@@ -106,7 +106,7 @@ void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a((Rc *)igIGBFile_Create(0)
     igObject::release(t);
     s0->f20 = s1;
     }
-    ((Gap::Core::igDirectory *)(a.get()))->appendInfo((igInfo *)b.get());
+    ((Gap::Core::igDirectory *)(a.get()))->appendInfo((Gap::Core::igInfo *)b.get());
     ((Obj_23c250 *)a.get())->vX(arg0[13]);
 }
 

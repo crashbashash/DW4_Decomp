@@ -8,9 +8,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igMetaObject *igInfoList_GetOrCreateMetaObject(void);
-void igInfoList_EnsureRegistered(void);
-void *igInfoList_Create(int allocator);
 
 #ifdef __cplusplus
 }

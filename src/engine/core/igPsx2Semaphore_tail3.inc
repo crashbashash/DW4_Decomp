@@ -9,11 +9,12 @@ int igPsx2Semaphore_IsCreated(igPsx2Semaphore *self) {
     return self->_semaID != -1;
 }
 
-void igPsx2Semaphore_ReleaseDefaults(igSemaphoreView *self) {
+void igPsx2Semaphore_ReleaseDefaults(igPsx2Semaphore *self) {
     igResult destroyed;
+    Gap::Core::igSemaphore *semaphore = (Gap::Core::igSemaphore *)self;
 
-    if (self->IsCreated() != 0) {
-        destroyed = self->Destroy();
+    if (semaphore->isActive()) {
+        destroyed = semaphore->deactivate();
     }
     igObject_ReleaseDefaults((igObject *)self);
 }

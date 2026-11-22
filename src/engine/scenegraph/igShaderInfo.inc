@@ -69,7 +69,7 @@ CallbackArray *igShaderInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igShaderInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igShaderInfo_GetMetaObjectFunction,
         "igShaderInfo",

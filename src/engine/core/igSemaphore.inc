@@ -1,52 +1,55 @@
-igMetaObject *g_igSemaphore_metaObject;
+namespace Gap {
+namespace Core {
 
-void * igSemaphore_Create(int pool) {
-    igSemaphore_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igSemaphore_metaObject, (igMemoryPoolView *)pool));
-}
+igMetaObject *igSemaphore::_Meta;
 
-igMetaObject *igSemaphore_GetOrCreateMetaObject(void) {
-    if (g_igSemaphore_metaObject == 0) {
-        g_igSemaphore_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igSemaphore_metaObject;
-}
-
-igMetaObject *igSemaphore_GetMetaObject(void)
+igSemaphore *igSemaphore::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igSemaphore_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igSemaphore_EnsureRegistered();
-    return g_igSemaphore_metaObject;
+    arkRegister();
+    return (igSemaphore *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igSemaphore_EnsureRegistered(void)
+igMetaObject *igSemaphore::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igSemaphore_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igSemaphore_Register(void) {
+igMetaObject *igSemaphore::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void igSemaphore::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igSemaphore::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1,
-        &g_igSemaphore_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
-        igSemaphore_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igSemaphore",
-        0xC,
+        sizeof(igSemaphore),
         0,
-        igSemaphore_SetAbstractProxy,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igSemaphore_GetMetaObjectFunction(void) {
-    igSemaphore_GetMetaObject();
+void igSemaphore::arkRegisterInitialize()
+{
+    _Meta->_abstractProxy = (int)&igPsx2Semaphore_GetMetaObjectFunction;
 }
-
-void igSemaphore_SetAbstractProxy(void) {
-    *(int *)((char *)((void *)g_igSemaphore_metaObject) + 60) = (int)(&igPsx2Semaphore_GetMetaObjectFunction);
+}
 }
 

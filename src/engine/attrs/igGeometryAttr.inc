@@ -97,7 +97,7 @@ void igGeometryAttr::arkRegisterInitialize()
         metaField->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
-    *(void (**)())&_Meta->_abstractProxy = (void (*)())igGeometryAttr1_5_GetMetaObjectFunction;
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Attrs::igGeometryAttr1_5::getClassMetaSafe;
 }
 }
 }

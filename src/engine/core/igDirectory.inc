@@ -34,7 +34,7 @@ void igDirectory::arkRegister()
 
 CallbackArray *igDirectory::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Core::igDirEntry::arkRegister, Gap::Core::igDirectoryList::arkRegister, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, igSemaphore_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igDirEntry::arkRegister, Gap::Core::igDirectoryList::arkRegister, Gap::Core::igInfoList::arkRegister, igResource_EnsureRegistered, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, Gap::Core::igSemaphore::arkRegister, 0 };
 
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -74,7 +74,7 @@ void igDirectory::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
-        metaField->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
@@ -112,7 +112,7 @@ void igDirectory::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 17);
-        metaField->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
         metaField->_persistent = 0;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);

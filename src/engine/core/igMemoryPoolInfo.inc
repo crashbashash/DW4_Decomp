@@ -75,7 +75,7 @@ CallbackArray *igMemoryPoolInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMemoryPoolInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         (igMetaObjectGetFunction)igInfo_GetPublishedMetaObject,
         igMemoryPoolInfo_GetMetaObjectFunction,
         "igMemoryPoolInfo",

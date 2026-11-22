@@ -111,7 +111,7 @@ void Gap__Bec__ParticleArray__vfunc_27(igParticleArrayRefs *self) {
             if (self->_primLengthArray == 0) {
                 count = self->_aliveParticleNum - 1;
             } else {
-                count = ((igPrimLengthArrayView *)self->_primLengthArray.p)->v27(0) - 1;
+                count = ((Gap::Gfx::igPrimLengthArray *)self->_primLengthArray.p)->getPrimLength(0) - 1;
             }
             break;
         case 4:
@@ -120,7 +120,7 @@ void Gap__Bec__ParticleArray__vfunc_27(igParticleArrayRefs *self) {
             if (self->_primLengthArray == 0) {
                 count = self->_aliveParticleNum - 2;
             } else {
-                count = ((igPrimLengthArrayView *)self->_primLengthArray.p)->v27(0) - 2;
+                count = ((Gap::Gfx::igPrimLengthArray *)self->_primLengthArray.p)->getPrimLength(0) - 2;
             }
             break;
         case 5:
@@ -129,7 +129,7 @@ void Gap__Bec__ParticleArray__vfunc_27(igParticleArrayRefs *self) {
             if (self->_primLengthArray == 0) {
                 count = self->_aliveParticleNum - 2;
             } else {
-                count = ((igPrimLengthArrayView *)self->_primLengthArray.p)->v27(0) - 2;
+                count = ((Gap::Gfx::igPrimLengthArray *)self->_primLengthArray.p)->getPrimLength(0) - 2;
             }
             break;
         }

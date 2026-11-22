@@ -49,7 +49,7 @@ CallbackArray *igDataPumpInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDataPumpInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igDataPumpInfo_GetMetaObjectFunction,
         "igDataPumpInfo",

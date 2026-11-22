@@ -1502,7 +1502,7 @@ CallbackArray *igMovieInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMovieInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igMovieInfo_GetMetaObjectFunction,
         "igMovieInfo",

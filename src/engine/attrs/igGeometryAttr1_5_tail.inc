@@ -1,132 +1,120 @@
-int igGeometryAttr_GetPrimLength(igGeometryAttr *self, int arg1) {
-    void *temp_v0;
+namespace Gap {
+namespace Attrs {
 
-    temp_v0 = (void *)(self->_primLengths);
-    if (temp_v0 != 0) {
-        return *(int *)(*(int *)((char *)(temp_v0) + 16) + (arg1 * 4));
+unsigned int igGeometryAttr::getPrimitiveLength(unsigned int i) const
+{
+    if (_primLengths != 0) {
+        return _primLengths->get(i);
     }
     return 0;
 }
 
-void igGeometryAttr1_5_SynchronizeDefault(void) {
-    FUN_0013cf70();
+void igGeometryAttr1_5::synchronizeDefault(igVisualContext *visualContext)
+{
+    igGeometryAttr::synchronizeDefault(visualContext);
 }
 
-extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self, int a, int b, int c, int d) {
-    if (self->_vertexArray == 0) {
-        igObject *created = (igObject *)Gap::Gfx::igVertexArray::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool());
-        igObject *previous;
-        igObject::ref(created);
-        previous = (igObject *)self->_vertexArray;
-        igObject::release(previous);
-        self->_vertexArray = (int)created;
-        {
-            igObject *vertexArray = (igObject *)self->_vertexArray;
-            vertexArray->release();
-        }
+unsigned int igGeometryAttr1_5::configureVertexArray(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usage, igVisualContext *context)
+{
+    if (_vertexArray == 0) {
+        _vertexArray = igVertexArray::_instantiateFromPool(getMemoryPool());
+        _vertexArray->release();
     }
-    ((VertexArrayConfigureView *)self->_vertexArray)->configure(a, b, c, d);
+    return _vertexArray->configure(vertexFormat, vertexCount, usage, context);
 }
 
-void igGeometryAttr1_5_UserMakeConcrete(S_13d180 *arg0, int arg1) {
-    Rc *sp3C;
-    Rc *s0;
-    Rc *old;
+void igGeometryAttr1_5::userMakeConcrete(igMetaObject *meta)
+{
     int i;
-    int meta = (int)Gap::Attrs::igGeometryAttr::getClassMeta();
-    if (meta == arg1 && arg0->f32 != 0) {
-        old = arg0->f48;
-        if (old != 0) {
-            old->refs = old->refs - 1;
-            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
-        }
-        sp3C = (Rc *)igPrimLengthArray_Create(((Gap::Core::igObject *)arg0)->getMemoryPool());
-        s0 = *(Rc **)&sp3C;
-        if (s0 != 0) s0->refs = s0->refs + 1;
-        old = arg0->f48;
-        if (old != 0) {
-            old->refs = old->refs - 1;
-            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
-        }
-        arg0->f48 = s0;
-        REL(&sp3C)
-        X_13d180 *x = (X_13d180 *)arg0->f48;
-        x->grow(arg0->f32->n, 32, 0);
-        for (i = 0; i < arg0->f32->n; i++) {
-            Gap__Attrs__igGeometryAttr1_5__vfunc_40((S_13de80 *)arg0, i, igGeometryAttr_GetPrimLength((igGeometryAttr *)arg0, i));
+
+    if (igGeometryAttr::getClassMeta() == meta && _primLengths != 0) {
+        /* matching construct: retail releases the old array here without clearing the field (a store of 0 adds a
+         * `sw zero,48(s1)`); the assignment below releases the same pointer once more */
+        _stripLengths.release();
+        _stripLengths = igSmartPointer<igPrimLengthArray>(igPrimLengthArray::_instantiateFromPool(getMemoryPool()));
+        _stripLengths->configure(_primLengths->getCount(), 32, 0);
+        for (i = 0; i < _primLengths->getCount(); i++) {
+            igGeometryAttr1_5::setPrimitiveLength(i, igGeometryAttr::getPrimitiveLength(i));
         }
     }
 }
 
-void igGeometryAttr1_5_apply(igGeometryAttr1_5 *self, void *context)
+void igGeometryAttr1_5::apply(igVisualContext *vc)
 {
     /* matching construct: declaration and load order permutation sweep (5040 + 120 variants) */
     int primType;
-    unsigned numPrims;
-    unsigned offset;
-    int stripType;
-    int indexArray;
+    unsigned int numPrims;
+    unsigned int offset;
+    int drawMultiple;
+    igIndexArray *indexArray;
     int overlap;
-    StripLengths *lengths;
+    igPrimLengthArray *lengths;
 
-    igPsx2VisualContext_SetVertexArray((igPsx2VisualContext *)context, (igVertexArray *)self->_vertexArray);
-    offset = self->_offset;
-    numPrims = self->_numPrims;
-    primType = self->_primType;
-    lengths = (StripLengths *)self->_stripLengths;
-    indexArray = self->_indexArray;
-    if (indexArray != 0) igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)context, (igIndexArray *)indexArray);
+    igPsx2VisualContext_SetVertexArray((igPsx2VisualContext *)vc, (::igVertexArray *)_vertexArray.p);
+    offset = _offset;
+    numPrims = _numPrims;
+    primType = _primType;
+    lengths = _stripLengths;
+    indexArray = _indexArray;
+    if (indexArray != 0) {
+        igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)vc, (::igIndexArray *)indexArray);
+    }
     if (lengths != 0) {
-        if (primType == 2) {
-            stripType = 0;
+        if (primType == IG_GFX_DRAW_LINE_STRIP) {
+            drawMultiple = IG_GFX_DRAW_MULTIPLE_LINE_STRIPS;
             overlap = 1;
-        } else if (primType == 4) {
-            stripType = 1;
+        } else if (primType == IG_GFX_DRAW_TRIANGLE_STRIP) {
+            drawMultiple = IG_GFX_DRAW_MULTIPLE_TRIANGLE_STRIPS;
             overlap = 2;
         } else {
-            if (primType != 5) return;
-            stripType = 2;
+            if (primType != IG_GFX_DRAW_TRIANGLE_FAN) {
+                return;
+            }
+            drawMultiple = IG_GFX_DRAW_MULTIPLE_TRIANGLE_FANS;
             overlap = 2;
         }
         switch (numPrims) {
         case 0:
             break;
         case 1:
-            igPsx2VisualContext_Draw((igPsx2VisualContext *)context, primType, lengths->get(0) - overlap, offset);
+            igPsx2VisualContext_Draw((igPsx2VisualContext *)vc, primType, lengths->getPrimLength(0) - overlap, offset);
             break;
         default:
-            igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)context, (igPrimLengthArray *)lengths);
-            igPsx2VisualContext_DrawMultiple((igPsx2VisualContext *)context, stripType, numPrims, offset, 0);
+            igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)vc, (::igPrimLengthArray *)lengths);
+            igPsx2VisualContext_DrawMultiple((igPsx2VisualContext *)vc, drawMultiple, numPrims, offset, 0);
         }
-        if (lengths != 0) igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)context, 0);
+        if (lengths != 0) {
+            igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)vc, 0);
+        }
     } else {
-        igPsx2VisualContext_Draw((igPsx2VisualContext *)context, primType, numPrims, offset);
+        igPsx2VisualContext_Draw((igPsx2VisualContext *)vc, primType, numPrims, offset);
     }
-    if (indexArray != 0) igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)context, 0);
+    if (indexArray != 0) {
+        igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)vc, 0);
+    }
+}
+}
 }
 
-inline void T_13d460::setBuffer(const igSmartPointer<R_13d460> &buffer) {
-    R_13d460 *held = buffer.get();
-    igObject::ref(held);
-    R_13d460 *previous = (R_13d460 *)f48;
-    igObject::release(previous);
-    f48 = (Buf *)held;
-}
+namespace Gap {
+namespace Attrs {
 
-int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T_13d460 *arg0, int arg1, unsigned arg2, int arg3) {
-    arg0->f20 = arg1;
-    arg0->f24 = arg2;
-    arg0->f28 = arg3;
-    int t = arg0->f20;
-    if ((unsigned)(t - 4) <= 1U || t == 2) {
-        if (arg0->f48 == 0) {
-            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)igPrimLengthArray_Create(((Gap::Core::igObject *)arg0)->getMemoryPool())));
+bool igGeometryAttr1_5::configurePrimitive(IG_GFX_DRAW type, unsigned int num, unsigned int offset)
+{
+    _primType = type;
+    _numPrims = num;
+    _offset = offset;
+    if (_primType == IG_GFX_DRAW_TRIANGLE_STRIP || _primType == IG_GFX_DRAW_TRIANGLE_FAN || _primType == IG_GFX_DRAW_LINE_STRIP) {
+        if (_stripLengths == 0) {
+            _stripLengths = igSmartPointer<igPrimLengthArray>(igPrimLengthArray::_instantiateFromPool(getMemoryPool()));
         }
-        if (((R_13d460 *)arg0->f48)->cap < arg2) {
-            arg0->f48->v92(arg2, 0x20, 0);
+        if (_stripLengths->getCount() < num) {
+            _stripLengths->configure(num, 32, 0);
         }
     }
-    return 1;
+    return true;
+}
+}
 }
 
 /* Position of vertex `index` in a locked vertex component. */
@@ -134,12 +122,14 @@ static inline float *lockedVertex(const igVertexArrayLock &lock, unsigned int in
     return (float *)(lock.data + index * lock.stride);
 }
 
+namespace Gap {
+namespace Attrs {
+
 /* Ray test over the triangles of a triangle list (type 3) or triangle strips (type 4), plain or indexed. Each
  * triangle goes through FUN_0018b9e0; the first hit after (*primIndex, *vertexIndex) wins, and that position is
  * written back, so a caller passing `resume` walks every hit in turn. */
-extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self, const void *ray, float *hit,
-                                                        float *normal, int *primIndex, int *vertexIndex, int mode,
-                                                        bool resume) {
+bool igGeometryAttr1_5::intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, int &primIndex, int &polyIndex, ISET_SIDES whichFaces, bool findNextIntersection)
+{
     igVertexArrayLock lock;
     int prim = 0;
     int vertex = 0;
@@ -152,23 +142,22 @@ extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self,
     igVertexArrayLock_Init(&lock);
     indices = 0;
     found = false;
-    if (!resume || *primIndex == -1 || *vertexIndex == -1) {
-        *primIndex = -1;
-        *vertexIndex = -1;
+    if (!findNextIntersection || primIndex == -1 || polyIndex == -1) {
+        primIndex = -1;
+        polyIndex = -1;
     }
-    lock.component = 0;
-    lock.firstVertex = 0;
-    lock.componentIndex = self->_offset;
+    lock.setType(IG_GFX_POSITION);
+    lock.componentIndex = _offset;
     lock.count = 0;
-    ((igVertexArrayView *)self->_vertexArray)->lock(&lock, 0);
-    if (self->_primType == 3) {
-        if (self->_indexArray != 0) {
-            indices = ((igIndexArrayView *)self->_indexArray)->lock(0, 0, -1);
+    _vertexArray->getEditableComponent(&lock, 0);
+    if (_primType == IG_GFX_DRAW_TRIANGLES) {
+        if (_indexArray != 0) {
+            indices = _indexArray->getEditableIndices16(0, 0, -1);
             for (vertex = 0, prim = 0; prim < lock.count; prim++, vertex += 3) {
                 unsigned short *triangle = indices + vertex;
                 if (FUN_0018b9e0(ray, lockedVertex(lock, triangle[0]), lockedVertex(lock, triangle[1]),
-                                 lockedVertex(lock, triangle[2]), hit, normal, mode) >= 0.0f &&
-                    prim > *primIndex) {
+                                 lockedVertex(lock, triangle[2]), intersectPoint.vec, norm.vec, whichFaces) >= 0.0f &&
+                    prim > primIndex) {
                     found = true;
                     break;
                 }
@@ -176,19 +165,19 @@ extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self,
         } else {
             for (vertex = 0, prim = 0; prim < lock.count; prim++, vertex += 3) {
                 if (FUN_0018b9e0(ray, lockedVertex(lock, vertex), lockedVertex(lock, vertex + 1),
-                                 lockedVertex(lock, vertex + 2), hit, normal, mode) >= 0.0f &&
-                    prim > *primIndex) {
+                                 lockedVertex(lock, vertex + 2), intersectPoint.vec, norm.vec, whichFaces) >= 0.0f &&
+                    prim > primIndex) {
                     found = true;
                     break;
                 }
             }
         }
-    } else if (self->_primType == 4) {
-        if (self->_indexArray != 0) {
-            indices = ((igIndexArrayView *)self->_indexArray)->lock(0, 0, -1);
+    } else if (_primType == IG_GFX_DRAW_TRIANGLE_STRIP) {
+        if (_indexArray != 0) {
+            indices = _indexArray->getEditableIndices16(0, 0, -1);
             int first = 0;
             for (prim = 0; prim < lock.count; prim++) {
-                unsigned int length = ((PrimLengthArray *)self->_stripLengths)->getLength(prim);
+                unsigned int length = _stripLengths->getPrimLength(prim);
                 a = first;
                 b = first + 1;
                 for (vertex = 2; vertex < length; vertex++) {
@@ -196,12 +185,12 @@ extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self,
                     float t;
                     if (vertex & 1) {
                         t = FUN_0018b9e0(ray, lockedVertex(lock, indices[a]), lockedVertex(lock, indices[c]),
-                                         lockedVertex(lock, indices[b]), hit, normal, mode);
+                                         lockedVertex(lock, indices[b]), intersectPoint.vec, norm.vec, whichFaces);
                     } else {
                         t = FUN_0018b9e0(ray, lockedVertex(lock, indices[a]), lockedVertex(lock, indices[b]),
-                                         lockedVertex(lock, indices[c]), hit, normal, mode);
+                                         lockedVertex(lock, indices[c]), intersectPoint.vec, norm.vec, whichFaces);
                     }
-                    if (t >= 0.0f && (prim > *primIndex || (prim == *primIndex && vertex > *vertexIndex))) {
+                    if (t >= 0.0f && (prim > primIndex || (prim == primIndex && vertex > polyIndex))) {
                         found = true;
                         goto done;
                     }
@@ -213,20 +202,20 @@ extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self,
         } else {
             int first = 0;
             for (prim = 0; prim < lock.count; prim++) {
-                unsigned int length = ((PrimLengthArray *)self->_stripLengths)->getLength(prim);
+                unsigned int length = _stripLengths->getPrimLength(prim);
                 a = first;
                 b = first + 1;
                 for (vertex = 2; vertex < length; vertex++) {
                     c = first + vertex;
                     float t;
                     if (vertex & 1) {
-                        t = FUN_0018b9e0(ray, lockedVertex(lock, a), lockedVertex(lock, c), lockedVertex(lock, b), hit,
-                                         normal, mode);
+                        t = FUN_0018b9e0(ray, lockedVertex(lock, a), lockedVertex(lock, c), lockedVertex(lock, b),
+                                         intersectPoint.vec, norm.vec, whichFaces);
                     } else {
-                        t = FUN_0018b9e0(ray, lockedVertex(lock, a), lockedVertex(lock, b), lockedVertex(lock, c), hit,
-                                         normal, mode);
+                        t = FUN_0018b9e0(ray, lockedVertex(lock, a), lockedVertex(lock, b), lockedVertex(lock, c),
+                                         intersectPoint.vec, norm.vec, whichFaces);
                     }
-                    if (t >= 0.0f && (prim > *primIndex || (prim == *primIndex && vertex > *vertexIndex))) {
+                    if (t >= 0.0f && (prim > primIndex || (prim == primIndex && vertex > polyIndex))) {
                         found = true;
                         goto done;
                     }
@@ -237,110 +226,102 @@ extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self,
             }
         }
     }
-done:
-    *primIndex = prim;
-    *vertexIndex = vertex;
-    ((igVertexArrayView *)self->_vertexArray)->unlock(&lock, 1);
+    done:
+    primIndex = prim;
+    polyIndex = vertex;
+    _vertexArray->commitComponentEdits(lock, 1);
     if (indices != 0) {
-        ((igIndexArrayView *)self->_indexArray)->unlock(indices, 1, 0, -1);
+        _indexArray->commitIndexEdits(indices, 1, 0, -1);
     }
     return found;
 }
 
-extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_33(igGeometryAttr1_5 *self, const float *matrix) {
+void igGeometryAttr1_5::transform(const igMatrix44f &m)
+{
     /* matching construct: declaration-order sweep — vertex and i declared before format */
     char *vertex;
     unsigned int i;
-    unsigned int format = *((igVertexFormatView *)self->_vertexArray)->getFormat();
-    if (format & 1) {
+    igVertexFormat format = _vertexArray->getVertexFormat();
+
+    if (format.hasPositions()) {
         igVertexArrayLock lock;
         igVertexArrayLock_Init(&lock);
-        lock.component = 0;
-        lock.firstVertex = 0;
-        lock.componentIndex = self->_offset;
+        lock.setType(IG_GFX_POSITION);
+        lock.componentIndex = _offset;
         lock.count = 0;
-        ((igVertexArrayView *)self->_vertexArray)->lock(&lock, 0);
+        _vertexArray->getEditableComponent(&lock, 0);
         if (lock.stride == 12) {
-            FUN_00192430(matrix, (float *)lock.data, (float *)lock.data, lock.count);
+            FUN_00192430(m.m, (float *)lock.data, (float *)lock.data, lock.count);
         } else {
             vertex = lock.data;
             for (i = 0; i < lock.count; i++) {
-                FUN_00192430(matrix, (float *)vertex, (float *)vertex, 1);
+                FUN_00192430(m.m, (float *)vertex, (float *)vertex, 1);
                 vertex += lock.stride;
             }
         }
-        ((igVertexArrayView *)self->_vertexArray)->unlock(&lock, 0);
+        _vertexArray->commitComponentEdits(lock, 0);
     }
     {
-        float normalMatrix[16];
-        igMatrix44f_SetIdentity(normalMatrix);
-        igMatrix44f_Invert(normalMatrix, (const float *)matrix);
-        FUN_001903d0(normalMatrix);
-        if (format & 2) {
-            FUN_0013dbb0(1, (igVertexArrayView *)self->_vertexArray, normalMatrix);
+        igMatrix44f normalMatrix;
+        igMatrix44f_Invert(normalMatrix.m, m.m);
+        FUN_001903d0(normalMatrix.m);
+        if (format.hasNormals()) {
+            transformVectors(IG_GFX_NORMAL, _vertexArray, normalMatrix.m);
         }
-        if (format & 0x400000) {
-            FUN_0013dbb0(7, (igVertexArrayView *)self->_vertexArray, normalMatrix);
+        if (format.hasBinormals()) {
+            transformVectors(IG_GFX_BINORMAL, _vertexArray, normalMatrix.m);
         }
-        if (format & 0x800000) {
-            FUN_0013dbb0(8, (igVertexArrayView *)self->_vertexArray, normalMatrix);
+        if (format.hasTangents()) {
+            transformVectors(IG_GFX_TANGENT, _vertexArray, normalMatrix.m);
         }
     }
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_40(S_13de80 *arg0, int arg1, int arg2) {
-    Rc *sp5C;
-    Rc *s0;
-    Rc *old;
-    if (arg0->f48 == 0) {
-        sp5C = (Rc *)igPrimLengthArray_Create(((Gap::Core::igObject *)arg0)->getMemoryPool());
-        s0 = *(Rc **)&sp5C;
-        if (s0 != 0) s0->refs = s0->refs + 1;
-        old = arg0->f48;
-        if (old != 0) {
-            old->refs = old->refs - 1;
-            if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
-        }
-        arg0->f48 = s0;
-        REL(&sp5C)
+void igGeometryAttr1_5::setPrimitiveLength(unsigned int uiPrim, unsigned int uiLength)
+{
+    unsigned int count;
+
+    if (_stripLengths == 0) {
+        _stripLengths = igSmartPointer<igPrimLengthArray>(igPrimLengthArray::_instantiateFromPool(getMemoryPool()));
     }
-    X_13de80 *x = (X_13de80 *)arg0->f48;
-    unsigned n = arg1 + 1;
-    if (((Y *)x)->f12 < n) x->grow(n, 32, 0);
-    x = (X_13de80 *)arg0->f48;
-    x->setAt(arg1, arg2);
+    count = uiPrim + 1;
+    if (_stripLengths->getCount() < count) {
+        _stripLengths->configure(count, 32, 0);
+    }
+    _stripLengths->setPrimLength(uiPrim, uiLength);
 }
 
-unsigned int Gap__Attrs__igGeometryAttr1_5__vfunc_42(GeometryPrimitiveView *self) {
+unsigned int igGeometryAttr1_5::getNumVerts() const
+{
     unsigned int i;
     unsigned int total;
-    PrimLengthArray *lengths;
+    igPrimLengthArray *lengths;
     int type;
     unsigned int count;
     unsigned int vertexCount;
     unsigned int offset;
 
     /* matching construct: statement-order sweep — offset read second */
-    vertexCount = self->_vertexArray->_vertexCount;
-    offset = self->_offset;
-    count = self->_numPrims;
-    type = self->_primType;
-    lengths = self->_stripLengths;
-    if (self->_indexArray != 0) {
+    vertexCount = _vertexArray->getCount();
+    offset = _offset;
+    count = _numPrims;
+    type = _primType;
+    lengths = _stripLengths;
+    if (_indexArray != 0) {
         total = vertexCount - offset;
     } else {
         total = 0;
-        if (type == 4 || type == 5 || type == 2) {
+        if (type == IG_GFX_DRAW_TRIANGLE_STRIP || type == IG_GFX_DRAW_TRIANGLE_FAN || type == IG_GFX_DRAW_LINE_STRIP) {
             for (i = 0; i < count; i++) {
-                total += lengths->getLength(i);
+                total += lengths->getPrimLength(i);
             }
         } else {
-            if (type == 0) {
+            if (type == IG_GFX_DRAW_POINTS) {
                 total = count;
             } else {
-                if (type == 1) {
+                if (type == IG_GFX_DRAW_LINES) {
                     count *= 2;
-                } else if (type == 3) {
+                } else if (type == IG_GFX_DRAW_TRIANGLES) {
                     count *= 3;
                 } else {
                     count = 0;
@@ -352,8 +333,11 @@ unsigned int Gap__Attrs__igGeometryAttr1_5__vfunc_42(GeometryPrimitiveView *self
     return total;
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1, float *arg2) {
-    igVertexArrayLock acc;
+static inline float vertexComponent(const igVec3f *vertex, int index) { return vertex->vec[index]; }
+
+void igGeometryAttr1_5::computeBound(igVec3f *min, igVec3f *max)
+{
+    igVertexArrayLock lock;
     float mz = 1e20f;
     float my = mz;
     float mx = mz;
@@ -361,123 +345,108 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1
     float ny = nz;
     float nx = nz;
     unsigned int i;
-    igVertexArrayLock_Init(&acc);
-    acc.component = 0;
-    acc.firstVertex = 0;
-    acc.componentIndex = arg0->f28;
-    acc.count = 0;
-    arg0->f12->v108(&acc, 0);
-    for (i = 0; i < acc.count; i++) {
-        BoundsVertex *p = (BoundsVertex *)(acc.data + i * acc.stride);
-        if (!(mx <= p->x)) { mx = p->x; }
-        if (!(my <= p->y)) { my = p->y; }
-        if (!(mz <= p->z)) { mz = p->z; }
-        { float t = p->getX(); if (nx < t) { nx = t; } }
-        { float t = p->getY(); if (ny < t) { ny = t; } }
-        { float t = p->getZ(); if (nz < t) { nz = t; } }
+
+    igVertexArrayLock_Init(&lock);
+    lock.setType(IG_GFX_POSITION);
+    lock.componentIndex = _offset;
+    lock.count = 0;
+    _vertexArray->getEditableComponent(&lock, 0);
+    for (i = 0; i < lock.count; i++) {
+        igVec3f *p = (igVec3f *)(lock.data + i * lock.stride);
+        if (!(mx <= p->vec[0])) { mx = p->vec[0]; }
+        if (!(my <= p->vec[1])) { my = p->vec[1]; }
+        if (!(mz <= p->vec[2])) { mz = p->vec[2]; }
+        /* matching construct: the maximum reads each component through an accessor (retail reloads it; a plain
+         * read is shared with the minimum's) */
+        { float t = vertexComponent(p, 0); if (nx < t) { nx = t; } }
+        { float t = vertexComponent(p, 1); if (ny < t) { ny = t; } }
+        { float t = vertexComponent(p, 2); if (nz < t) { nz = t; } }
     }
-    arg1[0] = mx;
-    arg1[1] = my;
-    arg1[2] = mz;
-    arg2[0] = nx;
-    arg2[1] = ny;
-    arg2[2] = nz;
-    arg0->f12->v112(&acc, 0);
+    (*min)[0] = mx;
+    (*min)[1] = my;
+    (*min)[2] = mz;
+    (*max)[0] = nx;
+    (*max)[1] = ny;
+    (*max)[2] = nz;
+    _vertexArray->commitComponentEdits(lock, 0);
 }
 
-void igGeometryAttr1_5_UserPostLoad(O_13e230 *arg0) {
-    int sp4C;
-    unsigned s0, s1;
-    Ar *a0;
-    igAttr_UserPostLoad(arg0);
-    if (arg0->f40 != 0 || arg0->f44 != 0) {
-        sp4C = *arg0->f12->v100();
-        if (arg0->f44 != 0) {
-            sp4C = sp4C | 0x400000;
+void igGeometryAttr1_5::userPostLoad()
+{
+    unsigned int count;
+    unsigned int i;
+
+    igAttr::userPostLoad();
+    if (_dPds != 0 || _dPdt != 0) {
+        igVertexFormat vertexFormat = _vertexArray->getVertexFormat();
+        if (_dPdt != 0) {
+            vertexFormat.setHasBinormals(true);
         } else {
-            sp4C = sp4C & 0xFFBFFFFF;
+            vertexFormat.setHasBinormals(false);
         }
-        if (arg0->f40 != 0) {
-            sp4C = sp4C | 0x800000;
+        if (_dPds != 0) {
+            vertexFormat.setHasTangents(true);
         } else {
-            sp4C = sp4C & 0xFF7FFFFF;
+            vertexFormat.setHasTangents(false);
         }
-        s1 = arg0->f12->f12;
-        arg0->f12->v240(&sp4C, s1, arg0->f12->f20, 0);
-        s0 = 0;
-        if (arg0->f44 != 0) {
-            for (; s0 < s1; s0++) {
-                arg0->f12->v140(s0, &arg0->f44->f16[s0]);
+        count = _vertexArray->getCount();
+        _vertexArray->reconfigure(vertexFormat, count, _vertexArray->getUsageFlags(), 0);
+        i = 0;
+        if (_dPdt != 0) {
+            for (; i < count; i++) {
+                _vertexArray->setBinormal(i, ((igVec3f *)_dPdt->_data)[i]);
             }
-            a0 = arg0->f44;
-            if (a0 != 0) {
-                a0->refs = a0->refs - 1;
-                if ((a0->refs & 0x7fffff) == 0) {
-                    igObject_Destroy((igObject *)a0);
-                }
-            }
-            arg0->f44 = 0;
+            _dPdt = 0;
         }
-        s0 = 0;
-        if (arg0->f40 != 0) {
-            for (; s0 < s1; s0++) {
-                arg0->f12->v152(s0, &arg0->f40->f16[s0]);
+        i = 0;
+        if (_dPds != 0) {
+            for (; i < count; i++) {
+                _vertexArray->setTangent(i, ((igVec3f *)_dPds->_data)[i]);
             }
-            a0 = arg0->f40;
-            if (a0 != 0) {
-                a0->refs = a0->refs - 1;
-                if ((a0->refs & 0x7fffff) == 0) {
-                    igObject_Destroy((igObject *)a0);
-                }
-            }
-            arg0->f40 = 0;
+            _dPds = 0;
         }
     }
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_37(igResult *arg0, A_13e440 *arg1, B *arg2) {
-    unsigned n;
-    unsigned i;
-    VertexFormat fl;
-    Obj_13e440 *o;
-    o = arg1->f12;
-    n = arg2->f8;
-    if (o->f12 < n) {
-        *arg0 = g_resultFailure;
-    } else {
-        fl = *o->v100();
-        if (!fl.has()) {
-            fl.set();
-            o = arg1->f12;
-            o->v240(&fl, o->f12, o->f20, 0);
-        }
-        for (i = 0; i < n; i++) {
-            o = arg1->f12;
-            o->v152(i, arg2->f16 + i * 12);
-        }
-        *arg0 = g_resultSuccess;
+igResult igGeometryAttr1_5::setTangents(igVec3fList *tangents)
+{
+    unsigned int count;
+    unsigned int i;
+
+    count = tangents->_count;
+    if (_vertexArray->getCount() < count) {
+        return g_resultFailure;
     }
+    igVertexFormat vertexFormat = _vertexArray->getVertexFormat();
+    if (!vertexFormat.hasTangents()) {
+        vertexFormat.setHasTangents(true);
+        _vertexArray->reconfigure(vertexFormat, _vertexArray->getCount(), _vertexArray->getUsageFlags(), 0);
+    }
+    for (i = 0; i < count; i++) {
+        _vertexArray->setTangent(i, ((igVec3f *)tangents->_data)[i]);
+    }
+    return g_resultSuccess;
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_38(igResult *arg0, A_13e550 *arg1, R_13e550 *arg2) {
-    VertexFormat_13e550 sp6C;
-    unsigned int s0;
-    unsigned int s1;
-    B_13e550 *b = arg1->buf;
-    s1 = arg2->cnt;
-    if (b->f12 < s1) {
-        *arg0 = g_resultFailure;
-        return;
+igResult igGeometryAttr1_5::setBinormals(igVec3fList *bn)
+{
+    unsigned int count;
+    unsigned int i;
+
+    count = bn->_count;
+    if (_vertexArray->getCount() < count) {
+        return g_resultFailure;
     }
-    sp6C = *b->v100();
-    s0 = 0;
-    if (!sp6C.has()) {
-        sp6C.set();
-        b = arg1->buf;
-        b->v240(&sp6C, b->f12, b->f20, 0);
-        ;
+    igVertexFormat vertexFormat = _vertexArray->getVertexFormat();
+    if (!vertexFormat.hasBinormals()) {
+        vertexFormat.setHasBinormals(true);
+        _vertexArray->reconfigure(vertexFormat, _vertexArray->getCount(), _vertexArray->getUsageFlags(), 0);
     }
-    { int i = s0; for (; i < s1; i++) { b = arg1->buf; b->v140(i, arg2->arr + i * 3); } }
-    *arg0 = g_resultSuccess;
+    for (i = 0; i < count; i++) {
+        _vertexArray->setBinormal(i, ((igVec3f *)bn->_data)[i]);
+    }
+    return g_resultSuccess;
+}
+}
 }
 

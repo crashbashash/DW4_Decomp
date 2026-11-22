@@ -8,7 +8,7 @@ void igDirectory::userRegister() {
     Gap::Core::igExternalDirEntry::getClassTypeSafe();
     Gap::Core::igExternalIndexedEntry::getClassTypeSafe();
     Gap::Core::igExternalInfoEntry::getClassTypeSafe();
-    igInfo_GetMetaObject();
+    Gap::Core::igInfo::getClassTypeSafe();
     igResource_GetMetaObject();
 }
 
@@ -16,7 +16,7 @@ void igDirectory::releaseDefaults() {
     igResult destroyed;
     int infoCount;
     int i;
-    igInfoView *info;
+    igInfo *info;
 
     if (_managingResource != 0) {
         for (i = 0; i < _externalDirectoryList->_count; i++) {
@@ -25,14 +25,14 @@ void igDirectory::releaseDefaults() {
     }
     infoCount = getInfoCount();
     for (i = 0; i < infoCount; i++) {
-        info = (igInfoView *)getInfo(i);
-        if (info->_directory == (int)this) {
+        info = getInfo(i);
+        if (info->_directory == this) {
             info->_directory = 0;
         }
     }
     igObject::releaseDefaults();
-    if (_loadingSemaphore != 0 && ((igSemaphoreView *)_loadingSemaphore.p)->IsCreated() != 0) {
-        destroyed = ((igSemaphoreView *)_loadingSemaphore.p)->Destroy();
+    if (_loadingSemaphore != 0 && _loadingSemaphore->isActive()) {
+        destroyed = _loadingSemaphore->deactivate();
     }
 }
 
@@ -196,21 +196,19 @@ void igDirectory::removeInfo(igInfo *info) {
 }
 
 void igDirectory::appendInfo(igInfo *info) {
-    ((igObjectList *)_infoList.p)->append((igObject *)info);
-    info->_directory = (int)this;
+    _infoList->append(info);
+    info->_directory = this;
 }
 
 igInfo *igDirectory::getInfo(const char *infoName) {
-    return (igInfo *)((igObjectList *)_infoList.p)->search((igStringMetaField *)igNamedObject::k_name, infoName);
+    return _infoList->search((igStringMetaField *)igNamedObject::k_name, infoName);
 }
 
 /* The lower bound is spelled `index <= -1` so it fuses into slti at. */
 igInfo *igDirectory::getInfo(int index) {
-    ::igTDataList<igInfo *> *infos;
     if (!(index <= -1)) {
-        infos = (::igTDataList<igInfo *> *)_infoList.p;
-        if (index < infos->_count) {
-            return infos->_data[index];
+        if (index < _infoList->_count) {
+            return _infoList->get(index);
         }
     }
     return 0;
@@ -218,11 +216,11 @@ igInfo *igDirectory::getInfo(int index) {
 
 bool igDirectory::attemptResolve(igDirectory *parentDir, void *ref) {
     int i;
-    igInfoView *info;
+    igInfo *info;
 
-    for (i = 0; i < ((::igTDataList<igInfoView *> *)_infoList.p)->_count; i++) {
-        info = ((::igTDataList<igInfoView *> *)_infoList.p)->_data[i];
-        if (info->_resolveState == 1 && (info->FindObjectReference(parentDir, ref) & 0xFF) == 1) {
+    for (i = 0; i < _infoList->_count; i++) {
+        info = _infoList->get(i);
+        if (info->_resolveState == 1 && info->attemptResolve(parentDir, ref) == 1) {
             return 1;
         }
     }

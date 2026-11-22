@@ -36,11 +36,9 @@ void igVec3fList_EnsureRegistered(void);
 
 /* Gfx */
 void igParticleFormat_EnsureRegistered(void);
-void igPrimLengthArray1_1_EnsureRegistered(void);
 void igTrackedElementMetaField_EnsureRegistered(void);
 
 /* Attrs */
-void igGeometryAttr1_5_EnsureRegistered(void);
 void igParticleAttr_EnsureRegistered(void);
 
 /* SceneGraph */

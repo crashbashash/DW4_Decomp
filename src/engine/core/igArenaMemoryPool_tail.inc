@@ -87,7 +87,7 @@ void igArenaMemoryPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igArenaMemoryPool_Register);
 }
 
-static igMetaObjectCallback g_igArenaMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igArenaMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igArenaMemoryPool_Register(void) {
     return igMetaObject_RegisterClass(
@@ -210,7 +210,7 @@ void igArenaMemoryPool_InitFields(void) {
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 9);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 11);
-    allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    allocationLock->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 12)))->setDefault(-1);
     heapIntegrityCheckLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
     defaultHeapCheck = g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel;

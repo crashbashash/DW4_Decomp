@@ -111,7 +111,7 @@ KIT_VECTOR = {
 # constructor gives the class holding it one (the matrix attrs' retail vtable probes construct theirs);
 # igCapabilityManager has no reflected record here. igVertexArray's slots take the component lock (the kit's
 # igComponentEditInfo) by reference or pointer, igVertexStream's the kit's igComponentEditInfo2.
-FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock", "igImageConvertRows",
+FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
                  "igComponentEditInfo2")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
@@ -119,9 +119,12 @@ FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock", "igI
 # igGeometryMaskAttr's accessors take and return over its `_mask` word, and igVertexFormat, the vertex arrays'
 # format word (igVertexArray1_1's `_vertexFormat` field, the argument of their configure slots), igVertexData's
 # component types (igVertexArray2Helper's getMinValue and getMaxValue take one), and dw4/gfx/png.h, libpng's types
-# (png_structp, png_infop, png_color_8p) that igFileImagePng's reader members take.
+# (png_structp, png_infop, png_color_8p) that igFileImagePng's reader members take, igRay.h, the kit's
+# igRay::ISET_SIDES that igGeometryAttr's intersectRay takes, and igVertexArrayLock.h, the kit's vertex component
+# enum igGeometryAttr1_5's vector helper takes.
 KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h",
-                    "dw4/gfx/igVertexFormat.h", "dw4/gfx/igVertexData.h", "dw4/gfx/png.h")
+                    "dw4/gfx/igVertexFormat.h", "dw4/gfx/igVertexData.h", "dw4/gfx/png.h", "dw4/maths/igRay.h",
+                    "dw4/gfx/igVertexArrayLock.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.

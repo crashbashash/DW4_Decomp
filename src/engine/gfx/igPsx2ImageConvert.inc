@@ -1,10 +1,14 @@
-igMetaObject *g_igPsx2ImageConvert_metaObject;
+namespace Gap {
+namespace Gfx {
 
-void FUN_0014dc40(void) {
-    *(int *)((char *)(g_igImageConvert_metaObject) + 60) = (int)(&igPsx2ImageConvert_GetMetaObjectFunction);
+igMetaObject *igPsx2ImageConvert::_Meta;
+
+void igImageConvert::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+
+    *(void (**)())&metaObject->_abstractProxy = (void (*)())Gap::Gfx::igPsx2ImageConvert::getClassMetaSafe;
 }
-
-void igPsx2ImageConvert_GetMetaObjectFunction(void) {
-    igPsx2ImageConvert_GetMetaObject();
+}
 }
 

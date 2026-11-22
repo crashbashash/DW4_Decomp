@@ -40,7 +40,7 @@ CallbackArray *beOptInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beOptInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         beOptInfo_GetMetaObjectFunction,
         "beOptInfo",

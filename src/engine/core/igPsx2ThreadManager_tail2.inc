@@ -1,9 +1,9 @@
 void igPsx2ThreadManager_InitDefaults(igPsx2ThreadManagerView *self) {
     igResult created;
-    igSemaphoreView *semaphore;
+    Gap::Core::igSemaphore *semaphore;
 
     semaphore = self->_sema;
-    created = semaphore->Create();
+    created = semaphore->activate();
 }
 
 void igPsx2ThreadManager_CreateGlobal(void) {

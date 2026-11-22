@@ -24,7 +24,7 @@ void igThreadManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igThreadManager_Register);
 }
 
-static igMetaObjectCallback g_igThreadManager_callbackList[] = { igNonRefCountedThreadList_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igThreadManager_callbackList[] = { igNonRefCountedThreadList_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igThreadManager_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -78,7 +78,7 @@ void igThreadManager_InitFields(void) {
     ((igObjectRefMetaField *)threadListField)->_metaObject = (int)igNonRefCountedThreadList_GetOrCreateMetaObject();
     ((igRefMetaField *)threadListField)->_construct = 1;
     semaField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)semaField)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)semaField)->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((igRefMetaField *)semaField)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_igThreadManager_fieldTable, g_igThreadManager_fieldDescriptors, g_igThreadManager_fieldOffsets, base);
     ((igMetaObject *)(g_igThreadManager_metaObject))->_abstractProxy = (int)igPsx2ThreadManager_GetMetaObjectFunction;

@@ -432,7 +432,7 @@ void FUN_0017f080(igPsx2VisualContext *vc, int primitive, unsigned int count, in
 
     if (array->_vertexStream == 0 || !array->_vertexStream->isConfigured()) {
         array->configure((IG_GFX_DRAW)primitive, (Gap::Gfx::igIndexArray *)vc->_pIndexArray,
-                         (igPrimLengthArray *)vc->_pStripLengthArray, (igVisualContext *)vc);
+                         (Gap::Gfx::igPrimLengthArray *)vc->_pStripLengthArray, (igVisualContext *)vc);
     }
     stream = (Gap::Gfx::igPsx2VertexStream *)array->_vertexStream.p;
     useRenderList = stream->_renderListHandle != 0;

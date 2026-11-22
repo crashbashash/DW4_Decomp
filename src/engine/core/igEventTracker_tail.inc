@@ -2,17 +2,14 @@ void igEventTracker_CodeReference(void)
 {
 }
 
-static inline void setLock(igEventTrackerView *self, igSemaphoreView *pool) {
-    igSemaphoreView *previous;
+static inline void setLock(igEventTrackerView *self, Gap::Core::igSemaphore *pool) {
+    Gap::Core::igSemaphore *previous;
     if (pool != 0) {
-        pool->_refCount = pool->_refCount + 1;
+        pool->ref();
     }
     previous = self->_lock;
     if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
+        previous->release();
     }
     self->_lock = pool;
 }
@@ -20,17 +17,17 @@ static inline void setLock(igEventTrackerView *self, igSemaphoreView *pool) {
 void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open) {
     if (open != 0) {
         if (self->_lock == 0) {
-            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
-            created.get()->Create();
+            igSmartPointer<Gap::Core::igSemaphore> created(Gap::Core::igSemaphore::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+            created.get()->activate();
             setLock(self, created.get());
         }
     } else {
         if (self->_lock != 0) {
-            igSmartPointer<igSemaphoreView> kept(self->_lock);
+            igSmartPointer<Gap::Core::igSemaphore> kept(self->_lock);
             kept.retain();
             setLock(self, 0);
             if (kept.get() != 0) {
-                kept.get()->Destroy();
+                kept.get()->deactivate();
             }
         }
     }
@@ -47,7 +44,7 @@ int igEventTracker_GetCount(int *tracker)
 }
 
 void igEventTracker_SetEventTag(igEventTrackerView *tracker, int tag) {
-    ScopedLock guard(tracker->_lock);
+    igScopeLock guard(tracker->_lock);
     if (tracker->isBusy() != false) {
         return;
     }
@@ -66,7 +63,7 @@ void igEventTracker_SetEventTag(igEventTrackerView *tracker, int tag) {
 }
 
 void igEventTracker_SetEventClassName(igEventTrackerView *tracker, int className) {
-    ScopedLock guard(tracker->_lock);
+    igScopeLock guard(tracker->_lock);
     if (tracker->isBusy() != false) {
         return;
     }
@@ -146,7 +143,7 @@ void igEventTracker_Shutdown(igEventTrackerView *self) {
 }
 
 void igEventTracker_Reset(igEventTrackerView *self) {
-    ScopedLock guard(self->_lock);
+    igScopeLock guard(self->_lock);
     self->_count = 0;
     igStringTable_RemoveAll(self->_groups);
     igStringTable_RemoveAll(self->_classNames);
@@ -284,7 +281,7 @@ int igEventTracker_AddEvent(igEventTrackerView *self, EventRecord *record, int c
         break;
     }
     {
-        ScopedLock guard(self->_lock);
+        igScopeLock guard(self->_lock);
         char buffer[32];
         if (isFlagSet(*self, 2)) {
             return -1;
@@ -527,7 +524,7 @@ static inline void decodeSigned(const char *&p, int &out) {
  * is present, then the extra slots. */
 extern "C" igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRecord *record);
 igResult igEventTracker_ReadEvent(igEventTrackerView *self, int offset, EventRecord *record) {
-    ScopedLock guard(self->_lock);
+    igScopeLock guard(self->_lock);
     unsigned int flags;
     int slot;
     int state;
@@ -951,7 +948,7 @@ int igEventTracker_GetNextEventOffset(igEventTrackerView *self, int offset) {
 /* Mark as freed every allocation still recorded whose call stack, below `main`, passes through a
  * function whose name contains `wanted`. */
 void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wanted) {
-    ScopedLock guard(self->_lock);
+    igScopeLock guard(self->_lock);
     int i;
     int n = self->_hashIndex->_count;
     EventRecord record;
@@ -992,7 +989,7 @@ void igEventTracker_IgnoreEventsInFunction(igEventTrackerView *self, char *wante
  * +8 of the `_hashIndex` object, or 0 while that count is 0. */
 
 int igEventTracker_GetLeakCount(igEventTrackerView *self) {
-    ScopedLock guard(self->_lock);
+    igScopeLock guard(self->_lock);
     int i;
     int count = self->_hashIndex->_count;
     int offset;
@@ -1014,7 +1011,7 @@ int igEventTracker_GetLeakCount(igEventTrackerView *self) {
 }
 
 int igEventTracker_FindNextLeak(igEventTrackerView *self, int *cursor) {
-    ScopedLock guard(self->_lock);
+    igScopeLock guard(self->_lock);
     int offset;
     int count = self->_hashIndex->_count;
     EventRecord record;
@@ -1556,7 +1553,6 @@ char *igEventTracker_FormatEvent(igEventTrackerView *self, EventRecord *record, 
     return output;
 }
 
-
 int igEventTracker_GetEventFormat(void *tracker, int type) {
     int nameOffset;
     int idx;
@@ -1658,7 +1654,7 @@ void igEventTracker_PrintEvent(igEventTrackerView *self, int offset) {
     }
     self->FormatEvent(&record, self->_formatBuffer, 0x2003);
     {
-        ScopedLock guard(self->_lock);
+        igScopeLock guard(self->_lock);
         int length = strlen(self->_formatBuffer);
         int i;
         for (i = 0; i < length; i += 128) {
@@ -1681,64 +1677,6 @@ void igEventTracker_PrintAllEvents(igEventTrackerView *self) {
         s = self->GetNextEventOffset(s);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void igEventTracker_PrintLeaks(igEventTrackerView *self) {
     int i;

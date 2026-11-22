@@ -63,7 +63,7 @@ void igPageMemoryPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPageMemoryPool_Register);
 }
 
-static igMetaObjectCallback g_igPageMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPageMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igPageMemoryPool_Register(void) {
     return igMetaObject_RegisterClass(
@@ -138,7 +138,7 @@ void igPageMemoryPool_InitFields(void) {
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
-    allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    allocationLock->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(-1);
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     defaultMessageLevel = g_igPageMemoryPool_defaultMessageLevel;

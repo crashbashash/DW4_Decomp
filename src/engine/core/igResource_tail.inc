@@ -336,8 +336,8 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         }
                     }
                     igDirectory_ReplaceReference((Gap::Core::igDirectory *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));
-                    if (((Gap::Core::igObject *)target.p)->isOfType((igMetaObject *)g_igInfo_metaObject) != 0) {
-                        ((Gap::Core::igDirectory *)directory)->appendInfo((igInfo *)target.p);
+                    if (((Gap::Core::igObject *)target.p)->isOfType((igMetaObject *)Gap::Core::igInfo::getClassMeta()) != 0) {
+                        ((Gap::Core::igDirectory *)directory)->appendInfo((Gap::Core::igInfo *)target.p);
                     }
                 }
             }
@@ -373,7 +373,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
                     sceneGraphList = AsObjectList(*(void **)((char *)info + sceneGraphListField->_offset));
                     if (sceneGraphList != 0) ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)sceneGraphList))->appendUnique((Gap::Core::igObject *)root);
                     ((Gap::Core::igObjectRefMetaField *)camerasField)->set((Gap::Core::igObject *)info, (Gap::Core::igObject *)0);
-                    ((Gap::Core::igDirectory *)directory)->appendInfo((igInfo *)info);
+                    ((Gap::Core::igDirectory *)directory)->appendInfo((Gap::Core::igInfo *)info);
                     {
                         igObject *u = info;
                         igObject::release(u);

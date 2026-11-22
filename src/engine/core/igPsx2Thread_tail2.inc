@@ -6,11 +6,11 @@ int igPsx2Thread_IsEqual(void *self, void *other) {
 
 void igPsx2Thread_InitDefaults(igPsx2ThreadView *self) {
     igResult result;
-    igSemaphoreView *done;
+    Gap::Core::igSemaphore *done;
 
     self->_stack = (int)((Gap::Core::igObject *)self)->mallocAligned(self->_stackSize, self->GetStackAlignment());
     done = self->_threadDoneSema;
-    result = done->SetInitialCount(0);
+    result = done->setInitialResourceCount(0);
 }
 
 void igPsx2Thread_AdoptCurrentThread(igPsx2Thread *self) {
@@ -22,8 +22,8 @@ void igPsx2Thread_AdoptCurrentThread(igPsx2Thread *self) {
 void igPsx2Thread_Join(int *result, void *self, igPsx2ThreadView *thread) {
     igResult waited;
     igResult signalled;
-    waited = thread->_threadDoneSema->Wait(1);
-    signalled = thread->_threadDoneSema->Signal();
+    waited = thread->_threadDoneSema->obtainResource(true);
+    signalled = thread->_threadDoneSema->releaseResource();
     if (thread->_threadID != -1) {
         while (ReferThreadStatus(thread->_threadID, 0) != 0x10) {
             p2SleepMilliseconds(1);
@@ -72,7 +72,7 @@ void igPsx2Thread_Terminate(int *result, igPsx2ThreadView *self) {
     s1 = self->_threadID;
     s0b = TerminateThread(threadID(self));
     self->_threadID = -1;
-    signalled = self->_threadDoneSema->Signal();
+    signalled = self->_threadDoneSema->releaseResource();
     self->_refCount--;
     if (((unsigned long long)(long long)self->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy((igObject *)self);
@@ -146,7 +146,7 @@ igResult igPsx2Thread_ITerminate(igPsx2ThreadView *self) {
     int id = self->_threadID;
     int status = TerminateThread(igPsx2Thread_getThreadID(self));
     self->_threadID = -1;
-    igResult signalled = self->_threadDoneSema->Signal();
+    igResult signalled = self->_threadDoneSema->releaseResource();
     --self->_refCount;
     if ((self->_refCount & 0x7fffff) == 0) {
         igObject_Destroy(self);
@@ -224,14 +224,14 @@ void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread) {
         thread->_threadID = -1;
         { *out = g_resultFailure.v; return; }
     }
-    if (thread->_threadDoneSema->IsCreated() != 0) {
-        t1 = thread->_threadDoneSema->Destroy();
+    if (thread->_threadDoneSema->isActive()) {
+        t1 = thread->_threadDoneSema->deactivate();
     }
-    t2 = thread->_threadDoneSema->Create();
+    t2 = thread->_threadDoneSema->activate();
     thread->_threadID = _StartThread(thread->_threadID, thread);
     if (thread->_threadID == -1) {
         g_threadManager->RemoveThread(thread);
-        t3 = thread->_threadDoneSema->Destroy();
+        t3 = thread->_threadDoneSema->deactivate();
         { *out = g_resultFailure.v; return; }
     }
     { *out = g_resultSuccess.v; return; }
@@ -250,13 +250,13 @@ igResult igPsx2Thread_Stop(igPsx2ThreadView *self) {
     return igResult(g_resultFailure.v);
 }
 
-igResult igPsx2Thread_GetResult(igPsx2ThreadView *self, int block, int *result) {
-    if (self->_threadDoneSema->IsCreated() == 0) {
+igResult igPsx2Thread_GetResult(igPsx2ThreadView *self, bool block, int *result) {
+    if (!self->_threadDoneSema->isActive()) {
         return igResult(g_resultFailure.v);
     }
-    igResult t = self->_threadDoneSema->Wait(block);
+    igResult t = self->_threadDoneSema->obtainResource(block);
     if (t.v != g_resultFailure.v) {
-        self->_threadDoneSema->Signal();
+        self->_threadDoneSema->releaseResource();
         *result = self->_result;
     }
     return t;

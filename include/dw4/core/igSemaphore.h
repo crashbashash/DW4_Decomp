@@ -1,13 +1,22 @@
 #ifndef DW4_IGSEMAPHORE_H
 #define DW4_IGSEMAPHORE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-void *igSemaphore_Create(int pool);
+#include "dw4/support/reflected.h"
 
-#ifdef __cplusplus
-}
-#endif
+/* The mutually exclusive lock of alchemy-kit_202309 igCore/igSemaphore.h: constructed on the stack, it
+ * obtains the semaphore (a null semaphore is no lock) and releases it with the scope. */
+class igScopeLock {
+public:
+    igScopeLock(Gap::Core::igSemaphore *semaphore) : _semaphore(semaphore) {
+        if (_semaphore)
+            _semaphore->obtainResource(true);
+    }
+    ~igScopeLock() {
+        if (_semaphore)
+            _semaphore->releaseResource();
+    }
+private:
+    Gap::Core::igSemaphore *_semaphore;
+};
 
 #endif

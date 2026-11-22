@@ -77,7 +77,7 @@ void FUN_002290c0(void)
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igFileInfo_Register);
 }
 
-static igMetaObjectCallback g_igFileInfo_callbackList[] = { Gap::Core::igDirectory::arkRegister, igInfoList_EnsureRegistered, FUN_00228dd0, igIGBFile_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFileInfo_callbackList[] = { Gap::Core::igDirectory::arkRegister, Gap::Core::igInfoList::arkRegister, FUN_00228dd0, igIGBFile_EnsureRegistered, 0 };
 
 CallbackArray *igFileInfo_Register(void) {
     BaseLibrary_MarkRegistered();
@@ -140,7 +140,7 @@ void igFileInfo_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igDirectory::getClassTypeLazy();
     ((igRefMetaField *)field)->_construct = 1;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)field2)->_construct = 1;
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)field3)->_metaObject = (int)igFileInfoList_GetOrCreateMetaObject();

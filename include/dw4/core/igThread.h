@@ -4,7 +4,11 @@
 
 struct igThread;
 class igPsx2ThreadView;
-class igSemaphoreView;
+namespace Gap {
+namespace Core {
+class igSemaphore;
+}
+}
 struct igMetaObject;
 
 /* igPsx2ThreadManager: slot 21 finds the calling thread, slots 22 and 23 add and remove a thread. */
@@ -18,7 +22,7 @@ public:
     virtual void RemoveThread(igPsx2ThreadView *thread);
     unsigned int _refCount;
     igTDataList<igPsx2ThreadView *> *_threadList;
-    igSemaphoreView *_sema;
+    Gap::Core::igSemaphore *_sema;
 };
 
 extern "C" {

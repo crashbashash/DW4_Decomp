@@ -92,7 +92,7 @@ void beSystem_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSystem_Register);
 }
 
-static igMetaObjectCallback g_beSystem_callbackList[] = { igRandomNumber_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igDirectory::arkRegister, igStringObj_EnsureRegistered, igInfoList_EnsureRegistered, igGroup_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSystem_callbackList[] = { igRandomNumber_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igDirectory::arkRegister, igStringObj_EnsureRegistered, Gap::Core::igInfoList::arkRegister, igGroup_EnsureRegistered, 0 };
 
 CallbackArray *beSystem_Register(void) {
     BecLibrary_MarkRegistered();
@@ -257,7 +257,7 @@ void beSystem_InitFields(void) {
     ((igObjectRefMetaField *)globalStrObj)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)globalStrObj)->_construct = 1;
     discErrInfos = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
-    ((igObjectRefMetaField *)discErrInfos)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)discErrInfos)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)discErrInfos)->_construct = 1;
     viewerScene = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
     ((igObjectRefMetaField *)viewerScene)->_metaObject = (int)igGroup_GetOrCreateMetaObject();

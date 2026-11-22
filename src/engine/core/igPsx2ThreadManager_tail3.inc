@@ -12,14 +12,14 @@ int igPsx2ThreadManager_GetCurrentThread(igPsx2ThreadManager *self) {
 
 void igPsx2ThreadManager_FinishThread(igPsx2ThreadManagerView *manager, igPsx2ThreadView *thread) {
     igResult signalled;
-    igSemaphoreView *done;
+    Gap::Core::igSemaphore *done;
 
     manager->RemoveThread(thread);
     int *tid = &thread->_threadID;
     ChangeThreadPriority(*tid, 1);
     *tid = -1;
     done = thread->_threadDoneSema;
-    signalled = done->Signal();
+    signalled = done->releaseResource();
     thread->_refCount = (int)((int) (thread->_refCount - 1));
     if (((unsigned long long) ((long long) (int) thread->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(thread);

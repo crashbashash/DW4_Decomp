@@ -1857,6 +1857,21 @@ igGeometryAttr	static igMetaField *k_primLengths;
 igGeometryAttr	static igMetaField *k_handle;
 igGeometryAttr	static igMetaField *k_dPds;
 igGeometryAttr	static igMetaField *k_dPdt;
+igGeometryAttr	virtual void apply(igVisualContext *vc) = 0;
+igGeometryAttr	virtual unsigned int configureVertexArray(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usage, igVisualContext *context) = 0;
+igGeometryAttr	virtual void transform(const igMatrix44f &m) = 0;
+igGeometryAttr	virtual void computeBound(igVec3f *min, igVec3f *max) = 0;
+igGeometryAttr	virtual bool intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, ISET_SIDES whichFaces = FRONT_SIDE);
+igGeometryAttr	virtual bool intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, int &primIndex, int &polyIndex, ISET_SIDES whichFaces = FRONT_SIDE, bool findNextIntersection = false) = 0;
+igGeometryAttr	virtual igResult setTangents(igVec3fList *tangents) = 0;
+igGeometryAttr	virtual igResult setBinormals(igVec3fList *bn) = 0;
+igGeometryAttr	virtual bool configurePrimitive(IG_GFX_DRAW type, unsigned int num, unsigned int offset = 0) = 0;
+igGeometryAttr	virtual void setPrimitiveLength(unsigned int uiPrim, unsigned int uiLength) = 0;
+igGeometryAttr	virtual unsigned int getPrimitiveLength(unsigned int i) const;
+igGeometryAttr	protected: virtual unsigned int getNumVerts() const = 0;
+igGeometryAttr	public: virtual igSmartPointer<igPrimLengthArray> getPrimLengthArray() const = 0;
+igGeometryAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igGeometryAttr	virtual void reset();
 igGeometryAttrList	IG_OBJECT_DEFINE(igGeometryAttrList)
 igGeometrySetAttr	IG_OBJECT_DEFINE(igGeometrySetAttr)
 igGeometrySetAttr	private: static igMetaField *k_vc;
@@ -1921,7 +1936,7 @@ igImage	virtual void copy(const igImage *src, bool copyImage = true);
 igImage	virtual void copySubImage(const igImage *src, int offX, int offY, int width, int height);
 igImage	virtual void scale(int x, int y, igImage *src = 0);
 igImage	void setClut(igClut *clut);
-igImage	bool canConvert(IG_GFX_TEXTURE_FORMAT tfmt, igSmartPointer<igImageConvertRows> convert) const;
+igImage	bool canConvert(IG_GFX_TEXTURE_FORMAT tfmt, igSmartPointer<igImageConvert> convert) const;
 igImage	unsigned char convert(IG_GFX_TEXTURE_FORMAT format, const igImage *src);
 igImage	virtual void reduce(igImage *img);
 igImage	inline int getSize() const { return _imageSize; }
@@ -2253,3 +2268,121 @@ igVertexArray2Helper	virtual void getMaxValue(IG_VERTEX_COMPONENT_TYPE type, flo
 igVertexArray2Helper	virtual float compressVertexData(IG_VERTEX_COMPONENT_TYPE type, int byteCount, bool useFixedPoint, bool isSigned, int fraction, int index = 0);
 igVertexArray2Helper	static unsigned int getWeightCount(igVertexData *weightVertexData);
 igVertexArray2Helper	static unsigned int getIndexCount(const igVertexData *indexVertexData);
+igSemaphore	IG_ABSTRACT_OBJECT_DEFINE(igSemaphore)
+igSemaphore	virtual igResult activate() = 0;
+igSemaphore	virtual igResult deactivate() = 0;
+igSemaphore	virtual bool isActive() const = 0;
+igSemaphore	virtual igResult setInitialResourceCount(unsigned int initCount) = 0;
+igSemaphore	virtual unsigned int getInitialResourceCount() const = 0;
+igSemaphore	virtual igResult setMaxResourceCount(unsigned int maxCount) = 0;
+igSemaphore	virtual unsigned int getMaxResourceCount() const = 0;
+igSemaphore	virtual unsigned int getCurrentResourceCount() const = 0;
+igSemaphore	virtual igResult releaseResource() = 0;
+igSemaphore	virtual igResult releaseResourceFromInterrupt() = 0;
+igSemaphore	virtual igResult obtainResource(bool block) = 0;
+igSemaphore	virtual igResult obtainResourceFromInterrupt() = 0;
+igSemaphore	virtual igResult obtainResourcePseudoBlocking() = 0;
+igInfo	IG_OBJECT_DEFINE(igInfo)
+igInfo	private: static igMetaField *k_directory;
+igInfo	static igMetaField *k_resolveState;
+igInfo	public: inline void setDirectory(igDirectory *directoryParam) { _directory = directoryParam; }
+igInfo	inline const igDirectory *getDirectory() const { return _directory; }
+igInfo	inline void setResolveState(bool resolveStateParam) { _resolveState = resolveStateParam; }
+igInfo	inline bool getResolveState() const { return _resolveState; }
+igInfo	virtual bool attemptResolve(igDirectory *parentDir, void *ref);
+igInfo	virtual void *resolve(const char *key);
+igInfoList	IG_OBJECT_DEFINE(igInfoList)
+igImageUtils	IG_ABSTRACT_OBJECT_DEFINE(igImageUtils)
+igImageUtils	public: static const char *getExt(const char *fName);
+igImageUtils	static inline const char *getExtNoDot(const char *fName) { const char *ext = getExt(fName); return ext ? ext + 1 : ext; }
+igImageUtils	static const char *getFileName(const char *fName);
+igImageConvert	IG_ABSTRACT_OBJECT_DEFINE(igImageConvert)
+igImageConvert	public: typedef void (conversionFn)(unsigned char *dest, const unsigned char *source, int nSample, void *miscData);
+igImageConvert	virtual conversionFn *getPackConversionFn(IG_GFX_IMAGE_ORDER order, IG_GFX_TEXTURE_FORMAT packedFormat, bool isUnpack) = 0;
+igImageConvert	virtual conversionFn *getConversionFn(IG_GFX_IMAGE_ORDER order, IG_GFX_TEXTURE_FORMAT sFmt, IG_GFX_TEXTURE_FORMAT tFmt, int xSize = 0, int ySize = 0) = 0;
+igImageConvert	virtual void swapRGBA8888(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGB888(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGBA5551(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGBA4444(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGB565(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGB332(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapLA88(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGBA2222(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapLA44(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	virtual void swapRGBA3328(unsigned char *pixels, int count, unsigned int *order) = 0;
+igImageConvert	static void pal_4_To_pal_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igImageConvert	static void luminance_8_To_alpha_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igImageConvert	static void alpha_8_To_luminance_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igImageConvert	static void pal_8_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	IG_OBJECT_DEFINE(igPsx2ImageConvert)
+igPsx2ImageConvert	public: virtual conversionFn *getPackConversionFn(IG_GFX_IMAGE_ORDER order, IG_GFX_TEXTURE_FORMAT packedFormat, bool isUnpack);
+igPsx2ImageConvert	virtual conversionFn *getConversionFn(IG_GFX_IMAGE_ORDER order, IG_GFX_TEXTURE_FORMAT sFmt, IG_GFX_TEXTURE_FORMAT tFmt, int xSize = 0, int ySize = 0);
+igPsx2ImageConvert	virtual void swapRGBA8888(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGB888(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGBA5551(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGBA4444(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGB565(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGB332(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapLA88(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGBA2222(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapLA44(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	virtual void swapRGBA3328(unsigned char *pixels, int count, unsigned int *order);
+igImageLoader	IG_ABSTRACT_OBJECT_DEFINE(igImageLoader)
+igImageLoader	public: virtual bool load(igStringObj *fileName, igImage *image) = 0;
+igTgaLoader	IG_OBJECT_DEFINE(igTgaLoader)
+igTgaLoader	protected: static igMetaField *k_file;
+igTgaLoader	protected: static igMetaField *k_palette;
+igTgaLoader	protected: static igMetaField *k_tempMap;
+igTgaLoader	protected: static igMetaField *k_tempRow;
+igTgaLoader	protected: static igMetaField *k_bCount;
+igTgaLoader	protected: static igMetaField *k_bType;
+igTgaLoader	protected: static igMetaField *k_psize;
+igTgaLoader	protected: static igMetaField *k_nextChar;
+igTgaLoader	protected: static igMetaField *k_limitChar;
+igTgaLoader	protected: static igMetaField *k_sbpr;
+igTgaLoader	public: virtual void releaseDefaults();
+igTgaLoader	virtual bool load(igStringObj *fileName, igImage *image);
+igTgaLoader	protected: bool cleanup(bool retVal);
+igTgaLoader	void cGetPixel(unsigned char *dp);
+igTgaLoader	IG_GFX_TEXTURE_FORMAT estimateImageFormat(int ftype, int w, IG_GFX_TEXTURE_FORMAT &igFmt, int &srcBpr, IG_GFX_IMAGE_ORDER &order, bool &isCompressed);
+igTgaLoader	bool fillBuffer();
+igTgaLoader	bool isBufEmpty();
+igTgaLoader	unsigned char getNextChar();
+igPrimLengthArray	IG_ABSTRACT_OBJECT_DEFINE(igPrimLengthArray)
+igPrimLengthArray	protected: static igMetaField *k_lengthData;
+igPrimLengthArray	protected: static igMetaField *k_numStrips;
+igPrimLengthArray	protected: static igMetaField *k_dataSize;
+igPrimLengthArray	public: virtual unsigned int configure(unsigned int num, int dataSize, igVisualContext *context) = 0;
+igPrimLengthArray	inline const unsigned char *getRawPrimLengthData() const { return _lengthData; }
+igPrimLengthArray	inline unsigned int getCount() const { return _numStrips; }
+igPrimLengthArray	inline unsigned int getDataSize() const { return _dataSize; }
+igPrimLengthArray	virtual unsigned int *getEditablePrimLength(unsigned int editFlags, unsigned int startLength = 0, unsigned int num = 0xFFFFFFFF) = 0;
+igPrimLengthArray	virtual void commitPrimLengthEdits(unsigned int *lengths, unsigned int commitFlags, unsigned int startLength = 0, unsigned int num = 0xFFFFFFFF) = 0;
+igPrimLengthArray	virtual void setPrimLength(unsigned int stripNumber, unsigned int value) = 0;
+igPrimLengthArray	virtual unsigned int getPrimLength(unsigned int stripNumber) const = 0;
+igPrimLengthArray1_1	IG_OBJECT_DEFINE(igPrimLengthArray1_1)
+igPrimLengthArray1_1	protected: static igMetaField *k_lengthData;
+igPrimLengthArray1_1	public: virtual void userMakeConcrete(igMetaObject *meta);
+igPrimLengthArray1_1	virtual unsigned int configure(unsigned int num, int dataSize, igVisualContext *context);
+igPrimLengthArray1_1	virtual unsigned int *getEditablePrimLength(unsigned int editFlags, unsigned int startLength = 0, unsigned int num = 0xFFFFFFFF);
+igPrimLengthArray1_1	virtual void commitPrimLengthEdits(unsigned int *lengths, unsigned int commitFlags, unsigned int startLength = 0, unsigned int num = 0xFFFFFFFF);
+igPrimLengthArray1_1	virtual void setPrimLength(unsigned int stripNumber, unsigned int value);
+igPrimLengthArray1_1	virtual unsigned int getPrimLength(unsigned int stripNumber) const;
+igGeometryAttr1_5	IG_OBJECT_DEFINE(igGeometryAttr1_5)
+igGeometryAttr1_5	protected: static igMetaField *k_stripLengths;
+igGeometryAttr1_5	public: virtual bool configurePrimitive(IG_GFX_DRAW type, unsigned int num, unsigned int offset = 0);
+igGeometryAttr1_5	inline virtual igSmartPointer<igPrimLengthArray> getPrimLengthArray() const { return _stripLengths; }
+igGeometryAttr1_5	virtual void userMakeConcrete(igMetaObject *meta);
+igGeometryAttr1_5	virtual unsigned int configureVertexArray(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usage, igVisualContext *context);
+igGeometryAttr1_5	virtual bool intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, int &primIndex, int &polyIndex, ISET_SIDES whichFaces = FRONT_SIDE, bool findNextIntersection = false);
+igGeometryAttr1_5	virtual void apply(igVisualContext *vc);
+igGeometryAttr1_5	virtual void transform(const igMatrix44f &m);
+igGeometryAttr1_5	virtual void computeBound(igVec3f *min, igVec3f *max);
+igGeometryAttr1_5	virtual igResult setTangents(igVec3fList *tangents);
+igGeometryAttr1_5	virtual igResult setBinormals(igVec3fList *bn);
+igGeometryAttr1_5	virtual void setPrimitiveLength(unsigned int uiPrim, unsigned int uiLength);
+igGeometryAttr1_5	inline virtual unsigned int getPrimitiveLength(unsigned int i) const { return _stripLengths->getPrimLength(i); }
+igGeometryAttr1_5	virtual void synchronizeDefault(igVisualContext *vc);
+igGeometryAttr1_5	virtual void userPostLoad();
+igGeometryAttr1_5	protected: virtual unsigned int getNumVerts() const;
+igGeometryAttr1_5	protected: static void transformVectors(IG_GFX_VERTEX_COMPONENT component, igVertexArray *vertexArray, const float *matrix);

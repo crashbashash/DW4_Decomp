@@ -181,3 +181,14 @@ igPsx2Folder	Core
 igVertexStream	Gfx
 igPsx2VertexStream	Gfx
 igVertexArray2Helper	Gfx
+igSemaphore	Core
+igInfo	Core
+igInfoList	Core	igTObjectList<igInfo>
+igImageUtils	Gfx
+igImageConvert	Gfx
+igPsx2ImageConvert	Gfx
+igImageLoader	Gfx
+igTgaLoader	Gfx
+igPrimLengthArray	Gfx
+igPrimLengthArray1_1	Gfx
+igGeometryAttr1_5	Attrs

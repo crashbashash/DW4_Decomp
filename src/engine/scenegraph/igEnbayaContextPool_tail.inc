@@ -98,6 +98,21 @@ found:
     return v;
 }
 
+/* igEnbayaContextPool::deallocate (kit igSg/igEnbayaContextPool.igo): moves the context to the end of its pool's
+ * allocated range (swaps it with the last allocated one) and shrinks the range by one. */
+void FUN_001c16a0(igEnbayaContextPool *pool, void *context, int boneCount) {
+    int poolIndex = ((Gap::Core::igUnsignedIntList *)pool->_boneCountList)->find(boneCount);
+    Gap::Core::igPointerList *contexts = (Gap::Core::igPointerList *)((Gap::Core::igObjectList *)pool->_poolList)->get(poolIndex);
+    int contextIndex = contexts->find(context);
+    int freeIndex = ((Gap::Core::igUnsignedIntList *)pool->_freeIndexList)->get(poolIndex);
+    /* matching construct: dead read — an unused read of the pool beside the swap's: two reads of it in one block
+     * give the pool list's element array its own common-subexpression temporary in the first round, so the shared
+     * poolIndex * 4 gets the lower register (retail's t1/t0); the read itself is gone before code generation */
+    Gap::Core::igPointerList *unused = (Gap::Core::igPointerList *)((Gap::Core::igObjectList *)pool->_poolList)->get(poolIndex);
+    ((Gap::Core::igPointerList *)((Gap::Core::igObjectList *)pool->_poolList)->get(poolIndex))->swap(freeIndex - 1, contextIndex);
+    ((Gap::Core::igUnsignedIntList *)pool->_freeIndexList)->set(poolIndex, freeIndex - 1);
+}
+
 void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     EnbayaIntList *l0;
     int n1;

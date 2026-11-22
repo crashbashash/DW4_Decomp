@@ -11,10 +11,8 @@ extern "C" {
 #endif
 
 extern int g_igInfo_vtable[4];
-extern struct igMetaObject *g_igInfo_metaObject;
 
 struct igMetaObject *igInfo_GetPublishedMetaObject(void);
-struct CallbackArray *igInfo_Register(void);
 struct igInfo *igInfo_Destroy(struct igInfo *self, short deleteFlag);
 
 #ifdef __cplusplus

@@ -41,7 +41,22 @@ public:
         }
         getArrayInternal()[index] = value;
     }
-    inline int find(const T &value, int startIndex) const {
+    inline void swap(int index1, int index2) {
+        if (!(_count != 0)) {
+            return;
+        }
+        if (!((index1 >= 0) && (index1 < _count))) {
+            return;
+        }
+        if (!((index2 >= 0) && (index2 < _count))) {
+            return;
+        }
+        T *data = getArrayInternal();
+        const T tmp = data[index1];
+        data[index1] = data[index2];
+        data[index2] = tmp;
+    }
+    inline int find(const T &value, int startIndex = 0) const {
         const int count = _count;
         for (int i = startIndex; i < count; i++) {
             if (value == getArray()[i]) {

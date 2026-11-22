@@ -185,18 +185,18 @@ igResult igPageMemoryPool_EnableAllocationLock(igPageMemoryPoolView *self, int e
     }
     igPageMemoryPool_SetPoolOptionFlags((igPageMemoryPool *)self, flags);
     if ((enable & 0xFF) == 0) {
-        igSmartPointer<igSemaphoreView> held(self->allocationLock);
+        igSmartPointer<Gap::Core::igSemaphore> held(self->allocationLock);
         self->allocationLock.clear();
         if (held.p != 0) {
-            held.p->Wait(1);
-            held.p->Destroy();
+            held.p->obtainResource(true);
+            held.p->deactivate();
         }
     } else if ((enable & 0xFF) == 1) {
         if (self->allocationLock.p != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
-        created.p->Create();
+        igSmartPointer<Gap::Core::igSemaphore> created(Gap::Core::igSemaphore::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+        created.p->activate();
         self->allocationLock = created;
     }
     return g_resultSuccess.v;
@@ -290,21 +290,21 @@ int igPageMemoryPool_AllocateElement(igPageMemoryPool *self) {
 
 void igPageMemoryPool_Lock(igPageMemoryPoolView *self) {
     igResult waited;
-    igSemaphoreView *lock;
+    Gap::Core::igSemaphore *lock;
 
     lock = self->allocationLock.p;
     if (lock != 0) {
-        waited = lock->Wait(1);
+        waited = lock->obtainResource(true);
     }
 }
 
 int igPageMemoryPool_UnlockAndReturn(igPageMemoryPoolView *self, int result) {
     igResult signalled;
-    igSemaphoreView *lock;
+    Gap::Core::igSemaphore *lock;
 
     lock = self->allocationLock.p;
     if (lock != 0) {
-        signalled = lock->Signal();
+        signalled = lock->releaseResource();
     }
     return result;
 }

@@ -161,7 +161,7 @@ bool igClut::load(const char *fileName)
 {
     const char *extension;
 
-    extension = FUN_0015ad50(fileName);
+    extension = Gap::Gfx::igImageUtils::getExt(fileName);
     if (extension != 0 && (strcmp(extension, ".act") == 0 || strcmp(extension, ".ACT") == 0)) {
         return loadAct(fileName);
     }

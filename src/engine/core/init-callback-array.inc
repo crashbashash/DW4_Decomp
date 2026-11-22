@@ -174,7 +174,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     ((Gap::Core::igDirectory *)directory.p)->loadRef();
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     ((Gap::Core::igNamedObject *)metaFieldInfo.p)->setName("metafield info");
-    ((Gap::Core::igDirectory *)directory.p)->appendInfo((igInfo *)metaFieldInfo.p);
+    ((Gap::Core::igDirectory *)directory.p)->appendInfo((Gap::Core::igInfo *)metaFieldInfo.p);
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"failOnDllVersionMismatch", self->reportHeaderVersionMismatch, 1, 0);
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"warnOnDllDateMismatch", self->warnOnDllDateMismatch, 1, 0);
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"resourceTempMemoryPoolSize", *(int *)(&self->resourceTempPoolSize), 0, 0);

@@ -87,7 +87,7 @@ void igAliasMemoryPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAliasMemoryPool_Register);
 }
 
-static igMetaObjectCallback g_igAliasMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAliasMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, igMemoryPool_EnsureRegistered, 0 };
 
 CallbackArray *igAliasMemoryPool_Register(void) {
     return igMetaObject_RegisterClass(
@@ -191,7 +191,7 @@ void igAliasMemoryPool_InitFields(void) {
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 10);
-    allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    allocationLock->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((Gap::Core::igUnsignedShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 12)))->setDefault(8);
     aliasedPool = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
     aliasedPool->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();

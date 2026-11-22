@@ -350,7 +350,7 @@ void igImage::copy(const igImage *src, bool copyImage)
 void igImage::copySubImage(const igImage *src, int offX, int offY, int width, int height)
 {
     igSmartPointer<igImage> converted(0);
-    igSmartPointer<igImageConvertRows> spare((igImageConvertRows *)igImageConvert_Create((int)getMemoryPool()));
+    igSmartPointer<igImageConvert> spare(igImageConvert::_instantiateFromPool(getMemoryPool()));
     int imageSize;
     int bytesPerRow;
     unsigned int components;
@@ -424,22 +424,22 @@ void igImage::setClut(igClut *clut)
 }
 void igImage::scale(int width, int height, igImage *source)
 {
-    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)getMemoryPool()));
+    igSmartPointer<igImageConvert> convert(igImageConvert::_instantiateFromPool(getMemoryPool()));
     if (source == 0) {
         source = this;
     } else {
         copy(source, false);
     }
     int format;
-    char *sourceRow;
+    unsigned char *sourceRow;
     int sourceBytesPerRow;
     int sourceWidth;
     int sourceHeight;
     int pixelSize;
     int order;
-    char *sourcePixels;
-    igImageRowConvert toPlain;
-    igImageRowConvert fromPlain;
+    unsigned char *sourcePixels;
+    igImageConvert::conversionFn *toPlain;
+    igImageConvert::conversionFn *fromPlain;
     int plainSize;
     unsigned int plainComponents;
     int plainRow;
@@ -448,12 +448,12 @@ void igImage::scale(int width, int height, igImage *source)
     int newSize;
     int newRow;
     unsigned int newComponents;
-    char *destRow;
+    unsigned char *destRow;
     float xScale;
     float yScale;
-    char *pixels;
+    unsigned char *pixels;
     int y;
-    char *row;
+    unsigned char *row;
     int x;
     format = source->_pfmt;
     sourceRow = 0;
@@ -464,7 +464,7 @@ void igImage::scale(int width, int height, igImage *source)
     sourceHeight = source->_py;
     pixelSize = source->_pz;
     order = source->_order;
-    sourcePixels = (char *)source->_pImage;
+    sourcePixels = source->_pImage;
     plainSize = source->_imageSize;
     plainComponents = pixelSize;
     plainRow = sourceBytesPerRow;
@@ -472,11 +472,11 @@ void igImage::scale(int width, int height, igImage *source)
     if (isPacked((IG_GFX_TEXTURE_FORMAT)source->_pfmt)) {
         IG_GFX_TEXTURE_FORMAT plainFormat = estimateUnpackedFmt2((IG_GFX_TEXTURE_FORMAT)format);
         estimateImageSize(plainFormat, sourceWidth, sourceHeight, plainSize, plainComponents, plainRow);
-        sourceRow = (char *)poolOf(this, kIGMemoryPoolHandleTemporary)->allocateAligned(plainRow, 0x80);
-        toPlain = convert->v23(order, format, 1);
-        fromPlain = convert->v23(order, format, 0);
+        sourceRow = (unsigned char *)poolOf(this, kIGMemoryPoolHandleTemporary)->allocateAligned(plainRow, 0x80);
+        toPlain = convert->getPackConversionFn((IG_GFX_IMAGE_ORDER)order, (IG_GFX_TEXTURE_FORMAT)format, true);
+        fromPlain = convert->getPackConversionFn((IG_GFX_IMAGE_ORDER)order, (IG_GFX_TEXTURE_FORMAT)format, false);
         estimateImageSize(plainFormat, width, height, scaledSize, plainComponents, scaledRow);
-        destRow = (char *)poolOf(this, kIGMemoryPoolHandleTemporary)->allocateAligned(scaledRow, 0x80);
+        destRow = (unsigned char *)poolOf(this, kIGMemoryPoolHandleTemporary)->allocateAligned(scaledRow, 0x80);
     }
     xScale = (float)(unsigned int)sourceWidth / (float)width;
     yScale = (float)(unsigned int)sourceHeight / (float)height;
@@ -486,7 +486,7 @@ void igImage::scale(int width, int height, igImage *source)
     _imageSize = newSize;
     _pz = newComponents;
     _bytesPerRow = newRow;
-    pixels = (char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    pixels = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
     row = pixels;
     for (y = 0; y < height; y++) {
         int sourceY = FUN_00156ae0(y, sourceHeight, yScale);
@@ -513,7 +513,7 @@ void igImage::scale(int width, int height, igImage *source)
     if (_pImage != 0 && _localImage) {
         Memory_FreeBuffer(_pImage);
     }
-    _pImage = (unsigned char *)pixels;
+    _pImage = pixels;
     _localImage = true;
     if (isIndexed((IG_GFX_TEXTURE_FORMAT)source->_pfmt) && source != this && source->_pClut != 0) {
         igSmartPointer<igClut> clut(igClut::_instantiateFromPool(getMemoryPool()));
@@ -522,13 +522,13 @@ void igImage::scale(int width, int height, igImage *source)
     }
 }
 
-bool igImage::canConvert(IG_GFX_TEXTURE_FORMAT tfmt, igSmartPointer<igImageConvertRows> convert) const
+bool igImage::canConvert(IG_GFX_TEXTURE_FORMAT tfmt, igSmartPointer<igImageConvert> convert) const
 {
     bool r = false;
     if (tfmt == _pfmt) {
         return true;
     }
-    if (convert->findConverter(_order, (IG_GFX_TEXTURE_FORMAT)_pfmt, tfmt, _px, _py) != 0) {
+    if (convert->getConversionFn((IG_GFX_IMAGE_ORDER)_order, (IG_GFX_TEXTURE_FORMAT)_pfmt, tfmt, _px, _py) != 0) {
         r = true;
         if (_pfmt == IG_GFX_TEXTURE_FORMAT_X_8 && tfmt == IG_GFX_TEXTURE_FORMAT_X_4) {
             if (_pClut == 0) {
@@ -543,13 +543,13 @@ bool igImage::canConvert(IG_GFX_TEXTURE_FORMAT tfmt, igSmartPointer<igImageConve
 
 unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *source)
 {
-    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)getMemoryPool()));
+    igSmartPointer<igImageConvert> convert(igImageConvert::_instantiateFromPool(getMemoryPool()));
     int sourceFormat;
-    igImageRowConvert rowConvert;
+    igImageConvert::conversionFn *rowConvert;
     int sourceBytesPerRow;
-    char *pixels;
+    unsigned char *pixels;
     igClut *clut;
-    int sourceClut;
+    void *sourceClut;
     if (source == 0) {
         source = this;
     }
@@ -568,7 +568,7 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
     if (done) {
         return done;
     }
-    rowConvert = convert->findConverter(source->_order, (IG_GFX_TEXTURE_FORMAT)source->_pfmt, format, _px, _py);
+    rowConvert = convert->getConversionFn((IG_GFX_IMAGE_ORDER)source->_order, (IG_GFX_TEXTURE_FORMAT)source->_pfmt, format, _px, _py);
     if (source != this) {
         if (_pImage != 0 && _localImage) {
             Memory_FreeBuffer(_pImage);
@@ -608,7 +608,7 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
     _bitsBlu = bitsBlu;
     _bitsAlpha = bitsAlpha;
     _bitsDepth = bitsDepth;
-    pixels = (char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    pixels = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
     if (source == this) {
         if (isIndexed((IG_GFX_TEXTURE_FORMAT)source->_pfmt) && isIndexed(format)) {
             clut = _pClut.p;
@@ -617,16 +617,16 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
         clut = igClut::_instantiateFromPool(poolOf(this, kIGMemoryPoolHandleClut));
         clut->copy(source->_pClut, true);
     }
-    sourceClut = (int)source->_pClut.p;
+    sourceClut = source->_pClut.p;
     if ((unsigned int)(format - IG_GFX_TEXTURE_FORMAT_RGB_DXT1) <= 3 || format == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
         sourceFormat == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
         (unsigned int)(sourceFormat - IG_GFX_TEXTURE_FORMAT_RGB_DXT1) <= 2 || sourceFormat == IG_GFX_TEXTURE_FORMAT_RGBA_DXT5) {
-        rowConvert(pixels, (void *)source->_pImage, (unsigned short)_px | ((unsigned short)_py << 16), sourceClut);
+        rowConvert(pixels, source->_pImage, (unsigned short)_px | ((unsigned short)_py << 16), sourceClut);
         _compressed = true;
     } else {
         unsigned int y;
-        char *to = pixels;
-        char *from = (char *)source->_pImage;
+        unsigned char *to = pixels;
+        const unsigned char *from = source->_pImage;
         for (y = 0; y < _py; y++) {
             rowConvert(to, from, _px, sourceClut);
             to += _bytesPerRow;
@@ -636,7 +636,7 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
     if (_pImage != 0 && _localImage) {
         Memory_FreeBuffer(_pImage);
     }
-    _pImage = (unsigned char *)pixels;
+    _pImage = pixels;
     _localImage = true;
     if (format == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
         (unsigned int)(format - IG_GFX_TEXTURE_FORMAT_TILED_RGBA_5553_16_GAMECUBE) <= 4 ||
@@ -790,44 +790,44 @@ void igImage::setPixel(int x, int y, const void *src)
 bool igImage::swapComponentOrder()
 {
     bool result = true;
-    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)getMemoryPool()));
+    igSmartPointer<igImageConvert> convert(igImageConvert::_instantiateFromPool(getMemoryPool()));
     switch (_pfmt) {
     case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32:
-        convert->v25(_pImage, _px * _py, &_order);
+        convert->swapRGBA8888(_pImage, _px * _py, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_RGB_888_24: {
-        char *row = (char *)_pImage;
+        unsigned char *row = _pImage;
         int rows = _py;
         while (rows != 0) {
-            convert->v26(row, _px, &_order);
+            convert->swapRGB888(row, _px, &_order);
             rows--;
             row += _bytesPerRow;
         }
         break;
     }
     case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16:
-        convert->v27(_pImage, (_bytesPerRow >> 1) * _py, &_order);
+        convert->swapRGBA5551(_pImage, (_bytesPerRow >> 1) * _py, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16:
-        convert->v28(_pImage, (_bytesPerRow >> 1) * _py, &_order);
+        convert->swapRGBA4444(_pImage, (_bytesPerRow >> 1) * _py, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_RGB_332_8:
-        convert->v30(_pImage, _imageSize, &_order);
+        convert->swapRGB332(_pImage, _imageSize, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_RGBA_3328_16:
-        convert->v34(_pImage, (_bytesPerRow >> 1) * _py, &_order);
+        convert->swapRGBA3328(_pImage, (_bytesPerRow >> 1) * _py, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_RGB_565_16:
-        convert->v29(_pImage, (_bytesPerRow >> 1) * _py, &_order);
+        convert->swapRGB565(_pImage, (_bytesPerRow >> 1) * _py, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_LA_88_16:
-        convert->v31(_pImage, (_bytesPerRow >> 1) * _py, &_order);
+        convert->swapLA88(_pImage, (_bytesPerRow >> 1) * _py, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_RGBA_2222_8:
-        convert->v32(_pImage, _imageSize, &_order);
+        convert->swapRGBA2222(_pImage, _imageSize, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_LA_44_8:
-        convert->v33(_pImage, _imageSize, &_order);
+        convert->swapLA44(_pImage, _imageSize, &_order);
         break;
     case IG_GFX_TEXTURE_FORMAT_L_8:
     case IG_GFX_TEXTURE_FORMAT_A_8:
@@ -1687,59 +1687,61 @@ void FUN_0015a6a0(Gap::Gfx::igImage *self, ImageBlock16 *out) {
     }
 }
 
-void FUN_0015aaf0(unsigned char *dst, unsigned char *src, int count)
+namespace Gap {
+namespace Gfx {
+
+void igImageConvert::pal_8_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
     int i;
     unsigned int packed;
 
-    for (i = 0; i < count - 1; i += 2) {
-        packed = src[0] & 0xF;
-        packed |= src[1] << 4;
-        *dst++ = packed;
-        src += 2;
+    for (i = 0; i < nSample - 1; i += 2) {
+        packed = source[0] & 0xF;
+        packed |= source[1] << 4;
+        *dest++ = packed;
+        source += 2;
     }
-    if (i < count)
-        *dst = (*src & 0xF) << 4;
+    if (i < nSample)
+        *dest = (*source & 0xF) << 4;
 }
 
-void FUN_0015ab50(void *dst, const void *src, unsigned int size) {
-    if (dst != src) {
-        memmove(dst, src, size);
+void igImageConvert::alpha_8_To_luminance_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
+{
+    if (dest != source) {
+        memmove(dest, source, nSample);
     }
 }
 
-void FUN_0015ab70(void *dst, const void *src, unsigned int size) {
-    if (dst != src) {
-        memmove(dst, src, size);
+void igImageConvert::luminance_8_To_alpha_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
+{
+    if (dest != source) {
+        memmove(dest, source, nSample);
     }
 }
 
 /* matching construct: 24-variant sweep — statement and declaration order */
-void FUN_0015ab90(unsigned char *dst, unsigned char *src, int count)
+void igImageConvert::pal_4_To_pal_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
     int i;
     unsigned int packed;
 
-    dst = dst + count - 1;
-    src = src + ((count + 1) >> 1) - 1;
+    dest = dest + nSample - 1;
+    source = source + ((nSample + 1) >> 1) - 1;
     i = 0;
-    if (count & 1) {
-        *dst = ((unsigned int)*src >> 4) & 0xF;
+    if (nSample & 1) {
+        *dest = ((unsigned int)*source >> 4) & 0xF;
         i++;
-        src--;
-        dst--;
+        source--;
+        dest--;
     }
-    for (; i < count; i += 2) {
-        packed = *src;
-        dst[0] = (packed >> 4) & 0xF;
-        dst[-1] = packed & 0xF;
-        src--;
-        dst -= 2;
+    for (; i < nSample; i += 2) {
+        packed = *source;
+        dest[0] = (packed >> 4) & 0xF;
+        dest[-1] = packed & 0xF;
+        source--;
+        dest -= 2;
     }
 }
-
-namespace Gap {
-namespace Gfx {
 
 IG_GFX_TEXTURE_FORMAT igImage::estimateUnpackedFmt2(IG_GFX_TEXTURE_FORMAT packed)
 {
@@ -1777,7 +1779,10 @@ void FUN_0015ad30(void *loader, igImage *image, int format, int width, int heigh
     ((Gap::Gfx::igImage *)image)->estimateImageSize((IG_GFX_TEXTURE_FORMAT)format, width, height, *size, *(unsigned int *)components, *rowBytes);
 }
 
-const char *FUN_0015ad50(const char *path) {
+namespace Gap {
+namespace Gfx {
+
+const char *igImageUtils::getExt(const char *path) {
     int n = strlen(path);
 
     while (n > 0) {
@@ -1788,9 +1793,6 @@ const char *FUN_0015ad50(const char *path) {
     }
     return 0;
 }
-
-namespace Gap {
-namespace Gfx {
 
 unsigned int igIndexArray::configure(unsigned int num, unsigned int usageFlags, IG_GFX_INDEX_DATA_SIZE dataSize, igVisualContext *context)
 {

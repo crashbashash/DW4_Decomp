@@ -32,7 +32,10 @@ void igPsx2Image::releaseDefaults()
 void igPsx2Image::copy(const igImage *src, bool copyImage)
 {
     igImage::copy(src, copyImage);
-    src->getMeta();
+    /* The Xbox build's igDxImage::copy (default.xbe 0x51050) copies its DDS header at this test, which a PNG image,
+       having none, skips; igPsx2Image holds no platform header, so the branch is empty. */
+    if (src->getMeta() != igFileImagePng::getClassMeta()) {
+    }
 }
 
 unsigned char igPsx2Image::platformConvert(IG_GFX_TEXTURE_FORMAT format, const igImage *source)
@@ -136,13 +139,13 @@ unsigned char igPsx2Image::platformConvert(IG_GFX_TEXTURE_FORMAT format, const i
 unsigned char igPsx2Image::platformLoad(const char *fileName)
 {
     unsigned char result = 0;
-    const char *extension = FUN_0015ad50(fileName);
+    const char *extension = Gap::Gfx::igImageUtils::getExt(fileName);
 
     if (extension != 0 && (strcmp(extension, ".tga") == 0 || strcmp(extension, ".TGA") == 0)) {
         igStringObjRef name((igStringObj *)igStringObj_Create((int)getMemoryPool()));
         igStringObj_Set(name, fileName);
-        LoaderRef loader((O1 *)igTgaLoader_Create((int)getMemoryPool()));
-        result = loader.p->v21(name.p, this) & 0xFF;
+        igSmartPointer<igTgaLoader> loader(igTgaLoader::_instantiateFromPool(getMemoryPool()));
+        result = loader->load(name.p, this);
         setName(fileName);
         return result;
     }

@@ -65,7 +65,7 @@ int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDb
     if (list->find(current) != -1) {
         RecordRef named(castToNamed(current));
         if (named.p != 0) {
-            return (unsigned char)igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)self, (char *)nameOf(named.p), (igObject *)object);
+            return (unsigned char)igDirectory_AddExternalInfoRef((Gap::Core::igDirectory *)file, (Gap::Core::igInfo *)self, (char *)nameOf(named.p), (Gap::Core::igObject *)object);
         }
     }
     return 0;
@@ -75,7 +75,7 @@ int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDb
 bool igAnimationDatabase_FindObjectReference(AnimDbRec *db, int file, AnimDbObject *obj) {
     char name[4096];
     if ((void *)obj == (void *)db) {
-        return igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)db, (char *)nameOf(db->_name), (igObject *)obj);
+        return igDirectory_AddExternalInfoRef((Gap::Core::igDirectory *)file, (Gap::Core::igInfo *)db, (char *)nameOf(db->_name), (Gap::Core::igObject *)obj);
     }
     if ((unsigned char)FUN_001aedd0(db, (igTDataList<AnimDbRecord *> *)db->_animationList, file, (AnimDbRecord *)obj) == 1) {
         return 1;
@@ -114,7 +114,7 @@ bool igAnimationDatabase_FindObjectReference(AnimDbRec *db, int file, AnimDbObje
             for (a = 0; a < total; a++) {
                 if ((AnimDbObject *)list->_data[a]->_source == target) {
                     sprintf(name, "%s %s %d", "__TS__", nameOf(skin.p->_name), a);
-                    return igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)db, name, (igObject *)obj);
+                    return igDirectory_AddExternalInfoRef((Gap::Core::igDirectory *)file, (Gap::Core::igInfo *)db, name, (Gap::Core::igObject *)obj);
                 }
             }
         }

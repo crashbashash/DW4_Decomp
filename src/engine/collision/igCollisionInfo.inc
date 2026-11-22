@@ -67,7 +67,7 @@ CallbackArray *igCollisionInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igCollisionInfo_GetMetaObjectFunction,
         "igCollisionInfo",

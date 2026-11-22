@@ -565,7 +565,7 @@ int Gap__igLogInterface__vfunc_27(igLogInterface *self, const char *format, va_l
 }
 
 igMetaObject *igInfo_GetMeta(void) {
-    return g_igInfo_metaObject;
+    return Gap::Core::igInfo::getClassMeta();
 }
 
 /* IgMessageInterface slot 13: run the base-class hook (Gap::Core::igObject::vfunc_11, a bare
@@ -632,7 +632,7 @@ public:
 };
 
 static inline Rc *createObjectList(Tag) {
-    return (Rc *)igInfoList_Create(0);
+    return (Rc *)Gap::Core::igInfoList::_instantiateFromPool(0);
 }
 
 /* Run the pass over a snapshot of the context's objects, skipping the excluded ones;

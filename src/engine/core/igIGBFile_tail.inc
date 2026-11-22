@@ -605,7 +605,7 @@ igResult igIGBFile_AddInfoListEntry(void *self) {
     void *infoList;
 
     infoList = (void *)(((igIGBFileView *)self)->_infoList);
-    if (((igTDataList<igInfoView *> *)infoList)->_count > 0) {
+    if (((igTDataList<igInfo *> *)infoList)->_count > 0) {
         ((igIGBFileView *)self)->_infoListPlace = ((Gap::Core::igDirectory *)((int)self))->addObject((Gap::Core::igObject *)((igObject *)infoList), 0, 0);
         ((igIGBFileView *)self)->_hasInfo = 1;
     }
@@ -1515,7 +1515,7 @@ igResult igIGBFile_ReadInfoList(igIGBFileView *self) {
         igObject::ref(infoList);
         t = (igObject *)self->_infoList;
         IG_OBJECT_RELEASE(t);
-        self->_infoList = (igTDataList<igInfoView *> *)infoList;
+        self->_infoList = (igTDataList<igInfo *> *)infoList;
     }
     return g_resultSuccess;
 }

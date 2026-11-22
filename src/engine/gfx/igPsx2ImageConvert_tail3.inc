@@ -1,112 +1,117 @@
-/* matching construct: a small sweep of spellings */
-ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_24(void *self, int srcFormat, int from, int to)
+namespace Gap {
+namespace Gfx {
+
+/* matching construct: the empty cases (a format converted to itself, a format with no conversion) keep retail's switch tables */
+igImageConvert::conversionFn *igPsx2ImageConvert::getConversionFn(IG_GFX_IMAGE_ORDER order, IG_GFX_TEXTURE_FORMAT sFmt, IG_GFX_TEXTURE_FORMAT tFmt, int xSize, int ySize)
 {
-    switch (from) {
-    case 0x10001:
-        switch (to) {
-        case 0x10000: return (void (*)())FUN_0015ab90;
-        case 0x10001: break;
+    switch (sFmt) {
+    case IG_GFX_TEXTURE_FORMAT_X_4:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_X_8: return pal_4_To_pal_8;
+        case IG_GFX_TEXTURE_FORMAT_X_4: break;
         }
         break;
-    case 0x10000:
-        switch (to) {
-        case 0x10001: return (void (*)())FUN_0015aaf0;
-        case 7: return (void (*)())FUN_0016f690;
-        case 0x10000: break;
+    case IG_GFX_TEXTURE_FORMAT_X_8:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_X_4: return pal_8_To_pal_4;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f690;
+        case IG_GFX_TEXTURE_FORMAT_X_8: break;
         }
         break;
-    case 6:
+    case IG_GFX_TEXTURE_FORMAT_RGBA_2222_8:
         break;
-    case 4:
+    case IG_GFX_TEXTURE_FORMAT_RGB_332_8:
         break;
-    case 8:
-        switch (to) {
-        case 7: return (void (*)())FUN_0016f700;
-        case 8: break;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f700;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: break;
         }
         break;
-    case 10:
-        switch (to) {
-        case 5: return (void (*)())FUN_0016f780;
-        case 10: break;
+    case IG_GFX_TEXTURE_FORMAT_RGB_565_16:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: return (conversionFn *)FUN_0016f780;
+        case IG_GFX_TEXTURE_FORMAT_RGB_565_16: break;
         }
         break;
-    case 9:
-        switch (to) {
-        case 7: return (void (*)())FUN_0016f7f0;
-        case 9: break;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f7f0;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16: break;
         }
         break;
-    case 11:
+    case IG_GFX_TEXTURE_FORMAT_RGBA_3328_16:
         break;
-    case 5:
-        switch (to) {
-        case 7: return (void (*)())FUN_0016f8a0;
-        case 8: return (void (*)())FUN_0016f930;
-        case 10: return (void (*)())FUN_0016f9b0;
-        case 5: break;
+    case IG_GFX_TEXTURE_FORMAT_RGB_888_24:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f8a0;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: return (conversionFn *)FUN_0016f930;
+        case IG_GFX_TEXTURE_FORMAT_RGB_565_16: return (conversionFn *)FUN_0016f9b0;
+        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: break;
         }
         break;
-    case 7:
-        switch (to) {
-        case 5: return (void (*)())FUN_0016fa10;
-        case 8: return (void (*)())FUN_0016fa60;
-        case 9: return (void (*)())FUN_0016fae0;
-        case 7: break;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: return (conversionFn *)FUN_0016fa10;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: return (conversionFn *)FUN_0016fa60;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16: return (conversionFn *)FUN_0016fae0;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: break;
         }
         break;
-    case 0:
-        switch (to) {
-        case 1: return (void (*)())FUN_0015ab70;
-        case 0x10000: return (void (*)())FUN_0016fe00;
-        case 0: break;
+    case IG_GFX_TEXTURE_FORMAT_L_8:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_A_8: return luminance_8_To_alpha_8;
+        case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)FUN_0016fe00;
+        case IG_GFX_TEXTURE_FORMAT_L_8: break;
         }
         break;
-    case 1:
-        switch (to) {
-        case 0: return (void (*)())FUN_0015ab50;
-        case 0x10000: return (void (*)())FUN_0016fe20;
-        case 0x10001: return (void (*)())FUN_0016fdb0;
-        case 1: break;
+    case IG_GFX_TEXTURE_FORMAT_A_8:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_L_8: return alpha_8_To_luminance_8;
+        case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)FUN_0016fe20;
+        case IG_GFX_TEXTURE_FORMAT_X_4: return (conversionFn *)FUN_0016fdb0;
+        case IG_GFX_TEXTURE_FORMAT_A_8: break;
         }
         break;
-    case 3:
-        switch (to) {
-        case 7: return (void (*)())FUN_0016fc20;
-        case 2: return (void (*)())FUN_0016fbd0;
-        case 0x10000: return (void (*)())FUN_0016fc80;
-        case 0x10001: return (void (*)())FUN_0016fcd0;
-        case 3: break;
+    case IG_GFX_TEXTURE_FORMAT_LA_88_16:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016fc20;
+        case IG_GFX_TEXTURE_FORMAT_LA_44_8: return (conversionFn *)FUN_0016fbd0;
+        case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)FUN_0016fc80;
+        case IG_GFX_TEXTURE_FORMAT_X_4: return (conversionFn *)FUN_0016fcd0;
+        case IG_GFX_TEXTURE_FORMAT_LA_88_16: break;
         }
         break;
-    case 2:
-        switch (to) {
-        case 3: return (void (*)())FUN_0016fb60;
-        case 0x10000: return (ConvertFunc)thunk_memcpy;
-        case 0x10001: return (void (*)())FUN_0016fd50;
-        case 2: break;
+    case IG_GFX_TEXTURE_FORMAT_LA_44_8:
+        switch (tFmt) {
+        case IG_GFX_TEXTURE_FORMAT_LA_88_16: return (conversionFn *)FUN_0016fb60;
+        case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)thunk_memcpy;
+        case IG_GFX_TEXTURE_FORMAT_X_4: return (conversionFn *)FUN_0016fd50;
+        case IG_GFX_TEXTURE_FORMAT_LA_44_8: break;
         }
         break;
     }
     return 0;
 }
 
-ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_23(void *self, int srcFormat, int dstFormat, int flag)
+igImageConvert::conversionFn *igPsx2ImageConvert::getPackConversionFn(IG_GFX_IMAGE_ORDER order, IG_GFX_TEXTURE_FORMAT packedFormat, bool isUnpack)
 {
-    switch (dstFormat) {
-    case 0x2:
-        return flag ? (void (*)())FUN_0016fb60 : (void (*)())FUN_0016fbd0;
-    case 0x8:
-        return flag ? (void (*)())FUN_0016f700 : (void (*)())FUN_0016fa60;
-    case 0xA:
-        return flag ? (void (*)())FUN_0016f780 : (void (*)())FUN_0016f9b0;
-    case 0x9:
-        return flag ? (void (*)())FUN_0016f7f0 : (void (*)())FUN_0016fae0;
-    case 0x10001:
-        return (void (*)())(flag ? FUN_0015ab90 : FUN_0015aaf0);
+    switch (packedFormat) {
+    case IG_GFX_TEXTURE_FORMAT_LA_44_8:
+        return isUnpack ? (conversionFn *)FUN_0016fb60 : (conversionFn *)FUN_0016fbd0;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16:
+        return isUnpack ? (conversionFn *)FUN_0016f700 : (conversionFn *)FUN_0016fa60;
+    case IG_GFX_TEXTURE_FORMAT_RGB_565_16:
+        return isUnpack ? (conversionFn *)FUN_0016f780 : (conversionFn *)FUN_0016f9b0;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16:
+        return isUnpack ? (conversionFn *)FUN_0016f7f0 : (conversionFn *)FUN_0016fae0;
+    case IG_GFX_TEXTURE_FORMAT_X_4:
+        return isUnpack ? pal_4_To_pal_8 : pal_8_To_pal_4;
     default:
         return 0;
     }
+}
+}
 }
 
 static inline int ClampIndex(int index, int last)

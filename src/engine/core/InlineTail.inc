@@ -259,10 +259,6 @@ int igErrorHandler_GetMeta(void) {
     return (int)g_igErrorHandler_metaObject;
 }
 
-int igInfoList_GetMeta(void) {
-    return (int)g_igInfoList_metaObject;
-}
-
 int igLibraryList_GetMeta(void) {
     return (int)g_igLibraryList_metaObject;
 }
@@ -352,10 +348,6 @@ igMetaObject *igContextExtInfoList_GetElementMeta(void) {
 
 igMetaObject *igMemoryPoolInfoList_GetElementMeta(void) {
     return g_igMemoryPoolInfo_metaObject;
-}
-
-int igInfoList_GetElementMeta(void) {
-    return (int)g_igInfo_metaObject;
 }
 
 int igPluginRepositoryList_GetElementMeta(void) {

@@ -60,7 +60,7 @@ void beFileListInfoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFileListInfoManager_Register);
 }
 
-static igMetaObjectCallback g_beFileListInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igStringRefList_EnsureRegistered, igInfoList_EnsureRegistered, Gap::Core::igDirectoryList::arkRegister, 0 };
+static igMetaObjectCallback g_beFileListInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igInfoList::arkRegister, Gap::Core::igDirectoryList::arkRegister, 0 };
 
 CallbackArray *beFileListInfoManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -170,16 +170,16 @@ void beFileListInfoManager_InitFields(void) {
     ((igObjectRefMetaField *)fnames)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)fnames)->_construct = 1;
     infoList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)infoList)->_construct = 1;
     dirList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
     ((igObjectRefMetaField *)dirList)->_metaObject = (int)Gap::Core::igDirectoryList::getClassTypeLazy();
     ((igRefMetaField *)dirList)->_construct = 1;
     readInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)readInfoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)readInfoList)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)readInfoList)->_construct = 1;
     importantInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)importantInfoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)importantInfoList)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)importantInfoList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beFileListInfoManager_fieldTable, g_beFileListInfoManager_fieldHandles, g_beFileListInfoManager_fieldOffsets, base);
 }

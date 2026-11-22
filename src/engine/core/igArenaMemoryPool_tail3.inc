@@ -1619,10 +1619,9 @@ int igArenaMemoryPool_IsSecondaryAllocator(void) {
 }
 
 static inline void releaseAllocationLock(igArenaMemoryPool *p) {
-    igSemaphoreView *x = (igSemaphoreView *)p->_allocationLock;
+    Gap::Core::igSemaphore *x = (Gap::Core::igSemaphore *)p->_allocationLock;
     if (x) {
-        x->_refCount = x->_refCount - 1;
-        if (((unsigned long long)((long long)(int)x->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(x);
+        x->release();
     }
 }
 
@@ -1635,19 +1634,19 @@ void igArenaMemoryPool_EnableAllocationLock(int *ret, igArenaMemoryPool *p, int 
     }
     igArenaMemoryPool_SetPoolOptionFlags(p, fl);
     if ((unsigned char)flag == 0) {
-        igSmartPointer<igSemaphoreView> lock((igSemaphoreView *)p->_allocationLock, kRetainReference);
+        igSmartPointer<Gap::Core::igSemaphore> lock((Gap::Core::igSemaphore *)p->_allocationLock, kRetainReference);
         releaseAllocationLock(p);
         p->_allocationLock = 0;
         if (lock.p != 0) {
-            lock->Wait(1);
-            lock->Destroy();
+            lock->obtainResource(true);
+            lock->deactivate();
         }
     } else if ((unsigned char)flag == 1) {
         if (p->_allocationLock != 0) { *ret = g_resultSuccess.v; return; }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)p)->getMemoryPool()))));
-        created->Create();
-        igSemaphoreView *t = created.p;
-        if (t) t->_refCount = t->_refCount + 1;
+        igSmartPointer<Gap::Core::igSemaphore> created(Gap::Core::igSemaphore::_instantiateFromPool(((Gap::Core::igObject *)p)->getMemoryPool()));
+        created->activate();
+        Gap::Core::igSemaphore *t = created.p;
+        if (t) t->ref();
         releaseAllocationLock(p);
         p->_allocationLock = (int)t;
     }
@@ -1789,31 +1788,31 @@ void *igArenaMemoryPool_AllocateElement(igArenaMemoryPoolView *self)
 
 void igArenaMemoryPool_Lock(igArenaMemoryPoolView *self) {
     igResult lockResult;
-    void **lock;
+    Gap::Core::igSemaphore *lock;
 
-    lock = (void **)self->_allocationLock;
+    lock = (Gap::Core::igSemaphore *)self->_allocationLock;
     if (lock != 0) {
-        lockResult = ((igSemaphoreView *)(lock))->Wait(1);
+        lockResult = lock->obtainResource(true);
     }
 }
 
 void igArenaMemoryPool_Unlock(igArenaMemoryPoolView *self) {
     igResult lockResult;
-    void **lock;
+    Gap::Core::igSemaphore *lock;
 
-    lock = (void **)self->_allocationLock;
+    lock = (Gap::Core::igSemaphore *)self->_allocationLock;
     if (lock != 0) {
-        lockResult = ((igSemaphoreView *)(lock))->Signal();
+        lockResult = lock->releaseResource();
     }
 }
 
 int igArenaMemoryPool_UnlockAndReturn(igArenaMemoryPoolView *self, int value) {
     igResult lockResult;
-    void **lock;
+    Gap::Core::igSemaphore *lock;
 
-    lock = (void **)self->_allocationLock;
+    lock = (Gap::Core::igSemaphore *)self->_allocationLock;
     if (lock != 0) {
-        lockResult = ((igSemaphoreView *)(lock))->Signal();
+        lockResult = lock->releaseResource();
     }
     return value;
 }

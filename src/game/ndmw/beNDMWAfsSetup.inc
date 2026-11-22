@@ -59,7 +59,7 @@ void beNDMWAfsSetup_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWAfsSetup_Register);
 }
 
-static igMetaObjectCallback g_beNDMWAfsSetup_callbackList[] = { igInfoList_EnsureRegistered, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWAfsSetup_callbackList[] = { Gap::Core::igInfoList::arkRegister, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWAfsSetup_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -120,7 +120,7 @@ void beNDMWAfsSetup_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWAfsSetup_ctorTable, 4);
     infoList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)infoList)->_construct = 1;
     customMenu = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)customMenu)->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();

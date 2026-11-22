@@ -1,40 +1,50 @@
-int Gap__Gfx__igPrimLengthArray1_1__vfunc_23(P_167240 *arg0, int arg1, int arg2) {
-    int temp_s0;
+namespace Gap {
+namespace Gfx {
 
-    arg0->f10 = arg2;
-    arg0->fc = arg1;
-    temp_s0 = arg0->fc * 4;
-    if (temp_s0 != 0) {
-        arg0->f8 = (int)((Gap::Core::igObject *)arg0)->realloc((void *)arg0->f8, temp_s0);
+unsigned int igPrimLengthArray1_1::configure(unsigned int num, int dataSize, igVisualContext *context)
+{
+    unsigned int size;
+
+    _dataSize = dataSize;
+    _numStrips = num;
+    size = _numStrips * 4;
+    if (size != 0) {
+        _lengthData = (unsigned char *)realloc(_lengthData, size);
     } else {
-        if (arg0->f8 != 0) {
-            ((Gap::Core::igObject *)arg0)->free((void *)arg0->f8);
+        if (_lengthData != 0) {
+            free(_lengthData);
         }
-        arg0->f8 = 0;
+        _lengthData = 0;
     }
-    return temp_s0;
+    return size;
 }
 
 /* Stores the length `length` of primitive strip `stripIndex` in the per-strip length table
  * (_lengthData is an int array, _numStrips entries). */
 
-void Gap__Gfx__igPrimLengthArray1_1__vfunc_26(igPrimLengthArray1_1 *self, int stripIndex, int length) {
-    *(int *)(self->_lengthData + (stripIndex * 4)) = length;
+void igPrimLengthArray1_1::setPrimLength(unsigned int stripNumber, unsigned int value)
+{
+    ((unsigned int *)_lengthData)[stripNumber] = value;
 }
 
 /* Returns the length of primitive strip `stripIndex` from the per-strip length table (_lengthData
  * is an int array, _numStrips entries); the getter paired with the setter in vfunc_26. */
 
-int Gap__Gfx__igPrimLengthArray1_1__vfunc_27(igPrimLengthArray1_1 *self, int stripIndex) {
-    return *(int *)(self->_lengthData + (stripIndex * 4));
+unsigned int igPrimLengthArray1_1::getPrimLength(unsigned int stripNumber) const
+{
+    return ((unsigned int *)_lengthData)[stripNumber];
 }
 
-int Gap__Gfx__igPrimLengthArray1_1__vfunc_24(igPrimLengthArray1_1 *arg0, int dummy1, int arg2) {
-    return arg0->_lengthData + (arg2 * 4);
+unsigned int *igPrimLengthArray1_1::getEditablePrimLength(unsigned int editFlags, unsigned int startLength, unsigned int num)
+{
+    return (unsigned int *)_lengthData + startLength;
 }
 
-void Gap__Gfx__igPrimLengthArray1_1__vfunc_25(void) {
+void igPrimLengthArray1_1::commitPrimLengthEdits(unsigned int *lengths, unsigned int commitFlags, unsigned int startLength, unsigned int num)
+{
 
+}
+}
 }
 
 void *FUN_00167310(png_structp png, int size) {

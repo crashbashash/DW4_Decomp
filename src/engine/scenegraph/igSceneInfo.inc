@@ -139,7 +139,7 @@ CallbackArray *igSceneInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSceneInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igSceneInfo_GetMetaObjectFunction,
         "igSceneInfo",

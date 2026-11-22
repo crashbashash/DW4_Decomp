@@ -57,7 +57,7 @@ void igPsx2Media_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2Media_Register);
 }
 
-static igMetaObjectCallback g_igPsx2Media_callbackList[] = { igPsx2IopRpcConnection_EnsureRegistered, igSemaphore_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2Media_callbackList[] = { igPsx2IopRpcConnection_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2Media_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -136,7 +136,7 @@ void igPsx2Media_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)igPsx2IopRpcConnection_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field)->_construct = 1;
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((igObjectRefMetaField *)field)->_construct = 1;
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();

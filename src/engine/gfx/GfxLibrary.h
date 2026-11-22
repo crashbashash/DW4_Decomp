@@ -121,8 +121,6 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/newlib/newlib_mallinfo.h"
 
 extern "C" igMetaObject *g_igScissorExt_metaObject;
-extern "C" igMetaObject *g_igPrimLengthArray_metaObject;
-extern "C" igMetaObject *g_igImageUtils_metaObject;
 extern "C" igMetaObject *g_igDisableExt_metaObject;
 extern "C" igMetaObject *g_igCapabilityManager_metaObject;
 extern "C" igMetaObject *g_igPsx2LongList_metaObject;
@@ -253,24 +251,6 @@ extern "C" CallbackArray *igScissorExt_Register(void);
 extern "C" void igScissorExt_GetMetaObjectFunction(void);
 extern "C" void FUN_0014bdb0(void);
 extern "C" void igPsx2ScissorExt_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igPrimLengthArray1_1_GetMetaObject(void);
-struct Obj_14be30 { int *vt; char pad[28]; };
-extern "C" int g_igPrimLengthArray1_1_vtable[4];
-extern "C" int igPrimLengthArray1_1_GetVTable(void);
-extern "C" igMetaObject *igPrimLengthArray_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igPrimLengthArray1_1_Register(void);
-extern "C" void igPrimLengthArray1_1_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igPrimLengthArray_GetPublishedMetaObject(void);
-
-struct T_14bf10 { int vt; int ref; char pad8[20]; int f28; char pad32[21]; char f53; char pad54[2]; int f56; int f60; char f64; char f65; };
-class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual T_14bf10 *vX(int); };
-extern "C" void igPrimLengthArray1_1_InitFields(void);
-extern "C" igMetaObject *igPrimLengthArray_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igPrimLengthArray_GetMetaObject(void);
-extern "C" void igPrimLengthArray_EnsureRegistered(void);
-extern "C" CallbackArray *igPrimLengthArray_Register(void);
-extern "C" void igPrimLengthArray_GetMetaObjectFunction(void);
-extern "C" void igPrimLengthArray_InitFields(void);
 extern "C" int IG_GFX_SPRITE_TYPE_GetMetaEnum(void);
 extern "C" int IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum(void);
 extern "C" igMetaObject *igPointSpriteExt_GetOrCreateMetaObject(void);
@@ -336,24 +316,6 @@ extern "C" void thunk_igLineWidthExt_GetMetaObject_0014d750(void);
 extern "C" CallbackArray *igLineWidthExt_Register(void);
 extern "C" void igLineWidthExt_GetMetaObjectFunction(void);
 extern "C" void igLineWidthExt_InitFields(void);
-extern "C" igMetaObject *igImageLoader_GetMetaObject(void);
-extern "C" void igImageLoader_EnsureRegistered(void);
-extern "C" igMetaObject *igImageUtils_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igImageLoader_Register(void);
-extern "C" void igImageLoader_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igImageUtils_GetPublishedMetaObject(void);
-extern "C" int igImageConvert_Create(int arg0);
-extern "C" igMetaObject *igImageConvert_GetMetaObject(void);
-extern "C" void igImageConvert_EnsureRegistered(void);
-extern "C" void igImageConvert_SetAbstractProxy_0014dc40(void);
-extern "C" CallbackArray *igImageConvert_Register(void);
-extern "C" void igImageConvert_GetMetaObjectFunction(void);
-extern "C" void FUN_0014dc40(void);
-extern "C" void igPsx2ImageConvert_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igImageUtils_GetMetaObject(void);
-extern "C" void igImageUtils_EnsureRegistered(void);
-extern "C" CallbackArray *igImageUtils_Register(void);
-extern "C" void igImageUtils_GetMetaObjectFunction(void);
 extern "C" igSmartPointer<igObject> *FUN_0014dd40(igSmartPointer<igObject> *self, short deleteFlag);
 extern "C" igMetaObject *igImage_GetPublishedMetaObject(void);
 extern "C" int CONTEXT_TRACKABLE_GetMetaEnum(void);
@@ -449,17 +411,6 @@ extern "C" CallbackArray *igBlendEquationExt_Register(void);
 extern "C" void igBlendEquationExt_GetMetaObjectFunction(void);
 extern "C" void igBlendEquationExt_InitFields(void);
 extern "C" void igPsx2BlendEquationExt_GetMetaObjectFunction(void);
-extern "C" int igTgaLoader_Create(int arg0);
-extern "C" igMetaObject *igTgaLoader_GetMetaObject(void);
-typedef struct { int *vt; int p1[1]; int *ref; int pad[9]; } Obj_1500f0;
-extern "C" int g_igTgaLoader_vtable[4];
-extern "C" int igTgaLoader_GetVTable(void);
-extern "C" void igTgaLoader_EnsureRegistered(void);
-extern "C" igMetaObject *igImageLoader_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igTgaLoader_Register(void);
-extern "C" void igTgaLoader_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igImageLoader_GetPublishedMetaObject(void);
-extern "C" void igTgaLoader_InitFields(void);
 struct VTableProbe { int *vt; char pad[1564]; };
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 struct S_temp_a0_1506b0 { char pad4[4]; int f4; };
@@ -591,16 +542,6 @@ extern "C" igMetaObject *igMultiTextureExt_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2MultiTextureExt_Register(void);
 extern "C" int FUN_001538b0(void);
 extern "C" void igPsx2MultiTextureExt_InitFields(void);
-extern "C" igMetaObject *igPsx2ImageConvert_GetMetaObject(void);
-struct Obj_153c40 { int *vt; char pad[4]; };
-extern "C" int g_igPsx2ImageConvert_vtable[4];
-extern "C" int igPsx2ImageConvert_GetVTable(void);
-extern "C" void igPsx2ImageConvert_EnsureRegistered(void);
-extern "C" igMetaObject *igImageConvert_GetPublishedMetaObject(void);
-extern "C" void igPsx2ImageConvert_InitFields_00153d10(void);
-extern "C" CallbackArray *igPsx2ImageConvert_Register(void);
-extern "C" int FUN_00153d00(void);
-extern "C" void FUN_00153d10(void);
 extern "C" igMetaObject *igPsx2DisableExt_GetMetaObject(void);
 extern "C" int g_igPsx2DisableExt_vtable[4];
 union U_153f60 { int vt; char b[32]; };
@@ -747,28 +688,6 @@ struct B { char pad[16]; struct C **tab; };
 struct A_1562d0 { char pad[308]; struct B *b; };
 extern "C" int FUN_001562d0(struct A_1562d0 *arg0, int arg1);
 extern "C" int FUN_00156ae0(int arg0, int arg1, float fparg0);
-typedef void (*igImageRowConvert)(void *dst, void *src, int count, int flags);
-class igImageConvertRows : public igVirtualObject {
-public:
-    virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
-    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22();
-    virtual igImageRowConvert v23(int order, int format, int toPlain);
-    /* The row converter from `fromFormat` to `toFormat` for a width x height image, or 0. */
-    virtual igImageRowConvert findConverter(int order, IG_GFX_TEXTURE_FORMAT fromFormat, IG_GFX_TEXTURE_FORMAT toFormat, int width, int height);
-    /* The in-place pixel conversions (slots 25-34): pixels, a count, and the image's _order. */
-    virtual void v25(void *pixels, int count, unsigned int *order);
-    virtual void v26(void *pixels, int count, unsigned int *order);
-    virtual void v27(void *pixels, int count, unsigned int *order);
-    virtual void v28(void *pixels, int count, unsigned int *order);
-    virtual void v29(void *pixels, int count, unsigned int *order);
-    virtual void v30(void *pixels, int count, unsigned int *order);
-    virtual void v31(void *pixels, int count, unsigned int *order);
-    virtual void v32(void *pixels, int count, unsigned int *order);
-    virtual void v33(void *pixels, int count, unsigned int *order);
-    virtual void v34(void *pixels, int count, unsigned int *order);
-};
 /* igMemoryPool: allocation (slot 52), aligned allocation (53), zeroed array allocation (54) and free (64). */
 class igMemoryPoolView : public igVirtualObject {
 public:
@@ -814,17 +733,12 @@ extern "C" void FUN_0015a6a0(Gap::Gfx::igImage *self, ImageBlock16 *out);
 /* Copies an uncompressed image into tiles (4x4 or 8x4/8x8 pixels by depth); 32-bit pixels split into high and low
  * halves 32 bytes apart. Compressed images go through FUN_0015a6a0. */
 extern "C" void FUN_0015a750(igImage *self, unsigned char *out);
-extern "C" void FUN_0015aaf0(unsigned char *dst, unsigned char *src, int count);
 
-extern "C" void FUN_0015ab50(void *dst, const void *src, unsigned int size);
-extern "C" void FUN_0015ab70(void *dst, const void *src, unsigned int size);
-extern "C" void FUN_0015ab90(unsigned char *dst, unsigned char *src, int count);
 /* An image loader's pixel hand-over: the image takes `pixels` as its buffer (the loader is unused). */
 extern "C" void FUN_0015ad20(void *loader, igImage *image, void *pixels);
 /* An image loader's size query: Gap::Gfx::igImage::estimateImageSize for `image` (the loader is unused). */
 extern "C" void FUN_0015ad30(void *loader, igImage *image, int format, int width, int height, int *size,
                              int *components, int *rowBytes);
-extern "C" const char *FUN_0015ad50(const char *path);
 extern "C" void FUN_0015b1e0(void *arg0);
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); };
 extern "C" int Gap__Bec__ParticleArray__vfunc_22(ParticleArray *arg0, int arg1);
@@ -1094,7 +1008,6 @@ extern "C" void igPointSpriteExt_GetTextureCoordPointer(igPointSpriteExt *self, 
 extern "C" void igPointSpriteExt_SetUniformSize(igPointSpriteExtView *self, unsigned int index, float value);
 extern "C" void igPointSpriteExt_SetRadian(igPointSpriteExtView *self);
 extern "C" void igPointSpriteExt_GetRadian(igPointSpriteExtView *self);
-extern "C" void igPrimLengthArray1_1_UserMakeConcrete(igPrimLengthArray1_1 *self);
 extern "C" int FUN_0015e130(unsigned int v);
 extern "C" igVertexFormat FUN_0015e160(unsigned int vtype);
 /* Copies vertex `srcIndex` of `src` to vertex `dstIndex` of `dst`, for the arrays `format` names. */
@@ -1585,11 +1498,6 @@ public:
 };
 extern "C" int Gap__Gfx__igVisualContextCapabilityManager__vfunc_23(igVisualContextCapabilityManager *self);
 typedef struct P_167240 { char pad8[8]; int f8; int fc; int f10; } P_167240;
-extern "C" int Gap__Gfx__igPrimLengthArray1_1__vfunc_23(P_167240 *arg0, int arg1, int arg2);
-extern "C" void Gap__Gfx__igPrimLengthArray1_1__vfunc_26(igPrimLengthArray1_1 *self, int stripIndex, int length);
-extern "C" int Gap__Gfx__igPrimLengthArray1_1__vfunc_27(igPrimLengthArray1_1 *self, int stripIndex);
-extern "C" int Gap__Gfx__igPrimLengthArray1_1__vfunc_24(igPrimLengthArray1_1 *arg0, int dummy1, int arg2);
-extern "C" void Gap__Gfx__igPrimLengthArray1_1__vfunc_25(void);
 extern "C" int DAT_00560840;
 extern "C" void *FUN_00167310(png_structp png, int size);
 extern "C" void FUN_00167320(png_structp png, void *storage);
@@ -1609,49 +1517,6 @@ public:
     /* Slot 25, the TGA loader's palette store (same arguments). */
     virtual int storeEntries(int format, int count, void *entries);
 };
-extern "C" void igTgaLoader_ReleaseDefaults(igObject *self);
-class O_1682e0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); int rc; };
-struct S_1682e0 { char pad[8]; O_1682e0 *f8; int f12; int f16; int f20; int f24; int f28; };
-extern "C" int FUN_001682e0(S_1682e0 *arg0, int arg1);
-extern "C" int FUN_001683a0(void *arg0);
-extern "C" int FUN_00168400(void *arg0);
-extern "C" unsigned char FUN_00168420(void *arg0);
-struct D { char pad24[24]; int f24; int f28; int f32; };
-extern "C" void FUN_00168480(struct D *arg0, char *arg1);
-extern "C" int FUN_00168570(int arg0, unsigned int arg1, int arg2, int *arg3, int *arg4, int *arg5, char *arg6);
-/* igFile as the TGA loader drives it: open/close/read and seek (whence 0 set, 1 current). */
-class igTgaFile : public igVirtualObject {
-public:
-    virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
-    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
-    virtual int open(int name, const char *mode);
-    virtual void close();
-    virtual int read(void *buffer, int size, int count);
-    virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();
-    virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37();
-    virtual int seek(int offset, int whence);
-};
-/* igTgaLoader: the file, palette buffers, the run-length state FUN_00168480 keeps and the read buffer. */
-struct igTgaLoaderView : public igObject {
-    igSmartPointer<igTgaFile> _file;
-    unsigned char *_palette;
-    unsigned char *_rawPalette;
-    unsigned char *_buffer;
-    int _runCount;
-    int _runRepeat;
-    int _bytesPerPixel;
-    int _position;
-    int _available;
-    int _bufferSize;
-};
-/* The loader's source: the file name at +8 (0: the empty string). */
-struct igTgaSource { int _vtable; unsigned int _refCount; int _name; };
-extern "C" unsigned char DAT_0048a480[12][4];
-extern "C" unsigned char DAT_0048a4b0[16];
-extern "C" unsigned char DAT_0048a4c0[32];
-extern "C" int Gap__Gfx__igTgaLoader__vfunc_23(igTgaLoaderView *self, igTgaSource *source, igImage *image);
 struct VisualContextTextures;
 class TextureImage;
 struct O520;
@@ -2002,34 +1867,6 @@ extern "C" void Gap__Gfx__igPsx2BlendEquationExt__vfunc_30(igPsx2BlendEquationEx
 extern "C" void Gap__Gfx__igPsx2DecalExt__vfunc_29(igPsx2DecalExt *self, int context);
 
 extern "C" void Gap__Gfx__igPsx2DecalExt__vfunc_30(igPsx2DecalExt *self, int arg1);
-
-class O1 : public igVirtualObject {
-public:
- virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v21(void*,void*);
-  
-};
-struct LoaderRef {
-    O1 *p;
-    LoaderRef(O1 *object) : p(object) {}
-    ~LoaderRef() {
-        O1 *o;
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_25(void);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_26(void);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_27(void *arg0, unsigned char *arg1, int arg2, int *arg3);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_28(void *self, unsigned char *p, int n, int *mode);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_29(void *arg0, unsigned char *p, int n);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_30(void);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_31(void);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_32(void);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_33(void *arg0, unsigned char *arg1, int arg2);
-extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_34(void);
-typedef void (*ConvertFunc)(void);
 typedef struct ImagePalette {
     char pad0[12];
     int lastIndex;
@@ -2039,8 +1876,6 @@ typedef struct ImagePalette {
     unsigned char used;
 } ImagePalette;
 extern "C" void FUN_0016f7f0(unsigned int *dst, unsigned short *src, int count);
-extern "C" ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_24(void *self, int srcFormat, int from, int to);
-extern "C" ConvertFunc Gap__Gfx__igPsx2ImageConvert__vfunc_23(void *self, int srcFormat, int dstFormat, int flag);
 extern "C" void FUN_0016f690(unsigned int *dst, unsigned char *src, int count, ImagePalette *palette);
 extern "C" void FUN_0016f700(unsigned int *dst, unsigned short *src, int count);
 extern "C" void FUN_0016f780(unsigned char *dst, unsigned short *src, int count);
@@ -2978,14 +2813,6 @@ struct PA_175ba0 {
     long long f112;
 };
 extern "C" int p2DrawParticles(int, unsigned, int, float);
-class igPrimLengthArrayView : public igVirtualObject {
-public:
-    virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
-    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26();
-    virtual int v27(int index);
-};
 extern "C" void Gap__Bec__ParticleArray__vfunc_27(igParticleArrayRefs *self);
 extern "C" long long DAT_00560660[4];
 extern "C" void Gap__Gfx__igPsx2ParticleArray__vfunc_29(PA_175ba0 *arg0);
@@ -3704,7 +3531,6 @@ extern "C" float Gap__Bec__ParticleArray__vfunc_31(ParticleArray *arg0);
 extern "C" float Gap__Bec__ParticleArray__vfunc_34(ParticleArray *arg0);
 extern "C" int igPsx2ScissorExt_GetMeta(void);
 extern "C" igMetaObject *igPsx2MultiTextureExt_GetMeta(void);
-extern "C" int igPsx2ImageConvert_GetMeta(void);
 extern "C" int igPsx2DecalExt_GetMeta(void);
 extern "C" igMetaObject *igPsx2BlendEquationExt_GetMeta(void);
 extern "C" igMetaObject *igPsx2DisableExt_GetMeta(void);
@@ -3737,11 +3563,9 @@ public:
     virtual void vfunc_69();
 };
 extern "C" void igVisualContext_DrawIndexed(igPsx2VisualContextSlots_180dd0 *self);
-extern "C" int igTgaLoader_GetMeta(void);
 extern "C" int igVisualContextCapabilityManager_GetMeta(void);
 extern "C" int FUN_00180e10(void);
 extern "C" int FUN_00180e20(void);
-extern "C" int igPrimLengthArray1_1_GetMeta(void);
 extern "C" int igPointSpriteExt_GetMeta(void);
 extern "C" int FUN_00180f10(void);
 extern "C" int igParticleArray_GetMeta(void);

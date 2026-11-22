@@ -170,7 +170,7 @@ void FUN_0014cd90(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igParticleArray_Register);
 }
 
-static igMetaObjectCallback g_igParticleArray_callbackList[] = { igParticleFormat_EnsureRegistered, Gap::Gfx::igVertexArray::arkRegister, igVisualContext_EnsureRegistered, igPointSpriteExt_EnsureRegistered, igPrimLengthArray_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igParticleArray_callbackList[] = { igParticleFormat_EnsureRegistered, Gap::Gfx::igVertexArray::arkRegister, igVisualContext_EnsureRegistered, igPointSpriteExt_EnsureRegistered, Gap::Gfx::igPrimLengthArray::arkRegister, 0 };
 
 CallbackArray *igParticleArray_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -320,7 +320,7 @@ void igParticleArray_InitFields(void) {
     ((igObjectRefMetaField *)pointSpriteField)->_metaObject = (int)igPointSpriteExt_GetOrCreateMetaObject();
     ((igMetaField *)pointSpriteField)->_persistent = 0;
     primLengthField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
-    ((igObjectRefMetaField *)primLengthField)->_metaObject = (int)igPrimLengthArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)primLengthField)->_metaObject = (int)Gap::Gfx::igPrimLengthArray::getClassTypeLazy();
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x10))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x11))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x12))->_persistent = 0;

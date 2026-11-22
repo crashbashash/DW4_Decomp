@@ -79,11 +79,11 @@ igExternalInfoEntry	_infoName	igStringRef
 __internalNonRefCountedObjectList	_data	igObject **
 igDirectory	_name	igStringRef
 igDirectory	_externalDirectoryList	igSmartPointer<igDirectoryList>
-igDirectory	_infoList	igSmartPointer< ::igInfoList>
+igDirectory	_infoList	igSmartPointer<igInfoList>
 igDirectory	_uniqueEntryList	igSmartPointer<igDirectory>
 igDirectory	_refList	igSmartPointer<igPointerList>
 igDirectory	_metaFieldPerObjectIndices	igSmartPointer< ::igShortListList>
-igDirectory	_loadingSemaphore	igSmartPointer< ::igSemaphore>
+igDirectory	_loadingSemaphore	igSmartPointer<igSemaphore>
 igIndexArray	_memPool	igSmartPointer<igMemoryPool>
 igIndexArray	_indexData	unsigned char *
 igVertexArray	_vdata	void **
@@ -146,3 +146,11 @@ igVertexStream	_streamMode	IG_VERTEX_STREAM_COMPILE_MODE
 igPsx2VertexStream	_dmaBuffer	unsigned char *
 igPsx2VertexStream	_dmaBufferStruct	unsigned char *
 igVertexArray2Helper	_vertexArray	igSmartPointer<igVertexArray2>
+igInfo	_directory	igDirectory *
+igInfo	_resolveState	bool
+igTgaLoader	_file	igSmartPointer<igFile>
+igTgaLoader	_palette	unsigned char *
+igTgaLoader	_tempMap	unsigned char *
+igTgaLoader	_tempRow	unsigned char *
+igPrimLengthArray	_lengthData	unsigned char *
+igGeometryAttr1_5	_stripLengths	igSmartPointer<igPrimLengthArray>

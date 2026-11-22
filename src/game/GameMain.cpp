@@ -275,7 +275,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igShadeModelAttr::arkRegister();
     Gap::Attrs::igMaterialAttr::arkRegister();
     Gap::Attrs::igGeometrySetAttr::arkRegister();
-    igGeometryAttr1_5_EnsureRegistered();
+    Gap::Attrs::igGeometryAttr1_5::arkRegister();
     Gap::Attrs::igColorAttr::arkRegister();
     igNonRefCountedNodeList_EnsureRegistered();
     igNodeList_EnsureRegistered();
@@ -286,7 +286,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igSceneInfo_EnsureRegistered();
     igGraphPathList_EnsureRegistered();
     igTransform_EnsureRegistered();
-    igPrimLengthArray1_1_EnsureRegistered();
+    Gap::Gfx::igPrimLengthArray1_1::arkRegister();
     Gap::Gfx::igIndexArray::arkRegister();
     Gap::Core::igBoolList::arkRegister();
     Gap::Core::igFloatList::arkRegister();

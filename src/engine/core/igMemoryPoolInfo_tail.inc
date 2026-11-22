@@ -1,6 +1,6 @@
 /* Read the pool info from its section of `ini` (the configuration registry by default). Without a
  * section, the defaults section names it under the info's own name. */
-igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, char *section) {
+igResult igMemoryPoolInfo_LoadFromRegistry(igMemoryPoolInfoView *self, igRegistry *ini, char *section) {
     igSmartPointer<igStringObj> value;
     int index = -1;
     int defaults;
@@ -15,7 +15,7 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
         if (defaults == -1) {
             return g_resultFailure;
         }
-        if (!((Gap::Core::igRegistry *)ini)->getValue(defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, value,
+        if (!((Gap::Core::igRegistry *)ini)->getValue(defaults, self->_name.p != 0 ? (const char *)self->_name.p : (const char *)emptyString, value,
                          (const char *)"", 0)) {
             return g_resultFailure;
         }

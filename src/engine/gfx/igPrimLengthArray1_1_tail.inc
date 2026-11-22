@@ -1,7 +1,14 @@
 /* IgPrimLengthArray1_1 slot 20, an empty override (`jr ra; nop`). The slot does nothing for this
  * class. */
 
-void igPrimLengthArray1_1_UserMakeConcrete(igPrimLengthArray1_1 *self) {
+namespace Gap {
+namespace Gfx {
+
+void igPrimLengthArray1_1::userMakeConcrete(igMetaObject *meta)
+{
+
+}
+}
 }
 
 igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock) {

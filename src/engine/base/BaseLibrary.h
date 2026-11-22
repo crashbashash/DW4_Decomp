@@ -583,7 +583,6 @@ int Gap__igListenerBase__vfunc_27(void);
 int Gap__igLockInterface__vfunc_27(int self, int mode);
 int Gap__igLogInterface__vfunc_24(void *d0, FILE *stream);
 int Gap__igLogInterface__vfunc_27(igLogInterface *self, const char *format, va_list args);
-igMetaObject *igInfo_GetMeta(void);
 void igMessageInterface_resetFields(igMessageInterface *self, int flags);
 void FUN_0022b470(int arg0, int arg1);
 void FUN_0022b610(B_2 *log, int root);

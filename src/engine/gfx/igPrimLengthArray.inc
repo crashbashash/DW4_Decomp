@@ -1,91 +1,79 @@
-igMetaObject *g_igPrimLengthArray_metaObject;
-igMetaField *g_igPrimLengthArray_lengthDataMetaField;
-igMetaField *g_igPrimLengthArray_numStripsMetaField;
-igMetaField *g_igPrimLengthArray_dataSizeMetaField;
+namespace Gap {
+namespace Gfx {
 
-igObject *igPrimLengthArray_Create(igMemoryPoolView *pool) {
-    igPrimLengthArray_EnsureRegistered();
-    return igMetaObject_CreateInstance(g_igPrimLengthArray_metaObject, pool);
-}
+igMetaObject *igPrimLengthArray::_Meta;
+igMetaField *igPrimLengthArray::k_lengthData;
+igMetaField *igPrimLengthArray::k_numStrips;
+igMetaField *igPrimLengthArray::k_dataSize;
 
-igMetaObject *igPrimLengthArray_GetOrCreateMetaObject(void) {
-    if (g_igPrimLengthArray_metaObject == 0) {
-        g_igPrimLengthArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igPrimLengthArray_metaObject;
-}
-
-igMetaObject *igPrimLengthArray_GetMetaObject(void)
+igPrimLengthArray *igPrimLengthArray::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igPrimLengthArray_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPrimLengthArray_EnsureRegistered();
-    return g_igPrimLengthArray_metaObject;
+    arkRegister();
+    return (igPrimLengthArray *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igPrimLengthArray_EnsureRegistered(void)
+igMetaObject *igPrimLengthArray::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igPrimLengthArray_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igPrimLengthArray_Register(void) {
+igMetaObject *igPrimLengthArray::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void igPrimLengthArray::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPrimLengthArray::arkRegisterInternal()
+{
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igPrimLengthArray_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igPrimLengthArray_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPrimLengthArray",
-        0x14, /* instance size */
+        sizeof(igPrimLengthArray),
         0,
-        &igPrimLengthArray_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igPrimLengthArray_GetMetaObjectFunction(void) {
-    igPrimLengthArray_GetMetaObject();
+void igPrimLengthArray::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_lengthData", "_numStrips", "_dataSize" };
+    static igMetaField **enumStorage[] = { &k_lengthData, &k_numStrips, &k_dataSize };
+    static int offsets[] = { 8, 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+    }
+    {
+        igUnsignedIntMetaField *metaField = (igUnsignedIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(32);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Gfx::igPrimLengthArray1_1::getClassMetaSafe;
 }
-
-static FieldFactory g_igPrimLengthArray_ctorTable[] = {
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igPrimLengthArray_fieldTable[] = {
-    "_lengthData",
-    "_numStrips",
-    "_dataSize",
-};
-static igMetaField **g_igPrimLengthArray_fieldHandles[] = {
-    &g_igPrimLengthArray_lengthDataMetaField,
-    &g_igPrimLengthArray_numStripsMetaField,
-    &g_igPrimLengthArray_dataSizeMetaField,
-};
-static int g_igPrimLengthArray_fieldOffsets[] = {
-    8,
-    12,
-    16,
-};
-
-void igPrimLengthArray_InitFields(void) {
-    int fieldStart;
-    void *temp_s1;
-    igMetaObject *meta;
-
-    meta = g_igPrimLengthArray_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igPrimLengthArray_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 2)))->setDefault(0x20);
-    igMetaObject_NameFields(meta, g_igPrimLengthArray_fieldTable, g_igPrimLengthArray_fieldHandles, g_igPrimLengthArray_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPrimLengthArray_metaObject) + 60) = (int)(igPrimLengthArray1_1_GetMetaObjectFunction);
+}
 }
 
 static const char *g_igPrimLengthArray_spriteTypeNames[] = {

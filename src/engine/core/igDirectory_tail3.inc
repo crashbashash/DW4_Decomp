@@ -80,12 +80,12 @@ int igDirectory::loadRef() {
         _loadedRefCount = count;
         return count;
     }
-    waited = ((igSemaphoreView *)_loadingSemaphore.p)->Wait(1);
+    waited = _loadingSemaphore->obtainResource(true);
     count = _loadedRefCount;
     if (waited.v == g_resultSuccess.v) {
         count += 1;
         _loadedRefCount = count;
-        signalled = ((igSemaphoreView *)_loadingSemaphore.p)->Signal();
+        signalled = _loadingSemaphore->releaseResource();
     }
     return count;
 }
@@ -96,13 +96,13 @@ int igDirectory::loadRelease() {
         left = _loadedRefCount - 1;
         _loadedRefCount = left;
     } else {
-        ((igSemaphoreView *)_loadingSemaphore.p)->Wait(1);
+        _loadingSemaphore->obtainResource(true);
         left = _loadedRefCount - 1;
         _loadedRefCount = left;
     }
     if (left <= 0) {
         if (_loadingSemaphore != 0) {
-            ((igSemaphoreView *)_loadingSemaphore.p)->Signal();
+            _loadingSemaphore->releaseResource();
         }
         if (_managingResource != 0) {
             ::igTDataList< ::igObject *> *list = (::igTDataList< ::igObject *> *)((igResource *)_managingResource)->_directoryList;
@@ -119,22 +119,22 @@ int igDirectory::loadRelease() {
         }
     } else {
         if (_loadingSemaphore != 0) {
-            ((igSemaphoreView *)_loadingSemaphore.p)->Signal();
+            _loadingSemaphore->releaseResource();
         }
     }
     return left;
 }
 
 /* The new semaphore arrives with its reference already counted (an adopted reference). */
-static inline igSemaphoreView *recreateLoadingSemaphore(igSmartPointer< ::igSemaphore> &held, AdoptReference) {
+static inline igSemaphore *recreateLoadingSemaphore(igSmartPointer<igSemaphore> &held, AdoptReference) {
     held.release();
-    held.p = (::igSemaphore *)igSemaphore_Create(0);
-    return (igSemaphoreView *)held.p;
+    held.p = igSemaphore::_instantiateFromPool(0);
+    return held.p;
 }
 
 void igDirectory::createLoadingSemaphore() {
     if (_loadingSemaphore == 0) {
-        recreateLoadingSemaphore(_loadingSemaphore, AdoptReference())->Create();
+        recreateLoadingSemaphore(_loadingSemaphore, AdoptReference())->activate();
     }
 }
 }

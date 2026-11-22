@@ -60,7 +60,7 @@ void FUN_00225c10(void)
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igOptInterface_Register);
 }
 
-static igMetaObjectCallback g_igOptInterface_callbackList[] = { igMetaObjectList_EnsureRegistered, FUN_002290c0, igInfoList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igOptInterface_callbackList[] = { igMetaObjectList_EnsureRegistered, FUN_002290c0, Gap::Core::igInfoList::arkRegister, 0 };
 
 CallbackArray *igOptInterface_Register(void) {
     BaseLibrary_MarkRegistered();
@@ -133,7 +133,7 @@ void igOptInterface_InitFields(void) {
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igFileInfo_GetOrCreateMetaObject();
     ((igRefMetaField *)field2)->_construct = 1;
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)field3)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)field3)->_construct = 1;
     igMetaObject_NameFields(meta, g_igOptInterface_fieldTable, g_igOptInterface_fieldHandles, g_igOptInterface_fieldOffsets, base);
 }

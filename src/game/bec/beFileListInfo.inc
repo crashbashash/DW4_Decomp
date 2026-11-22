@@ -46,7 +46,7 @@ CallbackArray *beFileListInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beFileListInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         beFileListInfo_GetMetaObjectFunction,
         "beFileListInfo",

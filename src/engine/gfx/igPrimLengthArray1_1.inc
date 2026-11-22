@@ -1,78 +1,65 @@
-igMetaObject *g_igPrimLengthArray1_1_metaObject;
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igPrimLengthArray1_1_GetMetaObject(void)
+igMetaObject *igPrimLengthArray1_1::_Meta;
+
+igMetaObject *igPrimLengthArray1_1::getClassTypeSafe()
 {
-    unsigned char ready;
-    if (g_igPrimLengthArray1_1_metaObject != 0) {
-        ready = (g_igPrimLengthArray1_1_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igPrimLengthArray1_1_EnsureRegistered();
-done:
-    return g_igPrimLengthArray1_1_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igPrimLengthArray1_1_GetVTable(void) {
-    struct Obj_14be30 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igPrimLengthArray1_1_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igPrimLengthArray1_1_EnsureRegistered(void)
+void *igPrimLengthArray1_1::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igPrimLengthArray1_1_Register);
+    igPrimLengthArray1_1 temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igPrimLengthArray1_1_Register(void) {
-    GfxLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
+void igPrimLengthArray1_1::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPrimLengthArray1_1::arkRegisterInternal()
+{
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPrimLengthArray1_1_metaObject,
-        igPrimLengthArray_Register,
-        igPrimLengthArray_GetPublishedMetaObject,
-        igPrimLengthArray1_1_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gfx::igPrimLengthArray::arkRegisterInternal,
+        Gap::Gfx::igPrimLengthArray::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPrimLengthArray1_1",
-        0x14, /* instance size */
-        igPrimLengthArray1_1_GetVTable,
-        &igPrimLengthArray1_1_InitFields,
-        0,                                                 /* static-initializer callback item (appended on fresh configuration) */
-        0                                                  /* 0-terminated dependency-callback list */
+        sizeof(igPrimLengthArray1_1),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igPrimLengthArray1_1_GetMetaObjectFunction(void) {
-    igPrimLengthArray1_1_GetMetaObject();
-}
+igMetaField *igPrimLengthArray1_1::k_lengthData;
 
-igMetaObject *igPrimLengthArray_GetPublishedMetaObject(void) {
-    return g_igPrimLengthArray_metaObject;
-}
+void igPrimLengthArray1_1::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
 
-igMetaField * g_igPrimLengthArray1_1_lengthDataMetaField;
-
-void igPrimLengthArray1_1_InitFields(void) {
-    void **temp_v0;
-    T_14bf10 *temp_s0;
-    int temp_s2;
-    void *temp_s1;
-
-    temp_s1 = (void *)(g_igPrimLengthArray1_1_metaObject);
-    temp_v0 = (void **)(igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_lengthData"));
-    temp_s2 = ((Gap::Core::__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)))->find((Gap::Core::igObject *)temp_v0);
-    temp_s0 = ((DW4VC_84_1 *)(temp_v0))->vX(1);
-    temp_s0->f60 = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
-    temp_s0->f56 = 0;
-    ((Gap::Core::igMemoryRefMetaField *)temp_s0)->setDefault(0);
-    temp_s0->f53 = 1;
-    temp_s0->f64 = 1;
-    temp_s0->f65 = 1;
-    temp_s0->f28 = (int)(&g_igPrimLengthArray1_1_lengthDataMetaField);
-    igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s2, (igMetaField *)temp_s0);
-    temp_s0->ref -= 1;
-    if ((temp_s0->ref & 0x7fffff) == 0) {
-        igObject_Destroy((igObject *)temp_s0);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_lengthData");
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_memType = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
+        metaField->_memSize = 0;
+        metaField->setDefault(0);
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+        metaField->_externalEnumStorage = (int)&k_lengthData;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
     }
+}
+}
 }
 

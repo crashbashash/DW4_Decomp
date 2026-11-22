@@ -96,7 +96,7 @@ void igEventTracker_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEventTracker_Register);
 }
 
-static igMetaObjectCallback g_igEventTracker_callbackList[] = { igStringTable_EnsureRegistered, igCallStackTable_EnsureRegistered, igLocationTable_EnsureRegistered, Gap::Core::igCharListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, igCallStackTracer_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igEventTracker_callbackList[] = { igStringTable_EnsureRegistered, igCallStackTable_EnsureRegistered, igLocationTable_EnsureRegistered, Gap::Core::igCharListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, igCallStackTracer_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igEventTracker_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -350,7 +350,7 @@ void igEventTracker_InitFields(void) {
     ((Gap::Core::igIntMetaField *)eventClassNameOffset)->setDefault(-1);
     eventClassNameOffset->_persistent = 0;
     lock = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x20));
-    ((igObjectRefMetaField *)lock)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lock)->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     lock->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igEventTracker_fieldTable, g_igEventTracker_fieldDescriptors, g_igEventTracker_fieldOffsets, base);
 }

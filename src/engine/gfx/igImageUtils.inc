@@ -1,37 +1,38 @@
-igMetaObject *g_igImageUtils_metaObject;
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igImageUtils_GetMetaObject(void)
+igMetaObject *igImageUtils::_Meta;
+
+igMetaObject *igImageUtils::getClassTypeSafe()
 {
-    igMetaObject *g = g_igImageUtils_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igImageUtils_EnsureRegistered();
-    return g_igImageUtils_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igImageUtils_EnsureRegistered(void)
+void igImageUtils::arkRegister()
 {
-    igMetaObject_RunStaticInit(igImageUtils_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *igImageUtils_Register(void) {
+CallbackArray *igImageUtils::arkRegisterInternal()
+{
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igImageUtils_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igImageUtils_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igImageUtils",
-        8, /* instance size */
+        sizeof(igImageUtils),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igImageUtils_GetMetaObjectFunction(void) {
-    igImageUtils_GetMetaObject();
+}
 }
 
 igSmartPointer<igObject> *FUN_0014dd40(igSmartPointer<igObject> *self, short deleteFlag) {

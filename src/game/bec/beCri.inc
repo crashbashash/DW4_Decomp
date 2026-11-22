@@ -78,7 +78,7 @@ void beCri_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCri_Register);
 }
 
-static igMetaObjectCallback g_beCri_callbackList[] = { beSystem_EnsureRegistered, beCriHandle_EnsureRegistered, beCriHandleList_EnsureRegistered, igInfoList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
+static igMetaObjectCallback g_beCri_callbackList[] = { beSystem_EnsureRegistered, beCriHandle_EnsureRegistered, beCriHandleList_EnsureRegistered, Gap::Core::igInfoList::arkRegister, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beCri_Register(void) {
     BecLibrary_MarkRegistered();
@@ -183,7 +183,7 @@ void beCri_InitFields(void) {
     ((igObjectRefMetaField *)hdSEs)->_metaObject = (int)beCriHandleList_GetOrCreateMetaObject();
     ((igRefMetaField *)hdSEs)->_construct = 1;
     infoList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
-    ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)infoList)->_metaObject = (int)Gap::Core::igInfoList::getClassTypeLazy();
     ((igRefMetaField *)infoList)->_construct = 1;
     lsBinObjs = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igObjectRefMetaField *)lsBinObjs)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();

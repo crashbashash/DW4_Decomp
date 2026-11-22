@@ -487,7 +487,7 @@ void Gap__igPsx2AudioContext__vfunc_54(igPsx2AudioContext *arg0, int arg1) {
     ThreadRef *a0;
     AudioThread *p;
     if (arg0->_streamingThread == 0) {
-        p = (AudioThread *)igSemaphore_Create(0);
+        p = (AudioThread *)Gap::Core::igSemaphore::_instantiateFromPool(0);
         g_streamingSemaphore = p;
         p->a92();
         g_streamingSemaphore->a132((void *)1);

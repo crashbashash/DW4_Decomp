@@ -678,6 +678,23 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `struct S { int a, b, c, d; }; S G; int Garr[16]; void h();` with
     `int k1(int *q) { int x = G.c; *q = 1; int y = G.c; return x + y; }`, the same through `S *p`, with `h()` in
     place of the store, with `int z = a; z = z * a;` in its place, and with `Garr[i]` / `p[i]`.
+- **Two reads of one value in a flow node get a temporary of their own; an unused read is enough.**
+  - *Symptom:* registers only: a scaled index (`i << 2`) shared by a lookup before a loop and two reads after it
+    sits in the register above the list's element-array pointer, where retail has it below; and an element read
+    after the loop is reloaded in retail where a single read after the loop reuses the one before it.
+  - *Cause (IR, `gdb_cse_compare.py`):* inside one flow node, an occurrence that a later one in the same node reuses
+    computes into a temporary of its own even when an earlier value reaches it; only the occurrences reused across
+    flow nodes share the first one's temporary. The next round of `IRO_CommonSubs` merges such split values into
+    new temporaries, numbered in group order (the group opened first, here the shift, gets the lower id), while a
+    value shared in the first round keeps its earlier temporary. Two reads of `list->_data` after the loop (one of
+    them unused) split the data pointer in round one, so round two numbers shift and data together, shift first;
+    with one read the data pointer keeps its round-one temporary below the merged shift. The same local pairing is
+    what makes the element read after the loop a fresh load. The unused read is gone before code generation.
+  - *Spelling:* a local read of the element beside the one the code uses, as a release-build assert's operand would
+    leave it, marked `/* matching construct: dead read — ... */`. An expression statement (`list->get(i);`) is
+    dropped by the front end and does nothing; a copy of the index (`int j = i;`) is propagated before the first
+    round and does nothing either.
+  - *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp` (igEnbayaContextPool's deallocate, 0x1c16a0).
 - **A load right after a store to the same base and offset becomes a register copy.**
   - *Symptom:* a squared-distance check against a local vector whose `y` was just set to 0 (`flat = centre;
     flat.y = 0.0f;`): retail has no load of `y`, the stored zero stands in for it; the plain spelling with `dx`, `dy`

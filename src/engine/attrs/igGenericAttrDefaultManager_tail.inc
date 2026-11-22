@@ -6,34 +6,29 @@ igSmartPointer<igAttr> igGenericAttrDefaultManager::createDefaultAttr(igMetaObje
     igMetaObject_IsOfType(meta, igAttr::getClassMeta());
     return igMetaObject_CreateInstanceDefaultRef(meta);
 }
-}
-}
 
-void FUN_0013cf70(void) {
+void igGeometryAttr::synchronizeDefault(igVisualContext *vc)
+{
 
-}
-
-void FUN_0013cf80(void **arg0, int a1, int a2, int a3, int a4) {
-    int sp1C;
-    int sp18;
-
-    sp1C = -1;
-    sp18 = -1;
-    ((DW4VC_144_4 *)(arg0))->vX(a1, a2, a3, (int)(&sp1C), (int)(&sp18), a4, 0);
 }
 
-void igGeometryAttr1_5_Reset(igGeometryAttr1_5 *self) {
-    void **temp_a0;
-    void **temp_a0_2;
+bool igGeometryAttr::intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, ISET_SIDES whichFaces)
+{
+    int primIndex = -1;
+    int polyIndex = -1;
+    return intersectRay(ray, intersectPoint, norm, primIndex, polyIndex, whichFaces, false);
+}
 
-    temp_a0 = (void **)(self->_vertexArray);
-    if (temp_a0 != 0) {
-        ((DW4VC_236_0 *)(temp_a0))->vX();
+void igGeometryAttr::reset()
+{
+    if (_vertexArray != 0) {
+        _vertexArray->reset();
     }
-    temp_a0_2 = (void **)(self->_indexArray);
-    if (temp_a0_2 != 0) {
-        ((DW4VC_140_0 *)(temp_a0_2))->vX();
+    if (_indexArray != 0) {
+        _indexArray->reset();
     }
+}
+}
 }
 
 /* Empty override (a bare return) in vtable slot 35 of Gap::Core::igPsx2IndexArray, next to slot

@@ -30,17 +30,17 @@ igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *self, u
     igResult destroyed;
     igResult created;
     if (enable == 0) {
-        igSmartPointer<igSemaphoreView> held(self->_allocationLock);
+        igSmartPointer<Gap::Core::igSemaphore> held(self->_allocationLock);
         self->_allocationLock.clear();
         if (held.p != 0) {
-            waited = held.p->Wait(1);
-            destroyed = held.p->Destroy();
+            waited = held.p->obtainResource(true);
+            destroyed = held.p->deactivate();
         }
         self->_allocationLock.clear();
     } else if (enable == 1) {
         if (self->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
-        igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
-        created = semaphore.p->Create();
+        igSmartPointer<Gap::Core::igSemaphore> semaphore(Gap::Core::igSemaphore::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+        created = semaphore.p->activate();
         self->_allocationLock = semaphore;
     }
     return igResult(g_resultSuccess.v);
@@ -120,31 +120,31 @@ void *igMallocMemoryPool_AllocateElement(igMallocMemoryPoolView *self)
 
 void igMallocMemoryPool_Lock(void *pool) {
     igResult result;
-    void **lock;
+    Gap::Core::igSemaphore *lock;
 
-    lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
+    lock = (Gap::Core::igSemaphore *)((igMallocMemoryPool *)pool)->_allocationLock;
     if (lock != 0) {
-        result = ((igSemaphoreView *)(lock))->Wait(1);
+        result = lock->obtainResource(true);
     }
 }
 
 void igMallocMemoryPool_Unlock(void *pool) {
     igResult result;
-    void **lock;
+    Gap::Core::igSemaphore *lock;
 
-    lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
+    lock = (Gap::Core::igSemaphore *)((igMallocMemoryPool *)pool)->_allocationLock;
     if (lock != 0) {
-        result = ((igSemaphoreView *)(lock))->Signal();
+        result = lock->releaseResource();
     }
 }
 
 int igMallocMemoryPool_UnlockAndReturn(void *pool, int value) {
     igResult result;
-    void **lock;
+    Gap::Core::igSemaphore *lock;
 
-    lock = (void **)((igMallocMemoryPool *)pool)->_allocationLock;
+    lock = (Gap::Core::igSemaphore *)((igMallocMemoryPool *)pool)->_allocationLock;
     if (lock != 0) {
-        result = ((igSemaphoreView *)(lock))->Signal();
+        result = lock->releaseResource();
     }
     return value;
 }

@@ -147,6 +147,6 @@ igNamedObject *igNamedObject_Destroy(igNamedObject *self, short deleteFlag) {
 }
 
 int FUN_00131c50(void) {
-    return (int)g_igInfo_metaObject;
+    return (int)Gap::Core::igInfo::getClassMeta();
 }
 

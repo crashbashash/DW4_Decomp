@@ -1,32 +1,36 @@
-int igInfo_FindObjectReference(void **self, int directory, int target) {
-    int meta;
+namespace Gap {
+namespace Core {
+
+bool igInfo::attemptResolve(igDirectory *parentDir, void *ref) {
+    igMetaObject *meta = getMeta();
     int i;
-    int value;
+    void *value;
     igMetaField *field;
-    meta = (int)((igObjectDispatchView *)(self))->GetMeta();
-    for (i = 0; i < igMetaObject_GetFieldCount((igMetaObject *)meta); i++) {
-        field = (igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, i);
-        if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) {
-          value = *(int *)((char *)self + field->_offset);
-          if (value == target) {
-            igDirectory_AddExternalInfoRef((igDirectoryView *)directory, (igInfoView *)self, (char *)field->_fieldName, (igObject *)target);
-            return 1;
-        }
+    for (i = 0; i < igMetaObject_GetFieldCount(meta); i++) {
+        field = (igMetaField *)igMetaObject_GetFieldAt(meta, i);
+        if (field->isOfType(igRefMetaField::getClassMeta())) {
+            value = *(void **)((char *)this + field->_offset);
+            if (value == ref) {
+                igDirectory_AddExternalInfoRef(parentDir, this, field->_fieldName.p, (igObject *)ref);
+                return true;
+            }
         }
     }
-    return 0;
+    return false;
 }
 
-int igObject_GetFieldValueByName(void **self, int name) {
+void *igInfo::resolve(const char *key) {
     igMetaField *field;
 
-    if (name == 0) {
+    if (key == 0) {
         return 0;
     }
-    field = (igMetaField *)(igMetaObject_FindFieldByName((igMetaObject *)(((igObjectDispatchView *)(self))->GetMeta()), (const char *)name));
+    field = (igMetaField *)igMetaObject_FindFieldByName(getMeta(), key);
     if (field == 0) {
         return 0;
     }
-    return *(int *)((char *)self + field->_offset);
+    return *(void **)((char *)this + field->_offset);
+}
+}
 }
 

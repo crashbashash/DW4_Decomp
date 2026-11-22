@@ -1,9 +1,9 @@
 void igStandardQueue_InitDefaults(igStandardQueueView *self) {
-    self->_insertLock->Create();
-    self->_removeLock->Create();
-    self->_queueSema->SetInitialCount(0);
-    self->_queueSema->SetMaximumCount(0x7FFFFFFF);
-    self->_queueSema->Create();
+    self->_insertLock->activate();
+    self->_removeLock->activate();
+    self->_queueSema->setInitialResourceCount(0);
+    self->_queueSema->setMaxResourceCount(0x7FFFFFFF);
+    self->_queueSema->activate();
 }
 
 void igStandardQueue_ReleaseDefaults(igStandardQueueView *self) {
@@ -28,21 +28,21 @@ int igStandardQueue_IsCreated(igStandardQueue *self) {
     return self->_data != 0;
 }
 
-igResult igStandardQueue_Insert(igStandardQueueView *self, int val, int block)
+igResult igStandardQueue_Insert(igStandardQueueView *self, int val, bool block)
 {
     unsigned a;
     unsigned b;
-    if (self->IsFull() != 0 && self->GetCount() > self->_maxCapacity && block == 0) {
+    if (self->IsFull() != 0 && self->GetCount() > self->_maxCapacity && !block) {
         return igResult(g_resultFailure.v);
     }
     while (((self->IsFull() != 0) ^ 1) == 0 && self->GetCount() > self->_maxCapacity) {
         g_threadManager->_threadList->_data[0]->Sleep(0x05F5E100);
     }
-    if (self->_insertLock->Wait(block) != g_resultSuccess) {
+    if (self->_insertLock->obtainResource(block) != g_resultSuccess) {
         return igResult(g_resultFailure.v);
     }
     if (self->IsFull() != 0) {
-        if (self->_removeLock->Wait(block) != g_resultSuccess) {
+        if (self->_removeLock->obtainResource(block) != g_resultSuccess) {
             return igResult(g_resultFailure.v);
         }
         if (self->IsFull() != 0) {
@@ -50,36 +50,36 @@ igResult igStandardQueue_Insert(igStandardQueueView *self, int val, int block)
             b = self->_capacity * 2;
             igStandardQueue_Resize(self, (int)((a < b) ? a : b));
         }
-        self->_removeLock->Signal();
+        self->_removeLock->releaseResource();
     }
     self->_data[self->_insertElement] = val;
     self->_insertElement = (self->_insertElement + 1) % self->_capacity;
-    self->_insertLock->Signal();
-    self->_queueSema->Signal();
+    self->_insertLock->releaseResource();
+    self->_queueSema->releaseResource();
     return igResult(g_resultSuccess.v);
 }
 
 int igStandardQueue_IsFull(igStandardQueueView *self) {
-    return self->_capacity == self->_queueSema->GetCount();
+    return self->_capacity == self->_queueSema->getCurrentResourceCount();
 }
 
-igResult igStandardQueue_Remove(igStandardQueueView *self, int *out, int block)
+igResult igStandardQueue_Remove(igStandardQueueView *self, int *out, bool block)
 {
-    if (self->_queueSema->Wait(block) != g_resultSuccess) {
+    if (self->_queueSema->obtainResource(block) != g_resultSuccess) {
         return igResult(g_resultFailure.v);
     }
-    if (self->_removeLock->Wait(block) != g_resultSuccess) {
+    if (self->_removeLock->obtainResource(block) != g_resultSuccess) {
         return igResult(g_resultFailure.v);
     }
     *out = self->_data[self->_removeElement];
     self->_removeElement = (self->_removeElement + 1) % self->_capacity;
-    self->_removeLock->Signal();
+    self->_removeLock->releaseResource();
     return igResult(g_resultSuccess.v);
 }
 
 int igStandardQueue_GetCount(igStandardQueueView *self)
 {
-    return self->_queueSema->GetCount();
+    return self->_queueSema->getCurrentResourceCount();
 }
 
 void igStandardQueue_Resize(igStandardQueueView *queue, int capacity) {
@@ -114,11 +114,11 @@ igResult igStandardQueue_SetCapacity(igStandardQueueView *self, unsigned n)
     if (self->_data == 0) {
         self->_capacity = n;
     } else {
-        self->_removeLock->Wait(1);
-        self->_insertLock->Wait(1);
+        self->_removeLock->obtainResource(true);
+        self->_insertLock->obtainResource(true);
         igStandardQueue_Resize(self, (int)n);
-        self->_insertLock->Signal();
-        self->_removeLock->Signal();
+        self->_insertLock->releaseResource();
+        self->_removeLock->releaseResource();
     }
     return igResult(g_resultSuccess.v);
 }
@@ -134,16 +134,16 @@ void igStandardQueue_SetMaxCapacity(int *out, igStandardQueueView *self, unsigne
         self->_maxCapacity = a;
         *out = g_resultSuccess.v;
     } else {
-        t[4] = self->_insertLock->Wait(1);
+        t[4] = self->_insertLock->obtainResource(true);
         if (a < self->GetCount()) {
-            t[3] = self->_insertLock->Signal();
+            t[3] = self->_insertLock->releaseResource();
             *out = g_resultFailure.v;
         } else {
-            t[2] = self->_removeLock->Wait(1);
+            t[2] = self->_removeLock->obtainResource(true);
             igStandardQueue_Resize(self, a);
             self->_maxCapacity = self->_capacity;
-            t[1] = self->_insertLock->Signal();
-            t[0] = self->_removeLock->Signal();
+            t[1] = self->_insertLock->releaseResource();
+            t[0] = self->_removeLock->releaseResource();
             *out = g_resultSuccess.v;
         }
     }

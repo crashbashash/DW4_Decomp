@@ -83,7 +83,7 @@ void igMallocMemoryPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMallocMemoryPool_Register);
 }
 
-static igMetaObjectCallback g_igMallocMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMallocMemoryPool_callbackList[] = { igEventTracker_EnsureRegistered, Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igMallocMemoryPool_Register(void) {
     return igMetaObject_RegisterClass(
@@ -172,7 +172,7 @@ void igMallocMemoryPool_InitFields(void) {
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 7);
-    allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    allocationLock->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
     defaultMessageLevel = g_igMallocMemoryPool_defaultMessageLevel;
     ((Gap::Core::igEnumMetaField *)messageLevel)->setDefault(defaultMessageLevel);

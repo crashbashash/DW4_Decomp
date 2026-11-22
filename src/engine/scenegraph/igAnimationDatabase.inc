@@ -119,7 +119,7 @@ CallbackArray *igAnimationDatabase_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationDatabase_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igAnimationDatabase_GetMetaObjectFunction,
         "igAnimationDatabase",

@@ -313,11 +313,6 @@ extern "C" int igStringObj_GetVTable(void);
 extern "C" CallbackArray *igStringObj_Register(void);
 extern "C" void igStringObj_GetMetaObjectFunction(void);
 extern "C" void igStringObj_InitFields(void);
-extern "C" igMetaObject *igSemaphore_GetOrCreateMetaObject(void);
-extern "C" void igSemaphore_EnsureRegistered(void);
-extern "C" CallbackArray *igSemaphore_Register(void);
-extern "C" void igSemaphore_GetMetaObjectFunction(void);
-extern "C" void igSemaphore_SetAbstractProxy(void);
 extern "C" void igPsx2Semaphore_GetMetaObjectFunction(void);
 extern "C" void **igSmartPointer_igLocationTable_Destruct(void **arg0, int arg1);
 extern "C" void **igSmartPointer_igCallStackTable_Destruct(void **arg0, short arg1);
@@ -428,13 +423,6 @@ extern "C" void igLibrary_EnsureRegistered(void);
 extern "C" CallbackArray *igLibrary_Register(void);
 extern "C" void igLibrary_GetMetaObjectFunction(void);
 extern "C" void igLibrary_InitFields(void);
-extern "C" int igInfoList_GetVTable(void);
-extern "C" CallbackArray *igInfoList_Register(void);
-extern "C" void igInfoList_GetMetaObjectFunction(void);
-extern "C" int igInfo_GetVTable(void);
-extern "C" void igInfo_EnsureRegistered(void);
-extern "C" void igInfo_GetMetaObjectFunction(void);
-extern "C" void igInfo_InitFields(void);
 extern "C" int igIGBFile_GetVTable(void);
 extern "C" int *igSmartPointer_igMemoryPool_Construct(int *p);
 extern "C" int *igSmartPointer_igMetaField_Construct(int *p);
@@ -621,7 +609,6 @@ extern "C" void igPsx2Thread_InitFields(void);
 extern "C" int igPsx2Semaphore_GetVTable(void);
 extern "C" void igPsx2Semaphore_EnsureRegistered(void);
 extern "C" CallbackArray *igPsx2Semaphore_Register(void);
-extern "C" igMetaObject *igSemaphore_GetPublishedMetaObject(void);
 extern "C" void igPsx2Semaphore_InitFields(void);
 extern "C" void *igPsx2Media_Create(int pool);
 extern "C" int igPsx2Media_GetVTable(void);
@@ -769,7 +756,6 @@ extern "C" int igIGBFile_GetCurrentPosition(igIGBFileView *arg0);
 extern "C" void igIGBFile_CloseAfterRead(igIGBFileView *arg0);
 extern "C" int igIGBFile_AbortRead(igIGBFileView *arg0);
 extern "C" void igIGBFile_EnsureConcrete(int *arg0, void *arg1);
-class igInfoView;
 struct igDirectoryView;
 extern "C" int igInfo_FindObjectReference(void **arg0, int arg1, int arg2);
 extern "C" struct StringPool *StringPool_Destroy(struct StringPool *self, long long delete_flag);
@@ -1121,7 +1107,6 @@ extern "C" int iResumeThread(int);
 extern "C" int iChangeThreadPriority(int, int);
 extern "C" int igPsx2Thread_IsEqual(void *arg0, void *arg1);
 class igPsx2ThreadView;
-class igSemaphoreView;
 class igPsx2ThreadManagerView;
 extern "C" void igPsx2Thread_InitDefaults(igPsx2ThreadView *self);
 extern "C" void igPsx2Thread_Sleep(int *result, int self, unsigned long long nanoseconds);
@@ -1141,7 +1126,7 @@ extern "C" void Gap__Core__igPsx2Thread__vfunc_52(int *result);
 extern "C" void Gap__Core__igPsx2Thread__vfunc_53(int *result);
 extern "C" void Gap__Core__igPsx2Thread__vfunc_54(int *result);
 extern "C" int igPsx2Semaphore_GetMeta(void);
-extern "C" void igPsx2Semaphore_ReleaseDefaults(igSemaphoreView *self);
+extern "C" void igPsx2Semaphore_ReleaseDefaults(igPsx2Semaphore *self);
 extern "C" int igPsx2Media_GetMeta(void);
 extern "C" igMetaObject *igPsx2LongTimer_GetMeta(void);
 extern "C" int igPsx2IopRpcConnection_GetMeta(void);
@@ -1200,7 +1185,6 @@ extern "C" igMetaObject *igStringRefListList_GetMeta(void);
 extern "C" igMetaObject *igDependencyMetaField_GetMeta(void);
 extern "C" int igDependencyMetaField_GetDescriptor(void);
 extern "C" int igErrorHandler_GetMeta(void);
-extern "C" int igInfoList_GetMeta(void);
 extern "C" int igLibraryList_GetMeta(void);
 extern "C" igMetaObject *igMemoryPoolInfoList_GetMeta(void);
 extern "C" igMetaObject *igNamedObjectList_GetMeta(void);
@@ -1217,7 +1201,6 @@ extern "C" int igStringRefList_GetElementSize(void);
 extern "C" igMetaObject *igContextExtList_GetElementMeta(void);
 extern "C" igMetaObject *igContextExtInfoList_GetElementMeta(void);
 extern "C" igMetaObject *igMemoryPoolInfoList_GetElementMeta(void);
-extern "C" int igInfoList_GetElementMeta(void);
 extern "C" int igPluginRepositoryList_GetElementMeta(void);
 extern "C" igMetaObject *igStringObjList_GetElementMeta(void);
 extern "C" igMetaObject *igThreadList_GetElementMeta(void);
@@ -1264,8 +1247,6 @@ extern "C" igMetaObject *igStringObj_GetMetaObject(void);
 extern "C" int g_igStringObj_vtable[4];
 extern "C" int text_shallowCopyMethod[4];
 extern "C" int text_destruct[4];
-extern "C" igMetaObject *g_igSemaphore_metaObject;
-extern "C" igMetaObject *igSemaphore_GetMetaObject(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igCallStackTracer_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" void **igSmartPointer_igSemaphore_Destruct(igObject **self, short flag);
 extern "C" igMetaObject *g_igResource_metaObject;
@@ -1327,10 +1308,6 @@ extern "C" igMetaObject *igLibraryList_GetMetaObject(void);
 extern "C" int g_igLibraryList_vtable[4];
 extern "C" igMetaObject *g_igLibrary_metaObject;
 extern "C" igMetaObject *igLibrary_GetMetaObject(void);
-extern "C" igMetaObject *g_igInfoList_metaObject;
-extern "C" igMetaObject *igInfoList_GetMetaObject(void);
-extern "C" int g_igInfoList_vtable[4];
-extern "C" igMetaObject *igInfo_GetMetaObject(void);
 extern "C" igMetaObject *g_igIGBFile_metaObject;
 extern "C" igMetaObject *igIGBFile_GetMetaObject(void);
 extern "C" int g_igIGBFile_vtable[4];
@@ -1683,20 +1660,18 @@ struct igDependencyOrderedListView {
     unsigned char _hasCircularDependencies;
 };
 extern "C" void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner);
-class igSemaphoreView;
 struct igDirectoryView;
 class igDirEntryView;
-class igInfoView;
 struct igDirectoryView : public igVirtualObject {
     int _count; int _capacity; igDirEntryView **_data; int _name;
-    igTDataList<igDirectoryView *> *_externalDirectoryList; igTDataList<igInfoView *> *_infoList; igResource *_managingResource;
+    igTDataList<igDirectoryView *> *_externalDirectoryList; igTDataList<igInfo *> *_infoList; igResource *_managingResource;
     unsigned char _sharingState; unsigned char _trackUniqueEntries; char _pad38[2];
     igObjectList *_uniqueEntryList; igTDataList<int> *_refList;
     unsigned char _loadPendingState; unsigned char _validState; unsigned char _compatibleState; char _pad51[1];
     int _loadedRefCount; unsigned char _concreteState; char _pad57[3]; igTDataList<igTDataList<short> *> *_metaFieldPerObjectIndices;
     unsigned char _autoWriteFilePreProcessState; unsigned char _useMemoryPoolAssignmentsState;
     unsigned char _forceWriteMemoryPoolInfoFromMetaState; char _pad67[1];
-    igSemaphoreView *_loadingSemaphore;
+    Gap::Core::igSemaphore *_loadingSemaphore;
 };
 class igIGBFileView;
 class igDirEntryView : public igVirtualObject { public:
@@ -1859,7 +1834,7 @@ public:
     virtual int GetHashBucketIndex(int hash);
     virtual void InsertHashIndex(int value, int offset);
     virtual void RebuildHashIndex(int capacity);
-    igSemaphoreView *_lock;
+    Gap::Core::igSemaphore *_lock;
     int _flags;
     unsigned int _eventTypeFilterFlags;
     unsigned int _memoryFieldFilterFlags;
@@ -1987,14 +1962,12 @@ class igIGBFileView : public igDirectoryView { public:
         }
     }
 };
-class igInfoView { public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual int FindObjectReference(Gap::Core::igDirectory *directory, void *object);
-    virtual int GetFieldValueByName(int name);
+/* igMemoryPoolInfo's own slots, after igInfo's two: 23 ReadFromRegistry, 24 UserRegistryLoad, 25 Print.
+ * ABI view only: never instantiated. */
+class igMemoryPoolInfoView : public Gap::Core::igInfo { public:
     virtual igResult ReadFromRegistry(igRegistry *ini, char *section);
     virtual igResult UserRegistryLoad(igRegistry *ini, int index);
-    virtual void Print();                                                       /* vfunc_27 */
-    unsigned int _refCount; int _name; int _directory; unsigned char _resolveState;
+    virtual void Print();
 };
 class igLongTimerView;
 extern "C" int g_igIGBFile_inheritedFieldCountFill[4];
@@ -2424,7 +2397,7 @@ extern "C" igMemoryPoolInfo *igMemoryPoolContextInfo_FindMemoryPoolInfoByHandle(
 extern "C" igResult igMemoryPoolContextInfo_ReadFromRegistry(igMemoryPoolContextInfoView *self, igRegistry *ini, char *section);
 extern "C" igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo *self, igRegistry *ini, int index);
 extern "C" void igMemoryPoolContextInfo_Print(igMemoryPoolContextInfoView *self);
-extern "C" igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, char *section);
+extern "C" igResult igMemoryPoolInfo_LoadFromRegistry(igMemoryPoolInfoView *self, igRegistry *ini, char *section);
 extern "C" void igMemoryPoolInfo_TrimCapacity(igMemoryPoolInfo *arg0);
 /* The growable pointer list shared by the allocator registries (igMemoryPoolInfoList): data,
  * signed count, capacity. Initial capacity 64 entries, growing four at a time. The allocator used
@@ -2891,7 +2864,6 @@ extern "C" void igElfFile_PrintSymbols(ElfFileView *arg0);
 extern "C" void igElfFile_PrintSymbol(igElfFile *self, int index, ElfSymbol *symbol);
 extern "C" igResult igMallocMemoryPool_Configure(igMallocMemoryPool *self, igMemoryPoolInfo *info);
 extern "C" void igMallocMemoryPool_Activate(igMallocMemoryPool *self);
-class igSemaphoreView;
 class igMallocMemoryPoolView;
 extern "C" igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *arg1, unsigned char arg2);
 extern "C" void igMallocMemoryPool_SetSize(int *outStatus, igMallocMemoryPool *self, long long size);
@@ -2931,7 +2903,7 @@ public:
     char _pad106[6];
     unsigned char _isActive;
     char _pad113[3];
-    igSmartPointer<igSemaphoreView> _allocationLock;
+    igSmartPointer<Gap::Core::igSemaphore> _allocationLock;
     int _poolIndex;
     unsigned int _elementSize;
     unsigned long long _maxSize;
@@ -3310,7 +3282,7 @@ public:
     long long localAllocationCount, localFreeCount, localNetAllocationCount, localNetAllocationCountHigh;
     unsigned char updateStatistics, updateGlobalStatistics; char pad106[6];
     unsigned char isActive; char pad113[3];
-    igSmartPointer<igSemaphoreView> allocationLock;
+    igSmartPointer<Gap::Core::igSemaphore> allocationLock;
     unsigned long long maxSize;
     igObject *eventTracker; int poolIndex;
     int messageLevel; int poolOptionFlags; unsigned *pageTables[32];
@@ -3375,38 +3347,6 @@ extern "C" void igStandardQueue_InitDefaults(igStandardQueueView *self);
 extern "C" void igStandardQueue_Create(igStandardQueue *self);
 extern "C" void igStandardQueue_Destroy(igStandardQueue *self);
 extern "C" int igStandardQueue_IsCreated(igStandardQueue *self);
-/* The semaphore interface of igPsx2Semaphore (slot N is the class's vfunc_(N + 2)). */
-class igSemaphoreView : public igVirtualObject {
-public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
-    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16();
-    virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual igResult Create();
-    virtual igResult Destroy();
-    virtual int IsCreated();
-    virtual igResult SetInitialCount(int count);
-    virtual int GetInitialCount();
-    virtual igResult SetMaximumCount(int count);
-    virtual int GetMaximumCount();
-    virtual int GetCount();
-    virtual igResult Signal();
-    virtual igResult ISignal();
-    virtual igResult Wait(int block);
-};
-/* Holds a semaphore for the enclosing scope; a null semaphore is no lock. */
-struct ScopedLock {
-    igSemaphoreView *lock;
-    ScopedLock(igSemaphoreView *semaphore) : lock(semaphore) {
-        if (lock != 0) {
-            lock->Wait(1);
-        }
-    }
-    ~ScopedLock() {
-        if (lock != 0) {
-            lock->Signal();
-        }
-    }
-};
 class igPsx2ThreadView;
 /* igPsx2Thread with the virtuals its callers use: slot 22 waits for another thread to finish, 23
  * sleeps for a number of nanoseconds, 30 tells whether the thread is running, 40 gives the stack
@@ -3449,7 +3389,7 @@ public:
     unsigned char _isMaster;
     unsigned char _userStack;
     char _pad46[2];
-    igSemaphoreView *_threadDoneSema;
+    Gap::Core::igSemaphore *_threadDoneSema;
     int _result;
     unsigned char _isDeferred;
     unsigned char _stopRequested;
@@ -3468,23 +3408,23 @@ public:
     virtual void Create();
     virtual void Destroy();
     virtual int IsCreated();
-    virtual igResult Insert(int value, int block);
-    virtual igResult Remove(int *value, int block);
+    virtual igResult Insert(int value, bool block);
+    virtual igResult Remove(int *value, bool block);
     virtual unsigned int GetCount();
     virtual int IsFull();
     int _serviceThreads;
-    igSemaphoreView *_insertLock;
-    igSemaphoreView *_removeLock;
-    igSemaphoreView *_queueSema;
+    Gap::Core::igSemaphore *_insertLock;
+    Gap::Core::igSemaphore *_removeLock;
+    Gap::Core::igSemaphore *_queueSema;
     unsigned int _capacity;
     unsigned int _insertElement;
     unsigned int _removeElement;
     int *_data;
     unsigned int _maxCapacity;
 };
-extern "C" igResult igStandardQueue_Insert(igStandardQueueView *self, int val, int block);
+extern "C" igResult igStandardQueue_Insert(igStandardQueueView *self, int val, bool block);
 extern "C" int igStandardQueue_IsFull(igStandardQueueView *self);
-extern "C" igResult igStandardQueue_Remove(igStandardQueueView *self, int *out, int block);
+extern "C" igResult igStandardQueue_Remove(igStandardQueueView *self, int *out, bool block);
 extern "C" int igStandardQueue_GetCount(igStandardQueueView *self);
 extern "C" void igStandardQueue_Resize(igStandardQueueView *queue, int capacity);
 extern "C" igResult igStandardQueue_SetCapacity(igStandardQueueView *self, unsigned n);
@@ -3559,7 +3499,7 @@ struct MediaIoRequest { int fd; int buffer; int size; int reserved; int kind; in
 class igPsx2MediaView : public igMediaView { public:
     char *_headAndTailBuffer;
     igPsx2IopRpcConnectionView *_connection;
-    igSemaphoreView *_sema;
+    Gap::Core::igSemaphore *_sema;
     MediaIoRequest *_commandBuffer;
     char *_writeBuffer;
     MediaHandlePool *_handlePool;
@@ -3621,7 +3561,7 @@ extern "C" void igPsx2Thread_ISetPriority(int *status, igPsx2Thread *self, int p
 extern "C" void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread);
 extern "C" unsigned char igPsx2Thread_IsRunning(igPsx2Thread *self);
 extern "C" igResult igPsx2Thread_Stop(igPsx2ThreadView *self);
-extern "C" igResult igPsx2Thread_GetResult(igPsx2ThreadView *self, int block, int *result);
+extern "C" igResult igPsx2Thread_GetResult(igPsx2ThreadView *self, bool block, int *result);
 extern "C" void igPsx2Thread_SetDeferred(int *arg0, igPsx2Thread *self, int arg2);
 extern "C" void igPsx2Thread_TestStop(igPsx2ThreadView *self);
 extern "C" void igPsx2Thread_Finish(igPsx2ThreadView *thread, int result);

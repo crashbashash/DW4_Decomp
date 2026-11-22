@@ -314,11 +314,6 @@ void igObject::arkRegisterInitialize() {
     igMetaObject_FinalizeAndAppendField(_Meta, poolIndexField);
     poolIndexField->release();
 }
-}
-}
-
-namespace Gap {
-namespace Core {
 
 void *igObject::operator new(unsigned int cSize, unsigned int allocSize, igMemoryPoolView *mp) {
     int total_size;

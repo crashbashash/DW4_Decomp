@@ -1,41 +1,43 @@
-igMetaObject *g_igImageConvert_metaObject;
+namespace Gap {
+namespace Gfx {
 
-int igImageConvert_Create(int arg0) {
-    igImageConvert_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance(g_igImageConvert_metaObject, (igMemoryPoolView *)arg0);
-}
+igMetaObject *igImageConvert::_Meta;
 
-igMetaObject *igImageConvert_GetMetaObject(void)
+igImageConvert *igImageConvert::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igImageConvert_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igImageConvert_EnsureRegistered();
-    return g_igImageConvert_metaObject;
+    arkRegister();
+    return (igImageConvert *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igImageConvert_EnsureRegistered(void)
+igMetaObject *igImageConvert::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igImageConvert_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igImageConvert_Register(void) {
+void igImageConvert::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igImageConvert::arkRegisterInternal()
+{
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igImageConvert_metaObject,
-        igImageUtils_Register,
-        igImageUtils_GetPublishedMetaObject,
-        igImageConvert_GetMetaObjectFunction,
+        true,
+        &_Meta,
+        Gap::Gfx::igImageUtils::arkRegisterInternal,
+        Gap::Gfx::igImageUtils::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igImageConvert",
-        8, /* instance size */
+        sizeof(igImageConvert),
         0,
-        igImageConvert_SetAbstractProxy_0014dc40, /* post-init hook */
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
-
-void igImageConvert_GetMetaObjectFunction(void) {
-    igImageConvert_GetMetaObject();
+}
 }
 

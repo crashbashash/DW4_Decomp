@@ -53,7 +53,7 @@ void igPsx2Thread_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2Thread_Register);
 }
 
-static igMetaObjectCallback g_igPsx2Thread_callbackList[] = { igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2Thread_callbackList[] = { Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igPsx2Thread_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -119,7 +119,7 @@ void igPsx2Thread_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2Thread_ctorTable, 6);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
     field = (igObjectRefMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    field->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    field->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     field->_construct = 1;
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2Thread_fieldTable, g_igPsx2Thread_fieldDescriptors, g_igPsx2Thread_fieldOffsets, base);

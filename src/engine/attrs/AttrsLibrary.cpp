@@ -160,7 +160,6 @@ igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRet
 #include "src/engine/attrs/igRenderListAttr_tail2.inc"
 #include "src/engine/attrs/igParticleAttr_tail3.inc"
 #include "src/engine/attrs/igLightAttr_tail2.inc"
-#include "src/engine/attrs/igGeometryAttr1_5_tail2.inc"
 #include "src/engine/attrs/igDisplayListAttr_tail3.inc"
 #include "src/engine/attrs/igVec3fList.inc"
 #include "src/engine/attrs/igNamedObject.inc"

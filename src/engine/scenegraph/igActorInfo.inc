@@ -83,7 +83,7 @@ CallbackArray *igActorInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActorInfo_metaObject,
-        igInfo_Register,
+        Gap::Core::igInfo::arkRegisterInternal,
         igInfo_GetPublishedMetaObject,
         igActorInfo_GetMetaObjectFunction,
         "igActorInfo",

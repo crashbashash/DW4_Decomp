@@ -50,8 +50,8 @@ CallbackArray *igPsx2Semaphore_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igPsx2Semaphore_metaObject,
-        igSemaphore_Register,
-        igSemaphore_GetPublishedMetaObject,
+        Gap::Core::igSemaphore::arkRegisterInternal,
+        Gap::Core::igSemaphore::getClassMeta,
         igPsx2Semaphore_GetMetaObjectFunction,
         "igPsx2Semaphore",
         0x18,
@@ -60,10 +60,6 @@ CallbackArray *igPsx2Semaphore_Register(void) {
         0,
         0
     );
-}
-
-igMetaObject *igSemaphore_GetPublishedMetaObject(void) {
-    return g_igSemaphore_metaObject;
 }
 
 static FieldFactory g_igPsx2Semaphore_ctorTable[] = {
@@ -98,6 +94,6 @@ void igPsx2Semaphore_InitFields(void) {
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)))->setDefault(1);
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2Semaphore_fieldTable, g_igPsx2Semaphore_fieldDescriptors, g_igPsx2Semaphore_fieldOffsets, first);
-    g_igPsx2Semaphore_metaObject->_writeProxy = (int)(&igSemaphore_GetMetaObjectFunction);
+    g_igPsx2Semaphore_metaObject->_writeProxy = (int)(&Gap::Core::igSemaphore::getClassMetaSafe);
 }
 

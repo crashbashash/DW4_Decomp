@@ -363,9 +363,24 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `findRefByEntryName`, `findObjectRefByEntryName`, `binaryFind`, `getRef`, `setRef`, `get` (with the kit's
    inline `getNonShared`), `makeAllConcrete`, `resolveExternal` (slot 23), `appendInfo`, `removeInfo` ×2,
    `getInfo` ×2, `getInfoCount`, `loadRef`, `loadRelease`, `createLoadingSemaphore`, `attemptResolve`, `contains`,
-   `fastFindRefEntry`, `releaseDefaults` and `userRegister`. igInfo, igInfoList, igSemaphore and igResource are
-   still flat, so their uses go through `igInfoView`, `igSemaphoreView` and flat list casts; the out-of-line
-   smart-pointer destructors of the semaphore, directory list and short-list list and the two template
+   `fastFindRefEntry`, `releaseDefaults` and `userRegister`. `igSemaphore` (alchemy-kit_202309 igCore/igSemaphore.h;
+   abstract: its pure slots 21-33 are read off igPsx2Semaphore's vtable, `activate`, `deactivate`, `isActive`,
+   `setInitialResourceCount`, `getInitialResourceCount`, `setMaxResourceCount`, `getMaxResourceCount`,
+   `getCurrentResourceCount`, `releaseResource`, then DW4's two interrupt-side variants
+   `releaseResourceFromInterrupt` and `obtainResourceFromInterrupt` around `obtainResource(bool block)`, and the
+   kit's `obtainResourcePseudoBlocking`; `arkRegisterInitialize` sets the abstract proxy to igPsx2Semaphore's),
+   `igInfo` (slots 21 `attemptResolve` and 22 `resolve(const char *key)`, the kit's names for DW4's older
+   two-slot form; `_directory` an `igDirectory *`, `_resolveState` a `bool`) and `igInfoList` (over
+   `igTObjectList<igInfo>`) are converted. The kit's `igScopeLock` (include/dw4/core/igSemaphore.h) replaces the
+   local lock class; callers of the semaphore call the kit names, and a `block` the queue and thread code
+   passes on is a `bool` parameter (an `int` is normalised at the call). igInfo's out-of-line getMeta copy
+   (base unit, 0x22b430) stays a C function reading `getClassMeta()`; the subclasses' slots 23-25
+   (`ReadFromRegistry`, `UserRegistryLoad`, `Print`) are `igMemoryPoolInfoView`'s, a view over the Gap class.
+   `igDirectory_AddExternalInfoRef` takes the Gap `igDirectory` and `igInfo`. `igResource` is still flat, so its
+   uses go through `igResourceView` and flat list casts; the Lua thread-local semaphore (`LuaSemaphoreView`) and
+   the audio streaming semaphore are separate stand-ins, since they count references through the root's
+   protected word. The out-of-line
+   smart-pointer destructors of the semaphore, directory list, info list and short-list list and the two template
    `getElementMeta` copies are now the compiler's, their C names bound by the compiler-name map.
    `igDirectory_ReplaceReference` (the kit's `replaceObjectInstance`, whose by-value smart pointers DW4 passes by
    reference) and the traversal callback `igDirectory_AddObjectCallback` stay free over the Gap class;
@@ -404,7 +419,13 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `Gap::Core::igFile *`. Still view-based: `igMediaFileView`/`igMemoryFileView`, igIGBFile's `igFileView`,
    scenegraph's `IniFileObject`/`IniPathResolver` (the ini loader) and insight's `NamedObject` folder, and GameMain's
    `Blk::folder` (typing it `Gap::Core::igFolder` moves `Blk::Blk` from 448 to 372 bytes: the intern pool is no
-   longer inlined there). Not converted yet: `igIGBFile` (about 2,400 lines; needs `igDirectory_Construct`/`_Destroy`
+   longer inlined there). Not converted yet: `igResource` (alchemy-kit_202309 igCore/igResource.h; members the
+   image has: `getDirectory`, `getImageDirectory`, `appendDirectory`, `addAlignmentPair`, `load`, `unload`,
+   `unloadAll`, `unloadAllIGBs`, `loadSynchronous`, `getInfoByType` (`igDirectory_GetNthObjectOfType`), the two
+   asynchronous-loading switches, `releaseDefaults`, `makeCompatible` (`igResource_FinishAsyncLoad`), `doLoad`
+   (`igResource_ReadFileWithSearchPaths`) and `isLoadFinished`; its queue, thread, alignment lists and pools are
+   smart pointers of flat or Gap classes, and `g_globalContext` and `ObjectSystemView::resource` the Gap class) and
+   `igIGBFile` (about 2,400 lines; needs `igDirectory_Construct`/`_Destroy`
    copies stamping `igTObjectList<igDirEntry>`'s vtable, its `igFileView`/`igIGBFileView` uses retired, and the
    protected igObject construction members reached as the kit's friend).
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
@@ -470,17 +491,31 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    beTextureCtrl_UpdateRam indexes the attribute list's data (`((int *)list->_data)[i]`) where it kept a byte
    offset, which keeps retail's register allocation once it reads `igTextureBindAttr::getClassMeta()` (the inline's
    temporary otherwise takes the offset's register). What is left in attrs, and why:
-   - the geometry group: `igGeometryAttr` (abstract; typed vertex/index/primLength/dPds/dPdt smart pointers; no
-     virtual declared yet, though retail gives it its own vtable, 0x523970, with pure slots and its own
-     `synchronizeDefault` 0x13cf70, `reset` 0x13cfc0, the four-argument `intersectRay` 0x13cf80, `getPrimitiveLength`
-     0x13d030, a `getMeta` copy and an out-of-line destructor), `igGeometryAttrList` (over
-     `igTObjectList<igGeometryAttr>`) and `igGeometrySetAttr` (slots `releaseDefaults`, `apply`, empty
-     `synchronizeDefault`, `reset`, `setup`, `setVisualContext`, and the protected `createRenderList`, 0x13e6e0;
-     specs scratch/Gfx4/specs/geom.py, geomlist.py, geomset.py) are converted. `igGeometryAttr1_5` stays flat: its
-     slots 30-41 (configureVertexArray, transform, computeBound, the seven-argument intersectRay, setTangents,
-     setBinormals, configurePrimitive, setPrimitiveLength, the inline getPrimitiveLength, getNumVerts, the inline
-     getPrimLengthArray) still read igVertexArray / igIndexArray through stand-in views and one helper not yet
-     decompiled (0x13dbb0, which keeps its C name);
+   - the geometry group is converted: `igGeometryAttr` (abstract; typed vertex/index/primLength/dPds/dPdt smart
+     pointers) has retail's own vtable (0x523970): slot 22 `apply` and the primitive slots 30-32, 34-38 and 40-41 are
+     pure, and its own definitions are slot 24 `synchronizeDefault` (empty, 0x13cf70), 26 `reset` (0x13cfc0: resets the
+     vertex and index arrays), 33 the four-argument `intersectRay` (0x13cf80, which
+     passes primIndex and polyIndex of -1 to the seven-argument slot 34), 39 `getPrimitiveLength` (0x13d030, over
+     `_primLengths`) and the `getMeta` copy at 0x1428a0; DW4's slot order differs from the kit header's (the
+     four-argument `intersectRay` is 33, the seven-argument one 34, and slot 41 `getPrimLengthArray` is the base's),
+     and the kit's `igRay::ISET_SIDES` is declared beside the flat igRay (include/dw4/maths/igRay.h). `igGeometryAttrList`
+     (over `igTObjectList<igGeometryAttr>`), `igGeometrySetAttr` (slots `releaseDefaults`, `apply`, empty
+     `synchronizeDefault`, `reset`, `setup`, `setVisualContext`, and the protected `createRenderList`, 0x13e6e0) and
+     `igGeometryAttr1_5` (`_stripLengths` an `igSmartPointer<igPrimLengthArray>`; slots 15 `userPostLoad` (the
+     binormal and tangent lists fold into the vertex format and are dropped), 18 `userMakeConcrete` (builds
+     `_stripLengths` from `_primLengths` through the base's `getPrimitiveLength` and its own `setPrimitiveLength`), 22
+     `apply`, 24 `synchronizeDefault` (calls the base's), 30 `configureVertexArray`, 31 `transform` (positions, then
+     the inverse transpose over normals, binormals and tangents), 32 `computeBound`, 34 the seven-argument
+     `intersectRay`, 35 `setTangents`, 36 `setBinormals`, 37 `configurePrimitive`, 38 `setPrimitiveLength`, 39 the
+     inline `getPrimitiveLength` through `_stripLengths`, 40 `getNumVerts`, 41 the inline `getPrimLengthArray`) are
+     converted over the real igVertexArray, igIndexArray and igPrimLengthArray members; the unit's stand-in views are
+     gone, and the compiler emits the out-of-line destructors of igGeometryAttr (0x137530) and of
+     `igSmartPointer<igPrimLengthArray>` (0x137260) that the class's vtable probe calls. The vector helper at 0x13dbb0
+     (normals, binormals and tangents of a locked vertex component through the matrix, renormalised above 5e-7) is the
+     protected static `igGeometryAttr1_5::transformVectors`, declared and linked from retail: the best source
+     (lock, the library's direction transform per vector, `length = sqrtf(dot(v, v))`, scale by `1.0f / length` above
+     the epsilon) differs by two instructions: retail adds the three squares unfused where MWCC fuses them into
+     `adda.s`/`madd.s`;
    - `igParticleAttr` (its array is a Gap::Bec class) and `igVertexBlendMatrixListAttr` (whose probe stamps
      igVisualAttribute's vtable from its matrix members' destructor chain) are not started;
    - igAttrPool's list fields (`_metaList`, `_nonSharableMetaList`, `_attributeList`) stay flat smart pointers: its
@@ -492,7 +527,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    gfx, gui, datapump and scenegraph register through, so their C copies are gone.
    The specs stay in the agents' scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`;
    `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`; `scratch/Attrs4/specs/mgr.py`;
-   `scratch/Attrs5/specs/light.py`, `texture.py`; `scratch/CoreWave9/specs/`; `scratch/Gfx1/specs/context.py`).
+   `scratch/Attrs5/specs/light.py`, `texture.py`; `scratch/CoreWave9/specs/`; `scratch/Gfx1/specs/context.py`;
+   `scratch/GeomAttr/specs/primlength.py`, `geom15.py`).
    memberize casts a pool passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast).
    Core's `igContext` is converted (alchemy-kit_202309 igCore/igContext.h: `IG_ABSTRACT_OBJECT_DEFINE`, the protected
    handles, `generateExtList`, `getExtMeta`, `findExtInstance`, DW4's slots 21-25 `makeCurrent`, `isCurrent`,
@@ -556,22 +592,51 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    igImageMipMapList's element meta is now the Gap class's. reduceAux (0x157ad0) and the tile copy at 0x15a750 have no
    source yet. `igFileImage` (abstract, no members), `igFileImagePng` (typed `_file` `igSmartPointer<igFile>`;
    overrides `releaseDefaults`, `copy`, `load(const char *)` and `toggleComponentOrder`; retail's `copy` calls
-   `src->getMeta()` after igImage's, as igPsx2Image's does: no kit inline or assert explains the call, which is
-   spelled as the bare virtual call; the PNG reader at 0x167860 is not decompiled, its callees `cleanup`,
+   `src->getMeta()` after igImage's, as igPsx2Image's does and the bare call is what igFileImagePng spells (the Xbox
+   build's igFileImagePng does not override `copy`, so no shape is known for it); the PNG reader at 0x167860 is not
+   decompiled, its callees `cleanup`,
    `estimatePixelFormat` and `setReadTransforms` are members over libpng's types, dw4/gfx/png.h, which reflected.h
    reads) and `igExternalImageEntry` (kit igGfx/igExternalImageEntry.h: `load`, `loadWork`, `initDefaults`) are
    converted. The image readers (`load`, `oldLoad`, `newLoad`, `platformLoad`, `platformSave`) call igFile's members
    (`fopen`, `fread`, `fwrite`, `fclose`). The compiler emits the out-of-line destructors, igFileImage's `getMeta`
    (0x180ff0), the igFile smart pointer destructor (0x150180) and the parent accessor copy at 0x14f760. Image
-   views left: `igImageConvertRows` (one stand-in for igImageConvert's slots 23-34 until igImageConvert and
-   igPsx2ImageConvert convert) and the TGA loader's `O1`/`LoaderRef` (until igTgaLoader converts).
+   views left: none. igPsx2Image's `copy` spells the call as the test the Xbox build's igDxImage::copy (default.xbe
+   0x51050) holds: after the base copy it compares `src->getMeta()` with igFileImagePng's metaobject and copies its DDS
+   header unless they are equal (a PNG image has none); igPsx2Image holds no platform header, so the branch is empty
+   and MWCC keeps only the virtual call. `igImageUtils` (alchemy-kit_202309 igGfx/igImageUtils.h; abstract, and the
+   parent of both `igImageConvert` and `igImageLoader` in retail's registration; `getExt`, 0x15ad50, is the callers'
+   extension test, `getExtNoDot` and `getFileName` are declared), `igImageConvert` and `igPsx2ImageConvert` are
+   converted (spec scratch/ImageConvert/specs/convert.py). igImageConvert is abstract and its registration sets the
+   abstract proxy to igPsx2ImageConvert (whose own sets the write proxy back); it holds the kit's `conversionFn`
+   typedef, slots 23 `getPackConversionFn(order, packedFormat, isUnpack)` and 24 `getConversionFn(order, sFmt, tFmt,
+   xSize, ySize)`, then ten slots 25-34 the kit has lost: DW4's per-format in-place component-order swaps
+   (`swapRGBA8888`, `swapRGB888`, `swapRGBA5551`, `swapRGBA4444`, `swapRGB565`, `swapRGB332`, `swapLA88`,
+   `swapRGBA2222`, `swapLA44`, `swapRGBA3328`; the names are DW4's own, from the format `igImage::swapComponentOrder`
+   calls each for). The PS2 class answers all ten, six of them empty. igImage's `scale`, `convert`, `canConvert`
+   (`igSmartPointer<igImageConvert>`) and `swapComponentOrder` create the class through `_instantiateFromPool` and
+   call it; a conversion is an `igImageConvert::conversionFn *`. The kit's row converters retail keeps are
+   igImageConvert's statics `pal_4_To_pal_8`, `pal_8_To_pal_4`, `luminance_8_To_alpha_8` and
+   `alpha_8_To_luminance_8` (the last two have one body, at 0x15ab50 and 0x15ab70, told apart by the slot-24 references
+   that return them); the PS2 row converters (0x16f690-0x16fe20, returned through casts) are still free functions.
+   `igImageLoader` (abstract; the pure `load(igStringObj *, igImage *)`: DW4's older revision takes the file name as
+   the string object its caller builds) and `igTgaLoader` (typed `_file`, `_palette`, `_tempMap` and `_tempRow`; the
+   kit's `cleanup`, `cGetPixel`, `estimateImageFormat`, which returns the format as retail's does, `fillBuffer`,
+   `isBufEmpty` and `getNextChar`; slot 10 `releaseDefaults` is the kit's `userRelease`; spec
+   scratch/ImageConvert/specs/tga.py) are converted. The reader `load` (0x1686e0) is not decompiled: it is declared
+   after `releaseDefaults` and links from retail, because MWCC emits a class's vtable, and so igTgaLoader's `getMeta`
+   copy, in the unit that defines its first non-inline virtual (a declared-only `load` first leaves both to retail).
    `igVertexStream`/`igPsx2VertexStream` are converted (enum `_accessMode` of the kit's
    `IG_VERTEX_ACCESS_MODE`, four values, with the inline `getAccessMode()`, which the stream's flat callers read; igPsx2VertexStream's
    `configure`, 0x17f720, links from retail). `igVertexArray2Helper` is converted (DW4's older virtual form of
    igGfx/igVertexArray2Helper.h: slots 21-59 in retail's order, vtable 0x5262a0, the inline `reset` at 0x180e40, the
    statics `getWeightCount`/`getIndexCount`; `compressVertexData`, 0x163810, is declared and links from retail).
-   Still flat: igTgaLoader, igPrimLengthArray (slots 21 configure, 22 getEditablePrimLength, 23 commitPrimLengthEdits,
-   24 setPrimLength, 25 getPrimLength) and igGeometryAttr1_5;
+   `igPrimLengthArray` (alchemy-kit_202309 igGfx/igPrimLengthArray.h, abstract) and `igPrimLengthArray1_1` are
+   converted: retail has no vtable for the abstract base (registered with a null vtable probe), so its slots 21
+   configure, 22 getEditablePrimLength, 23 commitPrimLengthEdits, 24 setPrimLength and 25 getPrimLength are pure
+   where the kit declares them plain, and the concrete class's vtable (0x526590) holds the overrides next to the
+   empty `userMakeConcrete` (slot 18, 0x15db80); `_lengthData` is an `unsigned char *` under C++, `configure`
+   (0x167240) reallocates it to four bytes a strip or frees it. The particle array reads its first strip length
+   through `getPrimLength`, and `igPsx2VisualContext`'s C accessors still hold the reference as a word;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

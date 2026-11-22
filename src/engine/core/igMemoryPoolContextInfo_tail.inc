@@ -2102,7 +2102,7 @@ igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo
                 { igMemoryPoolInfo *info = poolInfo; SETSTR(_scope) }
                 created = false;
             }
-            igInfoView *loader = (igInfoView *)poolInfo.p;
+            igMemoryPoolInfoView *loader = (igMemoryPoolInfoView *)poolInfo.p;
             if (loader->ReadFromRegistry(ini, igStringObj_Text(infoSection)) == g_resultSuccess) {
                 if (poolInfoName(poolInfo) == 0 || *poolInfoName(poolInfo) == 0) {
                     ((Gap::Core::igNamedObject *)poolInfo.p)->setName((const char *)igStringObj_Text(key));
@@ -2127,11 +2127,11 @@ igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo
 void igMemoryPoolContextInfo_Print(igMemoryPoolContextInfoView *self) {
     int count = igMemoryPoolContextInfo_GetMemoryPoolInfoCount(self);
     int i;
-    igInfoView *info;
+    igMemoryPoolInfoView *info;
     igReport_Printf("igMemoryPoolContextInfo:  %s\n", self->_name != 0 ? (const char *)self->_name : (const char *)emptyString);
     igReport_Flush();
     for (i = 0; i < count; i++) {
-        if ((info = (igInfoView *)igMemoryPoolContextInfo_GetMemoryPoolInfo(self, i)) != 0) {
+        if ((info = (igMemoryPoolInfoView *)igMemoryPoolContextInfo_GetMemoryPoolInfo(self, i)) != 0) {
             igReport_Printf(newline_2);
             igReport_Flush();
             info->Print();

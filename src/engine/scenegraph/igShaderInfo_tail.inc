@@ -3,7 +3,7 @@ void FUN_001d8ab0(void) {
     igSmartPointer<igObject> info((igObject *)FUN_00198cc0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     ((Gap::Core::igNamedObject *)info.p)->setName("shaderInfo");
     igSmartPointer<igObject> list = igResource_GetDirectory(g_globalContext, (const char *)text_system);
-    ((Gap::Core::igDirectory *)list.p)->appendInfo((igInfo *)info.p);
+    ((Gap::Core::igDirectory *)list.p)->appendInfo((Gap::Core::igInfo *)info.p);
 }
 
 void FUN_001d8b90(void) {
@@ -25,7 +25,7 @@ int igShaderInfo_FindObjectReference(ShaderFieldTable *self, int arg1, ShaderFie
     }
     name = e->name;
     name = name != 0 ? name : (int *)emptyString;
-    igDirectory_AddExternalInfoRef((igDirectoryView *)arg1, (igInfoView *)self, (char *)name, (igObject *)key);
+    igDirectory_AddExternalInfoRef((Gap::Core::igDirectory *)arg1, (Gap::Core::igInfo *)self, (char *)name, (Gap::Core::igObject *)key);
     return 1;
 }
 

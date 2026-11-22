@@ -66,7 +66,7 @@ void igStandardQueue_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igStandardQueue_Register);
 }
 
-static igMetaObjectCallback g_igStandardQueue_callbackList[] = { igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igStandardQueue_callbackList[] = { Gap::Core::igSemaphore::arkRegister, 0 };
 
 CallbackArray *igStandardQueue_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -142,13 +142,13 @@ void igStandardQueue_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igStandardQueue_ctorTable, 8);
     insertLock = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)insertLock)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)insertLock)->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((igObjectRefMetaField *)insertLock)->_construct = 1;
     removeLock = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)removeLock)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)removeLock)->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((igObjectRefMetaField *)removeLock)->_construct = 1;
     queueSema = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)queueSema)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)queueSema)->_metaObject = (int)Gap::Core::igSemaphore::getClassTypeLazy();
     ((igObjectRefMetaField *)queueSema)->_construct = 1;
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(4);
     data = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));

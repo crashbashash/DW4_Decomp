@@ -67,36 +67,33 @@ int igAliasMemoryPool_IsSecondaryAllocator(void) {
     return 0;
 }
 
-static inline void setLock(igAliasMemoryPool *pool, igSemaphoreView *lock) {
-    igSemaphoreView *previous;
+static inline void setLock(igAliasMemoryPool *pool, Gap::Core::igSemaphore *lock) {
+    Gap::Core::igSemaphore *previous;
     if (lock != 0) {
-        lock->_refCount = lock->_refCount + 1;
+        lock->ref();
     }
-    previous = (igSemaphoreView *)pool->_allocationLock;
+    previous = (Gap::Core::igSemaphore *)pool->_allocationLock;
     if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
+        previous->release();
     }
     pool->_allocationLock = (int)lock;
 }
 
 igResult igAliasMemoryPool_EnableAllocationLock(igAliasMemoryPool *pool, int enable) {
     if ((enable & 0xFF) == 0) {
-        igSmartPointer<igSemaphoreView> kept((igSemaphoreView *)pool->_allocationLock);
+        igSmartPointer<Gap::Core::igSemaphore> kept((Gap::Core::igSemaphore *)pool->_allocationLock);
         kept.retain();
         setLock(pool, 0);
         if (kept.get() != 0) {
-            kept.get()->Wait(1);
-            kept.get()->Destroy();
+            kept.get()->obtainResource(true);
+            kept.get()->deactivate();
         }
     } else if ((enable & 0xFF) == 1) {
         if (pool->_allocationLock != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)pool)->getMemoryPool()))));
-        created.get()->Create();
+        igSmartPointer<Gap::Core::igSemaphore> created(Gap::Core::igSemaphore::_instantiateFromPool(((Gap::Core::igObject *)pool)->getMemoryPool()));
+        created.get()->activate();
         setLock(pool, created.get());
     }
     return g_resultSuccess.v;
@@ -187,11 +184,11 @@ void *igAliasMemoryPool_AllocateElement(igAliasMemoryPool *self){return ((igMemo
  * virtual method at vtable offset 132 with 1. The status it returns is discarded. */
 void igAliasMemoryPool_Lock(igAliasMemoryPool *self) {
     igResult status;
-    void **lockObject;
+    Gap::Core::igSemaphore *lockObject;
 
-    lockObject = (void **)(self->_allocationLock);
+    lockObject = (Gap::Core::igSemaphore *)self->_allocationLock;
     if (lockObject != 0) {
-        status = ((igSemaphoreView *)(lockObject))->Wait((int)(1));
+        status = lockObject->obtainResource(true);
     }
 }
 
@@ -199,11 +196,11 @@ void igAliasMemoryPool_Lock(igAliasMemoryPool *self) {
  * virtual method at vtable offset 124. The status it returns is discarded. */
 void igAliasMemoryPool_Unlock(igAliasMemoryPool *self) {
     igResult status;
-    void **lockObject;
+    Gap::Core::igSemaphore *lockObject;
 
-    lockObject = (void **)(self->_allocationLock);
+    lockObject = (Gap::Core::igSemaphore *)self->_allocationLock;
     if (lockObject != 0) {
-        status = ((igSemaphoreView *)(lockObject))->Signal();
+        status = lockObject->releaseResource();
     }
 }
 
@@ -214,11 +211,11 @@ void igAliasMemoryPool_Unlock(igAliasMemoryPool *self) {
  * preserving its result. */
 int igAliasMemoryPool_UnlockAndReturn(igAliasMemoryPool *self, int result) {
     igResult status;
-    void **lockObject;
+    Gap::Core::igSemaphore *lockObject;
 
-    lockObject = (void **)(self->_allocationLock);
+    lockObject = (Gap::Core::igSemaphore *)self->_allocationLock;
     if (lockObject != 0) {
-        status = ((igSemaphoreView *)(lockObject))->Signal();
+        status = lockObject->releaseResource();
     }
     return result;
 }
