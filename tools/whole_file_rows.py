@@ -48,7 +48,10 @@ call it after. The range's present rows settle what they settled before, so rege
 its row unchanged and a conversion's row diff is what the conversion changed (stable_row):
 
   * a compiler name they bind keeps its address (tools/memberize.py renames a converted member's key, and empty
-    virtual functions fit many starts), and a name they strip is dropped (C++ files);
+    virtual functions fit many starts), and a name they strip is dropped (C++ files); a function fitting several
+    starts whose name differs from one they placed only in a parameter's type (`platformLoad(igFile *)` once
+    igFile is `Gap::Core::igFile`: the same class, name, constness and parameter count, one such name either
+    side) takes that name's address (retyped);
   * the static initializer's entry is theirs when the file's initializer fits several table entries;
   * retail functions of the range no compiled function reproduces, none of which they placed, link from retail
     as they did (the run is `--partial` without saying so); one they placed stops the run, a wrong compile;
@@ -80,8 +83,9 @@ covers its first data section and goes after the code rows.
 The rows go to stdout as JSON. `--write` merges them into unit-objects.json, replacing the
 whole-file rows inside the range and each row of a function the file now places (a row of a
 function the file leaves out stays), and replaces the units.tsv rows inside the range with one per
-file. The rows are written in address order. `--names` writes a `.tsv` for
-tools/apply_names.py, which is what moves `FUN_` names to the library's own.
+file. The rows are written in address order, and only once the whole file loads (unitobjects.load) and the
+compiler-name map builds from it: otherwise the run stops with why and leaves both files as they were. `--names`
+writes a `.tsv` for tools/apply_names.py, which is what moves `FUN_` names to the library's own.
 
 Usage:
   whole_file_rows.py --src src/third_party/zlib --files adler32 crc32 --range 0x221870 0x2252d8 \\
@@ -107,6 +111,7 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cc
 import compiler_names
+import demangle
 import exceptions
 import unitprofiles
 import unitobjects
@@ -237,13 +242,14 @@ class Twins:
         return copy
 
 
-def locate(functions, retail, starts, placed, dropped=()):
+def locate(functions, retail, starts, placed, dropped=(), retyped=None):
     """{name: va} for the functions with a retail copy. A function that fits several starts is
     settled by the others: a file keeps its functions in order, and each start is used once. A start a
     name is placed at (symbols.txt, the present row, `--at`) is that name's: a byte-identical function
     fitting only it is no member (a duplicate when reached, else stripped), as verify binds the start
-    to the placed name alone."""
-    found, open_ = {}, {}
+    to the placed name alone. `retyped` ({name: va}, retyped()) settles a function that fits several starts,
+    one of them the address the present row placed it at under its former name."""
+    found, open_, settled = {}, {}, set()
     for name, function in functions.items():
         if name in dropped:
             continue
@@ -256,10 +262,13 @@ def locate(functions, retail, starts, placed, dropped=()):
         hits = [va for va in starts if function.fits(retail, va)]
         if len(hits) == 1:
             found[name] = hits[0]
+        elif (retyped or {}).get(name) in hits:
+            found[name] = retyped[name]
+            settled.add(name)
         elif hits:
             open_[name] = hits
-    owner = {va: name for name, va in found.items() if name in placed}
-    found = {name: va for name, va in found.items() if name in placed or va not in owner}
+    owner = {va: name for name, va in found.items() if name in placed or name in settled}
+    found = {name: va for name, va in found.items() if name in placed or name in settled or va not in owner}
     clash = [v for v, n in collections.Counter(found.values()).items() if n > 1]
     if clash:
         sys.exit("one retail start fits two functions: %s; settle with --at or --drop"
@@ -279,6 +288,28 @@ def locate(functions, retail, starts, placed, dropped=()):
         found.update(single)
         open_ = {n: h for n, h in open_.items() if n not in single}
     return found
+
+
+def retyped(names, previous, placed, lo, hi):
+    """{name: va} of the compiled functions the range's present rows place under a mangled name that changed
+    only in a parameter's type (a parameter's class became the Gap class: `platformLoad__Q33Gap3Gfx7igImageFP6igFile`
+    is `platformLoad__Q33Gap3Gfx7igImageFPQ33Gap4Core6igFile` now). Of the members the present rows place in
+    [lo, hi) (`previous`, {name: va}) that the compile no longer has, the one of a function's class, name,
+    constness and parameter count, where it is the only one and no other function not `placed` has that shape."""
+    def shape(name):
+        d = demangle.demangle(name)
+        if d is None or d.data or not d.class_name:
+            return None
+        return d.namespaces, d.class_name, d.name, d.const, d.special, len(d.params)
+
+    gone, new = collections.defaultdict(list), collections.defaultdict(list)
+    for name, va in previous.items():
+        if lo <= va < hi and name not in names and shape(name):
+            gone[shape(name)].append(va)
+    for name in names:
+        if name not in placed and shape(name):
+            new[shape(name)].append(name)
+    return {found[0]: gone[s][0] for s, found in new.items() if len(found) == 1 and len(gone.get(s, ())) == 1}
 
 
 def reach(function_at, retail, syms, headers, obj, functions, records, names, hi, twins=None, sections=()):
@@ -639,6 +670,39 @@ def merge_rows(overlay, lo, hi, rows):
     return overlay
 
 
+def shared_functions(overlay):
+    """{address: [row keys]} of the functions more than one row of `overlay` places (its key or `emitted`)."""
+    keys = collections.defaultdict(list)
+    for key, row in overlay.items():
+        for va in {int(key, 16)} | {int(va, 16) for va in (row.get("emitted") or {}).values()}:
+            keys[va].append(key)
+    return {va: k for va, k in sorted(keys.items()) if len(k) > 1}
+
+
+def write_overlay(path, overlay, symbols):
+    """Write unit-objects.json `overlay` to `path`, in address order (a data-only row after the code), once it
+    loads (unitobjects.load) and the compiler-name map builds from it; otherwise exit with why, `path` as it was."""
+    fd, tmp = tempfile.mkstemp(suffix=".json", dir=os.path.dirname(os.path.abspath(path)))
+    try:
+        with os.fdopen(fd, "w") as fh:
+            json.dump(dict(sorted(overlay.items(), key=lambda row: int(row[0], 16))), fh, indent=2)
+            fh.write("\n")
+        try:
+            unitobjects.load(tmp)
+            compiler_names.generate(symbols, tmp)
+        except ValueError as e:
+            shared = "".join("; 0x%08x is placed by the rows %s" % (va, ", ".join(keys))
+                             for va, keys in shared_functions(overlay).items())
+            sys.exit("%s left as it was: the rows would not load: %s%s" % (path, e, shared))
+        finally:
+            unitobjects.load.cache_clear()
+        shutil.copymode(path, tmp)
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
 def overlay_addresses(path, skip=()):
     """{name: retail address} of the data the rows of unit-objects.json name, where every row naming it
     agrees; a section symbol (`@data`) is each object's own and is left out, and so are the rows `skip` keys."""
@@ -834,7 +898,8 @@ def main(argv=None):
             source = os.path.join(a.src, stem + a.ext)
             compile_file(a.wibo, compiler, unitprofiles.command_flags(profile), source, obj)
             syms, headers, functions = text_functions(obj)
-            at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop)
+            at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop,
+                        retyped(functions, settled, placed, lo, hi) if a.cxx else None)
             owned.update({va: name for name, va in at.items()})
             # the static initializer is a member at its retail address, after all `.text`
             initializer = static_initializer(obj, syms, headers, retail, forced, settled)
@@ -928,11 +993,8 @@ def main(argv=None):
                 fh.write("0x%08x\t%s\n" % (va, name.split("__F")[0] if a.cxx else name))
     if a.write:
         path = os.path.join(a.config, "unit-objects.json")
-        overlay = merge_rows(json.load(open(path)), lo, hi, rows)
-        with open(path, "w") as fh:
-            # in address order, a data-only row after the code
-            json.dump(dict(sorted(overlay.items(), key=lambda row: int(row[0], 16))), fh, indent=2)
-            fh.write("\n")
+        # the rows are written only once they load and bind: a failed run leaves the file as it was
+        write_overlay(path, merge_rows(json.load(open(path)), lo, hi, rows), symbols_path)
         if a.unit_va is None:
             line = "0x%08x\t0x%08x\t%s_%s\t%s\t%s\t%s\t-\twhole file\n"
             units_rows(units_path, lo, hi, [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)
@@ -941,8 +1003,7 @@ def main(argv=None):
                 units_rows(units_path, start, end,
                            [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)])
         # the rows bind compiler names: the map other units resolve them through follows them
-        unitobjects.load.cache_clear()
-        names_path, count = compiler_names.write(os.path.join(a.config, "symbols.txt"), path)
+        names_path, count = compiler_names.write(symbols_path, path)
         print("compiler names: %d -> %s" % (count, names_path), file=sys.stderr)
     return 0
 

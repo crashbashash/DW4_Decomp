@@ -53,9 +53,21 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     the flat struct of the same name is another type: a receiver declared as it (or a flat subclass) is cast to
     the Gap class too (`Class` alone in Gap's scope), and so is an argument for a `Class *` parameter that is not
     declared as the Gap class or a Gap subclass, while a cast of `this` to the flat struct passed there goes;
+  * a call's arguments take the member's order where the C prototype orders them otherwise
+    (igRegistry_GetValueFloat's `create, defaultValue` for the kit's `defaultVal, createValue`): each member
+    parameter takes the C argument whose type fits it and whose name matches it (`create` begins `createValue`);
+    the C order stands while it fits and no other order matches more names, and a call whose order the types and
+    names leave open is refused;
   * an argument for a reference parameter `const T &` where the C form took a pointer to the value is
     dereferenced (`*(const T *)v`, its own pointer cast dropped), a temporary's array member (`T(...).vec`) is the
-    temporary, and a name declared as `T` stays;
+    temporary, and a name declared as `T` (or a typedef of it: `igStringObjRef` for `igSmartPointer<igStringObj>`)
+    stays, as does the address of one (`&x`, `(igStringObj **)&x`, `&x.p`), which becomes `x`;
+  * the address of a temporary (`&igStringRef(name)`, where the C form took `const igStringRef *`) passed for a
+    parameter taking the class by value or reference is the temporary (`igStringRef(name)`), which the compiler
+    builds in place as before;
+  * an argument for an enum parameter (a nested one such as igFile's `OpenMode`, or one at file scope such as
+    `IG_GFX_DRAW`) is cast to it (`(IG_GFX_DRAW)primitive`, `(Gap::Core::igFile::OpenMode)n` outside the class)
+    unless it is an enumerator of it, a cast to it, a name declared as it or a call returning it;
   * a static member whose return type differs from the C definition's keeps its uses' types: a call assigned
     where the C form's integer went is cast back to it (`*p = (int)Class::make()`), and the member named in an
     array initialiser of a function-pointer typedef (a field table) is cast to that typedef;
@@ -87,16 +99,22 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
   * config/SLUS-20836/unit-objects.json: in the unit that places the function or datum, its `emitted`/`data`
     key (or the row's `symbol`) becomes the compiler name (demangle.mangle: `setVisualContext__10igRendererFP15
     igVisualContext`), which is how tools/compiler_names.py binds the compiler name to the `symbols.txt` key;
-    `externals` and `data` rows of the C names in other units go (the compiler-name map resolves them), and a
-    `duplicates` key is renamed. `python3 tools/compiler_names.py --write` then regenerates the map, and
-    `python3 tools/whole_file_rows.py --cxx` writes the `duplicates` rows of units that emit a copy of an inline
-    member.
+    the parameter types are spelled as the class's scope finds them (NameScope): a type nested in the class or
+    a base qualified by its owner (`Q43Gap4Core6igFile8OpenMode`), a function or function-pointer typedef as its
+    type (`igIOCallbackFunction *` is `PFii_v`), a converted class as its Gap class. A key of a converted
+    class's member whose parameter names a class converted since as its flat struct (`…FP6igFile` once igFile is
+    `Gap::Core::igFile`) is renamed to the name the compiler now emits (`…FPQ33Gap4Core6igFile`) by every batch
+    and by `--rekey`; `--check` reports one. `externals` and `data` rows of the C names in other units go (the
+    compiler-name map resolves them), and a `duplicates` key is renamed. `python3 tools/compiler_names.py
+    --write` then regenerates the map, and `python3 tools/whole_file_rows.py --cxx` writes the `duplicates` rows
+    of units that emit a copy of an inline member.
 
 It refuses the batch, before writing anything, when a C name has no definition (and is not an alias of one that
 has), a file-scope `static` is named (it stays a free function), the member is not declared and the table gives
 no signature, the declaration and the C definition disagree in parameters (other than an integer the member
-takes as a pointer), an instance member is used as a value or called without a receiver, or the receiver is
-assigned where it cannot become a local (above) or has its address taken.
+takes as a pointer), a C prototype orders the parameters in a way the types and names leave open (above), an
+instance member is used as a value or called without a receiver, or the receiver is assigned where it cannot
+become a local (above) or has its address taken.
 
 Dry run by default (`--diff` shows the source changes); `--apply` writes. Then regenerate
 include/dw4/support/reflected.h (`python3 scripts/gen_type_headers.py`) when config/class-members.tsv changed,
@@ -106,7 +124,8 @@ and verify each touched unit with tools/check.py.
   memberize.py table.tsv --diff          # ...with the source diff
   memberize.py table.tsv --apply         # do it
   memberize.py --respell [--apply]       # every `T Gap::Lib::Class::m(...)` definition into its namespaces
-  memberize.py --check                   # C-name declarations nothing needs any more
+  memberize.py --check                   # C-name declarations nothing needs any more, stale compiler names
+  memberize.py --rekey [--apply]         # rename the stale compiler-name keys of unit-objects.json
 """
 import argparse
 import collections
@@ -152,6 +171,8 @@ class Conversion:
         self.access = None                             # `private`/`protected` from its class-members.tsv row
         self.getter = None                             # a public static inline `{ return name; }` of the class
         self.c_params = {}                             # index -> (C integer type, member pointer type) retyped
+        self.raw_params = None                         # the parameters as its declaration spells them, names kept
+        self.order = None                              # member index -> C argument index, where the C order differs
 
     @property
     def base(self):
@@ -276,6 +297,22 @@ def declares_virtual(rows, name, params=None, macros=None, types=None, cls="C"):
     return False
 
 
+def declared_raw_params(rows, name, params, const=False, macros=None, types=None, cls="C"):
+    """The parameters as the class-members.tsv row of function `name` taking `params` (normalised) spells them,
+    names and defaults included (`igFile::OpenMode openMode`), or None when no row declares it."""
+    call = re.compile(r"(?:^|[\s*&:~])%s\s*\(" % re.escape(name))
+    for _access, stmt in row_statements(rows, macros):
+        m = call.search(stmt)
+        if not m:
+            continue
+        found = declared_members(cls, [stmt if stmt.endswith((";", "}")) else stmt + ";"], macros, types)
+        if any(d.name == name and tuple(d.params or ()) == tuple(params) and bool(d.const) == bool(const)
+               for d in found):
+            close = declarations._close(stmt, m.end() - 1)
+            return [a for a in _split_args(stmt[m.end():close]) if a not in ("", "void")]
+    return None
+
+
 def declared_access(rows, name, macros=None):
     """The access (`private`, `protected`) class-members.tsv rows give member `name` (object macros expanded),
     or None for public."""
@@ -366,22 +403,159 @@ def conversions(rows, members, macros, types):
         conv = Conversion(cname, cls, name, want.kind, bool(want.static), bool(want.const), bool(want.inline),
                           want.ret, tuple(want.params or ()), declaration, virtual)
         conv.access = declared_access(class_rows, name, macros)
+        if conv.kind == "func":
+            conv.raw_params = declared_raw_params(class_rows, name, conv.params, conv.const, macros, types, base)
         if conv.kind == "data" and conv.access:
             conv.getter = public_getter(class_rows, name, macros)
         out.append(conv)
     return out, errors
 
 
-def compiler_name(conv, converted=None):
-    """The MWCC b52 name of a conversion's member. In a member of a Gap class a parameter type naming a converted
-    class is that Gap class (`converted` is {class: library namespace}), as the class scope finds it."""
+_BUILTIN_WORDS = frozenset(("const", "volatile", "unsigned", "signed", "int", "char", "short", "long", "float",
+                            "double", "void", "bool", "wchar_t", "struct", "class", "union", "enum", "typename"))
+
+
+def _strip_comments(text):
+    return re.sub(r"/\*.*?\*/|//[^\n]*", " ", text, flags=re.S)
+
+
+def _enumerators(body):
+    return frozenset(m.group(1) for m in (re.match(r"\s*([A-Za-z_]\w*)", e) for e in body.split(",")) if m)
+
+
+class NameScope:
+    """What the types of a member's parameters name, for its compiler name and its callers' arguments: the types
+    a class declares inside it in config/class-members.tsv (`enum OpenMode {…}` of igFile, a nested typedef), the
+    classes' bases, the tree's function and function-pointer typedefs (`typedef void igIOCallbackFunction(int,
+    int);`) and its enums at file scope (`typedef enum IG_GFX_DRAW {…} IG_GFX_DRAW;`)."""
+
+    _NESTED = re.compile(r"(?:typedef\s+)?(enum|struct|class|union)\s+([A-Za-z_]\w*)\s*(?:\{(.*)\}|:[^;{]*\{.*\}|;)",
+                         re.S)
+    _NESTED_TYPEDEF = re.compile(r"typedef\s+([^;{}()]*?)\s*\b([A-Za-z_]\w*)\s*;$", re.S)
+    _FUNCTION = re.compile(r"\btypedef\s+([^;{}()]*?)\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\(([^;{}()]*)\)\s*;"
+                           r"|\btypedef\s+([^;{}()]*?)\b([A-Za-z_]\w*)\s*\(([^;{}()]*)\)\s*;")
+    _ENUM = re.compile(r"\benum\s+([A-Za-z_]\w*)\s*\{([^{}]*)\}|\btypedef\s+enum\s*\{([^{}]*)\}\s*([A-Za-z_]\w*)\s*;")
+
+    def __init__(self, members=None, bases=None, texts=(), types=None):
+        self.bases = bases or {}
+        self.types = types
+        self.nested = collections.defaultdict(dict)     # class -> {name: ("enum", enumerators) | ("record", None)
+        for cls, rows in (members or {}).items():       #                 | ("typedef", target)}
+            for _access, stmt in row_statements(rows):
+                m = self._NESTED.match(stmt)
+                if m:
+                    body = m.group(3) if m.group(1) == "enum" else None
+                    self.nested[cls][m.group(2)] = ("enum", _enumerators(body or "")) if m.group(1) == "enum" \
+                        else ("record", None)
+                    continue
+                m = self._NESTED_TYPEDEF.match(stmt)
+                if m and not re.search(r"\b(?:enum|struct|class|union)\s*\{", m.group(1)):
+                    self.nested[cls][m.group(2)] = ("typedef", m.group(1).strip())
+        functions = collections.defaultdict(set)        # name -> {(return, (parameter, ...), is a pointer)}
+        enums = collections.defaultdict(set)            # name -> {enumerators}
+        for text in texts:
+            if "typedef" not in text and "enum" not in text:
+                continue
+            code = _strip_comments(text)
+            for m in self._FUNCTION.finditer(code):
+                pointer = m.group(2) is not None
+                ret, name, args = (m.group(1), m.group(2), m.group(3)) if pointer else m.group(4, 5, 6)
+                functions[name].add((re.sub(r"\s+", " ", ret).strip(), tuple(
+                    a.strip() for a in _split_args(args) if a.strip() not in ("", "void")), pointer))
+            for m in self._ENUM.finditer(code):
+                enums[m.group(1) or m.group(4)].add(_enumerators(m.group(2) if m.group(1) else m.group(3)))
+        self.functions = {n: next(iter(f)) for n, f in functions.items() if len(f) == 1}
+        self.enums = {n: next(iter(e)) for n, e in enums.items() if len(e) == 1}
+
+    def nested_owner(self, cls, name, depth=0):
+        """(class, kind entry) of the class among `cls` and its bases that declares type `name`, or None."""
+        found = self.nested.get(cls, {}).get(name)
+        if found is not None:
+            return cls, found
+        if depth < 32:
+            for b in self.bases.get(cls, ()):
+                hit = self.nested_owner(b, name, depth + 1)
+                if hit:
+                    return hit
+        return None
+
+    def enum_of(self, cls, t):
+        """(owner class or None, enumerators) when parameter type `t` (normalised) of a member of `cls` is an enum
+        (a nested one, or one at file scope), else None."""
+        if not re.fullmatch(r"[A-Za-z_]\w*", t or ""):
+            return None
+        hit = self.nested_owner(cls, t)
+        if hit:
+            return (hit[0], hit[1][1]) if hit[1][0] == "enum" else None
+        return (None, self.enums[t]) if t in self.enums else None
+
+    def param_type(self, p):
+        """A parameter's type without its name or default, its spelling kept (`igFile::OpenMode`)."""
+        p = p.strip()
+        eq = declarations._top_equals(p)
+        p = (p[:eq] if eq >= 0 else p).strip()
+        m = re.match(r"(.*?[\w>*&\s])\s*\b([A-Za-z_]\w*)\s*((?:\[[^\]]*\]\s*)*)$", p, re.S)
+        if m and m.group(2) not in _BUILTIN_WORDS and re.search(r"[A-Za-z_>]", m.group(1)) and \
+                not m.group(1).rstrip().endswith("::") and m.group(1).strip() not in ("const", "volatile", "struct",
+                                                                                         "class", "union", "enum"):
+            p = m.group(1).strip() + ("*" if m.group(3) else "")
+        return p
+
+    def spelled(self, t, raw, cls, converted, gap, depth=0):
+        """The C++ spelling MWCC mangles for parameter type `t` (normalised, `conv.params`) of a member of class
+        `cls`, `raw` its declaration's spelling: a function (pointer) typedef is its type (`void (*)(int, int)`);
+        a type nested in the class or a base is qualified by its owner (`igFile::OpenMode`), as is one the
+        declaration qualifies; with `gap` (a member of a Gap class), a converted class is its Gap class."""
+        t = re.sub(r"\s*:\s*:\s*", "::", t)
+        qualifier = {}
+        for m in re.finditer(r"((?:[A-Za-z_]\w*\s*::\s*)+)([A-Za-z_]\w*)", raw or ""):
+            qualifier[m.group(2)] = re.sub(r"\s+", "", m.group(1))[:-2]
+        fn = re.fullmatch(r"(?:const\s*)?([A-Za-z_]\w*)\s*((?:[*&]|\s|const)*)", t)
+        if fn and depth < 8 and fn.group(1) in self.functions and fn.group(1) not in qualifier and \
+                not self.nested_owner(cls, fn.group(1)):
+            ret, args, pointer = self.functions[fn.group(1)]
+            declarator = ("*" if pointer else "") + re.sub(r"\s|const", "", fn.group(2))
+            inner = [self.spelled(self.types.param(a) if self.types else self.param_type(a), self.param_type(a),
+                                  cls, converted, gap, depth + 1) for a in args]
+            ret_t = self.types.strip_top_cv(self.types.norm(ret)) if self.types else ret
+            return "%s (%s)(%s)" % (self.spelled(ret_t, ret, cls, converted, gap, depth + 1), declarator or "*",
+                                    ", ".join(inner))
+
+        def name(m):
+            word = m.group(1)
+            if word in _BUILTIN_WORDS:
+                return word
+            if word in qualifier:
+                parts = qualifier[word].split("::")
+                if gap and parts[0] in converted:
+                    parts = ["Gap", converted[parts[0]]] + parts
+                return "::".join(parts + [word])
+            hit = self.nested_owner(cls, word) if depth < 8 else None
+            if hit:
+                owner, (kind, target) = hit
+                if kind == "typedef":
+                    return self.spelled(self.types.norm(target) if self.types else target, target, owner, converted,
+                                        gap, depth + 1)
+                return "%s::%s" % ("Gap::%s::%s" % (converted[owner], owner) if gap and owner in converted
+                                   else owner, word)
+            if gap and word in converted:
+                return "Gap::%s::%s" % (converted[word], word)
+            return word
+        return re.sub(r"(?<![\w:])([A-Za-z_]\w*)\b", name, t)
+
+
+def compiler_name(conv, converted=None, scope=None):
+    """The MWCC b52 name of a conversion's member. Its parameter types are spelled as the class scope finds them
+    (NameScope.spelled): a type nested in the class or a base qualified by its owner (`Q43Gap4Core6igFile8OpenMode`),
+    a typedef'd function pointer as its type (`PFii_v`), and in a member of a Gap class a converted class as that
+    Gap class (`converted` is {class: library namespace})."""
     if conv.kind == "data":
         return mangle(conv.qualified, None)
-    params = [re.sub(r"\s*:\s*:\s*", "::", p) for p in conv.params]
-    if converted and conv.cls.startswith("Gap::"):
-        params = [re.sub(r"(?<![\w:])([A-Za-z_]\w*)\b",
-                         lambda m: "Gap::%s::%s" % (converted[m.group(1)], m.group(1))
-                         if m.group(1) in converted else m.group(1), p) for p in params]
+    scope = scope or NameScope()
+    gap = bool(converted) and conv.cls.startswith("Gap::")
+    raw = getattr(conv, "raw_params", None) or ()
+    params = [scope.spelled(p, raw[i] if i < len(raw) else None, conv.base, converted or {}, gap)
+              for i, p in enumerate(conv.params)]
     return mangle(conv.qualified, params, conv.const)
 
 
@@ -477,6 +651,9 @@ _ARROW = re.compile(r"\s*->\s*([A-Za-z_]\w*)")
 _ASSIGNED = re.compile(r"\s*(?:=(?!=)|\+\+|--|[-+*/%&|^]=|<<=|>>=)")
 _CAST = re.compile(r"^\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\s*\*\s*\)\s*(.+)$", re.S)
 _CAST_AT = re.compile(r"\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\s*\*\s*\)")
+# a cast to a pointer type, multiword or template (`(unsigned char *)`, `(igStringObj **)`, `(const Vec *)`)
+_POINTER_CAST = (r"\(\s*(?:const\s+)?(?:(?:unsigned|signed|short|long)\s+)*[A-Za-z_][\w:]*(?:\s*<[^()]*>)?"
+                 r"(?:\s+const)?\s*\*+\s*\)\s*")
 _POSTFIX = re.compile(r"^[A-Za-z_]\w*(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[[^\[\]]*\])*$")
 _INTEGERS = ("int", "unsigned int", "short", "unsigned short", "long", "unsigned long", "char", "unsigned char")
 _MEMBER_HEAD = re.compile(r"([A-Za-z_][\w:]*)\s*::\s*~?[A-Za-z_]\w*\s*\($")
@@ -494,6 +671,90 @@ def retyped_params(c_params, params):
         if c not in _INTEGERS or not (m or "").endswith("*"):
             return None
         out[i] = (c, m)
+    return out
+
+
+def _literal(e):
+    """Whether `e` is an integer literal, which a cast may precede without parentheses."""
+    return re.fullmatch(r"-?\s*(?:0[xX][0-9a-fA-F]+|\d+)[uUlL]*", e.strip()) is not None
+
+
+def _fit(c, m, is_enum):
+    """How well an argument the C form declares as type `c` fits a member parameter of type `m` (normalised):
+    3 the same type; 2 a pointer to the value the member takes (by reference or by value); 1 another integer
+    (or an enum), another pointer, a pointer to another type for a reference, an integer for a pointer; 0 not."""
+    if c == m:
+        return 3
+    if c.endswith("*") and (m.endswith("&") and _normal_type(c[:-1]) == _normal_type(m[:-1]) or
+                            _normal_type(c[:-1]) == _normal_type(m)):
+        return 2
+    if c.endswith("*") and (m.endswith(("*", "&"))):
+        return 1
+    if c in _INTEGERS + ("bool",) and (m in _INTEGERS + ("bool",) or m.endswith("*") or is_enum(m)):
+        return 1
+    return 0
+
+
+def _name_fit(a, b):
+    """2 for parameters of one name, 1 when one name begins the other (`create`, `createValue`), else 0."""
+    if not a or not b:
+        return 0
+    a, b = a.lower(), b.lower()
+    if a == b:
+        return 2
+    return 1 if min(len(a), len(b)) >= 3 and (a.startswith(b) or b.startswith(a)) else 0
+
+
+def argument_order(c_params, c_names, params, names, is_enum=lambda t: False):
+    """The member's parameter order over a C form's (`order[i]` the C argument the member's i-th parameter takes),
+    or None when the C order is the member's. Each member parameter takes a C argument whose type fits it
+    (`_fit`); the C order stands while it fits and no other order matches more parameter names; another order
+    must fit and name-match best (types breaking a tie of names). Raises ValueError when several orders do."""
+    n = len(params)
+    if len(c_params) != n or n < 2:
+        return None
+    fits = [[_fit(c_params[j], params[i], is_enum) for j in range(n)] for i in range(n)]
+    found = []
+
+    def walk(i, used, order):
+        if i == n:
+            found.append(tuple(order))
+            return
+        for j in range(n):
+            if j not in used and fits[i][j]:
+                walk(i + 1, used | {j}, order + [j])
+    walk(0, frozenset(), [])
+    if not found:
+        return None
+
+    def score(order):
+        return (sum(_name_fit(c_names[j], names[i]) for i, j in enumerate(order)),
+                sum(fits[i][j] for i, j in enumerate(order)))
+    best = max(score(o) for o in found)
+    same = tuple(range(n))
+    if same in found and score(same)[0] == best[0]:
+        return None
+    top = [o for o in found if score(o) == best]
+    if len(top) > 1:
+        raise ValueError(top)
+    return top[0]
+
+
+def _param_names(text, name):
+    """The parameter names of the declaration of function `name` in `text` (None for an unnamed one)."""
+    m = re.search(r"\b%s\s*\(" % re.escape(name), text or "")
+    if not m:
+        return None
+    close = declarations._close(text, m.end() - 1)
+    out = []
+    for a in _split_args(text[m.end():close]):
+        if a in ("", "void"):
+            continue
+        eq = declarations._top_equals(a)
+        a = (a[:eq] if eq >= 0 else a).strip()
+        w = re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*$", a)
+        words = re.findall(r"[A-Za-z_]\w*", a)
+        out.append(w.group(1) if w and len(words) > 1 and w.group(1) not in _BUILTIN_WORDS else None)
     return out
 
 
@@ -597,6 +858,7 @@ class FileRewrite:
         self.defs = units.definitions(text)
         self.edits = []                                # (start, end, replacement)
         self.deletes = []                              # (start, end) of whole lines
+        self.moves = []                                # (argument spans, order): a call's arguments in member order
         self.gap_blocks = [(m.end(), units._match_brace(self.clean, m.end() - 1))
                            for m in re.finditer(r"\bnamespace\s+Gap\s*\{", self.clean)]
 
@@ -611,17 +873,44 @@ class FileRewrite:
 
     def result(self):
         deletes = sorted(self.deletes)
-        kept = [(s, e, r) for s, e, r in self.edits if not any(ds <= s and e <= de for ds, de in deletes)]
-        spans = sorted(kept + [(s, e, "") for s, e in deletes])
-        out, at = [], 0
-        for s, e, r in spans:
+
+        def dropped(s, e):
+            return any(ds <= s and e <= de for ds, de in deletes)
+        kept = [(s, e, r) for s, e, r in self.edits if not dropped(s, e)]
+        moves = [(spans, order) for spans, order in self.moves if not dropped(spans[0][0], spans[-1][1])]
+        return tidy(self._render(0, len(self.text), kept + [(s, e, "") for s, e in deletes], moves))
+
+    def _render(self, start, end, edits, moves):
+        """text[start:end] with the edits and moves inside it applied. A move writes a call's arguments in another
+        order (`order[i]` the argument written i-th), each with the edits inside it; the separators stay."""
+        tops = [m for m in moves if not any(o is not m and o[0][0][0] <= m[0][0][0] and m[0][-1][1] <= o[0][-1][1]
+                                            for o in moves)]
+        regions = [(spans[0][0], spans[-1][1]) for spans, _order in tops]
+        items = [(s, e, r, None) for s, e, r in edits if not any(rs <= s and e <= re_ for rs, re_ in regions)]
+        items += [(rs, re_, "", move) for (rs, re_), move in zip(regions, tops)]
+        out, at = [], start
+        for s, e, r, move in sorted(items, key=lambda x: x[:3]):
             if s < at:
                 raise Refused("%s: two edits overlap at line %d" % (self.rel, self.text.count("\n", 0, s) + 1))
             out.append(self.text[at:s])
-            out.append(r)
             at = e
-        out.append(self.text[at:])
-        return tidy("".join(out))
+            if move is None:
+                out.append(r)
+                continue
+            spans, order = move
+            inner = [x for x in edits if s <= x[0] and x[1] <= e]
+            if any(not any(a <= x[0] and x[1] <= b for a, b in spans) for x in inner):
+                raise Refused("%s:%d: an edit between the arguments of a call whose arguments change places"
+                              % (self.rel, self.text.count("\n", 0, s) + 1))
+            pieces = [self._render(a, b, [x for x in inner if a <= x[0] and x[1] <= b],
+                                   [m for m in moves if m is not move and a <= m[0][0][0] and m[0][-1][1] <= b])
+                      for a, b in spans]
+            for k, j in enumerate(order):
+                out.append(pieces[j])
+                if k + 1 < len(spans):
+                    out.append(self.text[spans[k][1]:spans[k + 1][0]])
+        out.append(self.text[at:end])
+        return "".join(out)
 
 
 def tidy(text):
@@ -688,6 +977,7 @@ class Planner:
         self.boundary = {}                              # C name -> files whose declaration of it stays
         self.comment_names = []                         # (file, start, end, conversion) of a C name in a comment
         self.converted = {}                              # class -> library namespace (converted-classes.tsv)
+        self.scope = NameScope()                         # nested types, typedefs and enums the members name
 
     def qual(self, conv, inside):
         """How code names a member: bare inside a member of its class, else qualified."""
@@ -769,43 +1059,123 @@ class Planner:
             fr.edits.append((s, s, "(%s *)(" % self.spell(cls, gap)))
             fr.edits.append((e, e, ")"))
 
-    def ref_argument(self, fr, span, cls, const, ctx):
-        """Edits giving an argument passed for a reference parameter `const cls &`, where the C form took a pointer
-        to the value: a temporary's array member (`cls(...).vec`) is the temporary, a name declared as `cls` stays,
-        an argument already written as the value (`*p`, `*(cls *)p`) stays, the address of a local or parameter declared
-        as `cls` (`&count` for an `int &`) is the name, and any other pointer (a float array,
-        a cast to one, a stand-in struct's address) is dereferenced as a `cls` (`*(const cls *)v`), its own pointer
-        cast dropped."""
+    def spellings(self, t, spelled=None):
+        """A regex alternation of the spellings of normalised type `t`: itself, `spelled` (the declaration's) and
+        every typedef name the tree resolves to it (`igStringObjRef` for `igSmartPointer<igStringObj>`)."""
+        if getattr(self, "_typedef_names", None) is None:
+            self._typedef_names = collections.defaultdict(set)
+            types = self.index.types
+            for name in list(types.raw):
+                target = types.resolve(name)
+                if target and target != name:
+                    self._typedef_names[_normal_type(target)].add(name)
+        names = {t, spelled or t} | self._typedef_names.get(_normal_type(t), set())
+
+        def pattern(s):
+            out, prev = [], None
+            for tok in re.findall(r"[A-Za-z_]\w*|::|\S", s):
+                word = re.match(r"\w", tok) is not None
+                if out:
+                    out.append(r"\s+" if word and prev else r"\s*")
+                out.append(re.escape(tok))
+                prev = word
+            return "".join(out)
+        return "|".join(pattern(n) for n in sorted(names, key=len, reverse=True) if n)
+
+    def declared_value(self, fr, name, t, ctx, spelled=None, after=r"[,;=(\[)]"):
+        """Whether `name` is declared in the function at `ctx` (its head or body) as a value or reference of
+        normalised type `t`, alone or after other declarators of that type (`Vec a, b`)."""
+        if ctx is None:
+            return False
+        return re.search(r"(?<![\w:])(?:const\s+)?(?:%s)(?:\s+const)?(?:\s+|\s*&\s*)"
+                         r"(?:[A-Za-z_]\w*\s*(?:=\s*[^,;()]*)?,\s*)*%s\s*%s"
+                         % (self.spellings(t, spelled), re.escape(name), after), fr.clean[ctx[1]:ctx[2]]) is not None
+
+    def temporary_argument(self, fr, span, t, spelled=None):
+        """An argument `&T(...)` (the address of a temporary the C form took a pointer to) passed for a parameter
+        `T`, `const T &` or `T &` is the temporary `T(...)`: the compiler builds it in place, as it did for the
+        pointer. -> whether it was one."""
         s, e = span
+        k = s
+        while k < e and (fr.clean[k] == "(" and declarations._close(fr.clean, k) == e - 1 or fr.clean[k].isspace()):
+            k, e = (k + 1, e - 1) if fr.clean[k] == "(" else (k + 1, e)
+        m = re.compile(r"&\s*(?:%s)\s*\(" % self.spellings(t, spelled)).match(fr.clean, k, e)
+        if not m or declarations._close(fr.clean, m.end() - 1) != e - 1:
+            return False
+        j = k + 1
+        while fr.clean[j].isspace():
+            j += 1
+        fr.edits.append((k, j, ""))
+        return True
+
+    def ref_argument(self, fr, span, t, const, ctx, spelled=None):
+        """Edits giving an argument passed for a reference parameter `const t &` (`t` normalised, `spelled` as the
+        declaration writes it), where the C form took a pointer to the value: a temporary's array member
+        (`t(...).vec`) or address (`&t(...)`) is the temporary, a name declared as `t` stays, an argument already
+        written as the value (`*p`, `*(t *)p`) stays, the address of a local or parameter declared as `t`
+        (`&count` for an `int &`, `(igStringObj **)&value` or `&value.p` for an `igStringObjRef &` holding a
+        smart pointer) is the name, and any other pointer (a float array, a cast to one, a stand-in struct's
+        address) is dereferenced as a `t` (`*(const t *)v`), its own pointer cast dropped."""
+        s, e = span
+        spelled = spelled or t
         expr = fr.text[s:e].strip()
-        head = re.match(r"%s\s*\(" % re.escape(cls), expr)
+        if self.temporary_argument(fr, span, t, spelled):
+            return
+        head = re.compile(r"(?:%s)\s*\(" % self.spellings(t, spelled)).match(fr.clean, s, e)
         if head:
-            close = declarations._close(fr.clean, s + head.end() - 1)
+            close = declarations._close(fr.clean, head.end() - 1)
             if re.fullmatch(r"\s*\.\s*[A-Za-z_]\w*\s*", fr.text[close + 1:e]):
                 fr.edits.append((close + 1, e, ""))
                 return
         bare = _strip_parens(expr)
-        if re.fullmatch(r"[A-Za-z_]\w*", bare) and ctx is not None and re.search(
-                r"\b%s(?:\s+const)?(?:\s+|\s*&\s*)%s\b\s*[,;=(\[)]" % (re.escape(cls), re.escape(bare)),
-                fr.text[ctx[1]:ctx[2]]):
+        if re.fullmatch(r"[A-Za-z_]\w*", bare) and self.declared_value(fr, bare, t, ctx, spelled):
             return
-        deref = re.match(r"\*\s*(?:\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*)?", bare)
+        deref = re.match(r"\*\s*(?:%s)?" % _POINTER_CAST, bare)
         if deref and _POSTFIX.match(_strip_parens(bare[deref.end():])):
             return
-        amp = re.fullmatch(r"&\s*([A-Za-z_]\w*)", bare)
-        if amp and ctx is not None and re.search(
-                r"\b%s(?:\s+const)?\s+(?:[A-Za-z_]\w*\s*(?:=\s*[^,;()]*)?,\s*)*%s\s*[,;=)]"
-                % (re.escape(cls), re.escape(amp.group(1))), fr.text[ctx[1]:ctx[2]]):
-            fr.edits.append((s, e, amp.group(1)))       # the address of a value declared as `cls`: the value
+        amp = re.fullmatch(r"(?:%s)?\(?\s*&\s*([A-Za-z_]\w*)(\s*\.\s*p)?\s*\)?" % _POINTER_CAST, bare)
+        if amp and (amp.group(0).count("(") - amp.group(0).count(")")) in (0, 1) and \
+                self.declared_value(fr, amp.group(1), t, ctx, spelled, r"[,;=)(]"):
+            fr.edits.append((s, e, amp.group(1)))       # the address of a value declared as `t`: the value
             return
-        cast = re.match(r"\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*", expr)
+        cast = re.match(_POINTER_CAST, expr)
         start = s + (cast.end() if cast else 0)
         inner = expr[start - s:]
-        deref = "*(%s%s *)" % ("const " if const else "", cls)
+        deref = "*(%s%s *)" % ("const " if const else "", spelled)
         if _POSTFIX.match(inner) or re.fullmatch(r"&\s*[A-Za-z_]\w*(?:\s*\[[^\[\]]*\])*", inner):
             fr.edits.append((s, start, deref))
         else:
             fr.edits.append((s, start, deref + "("))
+            fr.edits.append((e, e, ")"))
+
+    def enum_argument(self, fr, span, t, owner, enumerators, ctx, inside, gap):
+        """An argument for a parameter of enum type `t` (nested in class `owner`, or at file scope for None) is
+        cast to it unless it already has that type: an enumerator of it, a cast to it, a name declared as it or a
+        call returning it; an integer (a literal, an `int` variable, an expression) is cast, as C++ takes no
+        integer for an enum (`(IG_GFX_DRAW)primitive`, `(Gap::Core::igFile::OpenMode)5`)."""
+        s, e = span
+        expr = fr.text[s:e].strip()
+        bare = _strip_parens(expr)
+        own = re.compile(r"(?:(?:[A-Za-z_]\w*\s*::\s*)*%s)" % re.escape(t))
+        cast = re.match(r"\(\s*(?:enum\s+)?%s\s*\)\s*" % own.pattern, bare)
+        if cast and (_postfix_expr(bare[cast.end():]) or _literal(bare[cast.end():])):
+            return
+        name = re.fullmatch(r"(?:[A-Za-z_]\w*\s*::\s*)*([A-Za-z_]\w*)", bare)
+        if name and (name.group(1) in enumerators or (
+                re.fullmatch(r"[A-Za-z_]\w*", bare) and ctx is not None and re.search(
+                    r"(?<![\w:])(?:enum\s+)?%s\s+(?:[A-Za-z_]\w*\s*(?:=\s*[^,;()]*)?,\s*)*%s\s*[,;=)]"
+                    % (own.pattern, re.escape(bare)), fr.clean[ctx[1]:ctx[2]]))):
+            return
+        if re.search(r"\)\s*$", bare) and (self.expr_type(fr, bare, ctx) or "").split("::")[-1] == t:
+            return
+        if owner is None or (inside is not None and self.classes.derives(_base_name(inside), owner)):
+            spelled = t
+        else:
+            spelled = "%s::%s" % (self.spell(owner, gap), t)
+        if _postfix_expr(expr) or _literal(expr):
+            fr.edits.append((s, s, "(%s)" % spelled))
+        else:
+            fr.edits.append((s, s, "(%s)(" % spelled))
             fr.edits.append((e, e, ")"))
 
     def plan_file(self, fr):
@@ -863,7 +1233,7 @@ class Planner:
         after = re.match(r"\s*\(", fr.clean[end:])
         if conv.kind == "data" or conv.static:
             fr.edits.append((pos, end, conv.qualified))
-            self.retype_call(fr, conv, end, None)
+            self.retype_call(fr, conv, end, None, None, gap)
             return
         if not after:
             self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
@@ -924,7 +1294,7 @@ class Planner:
             fr.edits.append((pos, end, self.retyped_cast(fr, conv, pos, after) + self.qual(conv, inside)))
             if conv.inline and conv.kind == "func" and not after:
                 self.inline_users[conv.qualified].add(fr.rel)
-            self.retype_call(fr, conv, end, ctx)
+            self.retype_call(fr, conv, end, ctx, inside, self.gap_scope(fr, pos, ctx))
             return
         if not after:
             self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
@@ -946,24 +1316,42 @@ class Planner:
         fr.edits.append((pos, stop, (receiver or "") + conv.name + "("))
         self.typed_arguments(fr, conv, spans[1:], ctx, inside, gap)
 
-    def retype_call(self, fr, conv, end, ctx):
-        """A static member's call at `end` (after its name): its retyped arguments (retyped_arguments)."""
+    def retype_call(self, fr, conv, end, ctx, inside=None, gap=False):
+        """A static member's call at `end` (after its name): its arguments as at any call (typed_arguments)."""
         after = re.match(r"\s*\(", fr.clean[end:])
-        if not conv.c_params or not after:
+        if conv.kind != "func" or not after:
             return
         open_ = end + after.end() - 1
-        self.retyped_arguments(fr, conv, _arg_spans(fr.clean, open_, declarations._close(fr.clean, open_), fr.text),
-                               ctx)
+        self.typed_arguments(fr, conv, _arg_spans(fr.clean, open_, declarations._close(fr.clean, open_), fr.text),
+                             ctx, inside, gap)
 
     def typed_arguments(self, fr, conv, spans, ctx, inside, gap):
-        """A call's arguments cast where its parameter needs: to a converted class's Gap type for a pointer to
-        one, a pointer to the value for a reference (`ref_argument`), an integer the member takes as a pointer
-        (`retyped_arguments`)."""
+        """A call's arguments in the member's order (conv.order: the C form ordered them otherwise), each cast where
+        its parameter needs: to a converted class's Gap type for a pointer to one, a pointer to the value for a
+        reference (`ref_argument`), the temporary for a class taken by value (`temporary_argument`), an integer
+        for an enum (`enum_argument`), an integer the member takes as a pointer (`retyped_arguments`)."""
+        if conv.order and len(spans) == len(conv.order):
+            fr.moves.append((list(spans), conv.order))
+            spans = [spans[j] for j in conv.order]
         self.retyped_arguments(fr, conv, spans, ctx)
-        for span, param in zip(spans, conv.params):
-            ref = re.fullmatch(r"([A-Za-z_]\w*)( const)?&", param or "")
+        raw = conv.raw_params or ()
+        for i, (span, param) in enumerate(zip(spans, conv.params)):
+            spelled = None
+            if i < len(raw):
+                spelled = re.sub(r"\s+", " ", re.sub(r"\b(?:const|volatile|struct|class|union|enum)\b|&", " ",
+                                                     self.scope.param_type(raw[i]))).strip()
+                spelled = spelled if spelled and "*" not in spelled else None
+            ref = re.fullmatch(r"((?:(?:unsigned|signed|short|long) )*[A-Za-z_][\w:]*(?:<[^&*]*>)?)( const)?&",
+                               param or "")
             if ref:
-                self.ref_argument(fr, span, ref.group(1), bool(ref.group(2)), ctx)
+                self.ref_argument(fr, span, ref.group(1), bool(ref.group(2)), ctx, spelled)
+                continue
+            if re.fullmatch(r"[A-Za-z_][\w:]*(?:<[^&*]*>)?", param or "") and param not in _BUILTIN_WORDS:
+                enum = self.scope.enum_of(conv.base, param)
+                if enum:
+                    self.enum_argument(fr, span, param, enum[0], enum[1], ctx, inside, gap)
+                else:
+                    self.temporary_argument(fr, span, param, spelled)
                 continue
             if not conv.cls.startswith("Gap::"):
                 continue
@@ -1007,6 +1395,8 @@ class Planner:
                 if (_strip_parens(cast.group(2)) if cast else e) == "this":
                     stop = spans[1][0] if len(spans) > 1 else close
                     fr.edits.append((pos, stop, "%s::%s(" % (conv.base, conv.name)))
+                    ctx = fr.enclosing(pos)
+                    self.typed_arguments(fr, conv, spans[1:], ctx, inside, self.gap_scope(fr, pos, ctx))
                     return
         self.c_callers[conv.cname].add(fr.rel)
 
@@ -1175,7 +1565,7 @@ class Planner:
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.qualified, conv.cname))
             return
         fr.edits.append((pos, end, self.retyped_cast(fr, conv, pos, nxt == "(") + conv.qualified))
-        self.retype_call(fr, conv, end, None)
+        self.retype_call(fr, conv, end, None, None, any(s <= pos < e for s, e in fr.gap_blocks))
         if conv.inline:
             self.inline_users[conv.qualified].add(fr.rel)
 
@@ -1573,6 +1963,76 @@ def symbol_addresses(root):
     return out
 
 
+_ROW_FIELDS = ("emitted", "duplicates", "externals", "data", "anon", "stripped")
+
+
+def _flat_form(mangled, converted):
+    """`mangled` with each converted class's Gap scope (`Q33Gap4Core6igFile`) written as the flat class (`6igFile`)."""
+    for cls, lib in converted.items():
+        mangled = mangled.replace("Q33Gap%d%s%d%s" % (len(lib), lib, len(cls), cls), "%d%s" % (len(cls), cls))
+    return mangled
+
+
+def stale_keys(rows, members, macros, types, converted, scope):
+    """{key: compiler name} of the unit-objects.json keys of converted classes' members whose parameter names a
+    class converted after them as its flat struct (`platformLoad__Q33Gap3Gfx7igImageFP6igFile`, written while igFile
+    was flat): in the Gap class's scope the parameter's class is now the Gap class
+    (`…FPQ33Gap4Core6igFile`), which is the name the compiler emits. A parameter the declaration spells as the
+    flat struct (`::igFile *`) keeps it."""
+    if not converted:
+        return {}
+    flat = re.compile(r"(?<![\w:])(%s)\b" % "|".join(re.escape(c) for c in sorted(converted, key=len, reverse=True)))
+    keys = set()
+    for row in rows.values():
+        for field in _ROW_FIELDS:
+            if isinstance(row.get(field), dict):
+                keys.update(row[field])
+        if row.get("symbol"):
+            keys.add(row["symbol"])
+    declared, out = {}, {}
+    for key in sorted(keys):
+        d = demangle(key) if "__" in key else None
+        if d is None or d.data or d.class_name not in converted or d.namespaces[:1] != ("Gap",) or \
+                not any(flat.search(p) for p in d.params):
+            continue
+        cls = d.class_name
+        if cls not in declared:
+            declared[cls] = declared_members(cls, (members or {}).get(cls, []), macros, types)
+        for m in declared[cls]:
+            if m.kind != "func" or m.name != d.name or len(m.params or ()) != len(d.params) or bool(m.const) != d.const:
+                continue
+            conv = Conversion(key, "Gap::%s::%s" % (converted[cls], cls), m.name, "func", bool(m.static),
+                              bool(m.const), bool(m.inline), m.ret, tuple(m.params or ()), None)
+            conv.raw_params = declared_raw_params((members or {}).get(cls, []), m.name, conv.params, m.const, macros,
+                                                  types, cls)
+            try:
+                new = compiler_name(conv, converted, scope)
+            except ValueError:
+                continue
+            if new != key and _flat_form(new, converted) == _flat_form(key, converted):
+                out[key] = new
+    return out
+
+
+def rekey_rows(rows, renames):
+    """Rename unit-objects.json keys (`renames` {old: new}) in place, in order -> ([change], {row key})."""
+    changes, touched = [], set()
+    for unit, row in rows.items():
+        for field in _ROW_FIELDS:
+            entries = row.get(field)
+            if isinstance(entries, dict) and any(k in renames for k in entries):
+                row[field] = {renames.get(k, k): v for k, v in entries.items()}
+                for k in entries:
+                    if k in renames:
+                        changes.append("%s %s: %s -> %s" % (unit, field, k, renames[k]))
+                        touched.add(unit)
+        if row.get("symbol") in renames:
+            changes.append("%s symbol: %s -> %s" % (unit, row["symbol"], renames[row["symbol"]]))
+            row["symbol"] = renames[row["symbol"]]
+            touched.add(unit)
+    return changes, touched
+
+
 def rename_rows(rows, convs, placing):
     """Rename the placing unit's key of each conversion to its compiler name and drop the C names' rows elsewhere
     -> [change]. `placing` is {C name: row key} of the unit that places it. The placing unit's `emitted` key of a
@@ -1669,10 +2129,11 @@ def plan(root, table):
     rows = json.loads(_read(rows_path)) if os.path.exists(rows_path) else {}
     converted = converted_classes(root)
     planner.converted = converted
+    scope = planner.scope = NameScope(members, classes.bases, index.texts.values(), index.types)
     for conv in convs:
         if "::" not in conv.cls and conv.cls in converted:
             conv.cls = "Gap::%s::%s" % (converted[conv.cls], conv.cls)   # a converted class lives in Gap::<Lib>
-        conv.mangled = compiler_name(conv, converted)
+        conv.mangled = compiler_name(conv, converted, scope)
         conv.va = addresses.get(conv.cname)
         if conv.va is None:
             for row in rows.values():
@@ -1687,18 +2148,39 @@ def plan(root, table):
     planner.base_ctors = base_constructors(root, convs)
     planner.members = members
     # a C prototype taking an integer where the member takes a pointer (`X_CreateInstance(int allocator)`, whose
-    # definition classconv may have retyped already): its callers' arguments are cast (retyped_arguments)
+    # definition classconv may have retyped already): its callers' arguments are cast (retyped_arguments); one
+    # ordering its parameters otherwise (igRegistry_GetValueFloat's `create, defaultValue` for the kit's
+    # `defaultVal, createValue`): its callers' arguments take the member's order (argument_order)
     wanted = {c.cname for c in convs if c.kind == "func"}
     protos = collections.defaultdict(list)
     for ds in index.decls.values():
         for d in ds:
             if d.name in wanted and d.kind == "func" and d.params is not None:
-                protos[d.name].append(tuple(p for p in d.params if p != "void"))
+                protos[d.name].append((tuple(p for p in d.params if p != "void"), _param_names(d.text, d.name)))
     for conv in convs:
-        for ps in protos.get(conv.cname, ()):
+        names = _param_names("f(%s)" % ", ".join(conv.raw_params or ()), "f") or [None] * len(conv.params)
+        orders = set()
+        for ps, c_names in protos.get(conv.cname, ()):
+            c_names = c_names if c_names and len(c_names) == len(ps) else [None] * len(ps)
             if not conv.static and not conv.special and len(ps) == len(conv.params) + 1:
-                ps = ps[1:]                              # the receiver
+                ps, c_names = ps[1:], c_names[1:]       # the receiver
+            if ps == tuple(conv.params):
+                continue                                 # the member's own form (classconv's stub)
+            try:
+                order = argument_order(ps, c_names, conv.params, names,
+                                       lambda t, cls=conv.base: scope.enum_of(cls, t) is not None)
+            except ValueError as e:
+                raise Refused("%s (%s) orders its parameters otherwise than %s (%s), and their types and names fit "
+                              "%d orders (%s): rewrite its calls by hand" % (
+                                  conv.cname, ", ".join(ps), conv.qualified, ", ".join(conv.params), len(e.args[0]),
+                                  "; ".join(", ".join(str(j + 1) for j in o) for o in e.args[0])))
+            if order is not None:
+                orders.add(order)
+                ps = tuple(ps[j] for j in order)
             conv.c_params.update(retyped_params(ps, conv.params) or {})
+        if len(orders) > 1:
+            raise Refused("%s's C prototypes order its parameters in different ways" % conv.cname)
+        conv.order = orders.pop() if orders else None
     # 1. the definitions: heads, receivers, data definitions, inline members' C copies removed
     first = {rel: FileRewrite(rel, text) for rel, text in originals.items()}
     for conv in convs:
@@ -1737,12 +2219,16 @@ def plan(root, table):
             new_texts[rel] = cxxscope.respell(text) if cxx_reads(index, rel) else text
     placing = placing_rows(rows, convs, planner.defined, index, addresses)
     changes = rename_rows(rows, convs, placing) if rows else []
+    # members of converted classes whose parameter names a class this tree converted since their keys were written
+    more, rekeyed = rekey_rows(rows, stale_keys(rows, members, macros, index.types, converted, scope))
+    changes += more
     for conv in convs:
         if conv.cname in planner.defined and conv.cname not in placing:
             planner.notes.append("%s has no whole-file row placing it: its compiler name %s is in no row"
                                  % (conv.cname, conv.mangled))
     adds = sorted({(c.base, c.declaration) for c in convs if c.declaration})
     planner.units = touched_rows(new_texts, index, rows, addresses, set(placing.values()))
+    planner.units += sorted(rekeyed - set(planner.units))
     return new_texts, rows, changes, adds, convs, planner
 
 
@@ -1782,14 +2268,25 @@ def base_constructors(root, convs):
     return out
 
 
-def boundary_report(root):
+def tree_stale_keys(root, index=None):
+    """(unit-objects.json rows, {stale key: compiler name}) of the tree (stale_keys)."""
+    index = index or declarations.Index(root, approvals={})
+    rows_path = os.path.join(root, "config", GAME, "unit-objects.json")
+    rows = json.loads(_read(rows_path)) if os.path.exists(rows_path) else {}
+    members = class_members(root)
+    scope = NameScope(members, Classes(root, index).bases, index.texts.values(), index.types)
+    return rows, stale_keys(rows, members, declarations.function_macros(index.texts.values()), index.types,
+                            converted_classes(root), scope)
+
+
+def boundary_report(root, index=None):
     """The declarations of converted members' C names that nothing needs any more -> [finding].
 
     A converted member's C name is the retail name config/SLUS-20836/compiler-names.tsv gives a compiler name of a
     class in config/converted-classes.tsv. Each declaration of it in src/ and include/ is weighed as memberize
     weighs it (boundary_sites): one stays in the home header while an unconverted user still names it, plus one
     for a user's unit that does not read the home header; every other is reported."""
-    index = declarations.Index(root, approvals={})
+    index = index or declarations.Index(root, approvals={})
     converted = converted_classes(root)
     cnames = {}
     for compiled, (_va, retail) in compiler_names.load(os.path.join(root, "config", GAME, "symbols.txt")).items():
@@ -1893,22 +2390,47 @@ def main(argv=None):
                     help="report each converted member's C-name declaration nothing needs any more (exit 1)")
     ap.add_argument("--respell", action="store_true",
                     help="put every Gap-qualified out-of-line definition into its namespaces (no table)")
+    ap.add_argument("--rekey", action="store_true",
+                    help="rename the unit-objects.json keys of converted members whose parameter names a class "
+                         "converted since as its flat struct (no table)")
     a = ap.parse_args(argv)
     root = os.path.abspath(a.root)
     if a.check:
-        findings = boundary_report(root)
+        index = declarations.Index(root, approvals={})
+        findings = boundary_report(root, index)
         for f in findings:
             print(f)
+        _rows, stale = tree_stale_keys(root, index)
+        for old, new in sorted(stale.items()):
+            print("config/%s/unit-objects.json: %s: the compiler names it %s (memberize.py --rekey --apply)"
+                  % (GAME, old, new))
         print("memberize --check: %d C-name declaration%s no longer needed" % (len(findings),
-                                                                             "" if len(findings) == 1 else "s"))
-        return 1 if findings else 0
+                                                                             "" if len(findings) == 1 else "s")
+              + (", %d stale compiler-name key%s" % (len(stale), "" if len(stale) == 1 else "s") if stale else ""))
+        return 1 if findings or stale else 0
     if a.respell:
         new_texts = respell_tree(root)
         print("%d source files to respell" % len(new_texts))
         show_and_write(root, new_texts, a)
         return 0
+    if a.rekey:
+        rows, stale = tree_stale_keys(root)
+        changes, touched = rekey_rows(rows, stale)
+        for c in changes:
+            print("  unit-objects.json " + c)
+        print("%d unit-objects.json changes" % len(changes))
+        if not a.apply:
+            print("\n(dry run — re-run with --apply)")
+            return 0
+        if changes:
+            status = write_rows(root, rows)
+            if status:
+                return status
+            print("next:\n" + "\n".join("  python3 tools/whole_file_rows.py --unit-va %s --cxx --write" % key
+                                        for key in sorted(touched)))
+        return 0
     if not a.table:
-        ap.error("give a conversion table, --respell or --check")
+        ap.error("give a conversion table, --respell, --rekey or --check")
     try:
         new_texts, rows, changes, adds, convs, planner = plan(root, a.table)
     except Refused as e:
@@ -1939,18 +2461,14 @@ def main(argv=None):
         print("note: " + n)
     if not show_and_write(root, new_texts, a):
         return 0
-    if changes:
-        with open(os.path.join(root, "config", GAME, "unit-objects.json"), "w") as fh:
-            fh.write(json.dumps(rows, indent=2) + "\n")
     if adds:
         insert_member_rows(os.path.join(root, "config", "class-members.tsv"), adds)
     print("memberize: rewrote %d files, %d row changes, %d declarations added" % (len(new_texts), len(changes),
                                                                                  len(adds)))
-    names_tool = os.path.join(root, "tools", "compiler_names.py")
-    if changes and os.path.exists(names_tool):
-        r = subprocess.run([sys.executable, names_tool, "--write"], cwd=root)
-        if r.returncode:
-            return r.returncode
+    if changes:
+        status = write_rows(root, rows)
+        if status:
+            return status
     steps = []
     if adds:
         steps.append("python3 scripts/gen_type_headers.py          # class-members.tsv changed")
@@ -1959,6 +2477,16 @@ def main(argv=None):
     steps.append("python3 tools/memberize.py --check              # no C-name declaration left over")
     steps.append("make check-fresh && make link-fresh")
     print("next, in this order:\n" + "\n".join("  " + s for s in steps))
+    return 0
+
+
+def write_rows(root, rows):
+    """Write unit-objects.json and regenerate the compiler-name map from it -> exit status."""
+    with open(os.path.join(root, "config", GAME, "unit-objects.json"), "w") as fh:
+        fh.write(json.dumps(rows, indent=2) + "\n")
+    names_tool = os.path.join(root, "tools", "compiler_names.py")
+    if os.path.exists(names_tool):
+        return subprocess.run([sys.executable, names_tool, "--write"], cwd=root).returncode
     return 0
 
 

@@ -7,9 +7,13 @@ Without classes, every class of the spec, in its order. Run from the repository 
 docs/engine/member-conversion.md ("Converting a class, in order"), for every class of the batch:
 
   tables     the class's row in config/converted-classes.tsv, its `rows` in config/class-members.tsv (after its
-             last row there) and its `typed` fields in config/typed-fields.tsv
+             last row there) and its `typed` fields in config/typed-fields.tsv; for a spec with `add`, the rows
+             and typed fields the converted class lacks, each after the row the spec lists before it
   memberize  each C function a hand body replaces becomes an empty stub with the member's parameters, then
-             tools/memberize.py --apply renames every mapped C name and `g_<Class>_<datum>` to its member
+             tools/memberize.py --apply renames every mapped C name and `g_<Class>_<datum>` to its member. A
+             `gen` member no C name maps is the function at its role's retail address (the generator's
+             `--list`: a field adder symbols.txt calls `FUN_00153ef0`); a hand body's member no C function
+             becomes, and the class does not define yet, stops the run with its name
   splice     tools/gen_odl_source.py's boilerplate (`gen`) and the hand `bodies` replace the memberized
              definitions; a metafield's descriptor creator and `getMetaField` are igen's; a bootstrap class's
              constructors, copy slot and `__bootstrapDestruct` are written in the kit's form over their C
@@ -20,11 +24,15 @@ docs/engine/member-conversion.md ("Converting a class, in order"), for every cla
              splice, which drops the last C users of the bootstrap names)
   all        the four in order
 
-The rows of touched units, the compiler-name map and the checks are the caller's (member-conversion.md).
+A run that fails leaves src/, include/ and config/ as it found them. The rows of touched units, the compiler-name
+map and the checks are the caller's (member-conversion.md).
 
 A spec file is Python defining SPECS = {<class>: dict(...)}; `import classconv` gives it the shared pieces
 (COMMON, GEN, STRINGS, array_spec). The keys of a class's dict:
 
+  add      the class is converted already: the spec adds members to it (the `rows` and `typed` the class lacks
+           join the tables, its `map`/`extra`/`data` C names become members; `gen` defaults to none, no
+           descriptor or bootstrap bodies are written, and its other C names are not reported unmapped)
   lib      library namespace (default "Core"); base: the parent class (a bootstrap class's constructors);
            cxxbase: the kit template instance the class derives from over its registered parent
            (converted-classes.tsv's third column, `igTDataList<igObject *>`)
@@ -128,8 +136,15 @@ def find_c_def(text, cname):
     return m.start(), block_end(text, m.end() - 1)
 
 
+# a definition's head: at the start of a line, before the qualified name nothing but its type (a use inside an
+# expression, `if (Gap::Gfx::igImage::isIndexed(f)) {` or `x = igFoo::k_num;`, or after a keyword, `return X::m(a)`,
+# is none)
+TYPE_PREFIX = r"^[ \t]*(?!(?:return|else|case|goto|delete|throw|new)\b)(?:[\w:<>,*& \t]*[ \t*&])?(?:\w+::)*"
+DEF_HEAD = TYPE_PREFIX + r"%s::(?P<name>%s)\s*\((?P<params>[^;{]*?)\)[^;{]*\{"
+
+
 def member_def_re(cls, member):
-    return re.compile(r"^[^\n;{}]*\b%s::%s\s*\(([^;{]*?)\)[^;{]*\{" % (re.escape(cls), re.escape(member)), re.M)
+    return re.compile(DEF_HEAD % (re.escape(cls), re.escape(member)), re.M)
 
 
 def member_name(member):
@@ -156,7 +171,7 @@ def replace_member(text, cls, member, body):
     name = member_name(member)
     want = param_types(re.search(r"\((.*)\)", member).group(1)) if "(" in member else None
     for m in member_def_re(cls, name).finditer(text):
-        if want is None or param_types(m.group(1)) == want:
+        if want is None or param_types(m.group("params")) == want:
             return text[:m.start()] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
     return text, False
 
@@ -174,8 +189,8 @@ def qualified_member(q, member):
 def fragment_pieces(text, cls):
     """{member: definition text} of `cls`'s definitions in a gen_odl_source fragment (the first of each name)."""
     out = {}
-    for m in re.finditer(r"^[^\n;{}]*\b%s::(~?\w+)\s*\([^;{]*?\)[^;{]*\{" % re.escape(cls), text, re.M):
-        out.setdefault(m.group(1), text[m.start():block_end(text, m.end() - 1)])
+    for m in re.finditer(DEF_HEAD % (re.escape(cls), r"~?\w+"), text, re.M):
+        out.setdefault(m.group("name"), text[m.start():block_end(text, m.end() - 1)])
     return out
 
 
@@ -299,6 +314,9 @@ def array_spec(cls, element, ctype, set_default=None, lib="Core", sizeof=None):
 class Tree:
     """The repository the batch rewrites."""
 
+    # what a step may write: the sources, the headers and the tables
+    TRANSACTIONAL = ("src", "include", "config")
+
     def __init__(self, root=ROOT):
         self.root = root
         self._symbols = None
@@ -321,8 +339,7 @@ class Tree:
             raise ConvError("%s failed:\n%s" % (" ".join(args), out[-3000:]))
         return out
 
-    def symbols(self, cls):
-        """`cls`'s `<cls>_<suffix>` functions of symbols.txt, as suffixes in address order."""
+    def _load_symbols(self):
         if self._symbols is None:
             self._symbols = []
             for line in self.read(SYMBOLS).splitlines():
@@ -333,7 +350,41 @@ class Tree:
                     except ValueError:
                         pass
             self._symbols.sort()
-        return [n[len(cls) + 1:] for _va, n in self._symbols if n.startswith(cls + "_")]
+        return self._symbols
+
+    def symbols(self, cls):
+        """`cls`'s `<cls>_<suffix>` functions of symbols.txt, as suffixes in address order."""
+        return [n[len(cls) + 1:] for _va, n in self._load_symbols() if n.startswith(cls + "_")]
+
+    def symbol_at(self, va):
+        """The symbols.txt name of the function at `va`, or None."""
+        return next((n for v, n in self._load_symbols() if v == va), None)
+
+    def snapshot(self):
+        """{path: bytes} of every file a step may write (TRANSACTIONAL), for `restore`."""
+        out = {}
+        for top in self.TRANSACTIONAL:
+            for d, _dirs, files in os.walk(self.path(top)):
+                for f in files:
+                    p = os.path.join(d, f)
+                    with open(p, "rb") as fh:
+                        out[os.path.relpath(p, self.root)] = fh.read()
+        return out
+
+    def restore(self, snap):
+        """Put the files back as `snapshot` read them: changed and deleted ones rewritten, new ones removed; the
+        paths restored."""
+        now = self.snapshot()
+        changed = sorted(p for p in set(snap) | set(now) if snap.get(p) != now.get(p))
+        for p in changed:
+            if p in snap:
+                os.makedirs(os.path.dirname(self.path(p)), exist_ok=True)
+                with open(self.path(p), "wb") as fh:
+                    fh.write(snap[p])
+            else:
+                os.unlink(self.path(p))
+        self._symbols = None
+        return changed
 
     def files(self, lib):
         d = LIBRARY_DIRS.get(lib)
@@ -354,6 +405,32 @@ class Tree:
         lines[at:at] = ["%s\t%s" % (cls, r) for r in rows]
         self.write(rel, "\n".join(lines) + "\n")
 
+    def add_rows(self, rel, cls, rows):
+        """The `rows` of `cls` a tab table lacks, in their order among the ones it has: a new row goes after the
+        row `rows` lists before it, before the first one it has when none precedes it, and after `cls`'s last
+        row when the table has none of `rows`; the rows added."""
+        lines = self.read(rel).split("\n")
+        if lines and lines[-1] == "":
+            lines.pop()
+        have = {l: i for i, l in enumerate(lines) if l.split("\t", 1)[0] == cls}
+        inserts, pending, anchor = collections.defaultdict(list), [], None
+        for r in rows:
+            line = "%s\t%s" % (cls, r)
+            if line in have:
+                if pending:
+                    inserts[have[line] if anchor is None else anchor + 1] += pending
+                    pending = []
+                anchor = have[line]
+            elif line not in pending:
+                pending.append(line)
+        if pending:
+            inserts[(anchor if anchor is not None else max(have.values(), default=len(lines) - 1)) + 1] += pending
+        for at in sorted(inserts, reverse=True):
+            lines[at:at] = inserts[at]
+        if inserts:
+            self.write(rel, "\n".join(lines) + "\n")
+        return [l.split("\t", 1)[1] for at in sorted(inserts) for l in inserts[at]]
+
     def rekey(self, pairs):
         """Rename unit-objects.json keys `old` -> `new` in whichever unit rows list them; the names not found."""
         text = self.read(UNIT_OBJECTS)
@@ -373,16 +450,34 @@ def lib_of(spec):
     return spec.get("lib", "Core")
 
 
+def gen_of(spec):
+    """The members whose definitions the generator writes: none for a spec adding members to a converted class."""
+    return spec.get("gen", [] if spec.get("add") else GEN)
+
+
 def is_descriptor(cls, spec):
-    return spec.get("descriptor", cls.endswith("MetaField"))
+    return spec.get("descriptor", not spec.get("add") and cls.endswith("MetaField"))
 
 
 def step_tables(tree, classes, specs):
-    converted = {l.split("\t", 1)[0] for l in tree.read("config/converted-classes.tsv").split("\n")}
+    converted = {}
+    for l in tree.read("config/converted-classes.tsv").split("\n"):
+        p = l.split("\t")
+        if len(p) > 1 and not l.startswith("#"):
+            converted[p[0]] = p[1]
     for c in classes:
-        if c in converted:
-            raise ConvError("%s is converted already" % c)
         spec = specs[c]
+        if spec.get("add"):
+            # members added to a converted class: the rows and typed fields it lacks, the ones it has kept
+            if c not in converted:
+                raise ConvError("%s is not converted: a spec with `add` adds members to a converted class" % c)
+            if converted[c] != lib_of(spec):
+                raise ConvError("%s is converted in library %s, the spec says %s" % (c, converted[c], lib_of(spec)))
+            tree.add_rows("config/class-members.tsv", c, spec.get("rows", []))
+            tree.add_rows("config/typed-fields.tsv", c, ["%s\t%s" % ft for ft in spec.get("typed", ())])
+            continue
+        if c in converted:
+            raise ConvError("%s is converted already (a spec adding members to it sets `add`)" % c)
         tree.append_rows("config/converted-classes.tsv", c,
                          ["\t".join([lib_of(spec)] + ([spec["cxxbase"]] if spec.get("cxxbase") else []))])
         tree.append_rows("config/class-members.tsv", c, spec["rows"])
@@ -407,14 +502,66 @@ def member_decl(cls, rows, member):
     return d
 
 
-def stub(tree, cls, spec):
-    """Each C function a hand body or the generator replaces becomes an empty definition with the member's
-    parameters (memberize refuses a C form whose parameters differ from the member's)."""
-    pairs = [("%s_%s" % (cls, s), m) for s, m in spec["map"].items()] + list(spec.get("extra", {}).items())
-    for cname, member in pairs:
-        if member not in spec.get("bodies", {}) and member not in spec.get("gen", GEN):
+def generator_roles(tree, classes, specs):
+    """{class: {member: address}} of the boilerplate roles tools/gen_odl_source.py reads from the retail registrar
+    (`arkRegisterInitialize=0x153ef0`), for the classes whose `gen` the generator writes."""
+    classes = [c for c in classes if gen_of(specs[c])]
+    if not classes:
+        return {}
+    out = {}
+    args = ["tools/gen_odl_source.py", "--list"] + [a for c in classes for a in ("--class", c)]
+    for line in tree.run(args).splitlines():
+        p = line.split()
+        if p and p[0] in classes:
+            out[p[0]] = {m: int(va, 16) for m, va in re.findall(r"(\w+)=0x([0-9a-fA-F]+)", line)}
+    return out
+
+
+def c_names(tree, c, spec, roles=None):
+    """[(C name, member)] of the functions of class `c` the batch converts: `extra`'s, the `<c>_<suffix>` of
+    symbols.txt that `map` names, and for a `gen` member no other C name maps the function at the address the
+    retail registrar gives its role (`roles`, generator_roles: a field adder symbols.txt calls `FUN_00153ef0`)."""
+    pairs = list(spec.get("extra", {}).items())
+    pairs += [("%s_%s" % (c, n), spec["map"][n]) for n in tree.symbols(c) if n in spec.get("map", {})]
+    have = {member_name(m) for _cname, m in pairs}
+    for member in gen_of(spec):
+        va = (roles or {}).get(member)
+        if va is None or member in have:
             continue
-        d = member_decl(cls, spec["rows"], member)
+        cname = tree.symbol_at(va)
+        if cname is None:
+            raise ConvError("%s::%s: symbols.txt has no function at 0x%x, its retail role" % (c, member, va))
+        other = next((m for n, m in pairs if n == cname), None)
+        if other is not None:
+            raise ConvError("%s::%s: its retail role 0x%x is %s, which the spec maps to %s"
+                            % (c, member, va, cname, other))
+        pairs.append((cname, member))
+        have.add(member)
+    return pairs
+
+
+def defines_member(tree, c, spec, name):
+    """Whether the class's library defines `c::name` already."""
+    return any(member_def_re(c, name).search(tree.read(p))
+               for p in tree.files_naming(lib_of(spec), "%s::%s" % (c, name)))
+
+
+def unbacked_members(tree, c, spec, pairs, roles=None):
+    """The members whose definition the spec writes (a hand body, a generator role) that no C function becomes
+    and the class does not define yet: the splice would have nothing to write them over."""
+    have = {member_name(m) for _cname, m in pairs}
+    wanted = {member_name(m) for m in spec.get("bodies", {})}
+    wanted |= {m for m in gen_of(spec) if m in (roles or {})}
+    return sorted(m for m in wanted - have if not defines_member(tree, c, spec, m))
+
+
+def stub(tree, cls, spec, pairs):
+    """Each C function (`pairs`, c_names) a hand body or the generator replaces becomes an empty definition with
+    the member's parameters (memberize refuses a C form whose parameters differ from the member's)."""
+    for cname, member in pairs:
+        if member not in spec.get("bodies", {}) and member not in gen_of(spec):
+            continue
+        d = member_decl(cls, spec.get("rows", ()), member)
         if d is None:
             continue
         for path in tree.files_naming(lib_of(spec), cname):
@@ -424,28 +571,34 @@ def stub(tree, cls, spec):
                 break
 
 
-def memberize_table(tree, classes, specs):
-    """The memberize rows of the batch, and the class's C names neither mapped nor kept."""
+def memberize_table(tree, classes, specs, roles=None):
+    """The memberize rows of the batch, and the class's C names neither mapped nor kept (none for a spec adding
+    members to a converted class, whose other C names are its members already)."""
     table, unmapped = [], []
     for c in classes:
         spec = specs[c]
         q = "Gap::%s::%s" % (lib_of(spec), c)
         for g, m in spec.get("data", {}).items():
             table.append(("g_%s_%s" % (c, g), "%s::%s" % (q, m)))
-        for cname, m in spec.get("extra", {}).items():
-            table.append((cname, qualified_member(q, m)))
-        for n in tree.symbols(c):
-            if n in spec["map"]:
-                table.append(("%s_%s" % (c, n), qualified_member(q, spec["map"][n])))
-            elif n not in spec.get("keep", ()) and n not in BOOT:
-                unmapped.append("%s_%s" % (c, n))
+        pairs = c_names(tree, c, spec, (roles or {}).get(c))
+        table += [(cname, qualified_member(q, m)) for cname, m in pairs]
+        if not spec.get("add"):
+            mapped = {cname for cname, _m in pairs}
+            unmapped += ["%s_%s" % (c, n) for n in tree.symbols(c)
+                         if "%s_%s" % (c, n) not in mapped and n not in spec.get("keep", ()) and n not in BOOT]
     return table, unmapped
 
 
 def step_memberize(tree, classes, specs):
+    roles = generator_roles(tree, classes, specs)
+    pairs = {c: c_names(tree, c, specs[c], roles.get(c)) for c in classes}
+    unbacked = ["%s::%s" % (c, m) for c in classes
+                for m in unbacked_members(tree, c, specs[c], pairs[c], roles.get(c))]
+    if unbacked:
+        raise ConvError("no C function becomes %s: name it in the spec's `map` or `extra`" % ", ".join(unbacked))
     for c in classes:
-        stub(tree, c, specs[c])
-    table, unmapped = memberize_table(tree, classes, specs)
+        stub(tree, c, specs[c], pairs[c])
+    table, unmapped = memberize_table(tree, classes, specs, roles)
     for n in unmapped:
         print("unmapped: %s" % n)
     tree.run(["scripts/gen_type_headers.py"])
@@ -474,7 +627,7 @@ def static_data(rows):
 def respell_data(text, cls, rows):
     """A static datum's definition memberize left in its C type (`int igX::k_y;`) in the declared type."""
     for name, t in static_data(rows).items():
-        text = re.sub(r"^[^\n;{}()]*?\b%s::%s;" % (re.escape(cls), name), "%s%s::%s;" % (t, cls, name), text,
+        text = re.sub(TYPE_PREFIX + r"%s::%s;" % (re.escape(cls), name), "%s%s::%s;" % (t, cls, name), text,
                       flags=re.M)
     return text
 
@@ -482,7 +635,7 @@ def respell_data(text, cls, rows):
 def splice_class(tree, c, spec, frag):
     """Write the generator's and the hand definitions of one class over its memberized ones."""
     lib = lib_of(spec)
-    if "%s: not written" % c in frag and spec.get("gen", GEN):
+    if "%s: not written" % c in frag and gen_of(spec):
         # a class whose registration the spec writes by hand (`gen` empty, the bodies igen's form) needs no generator
         raise ConvError("generator: " + re.search(r"%s: not written: .*" % re.escape(c), frag).group(0))
     gen = fragment_pieces(frag, c)
@@ -494,9 +647,9 @@ def splice_class(tree, c, spec, frag):
     for path in tree.files_naming(lib, "%s::" % c):
         t = tree.read(path)
         if is_descriptor(c, spec):
-            t = re.sub(r"^[^\n;{}()]*?\b%s::_MetaField;" % c, "%s *%s::_MetaField;" % (c, c), t, flags=re.M)
-        t = respell_data(t, c, spec["rows"])
-        for member in spec.get("gen", GEN):
+            t = re.sub(TYPE_PREFIX + r"%s::_MetaField;" % c, "%s *%s::_MetaField;" % (c, c), t, flags=re.M)
+        t = respell_data(t, c, spec.get("rows", ()))
+        for member in gen_of(spec):
             if member in gen and member not in hand:
                 t, ok = replace_member(t, c, member, gen[member])
                 if ok:
@@ -506,10 +659,10 @@ def splice_class(tree, c, spec, frag):
             if ok:
                 done.add(member)
         tree.write(path, drop_file_tables(t, c))
-    wanted = (set(spec.get("gen", GEN)) & set(gen)) | set(spec.get("bodies", {}))
+    wanted = (set(gen_of(spec)) & set(gen)) | set(spec.get("bodies", {}))
     missing = sorted(wanted - done)
     print("%s: spliced %d%s" % (c, len(done), (" MISSING " + " ".join(missing)) if missing else ""))
-    if "Construct" in boot_cnames(tree, c, spec):
+    if not spec.get("add") and "Construct" in boot_cnames(tree, c, spec):
         splice_boot(tree, c, spec)
 
 
@@ -551,8 +704,9 @@ def splice_boot(tree, c, spec):
 def step_splice(tree, classes, specs):
     args = ["tools/gen_odl_source.py"]
     for c in classes:
-        args += ["--class", c]
-    frag = tree.run(args)
+        if gen_of(specs[c]):
+            args += ["--class", c]
+    frag = tree.run(args) if len(args) > 1 else ""
     for c in classes:
         splice_class(tree, c, specs[c], frag)
     tree.run(["tools/memberize.py", "--respell", "--apply"])
@@ -627,6 +781,8 @@ def main(argv=None):
     if unknown:
         ap.error("not in the spec: " + " ".join(unknown))
     tree = Tree(a.root)
+    # a run that fails leaves the tree as it found it: the stubs, rows and rewrites of its steps go
+    snap = tree.snapshot()
     try:
         if a.step in ("all", "tables"):
             step_tables(tree, classes, specs)
@@ -637,8 +793,13 @@ def main(argv=None):
         tree.run(["scripts/gen_type_headers.py"])
         if a.step in ("all", "decls"):
             step_decls(tree)
-    except ConvError as e:
+    except BaseException as e:
+        restored = tree.restore(snap)
+        if not isinstance(e, ConvError):
+            raise
         print("classconv: %s" % e, file=sys.stderr)
+        print("classconv: nothing written (%d file%s restored)" % (len(restored), "" if len(restored) == 1 else "s"),
+              file=sys.stderr)
         return 1
     return 0
 

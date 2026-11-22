@@ -537,6 +537,146 @@ class Memberize(unittest.TestCase):
         self.assertIn("    Widget::make(Pool_Get(3));\n    Widget::make((Pool *)w);\n    Widget::make(0);\n"
                       "    Widget::make((Pool *)(n + 4));\n    Widget::build(Pool_Get(1));\n", users)
 
+    def test_an_integer_passed_for_an_enum_parameter_is_cast(self):
+        # FUN_0017f080's draw: the C form took the primitive as an int, the member the kit's IG_GFX_DRAW; a nested
+        # enum (igFile::OpenMode) is cast to its owner's spelling outside the class
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        self.append("src/game/Game.h",
+                    "typedef enum IG_GFX_DRAW {\n"
+                    "    IG_GFX_DRAW_POINTS, IG_GFX_DRAW_LINES, IG_GFX_DRAW_DRAWMULTIPLE = 8192\n} IG_GFX_DRAW;\n"
+                    "extern \"C\" void Widget_Draw(Widget *self, int primitive, int count);\n"
+                    "extern \"C\" void Widget_SetMode(Widget *self, int mode);\n")
+        self.append("config/class-members.tsv", "Widget\tenum Mode { kRead, kWrite };\n"
+                                                "Widget\tvoid draw(IG_GFX_DRAW primitive, int count);\n"
+                                                "Widget\tvoid setMode(Mode mode);\n"
+                                                "Widget\tvirtual void configure(IG_GFX_DRAW primitive);\n")
+        self.append("src/game/Widget.inc", "void Widget_Draw(Widget *self, IG_GFX_DRAW primitive, int count) {\n}\n"
+                                           "void Widget_SetMode(Widget *self, Mode mode) {\n}\n"
+                                           "void Widget_Configure(Widget *self, IG_GFX_DRAW primitive) {\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Draw(Gap::Game::Widget *w, int primitive, IG_GFX_DRAW kind, int n) {\n"
+                    "    Widget_Draw(w, primitive, 3);\n    Widget_Draw(w, IG_GFX_DRAW_LINES, 3);\n"
+                    "    Widget_Draw(w, kind, n);\n    Widget_Draw(w, IG_GFX_DRAW_DRAWMULTIPLE | n, 3);\n"
+                    "    Widget_Draw(w, 0, 3);\n    Widget_SetMode(w, n);\n"
+                    "    Widget_SetMode(w, Gap::Game::Widget::kWrite);\n}\n"
+                    "void Gadget::redo(int primitive) {\n    Widget_Configure(this, primitive);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Draw\n00100120 000020 Widget_SetMode\n"
+                                                     "00100140 000020 Widget_Configure\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"]["Widget_SetMode"] = "0x00100120"
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        write(self.table, TABLE + "Widget_Draw\tWidget::draw\nWidget_SetMode\tWidget::setMode\n"
+                                  "Widget_Configure\tWidget::configure\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    w->draw((IG_GFX_DRAW)primitive, 3);\n    w->draw(IG_GFX_DRAW_LINES, 3);\n"
+                      "    w->draw(kind, n);\n    w->draw((IG_GFX_DRAW)(IG_GFX_DRAW_DRAWMULTIPLE | n), 3);\n"
+                      "    w->draw((IG_GFX_DRAW)0, 3);\n    w->setMode((Gap::Game::Widget::Mode)n);\n"
+                      "    w->setMode(Gap::Game::Widget::kWrite);\n", users)
+        # a subclass's direct call of the virtual base (FUN_0017f080's configure)
+        self.assertIn("    Widget::configure((IG_GFX_DRAW)primitive);\n", users)
+        # MWCC names the nested enum by its owner (setOpenMode__Q33Gap4Core6igFileFQ43Gap4Core6igFile8OpenMode)
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        self.assertEqual(rows["0x00100000"]["emitted"]["setMode__Q33Gap4Game6WidgetFQ43Gap4Game6Widget4Mode"],
+                         "0x00100120")
+
+    def test_the_address_of_a_temporary_is_the_temporary(self):
+        # igImage::setName(igStringRef): the C form took `const igStringRef *`, its callers `&igStringRef(...)`
+        self.append("src/game/Game.h", "struct igStringRef { char *p; igStringRef(const char *s); };\n"
+                                       "extern \"C\" void Widget_SetName(Widget *self, const igStringRef *name);\n")
+        self.append("config/class-members.tsv", "Widget\tvoid setName(igStringRef name);\n")
+        self.append("src/game/Widget.inc", "void Widget_SetName(Widget *self, igStringRef name) {\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Name(Widget *w, int arg1) {\n"
+                    "    Widget_SetName(w, &igStringRef((const char *)arg1));\n"
+                    "    Widget_SetName(w, &igStringRef(\"SphereImage\"));\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_SetName\n")
+        write(self.table, TABLE + "Widget_SetName\tWidget::setName\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    w->setName(igStringRef((const char *)arg1));\n"
+                      "    w->setName(igStringRef(\"SphereImage\"));\n", users)
+
+    def test_a_pointer_passed_for_a_typedef_template_reference_is_the_held_value(self):
+        # igRegistry::getValue(..., igStringObjRef &strVal, ...): the C form took `igStringObj **`
+        self.append("src/game/Game.h",
+                    "template <class T> struct igSmartPointer { T *p; };\nstruct igStringObj;\n"
+                    "typedef igSmartPointer<igStringObj> igStringObjRef;\n"
+                    "extern \"C\" bool Widget_GetText(Widget *self, int section, igStringObj **out);\n"
+                    "extern \"C\" bool Widget_GetFlag(Widget *self, int section, unsigned char *out);\n")
+        self.append("config/class-members.tsv", "Widget\tbool getText(int section, igStringObjRef &strVal);\n"
+                                                "Widget\tbool getFlag(int section, unsigned char &boolVal);\n")
+        self.append("src/game/Widget.inc", "bool Widget_GetText(Widget *self, int section, igStringObjRef &strVal) {\n"
+                                           "    return section != 0;\n}\n"
+                                           "bool Widget_GetFlag(Widget *self, int section, unsigned char &boolVal) {\n"
+                                           "    return section != 0;\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Text(Widget *w) {\n    igSmartPointer<igStringObj> value(make());\n"
+                    "    igStringObjRef infoSection;\n    igStringObj *text;\n    bool flag;\n    unsigned char byte;\n"
+                    "    Widget_GetText(w, 1, (igStringObj **)&value);\n    Widget_GetText(w, 1, &infoSection.p);\n"
+                    "    Widget_GetText(w, 2, &text);\n"
+                    "    Widget_GetFlag(w, 3, (unsigned char *)&flag);\n    Widget_GetFlag(w, 3, &byte);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_GetText\n00100120 000020 Widget_GetFlag\n")
+        write(self.table, TABLE + "Widget_GetText\tWidget::getText\nWidget_GetFlag\tWidget::getFlag\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    w->getText(1, value);\n    w->getText(1, infoSection);\n"
+                      "    w->getText(2, *(igStringObjRef *)&text);\n"
+                      "    w->getFlag(3, *(unsigned char *)&flag);\n    w->getFlag(3, byte);\n", users)
+
+    def test_arguments_take_the_members_order_where_the_c_prototype_differs(self):
+        # igRegistry_GetValueFloat(registry, section, key, out, create, defaultValue) is the kit's
+        # getValue(sectionHandle, valueName, floatVal, defaultVal, createValue)
+        self.append("src/game/Game.h", "extern \"C\" bool Widget_GetValueFloat(Widget *self, int section, "
+                                       "const char *key, float *out, int create, float defaultValue);\n")
+        self.append("config/class-members.tsv", "Widget\tbool getValue(int sectionHandle, const char *valueName, "
+                                                "float &floatVal, float defaultVal, unsigned char createValue);\n")
+        self.append("src/game/Widget.inc",
+                    "bool Widget_GetValueFloat(Widget *self, int sectionHandle, const char *valueName, "
+                    "float &floatVal, float defaultVal, unsigned char createValue) {\n"
+                    "    return createValue != 0;\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Float(Widget *w, int section, const char *key) {\n    float value;\n"
+                    "    if (Widget_GetValueFloat(w, section, key, &value, 0, 0.0f)) {\n    }\n"
+                    "    Widget_GetValueFloat(w, Widget_GetCount(w), key, &value, section + 1, "
+                    "(float)Widget_GetCount(w));\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_GetValueFloat\n")
+        write(self.table, TABLE + "Widget_GetValueFloat\tWidget::getValue\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    if (w->getValue(section, key, value, 0.0f, 0)) {\n", users)
+        # the arguments' own rewrites move with them
+        self.assertIn("    w->getValue(w->getCount(), key, value, (float)w->getCount(), section + 1);\n", users)
+
+    def test_an_order_the_types_and_names_cannot_settle_is_refused(self):
+        self.append("src/game/Game.h", "extern \"C\" void Widget_Mix(Widget *self, float a, int b, int c);\n")
+        self.append("config/class-members.tsv", "Widget\tvoid mix(int x, int y, float z);\n")
+        self.append("src/game/Widget.inc", "void Widget_Mix(Widget *self, int x, int y, float z) {\n}\n")
+        self.append("src/game/Users.inc", "void Users_Mix(Widget *w) {\n    Widget_Mix(w, 1.0f, 2, 3);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Mix\n")
+        write(self.table, TABLE + "Widget_Mix\tWidget::mix\n")
+        before = self.read("src/game/Users.inc")
+        self.assertEqual(self.run_tool("--apply"), 2)
+        self.assertEqual(before, self.read("src/game/Users.inc"))
+
+    def test_a_key_naming_a_class_converted_since_as_flat_is_renamed(self):
+        # igImage::platformLoad(igFile *) was keyed `…FP6igFile` while igFile was flat; once igFile is a Gap
+        # class, the compiler names it `…FPQ33Gap4Core6igFile`
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\nGadget\tGame\n")
+        self.append("config/class-members.tsv", "Gadget\tvirtual unsigned char load(Widget *file);\n"
+                                                "Gadget\tvoid keep(::Widget *flat);\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00400000"]["emitted"] = {"load__Q33Gap4Game6GadgetFP6Widget": "0x00400010",
+                                         "keep__Q33Gap4Game6GadgetFP6Widget": "0x00400020"}
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        self.assertEqual(memberize.main(["--check", "--root", self.root]), 1)
+        self.assertEqual(memberize.main(["--rekey", "--apply", "--root", self.root]), 0)
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        # a parameter the declaration spells as the flat struct keeps its name
+        self.assertEqual(rows["0x00400000"]["emitted"], {"load__Q33Gap4Game6GadgetFPQ33Gap4Game6Widget": "0x00400010",
+                                                         "keep__Q33Gap4Game6GadgetFP6Widget": "0x00400020"})
+        self.assertEqual(memberize.main(["--check", "--root", self.root]), 0)
+
 
 class Helpers(unittest.TestCase):
     MACROS = {"OBJ_BOOT": (("C",), "public: C(); virtual void __bootstrapDestruct(); "
@@ -567,6 +707,51 @@ class Helpers(unittest.TestCase):
         clean = 'f(o,       , 0)'
         spans = memberize._arg_spans(clean, 1, len(text) - 1, text)
         self.assertEqual([text[s:e] for s, e in spans], ["o", '"name"', "0"])
+
+
+class CompilerNames(unittest.TestCase):
+    """The compiler names MWCC emits for the core file classes' members (config/SLUS-20836/compiler-names.tsv)."""
+    MEMBERS = {
+        "igFile": ["enum OpenMode { kRead, kWrite, kDefaultOpenMode };", "void setOpenMode(OpenMode openMode);",
+                   "virtual void freadAsynchronous(void *ptr, int sizeInBytes, igIOCallbackFunction *callback, "
+                   "int token);"],
+        "igMediaFile": ["public: virtual int open(OpenMode e = kDefaultOpenMode);"],
+        "igMedia": ["virtual int open(int fileHandle, igStringRef name, igFile::OpenMode openMode) = 0;"],
+        "igImage": ["virtual unsigned char platformLoad(igFile *file);"],
+        "igExternalDirEntry": ["bool resolve(igResolveFunction *resolveFunction);"],
+    }
+    LIBS = {"igFile": "Core", "igMediaFile": "Core", "igMedia": "Core", "igImage": "Gfx", "igExternalDirEntry": "Core",
+            "igObject": "Core"}
+    TYPEDEFS = ["typedef void igIOCallbackFunction(int requestID, int result);\n",
+                "/* resolve */ typedef bool igResolveFunction(igExternalDirEntry *externalEntry);\n"]
+
+    def name(self, cls, member, converted=None):
+        types = memberize.declarations.Types()
+        converted = self.LIBS if converted is None else converted
+        scope = memberize.NameScope(self.MEMBERS, {"igMediaFile": ["igFile"]}, self.TYPEDEFS, types)
+        d = [m for m in memberize.declared_members(cls, self.MEMBERS[cls], None, types) if m.name == member][0]
+        conv = memberize.Conversion("C", "Gap::%s::%s" % (self.LIBS[cls], cls), member, "func", False, False, False,
+                                    d.ret, tuple(d.params), None)
+        conv.raw_params = memberize.declared_raw_params(self.MEMBERS[cls], member, conv.params, False, None, types, cls)
+        return memberize.compiler_name(conv, converted, scope)
+
+    def test_a_nested_enum_is_named_by_its_owner(self):
+        self.assertEqual(self.name("igFile", "setOpenMode"),
+                         "setOpenMode__Q33Gap4Core6igFileFQ43Gap4Core6igFile8OpenMode")
+        # found in a base class, or qualified by the declaration
+        self.assertEqual(self.name("igMediaFile", "open"), "open__Q33Gap4Core11igMediaFileFQ43Gap4Core6igFile8OpenMode")
+        self.assertEqual(self.name("igMedia", "open"),
+                         "open__Q33Gap4Core7igMediaFi11igStringRefQ43Gap4Core6igFile8OpenMode")
+
+    def test_a_function_typedef_is_its_type(self):
+        self.assertEqual(self.name("igFile", "freadAsynchronous"), "freadAsynchronous__Q33Gap4Core6igFileFPviPFii_vi")
+        self.assertEqual(self.name("igExternalDirEntry", "resolve"),
+                         "resolve__Q33Gap4Core18igExternalDirEntryFPFPQ33Gap4Core18igExternalDirEntry_b")
+
+    def test_a_converted_parameter_class_is_its_gap_class(self):
+        self.assertEqual(self.name("igImage", "platformLoad"), "platformLoad__Q33Gap3Gfx7igImageFPQ33Gap4Core6igFile")
+        flat = {k: v for k, v in self.LIBS.items() if k != "igFile"}
+        self.assertEqual(self.name("igImage", "platformLoad", flat), "platformLoad__Q33Gap3Gfx7igImageFP6igFile")
 
 
 if __name__ == "__main__":

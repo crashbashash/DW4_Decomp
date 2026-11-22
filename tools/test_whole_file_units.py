@@ -316,6 +316,47 @@ class Rows(unittest.TestCase):
         placed = whole_file_rows.locate(functions, retail, sorted(retail), {"kept": 0x110})
         self.assertEqual(placed, {"kept": 0x110, "other": 0x100})
 
+    def test_a_retyped_parameter_takes_the_address_of_the_name_it_replaced(self):
+        # the gfx unit 0x1493e0 once igFile became Gap::Core::igFile: igImage's platformLoad(igFile *) and
+        # platformSave(igFile *) are empty bodies, and each fits both of their starts
+        load, save = "platformLoad__Q33Gap3Gfx7igImageFP6igFile", "platformSave__Q33Gap3Gfx7igImageFP6igFile"
+        by_name = "platformLoad__Q33Gap3Gfx7igImageFPCc"
+        new_load, new_save = (n.replace("FP6igFile", "FPQ33Gap4Core6igFile") for n in (load, save))
+        previous = {load: 0x158f40, by_name: 0x1592a0, save: 0x1592b0}
+        retail = {0x158f40: 0, 0x1592a0: 1, 0x1592b0: 0}
+        functions = {new_load: self.Function(0), by_name: self.Function(1), new_save: self.Function(0)}
+        with self.assertRaisesRegex(SystemExit, "ambiguous"):
+            whole_file_rows.locate(functions, retail, sorted(retail), previous)
+        hints = whole_file_rows.retyped(functions, previous, previous, 0x1493e0, 0x16f560)
+        self.assertEqual(hints, {new_load: 0x158f40, new_save: 0x1592b0})
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), previous, (), hints),
+                         {new_load: 0x158f40, by_name: 0x1592a0, new_save: 0x1592b0})
+        # two former names of one shape, or two new ones, are a guess: --at settles them
+        clut = "platformLoad__Q33Gap3Gfx7igImageFP6igClut"
+        self.assertEqual(whole_file_rows.retyped({new_load: 0}, {load: 0x158f40, clut: 0x1592b0}, {}, 0, 0x200000),
+                         {})
+        self.assertEqual(whole_file_rows.retyped({new_load: 0, clut.replace("6igClut", "Q33Gap3Gfx6igClut"): 0},
+                                                 {load: 0x158f40}, {}, 0, 0x200000), {})
+
+    def test_rows_that_do_not_load_are_not_written(self):
+        # igFolder's getFiles placed by a row of its own outside the range the regenerated row now places it in
+        with tempfile.TemporaryDirectory() as tmp:
+            path, symbols = Path(tmp) / "unit-objects.json", Path(tmp) / "symbols.txt"
+            symbols.write_text("002b5d50 000010 igFolder_Construct\n00304ae0 000008 FUN_00304ae0\n")
+            text = json.dumps({"0x00300000": {"emitted": {"getFiles__Q33Gap4Core8igFolderCFv": "0x00304ae0"}}},
+                              indent=2) + "\n"
+            path.write_text(text)
+            rows = {"0x002b5d50": {"whole_file": True, "emitted": {"getFiles__Q33Gap4Core8igFolderCFv": "0x00304ae0"},
+                                   "data": {}}}
+            overlay = whole_file_rows.merge_rows(json.loads(text), 0x2b5d50, 0x2c0000, rows)
+            with self.assertRaisesRegex(SystemExit, "0x00304ae0 is placed by the rows 0x00300000, 0x002b5d50"):
+                whole_file_rows.write_overlay(str(path), overlay, str(symbols))
+            self.assertEqual(path.read_text(), text)
+            self.assertEqual(sorted(os.listdir(tmp)), ["symbols.txt", "unit-objects.json"])
+            overlay = whole_file_rows.merge_rows(json.loads(text), 0x2b5d50, 0x300010, rows)
+            whole_file_rows.write_overlay(str(path), overlay, str(symbols))
+            self.assertEqual(json.loads(path.read_text()), rows)
+
     def test_units_rows_cut_the_row_around_the_range(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "units.tsv"

@@ -105,8 +105,11 @@ local `…View` classes) go away as their users convert.
    does not cover by hand, in the kit's form. Then regenerate the header with
    `python3 scripts/gen_type_headers.py`.
 4. Run `tools/whole_file_rows.py --unit-va <va> --cxx --write` for each touched unit, the defining unit first and
-   its callers after. The unit's present row settles its partial functions, ambiguous starts, static-initializer
-   entry and data names; `--drop`/`--at` are needed only for a start no row settled yet.
+   its callers after. The unit's present row settles its partial functions, ambiguous starts (a member whose
+   mangled name changed only in a parameter's type, `platformLoad(igFile *)` once igFile is the Gap class, takes
+   its former name's address), static-initializer entry and data names; `--drop`/`--at` are needed only for a
+   start no row settled yet. Rows that would not load (two rows placing one function) are not written: the run
+   stops naming the function and the rows, and unit-objects.json stays as it was.
 5. Run `tools/compiler_names.py --write`.
 6. Run `tools/check.py --function <va> --cand <source>` for every touched unit. Each must report `MATCH`. Then
    `tools/memberize.py --check` (no C-name declaration left over) and `tools/typed_coverage.py --check`.
@@ -115,14 +118,19 @@ local `…View` classes) go away as their users convert.
 
 `tools/classconv.py <spec.py> {tables,memberize,splice,decls,all} [<class> ...]` runs steps 1-3 for a batch from a
 spec file (Python defining `SPECS`; its docstring lists the keys: `rows`, `typed`, `map`/`extra`/`keep`/`data`,
-`gen`, hand `bodies` in the kit's form, `boot` overrides, `lib`, `base`). It stubs every C function a hand body or
-the generator replaces with the member's parameters before `memberize.py --apply`, splices the generator's
-boilerplate and the hand bodies over the memberized definitions, writes a metafield's igen descriptor creator and
-`getMetaField`, writes a bootstrap class's three constructors, copy slot and `__bootstrapDestruct` in the kit's
-form (renaming their `unit-objects.json` keys), respells static data in their declared types and drops the
-C-name declarations `memberize.py --check` reports. Run `decls` once more after the rows are regenerated: a
-vtable's C name goes unused only then. `classconv.array_spec` builds a scalar array metafield's spec.
-Tests: `tools/test_classconv.py`.
+`gen`, hand `bodies` in the kit's form, `boot` overrides, `lib`, `base`, `add`). It stubs every C function a hand
+body or the generator replaces with the member's parameters before `memberize.py --apply`, splices the generator's
+boilerplate and the hand bodies over the memberized definitions (a definition's head only, never a call naming
+the member), writes a metafield's igen descriptor creator and `getMetaField`, writes a bootstrap class's three
+constructors, copy slot and `__bootstrapDestruct` in the kit's form (renaming their `unit-objects.json` keys),
+respells static data in their declared types and drops the C-name declarations `memberize.py --check` reports.
+A generator member no C name of the spec maps is the function at its role's retail address (a field adder
+symbols.txt names only by its address); a hand body's member that no C function becomes and the class does not
+define stops the run, naming it. A spec with `add` adds members to a converted class: the `rows` and `typed`
+fields the class lacks join the tables in the spec's order among the ones it has, and only its own C names are
+memberized. A run that fails leaves `src/`, `include/` and `config/` as it found them. Run `decls` once more after
+the rows are regenerated: a vtable's C name goes unused only then. `classconv.array_spec` builds a scalar array
+metafield's spec. Tests: `tools/test_classconv.py`.
 
 ## Conversion order
 
@@ -542,8 +550,14 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
   passed to a Gap parameter goes, and a body moving into the class keeps what its types meant: its bare receiver
   passed on is `(::igObject *)this`, and every other bare `igObject` in it `::igObject`. A C form taking a reference
   where the member takes one (`igObject(const igObject &)`) is refused and written by hand; a caller passing a
-  pointer where the member takes a reference dereferences it (`setDefault(*(const igVec3f *)v)`), or passes the
-  temporary whose array it passed (`igVec4f(…).vec` becomes `igVec4f(…)`).
+  pointer where the member takes a reference dereferences it (`setDefault(*(const igVec3f *)v)`), passes the
+  temporary whose array or address it passed (`igVec4f(…).vec` becomes `igVec4f(…)`, `&igStringRef(…)`
+  `igStringRef(…)`), or the value whose address it passed (`(igStringObj **)&value` for an `igStringObjRef &` is
+  `value`). An integer passed for an enum parameter is cast to it (`(IG_GFX_DRAW)primitive`), and a call takes
+  the member's argument order where the C prototype's differs (igRegistry's float `getValue`), mapped by type and
+  name, refused where they leave it open. A member's compiler name spells a nested enum by its owner
+  (`Q43Gap4Core6igFile8OpenMode`) and a typedef'd function pointer as its type (`PFii_v`); a key written while a
+  parameter's class was flat (`…FP6igFile`) is renamed once the class converts (`memberize.py --rekey`).
 - `tools/classconv.py` stubs a C function with the member's parameters and its own return type; where the member
   returns another type (an unnamed descriptor getter returning `int` becomes `igVec3fMetaField *getMetaField()`),
   memberize casts the uses back: an assignment of the result to the C form's integer

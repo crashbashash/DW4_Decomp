@@ -62,6 +62,24 @@ class TextTest(unittest.TestCase):
         self.assertEqual(sorted(cc.fragment_pieces(text, "igFoo")), ["other", "size"])
         self.assertEqual(cc.fragment_pieces(text, "igFoo")["other"], "void igFoo::other()\n{\n}")
 
+    def test_a_call_is_no_definition(self):
+        # igPsx2VisualContext_tail5.inc after igImage's memberize: the call lines are not igImage::isIndexed's head
+        calls = ("void FUN_0017b5f0(TexContext *context, TexEntry *entry)\n{\n    int format;\n\n"
+                 "    if (Gap::Gfx::igImage::isIndexed((IG_GFX_TEXTURE_FORMAT)entry->format)) {\n"
+                 "        format = DAT_0048acb0[entry->format - 0x10000];\n    } else {\n"
+                 "        format = DAT_0048ac40[entry->format];\n    }\n"
+                 "    format = igImage::k_count;\n    return igImage::isIndexed(format) ? 1 : 0;\n}\n")
+        self.assertEqual(cc.replace_member(calls, "igImage", "isIndexed", "x"), (calls, False))
+        self.assertEqual(cc.fragment_pieces(calls, "igImage"), {})
+        self.assertEqual(cc.respell_data(calls, "igImage", ["static int k_count;"]), calls)
+        definition = ("bool igImage::isIndexed(IG_GFX_TEXTURE_FORMAT fmt)\n{\n    return 0;\n}\n"
+                      "Gap::Core::igObject *Gap::Gfx::igImage::make(int n) const\n{\n}\n")
+        new, ok = cc.replace_member(definition, "igImage", "isIndexed", "bool igImage::isIndexed(IG_GFX_TEXTURE_FORMAT"
+                                    " fmt)\n{\n    return 1;\n}")
+        self.assertTrue(ok)
+        self.assertTrue(new.startswith("bool igImage::isIndexed(IG_GFX_TEXTURE_FORMAT fmt)\n{\n    return 1;\n}\n"))
+        self.assertEqual(sorted(cc.fragment_pieces(definition, "igImage")), ["isIndexed", "make"])
+
     def test_drop_file_tables(self):
         text = ("int x;\n\nstatic FieldFactory g_igFoo_ctorTable[] = {\n    igIntMetaField_Create,\n};\n"
                 "static int g_igFoo_fieldOffsets[] = {\n    56,\n};\n\n\nint y;\n")
@@ -171,12 +189,108 @@ class TreeTest(unittest.TestCase):
                          "igObject\tvirtual void a();\nigObject\tvoid c();\nigMetaField\tvirtual void b();\n")
 
     def test_stub_and_table(self):
-        cc.stub(self.tree, "igFooMetaField", self.specs["igFooMetaField"])
+        spec = self.specs["igFooMetaField"]
+        cc.stub(self.tree, "igFooMetaField", spec, cc.c_names(self.tree, "igFooMetaField", spec))
         self.assertIn("\nint igFooMetaField_GetSize(igFooMetaField *self)\n{\n}\n",
                       self.tree.read("src/engine/core/igFooMetaField.inc"))
         table, unmapped = cc.memberize_table(self.tree, ["igFooMetaField"], self.specs)
         self.assertEqual(table, [("igFooMetaField_GetSize", "Gap::Core::igFooMetaField::computeSize")])
         self.assertEqual(unmapped, ["igFooMetaField_Odd"])
+
+    def test_a_gen_member_is_the_function_at_its_role(self):
+        # igPsx2Image's field adder: symbols.txt calls it FUN_00153ef0, so no `<class>_InitFields` maps it
+        self.tree.write(cc.SYMBOLS, self.tree.read(cc.SYMBOLS) + "00153ef0 000018 FUN_00153ef0\n")
+        self.tree._symbols = None
+        listing = ("igFooMetaField                           getClassTypeSafe=0x100010 "
+                   "arkRegisterInitialize=0x153ef0\n1 classes, 1 written, 0 cannot be written\n")
+        self.tree.run = lambda args: listing
+        roles = cc.generator_roles(self.tree, ["igFooMetaField"], self.specs)
+        self.assertEqual(roles, {"igFooMetaField": {"getClassTypeSafe": 0x100010, "arkRegisterInitialize": 0x153ef0}})
+        table, _unmapped = cc.memberize_table(self.tree, ["igFooMetaField"], self.specs, roles)
+        self.assertIn(("FUN_00153ef0", "Gap::Core::igFooMetaField::arkRegisterInitialize"), table)
+        # a role whose member a C name maps already is not derived again; one at another mapped function is a clash
+        spec = dict(self.specs["igFooMetaField"], map={"GetSize": "getClassTypeSafe"})
+        self.assertEqual(cc.c_names(self.tree, "igFooMetaField", spec, roles["igFooMetaField"]),
+                         [("igFooMetaField_GetSize", "getClassTypeSafe"), ("FUN_00153ef0", "arkRegisterInitialize")])
+        with self.assertRaisesRegex(cc.ConvError, "getClassTypeSafe"):
+            cc.c_names(self.tree, "igFooMetaField", self.specs["igFooMetaField"], {"getClassTypeSafe": 0x100000})
+        with self.assertRaisesRegex(cc.ConvError, "arkRegisterInitialize"):
+            cc.c_names(self.tree, "igFooMetaField", self.specs["igFooMetaField"], {"arkRegisterInitialize": 0x200000})
+
+    def test_a_body_no_c_function_becomes_is_an_error(self):
+        # igGeometrySetAttr's spec named FUN_0013e6e0 under `map` (a `<class>_<suffix>`), so nothing became
+        # createRenderList
+        spec = dict(self.specs["igFooMetaField"], map={"GetSize": "computeSize", "FUN_00100030": "createRenderList"},
+                    bodies={"createRenderList": "bool {C}::createRenderList()\n{\n}"})
+        pairs = cc.c_names(self.tree, "igFooMetaField", spec)
+        self.assertEqual(cc.unbacked_members(self.tree, "igFooMetaField", spec, pairs), ["createRenderList"])
+        spec["extra"] = {"igFooMetaFieldList_X": "createRenderList"}
+        pairs = cc.c_names(self.tree, "igFooMetaField", spec)
+        self.assertEqual(cc.unbacked_members(self.tree, "igFooMetaField", spec, pairs), [])
+        # a member the class defines already (added to a converted class) needs none
+        del spec["extra"]
+        self.tree.write("src/engine/core/igFooMetaField.inc", "bool igFooMetaField::createRenderList()\n{\n}\n")
+        self.assertEqual(cc.unbacked_members(self.tree, "igFooMetaField", spec, pairs), [])
+
+    def test_splice_writes_the_definition_only(self):
+        os.makedirs(self.tree.path("src/engine/gfx"))
+        definition = "namespace Gap {\nnamespace Gfx {\n\nbool igImage::isIndexed(int fmt)\n{\n    return 0;\n}\n}\n}\n"
+        call = ("void FUN_0017b5f0(TexEntry *entry)\n{\n    if (Gap::Gfx::igImage::isIndexed(entry->format)) {\n"
+                "        entry->format = 0;\n    }\n}\n")
+        self.tree.write("src/engine/gfx/igGenericCapabilityManager_tail.inc", definition)
+        self.tree.write("src/engine/gfx/igPsx2VisualContext_tail5.inc", call)
+        spec = dict(lib="Gfx", rows=["static bool isIndexed(int fmt);"], gen=[],
+                    bodies={"isIndexed": "bool {C}::isIndexed(int fmt)\n{\n    return fmt >= 0x10000;\n}"})
+        cc.splice_class(self.tree, "igImage", spec, "")
+        self.assertEqual(self.tree.read("src/engine/gfx/igPsx2VisualContext_tail5.inc"), call)
+        self.assertIn("bool igImage::isIndexed(int fmt)\n{\n    return fmt >= 0x10000;\n}\n}\n}\n",
+                      self.tree.read("src/engine/gfx/igGenericCapabilityManager_tail.inc"))
+
+    def test_a_failed_run_restores_the_tree(self):
+        root = self.tree.root
+        self.tree.write(cc.SYMBOLS, self.tree.read(cc.SYMBOLS) + "00100040 000018 FUN_00100040\n")
+        tools = {"tools/gen_odl_source.py": "print('igFooMetaField arkRegisterInitialize=0x100040')\n",
+                 "scripts/gen_type_headers.py": "open('include/reflected.h', 'w').write('// regenerated\\n')\n",
+                 # memberize writes some of its texts, then fails
+                 "tools/memberize.py": "open('config/class-members.tsv', 'a').write('igFooMetaField\\tvoid x();\\n')\n"
+                                       "open('src/engine/core/new.inc', 'w').write('x')\nraise SystemExit(1)\n"}
+        for rel, text in tools.items():
+            os.makedirs(os.path.dirname(os.path.join(root, rel)), exist_ok=True)
+            self.tree.write(rel, text)
+        os.makedirs(os.path.join(root, "include"))
+        self.tree.write("include/reflected.h", "// as it was\n")
+        spec = os.path.join(root, "spec.py")
+        with open(spec, "w") as f:
+            f.write("SPECS = %r\n" % self.specs)
+        before = self.tree.snapshot()
+        self.assertEqual(cc.main([spec, "all", "--root", root]), 1)
+        self.assertEqual(self.tree.snapshot(), before)
+
+    def test_add_members_to_a_converted_class(self):
+        # igFile's statics, added after igFile was converted (CoreFiles' statics.tsv)
+        self.tree.write("config/converted-classes.tsv", "# class\tlibrary\nigObject\tCore\nigFile\tCore\n")
+        self.tree.write("config/class-members.tsv", "igFile\tIG_OBJECT_DEFINE(igFile)\nigFile\tvirtual int open();\n"
+                                                    "igFolder\tIG_OBJECT_DEFINE(igFolder)\n")
+        self.tree.write(cc.SYMBOLS, "00300000 000010 igFile_Open\n00300010 000010 FilePath_IsAbsolute\n")
+        self.tree._symbols = None
+        specs = {"igFile": dict(add=True, rows=["IG_OBJECT_DEFINE(igFile)",
+                                                "static bool isAbsolutePath(const char *path);",
+                                                "virtual int open();", "static void setSearchPath(const char *p);"],
+                                extra={"FilePath_IsAbsolute": "isAbsolutePath"})}
+        cc.step_tables(self.tree, ["igFile"], specs)
+        members = ("igFile\tIG_OBJECT_DEFINE(igFile)\nigFile\tstatic bool isAbsolutePath(const char *path);\n"
+                   "igFile\tvirtual int open();\nigFile\tstatic void setSearchPath(const char *p);\n"
+                   "igFolder\tIG_OBJECT_DEFINE(igFolder)\n")
+        self.assertEqual(self.tree.read("config/class-members.tsv"), members)
+        cc.step_tables(self.tree, ["igFile"], specs)
+        self.assertEqual(self.tree.read("config/class-members.tsv"), members)
+        self.assertEqual(cc.gen_of(specs["igFile"]), [])
+        self.assertEqual(cc.memberize_table(self.tree, ["igFile"], specs),
+                         ([("FilePath_IsAbsolute", "Gap::Core::igFile::isAbsolutePath")], []))
+        with self.assertRaises(cc.ConvError):
+            cc.step_tables(self.tree, ["igFile"], {"igFile": dict(specs["igFile"], add=False)})
+        with self.assertRaises(cc.ConvError):
+            cc.step_tables(self.tree, ["igFolder"], {"igFolder": dict(add=True, rows=[])})
 
     def test_rekey_finds_the_unit(self):
         self.assertEqual(self.tree.rekey([("igFooMetaField_Init", "__ct__Q33Gap4Core14igFooMetaFieldFv"),

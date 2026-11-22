@@ -90,13 +90,32 @@ conversion order are in [member conversion](engine/member-conversion.md).
   when every later use is inside its block, else the body's first line does. An assignment inside an expression,
   or inside a loop that read the receiver before it, is refused. An argument `&x` for a reference parameter
   `T &`, where `x` is declared as `T`, is `x`.
+- **Arguments.** A call's arguments take the member's order where the C prototype orders them otherwise
+  (igRegistry_GetValueFloat's `create, defaultValue` for the kit's `defaultVal, createValue`), mapped by type and
+  name; the C order stands while it fits and no other order matches more names, and an order the types and names
+  leave open is refused. An integer passed for an enum parameter is cast (`(IG_GFX_DRAW)primitive`,
+  `(Gap::Core::igFile::OpenMode)n` outside the class), the address of a temporary the C form took a pointer to
+  is the temporary (`&igStringRef(name)` becomes `igStringRef(name)`, built in place as before), and for a
+  reference to a typedef'd class (`igStringObjRef &`) a name declared as it, or its address (`&x`,
+  `(igStringObj **)&x`, `&x.p`), is the name, any other pointer dereferenced (`*(igStringObjRef *)&text`).
+- **Compiler names.** A member's parameter types are spelled as its class's scope finds them: a type nested in
+  the class or a base by its owner (`Q43Gap4Core6igFile8OpenMode`), a function or function-pointer typedef as
+  its type (`igIOCallbackFunction *` is `PFii_v`), a converted class as its Gap class. A key of a converted
+  member whose parameter names a class converted since as the flat struct
+  (`platformLoad__Q33Gap3Gfx7igImageFP6igFile` once igFile is converted) is renamed by every memberize batch and
+  by `memberize.py --rekey --apply` (after a merge), which print the `whole_file_rows.py` runs of the rows it
+  touched; `memberize.py --check` reports one.
 - **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
   row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
   functions it left to link from retail (a partial file) stay so without `--partial`, a name it left out
   that binds without a row stays out, and a `data`/`externals` entry or `anon` address it listed stays in its
   place while its name still binds at that address (the object, symbols.txt, data-names.tsv, the compiler-name
-  map, another unit's row or the address in the name). Regenerating an unchanged unit, or a caller whose code
-  changed only at call sites, writes its row unchanged, so a conversion's row diff is what the conversion changed.
+  map, another unit's row or the address in the name). A member whose mangled name changed only in a parameter's
+  type (`platformLoad__Q33Gap3Gfx7igImageFP6igFile` once igFile is the Gap class) and fits several starts takes
+  its former name's address when one name of that class, method, constness and parameter count went and one came.
+  Regenerating an unchanged unit, or a caller whose code changed only at call sites, writes its row unchanged, so a
+  conversion's row diff is what the conversion changed. The rows are written only once the file loads and the
+  compiler-name map builds from it; otherwise the run stops naming why and leaves the file as it was.
 - **Typed coverage.** `tools/typed_coverage.py` counts a member's accesses as it counts a free function's
   (`this->x`, a bare field, a read through a typed member such as `_visualContext->x`, a constructor's body),
   a read through a reference (`other._refCount`) as one through a pointer, a converted class's constructor's vtable
