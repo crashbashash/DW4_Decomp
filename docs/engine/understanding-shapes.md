@@ -132,8 +132,14 @@ IRDUMP_OUT=/tmp/irdump/flags.txt MWCIncludes=src gdb -q -batch -x tools/mwcc_ird
 
 - `gdb_nodeflags.py`: the `nodeflags` of every node after chosen phases (`IRDUMP_PHASES`). Bit `0x0001` marks a
   pointer-valued node whose target is `const`.
-- `gdb_cse_compare.py`: each node pair `IRO_CommonSubs` compares and rejects, with the flags or types that differ
-  (`node 384 vs 321: nodeflags 0000 vs 0001`). `IRDUMP_CALL` picks the function.
+- `gdb_cse_compare.py`: how `IRO_CommonSubs` grouped the function's expressions and which members share a value.
+  Grouping compares each expression, in flow order, with the latest member of every group opened before it; so for
+  each group the log lists the members, the groups each was compared with and why a compared pair differs (flags or
+  type), and the alike candidates that never met a member. Then an occurrence reuses an earlier member's value only
+  where the group is available (computed before in its flow node and not killed since, or available on entry), and an
+  occurrence that a later one reuses computes into a temporary of its own even when an earlier value reaches it; the
+  log lists which members share one value, why the first of each later set does not reuse the value before it, and the
+  nodes that kill the group. `IRDUMP_CALL` picks the call (one per function and round).
 - `gdb_steptrace.py`: an instruction trace of one call of a compiler routine, to diff the path two spellings take.
 
 Node numbers are the dump log's, so a node can be followed between the two.
@@ -165,15 +171,21 @@ The rules it lets you check are under [Delay slots (b52)](#delay-slots-b52).
 **When:** the instructions are right and only registers differ. `tools/dispatcher/regalloc.py` ties each register to
 its allocator node and searches the id orders that give retail's colours
 ([usage](../../tools/dispatcher/README.md), [model](register-allocation.md)). It has a b52 profile and takes the
-unit's compiler and flags from `units.tsv`; a whole-file candidate works (about a minute for `CoreLibrary.cpp`), and a test
-file with the unit header, the inline helpers and the function traces in a second:
+unit's compiler and flags from `units.tsv`; it compares the function on its own, so a whole-file candidate works (about a
+minute for `CoreLibrary.cpp`), and a test file with the unit header, the inline helpers and the function traces in a
+second. The function is a symbol, a VA, or a member the compiler-name map binds (`Class::method`); a candidate that
+defines it as a member the build does not bind yet names it with `--as Class::method`:
 
 ```sh
 python3 tools/dispatcher/regalloc.py 0xVA src/engine/core/CoreLibrary.cpp
+python3 tools/dispatcher/regalloc.py 0xVA test.cpp --as igSorter::endCompoundRenderPackage
 ```
 
-After the id permutations it tries single graph edits (renumber, merge, delete, interference, degree, un-coalesce) and pairs
-of them, and names the nodes of the edits that give retail's colours
+The id permutations cover the involved nodes and their most related neighbours: a neighbour whose id comes below an
+involved node's is pushed before simplify scans that node and lowers its degree, which can be the whole fix (each list
+append's count numbered below its list). Solutions that leave the parameters' ids in place come first. After them it
+tries single graph edits (renumber, a neighbour renumbered at each of a set of alike involved nodes at once, merge,
+delete, interference, degree, un-coalesce) and pairs of them, and names the nodes of the edits that give retail's colours
 ([graph edits](register-allocation.md#b52-coalescing-and-the-graph-edit-search)).
 
 Coalescing on b52 (verified, [details](register-allocation.md#b52-coalescing-and-the-graph-edit-search)): every copy whose

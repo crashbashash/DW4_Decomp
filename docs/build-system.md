@@ -38,10 +38,16 @@ the build and CI: it relinks, then writes the executable into a copy of your dis
 `tools/memberize.py <table>` rewrites free `<Class>_<Method>` functions and `g_<Class>_…` data as members of their
 class (dry run by default, `--diff` to see it, `--apply` to write). Each table row is `<C name>\t<member>`: the
 member as `Class::name`, declared in `config/class-members.tsv` (object macros expanded), or as a full signature
-(`static CallbackArray *igRenderer::arkRegisterInternal()`), whose declaration it adds to that table. It rewrites
+(`static CallbackArray *igRenderer::arkRegisterInternal()`), whose declaration it adds to that table; a class's
+`operator new`/`operator delete` (`void *igObject::operator new(size_t cSize, size_t allocSize, igMemoryPoolView
+*mp)`) is a static member like any other (`__nw__Q33Gap4Core8igObjectFUiUiP16igMemoryPoolView`, called
+`Gap::Core::igObject::operator new(a, b, c)` outside the class, bare inside it). It rewrites
 the definition head, the receiver as `this` without a local copy of it (`self->x` becomes `x`, a dispatch view's
-virtual `((View *)this)->f()`), a member the class defines inline loses its C copy, the C++ callers
-(`obj->m(a)`, `Class::m`, bare inside the class's members) and comments. In `unit-objects.json` the placing
+virtual `((View *)this)->f()`), a member the class defines inline loses its C copy, and the C++ callers
+(`obj->m(a)`, `Class::m`, bare inside the class's members). Comments keep the C name, which stays the symbol's
+retail name in `symbols.txt` (rewriting it gave prose such as "kept local: Gap::Core::igObjectList::setCount has no
+home"); only a code span holding just the C name (`` `igObjectList_SetCount` ``) names the member as code now does
+(`igObjectList::setCount`). In `unit-objects.json` the placing
 unit's key becomes the compiler name, which `tools/compiler_names.py --write` then binds; it prints the
 `tools/whole_file_rows.py --unit-va <va> --cxx --write` runs that regenerate the touched units' rows. A body
 spelled for its bytes in igen's form (tables as function-local statics, a cast a function pointer's new type
@@ -104,18 +110,31 @@ conversion order are in [member conversion](engine/member-conversion.md).
   member whose parameter names a class converted since as the flat struct
   (`platformLoad__Q33Gap3Gfx7igImageFP6igFile` once igFile is converted) is renamed by every memberize batch and
   by `memberize.py --rekey --apply` (after a merge), which print the `whole_file_rows.py` runs of the rows it
-  touched; `memberize.py --check` reports one.
+  touched; `memberize.py --check` reports one. A template instance naming a converted class as its flat struct
+  (`__dt__32igSmartPointer<14igVertexStream>Fv`, `getElementMeta__…igTObjectList<…>CFv`) names the instance where
+  the source spells it: code in the Gap namespaces (the converted members) now instantiates it with the Gap class,
+  while code at file scope still holds the flat struct's (`__dt__25igSmartPointer<8igObject>Fv` stays in many
+  units). So `--rekey` compiles each whole-file unit holding one (tools/project.py `compile_unit`, as check.py
+  builds it) and renames a name its object no longer has to the one object name that differs from it only in Gap
+  scopes (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv`, the lengths recomputed), in every field of the
+  row, `stripped` too; a memberize batch prints it as a step once the bodies compile, before the
+  `whole_file_rows.py` runs. `--check` compiles nothing and does not report these.
 - **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
   row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
   functions it left to link from retail (a partial file) stay so without `--partial`, a name it left out
   that binds without a row stays out, and a `data`/`externals` entry or `anon` address it listed stays in its
   place while its name still binds at that address (the object, symbols.txt, data-names.tsv, the compiler-name
   map, another unit's row or the address in the name). A member whose mangled name changed only in a parameter's
-  type (`platformLoad__Q33Gap3Gfx7igImageFP6igFile` once igFile is the Gap class) and fits several starts takes
-  its former name's address when one name of that class, method, constness and parameter count went and one came.
-  Regenerating an unchanged unit, or a caller whose code changed only at call sites, writes its row unchanged, so a
-  conversion's row diff is what the conversion changed. The rows are written only once the file loads and the
-  compiler-name map builds from it; otherwise the run stops naming why and leaves the file as it was.
+  type (`platformLoad__Q33Gap3Gfx7igImageFP6igFile` once igFile is the Gap class) or in its class template's
+  argument (`__dt__32igSmartPointer<14igVertexStream>Fv` once igVertexStream is) takes its former name's address
+  when it fits there and one name of that class, method, constness and parameter count went and one came.
+  Byte-identical functions left with the same starts (two empty virtual slots, inline destructors of one shape) take
+  the starts retail names them at: the calls, pointers and vtable words of the members placed so far, read as for
+  `duplicates`; one retail names outside the range is no member. What retail leaves open stops the run naming each
+  candidate and its starts, for `--at name=va`. Regenerating an unchanged unit, or a caller whose code changed only
+  at call sites, writes its row unchanged, so a conversion's row diff is what the conversion changed. The rows are
+  written only once the file loads and the compiler-name map builds from it; otherwise the run stops naming why
+  and leaves the file as it was.
 - **Typed coverage.** `tools/typed_coverage.py` counts a member's accesses as it counts a free function's
   (`this->x`, a bare field, a read through a typed member such as `_visualContext->x`, a constructor's body),
   a read through a reference (`other._refCount`) as one through a pointer, a converted class's constructor's vtable

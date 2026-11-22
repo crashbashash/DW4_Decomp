@@ -8,18 +8,20 @@ docs/engine/member-conversion.md ("Converting a class, in order"), for every cla
 
   tables     the class's row in config/converted-classes.tsv, its `rows` in config/class-members.tsv (after its
              last row there) and its `typed` fields in config/typed-fields.tsv; for a spec with `add`, the rows
-             and typed fields the converted class lacks, each after the row the spec lists before it
+             and typed fields the converted class lacks (a row it has declares the same, access label and spacing
+             aside), each after the row the spec lists before it
   memberize  each C function a hand body replaces becomes an empty stub with the member's parameters, then
              tools/memberize.py --apply renames every mapped C name and `g_<Class>_<datum>` to its member. A
              `gen` member no C name maps is the function at its role's retail address (the generator's
              `--list`: a field adder symbols.txt calls `FUN_00153ef0`); a hand body's member no C function
              becomes, and the class does not define yet, stops the run with its name
   splice     tools/gen_odl_source.py's boilerplate (`gen`) and the hand `bodies` replace the memberized
-             definitions; a metafield's descriptor creator and `getMetaField` are igen's; a bootstrap class's
-             constructors, copy slot and `__bootstrapDestruct` are written in the kit's form over their C
-             definitions and their unit-objects.json keys renamed to the compiler names; igen's file-scope
-             field tables go (the generator keeps them function-local); a static datum's definition takes its
-             declared type; `memberize.py --respell` last
+             definitions (a definition's head in code, never in a comment or string; an overload's, static or
+             not, by its parameter types); a metafield's descriptor creator and `getMetaField` are igen's; a
+             bootstrap class's constructors, copy slot and `__bootstrapDestruct` are written in the kit's form
+             over their C definitions and their unit-objects.json keys renamed to the compiler names; igen's
+             file-scope field tables go (the generator keeps them function-local); a static datum's definition
+             takes its declared type; `memberize.py --respell` last
   decls      the C-name declarations `memberize.py --check` reports unneeded are deleted (after the
              splice, which drops the last C users of the bootstrap names)
   all        the four in order
@@ -128,9 +130,43 @@ def block_end(text, brace):
     raise ConvError("unbalanced braces from offset %d" % brace)
 
 
+def code_text(text):
+    """`text` with every comment and string or character literal blanked to spaces (newlines kept), so that
+    an offset in it is the same offset in `text`: a definition's head is searched for in code only (a comment
+    naming `igFoo::size (the count)` before a definition is no head)."""
+    out, j, n = list(text), 0, len(text)
+
+    def blank(lo, hi):
+        for k in range(lo, hi):
+            if out[k] != "\n":
+                out[k] = " "
+
+    while j < n:
+        ch = text[j]
+        if ch in "\"'":
+            k = j + 1
+            while k < n and text[k] != ch:
+                k += 2 if text[k] == "\\" else 1
+            blank(j + 1, min(k, n))
+            j = k + 1
+        elif text.startswith("/*", j):
+            k = text.find("*/", j + 2)
+            k = n if k < 0 else k + 2
+            blank(j, k)
+            j = k
+        elif text.startswith("//", j):
+            k = text.find("\n", j)
+            k = n if k < 0 else k
+            blank(j, k)
+            j = k
+        else:
+            j += 1
+    return "".join(out)
+
+
 def find_c_def(text, cname):
     """(start, end) of the file-scope definition of the C function `cname`, or None."""
-    m = re.search(r"^(?![ \t])[^\n;{}()]*\b%s\s*\([^;{]*?\)\s*\{" % re.escape(cname), text, re.M)
+    m = re.search(r"^(?![ \t])[^\n;{}()]*\b%s\s*\([^;{]*?\)\s*\{" % re.escape(cname), code_text(text), re.M)
     if not m:
         return None
     return m.start(), block_end(text, m.end() - 1)
@@ -141,10 +177,6 @@ def find_c_def(text, cname):
 # is none)
 TYPE_PREFIX = r"^[ \t]*(?!(?:return|else|case|goto|delete|throw|new)\b)(?:[\w:<>,*& \t]*[ \t*&])?(?:\w+::)*"
 DEF_HEAD = TYPE_PREFIX + r"%s::(?P<name>%s)\s*\((?P<params>[^;{]*?)\)[^;{]*\{"
-
-
-def member_def_re(cls, member):
-    return re.compile(DEF_HEAD % (re.escape(cls), re.escape(member)), re.M)
 
 
 def member_name(member):
@@ -165,15 +197,35 @@ def param_types(params):
     return out
 
 
+def member_defs(text, cls, name):
+    """The (start, head match) of each definition of `cls::name` in `text`, in order: heads searched for in code
+    only (code_text), a comment before a definition on its line kept out of it."""
+    code = code_text(text)
+    for m in re.finditer(DEF_HEAD % (re.escape(cls), name), code, re.M):
+        start = m.start()
+        lead = len(code[start:m.end()]) - len(code[start:m.end()].lstrip(" \t"))
+        if code[start:start + lead] != text[start:start + lead]:
+            start += lead
+        yield start, m
+
+
 def replace_member(text, cls, member, body):
     """`text` with the first definition of `cls::member` replaced by `body`, and whether there was one. A member
-    given as a full declaration (an overload) is the definition whose parameter types are the declaration's."""
+    given as a full declaration (an overload) is the definition whose parameter types are the declaration's: a
+    static overload and a member one of one name differ in their parameters, never in the definition's head."""
     name = member_name(member)
     want = param_types(re.search(r"\((.*)\)", member).group(1)) if "(" in member else None
-    for m in member_def_re(cls, name).finditer(text):
+    for start, m in member_defs(text, cls, re.escape(name)):
         if want is None or param_types(m.group("params")) == want:
-            return text[:m.start()] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
+            return text[:start] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
     return text, False
+
+
+def declaration(row):
+    """What a class-members.tsv (or typed-fields.tsv) row declares: its access labels dropped and its spacing
+    normalised (`public: virtual  int f();` and `virtual int f();` declare the same); a row of labels only is
+    itself."""
+    return " ".join(re.sub(r"^\s*(?:(?:public|protected|private)\s*:\s*)*", "", row).split()) or " ".join(row.split())
 
 
 def qualified_member(q, member):
@@ -189,8 +241,8 @@ def qualified_member(q, member):
 def fragment_pieces(text, cls):
     """{member: definition text} of `cls`'s definitions in a gen_odl_source fragment (the first of each name)."""
     out = {}
-    for m in re.finditer(DEF_HEAD % (re.escape(cls), r"~?\w+"), text, re.M):
-        out.setdefault(m.group("name"), text[m.start():block_end(text, m.end() - 1)])
+    for start, m in member_defs(text, cls, r"~?\w+"):
+        out.setdefault(m.group("name"), text[start:block_end(text, m.end() - 1)])
     return out
 
 
@@ -408,21 +460,26 @@ class Tree:
     def add_rows(self, rel, cls, rows):
         """The `rows` of `cls` a tab table lacks, in their order among the ones it has: a new row goes after the
         row `rows` lists before it, before the first one it has when none precedes it, and after `cls`'s last
-        row when the table has none of `rows`; the rows added."""
+        row when the table has none of `rows`; the rows added. A row the table has is one declaring the same
+        (declaration: access label and spacing aside), so that adding is idempotent and never duplicates one."""
         lines = self.read(rel).split("\n")
         if lines and lines[-1] == "":
             lines.pop()
-        have = {l: i for i, l in enumerate(lines) if l.split("\t", 1)[0] == cls}
-        inserts, pending, anchor = collections.defaultdict(list), [], None
+        have = {}
+        for i, l in enumerate(lines):
+            if l.split("\t", 1)[0] == cls:
+                have.setdefault(declaration(l.split("\t", 1)[1] if "\t" in l else ""), i)
+        inserts, pending, queued, anchor = collections.defaultdict(list), [], set(), None
         for r in rows:
-            line = "%s\t%s" % (cls, r)
-            if line in have:
+            key = declaration(r)
+            if key in have:
                 if pending:
-                    inserts[have[line] if anchor is None else anchor + 1] += pending
+                    inserts[have[key] if anchor is None else anchor + 1] += pending
                     pending = []
-                anchor = have[line]
-            elif line not in pending:
-                pending.append(line)
+                anchor = have[key]
+            elif key not in queued:
+                queued.add(key)
+                pending.append("%s\t%s" % (cls, r))
         if pending:
             inserts[(anchor if anchor is not None else max(have.values(), default=len(lines) - 1)) + 1] += pending
         for at in sorted(inserts, reverse=True):
@@ -542,7 +599,7 @@ def c_names(tree, c, spec, roles=None):
 
 def defines_member(tree, c, spec, name):
     """Whether the class's library defines `c::name` already."""
-    return any(member_def_re(c, name).search(tree.read(p))
+    return any(next(member_defs(tree.read(p), c, re.escape(name)), None)
                for p in tree.files_naming(lib_of(spec), "%s::%s" % (c, name)))
 
 

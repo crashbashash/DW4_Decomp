@@ -59,7 +59,9 @@ adding an overlay never reduces coverage: it is merged, not substituted.
    declarations and call sites), the function columns of `config/source-approvals.tsv` and
    `config/assembly-sources.tsv`, the function keys of `config/SLUS-20836/unit-objects.json` (a `data`
    row that already spelled the function's new name goes, the function's own entry now holding it) and
-   the function names in `docs/`;
+   the function names in the subject documents of `docs/` (those `config/doc-subjects.txt` lists, which
+   `scripts/check_doc_function_names.py` holds to the symbol table); a method document names no function, so
+   one naming an old name is left as it is and listed, for its author to describe the shape instead;
    moves a one-function unit to `src/<module>/`, removes the stale `asm/<old>.s`,
    regenerates `config/SLUS-20836/symbols.txt` + `asm/`, and then runs `make check` and
    `make link`. Renaming one function by hand is a multi-file edit; a whole module
@@ -82,7 +84,10 @@ tool never rewrites:
 - a member (`.x`, `->x`, `Class::x`), a field, tag, label or macro name, a name used as an object
   (`x->`, `x.`), and a local, parameter, `typedef` or file `static` of the same name, with every use
   inside its scope;
-- a comment word, when the old name is a plain lower-case word or is also an ordinary identifier.
+- a comment word, when the old name is a plain lower-case word or is also an ordinary identifier. Any
+  other comment word of the old name is renamed: the batch takes the old name out of the symbol table,
+  so a comment keeping it would name nothing. (A member conversion, `tools/memberize.py`, leaves
+  comments as they are: its C names stay the functions' retail names.)
 
 Each file is rewritten in one pass, so a swap never renames its own result. A
 `unit-objects.json` key (`emitted`, `duplicates`, `externals`, and a row's `symbol`) is renamed by

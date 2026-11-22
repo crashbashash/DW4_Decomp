@@ -38,6 +38,46 @@ class DerivedThunk(unittest.TestCase):
             self.assertIn("void thunk_igWidget_GetMetaObject(void) { igWidget_GetMetaObject(); }", source)
 
 
+class Documents(unittest.TestCase):
+    def test_subject_documents_follow_the_rename_and_method_documents_are_left(self):
+        # FUN_00163770 became igVertexArray2Helper_FloatToFixedPoint: docs/engine/igvertexarray2helper.md (a subject
+        # document) follows it; member-conversion.md, a method document, names no function and was given the name
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts"))
+        import check_doc_function_names
+        with tempfile.TemporaryDirectory() as tree:
+            config = os.path.join(tree, "config", "SLUS-20836")
+            os.makedirs(os.path.join(config, "names"))
+            os.makedirs(os.path.join(tree, "src", "engine"))
+            os.makedirs(os.path.join(tree, "docs", "engine"))
+            with open(os.path.join(config, "symbols.txt"), "w") as f:
+                f.write("00163770 000090 FUN_00163770\n")
+            with open(os.path.join(config, "names", "EngineGFX.tsv"), "w") as f:
+                f.write("0x00163770\tigVertexArray2Helper_FloatToFixedPoint\tengine\n")
+            with open(os.path.join(tree, "src", "engine", "Helper.c"), "w") as f:
+                f.write("int FUN_00163770(float value, unsigned int fractionBits) { return 0; }\n")
+            with open(os.path.join(tree, "config", "doc-subjects.txt"), "w") as f:
+                f.write("# subjects\ndocs/engine/igvertexarray2helper.md\n")
+            subject = os.path.join(tree, "docs", "engine", "igvertexarray2helper.md")
+            method = os.path.join(tree, "docs", "engine", "member-conversion.md")
+            with open(subject, "w") as f:
+                f.write("`FUN_00163770` is a private helper called only from slot 61.\n")
+            with open(method, "w") as f:
+                f.write("A fixed-point helper (FUN_00163770) stays a free function.\n")
+            code = apply_names.main([
+                "--names", os.path.join(config, "names"), "--symbols", os.path.join(config, "symbols.txt"),
+                "--src", os.path.join(tree, "src"), "--asm", os.path.join(tree, "asm"), "--apply", "--no-regen"])
+            self.assertEqual(code, 0)
+            self.assertEqual(open(subject).read(),
+                             "`igVertexArray2Helper_FloatToFixedPoint` is a private helper called only from slot 61.\n")
+            self.assertEqual(open(method).read(), "A fixed-point helper (FUN_00163770) stays a free function.\n")
+            # the check reads the result as before the batch: the subject document names a symbol, the method
+            # document's placeholder is still its own finding
+            findings = check_doc_function_names.check_tree(
+                tree, check_doc_function_names.load_subjects(os.path.join(tree, "config", "doc-subjects.txt")),
+                {"igVertexArray2Helper_FloatToFixedPoint"})
+            self.assertEqual([f.split(":")[0] for f in findings], ["docs/engine/member-conversion.md"])
+
+
 MEMBER_TREE = {
     "include/dw4/support/reflected.h": (
         "typedef struct igObject {\n    int _vtable;\n} igObject;\n"

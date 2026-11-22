@@ -163,6 +163,19 @@ extern "C" Result fixture_owner(int *p) { Result result(p); Tick(); return resul
         self.assertFalse(ok)
         self.assertIn("unowned code or runtime data", report)
 
+    def test_unowned_contents_are_named(self):
+        # GfxHelper's gfx unit: the rejection named nothing of what the row left out (the helper's vtable,
+        # destructors and getMeta), each found only by patching verify
+        self.write_registry(self.good_registry)
+        extra = self.root / "extra.cpp"
+        extra.write_text(self.SOURCE + '\nextern "C" int stray_body(){return 7;}\nint stray_table[2] = {1, 2};\n')
+        ok, report = self.check(source=extra)
+        self.assertFalse(ok)
+        head = report.splitlines()[0]
+        for name in ("stray_body", "stray_table"):
+            self.assertIn(name, head)
+        self.assertNotIn("fixture_owner", head)
+
     def test_conflicting_ownership_and_external_alias_are_rejected(self):
         self.write_registry({hex(self.OWNER): {"emitted": {self.member_name: hex(self.OWNER)}}})
         with self.assertRaisesRegex(ValueError, "multiple compiler bodies"):

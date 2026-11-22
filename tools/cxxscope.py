@@ -36,8 +36,16 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import units  # noqa: E402
 
-_QUALIFIED = re.compile(r"\bGap\s*::\s*([A-Za-z_]\w*)\s*::\s*([A-Za-z_]\w*)\s*::\s*(~?\s*[A-Za-z_]\w*)")
+_QUALIFIED = re.compile(r"\bGap\s*::\s*([A-Za-z_]\w*)\s*::\s*([A-Za-z_]\w*)\s*::\s*"
+                        r"(operator\s*(?:new|delete)\b(?:\s*\[\s*\])?|~?\s*[A-Za-z_]\w*)")
 _BLOCK_HEAD = re.compile(r"(?m)^namespace Gap \{\nnamespace ([A-Za-z_]\w*) \{\n")
+
+
+def _member_name(name):
+    """A member's name as a head spells it: `~igRenderer`, `operator new`, `operator delete[]`."""
+    if name.startswith("operator"):
+        return "operator " + re.sub(r"\s+", "", name[len("operator"):])
+    return re.sub(r"\s+", "", name)
 
 
 def split(qualified):
@@ -113,7 +121,7 @@ def _items(text, clean):
         m = found[-1]
         library = m.group(1)
         edits = [(start, start + m.start(), _strip_namespace(text[start:start + m.start()], library)),
-                 (start + m.start(), start + m.end(), "%s::%s" % (m.group(2), re.sub(r"\s+", "", m.group(3))))]
+                 (start + m.start(), start + m.end(), "%s::%s" % (m.group(2), _member_name(m.group(3))))]
         items.append((start, end, library, edits))
     for m in _QUALIFIED.finditer(clean):
         if inside(m.start()) or any(s <= m.start() < e for _n, s, e in defs):

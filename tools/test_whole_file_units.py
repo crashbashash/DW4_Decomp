@@ -338,6 +338,47 @@ class Rows(unittest.TestCase):
         self.assertEqual(whole_file_rows.retyped({new_load: 0, clut.replace("6igClut", "Q33Gap3Gfx6igClut"): 0},
                                                  {load: 0x158f40}, {}, 0, 0x200000), {})
 
+    def test_a_retyped_template_argument_takes_its_start(self):
+        # the gfx unit 0x1493e0 once igVertexStream became Gap::Gfx::igVertexStream: four smart-pointer destructors
+        # of one shape were each left with 0x14aaf0, and all four were written there (the rows then failed to load:
+        # "function belongs to multiple compiler bodies"); the present row placed the stream's under its old name
+        old = "__dt__32igSmartPointer<14igVertexStream>Fv"
+        stream = "__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv"
+        others = ["__dt__30igSmartPointer<12igVertexData>Fv", "__dt__36igSmartPointer<Q33Gap4Core8igObject>Fv",
+                  "__dt__42igSmartPointer<Q33Gap4Core13igPointerList>Fv"]
+        kept = "__dt__41igSmartPointer<Q33Gap3Gfx13igVertexArray>Fv"
+        retail = {0x14a000: 7, 0x14aaf0: 7}
+        functions = {name: self.Function(7) for name in [stream, kept] + others}
+        placed = {kept: 0x14a000}
+        with self.assertRaisesRegex(SystemExit, "ambiguous"):
+            whole_file_rows.locate(functions, retail, sorted(retail), placed)
+        hints = whole_file_rows.retyped(functions, {old: 0x14aaf0, kept: 0x14a000}, placed, 0x1493e0, 0x16f560)
+        self.assertEqual(hints, {stream: 0x14aaf0})
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), placed, (), hints),
+                         {kept: 0x14a000, stream: 0x14aaf0})
+
+    def test_identical_functions_are_settled_by_their_retail_references(self):
+        # the gfx unit 0x1493e0 once igVertexStream was converted: its two empty slots (0x180bc0, 0x180eb0) and two
+        # empty inline resets of other classes all fit both starts; the vtables a member reaches name each
+        commit = "commitComponentEdits__Q33Gap3Gfx14igVertexStreamFRC20igComponentEditInfo2"
+        edit = "getEditableComponent__Q33Gap3Gfx14igVertexStreamFR20igComponentEditInfo2"
+        resets = ["reset__Q33Gap3Gfx12igIndexArrayFv", "reset__Q33Gap3Gfx14igVertexArray2Fv"]
+        retail = {0x180bc0: 0, 0x180ea0: 1, 0x180eb0: 0}
+        functions = {name: self.Function(0) for name in [commit, edit] + resets}
+        functions["getMeta__Q33Gap3Gfx14igVertexStreamCFv"] = self.Function(1)
+        reached = {commit: 0x180bc0, edit: 0x180eb0, resets[0]: 0x13d020, resets[1]: 0x13e660}
+        asked = []
+
+        def referenced(found):
+            asked.append(dict(found))
+            return {name: va for name, va in reached.items() if name not in found}
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), {}, referenced=referenced),
+                         {"getMeta__Q33Gap3Gfx14igVertexStreamCFv": 0x180ea0, commit: 0x180bc0, edit: 0x180eb0})
+        self.assertEqual(asked, [{"getMeta__Q33Gap3Gfx14igVertexStreamCFv": 0x180ea0}])
+        # retail naming neither slot leaves a guess: the run stops naming the candidates
+        with self.assertRaisesRegex(SystemExit, "ambiguous: .*%s.*%s" % (commit, edit)):
+            whole_file_rows.locate(functions, retail, sorted(retail), {}, referenced=lambda found: {})
+
     def test_rows_that_do_not_load_are_not_written(self):
         # igFolder's getFiles placed by a row of its own outside the range the regenerated row now places it in
         with tempfile.TemporaryDirectory() as tmp:

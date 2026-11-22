@@ -192,11 +192,14 @@ before colouring. Read from the code and checked on every general-register pass 
 **Graph edits** (the sms tip "replay the allocator when only registers differ"). After the id permutations, `regalloc.py`
 tries one edit at a time on the involved nodes and their most connected neighbours, replays each, and prints the ones that
 give retail's colours, with the `name` of each node guessed from the declaration order and the nodes the coalescer merged into
-it. The edits: renumber a node just below/above another (a declaration or creation-order change), merge two non-adjacent nodes
-(one variable; the merged web keeps the lower id, as the coalescer does), delete a node, add an interference, add k neighbours,
-and split a coalesced node off its survivor (the copy then has to survive: on b52 only when the two overlap). When no single
-edit is a full solution it tries pairs (`--edit-depth 1` turns that off). About 2,000 replays take a second for a 240-node
-graph.
+it. The edits: renumber a node just below/above another (a declaration or creation-order change; the moved node is an involved
+node, one of the edit pool, or any neighbour of an involved node, and for a set of involved nodes that must change from one
+colour to the same other one, each with exactly one neighbour of one cost and degree, those neighbours are moved at once),
+merge two non-adjacent nodes (one variable; the merged web keeps the lower id, as the coalescer does), delete a node, add an
+interference, add k neighbours, and split a coalesced node off its survivor (the copy then has to survive: on b52 only when
+the two overlap). Edits that renumber a parameter come after the others of the same score: a parameter's id comes from its
+position. When no single edit is a full solution it tries pairs (`--edit-depth 1` turns that off). About 2,000 replays take
+a second for a 240-node graph.
 
 What it found:
 
@@ -207,4 +210,10 @@ What it found:
   parameter's own web, which the local-copy spellings above cannot produce. Not matched.
 * 0x2d7280 (`igDependencyOrderedList_TopologicalSort`, MatchC's draft): 22 nodes over the whole function and 4 non-register
   differences; no single edit or pair reaches retail (best: 70 of 87 constrained nodes), so the remaining difference is in the code, not the colouring. Not matched.
+* 0x1dc610 (`igSorter::endCompoundRenderPackage`, each package-list append through a helper taking the list): the sorter
+  (a parameter) colours s2 and the three lists s1, retail the reverse. Each list has degree K at the first scan and is pushed
+  after the sorter; each append's count (degree 24) is pushed in that scan, but after the list's id. Both searches give
+  "each count's id below its list's" first (the count then drops its list to 24 before simplify reaches it, and the sorter
+  is coloured before the lists); the other full edits move the parameter. Matched by writing each append out with the
+  count declared ahead of the list.
 

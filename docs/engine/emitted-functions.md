@@ -273,9 +273,10 @@ stays out of the file under `--partial` until it reproduces.
 
 A data section no placed body or declared datum reaches went with the functions the retail linker
 dropped, so it needs no row and is not linked. A section a placed body does reach must have a row,
-or the object is rejected as unowned. Each isolated body refers to its unit's data as `DAT_<address>`,
-never a copy. The data sections that compared equal to retail are linked from one more object per unit,
-`u_<owner>_data.o` (`verify.isolate_unit_data`): only those sections, each renamed `.dw4_data_<address>`
+or the object is rejected as unowned, the rejection naming each symbol the object defines there with its
+section and size (a function or vtable the row leaves out). Each isolated body refers to its unit's data as
+`DAT_<address>`, never a copy. The data sections that compared equal to retail are linked from one more
+object per unit, `u_<owner>_data.o` (`verify.isolate_unit_data`): only those sections, each renamed `.dw4_data_<address>`
 and pinned there by `tools/linkgen.py`, with every symbol they define made local, so the link reaches
 them only through the bodies' `DAT_<address>` references. When several units define one datum (a
 header's static, a merged string) and all verify it at the same address, the first unit in address
@@ -310,8 +311,9 @@ compile proves each binding. `config/SLUS-20836/compiler-names.tsv` gathers thos
   under its row's profile, writes its `emitted`, `duplicates`, `stripped`, `data`, `anon` and `symbol`, leaves
   out the `externals` and undefined `data` the map binds, and with `--write` replaces the unit's
   unit-objects.json row and regenerates the map (units.tsv is left as it is). The unit that defines a class's
-  members is written first, then the units that call them; `--at` settles two members of one shape (a pair of
-  12-byte getters) and `--partial` a unit that still lacks the source of a function in its range.
+  members is written first, then the units that call them; retail's calls, pointers and vtable words settle
+  members of one shape (two empty virtual slots), `--at` what they leave open (the run names the candidates),
+  and `--partial` a unit that still lacks the source of a function in its range.
 
 ## A unit's own data
 

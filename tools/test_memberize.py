@@ -6,6 +6,7 @@ import re
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import memberize  # noqa: E402
@@ -131,7 +132,21 @@ class Memberize(unittest.TestCase):
         # a receiver declared as a view: its field of the same type is the class's, its virtual goes through it
         self.assertIn("void Widget::attach(struct Ctx *ctx) {\n    _ctx = ctx;\n"
                       "    ((WidgetView *)this)->notify();\n    getCount();\n}", widget)
-        self.assertIn("/* Widget::getClassTypeSafe registers on first use */", widget)
+        # a comment's prose keeps the C name: it is still the symbol's retail name
+        self.assertIn("/* Widget_GetMeta registers on first use */", widget)
+
+    def test_comment_prose_keeps_the_c_name_and_a_code_span_names_the_member(self):
+        # src/game/beNDMWLoadCtrl2.cpp's "kept local: igObjectList_SetCount has no include/dw4 home" had become
+        # "kept local: Gap::Core::igObjectList::setCount has no include/dw4 home"
+        self.append("src/game/Users.inc", "/* kept local: Widget_EnsureRegistered has no include/dw4 home. */\n"
+                                          "// Widget_EnsureRegistered registers the class\n"
+                                          "/* reached through ` Widget_EnsureRegistered ` and `Widget_GetCount` */\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("/* kept local: Widget_EnsureRegistered has no include/dw4 home. */\n"
+                      "// Widget_EnsureRegistered registers the class\n", users)
+        # a code span names the member as code does, unless code still calls the C name (user.c calls GetCount)
+        self.assertIn("/* reached through ` Widget::arkRegister ` and `Widget_GetCount` */", users)
 
     def test_callers(self):
         self.assertEqual(self.run_tool("--apply"), 0)
@@ -659,6 +674,54 @@ class Memberize(unittest.TestCase):
         self.assertEqual(self.run_tool("--apply"), 2)
         self.assertEqual(before, self.read("src/game/Users.inc"))
 
+    def test_operator_new_members_and_their_callers(self):
+        # igObject_AllocateRawStorage / igObject_AllocateRawStorageDefault are the kit's igObject::operator new(size_t,
+        # size_t, igMemoryPool *) pair; the table rows were refused as "neither `Class::name` nor a member signature"
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        self.append("config/class-members.tsv",
+                    "Widget\tstatic void *operator new(unsigned int size, void *memory, void *unused) { return memory; }\n"
+                    "Widget\tstatic void operator delete(void *memory) { Pool_Free(memory); }\n")
+        self.append("src/game/Game.h", "typedef unsigned int size_t;\nstruct Pool;\n"
+                    "extern \"C\" char *Widget_AllocateRawStorage(unsigned int size, unsigned int prefix_size, "
+                    "struct Pool *requested_pool);\n"
+                    "extern \"C\" void *Widget_AllocateRawStorageDefault(unsigned int size, unsigned int prefix);\n")
+        self.append("src/game/Widget.inc",
+                    "char *Widget_AllocateRawStorage(unsigned int size, unsigned int prefix_size, Pool *requested_pool) {\n"
+                    "    if (requested_pool == 0) {\n        return 0;\n    }\n"
+                    "    return (char *)requested_pool + prefix_size;\n}\n\n"
+                    "void *Widget_AllocateRawStorageDefault(unsigned int size,unsigned int prefix)"
+                    "{return Widget_AllocateRawStorage(size,prefix,0);}\n")
+        self.append("src/game/Users.inc", "void *Users_Make(Pool *pool) {\n"
+                                          "    return Widget_AllocateRawStorage(0x34, 0, pool);\n}\n"
+                                          "void *Users_MakeDefault(int size) {\n"
+                                          "    return Widget_AllocateRawStorageDefault(size, 0);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt",
+                    "00100200 000070 Widget_AllocateRawStorage\n00100270 000010 Widget_AllocateRawStorageDefault\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"].update({"Widget_AllocateRawStorage": "0x00100200",
+                                              "Widget_AllocateRawStorageDefault": "0x00100270"})
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        write(self.table, "Widget_AllocateRawStorage\tvoid *Widget::operator new(size_t cSize, size_t allocSize, "
+                          "Pool *mp)\n"
+                          "Widget_AllocateRawStorageDefault\tvoid *Widget::operator new(size_t cSize, size_t allocSize)\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("void *Widget::operator new(unsigned int size, unsigned int prefix_size, Pool *requested_pool) {",
+                      widget)
+        # inside the class the other allocator is called bare
+        self.assertIn("void *Widget::operator new(unsigned int size, unsigned int prefix)"
+                      "{return operator new(size,prefix,0);}", widget)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    return Gap::Game::Widget::operator new(0x34, 0, pool);\n", users)
+        self.assertIn("    return Gap::Game::Widget::operator new(size, 0);\n", users)
+        self.assertNotIn("Widget_AllocateRawStorage", self.read("src/game/Game.h"))
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        self.assertEqual(rows["0x00100000"]["emitted"]["__nw__Q33Gap4Game6WidgetFUiUiP4Pool"], "0x00100200")
+        self.assertEqual(rows["0x00100000"]["emitted"]["__nw__Q33Gap4Game6WidgetFUiUi"], "0x00100270")
+        members = self.read("config/class-members.tsv")
+        self.assertIn("Widget\tstatic void *operator new(size_t cSize, size_t allocSize, Pool *mp);\n", members)
+        self.assertIn("Widget\tstatic void *operator new(size_t cSize, size_t allocSize);\n", members)
+
     def test_a_key_naming_a_class_converted_since_as_flat_is_renamed(self):
         # igImage::platformLoad(igFile *) was keyed `…FP6igFile` while igFile was flat; once igFile is a Gap
         # class, the compiler names it `…FPQ33Gap4Core6igFile`
@@ -676,6 +739,36 @@ class Memberize(unittest.TestCase):
         self.assertEqual(rows["0x00400000"]["emitted"], {"load__Q33Gap4Game6GadgetFPQ33Gap4Game6Widget": "0x00400010",
                                                          "keep__Q33Gap4Game6GadgetFP6Widget": "0x00400020"})
         self.assertEqual(memberize.main(["--check", "--root", self.root]), 0)
+
+    def test_a_template_instance_naming_a_class_converted_since_is_renamed_from_the_object(self):
+        # 0x1493e0 placed `__dt__32igSmartPointer<14igVertexStream>Fv` at 0x14aaf0; once igVertexStream converted, the
+        # unit's members (in Gap::Gfx) instantiate igSmartPointer<Gap::Gfx::igVertexStream>, and --rekey left the
+        # key. Another unit still destroys a flat igSmartPointer<igObject>: only the objects tell them apart.
+        write(os.path.join(self.root, "config", "converted-classes.tsv"),
+              "igObject\tCore\nigVertexStream\tGfx\nigVertexArray2Helper\tGfx\nigMediaFile\tCore\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"]["__dt__32igSmartPointer<14igVertexStream>Fv"] = "0x0014aaf0"
+        rows["0x00100000"]["stripped"] = ["__dt__25igSmartPointer<8igObject>Fv",
+                                          "__dt__38igSmartPointer<20igVertexArray2Helper>Fv"]
+        rows["0x00400000"]["emitted"] = {"__dt__25igSmartPointer<8igObject>Fv": "0x00400010",
+                                         "getElementMeta__Q33Gap4Core28igTObjectList<11igMediaFile>CFv": "0x00400020"}
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        objects = {
+            "0x00100000": {"__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv", "__dt__25igSmartPointer<8igObject>Fv",
+                           "__dt__48igSmartPointer<Q33Gap3Gfx20igVertexArray2Helper>Fv"},
+            "0x00400000": {"__dt__25igSmartPointer<8igObject>Fv",
+                           "getElementMeta__Q33Gap4Core39igTObjectList<Q33Gap4Core11igMediaFile>CFv"}}
+        with mock.patch.object(memberize, "unit_object_names", lambda root, unit, row: objects[unit], create=True):
+            self.assertEqual(memberize.main(["--rekey", "--apply", "--root", self.root]), 0)
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        emitted = rows["0x00100000"]["emitted"]
+        self.assertEqual(emitted.get("__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv"), "0x0014aaf0")
+        self.assertNotIn("__dt__32igSmartPointer<14igVertexStream>Fv", emitted)
+        self.assertEqual(rows["0x00100000"]["stripped"], ["__dt__25igSmartPointer<8igObject>Fv",
+                                                          "__dt__48igSmartPointer<Q33Gap3Gfx20igVertexArray2Helper>Fv"])
+        self.assertEqual(rows["0x00400000"]["emitted"], {
+            "__dt__25igSmartPointer<8igObject>Fv": "0x00400010",
+            "getElementMeta__Q33Gap4Core39igTObjectList<Q33Gap4Core11igMediaFile>CFv": "0x00400020"})
 
 
 class Helpers(unittest.TestCase):

@@ -1207,6 +1207,22 @@ def solve_gp(text, relocs, resolve, retail, base_va):
     return None, len(gps)
 
 
+def unowned_contents(syms, headers, indices):
+    """`name (section, N bytes)` of each symbol the object defines in the sections `indices`, in section and
+    address order; a section no symbol names is `section (N bytes)` itself. What an emitted object holds that its
+    row does not own: a member, datum or table the row leaves out."""
+    names = {name for name, _ in headers}
+    out = []
+    for index in sorted(indices):
+        section, header = headers[index]
+        defined = sorted((value, name, size) for name, (home, value, size) in syms.items()
+                         if home == index and name not in names and not name.startswith("."))
+        out += ["%s (%s, %d bytes)" % (name, section, size) for _value, name, size in defined]
+        if not defined:
+            out.append("%s (%d bytes)" % (section, header[5]))
+    return out
+
+
 def defined_outside(syms, headers, spans, exempt=()):
     """Defined symbols whose name stands for an address outside the object's own bodies.
 
@@ -1731,7 +1747,9 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
                              "table refers to it")
         if (allocated != sections | auxiliary or executable != sections
                 or named_text != sections):
-            raise ValueError("unowned code or runtime data in emitted object")
+            stray = (allocated - sections - auxiliary) | (executable - sections) | (named_text - sections)
+            detail = ", ".join(unowned_contents(syms, headers, stray))
+            raise ValueError("unowned code or runtime data in emitted object" + (": " + detail if detail else ""))
         for alias, address in aliases.items():
             if alias in syms and syms[alias][0] != "UND":
                 raise ValueError(f"external alias {alias} is defined by the object")

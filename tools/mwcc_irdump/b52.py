@@ -22,6 +22,25 @@ NODE_LIST = 0x5B64E4           # head of the IR node list
 COMMON_SUBS = 0x532920         # IRO_CommonSubs
 NODE_EQUAL_FLAGS = 0x4F9D1B    # in the node comparison: node kinds and type bytes are equal, nodeflags compared next
 NODE_EQUAL_TYPES = 0x4F9D45    # in the node comparison: just after the IRO_TypesEqual(rtype) call, result in al
+# IRO_CommonSubs (0x532920) groups the expressions (0x531e70), computes which groups are available on entry to each
+# flow node (0x531f50), then decides, walking each flow node in order (0x5322e0, 0x532670), which occurrences reuse
+# a value computed before and which compute it, gives the computations whose value is reused a temporary, one per
+# connected set (0x532770), and finally replaces the reuses by the temporary (0x532850).
+# Grouping walks the expressions in flow order and compares each, through GROUP_MATCH(expr, group list) -> al, with
+# the LATEST member of every group in creation order: the first match adds it to that group through
+# GROUP_ADD(expr, index); no match opens a new group (index = the group count).
+GROUP_MATCH = 0x531DB0
+GROUP_ADD = 0x531E10
+SHARE_KILLS = 0x532505   # 0x5322e0 after an IR node's kills are known: ebp the node, [esp+0x10] its flow node, the
+KILLED = 0x5B4DEC        # groups it kills the bit vector at *KILLED (bit vector: word count, then the words)
+SHARE_DONE = 0x532949    # IRO_CommonSubs before the replacement phase: the decisions below are all made
+FLOW_HEAD = 0x5B63D4     # first flow node
+FLOW_INDEX, FLOW_FIRST, FLOW_LAST, FLOW_NEXT = 0, 0x10, 0x14, 0x30   # u16 index; first and last IR node; next
+NODE_EXPR, NODE_ROLE = 0x18, 0x20  # an IR node's expression record; its role byte: 0 reuses a value computed earlier in
+#                                    its flow node, 1 computes it again after a kill there, 2 first in its flow node
+# expression record: its IR node, the temporary of a computation whose value is reused, its group index, the list of
+# computations a reuse takes its value from (cells (expr, next)), and whether the group was available on entry
+EXPR_NODE, EXPR_TEMP, EXPR_GROUP, EXPR_SOURCES, EXPR_ENTRY = 6, 0x0A, 0x16, 0x1A, 0x1E
 
 # IR node fields (offsets into a node)
 NODE_KIND, NODE_TYPE, NODE_FLAGS, NODE_INDEX, NODE_RTYPE, NODE_NEXT = 0, 1, 6, 8, 0x10, 0x38

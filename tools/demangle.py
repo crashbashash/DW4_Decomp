@@ -560,11 +560,9 @@ def _split_scope(text):
     return parts
 
 
-def _demangle_at(mangled, split):
-    """The reading of `mangled` with its name ending at `split` (where its `__` starts), or None."""
-    head, reader = mangled[:split], _Reader(mangled[split + 2:])
-    if not head:
-        return None
+def _read_tail(text):
+    """(scope, const, params) of the encoding after a name's `__` (params None for a datum), or None."""
+    reader = _Reader(text)
     scope, const, params = (), False, None
     try:
         if reader.peek() in ("Q",) or reader.peek().isdigit():
@@ -581,6 +579,15 @@ def _demangle_at(mangled, split):
             return None
     except MangleError:
         return None
+    return scope, const, params
+
+
+def _demangle_at(mangled, split):
+    """The reading of `mangled` with its name ending at `split` (where its `__` starts), or None."""
+    head, tail = mangled[:split], _read_tail(mangled[split + 2:])
+    if not head or tail is None:
+        return None
+    scope, const, params = tail
     special = None
     class_parts = scope
     namespace_parts = ()
@@ -631,6 +638,49 @@ def demangle(mangled):
             return found
         at = mangled.find("__", at + 1)
     return None
+
+
+def _map_type(t, fn, depth):
+    kind = t[0]
+    if kind == "named":
+        return ("named", _map_scope(t[1], fn, depth))
+    if kind in ("ptr", "ref"):
+        return (kind, _map_type(t[1], fn, depth))
+    if kind in ("cv", "array"):
+        return (kind, t[1], _map_type(t[2], fn, depth))
+    if kind == "func":
+        return ("func", _map_type(t[1], fn, depth), tuple(_map_type(p, fn, depth) for p in t[2]))
+    if kind == "member":
+        return ("member", _map_scope(t[1], fn, depth), _map_type(t[2], fn, depth))
+    return t
+
+
+def _map_scope(scope, fn, depth):
+    inner = tuple((identifier, None if args is None else tuple(
+        a if isinstance(a, int) else _map_type(a, fn, depth + 1) for a in args)) for identifier, args in scope)
+    return fn(inner, depth)
+
+
+def map_scopes(mangled, fn):
+    """`mangled` written again with each scope it names passed through `fn(scope, depth)` -> scope: its own
+    class's and namespaces', a parameter's class, a template argument's (`depth` the number of template argument
+    lists around it). A scope is a tuple of (identifier, template arguments or None) segments: `(("Gap", None),
+    ("Core", None), ("igFile", None))`. None for a name that is not a compiler name."""
+    if demangle(mangled) is None:
+        return None
+    start = 2 if mangled.startswith("__") else 1
+    at = mangled.find("__", start)
+    while _demangle_at(mangled, at) is None:
+        at = mangled.find("__", at + 1)
+    scope, const, params = _read_tail(mangled[at + 2:])
+    out = mangled[:at] + "__"
+    if scope:
+        out += _encode_scope(_map_scope(scope, fn, 0))
+    if const:
+        out += "C"
+    if params is not None:
+        out += "F" + _encode_params(tuple(_map_type(p, fn, 0) for p in params))
+    return out
 
 
 def _name_code(name, scope_segments):

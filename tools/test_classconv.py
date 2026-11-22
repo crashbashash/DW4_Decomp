@@ -126,6 +126,34 @@ class TextTest(unittest.TestCase):
         self.assertNotIn("    b();", new)
         self.assertEqual(cc.replace_member(text, "igFoo", "void removeInfo(int);", "x"), (text, False))
 
+    def test_a_member_overload_beside_a_static_one_behind_a_comment_naming_it(self):
+        # igVertexArray2Helper_tail.inc after GfxVertex2's memberize: the comment before slot 25 names the static
+        # getIndexCount with a parenthesis after it, and the splice reported MISSING for `getIndexCount()`
+        text = ("unsigned int igVertexArray2Helper::getWeightCount()\n{\n}\n\n"
+                "/* Same as slot 24 for the stream with component type 6, index 0: looks it up with\n"
+                " * Gap::Gfx::igVertexArray2::findVertexData and passes it to "
+                "Gap::Gfx::igVertexArray2Helper::getIndexCount (same shape as "
+                "Gap::Gfx::igVertexArray2Helper::getWeightCount with\n"
+                " * fewer data-list classes), whose component count is left in v0. The declared return type is "
+                "void. */\n\n"
+                "unsigned igVertexArray2Helper::getIndexCount()\n{\n}\n\n"
+                "unsigned int igVertexArray2Helper::getIndexCount(const igVertexData *indexVertexData)\n{\n"
+                "    return 0;\n}\n")
+        member = "unsigned int getIndexCount()"
+        static = "static unsigned int getIndexCount(const igVertexData *indexVertexData)"
+        body = "unsigned int igVertexArray2Helper::getIndexCount()\n{\n    return getIndexCount(find());\n}"
+        new, ok = cc.replace_member(text, "igVertexArray2Helper", member, body)
+        self.assertTrue(ok)
+        self.assertIn(" * fewer data-list classes), whose component count is left in v0. The declared return type "
+                      "is void. */\n\n" + body + "\n\nunsigned int igVertexArray2Helper::getIndexCount(const "
+                      "igVertexData *indexVertexData)\n{\n    return 0;\n}\n", new)
+        static_body = ("unsigned int igVertexArray2Helper::getIndexCount(const igVertexData *indexVertexData)\n{\n"
+                       "    return 3;\n}")
+        new, ok = cc.replace_member(new, "igVertexArray2Helper", static, static_body)
+        self.assertTrue(ok)
+        self.assertTrue(new.endswith(body + "\n\n" + static_body + "\n"))
+        self.assertEqual(sorted(cc.fragment_pieces(text, "igVertexArray2Helper")), ["getIndexCount", "getWeightCount"])
+
     def test_array_spec(self):
         spec = cc.array_spec("igCharArrayMetaField", "igCharMetaField", "char", "index")
         self.assertIn("void setDefault(unsigned int index, char val);", spec["rows"])
@@ -291,6 +319,24 @@ class TreeTest(unittest.TestCase):
             cc.step_tables(self.tree, ["igFile"], {"igFile": dict(specs["igFile"], add=False)})
         with self.assertRaises(cc.ConvError):
             cc.step_tables(self.tree, ["igFolder"], {"igFolder": dict(add=True, rows=[])})
+
+    def test_adding_a_row_the_table_has_under_another_label(self):
+        # CoreFiles2's igFolder spec repeats getPathToFile without the `public:` the table's row carries
+        table = ("igFolder\tIG_OBJECT_DEFINE(igFolder)\nigFolder\tprotected: static igMetaField *k_folderName;\n"
+                 "igFolder\tpublic: virtual igStringObjRef getPathToFile(const char *fileName) const;\n"
+                 "igFolder\tvirtual igSmartPointer<igStringRefList> getFiles() const;\n")
+        self.tree.write("config/class-members.tsv", table)
+        rows = ["IG_OBJECT_DEFINE(igFolder)",
+                "protected: static igMetaField *k_folderName;",
+                "public: inline void setFolderName(const char *folderNameParam) { _folderName = folderNameParam; }",
+                "inline const char *getFolderName() const { return _folderName.p; }",
+                "void appendRelativePath(const char *subdir);",
+                "virtual igStringObjRef  getPathToFile(const char *fileName) const;"]
+        self.assertEqual(self.tree.add_rows("config/class-members.tsv", "igFolder", rows), rows[2:5])
+        lines = self.tree.read("config/class-members.tsv").splitlines()
+        self.assertEqual(lines, table.splitlines()[:2] + ["igFolder\t" + r for r in rows[2:5]]
+                         + table.splitlines()[2:])
+        self.assertEqual(self.tree.add_rows("config/class-members.tsv", "igFolder", rows), [])
 
     def test_rekey_finds_the_unit(self):
         self.assertEqual(self.tree.rekey([("igFooMetaField_Init", "__ct__Q33Gap4Core14igFooMetaFieldFv"),

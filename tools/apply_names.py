@@ -11,10 +11,13 @@ For every overlay entry whose name differs from `config/SLUS-20836/symbols.txt`:
   1. rewrite each reference to `<old>` as `<new>` in every source, header and `.inc`
      fragment under `src/` and `include/`, which covers the definition, every
      declaration and every call site, in the function column of
-     `config/source-approvals.tsv` and `config/assembly-sources.tsv`, and in the
+     `config/source-approvals.tsv` and `config/assembly-sources.tsv`, in the
      `emitted`/`duplicates`/`externals` keys and `symbol` of
      `config/SLUS-20836/unit-objects.json` (by address: a key is renamed only when the
-     address it holds is the renamed function's);
+     address it holds is the renamed function's), and in the subject documents of
+     `docs/` (`config/doc-subjects.txt`, the documents that may name functions, which
+     `scripts/check_doc_function_names.py` holds to the symbol table); a method
+     document names no function, so one naming an old name is left as it is and listed;
   2. move a one-function unit to `src/<module>/` (the overlay's third column);
   3. delete the stale `asm/<old>.s`;
   4. regenerate `config/SLUS-20836/symbols.txt` and `asm/` with `tools/split.py`, which also
@@ -29,7 +32,9 @@ around each occurrence and leaves alone what is not one:
     macro name, and a local, parameter or file `static` of the same name together
     with every use inside its scope;
   * comment words, when the old name is also an ordinary identifier or a plain
-    lower-case word.
+    lower-case word. Any other comment word of the old name is renamed: the batch
+    takes the old name out of the symbol table, so a comment keeping it would name
+    nothing (tools/memberize.py, whose C names stay retail names, leaves comments be).
 
 It refuses the batch, before writing anything, when:
 
@@ -67,6 +72,7 @@ from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
 import asmsources  # noqa: E402
 import split  # noqa: E402  (tools/split.py — load_names/sanitize are the name rules)
@@ -612,25 +618,38 @@ def rename_unit_objects(data, renamed):
     return count, errors
 
 
-def rewrite_documents(docs, renamed):
-    """Rewrite each renamed function's old name as its new one in the Markdown under `docs` (one pass,
-    so a swap never renames its own result) -> the number of names rewritten. A document names a
-    function by its symbol (scripts/check_doc_function_names.py holds it to the symbol table)."""
+def document_renames(tree, renamed):
+    """The Markdown under `tree`/docs with each renamed function's old name as its new one -> ({path: new text},
+    number of names rewritten, [(document, old name)] of the method documents naming one).
+
+    Only a subject document (config/doc-subjects.txt) names functions, and scripts/check_doc_function_names.py holds
+    its names to the symbol table, so its names follow the batch (one pass, so a swap never renames its own
+    result). A method document names no function: a renamed name in one stays as it is (the check reports a
+    `FUN_` placeholder there either way) and is listed, for its author to describe the shape instead."""
+    import check_doc_function_names
     sub = {old: new for old, new in renamed.values() if "_" in old}
+    docs = os.path.join(tree, "docs")
     if not sub or not os.path.isdir(docs):
-        return 0
+        return {}, 0, []
+    subjects_path = os.path.join(tree, "config", "doc-subjects.txt")
+    subjects = check_doc_function_names.load_subjects(subjects_path) if os.path.exists(subjects_path) else {}
     pattern = re.compile(r"\b(?:%s)\b" % "|".join(re.escape(o) for o in sorted(sub, key=len, reverse=True)))
-    count = 0
+    out, count, mentions = {}, 0, []
     for root, _dirs, files in os.walk(docs):
-        for f in files:
-            if f.endswith(".md"):
-                path = os.path.join(root, f)
-                text = open(path).read()
-                new, n = pattern.subn(lambda m: sub[m.group(0)], text)
-                if n:
-                    open(path, "w").write(new)
-                    count += n
-    return count
+        for f in sorted(files):
+            if not f.endswith(".md"):
+                continue
+            path = os.path.join(root, f)
+            rel = os.path.relpath(path, tree).replace(os.sep, "/")
+            text = open(path, errors="surrogateescape").read()
+            if rel not in subjects:
+                mentions.extend((rel, name) for name in sorted(set(pattern.findall(text))))
+                continue
+            new, n = pattern.subn(lambda m: sub[m.group(0)], text)
+            if n:
+                out[path] = new
+                count += n
+    return out, count, mentions
 
 
 # ---------------------------------------------------------------------------------------------
@@ -984,6 +1003,7 @@ def main(argv=None):
         uo_data = json.load(open(unit_objects))
         uo_count, errs = rename_unit_objects(uo_data, renamed)
         errors += errs
+    doc_texts, docs_count, doc_mentions = document_renames(tree, renamed)
 
     print("apply_names: %d/%d entries rename something (%d units to move, %d new asm labels)"
           % (len(renames), len(names), len(moves), len(renames)))
@@ -993,14 +1013,17 @@ def main(argv=None):
         print("  0x%08x  %-28s -> %-32s %s" % (va, old, new, where))
     if len(renames) > 40:
         print("  ... and %d more" % (len(renames) - 40))
-    print("%d source files to rewrite, %d unit-objects.json keys to rename"
-          % (len(new_texts), uo_count))
+    print("%d source files to rewrite, %d unit-objects.json keys to rename, %d subject documents to rewrite"
+          % (len(new_texts), uo_count, len(doc_texts)))
     for path in sorted(new_texts)[:40]:
         print("  " + os.path.relpath(path, tree))
     if len(new_texts) > 40:
         print("  ... and %d more" % (len(new_texts) - 40))
     for n in notes:
         print("note: " + n)
+    for doc, name in doc_mentions:
+        print("note: %s is a method document and names %s (renamed %s): it is left as it is; describe the shape "
+              "instead of naming the function (scripts/check_doc_function_names.py)" % (doc, name, sub[name]))
     for e in errors:
         print("error: " + e, file=sys.stderr)
     if errors:
@@ -1038,9 +1061,10 @@ def main(argv=None):
     if uo_count:
         with open(unit_objects, "w") as fh:
             fh.write(json.dumps(uo_data, indent=2) + "\n")
-    docs_count = rewrite_documents(os.path.join(os.path.dirname(os.path.abspath(a.src)), "docs"), renamed)
+    for path, text in doc_texts.items():
+        open(path, "w", errors="surrogateescape").write(text)
     if docs_count:
-        print("rewrote %d function names in docs/" % docs_count)
+        print("rewrote %d function names in the subject documents of docs/" % docs_count)
 
     # 2. move each one-function unit to its module folder (through temporary names, so a
     #    swap of two units never finds its destination taken)

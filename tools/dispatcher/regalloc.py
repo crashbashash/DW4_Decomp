@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""regalloc.py FUNCTION_OR_VA CANDIDATE.c[pp] [--flags "..."] [--compiler EXE] [--max-pool N] [--show-all] [--no-edits]
-             [--edit-pool N] [--edit-show N] [--edit-depth 1|2]
+"""regalloc.py FUNCTION_OR_VA CANDIDATE.c[pp] [--as MEMBER] [--flags "..."] [--compiler EXE] [--max-pool N] [--show-all]
+             [--no-edits] [--edit-pool N] [--edit-show N] [--edit-depth 1|2]
 
 Register-colouring diagnosis for ANY single function (the general entry point of the tools in this folder).
 
 What it does, in order:
-  1. resolves the function (a symbol name from config/SLUS-20836/symbols.txt, or a VA such as 0x1c5870) and picks the compiler and flags the
-     build uses for it (its config/SLUS-20836/units.tsv profile or a provisional per-function row; --flags/--compiler override), then
-     runs tools/verify.py on the candidate and prints its instruction diff, aligned so that one extra or missing instruction does
-     not shift every later pair (a whole-file candidate works: the colouring pass that fits the function is used);
+  1. resolves the function (a symbol name from config/SLUS-20836/symbols.txt, a VA such as 0x1c5870, or a member the
+     compiler-name map binds: its compiler name or `Class::method`) and picks the compiler and flags the build uses for it (its
+     config/SLUS-20836/units.tsv profile or a provisional per-function row; --flags/--compiler override), then runs
+     tools/verify.py on the candidate and prints its instruction diff, aligned so that one extra or missing instruction does
+     not shift every later pair. The function is compared on its own, outside its unit row, so the candidate may be the whole
+     file (the colouring pass that fits the function is used) or a test file with just the function; it is looked up under
+     the name the build binds, or under --as MEMBER (a compiler name, or `Class::method` read from the compiled candidate)
+     when the candidate defines it as a member the build does not bind yet;
   2. compiles the candidate once more under a debugger that instruments the compiler's graph colouring (regalloc_trace.py; no
      file of the compiler is modified) and takes, for the last general-register colouring pass that belongs to the emitted code,
      the interference graph, the push order and the IR;
@@ -16,13 +20,17 @@ What it does, in order:
      tells which of those nodes would have to get which register to reproduce retail (for each differing register pair: the node
      id, what it is, cost, degree, the neighbours that decided it, and the push order around it);
   4. replays simplify/select on the graph (regalloc_sim.py rules; the replay is checked against the compiler's own result) and
-     SUGGESTS: it searches permutations of the node ids of the nodes involved (the id order is the scan order of simplify, the only
-     thing a declaration change moves) for an order whose replay gives retail's colours, and prints the order together with what
-     each node is, so that the declarations can be arranged accordingly;
+     SUGGESTS: it searches permutations of the node ids of the nodes involved and of their most related neighbours, up to
+     --max-pool nodes (the id order is the scan order of simplify, the only thing a declaration change moves: a neighbour
+     whose id comes below an involved node's is pushed before that node is scanned and lowers its degree) for an order whose
+     replay gives retail's colours, the ones that leave the parameters' ids in place first, and prints the order together
+     with what each node is, so that the declarations can be arranged accordingly;
   5. searches single graph edits (doldecomp/sms AGENT_MATCHING_TIPS, "Replay the allocator when only registers differ"): renumber
-     a node below/above another, merge two nodes (lower id kept, as b52's coalescer does), delete a node, add an interference,
-     add k neighbours, split a coalesced node off its survivor; pairs of edits when no single one is enough. Each edit that gives
-     retail's colours is printed with the nodes' guessed source names (declaration order) and the nodes coalesced into them.
+     a node below/above another (an involved node or one of its neighbours, and the same neighbour move made at once for each
+     of a set of involved nodes that must change alike: the repeated code of one construct), merge two nodes (lower id kept,
+     as b52's coalescer does), delete a node, add an interference, add k neighbours, split a coalesced node off its survivor;
+     pairs of edits when no single one is enough. Each edit that gives retail's colours is printed with the nodes' guessed
+     source names (declaration order) and the nodes coalesced into them.
 
 How the ids come about (use it to turn a suggested order into a source change; see docs/engine/register-allocation.md):
   * function-level variables and parameters take ids from their position in the declaration block (parameters first);
@@ -54,19 +62,109 @@ USE, DEF = 1, 2             # IR operand flag bits
 
 
 # ----------------------------------------------------------------------------------------------------------- verify + asm
+SYMBOLS = os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt")
+
+
+def member_names(spec, names):
+    """The compiler names among `names` that `spec` denotes: the name itself, or a member function spelled
+    `[Scope::]Class::method` (any trailing part of its qualified name) or `...::method(params)` (its signature)."""
+    from demangle import demangle
+    if spec in names:
+        return [spec]
+    want = spec.replace(" ", "")
+    out = []
+    for n in names:
+        d = demangle(n)
+        if d is None or d.data:
+            continue
+        full = (d.signature if "(" in want else d.qualified).replace(" ", "")
+        if full == want or full.endswith("::" + want):
+            out.append(n)
+    return sorted(out)
+
+
 def resolve(spec):
-    """-> (va, name, size)"""
-    import verify
-    by_name, by_va = verify.load_symbols(os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt"))
+    """-> (va, name, size, compiler name or None): `spec` is a symbols.txt name, a VA, or a member the compiler-name map
+    binds (its compiler name, or `Class::method` matched through tools/demangle.py)."""
+    import verify, compiler_names
+    by_name, by_va = verify.load_symbols(SYMBOLS)
     if spec in by_name:
-        return by_name[spec][0], spec, by_name[spec][1]
+        return by_name[spec][0], spec, by_name[spec][1], None
     try:
         va = int(spec, 16)
     except ValueError:
         va = None
     if va in by_va:
-        return va, by_va[va][0], by_va[va][1]
-    raise SystemExit("unknown function %r (not in config/SLUS-20836/symbols.txt)" % spec)
+        return va, by_va[va][0], by_va[va][1], None
+    bound = compiler_names.load(SYMBOLS)
+    hits = member_names(spec, bound)
+    if len(hits) > 1:
+        raise SystemExit("%r names %d members: %s" % (spec, len(hits), ", ".join(hits)))
+    if not hits:
+        raise SystemExit("unknown function %r: not in config/SLUS-20836/symbols.txt nor in the compiler-name map; a member "
+                         "the build does not bind yet is given as its retail function with --as %s" % (spec, spec))
+    va = bound[hits[0]][0]
+    return va, by_va[va][0], by_va[va][1], hits[0]
+
+
+def binding(va, name):
+    """The name the build compiles the function at `va` under: its unit row's key (the owner's `symbol`, or the emitted
+    member's compiler name), else its symbols.txt name."""
+    import unitobjects
+    group = unitobjects.group_for(va, None)
+    if group is None:
+        return name
+    if va == group.owner:
+        return group.symbol or name
+    return next(n for n, address in group.emitted if address == va)
+
+
+def defined_as(spec, cand, exe, flags):
+    """The compiler name the candidate defines `spec` (a compiler name, or `Class::method` read from the compiled
+    candidate's functions) under."""
+    import cc, verify
+    from demangle import demangle
+    if demangle(spec) is not None:
+        return spec
+    obj = os.path.join(cc.scratch_dir(), "regalloc-candidate.o")
+    r = subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, exe, flags, cand, obj), cwd=ROOT, capture_output=True,
+                       text=True, env=dict(os.environ, MWCIncludes=os.path.dirname(cand)))
+    if not os.path.exists(obj):
+        raise SystemExit("the candidate does not compile:\n" + (r.stdout + r.stderr)[-1500:])
+    syms, sections = verify.object_syms(obj)
+    hits = member_names(spec, [n for n, (ndx, _value, size) in syms.items() if sections.get(ndx) == ".text" and size])
+    if len(hits) != 1:
+        raise SystemExit("the candidate defines %s for %r" % (", ".join(hits) if hits else "no function", spec))
+    return hits[0]
+
+
+def standalone_inputs(va, name, defined):
+    """verify.verify_one's `unit_objects` and `symbols` that compare the function at `va` on its own, as the candidate
+    `defined` it: the unit-objects table without the function's unit row (a whole-file candidate's other functions are
+    then notes, a one-function candidate is not its whole unit), and, when the candidate's name is not symbols.txt's,
+    a copy of config/SLUS-20836 (links) whose symbols.txt gives the function that name."""
+    import json, cc, unitobjects
+    tmp = os.path.join(cc.scratch_dir(), "regalloc-config")
+    os.makedirs(tmp, exist_ok=True)
+    group = unitobjects.group_for(va, None)
+    rows = json.loads(unitobjects.resolve_path(unitobjects.DEFAULT_PATH).read_text())
+    table = os.path.join(tmp, "unit-objects.json")
+    with open(table, "w") as fh:
+        json.dump({k: v for k, v in rows.items() if not group or int(k, 0) != group.owner}, fh)
+    symbols = SYMBOLS
+    if defined != name:
+        config = os.path.dirname(SYMBOLS)
+        for entry in os.listdir(config):
+            if entry != "symbols.txt" and not os.path.lexists(os.path.join(tmp, entry)):
+                os.symlink(os.path.join(config, entry), os.path.join(tmp, entry))
+        symbols = os.path.join(tmp, "symbols.txt")
+        with open(SYMBOLS) as src, open(symbols, "w") as out:
+            for line in src:
+                f = line.split()
+                if len(f) >= 3 and not line.startswith("#") and int(f[0], 16) == va:
+                    line = " ".join([f[0], f[1], defined] + f[3:]) + "\n"
+                out.write(line)
+    return table, symbols
 
 
 def build_profile(va):
@@ -75,8 +173,7 @@ def build_profile(va):
     import verify, unitobjects, unitprofiles
     group = unitobjects.group_for(va, None)
     owner = group.owner if group else va
-    res = unitprofiles.resolve(owner, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT,
-                               symbols=os.path.join(ROOT, "config", "SLUS-20836", "symbols.txt"))
+    res = unitprofiles.resolve(owner, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT, symbols=SYMBOLS)
     profile = res.override or res.profile
     return profile.compiler, unitprofiles.command_flags(profile)
 
@@ -194,6 +291,15 @@ def align(ir, asm):
     return pairs, score
 
 
+def tie(nodes, ro, rr, pr, fin):
+    """The virtual nodes of one aligned IR instruction (`nodes`, in IR operand order) that must take another register, with the
+    register: by position when the nodes' colours (`fin`) read as ours's registers `ro` in order, else (the IR lists the
+    operands in another order) through the colour ours used for each differing pair of `pr`. -> [(node, retail register)]"""
+    if [REGNAME.get(fin.get(nd) if nd >= 32 else nd) for nd in nodes] == ro:
+        return [(nodes[j], rr[j]) for j in range(len(ro)) if ro[j] != rr[j] and nodes[j] >= 32]
+    return [(nd, y) for x, y in pr for nd in nodes if nd >= 32 and REGNAME.get(fin.get(nd)) == x]
+
+
 # ------------------------------------------------------------------------------------------------------------- replay
 def relabel(adj, perm):
     """perm: {old id: new id} for a subset of nodes (a permutation of their ids)"""
@@ -230,6 +336,25 @@ def kendall(a, b):
     pos = {n: i for i, n in enumerate(b)}
     seq = [pos[n] for n in a]
     return sum(1 for i in range(len(seq)) for j in range(i + 1, len(seq)) if seq[i] > seq[j])
+
+
+def neighbours(adj, cost, involved):
+    """The virtual neighbours of the `involved` nodes, most relevant first: next to more involved nodes, then those simplify
+    can push in its first scan (degree below K: pushed before an involved node is scanned, one lowers that node's degree), then
+    by cost and by degree."""
+    near = {}
+    for m in involved:
+        for o in adj[m]:
+            if o >= 32 and o not in involved:
+                near[o] = near.get(o, 0) + 1
+    return sorted(near, key=lambda o: (-near[o], len(adj[o]) >= sim.K, -cost.get(o, 0), -len(adj[o]), o))
+
+
+def rank_orders(sols, pool, fixed):
+    """The solutions of `search` over `pool`, the realisable ones first: the ones that keep every `fixed` node (a parameter:
+    parameters take the first ids, in declaration order) in its slot, then the nearest to the current order."""
+    slots = sorted(pool)
+    return sorted(sols, key=lambda o: (any(n in fixed and n != s for s, n in zip(slots, o)), kendall(o, slots)))
 
 
 def search(adj, cost, want, pool, limit=40000, seed=1):
@@ -322,13 +447,47 @@ def candidate_edits(adj, cost, rel, want, alias, pre_adj, nmove=12, step=0.5):
         yield "split", (m, r), a2, c2, None
 
 
-def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, depth=1):
+def neighbour_edits(adj, cost, involved, col, want, step=0.5):
+    """Yield, as candidate_edits does, the renumber edits that move a neighbour of an involved node just below or above it, for
+    every virtual neighbour of every involved node (simplify scans in id order, so a neighbour pushed before an involved node is
+    scanned lowers that node's degree); and the same move made at once for each of a set of siblings, involved nodes that must
+    change from one colour (`col`) to one other (`want`), each with exactly one neighbour of a given cost and degree (one
+    source construct repeated, such as the count of each of three list appends): kind "renumber each", args
+    (((n, m), ...), side)."""
+    for m in involved:
+        for n in sorted(o for o in adj[m] if o >= 32 and o not in involved):
+            for side in (-1, 1):
+                new = m + step * side
+                yield ("renumber", (n, m, side), relabel(adj, {n: new}), {(new if i == n else i): c for i, c in cost.items()},
+                       {n: new})
+    siblings = {}
+    for m in involved:
+        siblings.setdefault((col.get(m), want.get(m)), []).append(m)
+    for ms in siblings.values():
+        alike = {}
+        for m in ms:
+            for n in adj[m]:
+                if n >= 32 and n not in involved:
+                    alike.setdefault((cost.get(n, 0), len(adj[n])), {}).setdefault(m, []).append(n)
+        for _sig, per in sorted(alike.items(), key=lambda e: (-e[0][0], -e[0][1])):
+            pairs = tuple((per[m][0], m) for m in ms if len(per.get(m, ())) == 1)
+            if len(ms) < 2 or len(pairs) < len(ms) or len({n for n, _m in pairs}) < len(pairs):
+                continue
+            for side in (-1, 1):
+                perm = {n: m + step * side for n, m in pairs}
+                yield ("renumber each", (pairs, side), relabel(adj, perm), {perm.get(i, i): c for i, c in cost.items()},
+                       perm)
+
+
+def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, depth=1, fixed=()):
     """Graph edits around the `involved` nodes. -> (base score, total, [(score, [(kind, args), ...])]) where score counts the
-    constrained nodes of `want` ({node: colour}) that get their colour, best first. Kinds: delete (n), merge (a, b: one web,
-    id min(a, b)), split (m, r: undo the coalescing of m into r; args gain whether both then get one colour), degree (n, k
-    phantom neighbours), edge (a, b: make them interfere), renumber (n, m, -1/+1: n's id just below/above m's). depth=2 also
-    applies each of the best 12 single edits and searches one more edit on the result when no single edit is a full solution
-    (only full solutions are kept)."""
+    constrained nodes of `want` ({node: colour}) that get their colour, best first, and among equals the edits that renumber
+    none of the `fixed` nodes (parameters: their ids come from their position) first. Kinds: delete (n), merge (a, b: one
+    web, id min(a, b)), split (m, r: undo the coalescing of m into r; args gain whether both then get one colour), degree
+    (n, k phantom neighbours), edge (a, b: make them interfere), renumber (n, m, -1/+1: n's id just below/above m's; n is an
+    involved node or one of the edit pool, or a neighbour of m), renumber each (((n, m), ...), -1/+1: each n's id just
+    below/above its m's at once; see neighbour_edits). depth=2 also applies each of the best 12 single edits and searches
+    one more edit on the result when no single edit is a full solution (only full solutions are kept)."""
     total = len(want)
 
     def score(a2, c2, w, idmap=None):
@@ -336,35 +495,38 @@ def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, de
         f = (idmap or {}).get
         return sum(1 for nd, c in w.items() if col.get(f(nd, nd) if idmap else nd) == c), col
 
-    def related(a, inv):
-        near = {}
-        for nd in inv:
-            for o in a[nd]:
-                if o >= 32 and o not in inv:
-                    near[o] = near.get(o, 0) + 1
-        return list(inv) + sorted(near, key=lambda o: (-near[o], -cost.get(o, 0), o))[:max(0, pool - len(inv))]
+    def related(a, c, inv):
+        return list(inv) + neighbours(a, c, inv)[:max(0, pool - len(inv))]
 
-    base, _ = score(adj, cost, want)
-    out, firsts = [], []
-    for kind, args, a2, c2, idmap in candidate_edits(adj, cost, related(adj, involved), want, alias, pre_adj,
-                                                            max(12, len(involved))):
+    base, col0 = score(adj, cost, want)
+    out, firsts, seen = [], [], set()
+    for kind, args, a2, c2, idmap in itertools.chain(
+            candidate_edits(adj, cost, related(adj, cost, involved), want, alias, pre_adj, max(12, len(involved))),
+            neighbour_edits(adj, cost, involved, col0, want)):
+        if (kind, args) in seen:
+            continue
+        seen.add((kind, args))
         sc, col = score(a2, c2, want, idmap)
         if kind == "split":
             args = args + (col.get(args[0]) == col.get(args[1]),)
         out.append((sc, [(kind, args)]))
         firsts.append((sc, kind, args, a2, c2, idmap, col))
-    order = ["renumber", "merge", "delete", "edge", "degree", "split"]
+    order = ["renumber", "renumber each", "merge", "delete", "edge", "degree", "split"]
     if depth > 1 and not any(sc == total for sc, _ in out):
         firsts.sort(key=lambda e: (-e[0], order.index(e[1])))
         for sc, kind, args, a2, c2, idmap, col in [e for e in firsts if base < e[0] < total][:12]:
             f = (idmap or {}).get
             w2 = {(f(n, n) if idmap else n): c for n, c in want.items()}
             inv2 = [n for n, c in w2.items() if n in a2 and col.get(n) != c]
-            for kind2, args2, a3, c3, idmap2 in candidate_edits(a2, c2, related(a2, inv2), w2, None, None,
+            for kind2, args2, a3, c3, idmap2 in candidate_edits(a2, c2, related(a2, c2, inv2), w2, None, None,
                                                                        max(12, len(inv2)), 0.25):
                 if score(a3, c3, w2, idmap2)[0] == total:
                     out.append((total, [(kind, args), (kind2, args2)]))
-    out.sort(key=lambda e: (-e[0], len(e[1]), [order.index(k) for k, _ in e[1]]))
+
+    def moves_fixed(steps):
+        return any(n in fixed for kind, args in steps if kind in ("renumber", "renumber each")
+                   for n in ([args[0]] if kind == "renumber" else [n for n, _m in args[0]]))
+    out.sort(key=lambda e: (-e[0], len(e[1]), moves_fixed(e[1]), [order.index(k) for k, _ in e[1]]))
     return base, total, out
 
 
@@ -390,17 +552,24 @@ def explain_edit(kind, args, who):
         return "renumber %s just %s %s (declare or create it %s that value):\n         %s: %s\n         %s: %s" % (
             args[0], "below" if args[2] < 0 else "above", args[1], "before" if args[2] < 0 else "after",
             args[0], who(args[0]), args[1], who(args[1]))
+    if kind == "renumber each":
+        pairs, side = args
+        return "renumber each of %s just %s %s (declare or create each %s that value):%s" % (
+            ", ".join(str(n) for n, _m in pairs), "below" if side < 0 else "above", ", ".join(str(m) for _n, m in pairs),
+            "before" if side < 0 else "after", "".join("\n         %s: %s\n         %s: %s" % (n, who(n), m, who(m))
+                                                       for n, m in pairs))
     return "%s %s" % (kind, args)
 
 
 SCALAR = {"int", "char", "short", "long", "float", "double", "bool", "unsigned", "signed", "u8", "u16", "u32", "s8", "s16", "s32"}
 
 
-def source_names(path, func):
+def source_names(path, func, member=False):
     """Guess {node id: name} from the declarations of `func` in `path` (or a file it includes with quotes): parameters take ids
-    from 32 in order (`this` first for a member function), then every scalar or pointer local in textual order. A local of class
-    type takes no id. This is the declaration-order rule of docs/engine/register-allocation.md, so it is a guess: inline
-    functions' locals and compiler temporaries come after, and a local the optimizer removes still holds its id."""
+    from 32 in order (`this` first for a member function: `member`, or a definition spelled `Class::func`), then every scalar or
+    pointer local in textual order. A local of class type takes no id. This is the declaration-order rule of
+    docs/engine/register-allocation.md, so it is a guess: inline functions' locals and compiler temporaries come after, and a
+    local the optimizer removes still holds its id."""
     seen, todo, text = set(), [path], None
     while todo and text is None:
         f = todo.pop(0)
@@ -417,7 +586,7 @@ def source_names(path, func):
     if text is None:
         return {}
     m, src = text
-    params = ["this"] if "::" in m.group(1) else []
+    params = ["this"] if member or "::" in m.group(1) else []
     for p in m.group(2).split(","):
         w = re.findall(r"[A-Za-z_]\w*", p)
         if w and w != ["void"]:
@@ -447,11 +616,14 @@ def source_names(path, func):
 # --------------------------------------------------------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("function", help="symbol name or VA (0x...)")
+    ap.add_argument("function", help="symbol name, VA (0x...), or a member the compiler-name map binds (compiler name or Class::method)")
     ap.add_argument("candidate")
+    ap.add_argument("--as", dest="defined", metavar="MEMBER",
+                    help="the candidate defines the function as this member (compiler name or Class::method), not under the name the build binds")
     ap.add_argument("--flags", help="compiler flags (default: the build's flags for this unit)")
     ap.add_argument("--compiler", help="compiler executable (default: the build's compiler for this unit)")
-    ap.add_argument("--max-pool", type=int, default=8, help="largest set of node ids permuted exhaustively (default 8)")
+    ap.add_argument("--max-pool", type=int, default=8, help="nodes whose ids are permuted: the involved ones, then their most related "
+                    "neighbours up to this many (default 8; up to 8 exhaustively, more at random)")
     ap.add_argument("--pass", dest="passno", type=int, help="use this colouring pass (default: the one that best fits the emitted code)")
     ap.add_argument("--show-all", action="store_true", help="list every node, not only the ones involved")
     ap.add_argument("--no-suggest", action="store_true", help="stop after the node report (no id permutations, no graph edits)")
@@ -462,7 +634,7 @@ def main():
     a = ap.parse_args()
 
     import verify
-    va, name, size = resolve(a.function)
+    va, name, size, member = resolve(a.function)
     cand = os.path.abspath(a.candidate)
     exe, flags = build_profile(va)
     if a.compiler:
@@ -470,19 +642,24 @@ def main():
     if a.flags:
         flags = a.flags
     os.chdir(ROOT)
-    print("function %s 0x%06x (%d bytes)\ncompiler %s\nflags    %s" % (name, va, size, os.path.relpath(exe, ROOT), flags))
-    ok, report = verify.verify_one(va, cand, flags=flags, mwcc=exe, verbose=True)
+    defined = defined_as(a.defined, cand, exe, flags) if a.defined else member or binding(va, name)
+    print("function %s 0x%06x (%d bytes)%s\ncompiler %s\nflags    %s" % (
+        name, va, size, "" if defined == name else ", defined as %s" % defined, os.path.relpath(exe, ROOT), flags))
+    table, symbols = standalone_inputs(va, name, defined)
+    ok, report = verify.verify_one(va, cand, flags=flags, mwcc=exe, verbose=True, symbols=symbols, unit_objects=table)
     ours_w, _ = parse_words(report)
     retail_w = list(struct.unpack("<%dI" % (size // 4), verify.va_bytes(verify.read_elf(verify.ELF_DEFAULT), va, size)))
     print("\n== verify.py ==")
-    # a whole-file candidate defines every other function of its unit too: those notes say nothing about this one
-    noise = ("[", "!!", "object defines ", "unresolved relocation", "unowned allocated", "object has ")
+    # a whole-file candidate defines every other function of its unit too: those notes (their symbols, relocations and
+    # literals) say nothing about this one
+    noise = ("[", "!!", "object defines ", "unresolved relocation", "unowned allocated", "object has ", "literal reference at ",
+             ".lit")
     lines = report.splitlines()
     print("\n".join(l for l in lines if not l.lstrip().startswith(noise)))
     skipped = sum(1 for l in lines[1:] if l.lstrip().startswith(noise[2:]))
     if skipped:
         print("   (%d notes about other symbols of the object omitted)" % skipped)
-    if ok:
+    if ok or ours_w == retail_w:          # a whole-file candidate's other functions make the standalone verdict DIFFER
         print("\nMATCH: nothing to diagnose")
         sys.exit(0)
     if not ours_w:
@@ -582,20 +759,27 @@ def main():
                 nuses[nd] = nuses.get(nd, 0) + 1
     inv = {v: k2 for k2, v in pairs.items()}      # ir index -> asm index
 
+    def copy_kind(nd):
+        """"param copy aN" / "call result copy vN" for a node first defined as a copy of that register, else ""."""
+        idx = first_def.get(nd)
+        src = [x for f, x in ir[idx]["ops"] if (f & USE)] if idx is not None else []
+        if not src or ir[idx]["op"] != 0x4010 or not all(s < 32 for s in src):
+            return ""
+        return {4: "param copy a0", 5: "param copy a1", 6: "param copy a2", 7: "param copy a3", 2: "call result copy v0",
+                3: "call result copy v1"}.get(src[0], "")
+
     def describe(nd):
         idx = first_def.get(nd)
         if idx is None:
             return "param/entry value"
         ai = inv.get(idx)
         txt = "%s %s" % asm_o[ai] if ai is not None else "(IR op 0x%x, registers %s)" % (ir[idx]["op"], ",".join(sorted(ir[idx]["regs"])))
-        src = [x for f, x in ir[idx]["ops"] if (f & USE)]
-        kind = ""
-        if ir[idx]["op"] == 0x4010 and src and all(s < 32 for s in src):
-            kind = {4: "param copy a0", 5: "param copy a1", 6: "param copy a2", 7: "param copy a3", 2: "call result copy v0",
-                    3: "call result copy v1"}.get(src[0], "")
+        kind = copy_kind(nd)
         return (("[%s] " % kind) if kind else "") + (txt + ("  @%d" % ai if ai is not None else ""))
 
-    names = source_names(cand, name)
+    from demangle import demangle
+    method = demangle(defined)
+    names = source_names(cand, method.name, method.class_name is not None) if method else source_names(cand, defined)
     alias = p.get("alias") or {}
 
     def label(nd):
@@ -618,10 +802,7 @@ def main():
             alt = [rr[0], rr[2], rr[1]]
             if sum(x != y for x, y in zip(ro, alt)) < sum(x != y for x, y in zip(ro, rr)):
                 rr = alt
-        if len(nodes) == len(ro):                       # operand order agrees: map by position
-            tied = [(nodes[j], rr[j]) for j in range(len(ro)) if ro[j] != rr[j] and nodes[j] >= 32]
-        else:                                           # otherwise by the colour ours used
-            tied = [(nd, y) for x, y in pr for nd in nodes if nd >= 32 and REGNAME.get(fin.get(nd)) == x]
+        tied = tie(nodes, ro, rr, pr, fin)
         for nd, y in tied:
             if nd in want and want[nd] != REGNUM[y]:
                 conflict.add(nd)
@@ -682,37 +863,26 @@ def main():
         sys.exit(1)
 
     # suggest -----------------------------------------------------------------------------------------------------------------
-    print("\n== suggest: permuting the ids of the involved nodes ==")
+    print("\n== suggest: permuting the ids of the involved nodes and their neighbours ==")
     wantc = {nd: c for nd, c in want.items() if nd not in conflict}
-    pool = list(involved)
-    tried = []
-    sols = []
-    # grow the pool by the most related neighbours until a solution appears (or the limit is reached)
-    related = []
-    for nd in involved:
-        for o in adj[nd]:
-            if o >= 32 and o not in pool and o not in related:
-                related.append(o)
-    related.sort(key=lambda o: -len(set(adj[o]) & set(adj[involved[0]])))
-    while True:
-        pool_sorted = sorted(pool)
-        sols, total = search(adj, cost, wantc, pool_sorted, limit=30000)
-        tried.append(len(pool_sorted))
-        if sols or len(pool_sorted) >= a.max_pool or not related:
-            break
-        pool.append(related.pop(0))
+    # the involved nodes and their most related neighbours: a neighbour's id below an involved node's can change when that
+    # node is pushed, which is what decides its colour
+    near = neighbours(adj, cost, involved)[:max(0, a.max_pool - len(involved))]
+    pool = sorted(involved + near)
+    sols, total = search(adj, cost, wantc, pool, limit=30000)
+    fixed = {nd for nd in adj if nd >= 32 and (nd not in first_def or copy_kind(nd).startswith("param"))}
     if not sols:
         print("no permutation of the ids of %s makes the replay reproduce retail's colours for the %d constrained nodes."
-              % (sorted(pool), len(wantc)))
+              % (pool, len(wantc)))
         print("The difference is not an id order of these nodes: see the single graph edits below.")
     else:
-        slots = sorted(pool)
-        cur = sorted(pool)
-        sols = sorted(sols, key=lambda o: kendall(o, cur))
-        print("search over %s nodes: %d solution(s); nearest to the current order first.\n" %
-              ("/".join(str(t) for t in tried), len(sols)))
+        slots = pool
+        sols = rank_orders(sols, pool, fixed)
+        print("search over %d nodes (%d involved, neighbours %s): %d solution(s); the ones that leave the parameters' ids in "
+              "place first (parameters take the first ids), then the nearest to the current order.\n"
+              % (len(pool), len(involved), " ".join(map(str, near)) or "none", len(sols)))
         for s_i, order in enumerate(sols[:3]):
-            print("solution %d (%d swaps away from the current relative order):" % (s_i + 1, kendall(order, cur)))
+            print("solution %d (%d swaps away from the current relative order):" % (s_i + 1, kendall(order, slots)))
             print("   id slot   node   now  what")
             for slot, nd in zip(slots, order):
                 print("   %7d  %5d %5s  %s%s" % (slot, nd, "same" if nd == slot else "moves", label(nd), describe(nd)))
@@ -729,7 +899,8 @@ are copied. Re-run this tool after each change; the node ids are stable only bel
 
     # single graph edits ------------------------------------------------------------------------------------------------------
     print("\n== single graph edits (replayed; the ones that give retail's colours name a source change) ==")
-    base, total, edits = edit_search(adj, cost, wantc, involved, alias, p.get("pre_adj"), pool=a.edit_pool, depth=a.edit_depth)
+    base, total, edits = edit_search(adj, cost, wantc, involved, alias, p.get("pre_adj"), pool=a.edit_pool, depth=a.edit_depth,
+                                     fixed=fixed)
     full = [e for e in edits if e[0] == total]
     print("%d single edits tried around %d involved nodes; the current graph satisfies %d of %d constrained nodes; %d full solution(s)."
           % (sum(1 for e in edits if len(e[1]) == 1), len(involved), base, total, len(full)))
@@ -749,7 +920,7 @@ are copied. Re-run this tool after each change; the node ids are stable only bel
         print("No edit reaches retail's colours (pairs of edits included)." if a.edit_depth > 1 else "No single edit reaches retail's colours.")
         if better:
             print("The best partial edits of each kind (more constrained nodes right than now):")
-            for kind in ("renumber", "merge", "delete", "edge", "degree", "split"):
+            for kind in ("renumber", "renumber each", "merge", "delete", "edge", "degree", "split"):
                 for sc, steps in [e for e in better if e[1][0][0] == kind][:2]:
                     print("  [%d/%d] %s" % (sc, total, explain_edit(kind, steps[0][1], who)))
     sys.exit(1)

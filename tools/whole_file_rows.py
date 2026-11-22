@@ -6,8 +6,10 @@ A stock file keeps its upstream text, so the rows that tie it to retail are meas
 unit's profile, then:
 
   members    each `.text` function is found in the retail range by its bytes, relocated fields
-             masked; a name symbols.txt already places wins, and a `--at name=va` settles a
-             function that fits more than one retail start. The file's static initializer (its
+             masked; a name symbols.txt already places wins. Byte-identical functions left with the
+             same starts take the ones retail's calls, pointers and vtable words name them at (one
+             named outside the range is no member), and a `--at name=va` settles what that leaves
+             open, which the run names. The file's static initializer (its
              `.init`) is the function of the static-initializer table it fits, outside the range
   duplicates a compiled function outside the range that a member still calls, that a vtable or
              other datum the file keeps names, or that an exception table names: the retail
@@ -48,10 +50,11 @@ call it after. The range's present rows settle what they settled before, so rege
 its row unchanged and a conversion's row diff is what the conversion changed (stable_row):
 
   * a compiler name they bind keeps its address (tools/memberize.py renames a converted member's key, and empty
-    virtual functions fit many starts), and a name they strip is dropped (C++ files); a function fitting several
-    starts whose name differs from one they placed only in a parameter's type (`platformLoad(igFile *)` once
-    igFile is `Gap::Core::igFile`: the same class, name, constness and parameter count, one such name either
-    side) takes that name's address (retyped);
+    virtual functions fit many starts), and a name they strip is dropped (C++ files); a function whose name
+    differs from one they placed only in a parameter's type or its class template's argument
+    (`platformLoad(igFile *)` once igFile is `Gap::Core::igFile`, `igSmartPointer<igVertexStream>::~igSmartPointer`
+    once igVertexStream is the Gap class: the same class, name, constness and parameter count, one such name either
+    side) takes that name's address when it fits there (retyped);
   * the static initializer's entry is theirs when the file's initializer fits several table entries;
   * retail functions of the range no compiled function reproduces, none of which they placed, link from retail
     as they did (the run is `--partial` without saying so); one they placed stops the run, a wrong compile;
@@ -242,13 +245,19 @@ class Twins:
         return copy
 
 
-def locate(functions, retail, starts, placed, dropped=(), retyped=None):
+def locate(functions, retail, starts, placed, dropped=(), retyped=None, referenced=None):
     """{name: va} for the functions with a retail copy. A function that fits several starts is
     settled by the others: a file keeps its functions in order, and each start is used once. A start a
     name is placed at (symbols.txt, the present row, `--at`) is that name's: a byte-identical function
     fitting only it is no member (a duplicate when reached, else stripped), as verify binds the start
-    to the placed name alone. `retyped` ({name: va}, retyped()) settles a function that fits several starts,
-    one of them the address the present row placed it at under its former name."""
+    to the placed name alone. `retyped` ({name: va}, retyped()) settles a function at the address the present
+    row placed it at under its former name, when it fits there.
+
+    Byte-identical functions left with the same starts (two empty virtual slots, inline destructors of one
+    shape) are settled by what retail says of them: `referenced(found)` ({name: va}, the addresses the retail
+    calls, pointers and vtable words of the functions placed so far give the functions not placed, as reach
+    reads them) places one at the start retail names it at, and one retail names outside its starts is no
+    member (a duplicate). What that leaves to a guess stops the run with the candidates."""
     found, open_, settled = {}, {}, set()
     for name, function in functions.items():
         if name in dropped:
@@ -260,11 +269,11 @@ def locate(functions, retail, starts, placed, dropped=(), retyped=None):
             found[name] = placed[name]
             continue
         hits = [va for va in starts if function.fits(retail, va)]
-        if len(hits) == 1:
-            found[name] = hits[0]
-        elif (retyped or {}).get(name) in hits:
+        if (retyped or {}).get(name) in hits:
             found[name] = retyped[name]
             settled.add(name)
+        elif len(hits) == 1:
+            found[name] = hits[0]
         elif hits:
             open_[name] = hits
     owner = {va: name for name, va in found.items() if name in placed or name in settled}
@@ -273,18 +282,30 @@ def locate(functions, retail, starts, placed, dropped=(), retyped=None):
     if clash:
         sys.exit("one retail start fits two functions: %s; settle with --at or --drop"
                  % ", ".join("0x%x %s" % (v, "/".join(n for n in found if found[n] == v)) for v in clash))
+    asked = None
     while open_:
         taken = set(found.values())
-        settled = {n: [v for v in hits if v not in taken] for n, hits in open_.items()}
+        left = {n: [v for v in hits if v not in taken] for n, hits in open_.items()}
         # a function whose every retail copy belongs to a byte-identical twin was stripped
-        settled = {n: hits for n, hits in settled.items() if hits}
-        open_ = {n: h for n, h in open_.items() if n in settled}
+        open_ = {n: hits for n, hits in left.items() if hits}
         if not open_:
             break
-        single = {n: hits[0] for n, hits in settled.items() if len(hits) == 1}
+        # a start that is the last one of several functions is none of theirs by elimination
+        last = collections.Counter(hits[0] for hits in open_.values() if len(hits) == 1)
+        single = {n: hits[0] for n, hits in open_.items() if len(hits) == 1 and last[hits[0]] == 1}
+        if not single and referenced is not None and asked != set(found):
+            asked = set(found)
+            reached = referenced(dict(found))
+            single = {n: reached[n] for n in open_ if reached.get(n) in open_[n]}
+            outside = {n for n in open_ if n in reached and reached[n] not in open_[n]}
+            if len(set(single.values())) != len(single):
+                single = {}
+            open_ = {n: h for n, h in open_.items() if n not in outside}
+            if outside and not single:
+                continue
         if not single:
             sys.exit("ambiguous: %s; settle with --at name=va"
-                     % ", ".join("%s at %s" % (n, "/".join("0x%x" % v for v in h)) for n, h in settled.items()))
+                     % ", ".join("%s at %s" % (n, "/".join("0x%x" % v for v in h)) for n, h in open_.items()))
         found.update(single)
         open_ = {n: h for n, h in open_.items() if n not in single}
     return found
@@ -293,14 +314,18 @@ def locate(functions, retail, starts, placed, dropped=(), retyped=None):
 def retyped(names, previous, placed, lo, hi):
     """{name: va} of the compiled functions the range's present rows place under a mangled name that changed
     only in a parameter's type (a parameter's class became the Gap class: `platformLoad__Q33Gap3Gfx7igImageFP6igFile`
-    is `platformLoad__Q33Gap3Gfx7igImageFPQ33Gap4Core6igFile` now). Of the members the present rows place in
-    [lo, hi) (`previous`, {name: va}) that the compile no longer has, the one of a function's class, name,
-    constness and parameter count, where it is the only one and no other function not `placed` has that shape."""
+    is `platformLoad__Q33Gap3Gfx7igImageFPQ33Gap4Core6igFile` now) or in its class template's argument the same
+    way (`__dt__32igSmartPointer<14igVertexStream>Fv` is `__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv`).
+    Of the members the present rows place in [lo, hi) (`previous`, {name: va}) that the compile no longer has, the
+    one of a function's class (template arguments unqualified), name, constness and parameter count, where it is
+    the only one and no other function not `placed` has that shape."""
     def shape(name):
         d = demangle.demangle(name)
         if d is None or d.data or not d.class_name:
             return None
-        return d.namespaces, d.class_name, d.name, d.const, d.special, len(d.params)
+        template, bracket, arguments = d.class_name.partition("<")
+        cls = template + bracket + re.sub(r"\b\w+::", "", arguments)
+        return d.namespaces, cls, d.name, d.const, d.special, len(d.params)
 
     gone, new = collections.defaultdict(list), collections.defaultdict(list)
     for name, va in previous.items():
@@ -898,8 +923,17 @@ def main(argv=None):
             source = os.path.join(a.src, stem + a.ext)
             compile_file(a.wibo, compiler, unitprofiles.command_flags(profile), source, obj)
             syms, headers, functions = text_functions(obj)
+            twins = Twins(profile, source, tmp, a.config, a.wibo)
+
+            def referenced(found, obj=obj, syms=syms, headers=headers, functions=functions, twins=twins):
+                """{name: va} the retail references of the members `found` place give the functions not placed."""
+                known = {n: v for n, (v, _s) in by_name.items()}
+                if not a.cxx:
+                    known.update({name: va for va, name in owned.items()})
+                return reach(found, retail, syms, headers, obj, functions, records, known, hi, twins)[1]
+
             at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop,
-                        retyped(functions, settled, placed, lo, hi) if a.cxx else None)
+                        retyped(functions, settled, placed, lo, hi) if a.cxx else None, referenced)
             owned.update({va: name for name, va in at.items()})
             # the static initializer is a member at its retail address, after all `.text`
             initializer = static_initializer(obj, syms, headers, retail, forced, settled)
@@ -908,8 +942,7 @@ def main(argv=None):
             if initializer:
                 functions[initializer[0]] = initializer[1]
                 at[initializer[0]] = initializer[2]
-            compiled.append((stem, obj, syms, headers, functions, at,
-                             Twins(profile, source, tmp, a.config, a.wibo), initializer and initializer[0]))
+            compiled.append((stem, obj, syms, headers, functions, at, twins, initializer and initializer[0]))
         missing = [by_va[v] for v in starts if v not in owned]
         if not a.partial and settled_partial([v for v in starts if v not in owned], previous):
             a.partial = True        # the previous rows left exactly these to link from retail
