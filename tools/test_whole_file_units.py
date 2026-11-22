@@ -121,6 +121,27 @@ class Overlay(unittest.TestCase):
             self.load({"whole_file": True,
                        "emitted": {"__sinit_gfx.cpp": "0x00180100", "__sinit_gfx2.cpp": "0x00180200"}})
 
+    # IGBFile's core row (0x2b5d50) once igInfoList became a member class: the C igInfoList_GetElementMeta was left
+    # beside the member, compiled at its retail start, while the member's body, the same bytes, became a duplicate
+    ELEMENT_META = "getElementMeta__Q33Gap4Core33igTObjectList<Q33Gap4Core6igInfo>CFv"
+
+    def test_a_function_given_two_bodies_names_them(self):
+        with self.assertRaises(ValueError) as caught:
+            self.load({"whole_file": True, "emitted": {"igInfoList_GetElementMeta": "0x00331be0"},
+                       "duplicates": {self.ELEMENT_META: "0x00331be0"}})
+        for named in ("0x00331be0", "igInfoList_GetElementMeta", self.ELEMENT_META):
+            self.assertIn(named, str(caught.exception))
+
+    def test_a_function_two_rows_place_names_both_rows(self):
+        self.registry.write_text(json.dumps({"0x00180000": {"emitted": {"two": "0x00180100"}},
+                                             "0x00180100": {"emitted": {"three": "0x00180200"}}}))
+        unitobjects.load.cache_clear()
+        self.addCleanup(unitobjects.load.cache_clear)
+        with self.assertRaises(ValueError) as caught:
+            unitobjects.load(self.registry)
+        for named in ("0x00180100", "two", "row 0x00180000", "row 0x00180100"):
+            self.assertIn(named, str(caught.exception))
+
 
 class Objects(unittest.TestCase):
     OWNER, MEMBER, DATA, DROPPED, DROPPED_DATA = 0x180000, 0x180100, 0x180200, 0x180300, 0x180400
@@ -408,6 +429,27 @@ class Rows(unittest.TestCase):
                          [["0x100", "0x00000200", "block"], ["0x200", "0x300", "new"],
                           ["0x00000300", "0x400", "block"], ["0x400", "0x500", "next"]])
 
+    def test_a_c_definition_left_beside_its_member_is_named(self):
+        # IGBFile's core row: the leftover C igInfoList_GetElementMeta and the member's duplicate at one start
+        element = Overlay.ELEMENT_META
+        self.assertEqual(whole_file_rows.leftover(["igInfoList_GetElementMeta", element]),
+                         ["igInfoList_GetElementMeta"])
+        self.assertEqual(whole_file_rows.leftover(["__dt__30igSmartPointer<12igMetaObject>Fv", element]), [])
+        with tempfile.TemporaryDirectory() as tmp:
+            path, symbols = Path(tmp) / "unit-objects.json", Path(tmp) / "symbols.txt"
+            symbols.write_text("002b5d50 000010 CoreLibrary_MarkRegistered\n"
+                               "00331be0 00000c igInfoList_GetElementMeta\n")
+            path.write_text("{}\n")
+            rows = {"0x002b5d50": {"whole_file": True, "emitted": {"igInfoList_GetElementMeta": "0x00331be0"},
+                                   "duplicates": {element: "0x00331be0"}, "data": {}}}
+            with self.assertRaises(SystemExit) as caught:
+                whole_file_rows.write_overlay(str(path), rows, str(symbols))
+            self.assertEqual(path.read_text(), "{}\n")
+        report = str(caught.exception.code).partition("would not load: ")[2]
+        for named in ("0x00331be0", "igInfoList_GetElementMeta", element):
+            self.assertIn(named, report)
+        self.assertEqual([va for va, _bodies in whole_file_rows.shared_bodies(rows, {})], [0x331be0])
+
 
 class Regenerate(unittest.TestCase):
     """tools/whole_file_rows.py run again over a unit: the present row settles what it settled before."""
@@ -498,6 +540,71 @@ class CxxRows(unittest.TestCase):
             self.addCleanup(unitobjects.load.cache_clear)
             group, = unitobjects.load(str(overlay))
         self.assertEqual(group.symbol, "first__FPv")
+
+
+class KeyFunction(unittest.TestCase):
+    """ImageConvert's igTgaLoader in the gfx unit (0x1493e0): with the declared-only `load` its first virtual, MWCC
+    left the class's vtable and getMeta out of the file; igImageLoader's getMeta, of the same shape, then fit the
+    retail copy, and the run stopped on `_Meta__Q33Gap3Gfx13igImageLoader reads as 0x55ff10 and 0x55fd58`."""
+    SOURCE = '''struct igMetaObject;
+namespace Gap {
+namespace Gfx {
+class igImageLoader {
+public:
+    static igMetaObject *_Meta;
+    virtual igMetaObject *getMeta() const { return _Meta; }
+    virtual bool load(const char *fileName) = 0;
+};
+class igTgaLoader : public igImageLoader {
+public:
+    static igMetaObject *_Meta;
+    virtual igMetaObject *getMeta() const { return _Meta; }
+%s
+    static void *retrieveVTablePointer();
+};
+igMetaObject *igTgaLoader::_Meta;
+void igTgaLoader::releaseDefaults() {}
+void *igTgaLoader::retrieveVTablePointer() { igTgaLoader loader; return *(void **)&loader; }
+}
+}
+'''
+    LOAD, RELEASE = "virtual bool load(const char *fileName);", "virtual void releaseDefaults();"
+
+    def setUp(self):
+        if not Path(verify.WIBO_DEFAULT).exists():
+            self.skipTest("private compiler unavailable")
+        temp = tempfile.TemporaryDirectory(prefix="dw4-whole-file-key-")
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.profile = unitprofiles.resolve(0x1493e0, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+
+    def compile(self, first, second):
+        """(syms, functions, class-members table) of the class declaring `first` then `second`."""
+        source, obj, members = self.root / "tga.cpp", self.root / "tga.o", self.root / "members.tsv"
+        source.write_text(self.SOURCE % ("    %s\n    %s" % (first, second)))
+        members.write_text("igTgaLoader\tpublic: %s\nigTgaLoader\t%s\n" % (first, second))
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, self.profile.compiler,
+                                       unitprofiles.command_flags(self.profile), str(source), str(obj)),
+                       cwd=verify.ROOT, check=True, capture_output=True)
+        syms, _headers, functions = whole_file_rows.text_functions(str(obj))
+        return syms, functions, str(members)
+
+    def test_a_declared_only_key_function_is_named(self):
+        syms, functions, members = self.compile(self.LOAD, self.RELEASE)
+        self.assertNotIn("getMeta__Q33Gap3Gfx11igTgaLoaderCFv", functions)
+        self.assertEqual(whole_file_rows.moved_vtables(syms, functions, members),
+                         [("Gap::Gfx::igTgaLoader", "Gap::Gfx::igTgaLoader::load")])
+        with mock.patch.object(whole_file_rows, "CLASS_MEMBERS", members), \
+                self.assertRaises(SystemExit) as caught:
+            whole_file_rows.reads_twice("GfxLibrary.o", syms, functions, "_Meta__Q33Gap3Gfx13igImageLoader",
+                                        0x55ff10, 0x55fd58)
+        self.assertIn("Gap::Gfx::igTgaLoader::load", str(caught.exception.code))
+
+    def test_a_defined_key_function_keeps_the_vtable(self):
+        # releaseDefaults declared first, as ImageConvert left it: the vtable and getMeta are the file's
+        syms, functions, members = self.compile(self.RELEASE, self.LOAD)
+        self.assertIn("getMeta__Q33Gap3Gfx11igTgaLoaderCFv", functions)
+        self.assertEqual(whole_file_rows.moved_vtables(syms, functions, members), [])
 
 
 class ExceptionsOn(unittest.TestCase):

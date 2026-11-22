@@ -110,31 +110,45 @@ local `…View` classes) go away as their users convert.
    igFile is the Gap class, takes its former name's address), static-initializer entry and data names; retail's
    references settle byte-identical functions left with the same starts (empty virtual slots by the vtable words);
    `--drop`/`--at` are needed only for a start neither settles, which the run names. Rows that would not load (two
-   rows placing one function) are not written: the run stops naming the function and the rows, and
-   unit-objects.json stays as it was.
+   rows placing one function, or one row giving a function two bodies) are not written: the run stops naming each
+   such function with its bodies and rows, and a C definition left beside the member that replaced it (a
+   `GetElementMeta` the conversion left in place, compiled at the member's address) is named as the one to delete;
+   unit-objects.json stays as it was. A datum that reads as two addresses because a class's vtable left the file
+   names the class: MWCC emits a class's vtable, and the inline virtuals only it names (`getMeta`), in the unit
+   defining its key function, the first virtual it declares that is neither inline nor pure, so a key function the
+   file only declares (a partial file leaving it to retail) takes them out; the run names it from
+   `class-members.tsv`. Declare first a virtual the file defines, or define it.
 5. Run `tools/compiler_names.py --write`.
-6. Run `tools/check.py --function <va> --cand <source>` for every touched unit. Each must report `MATCH`. Then
+6. Run `tools/check.py --function <va> --cand <source>` for every touched unit. Each must report `MATCH`; a unit
+   whose bodies are missing or of the wrong extent lists every body that differs, its size against retail's and
+   each differing word (relocated fields masked). Then
    `tools/memberize.py --check` (no C-name declaration left over) and `tools/typed_coverage.py --check`.
 
 ### The batch tool
 
-`tools/classconv.py <spec.py> {tables,memberize,splice,decls,all} [<class> ...]` runs steps 1-3 for a batch from a
-spec file (Python defining `SPECS`; its docstring lists the keys: `rows`, `typed`, `map`/`extra`/`keep`/`data`,
+`tools/classconv.py <spec.py> {tables,memberize,splice,decls,rekey,all} [<class> ...]` runs steps 1-3 for a batch
+from a spec file (Python defining `SPECS`; its docstring lists the keys: `rows`, `typed`, `map`/`extra`/`keep`/`data`,
 `gen`, hand `bodies` in the kit's form, `boot` overrides, `lib`, `base`, `add`). It stubs every C function a hand
 body or the generator replaces with the member's parameters before `memberize.py --apply`, splices the generator's
 boilerplate and the hand bodies over the memberized definitions (a definition's head only, in code: never a call
-naming the member, nor a comment or string; an overload's, static or not, by its parameter types), writes a
+naming the member, nor a comment or string; an overload's, static or not, by its signature), writes a
 metafield's igen descriptor creator and `getMetaField`, writes a bootstrap class's three
 constructors, copy slot and `__bootstrapDestruct` in the kit's form (renaming their `unit-objects.json` keys),
-respells static data in their declared types and drops the C-name declarations `memberize.py --check` reports.
+respells static data in their declared types, drops the C-name declarations `memberize.py --check` reports and
+last runs `memberize.py --rekey --apply`, which renames or drops the row names the touched units' objects now
+spell otherwise (a unit that does not compile yet keeps them, reported: run `--rekey` again once it does).
+An overload's spec key is its declaration in any spelling: it names the class row of the same name, parameter
+types and `const` (access labels, `virtual`/`static`/`inline`, parameter names, defaults, `const` placement and
+spacing aside), and a bare name the class overloads stops the run. A step changes only the text it rewrites:
+the blank lines around a table it drops or a definition it writes stay as the file had them.
 A generator member no C name of the spec maps is the function at its role's retail address (a field adder
 symbols.txt names only by its address); a hand body's member that no C function becomes and the class does not
 define stops the run, naming it. A spec with `add` adds members to a converted class: the `rows` and `typed`
 fields the class lacks join the tables in the spec's order among the ones it has (a row it has is one of the same
-declaration, access label and spacing aside, so a repeated row is never added twice), and only its own C names are
-memberized. A run that fails leaves `src/`, `include/` and `config/` as it found them. Run `decls` once more after
-the rows are regenerated: a vtable's C name goes unused only then. `classconv.array_spec` builds a scalar array
-metafield's spec. Tests: `tools/test_classconv.py`.
+signature, or the same declaration for a datum, so a repeated row is never added twice), and only its own C names
+are memberized. A run that fails leaves `src/`, `include/` and `config/` as it found them. Run `decls` once more
+after the rows are regenerated: a vtable's C name goes unused only then. `classconv.array_spec` builds a scalar
+array metafield's spec. Tests: `tools/test_classconv.py`.
 
 ## Conversion order
 
@@ -661,7 +675,9 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
   (`Q43Gap4Core6igFile8OpenMode`) and a typedef'd function pointer as its type (`PFii_v`); a key written while a
   parameter's class was flat (`…FP6igFile`) is renamed once the class converts (`memberize.py --rekey`), and so is
   a template instance a unit's object now spells with the class's Gap scope
-  (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv` for `__dt__32igSmartPointer<14igVertexStream>Fv`).
+  (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv` for `__dt__32igSmartPointer<14igVertexStream>Fv`) and a
+  name of a class renamed or retired (`__dt__11igScopeLockFv` for `__dt__10ScopedLockFv`; a `stripped` body the
+  object no longer compiles goes).
 - `tools/classconv.py` stubs a C function with the member's parameters and its own return type; where the member
   returns another type (an unnamed descriptor getter returning `int` becomes `igVec3fMetaField *getMetaField()`),
   memberize casts the uses back: an assignment of the result to the C form's integer

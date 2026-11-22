@@ -16,7 +16,8 @@ def state(**rises):
     counters = {k: 10 for k, _ in progress.DEBT_COUNTERS}
     counters.update(rises)
     return {"debt": {"counters": counters,
-                     "baseline": {k: {"value": 10, "reason": None} for k, _ in progress.DEBT_COUNTERS}}}
+                     "baseline": {k: {"value": 10, "reason": None} for k, _ in progress.DEBT_COUNTERS}},
+            "categories": {"recorded": True, "warning": None}}
 
 
 def quiet(fn, *args):
@@ -76,6 +77,53 @@ class Ratchet(unittest.TestCase):
         saved = json.load(open(progress.DEBT_BASELINE))["counters"]
         self.assertEqual(saved["mismatch.functions"], {"value": 11, "reason": "first second"})
         self.assertEqual(saved["fun_dat_refs"], 12)
+
+    def test_a_stale_category_table_asks_for_a_check_run(self):
+        # NearMiss4's tree: data/check-categories.tsv had 20463 rows for 20464 decompiled units (a function added
+        # since the last check), and --debt-check listed every counter the table gives as rising or unavailable
+        table = os.path.join(os.path.dirname(progress.DEBT_BASELINE), "check-categories.tsv")
+        with open(table, "w") as fh:
+            fh.write("# va\tname\tcategory\tdiagnostic\n00100000\tone\tmatch\t-\n")
+        with mock.patch.object(progress, "CATEGORIES_TSV", table):
+            categories = progress.categorise([(0x100000, 8, "one"), (0x100008, 8, "two")])
+        d = state(**dict({k: None for k in progress.CATEGORY_COUNTERS}, **{"unmatched.functions": 11}))
+        d["categories"] = categories
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(progress.debt_check(d), 1)
+        text = out.getvalue()
+        self.assertIn("data/check-categories.tsv", text)
+        self.assertIn("check.py", text)
+        for k in progress.CATEGORY_COUNTERS:
+            self.assertNotIn(k, text)
+        self.assertIn("unmatched.functions", text)      # a counter the table does not give is still checked
+
+
+class Publishing(unittest.TestCase):
+    """progress.py with no flag prints and writes nothing (ImageConvert's bare run rewrote PROGRESS.md and
+    docs/progress.json, which it then reverted); --write (`make progress`) writes them."""
+
+    def test_only_write_writes(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        paths = {name: os.path.join(folder.name, name) for name in ("PROGRESS.md", "progress.json", "README.md")}
+        with open(paths["README.md"], "w") as fh:
+            fh.write("<!-- progress:start -->old<!-- progress:end -->\n")
+        bytes_ = dict(fully_matched=1, total=4, matched=2, assembly=0, functions_assembly=0, functions_asm_body=0,
+                      asm_body=0)
+        d = {"functions": dict(fully_matched=1, total=2, matched=1), "code_bytes": bytes_,
+             "link": {"from_c_pct": 50.0}, "categories": {"recorded": True}}
+        with mock.patch.multiple(progress, collect=lambda: d, render_md=lambda d: "page\n",
+                                 readme_block=lambda d: "<!-- progress:start -->new<!-- progress:end -->",
+                                 PROGRESS_MD=paths["PROGRESS.md"], PROGRESS_JSON=paths["progress.json"],
+                                 README=paths["README.md"]):
+            self.assertEqual(quiet(progress.main, []), 0)
+            self.assertFalse(os.path.exists(paths["PROGRESS.md"]) or os.path.exists(paths["progress.json"]))
+            self.assertIn("old", open(paths["README.md"]).read())
+            self.assertEqual(quiet(progress.main, ["--write"]), 0)
+            self.assertEqual(open(paths["PROGRESS.md"]).read(), "page\n")
+            self.assertTrue(os.path.exists(paths["progress.json"]))
+            self.assertIn("new", open(paths["README.md"]).read())
 
 
 class FreeMethods(unittest.TestCase):

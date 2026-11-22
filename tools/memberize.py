@@ -90,7 +90,8 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     outside the class and its subclasses: the kit reaches those only through the class's own inlines;
   * a call in a `#define`'s replacement text (its continuation lines included) or in a member function a class
     body defines is a call like any other, its receiver cast to the class (a macro parameter parenthesised);
-    a statement names the C name as a declaration only when a type comes before the name;
+    a statement names the C name as a declaration only when a type comes before the name (a template instance's
+    too: `igSmartPointer<struct igObject> igResource_GetDirectory(void *directory, const char *name);`);
   * the boundary: while any code still names the C name, its prototype stays in its home header (a header under
     include/, the one named for the class first), and in another header only where a user's unit does not read
     the home header; every other declaration of the C name (`extern "C"` lines, C-linkage blocks, a unity
@@ -109,12 +110,16 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     type (`igIOCallbackFunction *` is `PFii_v`), a converted class as its Gap class. A key of a converted
     class's member whose parameter names a class converted since as its flat struct (`…FP6igFile` once igFile is
     `Gap::Core::igFile`) is renamed to the name the compiler now emits (`…FPQ33Gap4Core6igFile`) by every batch
-    and by `--rekey`; `--check` reports one. A template instance naming a converted class as its flat struct
-    (`__dt__32igSmartPointer<14igVertexStream>Fv`) is whichever instance the unit's source spells (the Gap
-    class's inside its namespaces, the flat struct's at file scope), so `--rekey` compiles each whole-file unit
-    holding one and renames a name its object no longer has to the object's one name that differs from it only in
-    Gap scopes (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv`), in every field of the row; `--check`
-    compiles nothing and does not report these. `externals` and `data` rows of the C names in other units go (the
+    and by `--rekey`; `--check` reports one. Some names only the unit's object settles, so `--rekey` compiles each
+    whole-file unit holding one and renames a name its object no longer has, in every field of the row: a template
+    instance naming a converted class as its flat struct (`__dt__32igSmartPointer<14igVertexStream>Fv`) is whichever
+    instance the unit's source spells (the Gap class's inside its namespaces, the flat struct's at file scope), the
+    object's one name that differs from it only in Gap scopes (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>
+    Fv`); a name naming a class the tree no longer declares (a view retired, a helper renamed) is the object's one
+    name the row does not list that differs from it only in the classes it names (`__dt__11igScopeLockFv` for
+    `__dt__10ScopedLockFv`), and a `stripped` name with no such name goes (`__dt__33igSmartPointer<15igSemaphore
+    View>Fv` once igSemaphoreView is retired: the object no longer compiles that body); `--check` compiles nothing
+    and does not report these. `externals` and `data` rows of the C names in other units go (the
     compiler-name map resolves them), and a `duplicates` key is renamed. `python3 tools/compiler_names.py
     --write` then regenerates the map, and `python3 tools/whole_file_rows.py --cxx` writes the `duplicates` rows
     of units that emit a copy of an inline member.
@@ -135,7 +140,7 @@ and verify each touched unit with tools/check.py.
   memberize.py table.tsv --apply         # do it
   memberize.py --respell [--apply]       # every `T Gap::Lib::Class::m(...)` definition into its namespaces
   memberize.py --check                   # C-name declarations nothing needs any more, stale compiler names
-  memberize.py --rekey [--apply]         # rename the stale compiler-name keys of unit-objects.json
+  memberize.py --rekey [--apply]         # rename the stale names of unit-objects.json (compiles the units)
 """
 import argparse
 import collections
@@ -903,13 +908,17 @@ class FileRewrite:
         return self.clean.index("{", start)
 
     def result(self):
+        """The text with the edits and deletions; two namespace blocks of one library a deletion left with only
+        blanks between become one (cxxscope.merge_blocks), the file's other blocks keeping their bounds."""
         deletes = sorted(self.deletes)
 
         def dropped(s, e):
             return any(ds <= s and e <= de for ds, de in deletes)
         kept = [(s, e, r) for s, e, r in self.edits if not dropped(s, e)]
         moves = [(spans, order) for spans, order in self.moves if not dropped(spans[0][0], spans[-1][1])]
-        return tidy(self._render(0, len(self.text), kept + [(s, e, "") for s, e in deletes], moves))
+        marked = self._render(0, len(self.text), kept + [(s, e, "\0") for s, e in deletes], moves).split("\0")
+        joins = {sum(len(piece) for piece in marked[:i]) for i in range(1, len(marked))}
+        return tidy(cxxscope.merge_blocks("".join(marked), joins))
 
     def _render(self, start, end, edits, moves):
         """text[start:end] with the edits and moves inside it applied. A move writes a call's arguments in another
@@ -960,11 +969,23 @@ _NOT_A_TYPE = frozenset(("return", "else", "do", "case", "throw", "delete", "new
 
 
 def _declares(head):
-    """Whether the text of a statement before a function's name declares it (`extern "C" int `, `T *`), rather than
-    calling it (an empty head, `return `, `if (x && `)."""
+    """Whether the text of a statement before a function's name declares it (`extern "C" int `, `T *`, a template
+    instance `igSmartPointer<struct igObject> `), rather than calling it (an empty head, `return `, `if (x && `,
+    `a > `)."""
     if "=" in head or head.count("(") != head.count(")"):
         return False
-    m = re.search(r"([A-Za-z_]\w*)[\s*&]*$", head)
+    head = re.sub(r"[\s*&]*$", "", head)
+    if head.endswith(">"):
+        depth, at = 0, len(head) - 1
+        while at >= 0:
+            depth += {">": 1, "<": -1}.get(head[at], 0)
+            if depth == 0:
+                break
+            at -= 1
+        if at < 0:
+            return False
+        head = head[:at]                                 # the template's name declares like a type's
+    m = re.search(r"([A-Za-z_]\w*)\s*$", head)
     return m is not None and m.group(1) not in _NOT_A_TYPE
 
 
@@ -2065,7 +2086,8 @@ def stale_keys(rows, members, macros, types, converted, scope):
 
 def rekey_rows(rows, renames, unit_renames=None):
     """Rename unit-objects.json keys in place, in order -> ([change], {row key}): `renames` {old: new} in every row,
-    `unit_renames` {row key: {old: new}} in that row only (a `stripped` list's names too)."""
+    `unit_renames` {row key: {old: new}} in that row only (a `stripped` list's names too; a new name None drops the
+    old one)."""
     changes, touched = [], set()
     for unit, row in rows.items():
         here = dict(renames)
@@ -2075,57 +2097,119 @@ def rekey_rows(rows, renames, unit_renames=None):
             if not isinstance(entries, (dict, list)) or not any(k in here for k in entries):
                 continue
             if isinstance(entries, dict):
-                row[field] = {here.get(k, k): v for k, v in entries.items()}
+                row[field] = {here.get(k, k): v for k, v in entries.items() if here.get(k, k) is not None}
             else:
-                row[field] = [here.get(k, k) for k in entries]
+                row[field] = [here.get(k, k) for k in entries if here.get(k, k) is not None]
             for k in entries:
                 if k in here:
-                    changes.append("%s %s: %s -> %s" % (unit, field, k, here[k]))
+                    changes.append("%s %s: %s %s" % (unit, field, k, "dropped" if here[k] is None
+                                                     else "-> " + here[k]))
                     touched.add(unit)
-        if row.get("symbol") in here:
+        if row.get("symbol") in here and here[row["symbol"]] is not None:
             changes.append("%s symbol: %s -> %s" % (unit, row["symbol"], here[row["symbol"]]))
             row["symbol"] = here[row["symbol"]]
             touched.add(unit)
     return changes, touched
 
 
-def template_keys(rows, converted):
-    """{row key: [name]} of the unit-objects.json names whose template argument names a converted class as its flat
-    struct (`__dt__32igSmartPointer<14igVertexStream>Fv`, `getElementMeta__Q33Gap4Core34igTObjectList<14igMediaFile>
-    CFv`): which instance the unit compiles depends on where its source spells it (inside a Gap namespace or a Gap
-    class's member the Gap class, at file scope the flat struct), so only its object tells (template_renames)."""
+def declared_classes(root):
+    """The class, struct, union and enum names src/ and include/ (third-party sources too) declare or define, and
+    the typedef names: the names a compiler name's scopes may still name."""
+    out = set()
+    patterns = (re.compile(r"\b(?:struct|class|union|enum)\s+([A-Za-z_]\w*)"), re.compile(r"\}\s*([A-Za-z_]\w*)\s*;"),
+                re.compile(r"\btypedef\b[^;{}]*?\b([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*;"))
+    for top in ("src", "include"):
+        for dirpath, _dirs, files in os.walk(os.path.join(root, top)):
+            for f in files:
+                if f.endswith(SOURCE_EXTS):
+                    text = _read(os.path.join(dirpath, f))
+                    for pattern in patterns:
+                        out.update(pattern.findall(text))
+    return out
+
+
+def _scope_classes(mangled):
+    """The class identifiers a compiler name's scopes name (its class, its parameters', its template arguments'),
+    its namespaces (`Gap::<library>`, `std`) aside."""
+    out = set()
+
+    def collect(scope, _depth):
+        names = [identifier for identifier, _args in scope]
+        if names[:1] == ["Gap"]:
+            names = names[2:]
+        elif names[:1] == ["std"]:
+            names = names[1:]
+        out.update(names)
+        return scope
+    map_scopes(mangled, collect)
+    return out
+
+
+def _shape(mangled):
+    """`mangled` with every class its scopes name written as one stand-in, a class template keeping its name
+    (`__dt__33igSmartPointer<15igSemaphoreView>Fv` and `__dt__40igSmartPointer<Q33Gap4Core11igSemaphore>Fv` are one
+    shape, `__dt__10ScopedLockFv` and `__dt__11igScopeLockFv` another)."""
+    def stand_in(scope, _depth):
+        identifier, args = scope[-1]
+        return ((identifier if args is not None else "_", args),)
+    return map_scopes(mangled, stand_in) or mangled
+
+
+def object_keys(rows, converted, declared):
+    """{row key: [name]} of the unit-objects.json names only the unit's object can settle (object_renames): a
+    template instance whose argument names a converted class as its flat struct (`__dt__32igSmartPointer<14igVertex
+    Stream>Fv`, `getElementMeta__Q33Gap4Core34igTObjectList<14igMediaFile>CFv`: which instance the unit compiles
+    depends on where its source spells it, inside a Gap namespace or a Gap class's member the Gap class, at file scope
+    the flat struct), and in a whole-file row a name whose scopes name a class the tree no longer declares (`declared`,
+    declared_classes: a view retired, `__dt__33igSmartPointer<15igSemaphoreView>Fv`, or a helper renamed,
+    `__dt__10ScopedLockFv` once it is the kit's igScopeLock)."""
     out = {}
     for unit, row in rows.items():
         names = [k for field in _ROW_FIELDS if isinstance(row.get(field), (dict, list)) for k in row[field]]
         names += [row["symbol"]] if row.get("symbol") else []
         found = [k for k in names if "<" in k and _gap_template_form(k, converted) != k]
+        if row.get("whole_file"):
+            found += [k for k in names if k not in found and _scope_classes(k) - declared]
         if found:
             out[unit] = found
     return out
 
 
-def template_renames(rows, converted, object_names):
-    """{row key: {old: new}} of the template-instance names (template_keys) a unit's object no longer has, each the
-    one name of the object that differs from it only in converted classes' Gap scopes
-    (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv` for `__dt__32igSmartPointer<14igVertexStream>Fv`) ->
-    (renames, notes). `object_names(row key, row)` is the set of names the unit's object defines and references, or
-    None when it cannot be compiled."""
+def object_renames(rows, converted, declared, object_names):
+    """{row key: {old: new}} of the names (object_keys) a unit's object no longer has -> (renames, notes). Each
+    becomes the one name of the object that differs from it only in converted classes' Gap scopes
+    (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv` for `__dt__32igSmartPointer<14igVertexStream>Fv`), else
+    the one name of the object the row does not list that differs from it only in the classes it names (_shape:
+    `__dt__11igScopeLockFv` for `__dt__10ScopedLockFv`); a `stripped` name with neither goes (None: the object
+    no longer compiles that body, `__dt__33igSmartPointer<15igSemaphoreView>Fv` once the view is retired).
+    `object_names(row key, row)` is the set of names the unit's object defines and references, or None when it cannot
+    be compiled."""
     out, notes = {}, []
-    for unit, stale in sorted(template_keys(rows, converted).items()):
-        names = object_names(unit, rows[unit])
+    for unit, stale in sorted(object_keys(rows, converted, declared).items()):
+        row = rows[unit]
+        names = object_names(unit, row)
         if names is None:
-            notes.append("%s: the unit could not be compiled here, its template-instance names stay (%s)"
-                         % (unit, ", ".join(stale)))
+            notes.append("%s: the unit could not be compiled here, its names stay (%s)" % (unit, ", ".join(stale)))
             continue
-        flat = {}
+        others = {k for field in _ROW_FIELDS if field != "stripped" and isinstance(row.get(field), (dict, list))
+                  for k in row[field]}
+        others |= {row["symbol"]} if row.get("symbol") else set()
+        listed = others | set(row.get("stripped") or ())
+        flat, shapes, claimed = {}, {}, set()
         for n in names:
             flat.setdefault(_flat_form(n, converted), set()).add(n)
+            if n not in listed:
+                shapes.setdefault(_shape(n), set()).add(n)
         for key in stale:
             if key in names:
                 continue
-            found = flat.get(_flat_form(key, converted), set()) - {key}
+            found = (flat.get(_flat_form(key, converted), set()) - {key} or shapes.get(_shape(key), set())) - claimed
             if len(found) == 1:
-                out.setdefault(unit, {})[key] = found.pop()
+                new = found.pop()
+                claimed.add(new)
+                out.setdefault(unit, {})[key] = new
+            elif not found and key not in others:
+                out.setdefault(unit, {})[key] = None
             else:
                 notes.append("%s: %s is not in the unit's object, which has %s" % (
                     unit, key, " and ".join(sorted(found)) if found else "no name of that instance"))
@@ -2517,8 +2601,9 @@ def main(argv=None):
                     help="put every Gap-qualified out-of-line definition into its namespaces (no table)")
     ap.add_argument("--rekey", action="store_true",
                     help="rename the unit-objects.json keys of converted members whose parameter names a class "
-                         "converted since as its flat struct, and the template-instance names a unit's object now "
-                         "spells with a converted class's Gap scope (compiles those units; no table)")
+                         "converted since as its flat struct, and the names a unit's object now spells otherwise: a "
+                         "template instance of a converted class, a class renamed or retired, a stripped body gone "
+                         "(compiles those units; no table)")
     a = ap.parse_args(argv)
     root = os.path.abspath(a.root)
     if a.check:
@@ -2541,8 +2626,8 @@ def main(argv=None):
         return 0
     if a.rekey:
         rows, stale = tree_stale_keys(root)
-        unit_renames, notes = template_renames(rows, converted_classes(root),
-                                               lambda unit, row: unit_object_names(root, unit, row))
+        unit_renames, notes = object_renames(rows, converted_classes(root), declared_classes(root),
+                                             lambda unit, row: unit_object_names(root, unit, row))
         changes, touched = rekey_rows(rows, stale, unit_renames)
         for c in changes:
             print("  unit-objects.json " + c)
@@ -2602,8 +2687,8 @@ def main(argv=None):
     steps = []
     if adds:
         steps.append("python3 scripts/gen_type_headers.py          # class-members.tsv changed")
-    steps.append("python3 tools/memberize.py --rekey --apply      # once the bodies compile: template-instance names "
-                 "of the classes converted")
+    steps.append("python3 tools/memberize.py --rekey --apply      # once the bodies compile: the row names the "
+                 "objects now spell otherwise")
     steps += ["python3 tools/whole_file_rows.py --unit-va %s --cxx --write" % key for key in planner.units]
     steps.append("python3 tools/check.py --function <unit va> --cand <unit file>   # each touched unit")
     steps.append("python3 tools/memberize.py --check              # no C-name declaration left over")

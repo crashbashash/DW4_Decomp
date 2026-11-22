@@ -59,8 +59,12 @@ conversion order are in [member conversion](engine/member-conversion.md).
   `namespace Gap { namespace <Library> {`, the head naming the class alone (`void igRenderer::draw()`), one block
   per run of adjacent members (a free function between them stays outside). `tools/gen_odl_source.py` writes its
   fragments the same way; both take the block from `tools/cxxscope.py`. `memberize.py --respell` puts every
-  remaining `T Gap::<Library>::Class::m(...)` definition of the tree into that form. `tools/units.py` reads a
-  namespace block as transparent, as it reads `extern "C" { }`, so every tool still finds the definitions.
+  remaining `T Gap::<Library>::Class::m(...)` definition of the tree into that form, joining a block it writes to a
+  block of the library right before or after it; memberize and classconv likewise join the two blocks a removal of
+  theirs left side by side (a C definition, an igen file table). The blocks a file already has elsewhere keep
+  their bounds and the blank lines between definitions stay, so a second `--respell` changes nothing.
+  `tools/units.py` reads a namespace block as transparent, as it reads `extern "C" { }`, so every tool still finds
+  the definitions.
 - **Flat and Gap types.** The flat struct of a converted class and its Gap class are two types of one name. A
   receiver or `Class *` argument declared as the flat struct (or a flat subclass, or not declared) is cast to the
   Gap class (`((Gap::Core::igObject *)m)->realloc(…)`; bare `igObject` in Gap's scope), a cast of `this` to the
@@ -114,11 +118,16 @@ conversion order are in [member conversion](engine/member-conversion.md).
   (`__dt__32igSmartPointer<14igVertexStream>Fv`, `getElementMeta__…igTObjectList<…>CFv`) names the instance where
   the source spells it: code in the Gap namespaces (the converted members) now instantiates it with the Gap class,
   while code at file scope still holds the flat struct's (`__dt__25igSmartPointer<8igObject>Fv` stays in many
-  units). So `--rekey` compiles each whole-file unit holding one (tools/project.py `compile_unit`, as check.py
-  builds it) and renames a name its object no longer has to the one object name that differs from it only in Gap
-  scopes (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv`, the lengths recomputed), in every field of the
-  row, `stripped` too; a memberize batch prints it as a step once the bodies compile, before the
-  `whole_file_rows.py` runs. `--check` compiles nothing and does not report these.
+  units). A name can also outlive its class: a view retired (`__dt__33igSmartPointer<15igSemaphoreView>Fv`) or a
+  helper renamed (`__dt__10ScopedLockFv` once it is the kit's igScopeLock). So `--rekey` compiles each whole-file
+  unit holding such a name (a template argument a converted class's flat struct, or a class no source declares;
+  tools/project.py `compile_unit`, as check.py builds it) and renames a name its object no longer has to the one
+  object name that differs from it only in Gap scopes (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv`, the
+  lengths recomputed), else to the one object name the row does not list that differs from it only in the classes
+  it names (`__dt__11igScopeLockFv`), in every field of the row, `stripped` too; a `stripped` name with neither
+  goes (the object no longer compiles that body). A memberize batch prints it as a step once the bodies compile,
+  before the `whole_file_rows.py` runs, and `tools/classconv.py`'s last step runs it. `--check` compiles nothing
+  and does not report these.
 - **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
   row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
   functions it left to link from retail (a partial file) stay so without `--partial`, a name it left out

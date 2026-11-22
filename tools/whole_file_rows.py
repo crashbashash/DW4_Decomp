@@ -87,7 +87,10 @@ The rows go to stdout as JSON. `--write` merges them into unit-objects.json, rep
 whole-file rows inside the range and each row of a function the file now places (a row of a
 function the file leaves out stays), and replaces the units.tsv rows inside the range with one per
 file. The rows are written in address order, and only once the whole file loads (unitobjects.load) and the
-compiler-name map builds from it: otherwise the run stops with why and leaves both files as they were. `--names`
+compiler-name map builds from it: otherwise the run stops with why and leaves both files as they were, naming each
+function two rows place or one row gives two bodies, and a C definition left beside the member that replaced it
+(shared_report). A datum that reads as two addresses names the class whose vtable left the file, its key function
+declared and not defined there (moved_vtables). `--names`
 writes a `.tsv` for tools/apply_names.py, which is what moves `FUN_` names to the library's own.
 
 Usage:
@@ -123,6 +126,7 @@ import verify
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 R_32, R_26, R_HI16, R_LO16, R_GPREL16 = 2, 4, 5, 6, 7
 FIELD_MASK = {R_32: 0xffffffff, R_26: 0x03ffffff, R_HI16: 0xffff, R_LO16: 0xffff, R_GPREL16: 0xffff}
+CLASS_MEMBERS = os.path.join(ROOT, "config", "class-members.tsv")
 
 
 def sext(value):
@@ -337,6 +341,50 @@ def retyped(names, previous, placed, lo, hi):
     return {found[0]: gone[s][0] for s, found in new.items() if len(found) == 1 and len(gone.get(s, ())) == 1}
 
 
+def moved_vtables(syms, functions, members=None):
+    """[(class, key function or None)] of the classes the object registers (it defines their `_Meta`) and whose
+    vtable it only references. MWCC emits a class's vtable, and the inline virtuals only the vtable names (getMeta),
+    in the unit that defines the class's key function: the first virtual the class declares that is neither inline
+    nor pure. Declared and defined nowhere in the file (a partial file leaving it to retail), it takes the vtable
+    out, and a member of another class with the same shape fits the retail copy the moved one left. The key
+    function is the first such virtual `members` (config/class-members.tsv) declares, when the object does not
+    define it; None when the table gives no such declaration."""
+    members = members or CLASS_MEMBERS
+    virtuals = collections.defaultdict(list)     # class -> the virtuals it declares, neither inline nor pure
+    if os.path.exists(members):
+        with open(members) as fh:
+            for line in fh:
+                cls, _, declaration = line.rstrip("\n").partition("\t")
+                declaration = re.sub(r"^(?:(?:public|protected|private):\s*)+", "", declaration)
+                method = re.search(r"(~?\w+)\s*\(", declaration)
+                if (method and declaration.startswith("virtual ") and "{" not in declaration
+                        and not re.search(r"=\s*0\s*;", declaration)):
+                    virtuals[cls].append(method.group(1))
+    out = []
+    for name, (section, _value, _size) in sorted(syms.items()):
+        found = demangle.demangle(name)
+        if (not found or found.special != "vt" or isinstance(section, int)
+                or not isinstance(syms.get("_Meta__" + name[len("__vt__"):], (None,))[0], int)):
+            continue
+        defined = {d.name for d in map(demangle.demangle, functions)
+                   if d and d.class_name == found.class_name and d.namespaces == found.namespaces}
+        first = (virtuals.get(found.class_base) or [None])[0]
+        key = "::".join(found.namespaces + (found.class_name, first)) if first and first not in defined else None
+        out.append(("::".join(found.namespaces + (found.class_name,)), key))
+    return out
+
+
+def reads_twice(obj, syms, functions, name, first, second):
+    """Stop: `name` reads as two addresses, naming a class whose vtable moved out of the file (moved_vtables)."""
+    why = "".join("; %s's vtable is not in this object although the file registers the class: MWCC emits a class's "
+                  "vtable (and the inline virtuals only it names, getMeta) with the class's key function, its first "
+                  "declared virtual that is neither inline nor pure, and %s" % (
+                      cls, "%s is declared and not defined in this file: define it, or declare first a virtual the "
+                           "file defines" % key if key else "that function is not defined in this file")
+                  for cls, key in moved_vtables(syms, functions))
+    sys.exit("%s: %s reads as 0x%x and 0x%x%s" % (obj, name, first, second, why))
+
+
 def reach(function_at, retail, syms, headers, obj, functions, records, names, hi, twins=None, sections=()):
     """(data, duplicates, externals) of one file: what its placed members reach in retail.
 
@@ -395,7 +443,7 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
                 else:
                     sys.exit("%s: relocation type %d against function %s" % (obj, kind, name))
                 if duplicates.get(name, address) != address:
-                    sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, duplicates[name], address))
+                    reads_twice(obj, syms, functions, name, duplicates[name], address)
                 if name not in duplicates:
                     copy = (twins(name, address) if twins else None) or functions[name]
                     if not copy.fits(retail, address):
@@ -413,7 +461,7 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
             if kind == R_26:
                 target = (base & 0xf0000000) | ((field & 0x3ffffff) << 2)
                 if externals.get(name, target) != target:
-                    sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, externals[name], target))
+                    reads_twice(obj, syms, functions, name, externals[name], target)
                 externals[name] = target
                 continue
             if kind == R_HI16:
@@ -427,7 +475,7 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
             if name in names:
                 continue
             if data.get(name, address) != address:
-                sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, data[name], address))
+                reads_twice(obj, syms, functions, name, data[name], address)
             data[name] = address
             if isinstance(home, int):
                 walk_section(address - syms[name][1], home)
@@ -558,7 +606,7 @@ def table_externals(placed, retail, syms, headers, obj, functions, records, name
                 sys.exit("%s: exception table names %s at 0x%x, which starts no retail function"
                          % (obj, name, address))
             if out.get(name, address) != address:
-                sys.exit("%s: %s reads as 0x%x and 0x%x" % (obj, name, out[name], address))
+                reads_twice(obj, syms, functions, name, out[name], address)
             out[name] = address
     return out
 
@@ -695,13 +743,54 @@ def merge_rows(overlay, lo, hi, rows):
     return overlay
 
 
-def shared_functions(overlay):
-    """{address: [row keys]} of the functions more than one row of `overlay` places (its key or `emitted`)."""
-    keys = collections.defaultdict(list)
+def shared_bodies(overlay, by_va):
+    """[(address, [(row key, name)])] of the functions `overlay` gives more than one body, as unitobjects.load
+    refuses them: an address one row names twice among its key, `emitted` and `duplicates`, or one two rows place
+    (key or `emitted`). A row's key is named by its `symbol`, else its symbols.txt name, else the key."""
+    placed, out = collections.defaultdict(list), []
     for key, row in overlay.items():
-        for va in {int(key, 16)} | {int(va, 16) for va in (row.get("emitted") or {}).values()}:
-            keys[va].append(key)
-    return {va: k for va, k in sorted(keys.items()) if len(k) > 1}
+        owner = int(key, 16)
+        own = [(int(va, 16), name) for name, va in (row.get("emitted") or {}).items()]
+        if not (row.get("whole_file") and owner in {int(va, 0) for va in (row.get("data") or {}).values()}):
+            own.insert(0, (owner, row.get("symbol") or by_va.get(owner, (key,))[0]))    # not a data-only row's datum
+        bodies = collections.defaultdict(list)
+        for va, name in own + [(int(va, 16), name) for name, va in (row.get("duplicates") or {}).items()]:
+            bodies[va].append((key, name))
+        out += [(va, names) for va, names in bodies.items() if len(names) > 1]
+        for va, name in own:
+            placed[va].append((key, name))
+    out += [(va, rows) for va, rows in placed.items() if len({key for key, _name in rows}) > 1]
+    return sorted(out)
+
+
+def leftover(names):
+    """The names of `names` that are no member function, when one of them is: the C definitions a conversion left
+    beside the member that replaced them (`igInfoList_GetElementMeta` beside `getElementMeta__...CFv`)."""
+    def member(name):
+        found = demangle.demangle(name)
+        return bool(found and found.class_name and not found.data)
+    if not any(member(name) for name in names):
+        return []
+    return [name for name in names if not member(name) and not name.startswith("0x")]
+
+
+def shared_report(overlay, symbols):
+    """What makes `overlay` place a function twice, for write_overlay's refusal: each address with its rows or
+    bodies, and the definition each leaves over."""
+    _by_name, by_va = verify.load_symbols(symbols)
+    out = []
+    for va, bodies in shared_bodies(overlay, by_va):
+        keys = list(dict.fromkeys(key for key, _name in bodies))
+        names = [name for _key, name in bodies]
+        line = ("0x%08x is placed by the rows %s (%s)" % (va, ", ".join(keys), ", ".join(names)) if len(keys) > 1
+                else "0x%08x has %d bodies in the row %s: %s" % (va, len(names), keys[0], ", ".join(names)))
+        stale = leftover(names)
+        if stale:
+            member = next(name for name in names if name not in stale and not name.startswith("0x"))
+            line += (": %s is likely a definition left over from the conversion to the member %s; delete it from "
+                     "the source" % (" and ".join(stale), member))
+        out.append(line)
+    return out
 
 
 def write_overlay(path, overlay, symbols):
@@ -716,8 +805,7 @@ def write_overlay(path, overlay, symbols):
             unitobjects.load(tmp)
             compiler_names.generate(symbols, tmp)
         except ValueError as e:
-            shared = "".join("; 0x%08x is placed by the rows %s" % (va, ", ".join(keys))
-                             for va, keys in shared_functions(overlay).items())
+            shared = "".join("; " + line for line in shared_report(overlay, symbols))
             sys.exit("%s left as it was: the rows would not load: %s%s" % (path, e, shared))
         finally:
             unitobjects.load.cache_clear()

@@ -52,6 +52,21 @@ class Respell(unittest.TestCase):
         self.assertEqual(cxxscope.respell(text), "namespace Gap {\nnamespace Gui {\n\nvoid igRenderer::draw() {\n}\n\n"
                                                  "void igRenderer::traverse() {\n}\n}\n}\n")
 
+    def test_blocks_the_file_had_keep_their_bounds(self):
+        # igObject_tail2.inc's two adjacent Core blocks (around `operator new`), and reflected.h's one block per
+        # class, were merged on every run although nothing in them was respelled
+        text = ("namespace Gap {\nnamespace Core {\n\nvoid igObject::a() {\n}\n}\n}\n\n"
+                "namespace Gap {\nnamespace Core {\n\nvoid igObject::b() {\n}\n}\n}\n")
+        self.assertEqual(cxxscope.respell(text), text)
+        respelled = cxxscope.respell(text + "\nvoid Gap::Gui::igRenderer::draw() {\n}\n")
+        self.assertTrue(respelled.startswith(text))
+
+    def test_a_merge_keeps_the_blank_lines_between_the_definitions(self):
+        text = ("namespace Gap {\nnamespace Gui {\n\nvoid igRenderer::draw() {\n}\n}\n}\n\n\n\n"
+                "void Gap::Gui::igRenderer::traverse() {\n}\n")
+        self.assertEqual(cxxscope.respell(text), "namespace Gap {\nnamespace Gui {\n\nvoid igRenderer::draw() {\n}\n"
+                                                 "\n\n\nvoid igRenderer::traverse() {\n}\n}\n}\n")
+
     def test_generated_fragments_have_the_same_spelling(self):
         lines = ["igMetaObject *igRenderer::_Meta;", "", "void igRenderer::arkRegister()", "{", "}", ""]
         fragment = gen_odl_source.render_fragment([("igRenderer", lines)], {"igRenderer": "Gui"}, "Gui")

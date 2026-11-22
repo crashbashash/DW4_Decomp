@@ -1,33 +1,39 @@
 #!/usr/bin/env python3
 """classconv.py — convert one batch of flat classes to `Gap::<Library>::` classes from a spec file.
 
-    python3 tools/classconv.py <spec.py> {tables,memberize,splice,decls,all} [<class> ...]
+    python3 tools/classconv.py <spec.py> {tables,memberize,splice,decls,rekey,all} [<class> ...]
 
 Without classes, every class of the spec, in its order. Run from the repository root. The steps are those of
 docs/engine/member-conversion.md ("Converting a class, in order"), for every class of the batch:
 
   tables     the class's row in config/converted-classes.tsv, its `rows` in config/class-members.tsv (after its
              last row there) and its `typed` fields in config/typed-fields.tsv; for a spec with `add`, the rows
-             and typed fields the converted class lacks (a row it has declares the same, access label and spacing
-             aside), each after the row the spec lists before it
-  memberize  each C function a hand body replaces becomes an empty stub with the member's parameters, then
-             tools/memberize.py --apply renames every mapped C name and `g_<Class>_<datum>` to its member. A
-             `gen` member no C name maps is the function at its role's retail address (the generator's
-             `--list`: a field adder symbols.txt calls `FUN_00153ef0`); a hand body's member no C function
-             becomes, and the class does not define yet, stops the run with its name
+             and typed fields the converted class lacks (a row it has declares the same: a function of the same
+             signature, whatever its access label, specifiers, parameter names, defaults and spacing), each after
+             the row the spec lists before it
+  memberize  each C function a hand body replaces becomes an empty stub with the member's parameters (its row's,
+             defaults dropped), then tools/memberize.py --apply renames every mapped C name and `g_<Class>_<datum>`
+             to its member. A `gen` member no C name maps is the function at its role's retail address (the
+             generator's `--list`: a field adder symbols.txt calls `FUN_00153ef0`); a hand body's member no C
+             function becomes, and the class does not define yet, stops the run with its name
   splice     tools/gen_odl_source.py's boilerplate (`gen`) and the hand `bodies` replace the memberized
              definitions (a definition's head in code, never in a comment or string; an overload's, static or
-             not, by its parameter types); a metafield's descriptor creator and `getMetaField` are igen's; a
+             not, by its signature); a metafield's descriptor creator and `getMetaField` are igen's; a
              bootstrap class's constructors, copy slot and `__bootstrapDestruct` are written in the kit's form
-             over their C definitions and their unit-objects.json keys renamed to the compiler names; igen's
-             file-scope field tables go (the generator keeps them function-local); a static datum's definition
-             takes its declared type; `memberize.py --respell` last
+             over their C definitions, in a namespace block joined with the library's block right before or after
+             it, and their unit-objects.json keys renamed to the compiler names; igen's file-scope field tables go
+             (the generator keeps them function-local); a static datum's definition takes its declared type;
+             `memberize.py --respell` last
   decls      the C-name declarations `memberize.py --check` reports unneeded are deleted (after the
              splice, which drops the last C users of the bootstrap names)
-  all        the four in order
+  rekey      `memberize.py --rekey --apply`: the row names the touched units' objects now spell otherwise (a
+             template instance or a class renamed or retired, a `stripped` body the object no longer compiles);
+             a unit that does not compile yet keeps its names, reported, for a later `--rekey`
+  all        the five in order
 
-A run that fails leaves src/, include/ and config/ as it found them. The rows of touched units, the compiler-name
-map and the checks are the caller's (member-conversion.md).
+A run that fails leaves src/, include/ and config/ as it found them. A step changes the text it rewrites and
+nothing else: the blank lines around a table it drops or a definition it writes stay as the file had them. The
+rows of touched units, the compiler-name map and the checks are the caller's (member-conversion.md).
 
 A spec file is Python defining SPECS = {<class>: dict(...)}; `import classconv` gives it the shared pieces
 (COMMON, GEN, STRINGS, array_spec). The keys of a class's dict:
@@ -44,10 +50,14 @@ A spec file is Python defining SPECS = {<class>: dict(...)}; `import classconv` 
   keep     C suffixes that stay free functions (memberize leaves them; anything else unmapped is reported)
   data     {datum suffix: member} for `g_<Class>_<suffix>`
   gen      members whose definitions the generator writes (default GEN)
-  bodies   {member: definition}, `{C}` the class (the first definition of that name is replaced)
-  overloads   a `map`/`extra` member and its `bodies` key may be the overload's full declaration, as its `rows`
-           row spells it (`void removeInfo(const char *infoName);`): memberize gets the full signature, the stub
-           its parameters, and the splice replaces the definition with those parameter types
+  bodies   {member: definition}, `{C}` the class (the definition of that member is replaced)
+  overloads   a `map`/`extra` member and its `bodies` key may be the overload's full declaration
+           (`void removeInfo(const char *infoName);`), matched to the class's rows (the spec's and
+           class-members.tsv's) by signature: name, parameter types and `const`, whatever the spelling's access
+           labels, `virtual`/`static`/`inline`, parameter names, defaults, `const` placement and spacing.
+           memberize gets the row's signature, the stub the row's parameters, and the splice replaces the
+           definition of that signature. A bare name the class overloads, or a declaration two rows fit, stops
+           the run
   boot     {Init|CopyConstruct|Construct|Clone|Destruct: definition} overriding the default bootstrap bodies
            (str.format: `{C}` the class, `{B}` the base, braces doubled)
   boot_names  {Init|CopyConstruct|Construct|Destruct: C name} for a bootstrap class whose C names do not
@@ -68,7 +78,9 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
+import cxxscope  # noqa: E402
 import demangle  # noqa: E402
+import memberize  # noqa: E402
 
 SYMBOLS = "config/SLUS-20836/symbols.txt"
 UNIT_OBJECTS = "config/SLUS-20836/unit-objects.json"
@@ -176,7 +188,7 @@ def find_c_def(text, cname):
 # expression, `if (Gap::Gfx::igImage::isIndexed(f)) {` or `x = igFoo::k_num;`, or after a keyword, `return X::m(a)`,
 # is none)
 TYPE_PREFIX = r"^[ \t]*(?!(?:return|else|case|goto|delete|throw|new)\b)(?:[\w:<>,*& \t]*[ \t*&])?(?:\w+::)*"
-DEF_HEAD = TYPE_PREFIX + r"%s::(?P<name>%s)\s*\((?P<params>[^;{]*?)\)[^;{]*\{"
+DEF_HEAD = TYPE_PREFIX + r"%s::(?P<name>%s)\s*\((?P<params>[^;{]*?)\)(?P<tail>[^;{]*)\{"
 
 
 def member_name(member):
@@ -185,16 +197,112 @@ def member_name(member):
     return m.group(1) if m else member
 
 
-def param_types(params):
-    """The types of a parameter list, names dropped and spacing normalised (`const char *name` -> `const char*`)."""
-    out = []
-    for p in params.split(","):
-        p = " ".join(p.split())
-        if not p or p == "void":
-            continue
-        p = re.sub(r"(?<=[\s*&])[A-Za-z_]\w*$", "", p).strip()
-        out.append(re.sub(r"\s*([*&])\s*", r"\1", p))
+_ACCESS = r"^\s*(?:(?:public|protected|private)\s*:(?!:)\s*)*"
+# the words a parameter's type may end with: never its name
+_TYPE_WORDS = frozenset(("const", "volatile", "unsigned", "signed", "int", "char", "short", "long", "float", "double",
+                         "void", "bool", "wchar_t"))
+
+
+def _top_split(text, sep):
+    """`text` split at each `sep` outside parentheses, angle brackets, brackets and braces."""
+    out, depth, start = [], 0, 0
+    for i, ch in enumerate(text):
+        if ch in "(<[{":
+            depth += 1
+        elif ch in ")>]}":
+            depth -= 1
+        elif ch == sep and depth == 0:
+            out.append(text[start:i])
+            start = i + 1
+    out.append(text[start:])
     return out
+
+
+def param_type(p):
+    """One parameter's type as a signature compares it: its default and its name dropped, `struct`/`class` and
+    spacing normalised, a top-level `const` dropped and the base type's `const` written first
+    (`char const *name = 0` -> `const char*`)."""
+    p = " ".join(_top_split(p, "=")[0].split())
+    fp = re.match(r"^(.*\(\s*[*&]+)\s*[A-Za-z_]\w*\s*(\).*)$", p)          # a function pointer `R (*name)(args)`
+    if fp:
+        p = fp.group(1) + fp.group(2)
+    else:
+        m = re.match(r"^(?P<type>.*?(?:[\w>]\s+|[*&]\s*))(?P<name>[A-Za-z_]\w*)(?P<arr>(?:\s*\[[^\]]*\])*)$", p)
+        if m and m.group("name") not in _TYPE_WORDS and \
+                re.sub(r"\b(?:const|volatile)\b|[\s*&]", "", m.group("type")):
+            p = m.group("type") + ("*" if m.group("arr") else "")
+    p = re.sub(r"\b(?:struct|class|union|enum|typename)\s+", "", p).strip()
+    depth, base_end = 0, len(p)
+    for i, ch in enumerate(p):
+        depth += {"<": 1, "(": 1, ">": -1, ")": -1}.get(ch, 0)
+        if depth == 0 and ch in "*&":
+            base_end = i
+            break
+    base, rest = p[:base_end], p[base_end:]
+    if re.search(r"\bconst\b", base):
+        base = "const " + " ".join(re.sub(r"\bconst\b", " ", base).split())
+    rest = re.sub(r"\s*\bconst\s*$", "", rest)
+    return re.sub(r"\s*([*&<>,()\[\]])\s*", r"\1", " ".join((base + rest).split()))
+
+
+def param_types(params):
+    """The types of a parameter list (param_type each; `void` alone is none)."""
+    out = [param_type(p) for p in _top_split(params, ",") if p.strip()]
+    return [] if out == ["void"] else out
+
+
+def _closing(text, open_):
+    """The index of the parenthesis closing the one at `open_`, or None."""
+    depth = 0
+    for i in range(open_, len(text)):
+        depth += {"(": 1, ")": -1}.get(text[i], 0)
+        if depth == 0:
+            return i
+    return None
+
+
+def signature(decl):
+    """(name, parameter types, const) of a function's declaration, definition head or class-members.tsv row —
+    access labels, `virtual`/`static`/`inline`, parameter names, defaults and spacing aside — or None for a bare
+    name or a datum."""
+    m = re.search(r"(~?[A-Za-z_]\w*)\s*\(", decl)
+    close = _closing(decl, m.end() - 1) if m else None
+    if close is None:
+        return None
+    return m.group(1), tuple(param_types(decl[m.end():close])), re.match(r"\s*const\b", decl[close + 1:]) is not None
+
+
+def same_member(a, b):
+    """Whether two spec member keys name one member: by name when either is a bare name (declared_row refuses a
+    bare name the class overloads), else by signature."""
+    if "(" not in a or "(" not in b:
+        return member_name(a) == member_name(b)
+    return signature(a) == signature(b)
+
+
+def declared_row(rows, member):
+    """The row of `rows` (class-members.tsv rows) declaring spec member `member`, or None when none does: a bare
+    name the one function of that name, a full declaration the function of its signature (the one of its name and
+    parameters when its `const` is the only difference). A bare name that names overloads, or a declaration two
+    rows fit, is ambiguous (ConvError)."""
+    name = member_name(member)
+    decls = collections.OrderedDict()
+    for r in rows:
+        s = signature(r)
+        if s and s[0] == name:
+            decls.setdefault(s, r)
+    if "(" not in member:
+        if len(decls) > 1:
+            raise ConvError("`%s` names %d overloads (%s): key it by its declaration"
+                            % (member, len(decls), "; ".join(declaration(r) for r in decls.values())))
+        return next(iter(decls.values()), None)
+    want = signature(member)
+    if want in decls:
+        return decls[want]
+    loose = [r for s, r in decls.items() if s[:2] == want[:2]]
+    if len(loose) > 1:
+        raise ConvError("`%s` fits %d rows (%s)" % (member, len(loose), "; ".join(declaration(r) for r in loose)))
+    return loose[0] if loose else None
 
 
 def member_defs(text, cls, name):
@@ -211,31 +319,50 @@ def member_defs(text, cls, name):
 
 def replace_member(text, cls, member, body):
     """`text` with the first definition of `cls::member` replaced by `body`, and whether there was one. A member
-    given as a full declaration (an overload) is the definition whose parameter types are the declaration's: a
-    static overload and a member one of one name differ in their parameters, never in the definition's head."""
-    name = member_name(member)
-    want = param_types(re.search(r"\((.*)\)", member).group(1)) if "(" in member else None
-    for start, m in member_defs(text, cls, re.escape(name)):
-        if want is None or param_types(m.group("params")) == want:
-            return text[:start] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
-    return text, False
+    given as a full declaration (an overload) is the definition of its signature (the one of its parameters when
+    `const` is the only difference): a static overload and a member one of one name differ in their parameters,
+    never in the definition's head."""
+    want = signature(member) if "(" in member else None
+    found = []
+    for start, m in member_defs(text, cls, re.escape(member_name(member))):
+        have = (m.group("name"), tuple(param_types(m.group("params"))), bool(re.match(r"\s*const\b", m.group("tail"))))
+        if want is None or have == want:
+            found = [(start, m)]
+            break
+        if have[:2] == want[:2]:
+            found.append((start, m))
+    if len(found) != 1:
+        return text, False
+    start, m = found[0]
+    return text[:start] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
 
 
 def declaration(row):
     """What a class-members.tsv (or typed-fields.tsv) row declares: its access labels dropped and its spacing
     normalised (`public: virtual  int f();` and `virtual int f();` declare the same); a row of labels only is
     itself."""
-    return " ".join(re.sub(r"^\s*(?:(?:public|protected|private)\s*:\s*)*", "", row).split()) or " ".join(row.split())
+    return " ".join(re.sub(_ACCESS, "", row).split()) or " ".join(row.split())
+
+
+def row_key(row):
+    """What makes two class-members.tsv rows one: a function's signature, else its declaration."""
+    s = signature(re.sub(r"\{.*\}\s*;?\s*$", "", declaration(row)))
+    return ("function",) + s if s else declaration(row)
 
 
 def qualified_member(q, member):
     """The memberize table's spelling of a spec member: `Gap::Lib::Class::name`, or an overload's full signature
-    with the class qualified (`void Gap::Core::igFoo::remove(const char *name)`)."""
+    with the class qualified (`void Gap::Core::igFoo::remove(const char *name)`), its access labels, defaults,
+    pure specifier and inline body dropped."""
     if "(" not in member:
         return "%s::%s" % (q, member)
-    decl = re.sub(r"^\s*(public|protected|private)\s*:\s*", "", member).strip().rstrip(";").strip()
+    decl = re.sub(_ACCESS, "", member).strip()
+    decl = re.sub(r"\s*(?:\{.*\}|=\s*0)?\s*;?\s*$", "", decl, flags=re.S)
     name = member_name(decl)
-    return re.sub(r"\b%s\s*\(" % re.escape(name), "%s::%s(" % (q, name), decl, count=1)
+    at = re.search(r"\b%s\s*\(" % re.escape(name), decl)
+    close = _closing(decl, at.end() - 1)
+    params = ", ".join(" ".join(_top_split(p, "=")[0].split()) for p in _top_split(decl[at.end():close], ","))
+    return "%s%s::%s(%s%s" % (decl[:at.start()], q, name, params, decl[close:])
 
 
 def fragment_pieces(text, cls):
@@ -251,12 +378,14 @@ def ns(lib, body):
 
 
 def decl_of(rows, member):
-    """(static, return type, parameter list) of the first row declaring `member`, or None."""
+    """(static, return type, parameter list without defaults) of the first row declaring `member`, or None."""
     for r in rows:
-        r = re.sub(r"^\s*(public|protected|private)\s*:\s*", "", r)
-        m = re.match(r"((?:virtual|static|inline)\s+)*(.*?)\b%s\s*\(([^)]*)\)" % re.escape(member), r)
-        if m:
-            return "static" in (m.group(1) or ""), m.group(2).strip(), m.group(3).strip()
+        r = re.sub(_ACCESS, "", r)
+        m = re.match(r"((?:virtual|static|inline)\s+)*(.*?)\b%s\s*\(" % re.escape(member), r)
+        close = _closing(r, m.end() - 1) if m else None
+        if close is not None:
+            params = ", ".join(_top_split(p, "=")[0].strip() for p in _top_split(r[m.end():close], ","))
+            return "static" in (m.group(1) or ""), m.group(2).strip(), params.strip()
     return None
 
 
@@ -279,30 +408,25 @@ def stub_text(text, cname, head):
     return text[:span[0]] + head + "\n{\n}" + text[span[1]:], True
 
 
-FILE_TABLES = (r"\n(static )?(igMetaObjectCallback |FieldFactory |const char \*|igMetaField \*\*|int )"
+FILE_TABLES = (r"(?m)^(static )?(igMetaObjectCallback |FieldFactory |const char \*|igMetaField \*\*|int )"
                r"g_%s_(callbackList|ctorTable|fieldTable|fieldDescriptors|fieldHandles|fieldOffsets)\[\] = \{[^}]*\};"
-               r"(?=\n)")
+               r"[ \t]*(?:\n|$)")
 
 
 def drop_file_tables(text, cls):
-    """igen keeps the registrar's and the field adder's tables function-local: the file-scope C ones go."""
+    """igen keeps the registrar's and the field adder's tables function-local: the file-scope C ones go, each with
+    the blank lines after it when a blank line comes before it (one table between two paragraphs leaves one
+    separator), and the namespace blocks of one library a table separated become one (cxxscope.merge_blocks). The
+    file's other blank lines and blocks stay as they are."""
     pat = re.compile(FILE_TABLES % re.escape(cls))
     while True:
-        new = pat.sub("", text)
-        if new == text:
-            return re.sub(r"\n\n\n+", "\n\n", text)
-        text = new
-
-
-def rekey_row(row, old, new):
-    """Rename the key `old` to `new` in one unit-objects.json row, in place and in order; whether it was there."""
-    hit = False
-    for sec in ("emitted", "data", "duplicates", "anon", "stripped"):
-        m = row.get(sec)
-        if isinstance(m, dict) and old in m:
-            row[sec] = collections.OrderedDict((new if k == old else k, v) for k, v in m.items())
-            hit = True
-    return hit
+        m = pat.search(text)
+        if not m:
+            return text
+        end = m.end()
+        if m.start() == 0 or text[:m.start()].endswith("\n\n"):
+            end = re.compile(r"(?:[ \t]*\n)*").match(text, end).end()
+        text = cxxscope.merge_blocks(text[:m.start()] + text[end:], {m.start()})
 
 
 def boot_bodies(C, base):
@@ -461,17 +585,19 @@ class Tree:
         """The `rows` of `cls` a tab table lacks, in their order among the ones it has: a new row goes after the
         row `rows` lists before it, before the first one it has when none precedes it, and after `cls`'s last
         row when the table has none of `rows`; the rows added. A row the table has is one declaring the same
-        (declaration: access label and spacing aside), so that adding is idempotent and never duplicates one."""
+        (row_key: a function of the same signature, whatever its access label, specifiers, parameter names,
+        defaults and spacing; another row of the same declaration), so that adding is idempotent and never
+        duplicates one."""
         lines = self.read(rel).split("\n")
         if lines and lines[-1] == "":
             lines.pop()
         have = {}
         for i, l in enumerate(lines):
             if l.split("\t", 1)[0] == cls:
-                have.setdefault(declaration(l.split("\t", 1)[1] if "\t" in l else ""), i)
+                have.setdefault(row_key(l.split("\t", 1)[1] if "\t" in l else ""), i)
         inserts, pending, queued, anchor = collections.defaultdict(list), [], set(), None
         for r in rows:
-            key = declaration(r)
+            key = row_key(r)
             if key in have:
                 if pending:
                     inserts[have[key] if anchor is None else anchor + 1] += pending
@@ -489,15 +615,17 @@ class Tree:
         return [l.split("\t", 1)[1] for at in sorted(inserts) for l in inserts[at]]
 
     def rekey(self, pairs):
-        """Rename unit-objects.json keys `old` -> `new` in whichever unit rows list them; the names not found."""
+        """Rename unit-objects.json keys `old` -> `new` in every unit row listing them (memberize.rekey_rows, the one
+        renaming of row names), in place and in order; the names no row lists."""
         text = self.read(UNIT_OBJECTS)
         data = json.loads(text, object_pairs_hook=collections.OrderedDict)
-        missing = []
-        for old, new in pairs:
-            if not any(rekey_row(row, old, new) for row in data.values() if isinstance(row, dict)):
-                missing.append(old)
+        rows = collections.OrderedDict((k, r) for k, r in data.items() if isinstance(r, dict))
+        listed = {r.get("symbol") for r in rows.values()}
+        listed |= {k for r in rows.values() for f in memberize._ROW_FIELDS if isinstance(r.get(f), (dict, list))
+                   for k in r[f]}
+        memberize.rekey_rows(rows, dict(pairs))
         self.write(UNIT_OBJECTS, json.dumps(data, indent=2, ensure_ascii=False) + ("\n" if text.endswith("\n") else ""))
-        return missing
+        return [old for old, _new in pairs if old not in listed]
 
 
 # ---------------------------------------------------------------------------------------------------- steps
@@ -551,12 +679,36 @@ MACRO_DECLS = {"_instantiateFromPool": (True, "{C} *", "igMemoryPoolView *pool")
 
 
 def member_decl(cls, rows, member):
-    """decl_of `member` in `rows` (an overload's own full declaration), else the object macros' declaration of it."""
-    d = decl_of([member] if "(" in member else rows, member_name(member))
+    """decl_of the row of `rows` declaring `member` (declared_row; an overload's own full declaration when no row
+    does), else the object macros' declaration of it."""
+    row = declared_row(rows, member)
+    d = decl_of([row or member] if "(" in member or row else rows, member_name(member))
     if d is None and member in MACRO_DECLS:
         static, ret, params = MACRO_DECLS[member]
         d = static, ret.replace("{C}", cls), params
     return d
+
+
+def class_rows(tree, c, spec):
+    """The class-members.tsv rows of `c`: the table's, then the spec's (those the tables step has not written)."""
+    rows = []
+    for line in tree.read("config/class-members.tsv").split("\n"):
+        p = line.split("\t", 1)
+        if len(p) == 2 and p[0] == c:
+            rows.append(p[1])
+    return rows + list(spec.get("rows", ()))
+
+
+def check_keys(tree, c, spec):
+    """Each member a spec key names (`map`, `extra`, `bodies`) is one row of the class or none (a new member):
+    a bare name of overloads, or a declaration two rows fit, stops the run (declared_row)."""
+    rows = class_rows(tree, c, spec)
+    for member in list(spec.get("map", {}).values()) + list(spec.get("extra", {}).values()) + \
+            list(spec.get("bodies", {})):
+        try:
+            declared_row(rows, member)
+        except ConvError as e:
+            raise ConvError("%s: %s" % (c, e))
 
 
 def generator_roles(tree, classes, specs):
@@ -615,10 +767,11 @@ def unbacked_members(tree, c, spec, pairs, roles=None):
 def stub(tree, cls, spec, pairs):
     """Each C function (`pairs`, c_names) a hand body or the generator replaces becomes an empty definition with
     the member's parameters (memberize refuses a C form whose parameters differ from the member's)."""
+    rows = class_rows(tree, cls, spec)
     for cname, member in pairs:
-        if member not in spec.get("bodies", {}) and member not in gen_of(spec):
+        if not any(same_member(member, b) for b in spec.get("bodies", {})) and member not in gen_of(spec):
             continue
-        d = member_decl(cls, spec.get("rows", ()), member)
+        d = member_decl(cls, rows, member)
         if d is None:
             continue
         for path in tree.files_naming(lib_of(spec), cname):
@@ -638,7 +791,8 @@ def memberize_table(tree, classes, specs, roles=None):
         for g, m in spec.get("data", {}).items():
             table.append(("g_%s_%s" % (c, g), "%s::%s" % (q, m)))
         pairs = c_names(tree, c, spec, (roles or {}).get(c))
-        table += [(cname, qualified_member(q, m)) for cname, m in pairs]
+        rows = class_rows(tree, c, spec)
+        table += [(cname, qualified_member(q, (declared_row(rows, m) or m) if "(" in m else m)) for cname, m in pairs]
         if not spec.get("add"):
             mapped = {cname for cname, _m in pairs}
             unmapped += ["%s_%s" % (c, n) for n in tree.symbols(c)
@@ -647,6 +801,8 @@ def memberize_table(tree, classes, specs, roles=None):
 
 
 def step_memberize(tree, classes, specs):
+    for c in classes:
+        check_keys(tree, c, specs[c])
     roles = generator_roles(tree, classes, specs)
     pairs = {c: c_names(tree, c, specs[c], roles.get(c)) for c in classes}
     unbacked = ["%s::%s" % (c, m) for c in classes
@@ -732,7 +888,9 @@ def boot_cnames(tree, c, spec):
 
 
 def splice_boot(tree, c, spec):
-    """A bootstrap class's constructors, copy slot and bootstrap destruct, in the kit's form."""
+    """A bootstrap class's constructors, copy slot and bootstrap destruct, in the kit's form: each over its C
+    definition, in its namespaces' block, joined with a block of the library right before or after it
+    (cxxscope.merge_blocks); the blank lines around it stay."""
     lib = lib_of(spec)
     bodies = boot_bodies(c, spec["base"])
     for n, override in spec.get("boot", {}).items():
@@ -749,7 +907,10 @@ def splice_boot(tree, c, spec):
             t = tree.read(path)
             span = find_c_def(t, cname)
             if span:
-                tree.write(path, t[:span[0]] + ns(lib, body) + "\n" + t[span[1]:])
+                end = span[1] + 1 if t[span[1]:span[1] + 1] == "\n" else span[1]
+                block = ns(lib, body)
+                tree.write(path, cxxscope.merge_blocks(t[:span[0]] + block + t[end:],
+                                                       {span[0], span[0] + len(block)}))
                 rekeys.append((cname, boot_key(lib, c, member, params)))
                 break
         else:
@@ -759,6 +920,8 @@ def splice_boot(tree, c, spec):
 
 
 def step_splice(tree, classes, specs):
+    for c in classes:
+        check_keys(tree, c, specs[c])
     args = ["tools/gen_odl_source.py"]
     for c in classes:
         if gen_of(specs[c]):
@@ -817,6 +980,11 @@ def step_decls(tree):
         print("%s: %d declaration%s dropped" % (path, len(lines), "" if len(lines) == 1 else "s"))
 
 
+def step_rekey(tree):
+    """The touched units' row names their objects now spell otherwise (memberize.py --rekey --apply)."""
+    print(tree.run(["tools/memberize.py", "--rekey", "--apply"]).rstrip())
+
+
 def load_specs(path):
     sys.path.insert(0, HERE)
     s = importlib.util.spec_from_file_location("classconv_spec", path)
@@ -828,7 +996,7 @@ def load_specs(path):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("spec", help="the batch's spec file (Python defining SPECS)")
-    ap.add_argument("step", choices=("tables", "memberize", "splice", "decls", "all"))
+    ap.add_argument("step", choices=("tables", "memberize", "splice", "decls", "rekey", "all"))
     ap.add_argument("classes", nargs="*", help="the classes to convert (default: the spec's, in order)")
     ap.add_argument("--root", default=ROOT)
     a = ap.parse_args(argv)
@@ -850,6 +1018,8 @@ def main(argv=None):
         tree.run(["scripts/gen_type_headers.py"])
         if a.step in ("all", "decls"):
             step_decls(tree)
+        if a.step in ("all", "rekey"):
+            step_rekey(tree)
     except BaseException as e:
         restored = tree.restore(snap)
         if not isinstance(e, ConvError):

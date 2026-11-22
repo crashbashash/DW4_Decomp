@@ -1,7 +1,7 @@
 """Tests for tools/dispatcher/regalloc.py: the instruction alignment (a missing delay-slot nop must not shift every later
 pair into a difference), the merge edit (the merged web keeps the lower id, as b52's coalescer does), the register
-constraints, the id search widened to the involved nodes' neighbours, and a candidate that defines the function as a
-member."""
+constraints, the id search widened to the involved nodes' neighbours, the degree and cost edits, and a candidate that
+defines the function as a member."""
 import json
 import os
 import sys
@@ -97,6 +97,56 @@ class NeighbourSearch(unittest.TestCase):
         sols, _total = ra.search(self.adj, self.cost, WANT, pool)
         best = ra.rank_orders(sols, pool, {32})[0]
         self.assertEqual([n for n in best if n in (32, 36, 38, 40, 44, 45, 46)], [32, 44, 36, 45, 38, 46, 40])
+
+
+# FUN_0020bb20 (NmGfxTex's best draft): the last group of the pass the tool replays, cut to the eleven values live across
+# the calls at its end. 32 is `textures` (ours s4, retail s3), 33 `program` (ours s3, retail s4), 34 `deferred` (the
+# parameters), 36 uploadCount, 37 count, 39 bound; every one has the physical floor of a value live across a call and
+# interferes with the others but for the APART pairs. Simplify picks 34 49 35 70 48 66 and the rescan pushes 32 before 33,
+# so 33 is coloured first and takes s3. No id order of the locals or cost change of either gives retail's colours.
+FLOOR = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 24, 25, 28, 29, 31]
+GROUP = {32: 19, 33: 12, 34: 3, 35: 4, 36: 10, 37: 13, 39: 8, 48: 5, 49: 4, 66: 7, 70: 5}
+APART = {(35, 66), (35, 70), (48, 66), (48, 70)}
+S = {r: ra.REGNUM[r] for r in ("s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8")}
+GROUP_WANT = {32: S["s3"], 33: S["s4"], 34: S["s8"], 35: S["s6"], 36: S["s2"], 37: S["s1"], 39: S["s0"], 48: S["s5"],
+              49: S["s7"], 66: S["s5"], 70: S["s6"]}
+
+
+def group_graph():
+    adj = {n: set() for n in FLOOR}
+    for x in GROUP:
+        adj[x] = set(FLOOR) | {y for y in GROUP if y != x and (min(x, y), max(x, y)) not in APART}
+        for p in FLOOR:
+            adj[p].add(x)
+    return {n: sorted(v) for n, v in adj.items()}, dict(GROUP)
+
+
+class DegreeAndCost(unittest.TestCase):
+    def setUp(self):
+        sim.K = 25
+        self.adj, self.cost = group_graph()
+
+    def test_one_more_value_beside_program_gives_retails_colours(self):
+        _stack, col = ra.replay(self.adj, self.cost)
+        self.assertEqual((col[32], col[33]), (S["s4"], S["s3"]))
+        base, total, edits = ra.edit_search(self.adj, self.cost, GROUP_WANT, [32, 33], fixed={32, 33, 34})
+        self.assertLess(base, total)
+        full = [steps for score, steps in edits if score == total]
+        kind, args = full[0][0]
+        self.assertEqual(len(full[0]), 1)
+        # a value live beside program and the rest of the group but not textures, numbered after the parameters (between
+        # 35 and 36): it takes s3 before program, so program gets s4 and textures s3
+        self.assertEqual((kind, args[0], args[1]), ("degree", 33, 32))
+        self.assertTrue(35 < args[2] < 36)
+        self.assertEqual(args[5], S["s3"])
+
+    def test_cost_edits_of_textures_and_program_are_searched(self):
+        _base, total, edits = ra.edit_search(self.adj, self.cost, GROUP_WANT, [32, 33], fixed={32, 33, 34})
+        costs = {args: score for score, steps in edits if len(steps) == 1 for kind, args in steps if kind == "cost"}
+        for n in (32, 33):
+            for d in (1, -1, 8, -8):
+                self.assertIn((n, d), costs)
+                self.assertLess(costs[(n, d)], total)        # NearMiss4's replay: no cost change flips them
 
 
 class Members(unittest.TestCase):

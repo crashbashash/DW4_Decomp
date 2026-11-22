@@ -1599,6 +1599,53 @@ def duplicate_tables(group, jumptables):
     return [table for _, address in group.duplicates for table in jumptables.get(address, [])]
 
 
+class RejectedBodies(ValueError):
+    """A unit whose bodies are missing or of the wrong extent: `lines` report every body that differs."""
+
+    def __init__(self, message, lines):
+        super().__init__(message)
+        self.lines = lines
+
+
+# the bits of a word a relocation of each type fills
+RELOCATED_FIELD = {R_32: 0xffffffff, R_26: 0x03ffffff, R_HI16: 0xffff, R_LO16: 0xffff, R_GPREL16: 0xffff,
+                   R_LITERAL: 0xffff}
+
+
+def differing_bodies(obj, headers, syms, group, members, image, by_va, deferred=()):
+    """Report lines for every body of `members` that differs from its retail function: one the object lacks, and
+    one whose size or words differ, each differing word with its index. The relocated fields are masked, since a
+    rejected object's references are never resolved. Only a rejected unit asks, so a match costs nothing."""
+    duplicates = {name for name, _ in group.duplicates}
+    lines = []
+    for name, address in members:
+        if name in deferred:
+            continue
+        kind = "duplicate" if name in duplicates else "emitted"
+        section, value, size = syms.get(name, (None, None, None))
+        if not isinstance(section, int) or not 0 < section < len(headers):
+            lines.append(f"MISSING {kind} 0x{address:x} {name}: the object does not define it")
+            continue
+        ours = object_section(obj, headers[section][0], section)[value:value + size]
+        masks = [0xffffffff] * (len(ours) // 4)
+        for _section, offset, kind_, _symbol, _addend in object_relocs(obj, target_section=section):
+            if value <= offset < value + len(masks) * 4:
+                masks[(offset - value) // 4] &= ~RELOCATED_FIELD.get(kind_, 0xffffffff) & 0xffffffff
+        retail = va_bytes(image, address, by_va[address][1])
+        words = []
+        for at in range(0, max(len(ours), len(retail)), 4):
+            got, want = ours[at:at + 4], retail[at:at + 4]
+            mask = masks[at // 4] if at // 4 < len(masks) else 0xffffffff
+            if (len(got) != 4 or len(want) != 4
+                    or (int.from_bytes(got, "little") ^ int.from_bytes(want, "little")) & mask):
+                words.append(f"  body 0x{address:x} [{at // 4}] retail {want[::-1].hex() or '-' * 8} "
+                             f"ours {got[::-1].hex() or '-' * 8}")
+        if words:
+            lines.append(f"DIFFER {kind} 0x{address:x} {name} {len(ours)}B, retail {len(retail)}B")
+            lines += words
+    return lines
+
+
 def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=False,
                           requested=None, jumptables=None, deferred=(), requested_lines=None):
     """Verify every explicitly owned body before any per-function extraction.
@@ -1651,20 +1698,26 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         literal_sections = [] if group.whole_file else fold()
         initializer = static_initializer(obj, headers, syms)
         initializer_name = initializer[0] if initializer else None
-        records, sections = {}, set()
+        records, sections, wrong = {}, set(), []
         for compiler_name, address in members:
             section, value, size = syms.get(compiler_name, (None, None, None))
             if not isinstance(section, int) or not 0 < section < len(headers):
-                raise ValueError(f"missing emitted function {compiler_name}")
+                wrong.append(f"missing emitted function {compiler_name}")
+                continue
             label, header = headers[section]
             expected = size if compiler_name in deferred else by_va[address][1]
             home = ".init" if compiler_name == initializer_name else ".text"
             if (label != home or value != 0 or size != expected
                     or header[5] != expected or not header[2] & 4 or section in sections):
-                raise ValueError(f"emitted extent differs for {compiler_name}: object symbol "
-                                 f"{size} bytes in a section of {header[5]}, retail {by_va[address][1]}")
+                wrong.append(f"emitted extent differs for {compiler_name}: object symbol "
+                             f"{size} bytes in a section of {header[5]}, retail {by_va[address][1]}")
+                continue
             records[compiler_name] = (address, section, size)
             sections.add(section)
+        if wrong:
+            # every body of the unit is told, not the first: what differs, and each word that does
+            raise RejectedBodies("; ".join(wrong), differing_bodies(obj, headers, syms, group, members, image,
+                                                                     by_va, deferred))
         ctor_section = ctor_slot = None
         if initializer:
             if initializer_name not in dict(group.emitted):
@@ -1768,6 +1821,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
             raise ValueError(f"object defines {smuggled[0][0]}, which names retail address "
                              f"0x{smuggled[0][1]:x} outside its own bodies (a candidate may only "
                              "reference that datum)")
+    except RejectedBodies as error:
+        return False, "\n".join([f"emitted object rejected: {error}"] + error.lines), None
     except (KeyError, ValueError) as error:
         return False, f"emitted object rejected: {error}", None
 

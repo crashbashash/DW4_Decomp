@@ -85,18 +85,29 @@ class TextTest(unittest.TestCase):
                 "static int g_igFoo_fieldOffsets[] = {\n    56,\n};\n\n\nint y;\n")
         self.assertEqual(cc.drop_file_tables(text, "igFoo"), "int x;\n\nint y;\n")
 
+    def test_drop_file_tables_keeps_the_other_blank_lines(self):
+        # igEventTracker_tail.inc names igSemaphore::, and igSemaphore's splice collapsed its run of 27 blank lines
+        text = ("int a;\n\n\n\nint b;\n\nstatic FieldFactory g_igFoo_ctorTable[] = {\n    igIntMetaField_Create,\n};\n"
+                "\nint y;\n\n\nint z;\n")
+        self.assertEqual(cc.drop_file_tables(text, "igFoo"), "int a;\n\n\n\nint b;\n\nint y;\n\n\nint z;\n")
+        self.assertEqual(cc.drop_file_tables("int a;\n\n\nint b;\n", "igFoo"), "int a;\n\n\nint b;\n")
+
+    def test_a_table_between_two_blocks_leaves_one_block(self):
+        # igResource.inc after igResource's memberize: the ctor table stood between the arkRegister and
+        # arkRegisterInternal blocks; blocks no table separated keep their bounds
+        block = "namespace Gap {\nnamespace Core {\n\nvoid igResource::%s()\n{\n}\n}\n}\n"
+        text = (block % "a" + "\nstatic FieldFactory g_igResource_ctorTable[] = {\n    x,\n};\n\n" + block % "b"
+                + "\n" + block % "c")
+        self.assertEqual(cc.drop_file_tables(text, "igResource"),
+                         "namespace Gap {\nnamespace Core {\n\nvoid igResource::a()\n{\n}\n\n"
+                         "void igResource::b()\n{\n}\n}\n}\n\n" + block % "c")
+
     def test_respell_data(self):
         rows = ["private: static igMetaField *k_num;", "static int k_cell;", "inline int getNum() const { return 1; }"]
         self.assertEqual(cc.static_data(rows), {"k_num": "igMetaField *", "k_cell": "int "})
         text = "int igFoo::k_num;\nvoid *igFoo::k_cell;\nint igFoo::k_numOther;\n"
         self.assertEqual(cc.respell_data(text, "igFoo", rows),
                          "igMetaField *igFoo::k_num;\nint igFoo::k_cell;\nint igFoo::k_numOther;\n")
-
-    def test_rekey_row_keeps_order(self):
-        row = {"emitted": collections.OrderedDict([("a", "0x1"), ("igFoo_Init", "0x2"), ("c", "0x3")])}
-        self.assertTrue(cc.rekey_row(row, "igFoo_Init", "__ct__Q33Gap4Core5igFooFv"))
-        self.assertEqual(list(row["emitted"]), ["a", "__ct__Q33Gap4Core5igFooFv", "c"])
-        self.assertFalse(cc.rekey_row(row, "absent", "x"))
 
     def test_boot_keys(self):
         self.assertEqual(cc.boot_key("Core", "igFooMetaField", "__ct__", ["bool"]),
@@ -338,11 +349,68 @@ class TreeTest(unittest.TestCase):
                          + table.splitlines()[2:])
         self.assertEqual(self.tree.add_rows("config/class-members.tsv", "igFolder", rows), [])
 
-    def test_rekey_finds_the_unit(self):
+    def test_overload_keys_match_their_rows_by_signature(self):
+        # igGeometryAttr's two intersectRay overloads (GeomAttr's geom15.py): a key had to repeat its row's text, or
+        # the stub was skipped, the splice reported it MISSING and an `add` spec duplicated the row
+        isect4 = ("virtual bool intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, "
+                  "ISET_SIDES whichFaces = FRONT_SIDE);")
+        isect7 = ("virtual bool intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, int &primIndex, "
+                  "int &polyIndex, ISET_SIDES whichFaces = FRONT_SIDE, bool findNextIntersection = false) = 0;")
+        table = "igGeometryAttr\t%s\nigGeometryAttr\tpublic: %s\n" % (isect4, isect7)
+        self.tree.write("config/converted-classes.tsv", "igObject\tCore\nigGeometryAttr\tAttrs\n")
+        self.tree.write("config/class-members.tsv", table)
+        os.makedirs(self.tree.path("src/engine/attrs"))
+        self.tree.write("src/engine/attrs/igGeometryAttr.inc",
+                        "int FUN_0013cf80(igGeometryAttr *self, igRay *ray, float *p, float *n, int sides) {\n"
+                        "    return 0;\n}\n")
+        key = "bool intersectRay(const igRay* r, igVec3f &p, igVec3f& n, ISET_SIDES sides)"
+        body = ("bool {C}::intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, "
+                "ISET_SIDES whichFaces)\n{\n    return 1;\n}")
+        spec = dict(add=True, lib="Attrs", gen=[], extra={"FUN_0013cf80": key}, bodies={isect4: body},
+                    rows=["public: virtual bool intersectRay(const igRay *r, igVec3f &p, igVec3f &n, ISET_SIDES s);"])
+        cc.step_tables(self.tree, ["igGeometryAttr"], {"igGeometryAttr": spec})
+        self.assertEqual(self.tree.read("config/class-members.tsv"), table)
+        cc.check_keys(self.tree, "igGeometryAttr", spec)
+        cc.stub(self.tree, "igGeometryAttr", spec, cc.c_names(self.tree, "igGeometryAttr", spec))
+        self.assertEqual(self.tree.read("src/engine/attrs/igGeometryAttr.inc"),
+                         "int FUN_0013cf80(igGeometryAttr *self, const igRay *ray, igVec3f &intersectPoint, "
+                         "igVec3f &norm, ISET_SIDES whichFaces)\n{\n}\n")
+        self.assertEqual(cc.memberize_table(self.tree, ["igGeometryAttr"], {"igGeometryAttr": spec})[0],
+                         [("FUN_0013cf80", "virtual bool Gap::Attrs::igGeometryAttr::intersectRay(const igRay *ray, "
+                                           "igVec3f &intersectPoint, igVec3f &norm, ISET_SIDES whichFaces)")])
+        defs = ("bool igGeometryAttr::intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, "
+                "int &primIndex, int &polyIndex, ISET_SIDES whichFaces, bool findNextIntersection)\n{\n}\n\n"
+                "bool igGeometryAttr::intersectRay(const igRay *ray, igVec3f &intersectPoint, igVec3f &norm, "
+                "ISET_SIDES whichFaces)\n{\n}\n")
+        new, ok = cc.replace_member(defs, "igGeometryAttr", isect4, body.replace("{C}", "igGeometryAttr"))
+        self.assertTrue(ok)
+        self.assertTrue(new.endswith("ISET_SIDES whichFaces)\n{\n    return 1;\n}\n"))
+        # a bare name of two overloads is ambiguous
+        with self.assertRaises(cc.ConvError):
+            cc.check_keys(self.tree, "igGeometryAttr", dict(spec, bodies={"intersectRay": body}))
+
+    def test_rekey_finds_the_unit_and_keeps_the_order(self):
+        self.tree.write(cc.UNIT_OBJECTS, json.dumps({"0x00100000": {"emitted": collections.OrderedDict(
+            [("a", "0x1"), ("igFooMetaField_Init", "0x00100000"), ("c", "0x3")])}}))
         self.assertEqual(self.tree.rekey([("igFooMetaField_Init", "__ct__Q33Gap4Core14igFooMetaFieldFv"),
                                           ("absent", "x")]), ["absent"])
         row = json.loads(self.tree.read(cc.UNIT_OBJECTS))["0x00100000"]
-        self.assertEqual(row["emitted"], {"__ct__Q33Gap4Core14igFooMetaFieldFv": "0x00100000"})
+        self.assertEqual(list(row["emitted"].items()), [("a", "0x1"), ("__ct__Q33Gap4Core14igFooMetaFieldFv",
+                                                                       "0x00100000"), ("c", "0x3")])
+
+    def test_the_rekey_step_runs_memberize_rekey(self):
+        # IGBFile's run left 0x2b5d50's stripped __dt__10ScopedLockFv and __dt__33igSmartPointer<15igSemaphoreView>Fv
+        # for a hand edit: the conversion's last step is memberize's one renaming of the rows from the objects
+        root = self.tree.root
+        for rel, text in {"tools/memberize.py": "import sys\nopen('argv.txt', 'w').write(' '.join(sys.argv[1:]))\n",
+                          "scripts/gen_type_headers.py": ""}.items():
+            os.makedirs(os.path.dirname(os.path.join(root, rel)), exist_ok=True)
+            self.tree.write(rel, text)
+        spec = os.path.join(root, "spec.py")
+        with open(spec, "w") as f:
+            f.write("SPECS = %r\n" % self.specs)
+        self.assertEqual(cc.main([spec, "rekey", "--root", root]), 0)
+        self.assertEqual(self.tree.read("argv.txt"), "--rekey --apply")
 
     def test_boot_names_for_c_names_of_another_stem(self):
         # a bootstrap class whose C names are not its own (__internalNonRefCountedObjectList's ObjectPointerList_*)
@@ -354,6 +422,23 @@ class TreeTest(unittest.TestCase):
         self.assertIn("igFooMetaField::igFooMetaField()\n{\n}\n", self.tree.read("src/engine/core/FooList.inc"))
         row = json.loads(self.tree.read(cc.UNIT_OBJECTS))["0x00100000"]
         self.assertEqual(row["emitted"], {"__ct__Q33Gap4Core14igFooMetaFieldFv": "0x00100000"})
+
+    def test_a_boot_body_joins_the_block_before_it_and_keeps_the_blank_lines(self):
+        self.tree.write(cc.UNIT_OBJECTS, json.dumps({"0x00100000": {"emitted": {"FooList_Init": "0x00100000"}}}))
+        self.tree.write("src/engine/core/FooList.inc",
+                        "namespace Gap {\nnamespace Core {\n\nvoid igFooMetaField::a()\n{\n}\n}\n}\n\n"
+                        "void *FooList_Init(igFooMetaField *self) {\n    return self;\n}\n\n\nint after;\n")
+        spec = dict(self.specs["igFooMetaField"], base="igMetaField", boot_names={"Init": "FooList_Init"})
+        cc.splice_boot(self.tree, "igFooMetaField", spec)
+        self.assertEqual(self.tree.read("src/engine/core/FooList.inc"),
+                         "namespace Gap {\nnamespace Core {\n\nvoid igFooMetaField::a()\n{\n}\n\n"
+                         "igFooMetaField::igFooMetaField()\n{\n}\n}\n}\n\n\nint after;\n")
+
+    def test_a_splice_keeps_the_blank_lines_of_the_files_naming_the_class(self):
+        text = "void f()\n{\n    igFooMetaField::g();\n}\n\n\n\n\nint after;\n"
+        self.tree.write("src/engine/core/igEventTracker_tail.inc", text)
+        cc.splice_class(self.tree, "igFooMetaField", dict(gen=[], add=True), "")
+        self.assertEqual(self.tree.read("src/engine/core/igEventTracker_tail.inc"), text)
 
     def test_empty_fragment_goes_with_its_include(self):
         self.tree.write("src/engine/core/igFooMetaField_tail.inc", "\n")

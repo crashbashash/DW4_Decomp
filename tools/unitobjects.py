@@ -112,7 +112,7 @@ def load(path=None):
     data = json.loads(path.read_text(), object_pairs_hook=unique)
     if not isinstance(data, dict):
         raise ValueError("unit objects must be an object keyed by owner address")
-    groups, owned = [], set()
+    groups, owned = [], {}      # owned: {address: label} of the functions the rows so far place
     for key, row in data.items():
         if (not isinstance(row, dict)
                 or set(row) - {"emitted", "externals", "duplicates", "exceptions", "stripped",
@@ -183,12 +183,24 @@ def load(path=None):
                 raise ValueError(f"data-only row {key} needs its .c or .cpp source, a path under src/")
         elif "source" in row:
             raise ValueError(f"row {key}: only a data-only row names its source; a function locates any other")
-        if len(set(group.members)) != len(group.members) or owned.intersection(group.addresses):
-            raise ValueError("function belongs to multiple compiler bodies")
+        # each body, labelled by its row and field: a function placed twice, or given two bodies by one row,
+        # names every body that claims it (a C definition left beside the member it became is the usual one)
+        # (a data-only row's key is its first datum, and it takes no emitted or duplicate body)
+        labelled = [(owner, f"{row.get('symbol') or 'the owner'} (row {key})")] + [
+            (address, f"{symbol} (row {key} {field})") for field, pairs in
+            (("emitted", emitted), ("duplicates", duplicates)) for symbol, address in pairs]
+        bodies = {}
+        for at, label in labelled:
+            bodies.setdefault(at, []).append(label)
+        clash = next(((at, labels) for at, labels in bodies.items() if len(labels) > 1), None) or next(
+            ((at, [owned[at]] + bodies[at]) for at in group.addresses if at in owned), None)
+        if clash:
+            raise ValueError("function 0x%08x belongs to multiple compiler bodies: %s"
+                             % (clash[0], ", ".join(clash[1])))
         names = [symbol for symbol, _ in emitted + duplicates + externals + data] + list(stripped)
         if len(set(names)) != len(names):
             raise ValueError("compiler symbol is declared twice in one unit")
-        owned.update(group.addresses)
+        owned.update((at, bodies[at][0]) for at in group.addresses)
         groups.append(group)
     return tuple(groups)
 

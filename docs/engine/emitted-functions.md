@@ -514,6 +514,9 @@ For a registered compiler object, verification requires:
 
 1. Every declared function symbol exists at offset zero in its own complete
    `.text` section (`.init` for the static initialiser), with the exact recorded retail size.
+   An object that fails this is rejected, and the report lists every member that differs from
+   retail: one the object lacks, and each whose size or words differ (relocated fields masked),
+   with every differing word.
 2. All nonempty allocated/executable/code sections belong to declared members.
    Unknown code, emitted runtime data and exception tables fail closed.
 3. Retail extents do not overlap, and explicit external aliases cannot conflict

@@ -47,7 +47,7 @@ jobs:
 
       - name: Regenerate the progress files
         run: |
-          python3 tools/progress.py
+          python3 tools/progress.py --write
 
       - name: Check the build tools' explicit-path options
         run: python3 -m unittest discover -s tools -p 'test_build_options.py'
@@ -72,7 +72,7 @@ jobs:
           # The one-line report states the matched figures (C/C++ and approved assembly), with the
           # asm bodies left out, and the fully-linked share of the section from C/C++, so the log
           # never counts asm bodies.
-          git commit -m "progress: $(python3 tools/progress.py --report) [skip ci]"
+          git commit -m "progress: $(python3 tools/progress.py) [skip ci]"
           # someone may have pushed while this job ran
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"

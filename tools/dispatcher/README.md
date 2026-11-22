@@ -31,8 +31,9 @@ pushes and colours) and searches the permutations of the node ids of the involve
 order that gives retail's colours; the orders that leave the parameters' ids in place come first, printed with the
 instruction that defines each node.  Last it searches single graph edits around the involved nodes (renumber, including a
 neighbour of an involved node and the same neighbour move at each of a set of alike involved nodes at once, merge, delete,
-add an interference, add neighbours, un-coalesce; pairs when no single edit is enough), replays each and prints the ones that
-give retail's colours with the guessed source name of every node and the nodes the coalescer merged into it
+add an interference, one more value live beside a node, a cost change by one reference, un-coalesce; pairs when no single
+edit is enough), replays each and prints the ones that give retail's colours with the guessed source name of every node and
+the nodes the coalescer merged into it, or the best partial edits of each kind when none does
 ([graph edits](../../docs/engine/register-allocation.md#b52-coalescing-and-the-graph-edit-search)).  The instruction diff is
 aligned (difflib), so one missing `nop` does not turn the rest into differences; in a whole-file candidate the colouring
 pass that fits the function is chosen.  Exit status 0 = match, 1 = still different, 2 = tool error.
@@ -57,8 +58,9 @@ What it cannot do:
   address-materialising sequences leave some nodes without an instruction ("IR op ..."), and a node tied to conflicting retail
   registers is excluded from the search.
 * The levers it searches are the id order and single graph edits (or pairs).  An edit is a graph change; turning it into
-  source is up to you (the printed names are a declaration-order guess), and an un-coalesce edit takes the split node's cost
-  from its survivor.
+  source is up to you (the printed names are a declaration-order guess), an un-coalesce edit takes the split node's cost
+  from its survivor, and the value a degree edit adds interferes with all of a node's neighbours or all but one involved
+  node (a value live over a smaller part of the range is not tried).
 * Spills: it follows the last pass, but a function that spills in retail but not in the candidate (or the reverse) is
   structural.
 * Pools of more than 8 nodes are searched by random swaps, not exhaustively.

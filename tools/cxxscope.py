@@ -22,8 +22,11 @@ this way and tools/memberize.py writes its definitions this way; both take the b
 (`T Gap::<Library>::<Class>::<member>(...) {`, a static datum `T Gap::<Library>::<Class>::<name>;`) into that form:
 the head loses `Gap::<Library>::` (and so does its return type, which the block's scope now finds), and each run of
 such definitions of one library with nothing but blanks and comments between them goes into one block, the comment
-lines right above the first going in with it. A block that ends where another of the same library begins becomes one.
-A free function between two members ends a block: it stays outside, where its linkage is the one it had.
+lines right above the first going in with it. A block it writes that ends where another of the same library begins
+(only blanks between) becomes one with it, the blank lines between them kept between the two definitions. Everything
+else stays as the file had it: blocks it did not write keep their bounds, and a file with no qualified definition is
+not changed, so a second run changes nothing. A free function between two members ends a block: it stays outside,
+where its linkage is the one it had.
 
 Unqualified names in a member's body are looked up in its class and the class's namespaces either way; the head's
 return type is the only text the block's scope reads differently, and the declaration in the class (inside the
@@ -155,11 +158,12 @@ def _lead_comments(text, clean, start):
 
 
 def respell(text):
-    """`text` with its Gap-qualified file-scope definitions in their namespaces (the module docstring)."""
+    """`text` with its Gap-qualified file-scope definitions in their namespaces (the module docstring); a text with
+    none is returned as it is."""
     clean = units._clean(text)
     items = _items(text, clean)
     if not items:
-        return merge_blocks(text)
+        return text
     groups = []
     for item in items:
         start = _lead_comments(text, clean, item[0])
@@ -168,13 +172,14 @@ def respell(text):
             groups[-1].append(item)
         else:
             groups.append([item])
-    out, at = [], 0
+    out, at, joins = [], 0, set()
     for group in groups:
         start = _lead_comments(text, clean, group[0][0])
         end = text.find("\n", group[-1][1])
         end = len(text) if end < 0 else end + 1
         namespace = "Gap::" + group[0][2]
         out.append(text[at:start])
+        joins.add(sum(len(piece) for piece in out))
         out.append("\n".join(open_lines(namespace)) + "\n\n")
         pos = start
         for _s, _e, _lib, edits in group:
@@ -186,28 +191,37 @@ def respell(text):
         if not text[pos:end].endswith("\n"):
             out.append("\n")
         out.append("\n".join(close_lines(namespace)) + "\n")
+        joins.add(sum(len(piece) for piece in out))
         at = end
     out.append(text[at:])
-    return merge_blocks("".join(out))
+    return merge_blocks("".join(out), joins)
 
 
-def merge_blocks(text):
+def merge_blocks(text, joins):
     """`text` with each `namespace Gap { namespace X {` block that only blanks separate from the next block of the
-    same library made one block with it."""
+    same library made one block with it where the gap between them holds an offset of `joins`: the edges of the
+    blocks a tool wrote, the place it removed something from (a table that stood between two blocks). The blocks
+    the file had elsewhere keep their bounds. The blank lines between the two blocks stay between the definitions
+    they separated (one when there were none)."""
+    joins = set(joins)
     while True:
         clean = units._clean(text)
         heads = [(m.start(), m.group(1), units._match_brace(clean, m.start() + len("namespace Gap "))) for m in
                  _BLOCK_HEAD.finditer(text) if not clean[clean.rfind("\n", 0, m.start()) + 1:m.start()].strip()]
         merged = False
-        for (a_start, a_lib, a_end), (b_start, b_lib, _b_end) in zip(heads, heads[1:]):
+        for (_a_start, a_lib, a_end), (b_start, b_lib, _b_end) in zip(heads, heads[1:]):
             closers = text.rfind("}\n}", 0, a_end)
-            if a_lib != b_lib or text[a_end:b_start].strip() or closers != a_end - 3:
+            if a_lib != b_lib or text[a_end:b_start].strip() or closers != a_end - 3 or \
+                    not any(a_end <= j <= b_start for j in joins):
                 continue
             body_end = text.rfind("\n", 0, closers) + 1           # the inner block's last line ends here
             head_end = b_start + len("namespace Gap {\nnamespace %s {\n" % b_lib)
             if text[head_end:head_end + 1] == "\n":
                 head_end += 1
-            text = text[:body_end] + "\n" + text[head_end:]
+            between = text[a_end + 1:b_start] or "\n"
+            text = text[:body_end] + between + text[head_end:]
+            shift = head_end - body_end - len(between)
+            joins = {j if j < body_end else j - shift for j in joins if not body_end <= j < head_end}
             merged = True
             break
         if not merged:

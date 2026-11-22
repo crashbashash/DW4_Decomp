@@ -157,14 +157,14 @@ check: asm-ensure
 	@$(STAMP) start check
 	python3 tools/layout.py >/dev/null
 	python3 tools/check.py --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" --flags="$(FLAGS)"
-	python3 tools/progress.py
+	python3 tools/progress.py --write
 	@$(STAMP) pass check
 
 check-fresh: asm-ensure
 	@$(STAMP) start check
 	python3 tools/layout.py >/dev/null
 	python3 tools/check.py --no-cache --wibo "$(WIBO)" --mwcc "$(MWCC)" --elf "$(ELF)" --flags="$(FLAGS)"
-	python3 tools/progress.py
+	python3 tools/progress.py --write
 	@$(STAMP) pass check
 
 # --- the derived-rule fixtures (no toolchain; the pack paths are pointed at your copies) ----
@@ -236,7 +236,7 @@ report: asm-ensure
 # README.md. Needs neither the game nor the compiler — it counts what is committed. CI runs this
 # on every push (see .github/workflows/progress.yml).
 progress:
-	python3 tools/progress.py
+	python3 tools/progress.py --write
 
 # Typed coverage: the inward metric. `typed-check` compares against
 # the recorded baseline in config/typed-coverage.json -- the gate is on the *count* of recovered

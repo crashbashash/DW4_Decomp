@@ -28,9 +28,11 @@ What it does, in order:
   5. searches single graph edits (doldecomp/sms AGENT_MATCHING_TIPS, "Replay the allocator when only registers differ"): renumber
      a node below/above another (an involved node or one of its neighbours, and the same neighbour move made at once for each
      of a set of involved nodes that must change alike: the repeated code of one construct), merge two nodes (lower id kept,
-     as b52's coalescer does), delete a node, add an interference, add k neighbours, split a coalesced node off its survivor;
-     pairs of edits when no single one is enough. Each edit that gives retail's colours is printed with the nodes' guessed
-     source names (declaration order) and the nodes coalesced into them.
+     as b52's coalescer does), delete a node, add an interference, add one more value live beside a node (a new node that
+     interferes with it and with its neighbours, or all of them but one involved node, at each id around the edit pool), raise
+     or lower a node's cost by one reference (outside or inside a loop), split a coalesced node off its survivor; pairs of
+     edits when no single one is enough. Each edit that gives retail's colours is printed with the nodes' guessed source
+     names (declaration order) and the nodes coalesced into them; when none does, the best partial edits of each kind.
 
 How the ids come about (use it to turn a suggested order into a source change; see docs/engine/register-allocation.md):
   * function-level variables and parameters take ids from their position in the declaration block (parameters first);
@@ -398,12 +400,13 @@ def search(adj, cost, want, pool, limit=40000, seed=1):
 # replayed graph, try one edit at a time and keep the ones whose replay gives retail's colours; each edit names a source change.
 # On b52 the coalescer runs before colouring, keeps the lower id of a merged pair and leaves the merged node without edges
 # (docs/engine/register-allocation.md, "Coalescing"), which is what merge/split model here.
-PHANTOMS = (1, 26, 27)      # at, k0, k1: never allocatable, so as extra neighbours they add degree and block no colour
+COST_STEPS = (1, -1, 8, -8)  # one reference more/fewer outside loops, inside a loop (cost = references, x8 per loop level)
 
 
-def candidate_edits(adj, cost, rel, want, alias, pre_adj, nmove=12, step=0.5):
+def candidate_edits(adj, cost, rel, want, alias, pre_adj, nmove=12, step=0.5, involved=(), live=None):
     """Yield (kind, args, graph, costs, idmap) for every single edit on the nodes `rel` (renumbering only the first `nmove`);
-    idmap renames nodes of the old graph."""
+    idmap renames nodes of the old graph. Degree edits add a value beside each node of `live` (default `rel`) and leave out of
+    its neighbours nothing or one of the `involved` nodes."""
     adjs = {i: set(v) for i, v in adj.items()}
     for n in rel:                                                       # delete
         yield "delete", (n,), {i: [o for o in v if o != n] for i, v in adj.items() if i != n}, cost, None
@@ -420,14 +423,25 @@ def candidate_edits(adj, cost, rel, want, alias, pre_adj, nmove=12, step=0.5):
             a2 = dict(adj)
             a2[x], a2[y] = list(adj[x]) + [y], list(adj[y]) + [x]
             yield "edge", (x, y), a2, cost, None
-    for n in rel:                                                       # degree
-        free = [ph for ph in PHANTOMS if ph not in adjs[n]]
-        for k in range(1, len(free) + 1):
-            a2 = dict(adj)
-            a2[n] = list(adj[n]) + free[:k]
-            for ph in free[:k]:
-                a2[ph] = list(adj.get(ph, [])) + [n]
-            yield "degree", (n, k), a2, cost, None
+    slots = sorted({m + step * side for m in rel for side in (-1, 1)} - set(adj))
+    for x in rel if live is None else live:                            # degree: one more value live beside x
+        for z in [None] + [z for z in involved if z != x and z in adjs[x]]:
+            nb = [x] + [o for o in adj[x] if o != z]
+            for new in slots:
+                a2 = dict(adj)
+                a2[new] = nb
+                for o in nb:
+                    a2[o] = list(a2[o]) + [new]
+                c2 = dict(cost)
+                c2[new] = max(2, cost.get(x, 0))
+                m = min(rel, key=lambda m: (abs(m - new), m))
+                yield "degree", (x, z, new, m, 1 if new > m else -1), a2, c2, None
+    for x in rel:                                                       # cost
+        for d in COST_STEPS:
+            if cost.get(x, 0) + d >= 1:
+                c2 = dict(cost)
+                c2[x] = cost.get(x, 0) + d
+                yield "cost", (x, d), adj, c2, None
     for n in rel[:nmove]:                                               # renumber
         for m in rel:
             for side in (-1, 1) if m != n else ():
@@ -482,12 +496,15 @@ def neighbour_edits(adj, cost, involved, col, want, step=0.5):
 def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, depth=1, fixed=()):
     """Graph edits around the `involved` nodes. -> (base score, total, [(score, [(kind, args), ...])]) where score counts the
     constrained nodes of `want` ({node: colour}) that get their colour, best first, and among equals the edits that renumber
-    none of the `fixed` nodes (parameters: their ids come from their position) first. Kinds: delete (n), merge (a, b: one
-    web, id min(a, b)), split (m, r: undo the coalescing of m into r; args gain whether both then get one colour), degree
-    (n, k phantom neighbours), edge (a, b: make them interfere), renumber (n, m, -1/+1: n's id just below/above m's; n is an
-    involved node or one of the edit pool, or a neighbour of m), renumber each (((n, m), ...), -1/+1: each n's id just
-    below/above its m's at once; see neighbour_edits). depth=2 also applies each of the best 12 single edits and searches
-    one more edit on the result when no single edit is a full solution (only full solutions are kept)."""
+    none of the `fixed` nodes (parameters: their ids come from their position) and add no value among the parameters' ids
+    first. Kinds: delete (n), merge (a, b: one web, id min(a, b)), split (m, r: undo the coalescing of m into r; args gain
+    whether both then get one colour), edge (a, b: make them interfere), degree (x, z, id, m, -1/+1: one more value live
+    beside x, interfering with x and every neighbour of x but z (None: all of them), cost max(2, x's), with an id just
+    below/above m's; args gain the colours the replay gives it and z), cost (x, d: x's cost plus d), renumber (n, m, -1/+1: n's id
+    just below/above m's; n is an involved node or one of the edit pool, or a neighbour of m), renumber each (((n, m), ...),
+    -1/+1: each n's id just below/above its m's at once; see neighbour_edits). depth=2 also applies each of the best 12
+    single edits and searches one more edit on the result when no single edit is a full solution (only full solutions are
+    kept; the second edit adds values beside the nodes still wrong only)."""
     total = len(want)
 
     def score(a2, c2, w, idmap=None):
@@ -501,7 +518,8 @@ def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, de
     base, col0 = score(adj, cost, want)
     out, firsts, seen = [], [], set()
     for kind, args, a2, c2, idmap in itertools.chain(
-            candidate_edits(adj, cost, related(adj, cost, involved), want, alias, pre_adj, max(12, len(involved))),
+            candidate_edits(adj, cost, related(adj, cost, involved), want, alias, pre_adj, max(12, len(involved)),
+                            involved=involved),
             neighbour_edits(adj, cost, involved, col0, want)):
         if (kind, args) in seen:
             continue
@@ -509,9 +527,11 @@ def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, de
         sc, col = score(a2, c2, want, idmap)
         if kind == "split":
             args = args + (col.get(args[0]) == col.get(args[1]),)
+        if kind == "degree":
+            args = args + (col.get(args[2]), col.get(args[1]))
         out.append((sc, [(kind, args)]))
         firsts.append((sc, kind, args, a2, c2, idmap, col))
-    order = ["renumber", "renumber each", "merge", "delete", "edge", "degree", "split"]
+    order = ["renumber", "renumber each", "merge", "delete", "edge", "degree", "cost", "split"]
     if depth > 1 and not any(sc == total for sc, _ in out):
         firsts.sort(key=lambda e: (-e[0], order.index(e[1])))
         for sc, kind, args, a2, c2, idmap, col in [e for e in firsts if base < e[0] < total][:12]:
@@ -519,13 +539,18 @@ def edit_search(adj, cost, want, involved, alias=None, pre_adj=None, pool=40, de
             w2 = {(f(n, n) if idmap else n): c for n, c in want.items()}
             inv2 = [n for n, c in w2.items() if n in a2 and col.get(n) != c]
             for kind2, args2, a3, c3, idmap2 in candidate_edits(a2, c2, related(a2, c2, inv2), w2, None, None,
-                                                                       max(12, len(inv2)), 0.25):
+                                                                       max(12, len(inv2)), 0.25, inv2, inv2):
                 if score(a3, c3, w2, idmap2)[0] == total:
                     out.append((total, [(kind, args), (kind2, args2)]))
 
+    lead = 32                                   # the first id after the parameters': a new value cannot come before it
+    while lead in fixed:
+        lead += 1
+
     def moves_fixed(steps):
         return any(n in fixed for kind, args in steps if kind in ("renumber", "renumber each")
-                   for n in ([args[0]] if kind == "renumber" else [n for n, _m in args[0]]))
+                   for n in ([args[0]] if kind == "renumber" else [n for n, _m in args[0]])) or \
+            any(kind == "degree" and args[2] < lead for kind, args in steps)
     out.sort(key=lambda e: (-e[0], len(e[1]), moves_fixed(e[1]), [order.index(k) for k, _ in e[1]]))
     return base, total, out
 
@@ -544,7 +569,23 @@ def explain_edit(kind, args, who):
                    args[0], args[1], args[0], "; both get the same colour, so no move is emitted" if args[2] else "; this adds a move",
                    args[0], who(args[0]), args[1], who(args[1]))
     if kind == "degree":
-        return "give %s %d more neighbour(s) (one more value live across its whole range per neighbour): %s" % (args[0], args[1], who(args[0]))
+        x, z, _new, m, side = args[:5]
+        colour = args[5] if len(args) > 5 else None
+        out = "one more value live beside %s, created just %s %s (declare or compute it %s that value): a value kept live across " \
+              "%s's range and its calls, interfering with %s and with every value it interferes with%s, referenced about as " \
+              "often (its cost)" % (x, "below" if side < 0 else "above", m, "before" if side < 0 else "after", x, x,
+                                    "" if z is None else " but %s (it starts after %s's last use or ends before %s is set)" % (z, z, z))
+        if colour is not None:
+            out += "; the replay gives it %s" % REGNAME.get(colour, colour)
+            if z is not None and len(args) > 6 and args[6] == colour:
+                out += ", %s's colour too (no register %s does not use already)" % (z, z)
+        out += "\n         %s: %s\n         %s: %s" % (x, who(x), m, who(m))
+        return out + ("\n         %s: %s" % (z, who(z)) if z is not None else "")
+    if kind == "cost":
+        return "%s %s's cost by %d: %s\n         %s: %s" % (
+            "raise" if args[1] > 0 else "lower", args[0], abs(args[1]),
+            {1: "one more reference outside loops", -1: "one reference fewer outside loops", 8: "one more reference inside a loop",
+             -8: "one reference fewer inside a loop"}.get(args[1], "references x8 per loop level"), args[0], who(args[0]))
     if kind == "edge":
         return "make %s and %s interfere (keep one live across the other's definition)\n         %s: %s\n         %s: %s" % (
             args[0], args[1], args[0], who(args[0]), args[1], who(args[1]))
@@ -919,8 +960,8 @@ are copied. Re-run this tool after each change; the node ids are stable only bel
         better = [e for e in edits if e[0] > base]
         print("No edit reaches retail's colours (pairs of edits included)." if a.edit_depth > 1 else "No single edit reaches retail's colours.")
         if better:
-            print("The best partial edits of each kind (more constrained nodes right than now):")
-            for kind in ("renumber", "renumber each", "merge", "delete", "edge", "degree", "split"):
+            print("The best partial edits of each kind (more constrained nodes right than now), the kind of the best edit first:")
+            for kind in dict.fromkeys(steps[0][0] for _sc, steps in better):
                 for sc, steps in [e for e in better if e[1][0][0] == kind][:2]:
                     print("  [%d/%d] %s" % (sc, total, explain_edit(kind, steps[0][1], who)))
     sys.exit(1)

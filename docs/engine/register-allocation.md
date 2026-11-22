@@ -196,10 +196,22 @@ it. The edits: renumber a node just below/above another (a declaration or creati
 node, one of the edit pool, or any neighbour of an involved node, and for a set of involved nodes that must change from one
 colour to the same other one, each with exactly one neighbour of one cost and degree, those neighbours are moved at once),
 merge two non-adjacent nodes (one variable; the merged web keeps the lower id, as the coalescer does), delete a node, add an
-interference, add k neighbours, and split a coalesced node off its survivor (the copy then has to survive: on b52 only when
-the two overlap). Edits that renumber a parameter come after the others of the same score: a parameter's id comes from its
-position. When no single edit is a full solution it tries pairs (`--edit-depth 1` turns that off). About 2,000 replays take
-a second for a 240-node graph.
+interference, add one more value live beside a node (a degree edit, below), raise or lower a node's cost by one reference
+outside or inside a loop (±1, ±8: the cost is the reference count, x8 per loop level), and split a coalesced node off its
+survivor (the copy then has to survive: on b52 only when the two overlap). Edits that renumber a parameter, or put a new
+value's id among the parameters', come after the others of the same score: a parameter's id comes from its position. When
+no single edit is a full solution it tries pairs (`--edit-depth 1` turns that off); when no pair is either, it prints the
+best partial edits of each kind, the kind of the best one first. About 1,000 replays take a second for a 290-node graph
+(0x20bb20, below: some 10,000 single edits in 9 seconds).
+
+**Degree edits.** A node's colour can depend on how many neighbours it still has when simplify scans it, and a phantom
+neighbour (one that is never pushed) does not model a real value: a real one is pushed too, takes a register and blocks it
+for its neighbours. So the degree edit adds a new virtual node, a value kept live across the chosen node's range and its
+calls: it interferes with the node and with every neighbour of it (the physical ones included), or with all but one
+involved node (a value that starts after that node's last use or ends before it is set). Its cost is the chosen node's
+(at least 2: one definition, one use), and it is tried at each id just below and above the nodes of the edit pool (where
+it is declared or created). The report gives the colour the replay gives it, and says so when that is also the colour of
+the involved node it leaves out (then the new value uses no register that node does not use already).
 
 What it found:
 
@@ -216,4 +228,14 @@ What it found:
   "each count's id below its list's" first (the count then drops its list to 24 before simplify reaches it, and the sorter
   is coloured before the lists); the other full edits move the parameter. Matched by writing each append out with the
   count declared ahead of the list.
+* 0x20bb20 (binds a texture chain to a program in `src/engine/p2texture.c`, NmGfxTex's best draft): `textures` (node 32,
+  a parameter) colours s4 and `program` (33) s3, retail the reverse. The last group of the pass is eleven values live
+  across the calls at its end; after the picks (34 49 35 70 48 66) every one of 32, 33, 36 (`uploadCount`), 37 (`count`)
+  and 39 (`bound`) has degree 24 and the rescan pushes them in id order, so 33 is coloured before 32. No id order of the
+  locals and no cost change of 32 or 33 flips them (only renumbering the parameter does). The best edit (144 of 146
+  constrained nodes; no edit fixes the other two, 44 and 174) is one more value live beside `program` and the rest of the
+  group but not `textures`, numbered between
+  `stage` (35) and `uploadCount` (36): it is pushed right after 33, takes s3, and 33 then gets s4 and 32 s3. The same value
+  beside 36, 37 or 39 works as well. Its s3 is the register `textures` gets too, which retail uses for nothing else, so
+  in retail it would add no register; which source value it is has not been found. Not matched.
 

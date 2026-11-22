@@ -9,7 +9,7 @@ published on every push without the retail ELF or the proprietary compiler:
 
 ```sh
 make progress          # PROGRESS.md, docs/progress.json, the block at the top of README.md
-python3 tools/progress.py --report    # the code number alone
+python3 tools/progress.py             # the code number alone; writes nothing
 python3 tools/datamap.py              # the data breakdown
 ```
 
@@ -147,7 +147,8 @@ carries (a large backlog of matched-but-unlinked code) is structurally absent he
 
 ## Publishing
 
-`tools/progress.py` writes three things, all generated and never hand-edited:
+`tools/progress.py --write` (`make progress`, and `make check` after its run) writes three things, all
+generated and never hand-edited; without a flag it prints the summary line and writes nothing:
 
 * `PROGRESS.md`: the detailed page (code bands, where in the binary, the data table, the
   recovered-metadata table);

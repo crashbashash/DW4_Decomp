@@ -26,8 +26,8 @@ The output is a pure function of the tree: it carries no date, revision or commi
 re-run with no source changes produces no changes (and `--check` is idempotent).
 
 Usage:
-  progress.py                 # write PROGRESS.md, docs/progress.json, README.md block
-  progress.py --report        # print the summary, write nothing
+  progress.py                 # print the summary, write nothing
+  progress.py --write         # write PROGRESS.md, docs/progress.json, README.md block (`make progress`)
   progress.py --json          # dump docs/progress.json to stdout
   progress.py --check         # exit 1 if the committed outputs are stale (for CI linting)
   progress.py --debt-check    # exit 1 naming each debt counter above config/debt-baseline.json
@@ -548,6 +548,15 @@ READABILITY_COUNTERS = {"m2c_idiom.units", "raw_casts.reflected", "fun_dat_refs"
                         "reflected.untyped_refs", "layout.tail_fragments", "matching_constructs",
                         "views.local", "members.offset_named", "strings.externs"}
 
+# The debt counters tools/check.py's category table (data/check-categories.tsv) gives: per category, the
+# code-only units per exception reason, and the orphan bytes. A table from another tree state leaves them unknown.
+CATEGORY_KINDS = (("code-only", "code_only"), ("name-defect", "name_defect"), ("inventory-gap", "inventory_gap"),
+                  ("foreign-profile", "foreign_profile"), ("unapproved", "unapproved"), ("mismatch", "mismatch"),
+                  ("compile", "compile"))
+CATEGORY_COUNTERS = frozenset(["%s.%s" % (key, what) for _kind, key in CATEGORY_KINDS for what in ("functions", "bytes")]
+                              + ["code_only.%s.%s" % (r, what) for r in EXC_REASONS for what in ("functions", "bytes")]
+                              + ["orphan.bytes"])
+
 _DISPATCH_VIEW = re.compile(r"\b(?:struct|class)\s+(?:\w*DispatchView\w*|DW4VC_\w+)\s*(?::[^{;]*)?\{")
 _SLOT_PLACEHOLDER = re.compile(r"\bvirtual\s+[\w\s\*&]+?\b(?:d\d+|vX)\s*\(")
 _BOILERPLATE_DEF = re.compile(r"\b\w+_(?:GetMetaObject|GetOrCreateMetaObject|GetMetaObjectFunction|GetPublishedMetaObject|"
@@ -812,9 +821,7 @@ def debt_summary(d, syms, matched, asm_body, paths, typed, inline):
 
     def cat(kind, what):
         return by.get(kind, {}).get(what, 0) if rec else None
-    for kind, key in (("code-only", "code_only"), ("name-defect", "name_defect"),
-                      ("inventory-gap", "inventory_gap"), ("foreign-profile", "foreign_profile"),
-                      ("unapproved", "unapproved"), ("mismatch", "mismatch"), ("compile", "compile")):
+    for kind, key in CATEGORY_KINDS:
         c[key + ".functions"] = cat(kind, "functions")
         c[key + ".bytes"] = cat(kind, "bytes")
     for r in EXC_REASONS:
@@ -890,13 +897,18 @@ def load_debt_baseline():
 
 
 def debt_check(d):
-    """Exit status and the few lines the pre-push hook prints."""
+    """Exit status and the few lines the pre-push hook prints. The counters data/check-categories.tsv gives are
+    not checked against a table from another tree state (`categorise`): the run says to refresh it instead."""
     cur, base = d["debt"]["counters"], d["debt"]["baseline"]
     if base is None:
         print("debt: no baseline at config/debt-baseline.json — run `tools/progress.py --debt-baseline`")
         return 1
+    cats = d["categories"]
+    stale = not cats["recorded"]
     rose, unavailable, new = [], [], []
     for k, _ in DEBT_COUNTERS:
+        if stale and k in CATEGORY_COUNTERS:
+            continue
         v = cur.get(k)
         if v is None:
             unavailable.append(k)
@@ -906,6 +918,10 @@ def debt_check(d):
             continue
         if v > base[k]["value"] and k not in READABILITY_COUNTERS:
             rose.append((k, base[k]["value"], v))
+    if stale:
+        print("debt: %s; the %d counters it gives are not checked: run tools/check.py (`make check`) to refresh "
+              "data/check-categories.tsv, then --debt-check again"
+              % (cats["warning"], sum(1 for k, _ in DEBT_COUNTERS if k in CATEGORY_COUNTERS)))
     for k in unavailable:
         print("debt: %s unavailable (its source is missing or stale; see the warning above)" % k)
     for k in new:
@@ -916,6 +932,7 @@ def debt_check(d):
     if n:
         print("debt: %d counter(s) rose" % n if not (unavailable or new) else
               "debt: %d counter(s) rose or could not be checked" % n)
+    if n or stale:
         return 1
     print("debt: OK — %d counters at or below config/debt-baseline.json" % len(DEBT_COUNTERS))
     return 0
@@ -1614,7 +1631,8 @@ def write(path, text):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--report", action="store_true", help="print the summary, write nothing")
+    ap.add_argument("--write", action="store_true",
+                    help="write PROGRESS.md, docs/progress.json and the README.md block (`make progress`)")
     ap.add_argument("--json", action="store_true", help="dump the JSON to stdout")
     ap.add_argument("--check", action="store_true",
                     help="write nothing; exit 1 if the committed outputs are stale")
@@ -1635,24 +1653,6 @@ def main(argv=None):
     if a.json:
         print(json.dumps(d, indent=1, sort_keys=True))
         return 0
-    if a.report:
-        lk = d["link"]
-        cats = d["categories"]
-        if cats["recorded"]:
-            head = ("%.1f %% of the code bytes fully matched (%d/%d functions), %.1f %% identical"
-                    % (pct(b["fully_matched"], b["total"]), f["fully_matched"], f["total"],
-                       pct(b["matched"] + b["assembly"], b["total"])))
-        else:
-            head = ("%.1f %% of the code bytes decompiled (categories not recorded)"
-                    % pct(b["matched"], b["total"]))
-        print("%s — %d/%d functions (%.1f %%); fully linked %.1f %% of the section from C/C++; "
-              "%d asm bodies (%.1f %% of the code bytes) not counted"
-              % (head, f["matched"] + b["functions_assembly"], f["total"],
-                 pct(f["matched"] + b["functions_assembly"], f["total"]), lk["from_c_pct"],
-                 b["functions_asm_body"], pct(b["asm_body"], b["total"])))
-        return 0
-
-    changed = []
     if a.check:
         # Turn "are the committed numbers current?" into an exit code instead of a diff to
         # inspect. Nothing is written on this path.
@@ -1670,6 +1670,22 @@ def main(argv=None):
             print("progress --check: stale: %s — run `make progress`" % ", ".join(stale))
             return 1
         print("progress --check: up to date")
+        return 0
+    if not a.write:
+        lk = d["link"]
+        cats = d["categories"]
+        if cats["recorded"]:
+            head = ("%.1f %% of the code bytes fully matched (%d/%d functions), %.1f %% identical"
+                    % (pct(b["fully_matched"], b["total"]), f["fully_matched"], f["total"],
+                       pct(b["matched"] + b["assembly"], b["total"])))
+        else:
+            head = ("%.1f %% of the code bytes decompiled (categories not recorded)"
+                    % pct(b["matched"], b["total"]))
+        print("%s — %d/%d functions (%.1f %%); fully linked %.1f %% of the section from C/C++; "
+              "%d asm bodies (%.1f %% of the code bytes) not counted"
+              % (head, f["matched"] + b["functions_assembly"], f["total"],
+                 pct(f["matched"] + b["functions_assembly"], f["total"]), lk["from_c_pct"],
+                 b["functions_asm_body"], pct(b["asm_body"], b["total"])))
         return 0
     changed = [p for p, t in ((PROGRESS_MD, render_md(d)),
                              (PROGRESS_JSON, json.dumps(d, indent=1, sort_keys=True) + "\n"))

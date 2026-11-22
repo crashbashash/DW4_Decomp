@@ -17,11 +17,13 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+import cc
 import exceptions as exception_records
 import linkgen
 import unitcompilers
 import unitflags
 import unitobjects
+import unitprofiles
 import units
 import verify
 
@@ -395,6 +397,41 @@ class TwinCallingAUnitBody(EmittedMetadata):
         self.assertTrue(ok, report)
         self.assertIn("MATCH duplicate 0x180200", report)
         self.assertNotIn("unresolved", report)
+
+
+class RejectedUnit(unittest.TestCase):
+    """GeomAttr's attrs unit: two igGeometryAttr1_5 members compiled longer than retail (configureVertexArray 284
+    bytes against 268 at 0x13d070, userMakeConcrete 380 against 360 at 0x13d180), and the report named only the
+    first. A rejected unit reports every body that differs: those two, and one of the right size whose words differ
+    (the 8-byte getClassMetaSafe at 0x137760)."""
+    SOURCE = '''extern "C" int Gap__Attrs__igGeometryAttr1_5__vfunc_32(int x) { return x + 1; }
+extern "C" int igGeometryAttr1_5_UserMakeConcrete(int x) { return x * 3; }
+extern "C" int igGeometryAttr1_5_GetMetaObjectFunction(void) { return 7; }
+'''
+    BODIES = {0x13d070: "Gap__Attrs__igGeometryAttr1_5__vfunc_32", 0x13d180: "igGeometryAttr1_5_UserMakeConcrete",
+              0x137760: "igGeometryAttr1_5_GetMetaObjectFunction"}
+
+    def test_every_differing_body_is_reported(self):
+        elf = Path(verify.ROOT) / "orig/SLUS-20836/SLUS_208.36"
+        if not all(Path(p).exists() for p in (verify.WIBO_DEFAULT, elf)):
+            self.skipTest("private compiler or retail image unavailable")
+        temp = tempfile.TemporaryDirectory(prefix="dw4-rejected-unit-")
+        self.addCleanup(temp.cleanup)
+        source, obj = Path(temp.name) / "attrs.cpp", Path(temp.name) / "attrs.o"
+        source.write_text(self.SOURCE)
+        profile = unitprofiles.resolve(0x13d070, verify.FLAGS_DEFAULT, verify.MWCC_DEFAULT).profile
+        subprocess.run(cc.compile_argv(verify.WIBO_DEFAULT, profile.compiler, unitprofiles.command_flags(profile),
+                                       str(source), str(obj)), cwd=verify.ROOT, check=True, capture_output=True)
+        group = unitobjects.Group(0x13d070, tuple((name, va) for va, name in self.BODIES.items() if va != 0x13d070),
+                                  ())
+        ok, report, records = verify.verify_emitted_object(
+            str(obj), group, str(elf), os.path.join(verify.ROOT, "config/SLUS-20836/symbols.txt"))
+        self.assertFalse(ok)
+        self.assertIsNone(records)
+        lines = report.splitlines()
+        for va, name in self.BODIES.items():
+            self.assertTrue(any(name in line and "0x%x" % va in line for line in lines[1:]), (name, report))
+            self.assertTrue(any(line.strip().startswith("body 0x%x [" % va) for line in lines), (name, report))
 
 
 if __name__ == "__main__":

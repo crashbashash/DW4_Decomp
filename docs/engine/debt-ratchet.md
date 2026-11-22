@@ -16,7 +16,9 @@ python3 tools/progress.py --debt-baseline --allow-increase "<reason>"   # record
 `--debt-check` prints at most a few lines and ends with `debt: OK` or `debt: N counter(s)
 rose`; the oracle runner runs it next to the byte oracle. `PROGRESS.md` §Debt shows the
 baseline against the current value of every counter, and `docs/progress.json` carries the
-same numbers under `debt`.
+same numbers under `debt`. A `data/check-categories.tsv` from another tree state is one line
+naming the table and how it differs, telling to run `tools/check.py` (`make check`) to refresh
+it; the counters it gives are then not checked (the check fails), the others are.
 
 ## The counters
 
@@ -158,5 +160,5 @@ Why read-only inputs: the gate has to run in a hook and in CI, neither of which 
 compiler or the game. Everything the counters need is committed (the categories table
 from the last complete `make check`, the symbol map, the source tree, the reflection
 headers), so a stale `data/check-categories.tsv` (its row count differs from the number of
-decompiled units) makes the category counters *unavailable* rather than wrong, and the
-check says so.
+decompiled units, or a decompiled unit has no row) leaves the category counters unknown rather
+than wrong: `--debt-check` says to refresh the table instead of listing them, and fails.

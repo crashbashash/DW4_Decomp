@@ -237,6 +237,25 @@ class Memberize(unittest.TestCase):
         self.assertIn("Widget\tint find(int key);\n", members)
         self.assertIn("Widget\tint find(const char *name);\n", members)
 
+    def test_a_prototype_returning_a_template_instance_is_a_declaration(self):
+        # include/dw4/core/igResource.h's `igSmartPointer<struct igObject> igResource_GetDirectory(void *directory,
+        # const char *name);` was read as a call and rewritten into `igSmartPointer<struct igObject>
+        # ((Gap::Core::igResource *)(void *directory))->getDirectory(const char *name);`
+        self.append("src/game/Game.h", "template <class T> struct Ptr { T *p; };\n")
+        header = self.read("include/dw4/game/Widget.h").replace(
+            "void Widget_EnsureRegistered(void);\n",
+            "void Widget_EnsureRegistered(void);\n"
+            "#ifdef __cplusplus\nPtr<struct Ctx> Widget_Find(void *self, const char *name);\n#endif\n")
+        write(os.path.join(self.root, "include", "dw4", "game", "Widget.h"), header)
+        self.append("src/game/Widget.inc", "Ptr<Ctx> Widget_Find(void *self, const char *name) {\n    Ptr<Ctx> out;\n"
+                                           "    out.p = ((Widget *)self)->_ctx;\n    return out;\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000010 Widget_Find\n")
+        write(self.table, TABLE + "Widget_Find\tPtr<Ctx> Widget::find(const char *name)\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertNotIn("Widget_Find", self.read("include/dw4/game/Widget.h"))
+        self.assertNotIn("find", self.read("include/dw4/game/Widget.h"))
+        self.assertIn("Ptr<Ctx> Widget::find(const char *name) {", self.read("src/game/Widget.inc"))
+
     def test_an_undeclared_short_member_is_refused(self):
         write(self.table, TABLE + "User_Count\tWidget::count\n")
         self.assertEqual(self.run_tool(), 2)
@@ -770,11 +789,39 @@ class Memberize(unittest.TestCase):
             "__dt__25igSmartPointer<8igObject>Fv": "0x00400010",
             "getElementMeta__Q33Gap4Core39igTObjectList<Q33Gap4Core11igMediaFile>CFv": "0x00400020"})
 
+    def test_names_of_classes_the_tree_no_longer_declares_follow_the_object(self):
+        # IGBFile renamed ScopedLock to the kit's igScopeLock and retired igSemaphoreView: 0x2b5d50's `stripped`
+        # kept __dt__10ScopedLockFv and __dt__33igSmartPointer<15igSemaphoreView>Fv, which its object no longer has
+        self.append("src/game/Game.h", "struct igScopeLock { int held; };\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"]["__dt__40igSmartPointer<Q33Gap4Core11igSemaphore>Fv"] = "0x002ba970"
+        rows["0x00100000"]["stripped"] = ["__dt__10ScopedLockFv", "__dt__25igSmartPointer<8igObject>Fv",
+                                          "__dt__33igSmartPointer<15igSemaphoreView>Fv"]
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        objects = {"0x00100000": {"__dt__11igScopeLockFv", "__dt__25igSmartPointer<8igObject>Fv",
+                                  "__dt__40igSmartPointer<Q33Gap4Core11igSemaphore>Fv"}}
+        with mock.patch.object(memberize, "unit_object_names", lambda root, unit, row: objects[unit]):
+            self.assertEqual(memberize.main(["--rekey", "--apply", "--root", self.root]), 0)
+        row = json.loads(self.read("config/SLUS-20836/unit-objects.json"))["0x00100000"]
+        self.assertEqual(row["stripped"], ["__dt__11igScopeLockFv", "__dt__25igSmartPointer<8igObject>Fv"])
+        self.assertEqual(row["emitted"]["__dt__40igSmartPointer<Q33Gap4Core11igSemaphore>Fv"], "0x002ba970")
+
 
 class Helpers(unittest.TestCase):
     MACROS = {"OBJ_BOOT": (("C",), "public: C(); virtual void __bootstrapDestruct(); "
                                    "protected: static struct Meta *_Meta; public: "
                                    "static inline struct Meta *getClassMeta() { return _Meta; }")}
+
+    def test_a_deletion_between_two_blocks_leaves_one_block(self):
+        # an inline member's C definition between two blocks of a class converted earlier goes; the blocks it
+        # separated become one, and two blocks nothing was deleted between keep their bounds
+        block = "namespace Gap {\nnamespace Core {\n\nvoid igObject::%s()\n{\n}\n}\n}\n"
+        text = block % "a" + "\nint FUN_00100040(void) {\n    return 0;\n}\n\n" + block % "b" + "\n" + block % "c"
+        fr = memberize.FileRewrite("src/x.inc", text)
+        start = text.index("int FUN_00100040")
+        fr.deletes.append((start, text.index("namespace", start)))
+        self.assertEqual(fr.result(), "namespace Gap {\nnamespace Core {\n\nvoid igObject::a()\n{\n}\n\n"
+                                      "void igObject::b()\n{\n}\n}\n}\n\n" + block % "c")
 
     def test_a_virtual_a_macro_declares_is_virtual(self):
         rows = ["OBJ_BOOT(Widget)", "void reset();"]
