@@ -80,7 +80,7 @@ void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
         *result = g_resultFailure.v;
         return;
     }
-    if (self->stream->Read(self->magic, 0x34, 1) != 1) {
+    if (self->stream->fread(self->magic, 0x34, 1) != 1) {
         igReport_Printf("Error reading: %s\n", self->path);
         igReport_Flush();
         self->Close();

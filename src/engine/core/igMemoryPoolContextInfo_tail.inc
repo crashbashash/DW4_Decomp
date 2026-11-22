@@ -1852,7 +1852,7 @@ igObject *igMemoryPoolContextInfo_PopContext(void) {
 
 void * igMemoryPoolContextInfo_Allocate(int size) {
     if (g_objectSystem->active != 0) {
-        return igObject_AllocateRawStorageDefault(size, 0);
+        return Gap::Core::igObject::operator new(size, 0);
     }
     return malloc(size);
 }

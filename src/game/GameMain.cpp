@@ -197,7 +197,7 @@ void GameMain_ClearScene(Blk *app);
 }
 
 extern "C" void GameMain_RegisterEngineClasses(void) {
-    igExternalImageEntry_EnsureRegistered();
+    Gap::Gfx::igExternalImageEntry::arkRegister();
     Gap::Core::igVirtualCFuncMetaField::arkRegister();
     Gap::Core::igUnsignedShortArrayMetaField::arkRegister();
     Gap::Core::igUnsignedLongArrayMetaField::arkRegister();
@@ -211,7 +211,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Core::igObjectRefArrayMetaField::arkRegister();
     igNamedObjectInfo_EnsureRegistered();
     Gap::Core::igMemoryRefArrayMetaField::arkRegister();
-    igMemoryFileEntryList_EnsureRegistered();
+    Gap::Core::igMemoryFileEntryList::arkRegister();
     Gap::Core::igLongArrayMetaField::arkRegister();
     Gap::Core::igFloatArrayMetaField::arkRegister();
     Gap::Core::igEnumArrayMetaField::arkRegister();

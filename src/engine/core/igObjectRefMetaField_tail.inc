@@ -442,39 +442,32 @@ void igObjectStringMap_RemoveAt(igObjectStringMap *self, int index) {
     ((igObject **)(l6->_data + l6->_count * 4))[0] = 0;
 }
 
-igPsx2FileView *g_reportOutputFile;
+Gap::Core::igFile *g_reportOutputFile;
 
-void igReport_SetOutputFile(igPsx2FileView *file) {
-    igPsx2FileView *p;
+void igReport_SetOutputFile(Gap::Core::igFile *file) {
+    Gap::Core::igFile *p;
 
     p = g_reportOutputFile;
     if (p != 0) {
-        p->_refCount -= 1;
-        if ((p->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(p);
-        }
+        p->release();
     }
     if (file != 0) {
-        file->_refCount += 1;
+        file->ref();
     }
     g_reportOutputFile = file;
 }
 
-igPsx2FileView *g_reportErrorFile;
+Gap::Core::igFile *g_reportErrorFile;
 
-void igReport_SetErrorFile(igPsx2FileView *file) {
-    igPsx2FileView *p;
-    int rc;
+void igReport_SetErrorFile(Gap::Core::igFile *file) {
+    Gap::Core::igFile *p;
+
     p = g_reportErrorFile;
     if (p != 0) {
-        rc = p->_refCount - 1;
-        p->_refCount = rc;
-        if (((unsigned long long) ((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(p);
-        }
+        p->release();
     }
     if (file != 0) {
-        file->_refCount = file->_refCount + 1;
+        file->ref();
     }
     g_reportErrorFile = file;
 }
@@ -499,7 +492,7 @@ void igReport_VPrintf(const char *format, int args) {
             buffer[4095] = 0;
             length = 0x1000;
         }
-        g_reportOutputFile->Write(&buffer[0], length, 1);
+        g_reportOutputFile->fwrite(&buffer[0], length, 1);
         if (g_reportEchoToStdout != 0) {
             printf((const char *)&percent_s[0], &buffer[0]);
         }
@@ -527,7 +520,7 @@ int igReport_VErrorPrintf(int format, int args) {
             buf[4095] = 0;
             length = 0x1000;
         }
-        g_reportErrorFile->Write(buf, length, 1);
+        g_reportErrorFile->fwrite(buf, length, 1);
         if (g_reportEchoToStderr != 0) {
             fprintf(_impure_ptr->_stderr, (const char *)&percent_s[0], buf);
         }
@@ -538,14 +531,14 @@ int igReport_VErrorPrintf(int format, int args) {
 
 void igReport_Flush(void) {
     if (g_reportOutputFile != 0) {
-        g_reportOutputFile->Flush();
+        g_reportOutputFile->fflush();
     }
     fflush(_impure_ptr->_stdout);
 }
 
 void igReport_FlushError(void) {
     if (g_reportErrorFile != 0) {
-        g_reportErrorFile->Flush();
+        g_reportErrorFile->fflush();
     }
     fflush(_impure_ptr->_stderr);
 }

@@ -1,30 +1,21 @@
-igMetaObject *g_igExternalImageEntry_metaObject;
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igExternalImageEntry_GetMetaObject(void)
+igMetaObject *igExternalImageEntry::_Meta;
+
+igMetaObject *igExternalImageEntry::getClassTypeSafe()
 {
-    unsigned char ready;
-    if (g_igExternalImageEntry_metaObject != 0) {
-        ready = (g_igExternalImageEntry_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igExternalImageEntry_EnsureRegistered();
-done:
-    return g_igExternalImageEntry_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igExternalImageEntry_GetVTable(void) {
-    struct W_14f470 o;
-    int r;
-    igObject_InitHeader((igObject *)&o);
-    o.f[1] = 0;
-    o.f[6] = 0;
-    o.f[7] = 0;
-    o.f[9] = 0;
-    o.vt = g_igExternalImageEntry_vtable;
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = g_igExternalImageEntry_vtable;
-    FUN_0014f580((W_14f580 *)&o, 0);
-    return r;
+void *igExternalImageEntry::retrieveVTablePointer()
+{
+    igExternalImageEntry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 igDirEntry *igDirEntry_Destroy(igDirEntry *self, short deleteFlag) {
@@ -55,55 +46,32 @@ igDirEntry *igDirEntry_Destroy(igDirEntry *self, short deleteFlag) {
     return self;
 }
 
-W_14f580 *FUN_0014f580(W_14f580 *t, short flag)
+namespace Gap {
+namespace Gfx {
+
+void igExternalImageEntry::arkRegister()
 {
-    if (t != 0) {
-        t->vt = g_igExternalDirEntry_vtable;
-        t->s40.~Str();
-        t->s32.~Str();
-        t->s28.~Str();
-        if (t != 0) {
-            t->vt = g_igDirEntry_vtable;
-            if (t != 0) {
-                t->vt = g_igNamedObject_vtable;
-                t->s8.~Str();
-            }
-        }
-        if (flag > 0) {
-            Memory_FreeBufferAliasC(t);
-        }
-    }
-    return t;
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-void igExternalImageEntry_EnsureRegistered(void)
+CallbackArray *igExternalImageEntry::arkRegisterInternal()
 {
-    igMetaObject_RunStaticInit(igExternalImageEntry_Register);
-}
-
-CallbackArray *igExternalImageEntry_Register(void) {
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igExternalImageEntry_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igExternalDirEntry::arkRegisterInternal,
-        igExternalDirEntry_GetPublishedMetaObject,
-        thunk_igExternalImageEntry_GetMetaObject_0014f750,
+        Gap::Core::igExternalDirEntry::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igExternalImageEntry",
-        0x2C, /* instance size */
-        igExternalImageEntry_GetVTable,
+        sizeof(igExternalImageEntry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igExternalImageEntry_GetMetaObjectFunction(void) {
-    igExternalImageEntry_GetMetaObject();
 }
-
-int FUN_0014f760(void) {
-    return (int)Gap::Core::igExternalDirEntry::getClassMeta();
 }
 
 igMetaObject *igDisableExt_GetOrCreateMetaObject(void) {

@@ -40,7 +40,6 @@
 #include "dw4/core/igDirectory.h"
 #include "dw4/core/igDoubleMetaField.h"
 #include "dw4/core/igEnumMetaField.h"
-#include "dw4/core/igExternalDirEntry.h"
 #include "dw4/core/igFloatMetaField.h"
 #include "dw4/core/igIGBFile.h"
 #include "dw4/core/igInfo.h"
@@ -138,7 +137,7 @@ union igRefCountWord {
 };
 #define EMIT(...) \
     do { \
-        if (file) { file->Print(__VA_ARGS__); } \
+        if (file) { file->fprintf(__VA_ARGS__); } \
         else { igReport_Printf(__VA_ARGS__); igReport_Flush(); } \
     } while (0)
 #define V1(p) virtual void p();
@@ -399,16 +398,6 @@ extern "C" CallbackArray *igMemoryPool_Register(void);
 extern "C" void igMemoryPool_GetMetaObjectFunction(void);
 extern "C" void igMemoryPool_InitFields(void);
 extern "C" void igArenaMemoryPool_GetMetaObjectFunction(void);
-extern "C" int igMemoryFileEntryList_Create(int arg0);
-extern "C" int igMemoryFileEntryList_GetVTable(void);
-extern "C" CallbackArray *igMemoryFileEntryList_Register(void);
-extern "C" void igMemoryFileEntryList_GetMetaObjectFunction(void);
-extern "C" void * igMemoryFileEntry_Create(int arg0);
-extern "C" int igMemoryFileEntry_GetVTable(void);
-extern "C" void igMemoryFileEntry_EnsureRegistered(void);
-extern "C" CallbackArray *igMemoryFileEntry_Register(void);
-extern "C" void igMemoryFileEntry_GetMetaObjectFunction(void);
-extern "C" void igMemoryFileEntry_InitFields(void);
 extern "C" void * igMemoryDictionary_Create(int arg0);
 extern "C" int igMemoryDictionary_GetVTable(void);
 extern "C" void igMemoryDictionary_EnsureRegistered(void);
@@ -455,8 +444,6 @@ extern "C" CallbackArray *igIGBFile_Register(void);
 extern "C" void igIGBFile_GetMetaObjectFunction(void);
 extern "C" void igIGBFile_InitFields(void);
 extern "C" void igIGBFile_StaticInitCallback(void);
-extern "C" void igPsx2Folder_GetMetaObjectFunction(void);
-extern "C" void igPsx2File_GetMetaObjectFunction(void);
 extern "C" void * igEventTracker_Create(int arg0);
 extern "C" igMetaObject *igEventTracker_GetOrCreateMetaObject(void);
 extern "C" int igEventTracker_GetVTable(void);
@@ -650,15 +637,6 @@ extern "C" int igPsx2IopRpcConnection_GetVTable(void);
 extern "C" CallbackArray *igPsx2IopRpcConnection_Register(void);
 extern "C" void igPsx2IopRpcConnection_GetMetaObjectFunction(void);
 extern "C" void igPsx2IopRpcConnection_InitFields(void);
-extern "C" int igPsx2Folder_GetVTable(void);
-extern "C" void igPsx2Folder_EnsureRegistered(void);
-extern "C" CallbackArray *igPsx2Folder_Register(void);
-extern "C" int igPsx2File_Create(int arg0);
-extern "C" int igPsx2File_GetVTable(void);
-extern "C" void igPsx2File_EnsureRegistered(void);
-extern "C" CallbackArray *igPsx2File_Register(void);
-extern "C" void igPsx2File_InitFields(void);
-extern "C" void igPsx2File_StaticInitCallback(void);
 extern "C" int igPsx2CallStackTracer_GetVTable(void);
 extern "C" void igPsx2CallStackTracer_EnsureRegistered(void);
 extern "C" CallbackArray *igPsx2CallStackTracer_Register(void);
@@ -909,8 +887,6 @@ extern "C" int igMetaObject_GetPoolName(int *object);
 extern "C" int igObject_Destruct(int extra0);
 extern "C" void igObject_TrimCapacity(int extra0);
 extern "C" void igObject_RegisterInstance(void **arg0, void *arg1);
-extern "C" char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *requested_pool);
-extern "C" void *igObject_AllocateRawStorageDefault(int size,int prefix);
 class igObjectDispatchView;
 extern "C" void igObject_CopyFields(igObjectDispatchView *self, int source);
 extern "C" int igObject_CloneViaMetadata(void **source, int copyMode);
@@ -1112,12 +1088,6 @@ extern "C" void PageTable_CountStates(int arg0, void *arg1);
 extern "C" void SystemAllocator_EnsureCreated(void);
 extern "C" void SystemAllocator_EnsureDestroyed(void);
 extern "C" void igPsx2CallStackTracer_HasSymbols(void);
-class igPsx2FileView;
-extern "C" void igPsx2File_Close(igPsx2FileView *arg0);
-extern "C" void **igPsx2File_OpenFile(void **arg0, const char *fileName, int arg2);
-extern "C" int igPsx2File_Seek(igPsx2FileView *arg0, int arg1, int arg2);
-extern "C" void igPsx2File_InitDefaultPrefix(void);
-extern "C" char *igPsx2File_MakeCompletePath(char *path);
 /* sceOpen flags and sceLseek origins (Sony sifdev.h). */
 enum { SCE_RDONLY = 0x1, SCE_WRONLY = 0x2, SCE_RDWR = 0x3, SCE_APPEND = 0x100, SCE_CREAT = 0x200, SCE_TRUNC = 0x400 };
 enum { SCE_SEEK_SET = 0, SCE_SEEK_CUR = 1, SCE_SEEK_END = 2 };
@@ -1175,8 +1145,6 @@ extern "C" void igPsx2Semaphore_ReleaseDefaults(igSemaphoreView *self);
 extern "C" int igPsx2Media_GetMeta(void);
 extern "C" igMetaObject *igPsx2LongTimer_GetMeta(void);
 extern "C" int igPsx2IopRpcConnection_GetMeta(void);
-extern "C" igMetaObject *igPsx2Folder_GetMeta(void);
-extern "C" int igPsx2File_GetMeta(void);
 extern "C" int igPsx2CallStackTracer_GetMeta(void);
 extern "C" int igStandardQueue_GetMeta(void);
 extern "C" igMetaObject *igStackMemoryPool_GetMeta(void);
@@ -1234,8 +1202,6 @@ extern "C" int igDependencyMetaField_GetDescriptor(void);
 extern "C" int igErrorHandler_GetMeta(void);
 extern "C" int igInfoList_GetMeta(void);
 extern "C" int igLibraryList_GetMeta(void);
-extern "C" igMetaObject *igMemoryFileEntry_GetMeta(void);
-extern "C" igMetaObject *igMemoryFileEntryList_GetMeta(void);
 extern "C" igMetaObject *igMemoryPoolInfoList_GetMeta(void);
 extern "C" igMetaObject *igNamedObjectList_GetMeta(void);
 extern "C" int igObjectStringMap_GetMeta(void);
@@ -1250,7 +1216,6 @@ extern "C" igMetaObject *igNonRefCountedThreadList_GetElementMeta(void);
 extern "C" int igStringRefList_GetElementSize(void);
 extern "C" igMetaObject *igContextExtList_GetElementMeta(void);
 extern "C" igMetaObject *igContextExtInfoList_GetElementMeta(void);
-extern "C" igMetaObject *igMemoryFileEntryList_GetElementMeta(void);
 extern "C" igMetaObject *igMemoryPoolInfoList_GetElementMeta(void);
 extern "C" int igInfoList_GetElementMeta(void);
 extern "C" int igPluginRepositoryList_GetElementMeta(void);
@@ -1347,12 +1312,6 @@ extern "C" igMetaObject *igMemoryPoolContextInfo_GetMetaObject(void);
 extern "C" int g_igMemoryPoolContextInfo_vtable[4];
 extern "C" igMetaObject *g_igMemoryPool_metaObject;
 extern "C" igMetaObject *igMemoryPool_GetMetaObject(void);
-extern "C" igMetaObject *g_igMemoryFileEntryList_metaObject;
-extern "C" igMetaObject *igMemoryFileEntryList_GetMetaObject(void);
-extern "C" int g_igMemoryFileEntryList_vtable[4];
-extern "C" igMetaObject *g_igMemoryFileEntry_metaObject;
-extern "C" igMetaObject *igMemoryFileEntry_GetMetaObject(void);
-extern "C" int g_igMemoryFileEntry_vtable[4];
 extern "C" igMetaObject *g_igMemoryDictionary_metaObject;
 extern "C" igMetaObject *igMemoryDictionary_GetMetaObject(void);
 extern "C" int g_igMemoryDictionary_vtable[4];
@@ -1386,7 +1345,6 @@ extern "C" void *igDirectory_Construct(igIGBFile *arg0);
 extern "C" int text_capacity[4];
 extern "C" int text_count[4];
 extern "C" igMetaObject *g_igIGBFile_metaObject;
-extern "C" int g_igFolder_vtable[4];
 extern "C" igMetaObject *g_igEventTracker_metaObject;
 extern "C" igMetaObject *igEventTracker_GetMetaObject(void);
 extern "C" int g_igEventTracker_vtable[4];
@@ -1500,12 +1458,6 @@ extern "C" int g_igPsx2LongTimer_vtable[4];
 extern "C" igMetaObject *g_igPsx2IopRpcConnection_metaObject;
 extern "C" igMetaObject *igPsx2IopRpcConnection_GetMetaObject(void);
 extern "C" int g_igPsx2IopRpcConnection_vtable[4];
-extern "C" igMetaObject *g_igPsx2Folder_metaObject;
-extern "C" igMetaObject *igPsx2Folder_GetMetaObject(void);
-extern "C" int g_igPsx2Folder_vtable[4];
-extern "C" igMetaObject *g_igPsx2File_metaObject;
-extern "C" igMetaObject *igPsx2File_GetMetaObject(void);
-extern "C" int g_igPsx2File_vtable[4];
 extern "C" igMetaObject *g_igPsx2CallStackTracer_metaObject;
 extern "C" igMetaObject *igPsx2CallStackTracer_GetMetaObject(void);
 extern "C" int g_igPsx2CallStackTracer_vtable[4];
@@ -1820,15 +1772,6 @@ public:
     virtual void Describe(void *target);
 };
 
-/* igFolder: a search folder; slot 21 joins _folderName with a file name. */
-class igFolderView : public igVirtualObject { public:
-    RESERVED(1); RESERVED(2); RESERVED(3); RESERVED(4); RESERVED(5); RESERVED(6); RESERVED(7);
-    RESERVED(8); RESERVED(9); RESERVED(10); RESERVED(11); RESERVED(12); RESERVED(13); RESERVED(14);
-    RESERVED(15); RESERVED(16); RESERVED(17); RESERVED(18); RESERVED(19); RESERVED(20);
-    virtual igSmartPointer<igStringObj> GetFullPath(const char *name);          /* +92 */
-    igStringRef _folderName;
-    void setFolderName(char *name) { _folderName = name; }
-};
 /* A node of the parsed driver database (vtable g_ConfigNode_vtable); section and settings nodes extend it.
  * Slot 0 is the deleting destructor. */
 class ConfigNode { public: int kind; virtual void Delete(int flags); };
@@ -1837,8 +1780,8 @@ struct ConfigNodeData { int kind; int vtable; };
 extern "C" void igDriverDatabase_ProcessConfigNode(igDriverDatabase *self, ConfigNode *node, igRegistry *registry, int section);
 extern "C" int g_ConfigNode_vtable[4];
 /* The character variable is an int; a char would add a sign extension. */
-extern "C" void igDriverDatabase_LoadDatabaseFile(igDriverDatabase *self, igFileView *file);
-extern "C" bool igDriverDatabase_ReadLineFromFile(void *a0, igFileView *s, char *buf, int n);
+extern "C" void igDriverDatabase_LoadDatabaseFile(igDriverDatabase *self, Gap::Core::igFile *file);
+extern "C" bool igDriverDatabase_ReadLineFromFile(void *a0, Gap::Core::igFile *s, char *buf, int n);
 class ConfigNode;
 extern "C" ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self);
 extern "C" int igDriverDatabase_ResolveSettingsSection(igDriverDatabase *self, igStringObj *sectionName, igRegistry *registry, int fallback);
@@ -2157,8 +2100,6 @@ extern "C" int igIGBFile_WriteMemoryRefs(igIGBFileView *o);
 extern "C" igResult igIGBFile_GetSectionBuffer(igIGBFileView *arg1, int arg2);
 extern "C" void igIGBFile_ReadMemoryEntries(int *arg0, igIGBFileView *arg1);
 extern "C" void *igIntMetaField_Construct(igMetaField *self, int extra1);
-extern "C" void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self, int extra1);
-extern "C" void *InternalObjectList_Construct(__internalObjectList *list, int extra1);
 extern "C" void StringPool_DestroyChunks(StringPool *pool);
 extern "C" void igLocationTable_Clear(igLocationTableView *table);
 extern "C" int igLocationTable_GetCount(igLocationTable *self);
@@ -2569,9 +2510,8 @@ class igObjectDirEntryView : public igDirEntryView { public:
 };
 extern "C" void *igObjectRefMetaField_Construct(igObjectRefMetaField *self, int extra1);
 typedef igTDataList<igObject *> FieldList;
-class igPsx2FileView;
-extern "C" void igReport_SetOutputFile(igPsx2FileView *arg0);
-extern "C" void igReport_SetErrorFile(igPsx2FileView *arg0);
+extern "C" void igReport_SetOutputFile(Gap::Core::igFile *arg0);
+extern "C" void igReport_SetErrorFile(Gap::Core::igFile *arg0);
 extern "C" void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, const char *path);
 /* igPluginHelper::_libraryLoader; the helper's destructor hands it each loaded igLibrary in turn. */
 class igLibraryLoaderView : public igVirtualObject {
@@ -2921,7 +2861,7 @@ public:
     virtual void d28();
     virtual void PrintSectionHeaders();                         /* slot 29, byte 124 */
     virtual void PrintSymbols();                                /* slot 30, byte 128 */
-    unsigned int refCount; const char *path; igFileView *stream;
+    unsigned int refCount; const char *path; Gap::Core::igFile *stream;
 };
 /* One symbol of the ELF file (Elf32_Sym), with the binding and type values its readers test. */
 struct ElfSymbol { int name; unsigned value; int size; unsigned char info; unsigned char other; unsigned short sectionIndex; };
@@ -3588,43 +3528,11 @@ extern "C" int g_igPsx2CallStackTracer_terminatorAddress[4];
 extern "C" int DAT_004c2620;
 extern "C" int igPsx2CallStackTracer_CaptureCallStack(igCallStackTracerView *tracer);
 extern "C" unsigned int *Gap__Core__igPsx2CallStackTracer__vfunc_31(igCallStackTracerView *tracer);
-/* igPsx2File: a file opened through the IOP file system (sceOpen); a text file is held whole in _fBuf. */
-class igPsx2FileView : public igFileView {
-public:
-    unsigned char *_fBuf;
-    int _bufSize;
-    int _bufPos;
-    int _fileSize;
-    int _isBinary;
-    int _isOpen;
-    int _stringFile;
-    char *_prefix;
-};
-extern "C" void igPsx2File_CloseFile(igPsx2FileView *self);
-extern "C" int igPsx2File_Scanf(igPsx2FileView *self, const char *format, ...);
-extern "C" void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mode);
-extern "C" void igPsx2File_GrowBuffer(igPsx2FileView *arg0, int arg1);
-extern "C" int igPsx2File_Read(igPsx2FileView *arg0, int arg1, int arg2, int arg3);
-extern "C" int igPsx2File_Write(igPsx2FileView *arg0, int arg1, int arg2, int arg3);
-extern "C" int igPsx2File_Flush(igPsx2FileView *arg0);
-extern "C" int igPsx2File_Printf(igPsx2FileView *arg0, int arg1, ...);
-extern "C" int igPsx2File_GetChar(igPsx2FileView *arg0);
-extern "C" int igPsx2File_UngetChar(igPsx2FileView *arg0, int arg1);
-extern "C" int igPsx2File_PutChar(igPsx2FileView *arg0, unsigned char arg1);
-extern "C" char *igPsx2File_GetString(igPsx2FileView *arg0, char *arg1, int arg2);
-extern "C" int igPsx2File_PutString(igPsx2FileView *arg0, char *arg1);
-extern "C" int igPsx2File_Tell(igPsx2File *arg0);
-extern "C" char *igPsx2File_MakeCompleteFilename(igPsx2FileView *self, char *path);
-extern "C" igStringRef igPsx2File_JoinPrefix(char *prefix, char *path);
 /* sceGetstat's sce_stat and sceDread's sce_dirent (Sony sifdev.h). */
 struct FolderFileStat { int mode; char rest[60]; };
 struct FolderEntry { FolderFileStat stat; char name[256]; void *reserved; };
 enum { SCE_STM_FMT = 0xF000, SCE_STM_FDIR = 0x1000 };
-extern "C" igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self);
-extern "C" igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self);
 struct FolderEntryWide { char bytes[328]; };
-extern "C" igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self);
-extern "C" void igPsx2Folder_TrimPath(igStringObj *arg0);
 struct FolderSearchList;
 /* igPsx2IopRpcConnection: a bound SIF RPC client, its transfer memory and the semaphore that
  * serialises calls. */
@@ -3758,7 +3666,6 @@ extern "C" void igPsx2LongTimer_Restart(igPsx2LongTimer *self);
 extern "C" void igPsx2LongTimer_SetResetTimeSeconds(igLongTimerView *self, double seconds);
 extern "C" double igPsx2LongTimer_GetResetTimeSeconds(igLongTimerView *self);
 extern "C" unsigned char igPsx2LongTimer_IsStopped(igPsx2LongTimer *self);
-extern "C" void igPsx2File_InitDefaults(igPsx2File *arg0);
 extern "C" int igStackMemoryPool_IsSecondaryAllocator(igStackMemoryPool *self);
 extern "C" void igStringRefList_UserPreWrite(igObjectDispatchView *self);
 extern "C" void igStringRefList_TrimCapacity(igStringRefList *l);

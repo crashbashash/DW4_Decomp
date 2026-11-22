@@ -13,7 +13,7 @@ igMetaField *igRawRefMetaField_Create(igMemoryPoolView *pool) {
         Gap::Core::igRawRefMetaField::arkRegister();
         field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)Gap::Core::igRawRefMetaField::getClassMeta(), pool)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x38, 0, pool)));
+        field = (void **)(((void **)Gap::Core::igObject::operator new(0x38, 0, pool)));
         if (field != 0) {
             field = (void **)(((void **)igRawRefMetaField_Construct((int **)field, 1)));
         }
@@ -32,7 +32,7 @@ igObject *igRawRefMetaField::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(igRawRefMetaField), 0), 0) igRawRefMetaField(*this);
+    return new (0) igRawRefMetaField(*this);
 }
 
 igMetaObject *igRawRefMetaField::getClassTypeLazy()

@@ -1,7 +1,11 @@
+namespace Gap {
+namespace Core {
+
 /* Opens the file in `mode` (0-3 text, 4-7 binary: read, write, append, read-write; 8 the mode it
  * was last opened in). A relative name is tried under each entry of the search path list in turn.
  * A text file is read whole into the buffer. */
-void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mode) {
+igResult igPsx2File::open(OpenMode mode)
+{
     const char *searchPaths;
     char path[512];
     bool absolute;
@@ -15,252 +19,275 @@ void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mod
     char *p;
     unsigned int n;
     int size;
+
     flags = 0;
-    if (mode == 8) mode = file->_openMode;
-    if (file->_isOpen == 1 && file->_openMode == mode) {
-        *result = g_resultSuccess.v;
-    } else {
-        switch (mode) {
-        case 0: case 1: case 2: case 3: case 8:
-            file->_isBinary = 0;
-            break;
-        case 4: case 5: case 6: case 7:
-            file->_isBinary = 1;
-            break;
+    if (mode == kDefaultOpenMode) {
+        mode = _openMode;
+    }
+    if (_isOpen == 1 && _openMode == mode) {
+        return g_resultSuccess;
+    }
+    switch (mode) {
+    case kRead: case kWrite: case kAppend: case kReadWrite: case kDefaultOpenMode:
+        _isBinary = 0;
+        break;
+    case kReadBinary: case kWriteBinary: case kAppendBinary: case kReadWriteBinary:
+        _isBinary = 1;
+        break;
+    }
+    switch (mode) {
+    case kWrite: case kWriteBinary: flags = SCE_TRUNC | SCE_CREAT | SCE_WRONLY; break;
+    case kAppend: case kAppendBinary: flags = SCE_CREAT | SCE_APPEND; break;
+    case kReadWrite: case kReadWriteBinary: flags = SCE_CREAT | SCE_RDWR; break;
+    case kRead: case kReadBinary: case kDefaultOpenMode: flags = SCE_RDONLY; break;
+    }
+    _bufSize = 0;
+    p = path;
+    _bufPos = 0;
+    n = sizeof(path);
+    _isOpen = 0;
+    if (p != 0) {
+        do {
+            *p = 0;
+            n -= 1;
+            p += 1;
+        } while (n != 0);
+    }
+    more = 1;
+    absolute = isAbsolutePath(_fileName.p);
+    hasDirectory = containsRelativePath(_fileName.p);
+    searchPaths = getSearchPath();
+    attempt = 0;
+    while (more && attempt < 0x100) {
+        if (absolute) {
+            path[0] = 0;
+            more = 0;
+            goto tryPath;
         }
-        switch (mode) {
-        case 1: case 5: flags = SCE_TRUNC | SCE_CREAT | SCE_WRONLY; break;
-        case 2: case 6: flags = SCE_CREAT | SCE_APPEND; break;
-        case 3: case 7: flags = SCE_CREAT | SCE_RDWR; break;
-        case 0: case 4: case 8: flags = SCE_RDONLY; break;
+        if (hasDirectory != 0) {
+            path[0] = 0;
+            hasDirectory = 0;
+            goto tryPath;
         }
-        file->_bufSize = 0;
-        p = path;
-        file->_bufPos = 0;
-        n = sizeof(path);
-        file->_isOpen = 0;
-        if (p != 0) {
-            do {
-                *p = 0;
-                n -= 1;
-                p += 1;
-            } while (n != 0);
-        }
-        more = 1;
-        absolute = Gap::Core::igFile::isAbsolutePath(file->_fileName);
-        hasDirectory = Gap::Core::igFile::containsRelativePath(file->_fileName);
-        searchPaths = Gap::Core::igFile::getSearchPath();
-        attempt = 0;
-        while (more && attempt < 0x100) {
-            if (absolute) {
-                path[0] = 0;
-                more = 0;
-                goto open;
-            }
-            if (hasDirectory != 0) {
-                path[0] = 0;
-                hasDirectory = 0;
-                goto open;
-            }
-            more = Gap::Core::igFile::getNextPath(&searchPaths, path, sizeof(path));
-            if (more) {
-open:
-                strcat(path, file->_fileName);
-                devicePath = file->MakeCompleteFilename(path);
-                if (*devicePath == 'c') {
-                    retries = 10;
-                    while ((fd = sceOpen(devicePath, flags)) < 0 && retries != 0) {
-                        retries -= 1;
-                    }
-                } else {
-                    fd = sceOpen(devicePath, flags, 0666);
+        more = getNextPath(&searchPaths, path, sizeof(path));
+        if (more) {
+tryPath:
+            strcat(path, _fileName.p);
+            devicePath = (char *)generateFilename(path);
+            if (*devicePath == 'c') {
+                retries = 10;
+                while ((fd = sceOpen(devicePath, flags)) < 0 && retries != 0) {
+                    retries -= 1;
                 }
-                file->_fileHandle = fd;
-                if (!(0 > fd)) break;
+            } else {
+                fd = sceOpen(devicePath, flags, 0666);
             }
-            attempt += 1;
+            _fileHandle = fd;
+            if (!(0 > fd)) break;
         }
-        if (file->_fileHandle < 0) {
-            *result = g_resultFailure.v;
-        } else {
-            if (mode == 6) sceLseek(file->_fileHandle, 0, SCE_SEEK_END);
-            if (file->_isBinary == 0) {
-                size = sceLseek(file->_fileHandle, 0, SCE_SEEK_END);
-                igPsx2File_GrowBuffer(file, size);
-                sceLseek(file->_fileHandle, 0, SCE_SEEK_SET);
-                if (size > 0) {
-                    fd = sceRead(file->_fileHandle, file->_fBuf, size);
-                    if (fd != size) igPsx2File_GrowBuffer(file, fd);
-                }
-                if (mode == 2) file->_bufPos = size;
-                else file->_bufPos = 0;
-            }
-            file->_openMode = mode;
-            file->_isOpen = 1;
-            *result = g_resultSuccess.v;
+        attempt += 1;
+    }
+    if (_fileHandle < 0) {
+        return g_resultFailure;
+    }
+    if (mode == kAppendBinary) {
+        sceLseek(_fileHandle, 0, SCE_SEEK_END);
+    }
+    if (_isBinary == 0) {
+        size = sceLseek(_fileHandle, 0, SCE_SEEK_END);
+        growBuffer(size);
+        sceLseek(_fileHandle, 0, SCE_SEEK_SET);
+        if (size > 0) {
+            fd = sceRead(_fileHandle, _fBuf, size);
+            if (fd != size) growBuffer(fd);
         }
+        if (mode == kAppend) _bufPos = size;
+        else _bufPos = 0;
+    }
+    _openMode = mode;
+    _isOpen = 1;
+    return g_resultSuccess;
+}
+
+void igPsx2File::close()
+{
+    if (_fileHandle >= 0) {
+        fflush();
+        sceClose(_fileHandle);
+        _fileHandle = -1;
+        if (_fBuf != 0) {
+            free(_fBuf);
+        }
+        _fBuf = 0;
+        _bufSize = 0;
+        _bufPos = 0;
+        _isOpen = 0;
     }
 }
 
-void igPsx2File_Close(igPsx2FileView *self) {
-    if (self->_fileHandle >= 0) {
-        self->Flush();
-        sceClose(self->_fileHandle);
-        self->_fileHandle = -1;
-        if (self->_fBuf != 0) {
-            ((Gap::Core::igObject *)self)->free((void *)self->_fBuf);
-        }
-        self->_fBuf = 0;
-        self->_bufSize = 0;
-        self->_bufPos = 0;
-        self->_isOpen = 0;
-    }
-}
-
-void **igPsx2File_OpenFile(void **self, const char *fileName, int modeText) {
-    igResult appendBinaryResult;
-    igResult appendResult;
-    igResult readWriteBinaryResult;
-    igResult readWriteResult;
-    igResult writeBinaryResult;
-    igResult writeResult;
-    igResult readBinaryResult;
+igFile *igPsx2File::fopen(const char *path, const char *mode)
+{
     igResult readResult;
-    int opened;
+    igResult readBinaryResult;
+    igResult writeResult;
+    igResult writeBinaryResult;
+    igResult updateResult;
+    igResult updateBinaryResult;
+    igResult appendResult;
+    igResult appendBinaryResult;
+    int status;
 
-    ((Gap::Core::igFile *)self)->setFileName(fileName);
-    if (strcmp((const char *)modeText, "r") == 0) {
-        readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
-        opened = readResult.v;
-        goto block_21;
+    setFileName(path);
+    if (strcmp(mode, "r") == 0) {
+        readResult = open(kRead);
+        status = readResult.v;
+        goto opened;
     }
-    if (strcmp((const char *)modeText, "rb") == 0) {
-        readBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(4));
-        opened = readBinaryResult.v;
-        goto block_21;
+    if (strcmp(mode, "rb") == 0) {
+        readBinaryResult = open(kReadBinary);
+        status = readBinaryResult.v;
+        goto opened;
     }
-    if (strcmp((const char *)modeText, (const char *)(int *)((char *)"w")) == 0) {
-        writeResult = ((igFileView *)(self))->OpenWithMode((int)(1));
-        opened = writeResult.v;
-        goto block_21;
+    if (strcmp(mode, "w") == 0) {
+        writeResult = open(kWrite);
+        status = writeResult.v;
+        goto opened;
     }
-    if (strcmp((const char *)modeText, (const char *)(int *)((char *)"wb")) == 0) {
-        writeBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(5));
-        opened = writeBinaryResult.v;
-        goto block_21;
+    if (strcmp(mode, "wb") == 0) {
+        writeBinaryResult = open(kWriteBinary);
+        status = writeBinaryResult.v;
+        goto opened;
     }
-    if ((strcmp((const char *)modeText, "r+") == 0) || (strcmp((const char *)modeText, "w+") == 0)) {
-        readWriteResult = ((igFileView *)(self))->OpenWithMode((int)(3));
-        opened = readWriteResult.v;
-        goto block_21;
+    if ((strcmp(mode, "r+") == 0) || (strcmp(mode, "w+") == 0)) {
+        updateResult = open(kReadWrite);
+        status = updateResult.v;
+        goto opened;
     }
-    if ((strcmp((const char *)modeText, "r+b") == 0) || (strcmp((const char *)modeText, "w+b") == 0)) {
-        readWriteBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(7));
-        opened = readWriteBinaryResult.v;
-        goto block_21;
+    if ((strcmp(mode, "r+b") == 0) || (strcmp(mode, "w+b") == 0)) {
+        updateBinaryResult = open(kReadWriteBinary);
+        status = updateBinaryResult.v;
+        goto opened;
     }
-    if ((strcmp((const char *)modeText, "a") == 0) || (strcmp((const char *)modeText, "a+") == 0)) {
-        appendResult = ((igFileView *)(self))->OpenWithMode((int)(2));
-        opened = appendResult.v;
-        goto block_21;
+    if ((strcmp(mode, "a") == 0) || (strcmp(mode, "a+") == 0)) {
+        appendResult = open(kAppend);
+        status = appendResult.v;
+        goto opened;
     }
-    if ((strcmp((const char *)modeText, "ab") == 0) || (strcmp((const char *)modeText, "a+b") == 0)) {
-        appendBinaryResult = ((igFileView *)(self))->OpenWithMode((int)(6));
-        opened = appendBinaryResult.v;
-        goto block_21;
+    if ((strcmp(mode, "ab") == 0) || (strcmp(mode, "a+b") == 0)) {
+        appendBinaryResult = open(kAppendBinary);
+        status = appendBinaryResult.v;
+        goto opened;
     }
     return 0;
-block_21:
-    return (opened == g_resultFailure.v) ? (void **)0 : self;
+opened:
+    return status == g_resultFailure.v ? 0 : this;
 }
 
-void igPsx2File_CloseFile(igPsx2FileView *self)
+void igPsx2File::fclose()
 {
-    self->CloseHandle();
+    close();
 }
 
-void igPsx2File_GrowBuffer(igPsx2FileView *self, int size) {
+void igPsx2File::growBuffer(int size)
+{
     int n;
-    if (self->_bufSize < size) {
+
+    if (_bufSize < size) {
         if (size > 0x100000) {
             n = size + 0x100000;
         } else {
             n = size * 2;
         }
-        if (self->_fBuf != 0) {
-            self->_fBuf = (unsigned char *)((Gap::Core::igObject *)self)->realloc((void *)self->_fBuf, n);
+        if (_fBuf != 0) {
+            _fBuf = (unsigned char *)realloc(_fBuf, n);
         } else {
-            self->_fBuf = (unsigned char *)((Gap::Core::igObject *)self)->malloc(n);
+            _fBuf = (unsigned char *)malloc(n);
         }
-        self->_bufSize = n;
+        _bufSize = n;
     }
-    self->_fileSize = size;
+    _fileSize = size;
 }
 
-int igPsx2File_Read(igPsx2FileView *self, int buffer, int size, int count) {
+int igPsx2File::fread(void *ptr, int size, int nElts)
+{
     int base;
     int r;
     int q;
     int bytes;
     int a1;
     int lim;
-    if (self->_fileHandle < 0) {
+
+    if (_fileHandle < 0) {
         return -1;
     }
-    base = self->Tell();
-    if (self->_isBinary == 1) {
-        r = sceRead(self->_fileHandle, (void *)buffer, count * size);
-        count = r / size;
-        q = count * size;
+    base = ftell();
+    if (_isBinary == 1) {
+        r = sceRead(_fileHandle, ptr, nElts * size);
+        nElts = r / size;
+        q = nElts * size;
         if (r != q) {
-            sceLseek(self->_fileHandle, base + q, 0);
+            sceLseek(_fileHandle, base + q, 0);
         }
-        return count;
+        return nElts;
     }
-    a1 = self->_bufPos;
-    bytes = size * count;
-    lim = self->_fileSize;
+    a1 = _bufPos;
+    bytes = size * nElts;
+    lim = _fileSize;
     if (lim < a1 + bytes) {
-        count = (lim - a1) / size;
-        bytes = count * size;
+        nElts = (lim - a1) / size;
+        bytes = nElts * size;
     }
-    memcpy((void *)buffer, self->_fBuf + a1, bytes);
-    self->_bufPos = self->_bufPos + bytes;
-    return count;
+    memcpy(ptr, _fBuf + a1, bytes);
+    _bufPos = _bufPos + bytes;
+    return nElts;
 }
 
-int igPsx2File_Write(igPsx2FileView *self, int buffer, int size, int count) {
+int igPsx2File::fwrite(const void *ptr, int size, int nElts)
+{
     int bytes;
-    if (self->_fileHandle < 0) return -1;
-    if (size == 0) return 0;
-    if (self->_isBinary == 1) {
-        if (self->_openMode == 6) {
-            sceLseek(self->_fileHandle, 0, 2);
+
+    if (_fileHandle < 0) {
+        return -1;
+    }
+    if (size == 0) {
+        return 0;
+    }
+    if (_isBinary == 1) {
+        if (_openMode == kAppendBinary) {
+            sceLseek(_fileHandle, 0, 2);
         }
-        return sceWrite(self->_fileHandle, (const void *)buffer, count * size) / size;
+        return sceWrite(_fileHandle, ptr, nElts * size) / size;
     }
-    bytes = size * count;
-    if (self->_openMode == 2) {
-        self->_bufPos = self->_fileSize;
+    bytes = size * nElts;
+    if (_openMode == kAppend) {
+        _bufPos = _fileSize;
     }
-    igPsx2File_GrowBuffer(self, self->_bufPos + bytes);
-    memcpy(self->_fBuf + self->_bufPos, (void *)buffer, bytes);
-    self->_bufPos = self->_bufPos + bytes;
+    growBuffer(_bufPos + bytes);
+    memcpy(_fBuf + _bufPos, ptr, bytes);
+    _bufPos = _bufPos + bytes;
     return bytes / size;
 }
 
-int igPsx2File_Flush(igPsx2FileView *self) {
-    if (self->_isBinary != 0) return 0; sceLseek(self->_fileHandle, 0, 0); sceWrite(self->_fileHandle, self->_fBuf, self->_fileSize); return 0;
+int igPsx2File::fflush()
+{
+    if (_isBinary != 0) {
+        return 0;
+    }
+    sceLseek(_fileHandle, 0, 0);
+    sceWrite(_fileHandle, _fBuf, _fileSize);
+    return 0;
 }
 
-int igPsx2File_Scanf(igPsx2FileView *self, const char *format, ...) {
+int igPsx2File::fscanf(const char *format, ...)
+{
     char *args;
     int n;
     int off;
     int length;
     int i;
     int count;
-    if (self->_isBinary != 0) {
+
+    if (_isBinary != 0) {
         return -1;
     }
     n = __builtin_args_info(2);
@@ -312,155 +339,169 @@ int igPsx2File_Scanf(igPsx2FileView *self, const char *format, ...) {
         strcat(piece, "%n");
         if (state == 1) {
             int consumed = 0;
-            sscanf((const char *)(self->_fBuf + self->_bufPos), piece, &consumed);
-            self->_bufPos += consumed;
+            sscanf((const char *)(_fBuf + _bufPos), piece, &consumed);
+            _bufPos += consumed;
         } else {
             void *target;
             args += 8;
             target = *(void **)(args - 8);
             int consumed = 0;
-            int matched = sscanf((const char *)(self->_fBuf + self->_bufPos), piece, target, &consumed);
+            int matched = sscanf((const char *)(_fBuf + _bufPos), piece, target, &consumed);
             if (matched == -1) {
                 break;
             }
             count += matched;
-            self->_bufPos += consumed;
+            _bufPos += consumed;
         }
     }
     return count;
 }
 
-int igPsx2File_Printf(igPsx2FileView *self, int format, ...) {
+int igPsx2File::fprintf(const char *format, ...)
+{
     char buf[16384];
     int n;
     int off;
     int len;
     int cur;
-    if (self->_isBinary != 0) {
+
+    if (_isBinary != 0) {
         return -1;
     }
     n = __builtin_args_info(2);
     if (n >= 8) off = 0; else off = (8 - n) * 8;
-    len = vsprintf(buf, (const char *)format, (char *)__builtin_next_arg(format) - off);
-    cur = self->_bufPos + len;
-    if (cur >= self->_fileSize) {
-        igPsx2File_GrowBuffer(self, cur);
+    len = vsprintf(buf, format, (char *)__builtin_next_arg(format) - off);
+    cur = _bufPos + len;
+    if (cur >= _fileSize) {
+        growBuffer(cur);
     }
-    memcpy(self->_fBuf + self->_bufPos, buf, len);
-    self->_bufPos = self->_bufPos + len;
+    memcpy(_fBuf + _bufPos, buf, len);
+    _bufPos = _bufPos + len;
     return len;
 }
 
-int igPsx2File_GetChar(igPsx2FileView *self) {
+int igPsx2File::fgetc()
+{
     int c;
     int i;
 
-    if (self->_isBinary != 0) {
-        sceRead(self->_fileHandle, &c, 1);
+    if (_isBinary != 0) {
+        sceRead(_fileHandle, &c, 1);
         return c;
     }
-    i = self->_bufPos;
-    if (i >= self->_fileSize) {
+    i = _bufPos;
+    if (i >= _fileSize) {
         return -1;
     }
-    self->_bufPos = i + 1;
-    return self->_fBuf[self->_bufPos - 1];
+    _bufPos = i + 1;
+    return _fBuf[_bufPos - 1];
 }
 
-int igPsx2File_UngetChar(igPsx2FileView *self, int c) {
+int igPsx2File::ungetc(int c)
+{
     int pos;
     int result;
 
     result = c;
-    if (self->_isBinary != 0) {
+    if (_isBinary != 0) {
         return -1;
     }
-    pos = self->_bufPos;
+    pos = _bufPos;
     if (pos == 0) {
         return -1;
     }
-    self->_bufPos = pos - 1;
-    if ((result & 0xFF) != self->_fBuf[self->_bufPos]) {
+    _bufPos = pos - 1;
+    if ((result & 0xFF) != _fBuf[_bufPos]) {
         result = -1;
     }
     return result;
 }
 
-int igPsx2File_PutChar(igPsx2FileView *self, unsigned char c) {
+int igPsx2File::fputc(int c)
+{
     int end;
 
-    if (self->_isBinary != 0) {
+    if (_isBinary != 0) {
         return -1;
     }
-    end = self->_bufPos + 1;
-    if (end >= self->_fileSize) {
-        igPsx2File_GrowBuffer(self, end);
+    end = _bufPos + 1;
+    if (end >= _fileSize) {
+        growBuffer(end);
     }
-    self->_fBuf[self->_bufPos] = c;
-    self->_bufPos = self->_bufPos + 1;
-    return c;
+    _fBuf[_bufPos] = c;
+    _bufPos = _bufPos + 1;
+    return (unsigned char)c;
 }
 
-char *igPsx2File_GetString(igPsx2FileView *self, char *buffer, int size) {
-    if (buffer == 0) {
+char *igPsx2File::fgets(char *s, int n)
+{
+    int i;
+    unsigned char c;
+
+    if (s == 0) {
         return 0;
     }
-    if (self->_isBinary != 0) {
+    if (_isBinary != 0) {
         return 0;
     }
-    if (self->_bufPos >= self->_fileSize) {
+    if (_bufPos >= _fileSize) {
         return 0;
     }
-    int i = 0;
-    size = size - 1;
-    if (size + self->_bufPos >= self->_fileSize) {
-        size = self->_fileSize - self->_bufPos;
+    i = 0;
+    n = n - 1;
+    if (n + _bufPos >= _fileSize) {
+        n = _fileSize - _bufPos;
     }
-    while (i < size) {
-        unsigned char c = self->_fBuf[self->_bufPos];
-        buffer[i] = c;
+    while (i < n) {
+        c = _fBuf[_bufPos];
+        s[i] = c;
         i++;
-        self->_bufPos = self->_bufPos + 1;
+        _bufPos = _bufPos + 1;
         if (c == 10) {
             break;
         }
     }
-    buffer[i] = 0;
-    return buffer;
+    s[i] = 0;
+    return s;
 }
 
-int igPsx2File_PutString(igPsx2FileView *self, char *text) {
+int igPsx2File::fputs(const char *s)
+{
     int end;
     int length;
 
-    if (text == 0) {
+    if (s == 0) {
         return -1;
     }
-    if (self->_isBinary != 0) {
+    if (_isBinary != 0) {
         return -1;
     }
-    length = strlen(text);
-    end = self->_bufPos + length;
-    if (end >= self->_fileSize) {
-        igPsx2File_GrowBuffer(self, end);
+    length = strlen(s);
+    end = _bufPos + length;
+    if (end >= _fileSize) {
+        growBuffer(end);
     }
-    memcpy(self->_fBuf + self->_bufPos, text, length);
-    self->_bufPos = self->_bufPos + length;
+    memcpy(_fBuf + _bufPos, s, length);
+    _bufPos = _bufPos + length;
     return length;
 }
 
-int igPsx2File_Seek(igPsx2FileView *self, int offset, int whence) {
+int igPsx2File::fseek(int offset, int whence)
+{
     int s;
-    if (self->_isBinary != 0) {
+    int v1;
+    int v0;
+
+    if (_isBinary != 0) {
         switch (whence) {
         case 0:
-            s = sceLseek(self->_fileHandle, offset, 0);
+            s = sceLseek(_fileHandle, offset, 0);
             return -(s != offset);
         case 1:
-            s = self->Tell();
-            return -(offset != sceLseek(self->_fileHandle, offset, 1) - s);
+            s = ftell();
+            return -(offset != sceLseek(_fileHandle, offset, 1) - s);
         case 2:
-            sceLseek(self->_fileHandle, offset, 2);
+            sceLseek(_fileHandle, offset, 2);
             return 0;
         default:
             return -1;
@@ -468,56 +509,65 @@ int igPsx2File_Seek(igPsx2FileView *self, int offset, int whence) {
     } else {
         switch (whence) {
         case 0:
-            self->_bufPos = offset;
+            _bufPos = offset;
             break;
         case 1:
-            self->_bufPos = self->_bufPos + offset;
+            _bufPos = _bufPos + offset;
             break;
         case 2:
-            self->_bufPos = self->_fileSize + offset;
+            _bufPos = _fileSize + offset;
             break;
         default:
             return -1;
         }
-        {int v1 = self->_fileSize; int v0 = self->_bufPos;
-        if (v1 < v0) self->_bufPos = v1;
-        else if (v0 < 0) self->_bufPos = 0;}
+        v1 = _fileSize;
+        v0 = _bufPos;
+        if (v1 < v0) _bufPos = v1;
+        else if (v0 < 0) _bufPos = 0;
         return 0;
     }
 }
 
-int igPsx2File_Tell(igPsx2File *self) {
-    if (self->_isBinary != 0) {
-        return sceLseek(self->_fileHandle, 0, 1);
+int igPsx2File::ftell()
+{
+    if (_isBinary != 0) {
+        return sceLseek(_fileHandle, 0, 1);
     }
-    return self->_bufPos;
+    return _bufPos;
 }
 
-int g_igPsx2File_defaultPrefix;
+const char *igPsx2File::defaultPrefix;
+}
+}
 int g_igPsx2_useCdrom;
 
-void igPsx2File_InitDefaultPrefix(void) {
+namespace Gap {
+namespace Core {
+
+void igPsx2File::userRegister()
+{
     if (g_igPsx2_useCdrom == 0) {
-        if ((*(int * *)&g_igPsx2File_defaultPrefix) == 0) {
-            (*(int * *)&g_igPsx2File_defaultPrefix) = (int *)("host0:");
+        if (defaultPrefix == 0) {
+            defaultPrefix = "host0:";
         }
     } else {
-        (*(int * *)&g_igPsx2File_defaultPrefix) = (int *)"cdrom0:";
+        defaultPrefix = "cdrom0:";
     }
 }
 
-char *igPsx2File_MakeCompletePath(char *path) {
-    igStringRef text = igPsx2File_JoinPrefix((char *)g_igPsx2File_defaultPrefix, path);
+char *igPsx2File::makeCompletePath(char *path) {
+    igStringRef text = joinPrefix((char *)defaultPrefix, path);
     return (char *)Memory_Reallocate(text.p, (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
 }
 
 /* Joins the file's device prefix and `path`, keeps the result as _completeFilename and returns it. */
-char *igPsx2File_MakeCompleteFilename(igPsx2FileView *self, char *path) {
-    igStringRef name = igPsx2File_JoinPrefix(self->_prefix, path);
-    retainString(name.p);
-    releaseString(self->_completeFilename);
-    self->_completeFilename = name.p;
-    return name.p;
+const char *igPsx2File::generateFilename(const char *name)
+{
+    igStringRef full = joinPrefix(_prefix.p, (char *)name);
+    _completeFilename = full;
+    return full.p;
+}
+}
 }
 
 static inline void appendText(const igSmartPointer<igStringObj> &ref, char *chars) {
@@ -526,7 +576,10 @@ static inline void appendText(const igSmartPointer<igStringObj> &ref, char *char
     igStringObj_Insert(text, chars, (unsigned int)length, (unsigned int)(strlen(chars)));
 }
 
-igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
+namespace Gap {
+namespace Core {
+
+igStringRef igPsx2File::joinPrefix(char *prefix, char *path) {
     char *chars;
     int limit, i;
     char c;
@@ -563,20 +616,21 @@ igStringRef igPsx2File_JoinPrefix(char *prefix, char *path) {
 }
 
 /* Lists the folder's files: each sceDread entry's full path is stat'ed and directories skipped. */
-igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
+igSmartPointer<igStringRefList> igPsx2Folder::getFiles() const
+{
     FolderEntry entry;
     FolderFileStat stat;
-    int handle = sceDopen((const char *)self->_folderName);
+    int handle = sceDopen(_folderName.p);
     if (handle < 0) {
-        return igSmartPointer<igObject>(0, kRetainReference);
+        return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
-    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<igStringRefList> list((igStringRefList *)igStringRefList_Create((int)getMemoryPool()));
+    igStringObjRef path((igStringObj *)igStringObj_Create((int)getMemoryPool()));
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
-        igStringObj_Format((igStringObj *)path.p,"%s/%s", self->_folderName, (char *)(&entry.stat + 1));
-        char *full = (char *)((igStringObj *)path.p)->_buffer;
+        igStringObj_Format(path.get(), "%s/%s", _folderName.p, (char *)(&entry.stat + 1));
+        char *full = (char *)path.get()->_buffer;
         full = (full == 0) ? g_stringObjEmptyText : full;
         if (sceGetstat(full, &stat) != 0) {
             continue;
@@ -585,27 +639,28 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
             continue;
         }
         igStringRef name(entry.name);
-        StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&name);
+        StringList_AppendRetained(list.p, (char *const *)&name);
     }
     sceDclose(handle);
     return list;
 }
 
 /* Lists the folder's subdirectories, the same walk keeping only S_IFDIR entries. */
-igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
+igSmartPointer<igStringRefList> igPsx2Folder::getSubFolders() const
+{
     FolderEntry entry;
     FolderFileStat stat;
-    int handle = sceDopen((const char *)self->_folderName);
+    int handle = sceDopen(_folderName.p);
     if (handle < 0) {
-        return igSmartPointer<igObject>(0, kRetainReference);
+        return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
-    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<igStringRefList> list((igStringRefList *)igStringRefList_Create((int)getMemoryPool()));
+    igStringObjRef path((igStringObj *)igStringObj_Create((int)getMemoryPool()));
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
-        igStringObj_Format((igStringObj *)path.p,"%s/%s", self->_folderName, (char *)(&entry.stat + 1));
-        char *full = (char *)((igStringObj *)path.p)->_buffer;
+        igStringObj_Format(path.get(), "%s/%s", _folderName.p, (char *)(&entry.stat + 1));
+        char *full = (char *)path.get()->_buffer;
         full = (full == 0) ? g_stringObjEmptyText : full;
         if (sceGetstat(full, &stat) != 0) {
             continue;
@@ -614,9 +669,11 @@ igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
             continue;
         }
         igStringRef name(entry.name);
-        StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&name);
+        StringList_AppendRetained(list.p, (char *const *)&name);
     }
     sceDclose(handle);
     return list;
+}
+}
 }
 

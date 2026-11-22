@@ -2,7 +2,6 @@
 #include "dw4/core/igMemoryPoolView.h"
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/gfx/igVisualContextDispatchView.h"
-#include "dw4/core/igFileDispatchView.h"
 extern "C" {
 #include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/cri_adxt.h"
@@ -400,8 +399,8 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
     } else {
         pool = ((Gap::Core::igObject *)self)->getMemoryPool();
         pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        igSmartPointer<igFileDispatchView> file((igFileDispatchView *)Gap::Core::igFile::_instantiateFromPool(pool));
-        path = file->MakeCompleteFilename((const char *)movie->_path);
+        igSmartPointer<Gap::Core::igFile> file(Gap::Core::igFile::_instantiateFromPool(pool));
+        path = (char *)file->generateFilename((const char *)movie->_path);
     }
     afsIndex = igAdx_FindAfsFile(path);
     pool = ((Gap::Core::igObject *)self)->getMemoryPool();

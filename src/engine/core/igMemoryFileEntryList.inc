@@ -1,51 +1,51 @@
-igMetaObject *g_igMemoryFileEntryList_metaObject;
+namespace Gap {
+namespace Core {
 
-int igMemoryFileEntryList_Create(int pool) {
-    igMemoryFileEntryList_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance(g_igMemoryFileEntryList_metaObject, (igMemoryPoolView *)pool);
-}
+igMetaObject *igMemoryFileEntryList::_Meta;
 
-igMetaObject *igMemoryFileEntryList_GetMetaObject(void)
+igMemoryFileEntryList *igMemoryFileEntryList::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMemoryFileEntryList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMemoryFileEntryList_EnsureRegistered();
-    return g_igMemoryFileEntryList_metaObject;
+    arkRegister();
+    return (igMemoryFileEntryList *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMemoryFileEntryList_GetVTable(void) {
-    igMemoryFileEntryList list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igMemoryFileEntryList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igMemoryFileEntryList_EnsureRegistered(void)
+igMetaObject *igMemoryFileEntryList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMemoryFileEntryList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMemoryFileEntryList_callbackList[] = { igMemoryFileEntry_EnsureRegistered, 0 };
+void *igMemoryFileEntryList::retrieveVTablePointer()
+{
+    igMemoryFileEntryList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMemoryFileEntryList_Register(void) {
+void igMemoryFileEntryList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMemoryFileEntryList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igMemoryFileEntry::arkRegister, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMemoryFileEntryList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igMemoryFileEntryList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMemoryFileEntryList",
-        0x14,
-        igMemoryFileEntryList_GetVTable,
+        sizeof(igMemoryFileEntryList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igMemoryFileEntryList_callbackList
+        regFunctions
     );
 }
-
-void igMemoryFileEntryList_GetMetaObjectFunction(void) {
-    igMemoryFileEntryList_GetMetaObject();
+}
 }
 

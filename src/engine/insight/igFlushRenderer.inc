@@ -812,7 +812,7 @@ void igInsightCore_UserRegister(void) {
         }
     }
     s0->name = (int)s1;
-    igFolder_SetFolderName((igFolderView *)(r.get()), "insight");
+    ((Gap::Core::igFolder *)(r.get()))->appendRelativePath("insight");
     igPluginHelper_AddRepository((igPluginHelper *)(((G *)g_objectSystem)->f76), (int)("Insight"), r->name, 1);
 }
 

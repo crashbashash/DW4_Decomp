@@ -317,23 +317,30 @@ void igObject::arkRegisterInitialize() {
 }
 }
 
-char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *requested_pool) {
+namespace Gap {
+namespace Core {
+
+void *igObject::operator new(unsigned int cSize, unsigned int allocSize, igMemoryPoolView *mp) {
     int total_size;
     igMemoryPoolView *pool;
 
-    pool = requested_pool;
-    total_size = size + prefix_size;
+    pool = mp;
+    total_size = cSize + allocSize;
     if (pool == 0) {
         pool = (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap);
     }
     if (pool == 0) {
         /* no pool at all: the prefix is not added on this path (retail behaviour) */
-        return ((char *)malloc(total_size));
+        return ::malloc(total_size);
     }
-    return (char *)pool->Allocate(total_size) + prefix_size;
+    return (char *)pool->Allocate(total_size) + allocSize;
 }
 
-void *igObject_AllocateRawStorageDefault(int size,int prefix){return igObject_AllocateRawStorage(size,prefix,0);}
+void *igObject::operator new(unsigned int cSize, unsigned int allocSize) {
+    return operator new(cSize, allocSize, 0);
+}
+}
+}
 
 int Memory_FreeBufferAliasC(void *block)
 {

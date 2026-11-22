@@ -85,11 +85,12 @@ static inline igMemoryPoolView *ownerOrSystemPool() {
 /* Give the file an empty prefix. */
 static inline void clearPrefix(const igSmartPointer<igObject> &holder) {
     char *interned;
-    /* matching construct: register-allocator tracer — the file pointer, numbered after the token, takes s1 */
-    igPsx2File *file = (igPsx2File *)holder.p;
+    /* matching construct: register-allocator tracer — the file pointer, numbered after the token, takes s1; assigning
+     * `_prefix = (const char *)0` computes the member's address into s2 first */
+    Gap::Core::igPsx2File *file = (Gap::Core::igPsx2File *)holder.p;
     interned = (char *)StringPool_Intern(InternedStrings::get(), (char *)0);
-    releaseString((char *)file->_prefix);
-    file->_prefix = (int)interned;
+    releaseString(file->_prefix.p);
+    file->_prefix.p = interned;
 }
 
 static inline void setName(igDirectory *directory, char *name) {
@@ -127,7 +128,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     self->configRegistry = (igRegistry *)Gap::Core::igRegistry::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     if (g_loadAlchemyIni && igRegistry_IsLoadingEnabled()) {
         if (g_alchemyIniPath != 0) {
-            igSmartPointer<igObject> file((igObject *)igPsx2File_Create((int)ownerOrSystemPool()));
+            igSmartPointer<igObject> file((igObject *)Gap::Core::igPsx2File::_instantiateFromPool(ownerOrSystemPool()));
             clearPrefix(file);
             setRegistryFile(self->configRegistry, file);
             ((Gap::Core::igRegistry *)self->configRegistry)->load(g_alchemyIniPath, (char *)"");

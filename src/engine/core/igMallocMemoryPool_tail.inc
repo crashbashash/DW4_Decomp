@@ -715,16 +715,16 @@ void igMallocMemoryPool_Dump(void *self, int unused1, int unused2, int unused3, 
     igMallocMemoryPool_Lock(self);
     message = "The method dump() has no meaning for an igMallocMemoryPool\n";
     if (fileName != 0) {
-        igSmartPointer<igFileView> file((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool()));
-        if (file.p->Open((const char *)fileName, (const char *)"w") == 0) {
+        igSmartPointer<Gap::Core::igFile> file(Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool()));
+        if (file.p->fopen((const char *)fileName, "w") == 0) {
             if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
                 igReport_Warning("igMallocMemoryPool::dump() Could not open file (%s) for output\n", fileName);
             }
             igMallocMemoryPool_Unlock(self);
             return;
         }
-        file.p->Print((const char *)message);
-        file.p->Close();
+        file.p->fprintf(message);
+        file.p->fclose();
     } else {
         printf(message);
     }

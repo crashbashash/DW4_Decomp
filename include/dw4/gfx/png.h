@@ -18,6 +18,26 @@ typedef struct png_row_info_struct *png_row_infop;
 typedef struct png_color_struct *png_colorp;
 typedef struct png_color_8_struct *png_color_8p;
 typedef struct png_color_16_struct *png_color_16p;
+/* libpng's png_color_8 (the sBIT chunk): the significant bits of each channel, which the reader's format
+ * mapping reads. */
+struct png_color_8_struct {
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+    unsigned char gray;
+    unsigned char alpha;
+};
+
+/* libpng's colour types (png_get_IHDR), the colour-type masks and the tRNS chunk's valid flag. */
+#define PNG_COLOR_MASK_PALETTE 1
+#define PNG_COLOR_MASK_ALPHA 4
+#define PNG_COLOR_TYPE_GRAY 0
+#define PNG_COLOR_TYPE_RGB 2
+#define PNG_COLOR_TYPE_PALETTE 3
+#define PNG_COLOR_TYPE_GRAY_ALPHA 4
+#define PNG_COLOR_TYPE_RGB_ALPHA 6
+#define PNG_INFO_tRNS 0x0010
+
 typedef unsigned int png_uint_32;
 typedef unsigned int png_size_t;
 typedef unsigned char *png_bytep;

@@ -5,127 +5,122 @@ void FUN_001673a0(png_structp png_ptr, png_row_infop row_info, png_bytep data) {
     }
 }
 
-void thunk_FUN_001592c0(LongListStorageView *self) {
-    FUN_001592c0(self);
+namespace Gap {
+namespace Gfx {
+
+void igFileImagePng::releaseDefaults()
+{
+    igImage::releaseDefaults();
 }
 
-void Gap__Gfx__igFileImagePng__vfunc_23(igImage *self, void **arg1, int deep) {
-    FUN_001563b0(self, (igImage *)arg1, deep);
-    ((DW4VC_88_0 *)(arg1))->vX();
+void igFileImagePng::copy(const igImage *src, bool copyImage)
+{
+    igImage::copy(src, copyImage);
+    src->getMeta();
 }
 
-int FUN_00167410(Owner_167410 *arg0, png_structp arg1, png_infop arg2, png_infop arg3, void *arg4, void *arg5, int arg6, int arg7) {
-    png_infop sp5C;
-    png_infop sp58;
-    png_structp sp54;
-    Obj_167410 *o;
-
-    sp54 = arg1;
-    sp58 = arg2;
-    sp5C = arg3;
-    if (arg4 != 0) {
-        ((Gap::Core::igObject *)arg0)->free(arg4);
+int igFileImagePng::cleanup(png_structp png, png_infop info, png_infop endInfo, void *rowPointers, void *pixels, int result, int reading)
+{
+    if (rowPointers != 0) {
+        free(rowPointers);
     }
-    if (arg5 != 0) {
-        ((Gap::Core::igObject *)arg0)->free(arg5);
+    if (pixels != 0) {
+        free(pixels);
     }
-    if (sp54 != 0) {
-        if (arg7 != 0) {
-            png_destroy_read_struct(&sp54, &sp58, &sp5C);
+    if (png != 0) {
+        if (reading != 0) {
+            png_destroy_read_struct(&png, &info, &endInfo);
         } else {
-            png_destroy_info_struct(sp54, &sp5C);
-            png_destroy_write_struct(&sp54, &sp58);
+            png_destroy_info_struct(png, &endInfo);
+            png_destroy_write_struct(&png, &info);
         }
     }
-    o = arg0->f92;
-    if (o != 0) {
-        o->vX();
-        o = arg0->f92;
-        ((igObject *)o)->release();
+    if (_file != 0) {
+        _file->fclose();
+        _file->release();
     }
-    o = arg0->f92;
-    igObject::release(((igObject *)o));
-    arg0->f92 = 0;
-    return arg6;
+    _file = 0;
+    return result;
 }
 
-int FUN_00167540(void *png, int bitDepth, int colorType, PngSignificantBits *bits, int *format) {
-    int result = -1;
+IG_GFX_TEXTURE_FORMAT igFileImagePng::estimatePixelFormat(int bitDepth, int colorType, png_color_8p significantBits, IG_GFX_TEXTURE_FORMAT *format)
+{
+    IG_GFX_TEXTURE_FORMAT result = IG_GFX_TEXTURE_FORMAT_INVALID;
     *format = result;
     switch (colorType) {
-    case 0:
+    case PNG_COLOR_TYPE_GRAY:
         switch (bitDepth) {
         case 1:
         case 2:
         case 4:
         case 8:
         case 16:
-            *format = 0;
+            *format = IG_GFX_TEXTURE_FORMAT_L_8;
             result = *format;
             break;
         }
         break;
-    case 2:
+    case PNG_COLOR_TYPE_RGB:
         switch (bitDepth) {
         case 8:
         case 16:
-            *format = 5;
+            *format = IG_GFX_TEXTURE_FORMAT_RGB_888_24;
             result = *format;
-            if (bits != 0) {
-                if (bits->red == 3 && bits->green == 3 && bits->blue == 2) {
-                    result = 4;
-                } else if (bits->red == 5 && bits->green == 6 && bits->blue == 5) {
-                    result = 10;
-                } else if (bits->red == 8 && bits->green == 8 && bits->blue == 8) {
-                    result = 5;
+            if (significantBits != 0) {
+                if (significantBits->red == 3 && significantBits->green == 3 && significantBits->blue == 2) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGB_332_8;
+                } else if (significantBits->red == 5 && significantBits->green == 6 && significantBits->blue == 5) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGB_565_16;
+                } else if (significantBits->red == 8 && significantBits->green == 8 && significantBits->blue == 8) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGB_888_24;
                 }
             }
         }
         break;
-    case 3:
+    case PNG_COLOR_TYPE_PALETTE:
         switch (bitDepth) {
         case 8:
-            *format = 0x10000;
+            *format = IG_GFX_TEXTURE_FORMAT_X_8;
             result = *format;
             break;
         case 4:
         case 2:
         case 1:
-            *format = 0x10000;
-            result = 0x10001;
+            *format = IG_GFX_TEXTURE_FORMAT_X_8;
+            result = IG_GFX_TEXTURE_FORMAT_X_4;
             break;
         }
         break;
-    case 4:
+    case PNG_COLOR_TYPE_GRAY_ALPHA:
         switch (bitDepth) {
         case 8:
         case 16:
-            *format = 3;
+            *format = IG_GFX_TEXTURE_FORMAT_LA_88_16;
             result = *format;
-            if (bits != 0) {
-                if (bits->gray == 4 && bits->alpha == 4) {
-                    result = 2;
-                } else if (bits->gray == 8 && bits->alpha == 8) {
-                    result = 3;
+            if (significantBits != 0) {
+                if (significantBits->gray == 4 && significantBits->alpha == 4) {
+                    result = IG_GFX_TEXTURE_FORMAT_LA_44_8;
+                } else if (significantBits->gray == 8 && significantBits->alpha == 8) {
+                    result = IG_GFX_TEXTURE_FORMAT_LA_88_16;
                 }
             }
         }
         break;
-    case 6:
+    case PNG_COLOR_TYPE_RGB_ALPHA:
         switch (bitDepth) {
         case 8:
         case 16:
-            *format = 7;
+            *format = IG_GFX_TEXTURE_FORMAT_RGBA_8888_32;
             result = *format;
-            if (bits != 0) {
-                if (bits->red == 5 && bits->green == 5 && bits->blue == 5 && bits->alpha == 1) {
-                    result = 8;
-                } else if (bits->red == 2 && bits->green == 2 && bits->blue == 2 && bits->alpha == 2) {
-                    result = 6;
-                } else if (bits->red == 4 && bits->green == 4 && bits->blue == 4 && bits->alpha == 4) {
-                    result = 9;
-                } else if (bits->red == 8 && bits->green == 8 && bits->blue == 8 && bits->alpha == 8) {
-                    result = 7;
+            if (significantBits != 0) {
+                if (significantBits->red == 5 && significantBits->green == 5 && significantBits->blue == 5 && significantBits->alpha == 1) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGBA_5551_16;
+                } else if (significantBits->red == 2 && significantBits->green == 2 && significantBits->blue == 2 && significantBits->alpha == 2) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGBA_2222_8;
+                } else if (significantBits->red == 4 && significantBits->green == 4 && significantBits->blue == 4 && significantBits->alpha == 4) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGBA_4444_16;
+                } else if (significantBits->red == 8 && significantBits->green == 8 && significantBits->blue == 8 && significantBits->alpha == 8) {
+                    result = IG_GFX_TEXTURE_FORMAT_RGBA_8888_32;
                 }
             }
         }
@@ -134,34 +129,37 @@ int FUN_00167540(void *png, int bitDepth, int colorType, PngSignificantBits *bit
     return result;
 }
 
+bool igFileImagePng::setReadTransforms(png_structp png, png_infop info)
+{
+    png_uint_32 width;
+    png_uint_32 height;
+    int bitDepth;
+    int colorType;
+    int interlaceType;
+    int compressionType;
+    int filterType;
 
-int FUN_001681c0(igImage *self, png_structp png, png_infop info) {
-    png_uint_32 sp5C;
-    png_uint_32 sp58;
-    int sp54;
-    int sp50;
-    int sp4C;
-    int sp48;
-    int sp44;
-
-    png_get_IHDR(png, info, &sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
+    png_get_IHDR(png, info, &width, &height, &bitDepth, &colorType, &interlaceType, &compressionType, &filterType);
     png_set_strip_16(png);
-    if ((sp54 < 8) && (sp50 == 3)) {
+    if ((bitDepth < 8) && (colorType == PNG_COLOR_TYPE_PALETTE)) {
         png_set_packing(png);
     }
-    if (sp54 < 8) {
-        if (sp50 == 0) {
+    if (bitDepth < 8) {
+        if (colorType == PNG_COLOR_TYPE_GRAY) {
             png_set_gray_1_2_4_to_8(png);
         }
     }
-    if ((png_get_valid(png, info, 0x10) != 0) && !(sp50 & 4) && !(sp50 & 1)) {
+    if ((png_get_valid(png, info, PNG_INFO_tRNS) != 0) && !(colorType & PNG_COLOR_MASK_ALPHA) && !(colorType & PNG_COLOR_MASK_PALETTE)) {
         png_set_tRNS_to_alpha(png);
     }
     png_set_read_user_transform_fn(png, FUN_001673a0);
-    return 1;
+    return true;
 }
 
-int Gap__Gfx__igFileImagePng__vfunc_45(void) {
-    return 1;
+bool igFileImagePng::toggleComponentOrder()
+{
+    return true;
+}
+}
 }
 

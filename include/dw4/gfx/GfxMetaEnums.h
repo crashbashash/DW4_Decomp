@@ -19,6 +19,19 @@ typedef enum IG_GFX_DRAW_MULTIPLE {
     IG_GFX_DRAW_MULTIPLE_LINE_STRIPS, IG_GFX_DRAW_MULTIPLE_TRIANGLE_STRIPS, IG_GFX_DRAW_MULTIPLE_TRIANGLE_FANS
 } IG_GFX_DRAW_MULTIPLE;
 
+/* The usage hints of a vertex array (alchemy-kit_202309 include/igGfx/igGfx.h); igVertexArray2Helper maps the
+ * write-only flag onto its stream's access mode. */
+typedef enum IG_GFX_USAGE_FLAGS {
+    IG_GFX_USAGE_WRITE_ONLY = 1,
+    IG_GFX_USAGE_FREQUENT_UPDATES = 2,
+    IG_GFX_USAGE_UPDATE_AFTER_DRAW = 4,
+    IG_GFX_USAGE_EDIT_ONCE = 8,
+    IG_GFX_USAGE_POINT_SPRITES = 16,
+    IG_GFX_USAGE_DOUBLE_BUFFER_DX = 32,
+    IG_GFX_USAGE_TRIPLE_BUFFER_DX = 64,
+    IG_GFX_USAGE_RT_PATCH = 128
+} IG_GFX_USAGE_FLAGS;
+
 /* The component orders of an igImage's pixels (alchemy-kit_202309 include/igGfx/igGfx.h); DW4 uses the default
  * order, 100, and the PS2's, 102. */
 typedef enum IG_GFX_IMAGE_ORDER {

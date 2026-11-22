@@ -12,7 +12,6 @@ extern "C" {
 void igDependencyMetaField_EnsureRegistered(void);
 void igFloatListList_EnsureRegistered(void);
 void igMemoryDescriptorMetaField_EnsureRegistered(void);
-void igMemoryFileEntryList_EnsureRegistered(void);
 void igNamedObjectInfo_EnsureRegistered(void);
 void igNamedObjectList_EnsureRegistered(void);
 void igObjectStringMap_EnsureRegistered(void);
@@ -36,7 +35,6 @@ void igTransformFunctionList_EnsureRegistered(void);
 void igVec3fList_EnsureRegistered(void);
 
 /* Gfx */
-void igExternalImageEntry_EnsureRegistered(void);
 void igParticleFormat_EnsureRegistered(void);
 void igPrimLengthArray1_1_EnsureRegistered(void);
 void igTrackedElementMetaField_EnsureRegistered(void);

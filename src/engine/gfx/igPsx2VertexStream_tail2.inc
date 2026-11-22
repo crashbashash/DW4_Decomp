@@ -1,34 +1,39 @@
-static inline int cast0(int o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)Gap::Core::igMemoryRefMetaField::getClassMeta()) != 0) { return o; } return 0; }
-
-void FUN_0017f5a0(void) {
-    int var_s0;
-
-    igResource_AddAlignment((igResource *)g_globalContext, "DMABuffer_PS2", 0x10);
-    var_s0 = (int)igMetaObject_FindFieldByName(g_igPsx2VertexStream_metaObject, "_dmaBuffer");
-    var_s0 = cast0(var_s0);
-    ((Gap::Core::igMemoryRefMetaField *)var_s0)->setAlignmentType("DMABuffer_PS2");
+static inline Gap::Core::igMemoryRefMetaField *castMemoryRefMetaField(igMetaField *field) {
+    if (field != 0 && ((Gap::Core::igObject *)field)->isOfType(Gap::Core::igMemoryRefMetaField::getClassMeta()) != 0) {
+        return (Gap::Core::igMemoryRefMetaField *)field;
+    }
+    return 0;
 }
 
-void igPsx2VertexStream_UserWriteFilePreProcess(S0_17f630 *arg0) {
-    int temp_a0;
-    int temp_a1;
+namespace Gap {
+namespace Gfx {
 
-    if (arg0->f10 != 0) {
-        temp_a0 = arg0->f80;
-        if ((temp_a0 != 0) && ((temp_a1 = arg0->f18, (temp_a1 == 3)) || (temp_a1 == 2)) && (arg0->f84 == 0)) {
-            arg0->f84 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(p2GetDisplayListSize((p2DisplayList *)temp_a0), 0x10);
-            p2CopyDisplayListData((p2DisplayList *)arg0->f80, (char *)arg0->f84);
-            arg0->f88 = (int)p2CopyDisplayList((p2DisplayList *)arg0->f80);
+void igPsx2VertexStream::userRegister()
+{
+    igResource_AddAlignment((igResource *)g_globalContext, "DMABuffer_PS2", 0x10);
+    castMemoryRefMetaField(igMetaObject_FindFieldByName(_Meta, "_dmaBuffer"))->setAlignmentType("DMABuffer_PS2");
+}
+
+void igPsx2VertexStream::userWriteFilePreProcess()
+{
+    if (_isConfigured) {
+        if (_renderListHandle != 0 && (_accessMode == IG_VERTEX_ACCESS_WRITE_ONCE || _accessMode == IG_VERTEX_ACCESS_WRITE) && _dmaBuffer == 0) {
+            _dmaBuffer = (unsigned char *)mallocAligned(p2GetDisplayListSize((p2DisplayList *)_renderListHandle), 0x10);
+            p2CopyDisplayListData((p2DisplayList *)_renderListHandle, (char *)_dmaBuffer);
+            _dmaBufferStruct = (unsigned char *)p2CopyDisplayList((p2DisplayList *)_renderListHandle);
         }
     }
 }
 
-void igPsx2VertexStream_UserPostLoad(S0_17f6c0 *arg0) {
-    igObject_UserPostLoad();
-    if ((arg0->f84 != 0) && (arg0->f88 != 0)) {
-        arg0->f10 = 1;
-        arg0->f80 = (int)p2RebaseDisplayList(arg0->f84, (p2DisplayList *)arg0->f88);
-        arg0->fC = p2GetDisplayListData((p2DisplayList *)arg0->f80);
+void igPsx2VertexStream::userPostLoad()
+{
+    igVertexStream::userPostLoad();
+    if (_dmaBuffer != 0 && _dmaBufferStruct != 0) {
+        _isConfigured = true;
+        _renderListHandle = (int)p2RebaseDisplayList((unsigned int)_dmaBuffer, (p2DisplayList *)_dmaBufferStruct);
+        _stream = (void *)p2GetDisplayListData((p2DisplayList *)_renderListHandle);
     }
+}
+}
 }
 

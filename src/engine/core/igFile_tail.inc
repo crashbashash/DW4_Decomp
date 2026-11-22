@@ -125,7 +125,7 @@ void igFile::arkRegisterInitialize()
         metaField->_persistent = 0;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
-    *(void (**)())&_Meta->_abstractProxy = (void (*)())igPsx2File_GetMetaObjectFunction;
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Core::igPsx2File::getClassMetaSafe;
 }
 }
 }

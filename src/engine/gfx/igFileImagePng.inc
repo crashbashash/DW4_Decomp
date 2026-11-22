@@ -1,131 +1,69 @@
-igMetaObject *g_igFileImagePng_metaObject;
-igMetaField *g_igFileImagePng_fileMetaField;
+namespace Gap {
+namespace Gfx {
 
-int igFileImagePng_Create(int arg0) {
-    igFileImagePng_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance(g_igFileImagePng_metaObject, (igMemoryPoolView *)arg0);
-}
+igMetaObject *igFileImagePng::_Meta;
+igMetaField *igFileImagePng::k_file;
 
-igMetaObject *igFileImagePng_GetMetaObject(void)
+igFileImagePng *igFileImagePng::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igFileImagePng_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igFileImagePng_EnsureRegistered();
-    return g_igFileImagePng_metaObject;
+    arkRegister();
+    return (igFileImagePng *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igFileImagePng_GetVTable(void) {
-    union U_150420 u;
-    int temp_s0;
-    int *p;
-
-    igObject_InitHeader((igObject *)u.b);
-    *(int *)&u.b[68] = 0;
-    *(int *)&u.b[88] = 0;
-    u.vt = (int)&g_igFileImagePng_vtable[0];
-    p = (int *)&u.b[92];
-    *p = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igFileImagePng_vtable[0];
-    igSmartPointer_igFile_Destruct((igSmartPointer<igObject> *)p, -1);
-    FUN_00150490((S_150490 *)u.b, 0);
-    return temp_s0;
-}
-
-void *FUN_00150490(struct S_150490 *arg0, short arg1) {
-    void *p;
-    igObject *o;
-    int *h;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->f0 = &DAT_00526c50[0];
-        if (arg0 != 0) {
-            arg0->f0 = &DAT_00526800[0];
-            if (&arg0->f58) {
-                p = arg0->f58;
-                if (p != 0) {
-                    h = (int *)((char *)(p) - 8);
-                    rc = *(int *)((char *)(p) - 4) - 1;
-                    *(int *)((char *)(p) - 4) = rc;
-                    if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                    }
-                }
-            }
-            if (&arg0->f44) {
-                o = (igObject *)arg0->f44;
-                if (o != 0) {
-                    rc = o->_refCount - 1;
-                    o->_refCount = rc;
-                    if (((unsigned long long) ((long long) (int) o->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(o);
-                    }
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
-void igFileImagePng_EnsureRegistered(void)
+igMetaObject *igFileImagePng::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igFileImagePng_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igFileImagePng_callbackList[] = { Gap::Core::igFile::arkRegister, 0 };
+void *igFileImagePng::retrieveVTablePointer()
+{
+    igFileImagePng temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igFileImagePng_Register(void) {
+void igFileImagePng::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igFileImagePng::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igFile::arkRegister, 0 };
+
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igFileImagePng_metaObject,
-        igFileImage_Register,
-        igFileImage_GetPublishedMetaObject,
-        igFileImagePng_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gfx::igFileImage::arkRegisterInternal,
+        Gap::Gfx::igFileImage::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFileImagePng",
-        0x60, /* instance size */
-        igFileImagePng_GetVTable,
-        &igFileImagePng_InitFields,
-        0, /* extra callback item */
-        g_igFileImagePng_callbackList /* callback list */
+        sizeof(igFileImagePng),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igFileImagePng_GetMetaObjectFunction(void) {
-    igFileImagePng_GetMetaObject();
+void igFileImagePng::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_file" };
+    static igMetaField **enumStorage[] = { &k_file };
+    static int offsets[] = { 92 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-igMetaObject *igFileImage_GetPublishedMetaObject(void) {
-    return g_igFileImage_metaObject;
 }
-
-static FieldFactory g_igFileImagePng_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igFileImagePng_fieldTable[] = {
-    "_file",
-};
-static igMetaField **g_igFileImagePng_fieldHandles[] = {
-    &g_igFileImagePng_fileMetaField,
-};
-static int g_igFileImagePng_fieldOffsets[] = {
-    92,
-};
-
-void igFileImagePng_InitFields(void) {
-    int fieldStart;
-    void *temp_s1;
-    igMetaObject *meta;
-
-    meta = g_igFileImagePng_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igFileImagePng_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
-    igMetaObject_NameFields(meta, g_igFileImagePng_fieldTable, g_igFileImagePng_fieldHandles, g_igFileImagePng_fieldOffsets, fieldStart);
 }
 

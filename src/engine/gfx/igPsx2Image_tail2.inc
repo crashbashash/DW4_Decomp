@@ -135,51 +135,37 @@ unsigned char igPsx2Image::platformConvert(IG_GFX_TEXTURE_FORMAT format, const i
 
 unsigned char igPsx2Image::platformLoad(const char *fileName)
 {
-    unsigned char var_s0 = 0;
-    int s;
-    s = FUN_0015ad50((char *)fileName);
-    if (s != 0) {
-        if (strcmp((char *)s, ".tga") != 0) {
-            if (strcmp((char *)s, ".TGA") == 0) goto block_4;
-            goto block_22;
-        }
-    block_4:
-        {
-            igSmartPointer<O0> name((O0 *)igStringObj_Create((int)getMemoryPool()));
-            igStringObj_Set((igStringObj *)((int)name.p), (char *)fileName);
-            LoaderRef loader((O1 *)igTgaLoader_Create((int)getMemoryPool()));
-            var_s0 = loader.p->v21(name.p, this) & 0xFF;
-            setName(fileName);
-        }
-        return var_s0;
+    unsigned char result = 0;
+    const char *extension = FUN_0015ad50(fileName);
+
+    if (extension != 0 && (strcmp(extension, ".tga") == 0 || strcmp(extension, ".TGA") == 0)) {
+        igStringObjRef name((igStringObj *)igStringObj_Create((int)getMemoryPool()));
+        igStringObj_Set(name, fileName);
+        LoaderRef loader((O1 *)igTgaLoader_Create((int)getMemoryPool()));
+        result = loader.p->v21(name.p, this) & 0xFF;
+        setName(fileName);
+        return result;
     }
-    block_22:
-    if (s != 0) {
-        if (strcmp((char *)s, ".png") != 0) {
-            if (strcmp((char *)s, ".PNG") == 0) goto block_26;
-        } else {
-    block_26:
-            ReaderRef reader((O2 *)igFileImagePng_Create((int)getMemoryPool()));
-            var_s0 = reader.p->v31((int)fileName) & 0xFF;
-            if (var_s0 != 0) {
-                copy((igImage *)reader.p, true);
-            }
+    if (extension != 0 && (strcmp(extension, ".png") == 0 || strcmp(extension, ".PNG") == 0)) {
+        igSmartPointer<igFileImagePng> reader(igFileImagePng::_instantiateFromPool(getMemoryPool()));
+        result = reader->load(fileName) & 0xFF;
+        if (result != 0) {
+            copy(reader, true);
         }
     }
-    return var_s0;
+    return result;
 }
 
 unsigned char igPsx2Image::platformLoad(igFile *file)
 {
     unsigned int b;
     unsigned int a;
-    Strm *s = (Strm *)file;
-    s->Read(&_imageSize, 4, 1);
-    s->Read(&_px, 4, 1);
-    s->Read(&_py, 4, 1);
-    s->Read(&_pz, 4, 1);
-    s->Read(&_ps, 4, 1);
-    s->Read(&a, 4, 1);
+    file->fread(&_imageSize, 4, 1);
+    file->fread(&_px, 4, 1);
+    file->fread(&_py, 4, 1);
+    file->fread(&_pz, 4, 1);
+    file->fread(&_ps, 4, 1);
+    file->fread(&a, 4, 1);
     _bitsRed = (a >> 24) & 0xFF;
     _bitsGrn = (a >> 16) & 0xFF;
     _bitsBlu = (a >> 8) & 0xFF;
@@ -187,12 +173,12 @@ unsigned char igPsx2Image::platformLoad(igFile *file)
     _bitsIdx = 0;
     _bitsInt = 0;
     _bitsDepth = 0;
-    s->Read(&b, 4, 1);
-    s->Read(&b, 4, 1);
+    file->fread(&b, 4, 1);
+    file->fread(&b, 4, 1);
     _pImage = (unsigned char *)mallocAligned(_imageSize, 0x80);
     _localImage = true;
-    s->Read(_pImage, 1, _imageSize);
-    ((VStream *)s)->v24();
+    file->fread(_pImage, 1, _imageSize);
+    file->fclose();
     _pfmt = guessPixelFormatFromNumComponents(_pz);
     _order = IG_GFX_IMAGE_ORDER_PSX2;
     scaleAlpha();
@@ -204,24 +190,23 @@ unsigned char igPsx2Image::platformSave(igFile *file)
     igSmartPointer<igImage> converted(igImage::_instantiateFromPool(getMemoryPool()));
     int word;
     int masks;
-    Stream *stream = (Stream *)file;
     converted->copy(this, true);
     converted->unScaleAlpha();
     word = 0x312A57F2;
-    stream->write(&word, 4, 1);
-    stream->write(&_imageSize, 4, 1);
-    stream->write(&_px, 4, 1);
-    stream->write(&_py, 4, 1);
-    stream->write(&_pz, 4, 1);
-    stream->write(&_ps, 4, 1);
+    file->fwrite(&word, 4, 1);
+    file->fwrite(&_imageSize, 4, 1);
+    file->fwrite(&_px, 4, 1);
+    file->fwrite(&_py, 4, 1);
+    file->fwrite(&_pz, 4, 1);
+    file->fwrite(&_ps, 4, 1);
     masks = (_bitsRed << 24) | (_bitsGrn << 16) | (_bitsBlu << 8) | _bitsAlpha;
-    stream->write(&masks, 4, 1);
+    file->fwrite(&masks, 4, 1);
     word = 0;
-    stream->write(&word, 4, 1);
-    stream->write(&word, 4, 1);
-    stream->write(converted->_pImage, 1, _imageSize);
-    stream->close();
-    stream->release();
+    file->fwrite(&word, 4, 1);
+    file->fwrite(&word, 4, 1);
+    file->fwrite(converted->_pImage, 1, _imageSize);
+    file->fclose();
+    file->release();
     return true;
 }
 
@@ -238,16 +223,15 @@ unsigned char igPsx2Image::oldLoad(igFile *file)
     unsigned int bitsAlpha;
     unsigned int bitsDepth;
     IG_GFX_TEXTURE_FORMAT format;
-    Strm_16ece0 *stream = (Strm_16ece0 *)file;
-    stream->v25(&_imageSize, 4, 1);
-    stream->v25(&_pz, 4, 1);
-    stream->v25(&_px, 4, 1);
-    stream->v25(&_py, 4, 1);
+    file->fread(&_imageSize, 4, 1);
+    file->fread(&_pz, 4, 1);
+    file->fread(&_px, 4, 1);
+    file->fread(&_py, 4, 1);
     _ps = 1;
     _pImage = (unsigned char *)mallocAligned(_imageSize, 0x80);
     _localImage = true;
-    stream->v25(_pImage, 1, _imageSize);
-    stream->v24();
+    file->fread(_pImage, 1, _imageSize);
+    file->fclose();
     _pfmt = guessPixelFormatFromNumComponents(_pz);
     scaleAlpha();
     format = (IG_GFX_TEXTURE_FORMAT)_pfmt;
@@ -262,16 +246,9 @@ unsigned char igPsx2Image::oldLoad(igFile *file)
     _bitsAlpha = bitsAlpha;
     _bitsDepth = bitsDepth;
     _order = IG_GFX_IMAGE_ORDER_PSX2;
-    ((igObject *)file)->release();
+    file->release();
     return true;
 }
-}
-}
-
-static inline unsigned imageSize(const ImageBuffer *i) { return i->size; }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2Image::load(void *data, IG_GFX_TEXTURE_FORMAT pixelFormat, IG_GFX_IMAGE_ORDER order, int width, int height)
 {

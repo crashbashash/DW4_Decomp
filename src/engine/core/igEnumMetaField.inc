@@ -14,7 +14,7 @@ igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool) {
         Gap::Core::igEnumMetaField::arkRegister();
         field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)Gap::Core::igEnumMetaField::getClassMeta(), pool)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x38, 0, pool)));
+        field = (void **)(((void **)Gap::Core::igObject::operator new(0x38, 0, pool)));
         if (field != 0) {
             field = (void **)(((void **)igEnumMetaField_Construct((int **)field, 1)));
         }
@@ -33,7 +33,7 @@ igObject *igEnumMetaField::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(igEnumMetaField), 0), 0) igEnumMetaField(*this);
+    return new (0) igEnumMetaField(*this);
 }
 
 igMetaObject *igEnumMetaField::getClassTypeSafe()

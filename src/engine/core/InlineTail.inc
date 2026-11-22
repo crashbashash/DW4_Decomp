@@ -3,40 +3,14 @@ int igPsx2IopRpcConnection_GetMeta(void)
     return (int)g_igPsx2IopRpcConnection_metaObject;
 }
 
-igMetaObject *igPsx2Folder_GetMeta(void) {
-    return g_igPsx2Folder_metaObject;
-}
+namespace Gap {
+namespace Core {
 
-int igPsx2File_GetMeta(void) {
-    return (int)g_igPsx2File_metaObject;
+void igPsx2File::initDefaults()
+{
+    _prefix = defaultPrefix;
 }
-
-void igPsx2File_InitDefaults(igPsx2File *self) {
-    int *header;
-    int prefix;
-    int count;
-    int pool;
-    int *old;
-    int *interned;
-    prefix = g_igPsx2File_defaultPrefix;
-    if (g_stringPool == 0) {
-        pool = ((int)StringPool_Allocate(0x10));
-        if (pool != 0) {
-            pool = ((int)StringPool_Construct((StringPool *)pool));
-        }
-        g_stringPool = (StringPool *)pool;
-    }
-    interned = (int *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)prefix)));
-    old = (int *)self->_prefix;
-    if (old != 0) {
-        header = old - 2;
-        count = old[-1] - 1;
-        old[-1] = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
-    self->_prefix = (int)interned;
+}
 }
 
 int igPsx2CallStackTracer_GetMeta(void)
@@ -293,14 +267,6 @@ int igLibraryList_GetMeta(void) {
     return (int)g_igLibraryList_metaObject;
 }
 
-igMetaObject *igMemoryFileEntry_GetMeta(void) {
-    return g_igMemoryFileEntry_metaObject;
-}
-
-igMetaObject *igMemoryFileEntryList_GetMeta(void) {
-    return g_igMemoryFileEntryList_metaObject;
-}
-
 igMetaObject *igMemoryPoolInfoList_GetMeta(void) {
     return g_igMemoryPoolInfoList_metaObject;
 }
@@ -382,10 +348,6 @@ igMetaObject *igContextExtList_GetElementMeta(void) {
 
 igMetaObject *igContextExtInfoList_GetElementMeta(void) {
     return g_igContextExtInfo_metaObject;
-}
-
-igMetaObject *igMemoryFileEntryList_GetElementMeta(void) {
-    return g_igMemoryFileEntry_metaObject;
 }
 
 igMetaObject *igMemoryPoolInfoList_GetElementMeta(void) {

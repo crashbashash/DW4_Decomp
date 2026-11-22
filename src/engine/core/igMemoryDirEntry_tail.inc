@@ -71,7 +71,7 @@ void igMemoryDirEntry::writeMemorySpecial(igIGBFile *file) {
         s2 -= s0;
         i += s0;
         if (s2 == 0) {
-            s6 += s4 * ((igFileView *)file->_file)->Write((void *)s8, s4, 1);
+            s6 += s4 * ((Gap::Core::igFile *)file->_file)->fwrite((void *)s8, s4, 1);
             t2 = file->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
@@ -81,7 +81,7 @@ void igMemoryDirEntry::writeMemorySpecial(igIGBFile *file) {
         s0 = ((s3 + 3) & ~3) % s4;
         s2 = s2 - (s0 - s3);
         if (s0 < s3) {
-            s6 += s4 * ((igFileView *)file->_file)->Write((void *)s8, s4, 1);
+            s6 += s4 * ((Gap::Core::igFile *)file->_file)->fwrite((void *)s8, s4, 1);
             t2 = file->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
@@ -172,7 +172,7 @@ void igMemoryDirEntry::readMemorySpecial(igIGBFile *file) {
             if (t < s4 + s2) {
                 s4 = t - s2;
             }
-            s2 += s4 * ((igFileView *)file->_file)->Read((void *)base, s4, 1);
+            s2 += s4 * ((Gap::Core::igFile *)file->_file)->fread((void *)base, s4, 1);
             s1 = s4;
         }
         s0 = s8 - s6;
@@ -248,15 +248,14 @@ int igMemoryDirEntry::getMemoryPoolHandle() {
 
 void igMemoryFile::userRegister()
 {
-    _entryList = (::igMemoryFileEntryList *)igMemoryFileEntryList_Create(
-        (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    _entryList = igMemoryFileEntryList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
-::igMemoryFileEntryList *igMemoryFile::_entryList;
+igMemoryFileEntryList *igMemoryFile::_entryList;
 
 void igMemoryFile::userUnregister()
 {
-    ((::igObject *)_entryList)->release();
+    _entryList->release();
     _entryList = 0;
 }
 }

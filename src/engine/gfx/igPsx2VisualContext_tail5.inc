@@ -138,7 +138,7 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, bool *useTexture) 
                 matrices = node->obj->f16;
                 levels = node->f24;
             } else {
-                int m2 = DAT_005610b0[0];
+                int m2 = (int)g_igVec3ucList_metaObject;
                 if (m2 == node->obj->meta()) {
                     matrices = node->obj->f16;
                     levels = 3;

@@ -11,6 +11,8 @@ igObject	protected: igObject();
 igObject	protected: igObject(bool bootstrap);
 igObject	protected: igObject(const igObject &other);
 igObject	static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
+igObject	static void *operator new(unsigned int cSize, unsigned int allocSize, igMemoryPoolView *mp);
+igObject	static void *operator new(unsigned int cSize, unsigned int allocSize);
 igObject	static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
 igObject	virtual void __bootstrapDestruct();
 igObject	virtual void constructFields(int flag);
@@ -2087,13 +2089,167 @@ igMemoryFile	virtual char *fgets(char *s, int n);
 igMemoryFile	virtual int fputs(const char *s);
 igMemoryFile	virtual int fseek(int offset, int whence);
 igMemoryFile	virtual int ftell();
-igMemoryFile	private: static ::igMemoryFileEntryList *_entryList;
+igMemoryFile	private: static class igMemoryFileEntryList *_entryList;
 igMemoryFile	private: static void arkRegisterUser();
 igMemoryFile	private: static void _classDestructor();
 igFolder	IG_OBJECT_DEFINE(igFolder)
 igFolder	protected: static igMetaField *k_folderName;
-igFolder	public: virtual igStringObjRef getPathToFile(const char *fileName) const;
+igFolder	public: inline void setFolderName(const char *folderNameParam) { _folderName = folderNameParam; }
+igFolder	inline const char *getFolderName() const { return _folderName.p; }
+igFolder	void appendRelativePath(const char *subdir);
+igFolder	virtual igStringObjRef getPathToFile(const char *fileName) const;
 igFolder	virtual igSmartPointer<igStringRefList> getFiles() const { return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference); }
 igFolder	virtual igSmartPointer<igStringRefList> getSubFolders() const { return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference); }
 igFolder	virtual igSmartPointer<igStringRefList> getFilesAndSubFolders() const { return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference); }
 igMediaList	IG_OBJECT_DEFINE(igMediaList)
+igFileImage	IG_ABSTRACT_OBJECT_DEFINE(igFileImage)
+igFileImagePng	IG_OBJECT_DEFINE(igFileImagePng)
+igFileImagePng	protected: static igMetaField *k_file;
+igFileImagePng	public: virtual void releaseDefaults();
+igFileImagePng	virtual void copy(const igImage *src, bool copyImage = true);
+igFileImagePng	virtual unsigned char load(const char *fileName);
+igFileImagePng	virtual bool toggleComponentOrder();
+igFileImagePng	protected: int cleanup(png_structp png, png_infop info, png_infop endInfo, void *rowPointers, void *pixels, int result, int reading);
+igFileImagePng	IG_GFX_TEXTURE_FORMAT estimatePixelFormat(int bitDepth, int colorType, png_color_8p significantBits, IG_GFX_TEXTURE_FORMAT *format);
+igFileImagePng	bool setReadTransforms(png_structp png, png_infop info);
+igExternalImageEntry	IG_OBJECT_DEFINE(igExternalImageEntry)
+igExternalImageEntry	public: virtual bool load(Core::igResolveFunction *userFunction);
+igExternalImageEntry	bool loadWork(igImage *image);
+igExternalImageEntry	virtual void initDefaults();
+igMemoryFileEntry	IG_OBJECT_DEFINE(igMemoryFileEntry)
+igMemoryFileEntry	private: static igMetaField *k_buffer;
+igMemoryFileEntry	private: static igMetaField *k_size;
+igMemoryFileEntry	public: inline void setBuffer(void *bufferParam) { _buffer = bufferParam; }
+igMemoryFileEntry	inline const void *getBuffer() const { return _buffer; }
+igMemoryFileEntry	inline void setSize(unsigned int sizeParam) { _size = sizeParam; }
+igMemoryFileEntry	inline unsigned int getSize() const { return _size; }
+igMemoryFileEntryList	IG_OBJECT_DEFINE(igMemoryFileEntryList)
+igPsx2File	IG_OBJECT_DEFINE(igPsx2File)
+igPsx2File	private: static igMetaField *k_fBuf;
+igPsx2File	private: static igMetaField *k_bufSize;
+igPsx2File	private: static igMetaField *k_bufPos;
+igPsx2File	private: static igMetaField *k_fileSize;
+igPsx2File	private: static igMetaField *k_isBinary;
+igPsx2File	private: static igMetaField *k_isOpen;
+igPsx2File	private: static igMetaField *k_stringFile;
+igPsx2File	private: static igMetaField *k_prefix;
+igPsx2File	public: virtual void initDefaults();
+igPsx2File	public: virtual igResult open(OpenMode e = kDefaultOpenMode);
+igPsx2File	virtual void close();
+igPsx2File	virtual igFile *fopen(const char *path, const char *mode);
+igPsx2File	virtual void fclose();
+igPsx2File	virtual int fread(void *ptr, int size, int nElts);
+igPsx2File	virtual int fwrite(const void *ptr, int size, int nElts);
+igPsx2File	virtual int fscanf(const char *format, ...);
+igPsx2File	virtual int fprintf(const char *format, ...);
+igPsx2File	virtual int fflush();
+igPsx2File	virtual int fgetc();
+igPsx2File	virtual int ungetc(int c);
+igPsx2File	virtual int fputc(int c);
+igPsx2File	virtual char *fgets(char *s, int n);
+igPsx2File	virtual int fputs(const char *s);
+igPsx2File	virtual int fseek(int offset, int whence);
+igPsx2File	virtual int ftell();
+igPsx2File	virtual const char *generateFilename(const char *name);
+igPsx2File	static void userRegister();
+igPsx2File	static char *makeCompletePath(char *path);
+igPsx2File	static igStringRef joinPrefix(char *prefix, char *path);
+igPsx2File	static const char *defaultPrefix;
+igPsx2File	private: void growBuffer(int size);
+igPsx2File	private: static void arkRegisterUser();
+igPsx2Folder	IG_OBJECT_DEFINE(igPsx2Folder)
+igPsx2Folder	public: virtual igSmartPointer<igStringRefList> getFiles() const;
+igPsx2Folder	virtual igSmartPointer<igStringRefList> getSubFolders() const;
+igPsx2Folder	virtual igSmartPointer<igStringRefList> getFilesAndSubFolders() const;
+igPsx2Folder	static void trimPath(igStringObj *path);
+igVertexStream	IG_OBJECT_DEFINE(igVertexStream)
+igVertexStream	public: enum IG_VERTEX_ACCESS_MODE { IG_VERTEX_ACCESS_READ_WRITE, IG_VERTEX_ACCESS_READ, IG_VERTEX_ACCESS_WRITE, IG_VERTEX_ACCESS_WRITE_ONCE };
+igVertexStream	static igMetaEnum *getIG_VERTEX_ACCESS_MODEMetaEnum();
+igVertexStream	private: static igMetaEnum *IG_VERTEX_ACCESS_MODE_Meta;
+igVertexStream	public: enum IG_VERTEX_STREAM_COMPILE_MODE { IG_VERTEX_STREAM_COMPILE_ALL = 0, IG_VERTEX_STREAM_COMPILE_COMPACT_MAX = 1, IG_VERTEX_STREAM_COMPILE_EVERYTHING = 2 };
+igVertexStream	static igMetaEnum *getIG_VERTEX_STREAM_COMPILE_MODEMetaEnum();
+igVertexStream	private: static igMetaEnum *IG_VERTEX_STREAM_COMPILE_MODE_Meta;
+igVertexStream	protected: static igMetaField *k_stream;
+igVertexStream	protected: static igMetaField *k_isConfigured;
+igVertexStream	protected: static igMetaField *k_vertexDataList;
+igVertexStream	protected: static igMetaField *k_accessMode;
+igVertexStream	protected: static igMetaField *k_primitive;
+igVertexStream	protected: static igMetaField *k_streamMode;
+igVertexStream	public: inline void setVertexDataList(igVertexDataList *vertexDataListParam) { _vertexDataList = vertexDataListParam; }
+igVertexStream	inline igVertexDataList *getVertexDataList() const { return _vertexDataList; }
+igVertexStream	inline void setPrimitive(IG_GFX_DRAW primitiveParam) { _primitive = primitiveParam; }
+igVertexStream	inline IG_GFX_DRAW getPrimitive() const { return _primitive; }
+igVertexStream	inline void setStreamMode(IG_VERTEX_STREAM_COMPILE_MODE streamModeParam) { _streamMode = streamModeParam; }
+igVertexStream	inline IG_VERTEX_STREAM_COMPILE_MODE getStreamMode() const { return _streamMode; }
+igVertexStream	inline void setAccessMode(IG_VERTEX_ACCESS_MODE mode) { _accessMode = mode; }
+igVertexStream	inline IG_VERTEX_ACCESS_MODE getAccessMode() { return _accessMode; }
+igVertexStream	inline virtual void *getRawVertexStream() { return _stream; }
+igVertexStream	virtual void getEditableComponent(igComponentEditInfo2 &componentInfo) {}
+igVertexStream	virtual void commitComponentEdits(const igComponentEditInfo2 &componentInfo) {}
+igVertexStream	inline bool isConfigured() { return _isConfigured; }
+igVertexStream	inline virtual bool configure(igSmartPointer<igVertexDataList> vertexDataList, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0) { return false; }
+igVertexStream	virtual void reset();
+igPsx2VertexStream	IG_OBJECT_DEFINE(igPsx2VertexStream)
+igPsx2VertexStream	private: static igMetaField *k_scaleAlphaState;
+igPsx2VertexStream	private: static igMetaField *k_syncSequence;
+igPsx2VertexStream	private: static igMetaField *k_textureCoordCompiled;
+igPsx2VertexStream	private: static igMetaField *k_multipassCompiled;
+igPsx2VertexStream	private: static igMetaField *k_blendMatrixCount;
+igPsx2VertexStream	private: static igMetaField *k_blendIndexCount;
+igPsx2VertexStream	private: static igMetaField *k_vertexCountCompiled;
+igPsx2VertexStream	private: static igMetaField *k_renderListHandle;
+igPsx2VertexStream	private: static igMetaField *k_dmaBuffer;
+igPsx2VertexStream	private: static igMetaField *k_dmaBufferStruct;
+igPsx2VertexStream	public: static void userRegister();
+igPsx2VertexStream	private: static void arkRegisterUser();
+igPsx2VertexStream	virtual void userWriteFilePreProcess();
+igPsx2VertexStream	virtual void userPostLoad();
+igPsx2VertexStream	virtual void getEditableComponent(igComponentEditInfo2 &componentInfo);
+igPsx2VertexStream	virtual bool configure(igSmartPointer<igVertexDataList> vertexDataList, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0);
+igPsx2VertexStream	virtual void reset();
+igPsx2VertexStream	void waitForSync();
+igVertexArray2Helper	IG_OBJECT_DEFINE(igVertexArray2Helper)
+igVertexArray2Helper	protected: static igMetaField *k_vertexArray;
+igVertexArray2Helper	public: inline void setVertexArray(igVertexArray2 *vertexArrayParam) { _vertexArray = vertexArrayParam; }
+igVertexArray2Helper	inline igVertexArray2 *getVertexArray() const { return _vertexArray; }
+igVertexArray2Helper	virtual unsigned int configure(const igVertexFormat &vertexFormat, unsigned int vertexCount);
+igVertexArray2Helper	virtual unsigned int getWeightCount();
+igVertexArray2Helper	virtual unsigned int getIndexCount();
+igVertexArray2Helper	virtual void setUsageFlags(unsigned int flags);
+igVertexArray2Helper	virtual unsigned int getUsageFlags() const;
+igVertexArray2Helper	virtual void setPosition(unsigned int idx, const igVec3f &pos);
+igVertexArray2Helper	virtual void getPosition(unsigned int idx, igVec3f &pos) const;
+igVertexArray2Helper	virtual const igVec3f *getPosition(unsigned int idx) const;
+igVertexArray2Helper	virtual void setNormal(unsigned int idx, const igVec3f &normal);
+igVertexArray2Helper	virtual void getNormal(unsigned int idx, igVec3f &normal) const;
+igVertexArray2Helper	virtual const igVec3f *getNormal(unsigned int idx) const;
+igVertexArray2Helper	virtual void setBinormal(unsigned int idx, const igVec3f &binormal);
+igVertexArray2Helper	virtual void getBinormal(unsigned int idx, igVec3f &binormal) const;
+igVertexArray2Helper	virtual const igVec3f *getBinormal(unsigned int idx) const;
+igVertexArray2Helper	virtual void setTangent(unsigned int idx, const igVec3f &tangent);
+igVertexArray2Helper	virtual void getTangent(unsigned int idx, igVec3f &tangent) const;
+igVertexArray2Helper	virtual const igVec3f *getTangent(unsigned int idx) const;
+igVertexArray2Helper	virtual void setColor(unsigned int idx, unsigned int abgr);
+igVertexArray2Helper	virtual void setColor(unsigned int idx, const igVec4f &rgba);
+igVertexArray2Helper	virtual unsigned int getColor(unsigned int idx) const;
+igVertexArray2Helper	virtual void getColor(unsigned int idx, igVec4f &rgba) const;
+igVertexArray2Helper	virtual void setWeight(unsigned int which, unsigned int idx, float weight);
+igVertexArray2Helper	virtual float getWeight(unsigned int which, unsigned int idx) const;
+igVertexArray2Helper	virtual void setBlendMatrixIndex(unsigned int which, unsigned int vertexIndex, unsigned char matrixIndex);
+igVertexArray2Helper	virtual unsigned char getBlendMatrixIndex(unsigned int which, unsigned int idx) const;
+igVertexArray2Helper	virtual void setTextureCoord(unsigned int which, unsigned int idx, const igVec2f &coord);
+igVertexArray2Helper	virtual void getTextureCoord(unsigned int which, unsigned int idx, igVec2f &coord) const;
+igVertexArray2Helper	virtual const igVec2f *getTextureCoord(unsigned int which, unsigned int idx) const;
+igVertexArray2Helper	virtual void setPointSpriteSize(unsigned int idx, float size);
+igVertexArray2Helper	virtual float getPointSpriteSize(unsigned int idx) const;
+igVertexArray2Helper	virtual void setPointSpriteSize(unsigned int idx, igVec2f &size);
+igVertexArray2Helper	virtual void getPointSpriteSize(unsigned int idx, igVec2f &size) const;
+igVertexArray2Helper	inline virtual void reset() { setVertexArray(0); }
+igVertexArray2Helper	virtual void copyVertex(const unsigned int destIndex, const igVertexArray *sourceVertexArray, const unsigned int sourceIndex, const igVertexFormat &fieldMask);
+igVertexArray2Helper	virtual unsigned int reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+igVertexArray2Helper	virtual void getVertexFormat(igVertexFormat *vertexFormat);
+igVertexArray2Helper	virtual void getMinValue(IG_VERTEX_COMPONENT_TYPE type, float &minNum, int index = 0);
+igVertexArray2Helper	virtual void getMaxValue(IG_VERTEX_COMPONENT_TYPE type, float &maxNum, int index = 0);
+igVertexArray2Helper	virtual float compressVertexData(IG_VERTEX_COMPONENT_TYPE type, int byteCount, bool useFixedPoint, bool isSigned, int fraction, int index = 0);
+igVertexArray2Helper	static unsigned int getWeightCount(igVertexData *weightVertexData);
+igVertexArray2Helper	static unsigned int getIndexCount(const igVertexData *indexVertexData);

@@ -1,6 +1,5 @@
 #include "dw4/support/reflected.h"
 #include "dw4/core/igSmartPointer.h"
-#include "dw4/core/igFileDispatchView.h"
 #include "dw4/game/beFileChkObj.h"
 #include "dw4/game/beLuaState.h"
 #include "dw4/audio/igAdxFile.h"
@@ -61,7 +60,7 @@ int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     ReaderRef reader(igAdxFile_Create(allocator));
-    if (((igFileDispatchView *)reader.p)->OpenFile(fileName, "rb") == 0) {
+    if (((Gap::Core::igFile *)reader.p)->fopen(fileName, "rb") == 0) {
         return -1;
     }
     fileSize = igAdxFile_GetFileSize((igAdxFile *)reader.p);
@@ -74,16 +73,16 @@ int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     self->_lp = (int)Memory_AllocateAlignedWithAllocator(fileSize, 0x40, (igMemoryPoolView *)allocator);
     if (self->_lp == 0) {
-        ((igFileDispatchView *)reader.p)->CloseFile();
+        ((Gap::Core::igFile *)reader.p)->fclose();
         return -1;
     }
     igAdxFile_SetUseBuffer((igAdxFile *)reader.p, 0);
     igAdxFile_SetUseAsync((igAdxFile *)reader.p, 0);
-    ((igFileDispatchView *)reader.p)->Read((void *)self->_lp, 1, fileSize);
+    ((Gap::Core::igFile *)reader.p)->fread((void *)self->_lp, 1, fileSize);
     igAdxFile_WaitForReadEnd((igAdxFile *)reader.p);
     igAdxFile_SetUseBuffer((igAdxFile *)reader.p, 1);
     igAdxFile_SetUseAsync((igAdxFile *)reader.p, 1);
-    ((igFileDispatchView *)reader.p)->CloseFile();
+    ((Gap::Core::igFile *)reader.p)->fclose();
     buffer = (char *)self->_lp;
     found = false;
     length = 0;

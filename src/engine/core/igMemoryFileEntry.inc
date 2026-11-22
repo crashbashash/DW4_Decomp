@@ -1,98 +1,64 @@
-igMetaObject *g_igMemoryFileEntry_metaObject;
-igMetaField *g_igMemoryFileEntry_bufferMetaField;
-igMetaField *g_igMemoryFileEntry_sizeMetaField;
+namespace Gap {
+namespace Core {
 
-void * igMemoryFileEntry_Create(int pool) {
-    igMemoryFileEntry_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igMemoryFileEntry_metaObject, (igMemoryPoolView *)pool));
-}
+igMetaObject *igMemoryFileEntry::_Meta;
+igMetaField *igMemoryFileEntry::k_buffer;
+igMetaField *igMemoryFileEntry::k_size;
 
-igMetaObject *igMemoryFileEntry_GetMetaObject(void)
+igMemoryFileEntry *igMemoryFileEntry::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMemoryFileEntry_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMemoryFileEntry_EnsureRegistered();
-    return g_igMemoryFileEntry_metaObject;
+    arkRegister();
+    return (igMemoryFileEntry *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMemoryFileEntry_GetVTable(void) {
-    igMemoryFileEntry entry;
-    int s0;
-    char *ps;
-    int *v1;
-    int *a1;
-    int v0;
-    igObject_InitHeader((igObject *)&entry);
-    ps = (char *)&entry._name;
-    *(int *)ps = 0;
-    entry._vtable = (int)&g_igNamedObject_vtable[0];
-    entry._vtable = (int)&g_igMemoryFileEntry_vtable[0];
-    s0 = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
-    entry._vtable = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            a1 = v1 - 2;
-            v0 = v1[-1] - 1;
-            v1[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-            }
-        }
-    }
-    return s0;
-}
-
-void igMemoryFileEntry_EnsureRegistered(void)
+igMetaObject *igMemoryFileEntry::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMemoryFileEntry_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igMemoryFileEntry_Register(void) {
+void *igMemoryFileEntry::retrieveVTablePointer()
+{
+    igMemoryFileEntry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igMemoryFileEntry::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMemoryFileEntry::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMemoryFileEntry_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
-        igMemoryFileEntry_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMemoryFileEntry",
-        0x14,
-        igMemoryFileEntry_GetVTable,
-        igMemoryFileEntry_InitFields,
+        sizeof(igMemoryFileEntry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igMemoryFileEntry_GetMetaObjectFunction(void) {
-    igMemoryFileEntry_GetMetaObject();
+void igMemoryFileEntry::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igRawRefMetaField_Create, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_buffer", "_size" };
+    static igMetaField **enumStorage[] = { &k_buffer, &k_size };
+    static int offsets[] = { 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igMemoryFileEntry_ctorTable[] = {
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igMemoryFileEntry_fieldTable[] = {
-    "_buffer",
-    "_size",
-};
-static igMetaField **g_igMemoryFileEntry_fieldDescriptors[] = {
-    &g_igMemoryFileEntry_bufferMetaField,
-    &g_igMemoryFileEntry_sizeMetaField,
-};
-static int g_igMemoryFileEntry_fieldOffsets[] = {
-    12,
-    16,
-};
-
-void igMemoryFileEntry_InitFields(void) {
-    int first;
-    void *meta;
-
-    meta = (void *)g_igMemoryFileEntry_metaObject;
-    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryFileEntry_ctorTable, 2);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryFileEntry_fieldTable, g_igMemoryFileEntry_fieldDescriptors, g_igMemoryFileEntry_fieldOffsets, first);
+}
 }
 

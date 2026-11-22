@@ -1,8 +1,10 @@
-int Gap__Gfx__igVertexStream__vfunc_23(igVertexStream *self) {
-    return self->_stream;
-}
+namespace Gap {
+namespace Gfx {
 
-void FUN_00180020(long long *arg0) {
-    p2WaitDmaSequence(1, arg0[5]);
+void igPsx2VertexStream::waitForSync()
+{
+    p2WaitDmaSequence(1, _syncSequence);
+}
+}
 }
 

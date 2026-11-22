@@ -1,124 +1,83 @@
-igMetaObject *g_igPsx2File_metaObject;
-igMetaField *g_igPsx2File_fBufMetaField;
-igMetaField *g_igPsx2File_bufSizeMetaField;
-igMetaField *g_igPsx2File_bufPosMetaField;
-igMetaField *g_igPsx2File_fileSizeMetaField;
-igMetaField *g_igPsx2File_isBinaryMetaField;
-igMetaField *g_igPsx2File_isOpenMetaField;
-igMetaField *g_igPsx2File_stringFileMetaField;
-igMetaField *g_igPsx2File_prefixMetaField;
+namespace Gap {
+namespace Core {
 
-int igPsx2File_Create(int allocator) {
-    igPsx2File_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance(g_igPsx2File_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igPsx2File::_Meta;
+igMetaField *igPsx2File::k_fBuf;
+igMetaField *igPsx2File::k_bufSize;
+igMetaField *igPsx2File::k_bufPos;
+igMetaField *igPsx2File::k_fileSize;
+igMetaField *igPsx2File::k_isBinary;
+igMetaField *igPsx2File::k_isOpen;
+igMetaField *igPsx2File::k_stringFile;
+igMetaField *igPsx2File::k_prefix;
 
-igMetaObject *igPsx2File_GetMetaObject(void)
+igPsx2File *igPsx2File::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igPsx2File_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPsx2File_EnsureRegistered();
-    return g_igPsx2File_metaObject;
+    arkRegister();
+    return (igPsx2File *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igPsx2File_GetVTable(void) {
-    igPsx2File f;
-    int vtable;
-
-    igObject_InitHeader((igObject *)&f);
-    f._name = 0;
-    f._fileName = 0;
-    f._completeFilename = 0;
-    f._vtable = (int)&g_igPsx2File_vtable[0];
-    f._prefix = 0;
-    vtable = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
-    f._vtable = (int)&g_igPsx2File_vtable[0];
-    igStringRef_Destruct((igStringRef *)&f._prefix, -1);
-    igFile_Destroy((igFile *)&f, (short)0);
-    return vtable;
-}
-
-void igPsx2File_EnsureRegistered(void)
+igMetaObject *igPsx2File::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igPsx2File_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igPsx2File_Register(void) {
+void *igPsx2File::retrieveVTablePointer()
+{
+    igPsx2File temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igPsx2File::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPsx2File::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igPsx2File_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igFile::arkRegisterInternal,
         Gap::Core::igFile::getClassMeta,
-        igPsx2File_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2File",
-        0x4C,
-        igPsx2File_GetVTable,
-        igPsx2File_InitFields,
-        igPsx2File_StaticInitCallback,
+        sizeof(igPsx2File),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        (igMetaObjectCallback)Gap::Core::igPsx2File::arkRegisterUser,
         0
     );
 }
 
-static FieldFactory g_igPsx2File_ctorTable[] = {
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-};
-static const char *g_igPsx2File_fieldTable[] = {
-    "_fBuf",
-    "_bufSize",
-    "_bufPos",
-    "_fileSize",
-    "_isBinary",
-    "_isOpen",
-    "_stringFile",
-    "_prefix",
-};
-static igMetaField **g_igPsx2File_fieldDescriptors[] = {
-    &g_igPsx2File_fBufMetaField,
-    &g_igPsx2File_bufSizeMetaField,
-    &g_igPsx2File_bufPosMetaField,
-    &g_igPsx2File_fileSizeMetaField,
-    &g_igPsx2File_isBinaryMetaField,
-    &g_igPsx2File_isOpenMetaField,
-    &g_igPsx2File_stringFileMetaField,
-    &g_igPsx2File_prefixMetaField,
-};
-static int g_igPsx2File_fieldOffsets[] = {
-    44,
-    48,
-    52,
-    56,
-    60,
-    64,
-    68,
-    72,
-};
+void igPsx2File::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igRawRefMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_fBuf", "_bufSize", "_bufPos", "_fileSize", "_isBinary", "_isOpen", "_stringFile", "_prefix" };
+    static igMetaField **enumStorage[] = { &k_fBuf, &k_bufSize, &k_bufPos, &k_fileSize, &k_isBinary, &k_isOpen, &k_stringFile, &k_prefix };
+    static int offsets[] = { 44, 48, 52, 56, 60, 64, 68, 72 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-void igPsx2File_InitFields(void) {
-    void *prefixField;
-    int base;
-    void *bufferField;
-    void *meta;
-
-    meta = (void *)(g_igPsx2File_metaObject);
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2File_ctorTable, 8);
-    bufferField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igMemoryRefMetaField *)bufferField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
-    prefixField = ((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
-    ((igMetaField *)prefixField)->_resetMethod = 3;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2File_fieldTable, g_igPsx2File_fieldDescriptors, g_igPsx2File_fieldOffsets, base);
-    ((igMetaObject *)g_igPsx2File_metaObject)->_writeProxy = (int)(&Gap::Core::igFile::getClassMetaSafe);
+    igMetaObject_CreateFields(metaObject, instFuncs, 8);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
+    }
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_resetMethod = 3;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_writeProxy = (void (*)())Gap::Core::igFile::getClassMetaSafe;
 }
 
-void igPsx2File_StaticInitCallback(void) {
-    igPsx2File_InitDefaultPrefix();
+void igPsx2File::arkRegisterUser() {
+    userRegister();
+}
+}
 }
 

@@ -51,7 +51,7 @@ component count/stride:
 * `FUN_00162ca0(vd)`: called by slots 25 and `FUN_001805a0`; same shape, fewer
   classes.
 
-`FUN_00163770` / `FUN_00163800` are private helpers called only from slot 61.
+`igVertexArray2Helper_FloatToFixedPoint` / `igVertexArray2Helper_FixedPointToFloat` are private helpers called only from slot 61.
 
 ## Slot map (22–61)
 

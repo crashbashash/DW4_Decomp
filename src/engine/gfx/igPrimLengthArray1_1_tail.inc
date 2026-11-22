@@ -569,7 +569,7 @@ static int FUN_0015f460(void *arg0, int arg1, int arg2, int arg3)
   return 0;
 }
 
-int *FUN_0015f4a0(struct S_15f430 *s, int a1, int a2) {
+int *FUN_0015f4a0(struct S_15f430 *s, int a1, unsigned int a2) {
     int *found = 0;
     int i;
     for (i = 0; i < s->count; i++) {

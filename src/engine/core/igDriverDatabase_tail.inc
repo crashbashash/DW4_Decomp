@@ -101,10 +101,10 @@ void igDriverDatabase_GatherProperties(void *self, igTDataList<igVisualContextVi
 }
 
 static inline int openPath(igDriverDatabase *database, const igSmartPointer<igStringObj> &path) {
-    igFileView *file = (igFileView *)database->_databaseFile;
+    Gap::Core::igFile *file = (Gap::Core::igFile *)database->_databaseFile;
     int text = path.p->_buffer;
     if (text == 0) text = (*(int *)&g_stringObjEmptyText);
-    return file->Open((const char *)text, (const char *)"r");
+    return (int)file->fopen((const char *)text, "r");
 }
 
 int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const char *rootPath) {
@@ -119,30 +119,30 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
         igObject::release((igObject *)self->_databaseFile);
         self->_databaseFile = (int)((igObject *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)al));
     }
-    opened = ((igFileView *)self->_databaseFile)->Open(name.p, (const char *)"r");
+    opened = (int)((Gap::Core::igFile *)self->_databaseFile)->fopen(name.p, "r");
     if (opened == 0) {
         if (rootPath == 0 || strlen(rootPath) == 0) {
             rootPath = ((const char *)igObjectSystem_GetRootPath((int *)((*(int *)&g_objectSystem))));
         }
         if (rootPath != 0 && strlen(rootPath) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
-            folder.p->setFolderName((char *)rootPath);
-            opened = openPath(self, folder.p->GetFullPath(name.p));
+            igSmartPointer<Gap::Core::igFolder> folder(Gap::Core::igFolder::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+            folder.p->setFolderName(rootPath);
+            opened = openPath(self, folder.p->getPathToFile(name.p));
         }
     }
     if (opened == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+        igSmartPointer<Gap::Core::igFolder> folder(Gap::Core::igFolder::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
         folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)((*(int *)&g_objectSystem))));
-        opened = openPath(self, folder.p->GetFullPath(name.p));
+        opened = openPath(self, folder.p->getPathToFile(name.p));
     }
     if (opened == 0) {
         igObject::release((igObject *)self->_databaseFile);
         self->_databaseFile = 0;
         return 0;
     }
-    igStringObj_Set((igStringObj *)self->_databaseFileName, (const char *)((igFile *)opened)->_fileName);
-    igDriverDatabase_LoadDatabaseFile(self, (igFileView *)self->_databaseFile);
-    ((igFileView *)self->_databaseFile)->Close();
+    igStringObj_Set((igStringObj *)self->_databaseFileName, ((Gap::Core::igFile *)opened)->_fileName.p);
+    igDriverDatabase_LoadDatabaseFile(self, (Gap::Core::igFile *)self->_databaseFile);
+    ((Gap::Core::igFile *)self->_databaseFile)->fclose();
     igObject::release((igObject *)self->_databaseFile);
     self->_databaseFile = 0;
     return 1;
@@ -253,7 +253,7 @@ int FUN_002daab0(igDriverDatabase *self, int registry, int section, int mergeMod
 }
 
 /* Read the database file into the raw text, a line at a time; a ';' ends the line. */
-void igDriverDatabase_LoadDatabaseFile(igDriverDatabase *self, igFileView *file) {
+void igDriverDatabase_LoadDatabaseFile(igDriverDatabase *self, Gap::Core::igFile *file) {
     char line[4096];
     char *p;
     int c;
@@ -314,12 +314,12 @@ int igDriverDatabase_GetCpuType(void *text) {
     return 1;
 }
 
-bool igDriverDatabase_ReadLineFromFile(void *a0, igFileView *s, char *buf, int n) {
-    int c = s->GetChar();
+bool igDriverDatabase_ReadLineFromFile(void *a0, Gap::Core::igFile *s, char *buf, int n) {
+    int c = s->fgetc();
     int i = 0;
     while (c != -1 && c != 10 && c != 13 && c != 0) {
         if (i < n - 2) buf[i] = c;
-        c = s->GetChar();
+        c = s->fgetc();
         i++;
     }
     if (n - 2 < i) i = n - 2;

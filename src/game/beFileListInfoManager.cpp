@@ -1,5 +1,4 @@
 #include "dw4/support/reflected.h"
-#include "dw4/core/igFileDispatchView.h"
 #include "dw4/game/beFileChkObj.h"
 #include "dw4/game/beFileListInfoManager.h"
 #include "dw4/core/StringPool.h"
@@ -63,8 +62,8 @@ static inline void insertReadInfo(beFileListInfoManager *self, int at, const Inf
 }
 
 int beFileChkObj_FileExists(beFileChkObj *checker, const char *fileName) {
-    if (((igFileDispatchView *)checker->_fd)->OpenFile(fileName, "rb") != 0) {
-        ((igFileDispatchView *)checker->_fd)->CloseFile();
+    if (((Gap::Core::igFile *)checker->_fd)->fopen(fileName, "rb") != 0) {
+        ((Gap::Core::igFile *)checker->_fd)->fclose();
         return 1;
     }
     return 0;

@@ -20,6 +20,16 @@ public:
             Parent::setCapacity(_count, sizeof(T));
         }
     }
+    inline void setCount(int newCount) {
+        if (!(newCount >= 0)) {
+            return;
+        }
+        if (newCount <= _capacity) {
+            _count = newCount;
+            return;
+        }
+        Parent::resizeAndSetCount(newCount, sizeof(T));
+    }
     inline const T *getArray() const { return (const T *)_data; }
     inline T &get(int index) const { return getArrayInternal()[index]; }
     inline void set(int index, const T &value) {
@@ -58,6 +68,14 @@ public:
     T get(int index) const { return _data[index]; }
     T &operator[](int index) { return _data[index]; }
     void set(int index, const T *value) { _data[index] = *value; }
+    /* the kit's setCount (alchemy-kit_202309 igCore/igTDataList.h), without its negative-count assert */
+    void setCount(int newCount) {
+        if (newCount <= _capacity) {
+            _count = newCount;
+            return;
+        }
+        ((Gap::Core::igDataList *)this)->resizeAndSetCount(newCount, sizeof(T));
+    }
     int find(T v, int start = 0) const {
         int i;
         int n = _count;

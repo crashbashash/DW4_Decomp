@@ -1,0 +1,21 @@
+#ifndef DW4_IGVERTEXDATA_H
+#define DW4_IGVERTEXDATA_H
+
+/* The components one igVertexData can hold (alchemy-kit_202309 igGfx/igVertexData.h, igVertexData's
+ * IG_VERTEX_COMPONENT_TYPE; its `_componentType` field stays the reflected int). DW4's list ends with
+ * IG_VERTEX_COMPONENT_CUSTOM: the kit's platform stream types come later. */
+enum IG_VERTEX_COMPONENT_TYPE {
+    IG_VERTEX_COMPONENT_NONE,
+    IG_VERTEX_COMPONENT_POSITION,
+    IG_VERTEX_COMPONENT_COLOR,
+    IG_VERTEX_COMPONENT_NORMAL,
+    IG_VERTEX_COMPONENT_TEXCOORD,
+    IG_VERTEX_COMPONENT_WEIGHT,
+    IG_VERTEX_COMPONENT_INDEX,
+    IG_VERTEX_COMPONENT_BINORMAL,
+    IG_VERTEX_COMPONENT_TANGENT,
+    IG_VERTEX_COMPONENT_SIZE,
+    IG_VERTEX_COMPONENT_CUSTOM
+};
+
+#endif

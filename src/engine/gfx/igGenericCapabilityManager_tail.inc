@@ -346,11 +346,6 @@ void igImage::copy(const igImage *src, bool copyImage)
         }
     }
 }
-}
-}
-
-namespace Gap {
-namespace Gfx {
 
 void igImage::copySubImage(const igImage *src, int offX, int offY, int width, int height)
 {
@@ -666,8 +661,7 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
     return true;
 }
 
-/* igFileImagePng vtable slot 42: constant-zero leaf. Slots 40 and 41 also return 0 and slot 45
- * returns 1. The receiver is not read. */
+/* Slot 42: one of igImage's four constant-false platform hooks (slots 39-42), which igFileImagePng inherits. */
 unsigned char igImage::platformConvert(IG_GFX_TEXTURE_FORMAT format, const igImage *img)
 {
     return false;
@@ -796,7 +790,7 @@ void igImage::setPixel(int x, int y, const void *src)
 bool igImage::swapComponentOrder()
 {
     bool result = true;
-    igSmartPointer<igImageConvertView> convert((igImageConvertView *)igImageConvert_Create((int)getMemoryPool()));
+    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)getMemoryPool()));
     switch (_pfmt) {
     case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32:
         convert->v25(_pImage, _px * _py, &_order);
@@ -879,15 +873,15 @@ unsigned char igImage::oldLoad(igFile *file)
     unsigned int bitsDepth;
     IG_GFX_TEXTURE_FORMAT format;
 
-    ((VStream *)file)->v25(&_imageSize, 4, 1);
-    ((VStream *)file)->v25(&_pz, 4, 1);
-    ((VStream *)file)->v25(&_px, 4, 1);
-    ((VStream *)file)->v25(&_py, 4, 1);
+    file->fread(&_imageSize, 4, 1);
+    file->fread(&_pz, 4, 1);
+    file->fread(&_px, 4, 1);
+    file->fread(&_py, 4, 1);
     _ps = 1;
     _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
     _localImage = true;
-    ((VStream *)file)->v25(_pImage, 1, _imageSize);
-    ((VStream *)file)->v24();
+    file->fread(_pImage, 1, _imageSize);
+    file->fclose();
     switch (_pz) {
     case 1:
         _pfmt = IG_GFX_TEXTURE_FORMAT_L_8;
@@ -936,15 +930,14 @@ unsigned char igImage::newLoad(igFile *file)
     unsigned int bitsAlpha;
     unsigned int bitsDepth;
     IG_GFX_TEXTURE_FORMAT format;
-    VStream *st = (VStream *)file;
 
     if (!(platformLoad(file) & 0xFF)) {
-        st->v25(&_imageSize, 4, 1);
-        st->v25(&_px, 4, 1);
-        st->v25(&_py, 4, 1);
-        st->v25(&_pz, 4, 1);
-        st->v25(&_ps, 4, 1);
-        st->v25(&maskWord, 4, 1);
+        file->fread(&_imageSize, 4, 1);
+        file->fread(&_px, 4, 1);
+        file->fread(&_py, 4, 1);
+        file->fread(&_pz, 4, 1);
+        file->fread(&_ps, 4, 1);
+        file->fread(&maskWord, 4, 1);
         _bitsRed = (maskWord >> 24) & 0xFF;
         _bitsGrn = (maskWord >> 16) & 0xFF;
         _bitsBlu = (maskWord >> 8) & 0xFF;
@@ -952,12 +945,12 @@ unsigned char igImage::newLoad(igFile *file)
         _bitsDepth = 0;
         _bitsIdx = 0;
         _bitsInt = 0;
-        st->v25(&skippedWord, 4, 1);
-        st->v25(&skippedWord, 4, 1);
+        file->fread(&skippedWord, 4, 1);
+        file->fread(&skippedWord, 4, 1);
         _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
         _localImage = true;
-        st->v25(_pImage, 1, _imageSize);
-        st->v24();
+        file->fread(_pImage, 1, _imageSize);
+        file->fclose();
         _pfmt = guessPixelFormatFromNumComponents(_pz);
     }
     format = (IG_GFX_TEXTURE_FORMAT)_pfmt;
@@ -975,8 +968,7 @@ unsigned char igImage::newLoad(igFile *file)
     return true;
 }
 
-/* Constant leaf in the igFileImagePng vtable (slot 40): ignores the image object and returns 0,
- * like the adjacent slots 39 and 41. */
+/* Slot 40, a constant-false platform hook (see platformConvert). */
 unsigned char igImage::platformLoad(igFile *file)
 {
     return false;
@@ -1019,36 +1011,34 @@ unsigned char igImage::load(const char *fileName)
         }
         return true;
     }
-    igSmartPointer<VStream_158f50> file((VStream_158f50 *)Gap::Core::igFile::_instantiateFromPool(getMemoryPool()));
+    igSmartPointer<igFile> file(igFile::_instantiateFromPool(getMemoryPool()));
     int signature;
-    if (file.p->v23((int)fileName, "rb") == 0) {
+    if (file->fopen(fileName, "rb") == 0) {
         return false;
     }
-    file.p->v25(&signature, 4, 1);
+    file->fread(&signature, 4, 1);
     switch (signature) {
     case 0x1F295FF4:
     case 0xF45F291F:
-        r = oldLoad((igFile *)file.p) & 0xFF;
+        r = oldLoad(file) & 0xFF;
         return r;
     case 0x312A57F2:
     case 0xF2572A31:
-        r = newLoad((igFile *)file.p) & 0xFF;
+        r = newLoad(file) & 0xFF;
         return r;
     default:
-        file.p->v24();
+        file->fclose();
         return false;
     }
 }
 
-/* Constant leaf in the igFileImagePng vtable (slot 39): ignores the image object and returns 0,
- * like the adjacent slots 40 and 41. */
+/* Slot 39, a constant-false platform hook (see platformConvert). */
 unsigned char igImage::platformLoad(const char *fileName)
 {
     return false;
 }
 
-/* igFileImagePng vtable slot 41: constant-zero leaf. Slots 40 and 42 also return 0 and slot 45
- * returns 1. The receiver is not read. */
+/* Slot 41, a constant-false platform hook (see platformConvert). */
 unsigned char igImage::platformSave(igFile *file)
 {
     return false;
@@ -1668,18 +1658,18 @@ int igImage::scaleAlpha()
 }
 }
 
-void FUN_0015a6a0(Img *arg0, E *out) {
+void FUN_0015a6a0(Gap::Gfx::igImage *self, ImageBlock16 *out) {
     int w;
     int h;
-    E *r0;
-    E *r1;
+    ImageBlock16 *r0;
+    ImageBlock16 *r1;
     int x;
     int y;
     long long t;
     long long u;
-    w = arg0->w >> 2;
-    h = arg0->h >> 2;
-    r0 = arg0->data;
+    w = self->getWidth() >> 2;
+    h = self->getHeight() >> 2;
+    r0 = (ImageBlock16 *)self->getData();
     r1 = r0 + w;
     for (y = 0; y < h; y += 2) {
         for (x = 0; x < w; x += 2) {
@@ -1787,13 +1777,13 @@ void FUN_0015ad30(void *loader, igImage *image, int format, int width, int heigh
     ((Gap::Gfx::igImage *)image)->estimateImageSize((IG_GFX_TEXTURE_FORMAT)format, width, height, *size, *(unsigned int *)components, *rowBytes);
 }
 
-int FUN_0015ad50(char *arg0) {
-    int n = strlen(arg0);
+const char *FUN_0015ad50(const char *path) {
+    int n = strlen(path);
 
     while (n > 0) {
         n--;
-        if (arg0[n] == 0x2E) {
-            return (int)arg0 + n;
+        if (path[n] == 0x2E) {
+            return path + n;
         }
     }
     return 0;

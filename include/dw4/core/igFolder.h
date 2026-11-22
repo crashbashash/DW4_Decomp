@@ -8,7 +8,6 @@ struct igFolderView;
 extern "C" {
 #endif
 
-void igFolder_SetFolderName(struct igFolderView *self, const char *name);
 
 #ifdef __cplusplus
 }

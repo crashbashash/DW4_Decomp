@@ -1,36 +1,37 @@
-igMetaObject *g_igFileImage_metaObject;
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igFileImage_GetMetaObject(void)
+igMetaObject *igFileImage::_Meta;
+
+igMetaObject *igFileImage::getClassTypeSafe()
 {
-    igMetaObject *g = g_igFileImage_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igFileImage_EnsureRegistered();
-    return g_igFileImage_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igFileImage_EnsureRegistered(void)
+void igFileImage::arkRegister()
 {
-    igMetaObject_RunStaticInit(igFileImage_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *igFileImage_Register(void) {
+CallbackArray *igFileImage::arkRegisterInternal()
+{
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igFileImage_metaObject,
+        true,
+        &_Meta,
         Gap::Gfx::igImage::arkRegisterInternal,
-        igImage_GetPublishedMetaObject,
-        igFileImage_GetMetaObjectFunction,
+        Gap::Gfx::igImage::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFileImage",
-        0x5C, /* instance size */
+        sizeof(igFileImage),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igFileImage_GetMetaObjectFunction(void) {
-    igFileImage_GetMetaObject();
+}
 }
 

@@ -157,7 +157,7 @@ void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int dig
 {
     bool showAddr = digits;
     unsigned char more = 1;
-    igFileView *file = 0;
+    Gap::Core::igFile *file = 0;
     unsigned long long end;
     if (!size) size = 1;
     else if (size > 8) size = 8;
@@ -165,8 +165,8 @@ void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int dig
         int alloc;
         if (g_useOwnerAllocator) alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
         else alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-        file = (igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)alloc);
-        if (0 == file->Open(name, (const char *)"w")) goto done;
+        file = Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)alloc);
+        if (0 == file->fopen(name, "w")) goto done;
     }
     {
         unsigned int mask;
@@ -184,8 +184,8 @@ void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int dig
         }
     }
     if (file) {
-        file->Close();
-        if (--file->_refCount, 0 == (0x7FFFFF & file->_refCount)) igObject_Destroy(file);
+        file->fclose();
+        file->release();
     }
 done:;
 }

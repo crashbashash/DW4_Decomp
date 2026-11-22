@@ -13,7 +13,7 @@ igMetaField *igUnsignedIntMetaField_Create(igMemoryPoolView *pool) {
         Gap::Core::igUnsignedIntMetaField::arkRegister();
         field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)Gap::Core::igUnsignedIntMetaField::getClassMeta()), pool)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
+        field = (void **)(((void **)Gap::Core::igObject::operator new(0x34, 0, pool)));
         if (field != 0) {
             field = (void **)(((void **)igUnsignedIntMetaField_Construct((igMetaField *)field, 1)));
         }
@@ -32,7 +32,7 @@ igObject *igUnsignedIntMetaField::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(igUnsignedIntMetaField), 0), 0) igUnsignedIntMetaField(*this);
+    return new (0) igUnsignedIntMetaField(*this);
 }
 
 igMetaObject *igUnsignedIntMetaField::getClassTypeSafe()

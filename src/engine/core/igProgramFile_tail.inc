@@ -3,7 +3,7 @@ void igProgramFile_Reset(igProgramFile *self) {
     int count;
     int pool;
     char *oldName;
-    igFileView *file;
+    Gap::Core::igFile *file;
     char *name;
 
     if (g_stringPool == 0) {
@@ -24,12 +24,9 @@ void igProgramFile_Reset(igProgramFile *self) {
         }
     }
     self->_fileName = (int)name;
-    file = (igFileView *)self->_file;
+    file = (Gap::Core::igFile *)self->_file;
     if (file != 0) {
-        --file->_refCount;
-        if (((unsigned long long)(long long)(int)file->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(file);
-        }
+        file->release();
     }
     self->_file = 0;
 }
@@ -41,7 +38,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
     int *old;
     int *header;
     int name;
-    igFileView *stream;
+    Gap::Core::igFile *stream;
     int refs;
     file->Reset();
     if (g_stringPool == 0) {
@@ -65,14 +62,11 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     stream = file->stream;
     if (stream != 0) {
-        stream->_refCount = stream->_refCount - 1;
-        if (((unsigned long long)(long long)(int)stream->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(stream);
-        }
+        stream->release();
     }
-    file->stream = (igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)allocator);
-    ((Gap::Core::igFile *)file->stream)->setFileName(file->path);
-    if (file->stream->OpenWithMode(4) == g_resultFailure) {
+    file->stream = Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)allocator);
+    file->stream->setFileName(file->path);
+    if (file->stream->open(Gap::Core::igFile::kReadBinary) == g_resultFailure) {
         igReport_Printf((const char *)"Unable to open: %s\n", (int)file->path);
         igReport_Flush();
         return g_resultFailure;
@@ -81,15 +75,15 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
 }
 
 void igProgramFile_Close(int *result, ProgramFileView *self) {
-    self->stream->CloseHandle();
+    self->stream->close();
     self->Reset();
     *result = g_resultSuccess.v;
 }
 
 void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size, void **dest) {
-    igFileView *stream;
+    Gap::Core::igFile *stream;
     stream = self->stream;
-    if (stream->Seek(offset, 0) == -1) {
+    if (stream->fseek(offset, 0) == -1) {
         igReport_Printf("Error seeking to offset 0x%x in: %s\n", offset, self->path);
         igReport_Flush();
         self->Close();
@@ -108,7 +102,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
     }
     memset(*dest, 0, size);
     stream = self->stream;
-    if (stream->Read(*dest, size, 1) != 1) {
+    if (stream->fread(*dest, size, 1) != 1) {
         igReport_Printf("Error reading: %s\n", self->path);
         igReport_Flush();
         self->Close();

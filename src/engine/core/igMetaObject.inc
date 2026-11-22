@@ -32,7 +32,7 @@ igMetaObject *igMetaObject_Create(igMemoryPoolView *allocator) {
         igMetaObject_EnsureRegistered();
         metaObject = (igMetaObject *)igMetaObject_CreateInstance(g_igMetaObject_metaObject, allocator);
     } else {
-        metaObject = (igMetaObject *)igObject_AllocateRawStorage(0x64, 0, allocator);
+        metaObject = (igMetaObject *)Gap::Core::igObject::operator new(0x64, 0, allocator);
         if (metaObject != 0) {
             metaObject = (igMetaObject *)igMetaObject_Construct(metaObject, 1);
         }
@@ -48,7 +48,7 @@ void *igMetaObject_Clone(int source, int pool) {
         igMetaObject_EnsureRegistered();
         r = ((void *)igObject_CloneViaMetadata((void **)source, pool));
     } else {
-        r = igObject_AllocateRawStorageDefault(0x64, 0);
+        r = Gap::Core::igObject::operator new(0x64, 0);
         if (r != 0) {
             r = igMetaObject_CopyConstruct((igMetaObject *)r, (void *)source);
         }

@@ -219,6 +219,64 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
     }
 }
 
+/* igSorter::endCompoundRenderPackage (alchemy-kit_202309 igSg/igSorter.h): closes the open compound render package
+ * once its nesting count falls to zero. The package takes the sorting key and distance of its first member, drops
+ * its geometry and state attributes, and joins the transparent, first or opaque package list.
+ * matching construct: regalloc.py — each append is the kit's igTDataList<T>::append(const T &) written out with
+ * the count declared ahead of the list: as the inline's parameter the list takes an allocator id below the count's,
+ * is pushed after the sorter and colours s1, the sorter s2 (retail: sorter s1, lists s2). */
+void FUN_001dc610(igSorter *sorter) {
+    if (sorter->_compoundPackageNestCount != 0) {
+        if (--sorter->_compoundPackageNestCount <= 0) {
+            sorter->_isCompoundPackageOpen = 0;
+            igRenderPackage *package = (igRenderPackage *)sorter->_compoundPackage;
+            if (((igTDataList<igRenderPackage *> *)package->_theMass)->getCount() != 0) {
+                igRenderPackage *first = ((igTDataList<igRenderPackage *> *)package->_theMass)->get(0);
+                ((igTDataList<igAttr *> *)package->_geomAttrs)->setCount(0);
+                ((igTDataList<igAttr *> *)((igRenderPackage *)sorter->_compoundPackage)->_stateAttrs)->setCount(0);
+                ((igRenderPackage *)sorter->_compoundPackage)->_sortingCache = first->_sortingCache;
+                ((igRenderPackage *)sorter->_compoundPackage)->_distance = first->_distance;
+                if (sorter->_isCompoundPackageTransparent) {
+                    int count;
+                    igTDataList<igRenderPackage *> *packages = (igTDataList<igRenderPackage *> *)sorter->_transpPackages;
+                    count = packages->getCount();
+                    igRenderPackage *item = (igRenderPackage *)sorter->_compoundPackage;
+                    if (count < packages->_capacity) {
+                        packages->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)packages)->resizeAndSetCount(count + 1, sizeof(igRenderPackage *));
+                    }
+                    packages->_data[count] = item;
+                } else if (sorter->_isCompoundPackageFirst) {
+                    int count;
+                    igTDataList<igRenderPackage *> *packages = (igTDataList<igRenderPackage *> *)sorter->_firstPackages;
+                    count = packages->getCount();
+                    igRenderPackage *item = (igRenderPackage *)sorter->_compoundPackage;
+                    if (count < packages->_capacity) {
+                        packages->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)packages)->resizeAndSetCount(count + 1, sizeof(igRenderPackage *));
+                    }
+                    packages->_data[count] = item;
+                } else {
+                    int count;
+                    igTDataList<igRenderPackage *> *packages = (igTDataList<igRenderPackage *> *)sorter->_opaquePackages;
+                    count = packages->getCount();
+                    igRenderPackage *item = (igRenderPackage *)sorter->_compoundPackage;
+                    if (count < packages->_capacity) {
+                        packages->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)packages)->resizeAndSetCount(count + 1, sizeof(igRenderPackage *));
+                    }
+                    packages->_data[count] = item;
+                }
+                igObject::release((igObject *)sorter->_compoundPackage);
+                sorter->_compoundPackage = 0;
+            }
+        }
+    }
+}
+
 void igSwitch_EnableChild(igSwitch *self, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;

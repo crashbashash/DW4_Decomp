@@ -47,15 +47,6 @@ int igTgaLoader_GetVTable(void) {
     return temp_s0;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igFile_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
 void igTgaLoader_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTgaLoader_Register);

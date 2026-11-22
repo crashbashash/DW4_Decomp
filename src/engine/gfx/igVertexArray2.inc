@@ -39,7 +39,7 @@ void igVertexArray2::arkRegister()
 
 CallbackArray *igVertexArray2::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Core::igObjectList::arkRegister, igVertexStream_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igObjectList::arkRegister, Gap::Gfx::igVertexStream::arkRegister, Gap::Core::igObject::arkRegister, 0 };
 
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -74,7 +74,7 @@ void igVertexArray2::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
-        metaField->_metaObject = (int)igVertexStream_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igVertexStream::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);

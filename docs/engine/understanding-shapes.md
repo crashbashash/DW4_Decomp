@@ -2151,6 +2151,21 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   is coloured first (`s1`), token 2 second (`s2`). Each of these alone leaves 13 words: the object pointer declared
   first, a setter taking the raw pointer, the token returned through an inline instead of the setter's local. *Units:*
   `src/engine/core/CoreLibrary.cpp` (0x2d1e40), `src/game/beMovie.cpp` (0x3a8b80).
+- **A list append's count must be numbered before its list.** igSorter's endCompoundRenderPackage appends one
+  package to one of three lists; with the kit's `igTDataList<T>::append(const T &)` (or any helper taking the
+  list) every instruction matches but the sorter sits in `s2` and the lists in `s1`, where retail has them the
+  other way. In the allocator's graph each list has degree 25 (K) and stays until the second scan, where the
+  sorter, the lowest id, is pushed first and so coloured after the lists. The list is the inline's parameter
+  and numbered before the inline's `count` local, and `int n = list->count()` is an `int` copy of an inline's
+  result, numbered late as well. Relabelling the dumped graph (`regalloc_sim.py`) gives retail's colours as soon
+  as each count's id is below its list's: the count (degree 24) is pushed in the first scan, its list drops to
+  24 and follows in that same scan, and the sorter is pushed after both. Spelling: each append written out in
+  its branch with `int count;` declared ahead of the list pointer, the count read through the flat list's
+  `const int &getCount()` (a plain read that keeps the declaration's id) and `_count++`, which then reloads the
+  count as retail does (`count = _count` folds the reload into the count). A list local declared before the
+  count, a function-level count and list shared by the three branches (one web each), and a helper copying its
+  list parameter into a local declared after the count (coalesced) each leave the 35 words. *Unit:*
+  `src/engine/scenegraph/SceneGraphLibrary.cpp` (0x1dc610).
 - **How a call's arguments are lowered (probed under `#pragma schedule off`).** Three steps, in this order:
   - An argument that contains a call, an inline with a statement body included, is evaluated first:
     `f3(p->x, q->y, g())` calls `g` before it loads either field.

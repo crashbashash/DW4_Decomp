@@ -171,3 +171,13 @@ igMediaFile	Core
 igMemoryFile	Core
 igFolder	Core
 igMediaList	Core	igTObjectList<igMedia>
+igFileImage	Gfx
+igFileImagePng	Gfx
+igExternalImageEntry	Gfx
+igMemoryFileEntry	Core
+igMemoryFileEntryList	Core	igTObjectList<igMemoryFileEntry>
+igPsx2File	Core
+igPsx2Folder	Core
+igVertexStream	Gfx
+igPsx2VertexStream	Gfx
+igVertexArray2Helper	Gfx

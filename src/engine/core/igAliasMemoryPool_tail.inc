@@ -380,13 +380,13 @@ void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int
     igAliasMemoryPool_Lock(self);
     g = "The method dump() has no meaning for an igAliasMemoryPool\n";
     if (t0 != 0) {
-        igSmartPointer<igFileView> r((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool()));
-        if (r.p->Open((const char *)t0, (const char *)"w") == 0) {
+        igSmartPointer<Gap::Core::igFile> r(Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool()));
+        if (r.p->fopen((const char *)t0, "w") == 0) {
             igAliasMemoryPool_Unlock(self);
             return;
         }
-        r.p->Print((const char *)g);
-        r.p->Close();
+        r.p->fprintf(g);
+        r.p->fclose();
     } else {
         printf(g);
     }

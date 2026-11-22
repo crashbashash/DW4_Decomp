@@ -5,27 +5,25 @@ void igMemoryFile::setMemoryFile(const char *filename, const void *pFileBuffer, 
 {
     arkRegister();
     if (pFileBuffer != 0) {
-        igSmartPointer< ::igMemoryFileEntry> entry(
-            (::igMemoryFileEntry *)igMemoryFileEntry_Create((int)((Gap::Core::igObject *)_entryList)->getMemoryPool()));
-        ((Gap::Core::igNamedObject *)entry.p)->setName(filename);
-        entry->_size = iBufferSize;
-        entry->_buffer = (int)pFileBuffer;
-        ((Gap::Core::igObjectList *)_entryList)->append((Gap::Core::igObject *)entry.p);
+        igSmartPointer<igMemoryFileEntry> entry(igMemoryFileEntry::_instantiateFromPool(_entryList->getMemoryPool()));
+        entry->setName(filename);
+        entry->setSize(iBufferSize);
+        entry->setBuffer((void *)pFileBuffer);
+        _entryList->append(entry.p);
     }
 }
 
 void igMemoryFile::getMemoryFile(const char *filename, const void *&pOutBuffer, int &iBufferSize)
 {
-    ::igMemoryFileEntry *entry;
+    igMemoryFileEntry *entry;
 
     pOutBuffer = 0;
     iBufferSize = 0;
     if (_entryList != 0) {
-        entry = (::igMemoryFileEntry *)((Gap::Core::igObjectList *)_entryList)
-                    ->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, filename);
+        entry = _entryList->search((igStringMetaField *)igNamedObject::k_name, filename);
         if (entry != 0) {
-            pOutBuffer = (const void *)entry->_buffer;
-            iBufferSize = entry->_size;
+            pOutBuffer = entry->getBuffer();
+            iBufferSize = entry->getSize();
         }
     }
 }

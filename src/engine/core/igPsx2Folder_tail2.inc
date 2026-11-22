@@ -1,21 +1,25 @@
-igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self) {
+namespace Gap {
+namespace Core {
+
+igSmartPointer<igStringRefList> igPsx2Folder::getFilesAndSubFolders() const
+{
     FolderEntryWide entry;
-    int handle = sceDopen((const char *)self->_folderName);
+    int handle = sceDopen(_folderName.p);
     if (handle < 0) {
         /* The empty result is built with the retaining constructor: retail stores the 0 into the
          * result and re-reads it for the reference-count test. */
-        return igSmartPointer<igObject>(0, kRetainReference);
+        return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<igStringRefList> list((igStringRefList *)igStringRefList_Create((int)getMemoryPool()));
     while (sceDread(handle, &entry) != 0) {
         igStringRef text(entry.bytes + 64);
-        StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&text);
+        StringList_AppendRetained(list.p, (char *const *)&text);
     }
     sceDclose(handle);
     return list;
 }
 
-void igPsx2Folder_TrimPath(igStringObj *path) {
+void igPsx2Folder::trimPath(igStringObj *path) {
     int i;
     char *s;
     int c;
@@ -34,6 +38,8 @@ void igPsx2Folder_TrimPath(igStringObj *path) {
         }
     }
     s[i] = 0;
+}
+}
 }
 
 static inline igMemoryPoolView *currentAllocator(void) {
@@ -58,7 +64,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
             key ="intrinsicModulePath";
         }
         if (((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, key, *(igStringObjRef *)&path, (const char *)"", 0)) {
-            igPsx2Folder_TrimPath((igStringObj *)path.p);
+            Gap::Core::igPsx2Folder::trimPath((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText : dir;
             igMemoryPoolView *allocator = currentAllocator();
@@ -85,7 +91,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
                 if (dirs[i] != 0) {
                     int file;
                     sprintf(candidate, (const char *)"%s/%s", dirs[i], name);
-                    resolved = igPsx2File_MakeCompletePath(candidate);
+                    resolved = Gap::Core::igPsx2File::makeCompletePath(candidate);
                     file = sceOpen(resolved, 1);
                     if (file < 0) {
                         Memory_FreeBufferAliasA(resolved);
@@ -102,7 +108,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
         }
     }
     if (resolved == 0) {
-        resolved = igPsx2File_MakeCompletePath(joined);
+        resolved = Gap::Core::igPsx2File::makeCompletePath(joined);
         Memory_FreeBufferAliasA(joined);
     }
     if ((unsigned int)strlen(resolved) > 251) {
@@ -199,33 +205,17 @@ void igPsx2_InitializeIop(void) {
     igPsx2_RebootIop();
 }
 
-static inline int internPool(void) {
-    if (g_stringPool == 0) {
-        int a = ((int)StringPool_Allocate(0x10));
-        if (a != 0) {
-            a = ((int)StringPool_Construct((StringPool *)a));
-        }
-        g_stringPool = (StringPool *)a;
-    }
-    return (int)g_stringPool;
+/* matching construct: assigning `_prefix = name` computes the member's address into a register first; retail reads it
+ * through the file */
+static inline void setPrefix(Gap::Core::igPsx2File *file, const char *name) {
+    char *interned = (char *)StringPool_Intern(InternedStrings::get(), name);
+    releaseString(file->_prefix.p);
+    file->_prefix.p = interned;
 }
 
-static inline void setName(igPsx2FileView *object, int name) {
-    int *interned = (int *)((void *)StringPool_Intern((StringPool *)(internPool()), (const char *)name));
-    if (object->_prefix != 0) {
-        int *header = (int *)object->_prefix - 2;
-        int count = ((int *)object->_prefix)[-1] - 1;
-        ((int *)object->_prefix)[-1] = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
-    object->_prefix = (char *)interned;
-}
-
-static inline int fileAllocator(void) {
-    int a = ((int)Memory_GetCurrentAllocator());
-    return g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+static inline igMemoryPoolView *fileAllocator(void) {
+    igMemoryPoolView *a = (igMemoryPoolView *)Memory_GetCurrentAllocator();
+    return g_useOwnerAllocator != 0 ? a : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
 }
 
 void igPsx2_SetupOutputFiles(void) {
@@ -234,16 +224,16 @@ void igPsx2_SetupOutputFiles(void) {
     if (enabled != 0) {
         igReport_SetOutputFile(0);
         igReport_SetErrorFile(0);
-        igSmartPointer<igPsx2FileView> first((igPsx2FileView *)igPsx2File_Create(fileAllocator()));
-        igSmartPointer<igPsx2FileView> second((igPsx2FileView *)igPsx2File_Create(fileAllocator()));
+        igSmartPointer<Gap::Core::igPsx2File> first(Gap::Core::igPsx2File::_instantiateFromPool(fileAllocator()));
+        igSmartPointer<Gap::Core::igPsx2File> second(Gap::Core::igPsx2File::_instantiateFromPool(fileAllocator()));
         if (g_igPsx2_useCdrom != 0) {
-            setName(first.p, g_igPsx2_atfilePrefix);
-            setName(second.p, g_igPsx2_atfilePrefix);
+            setPrefix(first.p, (const char *)g_igPsx2_atfilePrefix);
+            setPrefix(second.p, (const char *)g_igPsx2_atfilePrefix);
         }
-        if (first->Open("stdout.txt", (const char *)"wb") != 0) {
+        if (first->fopen("stdout.txt", "wb") != 0) {
             igReport_SetOutputFile(first.p);
         }
-        if (second->Open("stderr.txt", (const char *)"wb") != 0) {
+        if (second->fopen("stderr.txt", "wb") != 0) {
             igReport_SetErrorFile(second.p);
         }
     }
@@ -262,7 +252,7 @@ igResult igPsx2_SetAtfilePrefix(const char *text) {
         g_igPsx2_atfilePrefix = ((int)Memory_SystemAllocate(length + 1));
         strncpy((char *)g_igPsx2_atfilePrefix, text, length);
         *(char *)(g_igPsx2_atfilePrefix + length) = 0;
-        g_igPsx2File_defaultPrefix = g_igPsx2_atfilePrefix;
+        Gap::Core::igPsx2File::defaultPrefix = (const char *)g_igPsx2_atfilePrefix;
         igPsx2Media_SetDevicePrefix(g_igPsx2_atfilePrefix);
         return g_resultSuccess;
     } else {

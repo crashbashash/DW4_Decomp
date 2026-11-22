@@ -1,43 +1,49 @@
-int igExternalImageEntry_LoadExternalFile(A *arg0) {
-    igObject *temp_v0;
-    temp_v0 = (igObject *)Gap::Gfx::igImage::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool());
-    if (FUN_001551f0((S_1551f0 *)arg0, (V_1551f0 *)temp_v0) == 0) {
-        temp_v0->release();
-        return 0;
+namespace Gap {
+namespace Gfx {
+
+bool igExternalImageEntry::load(Core::igResolveFunction *userFunction)
+{
+    igImage *image = igImage::_instantiateFromPool(getMemoryPool());
+    if (!loadWork(image)) {
+        image->release();
+        return false;
     }
-    arg0->vX(temp_v0);
-    temp_v0->release();
-    return 1;
+    setRef(image);
+    image->release();
+    return true;
 }
 
-int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
-    char *s1;
-    char *buf;
-    int n;
-    int n2;
-    int tot;
+bool igExternalImageEntry::loadWork(igImage *image)
+{
+    char *name;
+    char *path;
+    int length;
+    int total;
 
-    if (arg1->vX(arg0->f32) == 0) {
-        s1 = arg0->f32;
-        n = strlen(arg0->f40);
-        n2 = n + strlen((char *)"/");
-        tot = strlen(s1);
-        tot = tot + n2;
-        buf = (char *)((Gap::Core::igObject *)arg0)->malloc(tot + 1);
-        strcpy(buf, arg0->f40);
-        strcat(buf, (char *)"/");
-        strcat(buf, arg0->f32);
-        if (arg1->vX(buf) == 0) {
-            ((Gap::Core::igObject *)arg0)->free(buf);
-            return 0;
+    if (!image->load(_entryName.p)) {
+        name = _entryName.p;
+        length = strlen(_externalFilePath.p);
+        length = length + strlen("/");
+        total = strlen(name);
+        total = total + length;
+        path = (char *)malloc(total + 1);
+        strcpy(path, _externalFilePath.p);
+        strcat(path, "/");
+        strcat(path, _entryName.p);
+        if (!image->load(path)) {
+            free(path);
+            return false;
         }
-        ((Gap::Core::igObject *)arg0)->free(buf);
+        free(path);
     }
-    return 1;
+    return true;
 }
 
-void igExternalImageEntry_InitDefaults(int arg0) {
-    igExternalDirEntry_InitDefaults((igDirEntry *)arg0);
-    ((Gap::Core::igExternalDirEntry *)arg0)->setDirectoryName((char const *)(&text_igImageDirectory[0]));
+void igExternalImageEntry::initDefaults()
+{
+    igExternalDirEntry::initDefaults();
+    setDirectoryName((const char *)text_igImageDirectory);
+}
+}
 }
 

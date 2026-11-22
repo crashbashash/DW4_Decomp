@@ -27,7 +27,7 @@ class PackTest(unittest.TestCase):
         # Gap::Lua::igLuaState::runString is the definition of igLuaState_RunString
         for name in ("igLuaState::runString", "runString__Q33Gap3Lua10igLuaStateFPCc"):
             md, cpp = self.run_pack(name, "--keep", "0", ext=".cpp")
-            self.assertIn("- function: `igLuaState_RunString` at 0x00246620", md)
+            self.assertIn("- function: `igLuaState_RunString` (`Gap::Lua::igLuaState::runString`) at 0x00246620", md)
             self.assertIn("int igLuaState::runString(const char *source) {\n", cpp)
             self.assertIn("kept `runString`", md)
 

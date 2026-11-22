@@ -57,7 +57,7 @@ void igFolder::arkRegisterInitialize()
 
     igMetaObject_CreateFields(metaObject, instFuncs, 1);
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
-    *(void (**)())&_Meta->_abstractProxy = (void (*)())igPsx2Folder_GetMetaObjectFunction;
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Core::igPsx2Folder::getClassMetaSafe;
 }
 }
 }

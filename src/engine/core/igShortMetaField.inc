@@ -13,7 +13,7 @@ igMetaField *igShortMetaField_Create(igMemoryPoolView *pool) {
         Gap::Core::igShortMetaField::arkRegister();
         instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)Gap::Core::igShortMetaField::getClassMeta(), pool)));
     } else {
-        instance = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
+        instance = (void **)(((void **)Gap::Core::igObject::operator new(0x34, 0, pool)));
         if (instance != 0) {
             instance = (void **)(((void **)igShortMetaField_Construct((int **)instance, 1)));
         }
@@ -32,7 +32,7 @@ igObject *igShortMetaField::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(igShortMetaField), 0), 0) igShortMetaField(*this);
+    return new (0) igShortMetaField(*this);
 }
 
 igMetaObject *igShortMetaField::getClassTypeSafe()

@@ -9,10 +9,7 @@ __internalNonRefCountedObjectList *__internalNonRefCountedObjectList::_instantia
         arkRegister();
         list = (__internalNonRefCountedObjectList *)igMetaObject_CreateInstance(_Meta, pool);
     } else {
-        list = (__internalNonRefCountedObjectList *)igObject_AllocateRawStorage(sizeof(__internalNonRefCountedObjectList), 0, pool);
-        if (list != 0) {
-            list = (__internalNonRefCountedObjectList *)ObjectPointerList_Construct((::__internalNonRefCountedObjectList *)list, 1);
-        }
+        list = new (0, pool) __internalNonRefCountedObjectList(true);
         list->initDefaults();
         list->userConstruct(0);
     }
@@ -25,7 +22,7 @@ igObject *__internalNonRefCountedObjectList::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(__internalNonRefCountedObjectList), 0), 0) __internalNonRefCountedObjectList(*this);
+    return new (0) __internalNonRefCountedObjectList(*this);
 }
 
 igMetaObject *__internalNonRefCountedObjectList::getClassTypeLazy()

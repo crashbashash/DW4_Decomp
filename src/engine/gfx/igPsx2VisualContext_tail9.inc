@@ -104,7 +104,7 @@ BuildResource *s7;
     } else {
         s0o = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 1, 0x7734);
     }
-    FUN_00180020((long long *)arg1);
-    FUN_00180ab0(arg0, s0o, first.p, s2, second.p, s7, s1, FUN_00162ca0(s1));
+    ((Gap::Gfx::igPsx2VertexStream *)((long long *)arg1))->waitForSync();
+    FUN_00180ab0(arg0, s0o, first.p, s2, second.p, s7, s1, Gap::Gfx::igVertexArray2Helper::getIndexCount((const igVertexData *)s1));
 }
 

@@ -1,86 +1,69 @@
-igMetaObject *g_igVertexArray2Helper_metaObject;
-igMetaField *g_igVertexArray2Helper_vertexArrayMetaField;
+namespace Gap {
+namespace Gfx {
 
-igVertexArray2HelperAccess *igVertexArray2Helper_Create(int arg0) {
-    igVertexArray2Helper_EnsureRegistered();
-    return (igVertexArray2HelperAccess *)igMetaObject_CreateInstance(g_igVertexArray2Helper_metaObject, (igMemoryPoolView *)arg0);
-}
+igMetaObject *igVertexArray2Helper::_Meta;
+igMetaField *igVertexArray2Helper::k_vertexArray;
 
-igMetaObject *igVertexArray2Helper_GetMetaObject(void)
+igVertexArray2Helper *igVertexArray2Helper::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igVertexArray2Helper_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igVertexArray2Helper_EnsureRegistered();
-    return g_igVertexArray2Helper_metaObject;
+    arkRegister();
+    return (igVertexArray2Helper *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igVertexArray2Helper_GetVTable(void) {
-    Obj_14a560 obj;
-    int r;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.m8 = 0;
-    obj.vt = &g_igVertexArray2Helper_vtable[0];
-    obj.m12 = 0;
-    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igVertexArray2Helper_vtable[0];
-    obj.rel12();
-    obj.vt = &g_igNamedObject_vtable[0];
-    obj.rel8();
-    return r;
-}
-
-void igVertexArray2Helper_EnsureRegistered(void)
+igMetaObject *igVertexArray2Helper::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igVertexArray2Helper_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igVertexArray2Helper_callbackList[] = { Gap::Gfx::igVertexArray2::arkRegister, 0 };
+void *igVertexArray2Helper::retrieveVTablePointer()
+{
+    igVertexArray2Helper temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igVertexArray2Helper_Register(void) {
+void igVertexArray2Helper::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igVertexArray2Helper::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igVertexArray2::arkRegister, 0 };
+
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igVertexArray2Helper_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igVertexArray2Helper_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igVertexArray2Helper",
-        0x10, /* instance size */
-        igVertexArray2Helper_GetVTable,
-        &igVertexArray2Helper_InitFields,
-        0, /* extra callback item */
-        g_igVertexArray2Helper_callbackList /* callback list */
+        sizeof(igVertexArray2Helper),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igVertexArray2Helper_GetMetaObjectFunction(void) {
-    igVertexArray2Helper_GetMetaObject();
+void igVertexArray2Helper::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_vertexArray" };
+    static igMetaField **enumStorage[] = { &k_vertexArray };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Gfx::igVertexArray2::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igVertexArray2Helper_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igVertexArray2Helper_fieldTable[] = {
-    "_vertexArray",
-};
-static igMetaField **g_igVertexArray2Helper_fieldHandles[] = {
-    &g_igVertexArray2Helper_vertexArrayMetaField,
-};
-static int g_igVertexArray2Helper_fieldOffsets[] = {
-    12,
-};
-
-void igVertexArray2Helper_InitFields(void) {
-    int fieldStart;
-    void *temp_s1;
-    igMetaObject *meta;
-
-    meta = g_igVertexArray2Helper_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igVertexArray2Helper_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gfx::igVertexArray2::getClassTypeLazy();
-    igMetaObject_NameFields(meta, g_igVertexArray2Helper_fieldTable, g_igVertexArray2Helper_fieldHandles, g_igVertexArray2Helper_fieldOffsets, fieldStart);
+}
 }
 

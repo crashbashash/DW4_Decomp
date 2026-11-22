@@ -339,9 +339,11 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `__internalObjectList`'s reference-counting `setCount`, `append`, `insert` and `set`; DW4's image has no
    `remove(igObject *)`). Their constructors and `__bootstrapDestruct` replace the retail C names
    (`ObjectPointerList_*`, `InternalObjectList_*`, classconv's `boot_names`), and `_instantiateFromPool`
-   constructs through the bool constructor's C name until igObject's kit `operator new(size_t, size_t,
-   igMemoryPool *)` pair (`igObject_AllocateRawStorage`, `igObject_AllocateRawStorageDefault`) is a member:
-   through a placement new MWCC tests the block twice. igen's override of an inherited field finds its index with
+   constructs with `new (0, pool) T(true)` through igObject's kit `operator new(size_t, size_t, igMemoryPool *)`
+   pair (`igObject_AllocateRawStorage`, `igObject_AllocateRawStorageDefault`, members of the root: `memberize.py`
+   does not parse `operator` names, so their rows and callers are hand-written; the clones are `new (0) T(*this)`):
+   one null test, as retail's. The metafield `<Class>_Create` factories are still free, so they call
+   `igObject::operator new(size, 0, pool)`. igen's override of an inherited field finds its index with
    `((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField)`, and a metafield's
    descriptor registers with `getMetaFieldTypes()->append(metaField)`. Of the 154 classes the core
    unit registers, 71 are converted (igContext with them); the other kit-declared ones (the remaining typed lists, the memory pools,
@@ -386,11 +388,21 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `setSearchPathFromRegistry`, `getSearchPath`, `getNextPath`; its implicit destructor is retail's `igFile_Destroy`,
    still named by the flat `igPsx2File`/`igAdxFile` probes), `igMediaFile` (`_media` an `igSmartPointer<igMedia>`,
    `fit`), `igMemoryFile` (statics `userRegister`, `userUnregister`, `setMemoryFile`, `getMemoryFile`; its entry list
-   `_entryList` is still the flat `igMemoryFileEntryList`) and `igFolder` (`getPathToFile`; the three inline
+   `_entryList` is a `igMemoryFileEntryList *`), `igMemoryFileEntry` (`setBuffer`, `setSize` and the getters, the
+   kit's) and `igMemoryFileEntryList` (over `igTObjectList<igMemoryFileEntry>`), `igPsx2File` (no kit header: slots 9
+   `initDefaults`, 21-37 and 39 `generateFilename`; statics `userRegister` for the default prefix, `makeCompletePath`,
+   `joinPrefix`, `defaultPrefix`; the private `growBuffer`; spec scratch/CoreFiles2/specs/psx2.py), `igPsx2Folder`
+   (`getFiles`, `getSubFolders`, `getFilesAndSubFolders`, `trimPath`) and `igFolder` (`getPathToFile`,
+   `setFolderName`/`getFolderName`, `appendRelativePath` = `igFolder_SetFolderName`; the three inline
    `get*Folders` slots return a retained null list, whose out-of-line copies in scenegraph and GameMain stay C and
-   are duplicates here). Flat callers reach them through `Gap::Core::igFile::_instantiateFromPool` and the views.
-   Not converted yet: `igIGBFile` (about 2,400 lines; needs `igDirectory_Construct`/`_Destroy` copies and its
-   `igFileView`/`igIGBFileView` uses retired), `igPsx2File`, `igPsx2Folder`, `igMemoryFileEntry(List)`.
+   are duplicates here). The file views are gone from core, Lua, the game and the movie codec: callers use igFile's
+   members (`fopen`, `fclose`, `fread`, `fgetc`, `fprintf`, `generateFilename`); the report files are
+   `Gap::Core::igFile *`. Still view-based: `igMediaFileView`/`igMemoryFileView`, igIGBFile's `igFileView`,
+   scenegraph's `IniFileObject`/`IniPathResolver` (the ini loader) and insight's `NamedObject` folder, and GameMain's
+   `Blk::folder` (typing it `Gap::Core::igFolder` moves `Blk::Blk` from 448 to 372 bytes: the intern pool is no
+   longer inlined there). Not converted yet: `igIGBFile` (about 2,400 lines; needs `igDirectory_Construct`/`_Destroy`
+   copies stamping `igTObjectList<igDirEntry>`'s vtable, its `igFileView`/`igIGBFileView` uses retired, and the
+   protected igObject construction members reached as the kit's friend).
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no
@@ -454,13 +466,17 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    beTextureCtrl_UpdateRam indexes the attribute list's data (`((int *)list->_data)[i]`) where it kept a byte
    offset, which keeps retail's register allocation once it reads `igTextureBindAttr::getClassMeta()` (the inline's
    temporary otherwise takes the offset's register). What is left in attrs, and why:
-   - the geometry group: `igGeometryAttr` (abstract, no vtable of its own; typed vertex/index/primLength/dPds/dPdt
-     smart pointers, no virtual declared until its subclass converts), `igGeometryAttrList` (over
+   - the geometry group: `igGeometryAttr` (abstract; typed vertex/index/primLength/dPds/dPdt smart pointers; no
+     virtual declared yet, though retail gives it its own vtable, 0x523970, with pure slots and its own
+     `synchronizeDefault` 0x13cf70, `reset` 0x13cfc0, the four-argument `intersectRay` 0x13cf80, `getPrimitiveLength`
+     0x13d030, a `getMeta` copy and an out-of-line destructor), `igGeometryAttrList` (over
      `igTObjectList<igGeometryAttr>`) and `igGeometrySetAttr` (slots `releaseDefaults`, `apply`, empty
      `synchronizeDefault`, `reset`, `setup`, `setVisualContext`, and the protected `createRenderList`, 0x13e6e0;
      specs scratch/Gfx4/specs/geom.py, geomlist.py, geomset.py) are converted. `igGeometryAttr1_5` stays flat: its
-     twelve slots (configure, transform, computeBound, intersectRay, tangents, ...) still read igVertexArray /
-     igIndexArray through stand-in views and one helper not yet decompiled (0x13dbb0, which keeps its C name);
+     slots 30-41 (configureVertexArray, transform, computeBound, the seven-argument intersectRay, setTangents,
+     setBinormals, configurePrimitive, setPrimitiveLength, the inline getPrimitiveLength, getNumVerts, the inline
+     getPrimLengthArray) still read igVertexArray / igIndexArray through stand-in views and one helper not yet
+     decompiled (0x13dbb0, which keeps its C name);
    - `igParticleAttr` (its array is a Gap::Bec class) and `igVertexBlendMatrixListAttr` (whose probe stamps
      igVisualAttribute's vtable from its matrix members' destructor chain) are not started;
    - igAttrPool's list fields (`_metaList`, `_nonSharableMetaList`, `_attributeList`) stay flat smart pointers: its
@@ -523,7 +539,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    slots, with `allocateBlendedVertexLists`/`freeBlendedVertexLists` for the skinning lists) holds
    `_pBlendedVertsList`/`_pBlendedNormsList` as `igSmartPointer<igPointerList>` and the flat `igPsx2LongList`
    wait list. `igVertexArray2` and `igPsx2VertexArray2` (igGfx/igVertexArray2.h; spec scratch/Gfx4/specs/vertex2.py) are converted: slots 21 `configure`
-   (the base one builds an internal igVertexArray through igVertexArray2HelperAccess and copies each stream; decompiled, 0x15f7d0), 22 `reset` (empty in the base, whose copy is attrs'
+   (the base one builds an internal igVertexArray through an `igSmartPointer<igVertexArray2Helper>` and copies each stream; decompiled, 0x15f7d0), 22 `reset` (empty in the base, whose copy is attrs'
    0x13e660; the PS2 class resets its vertex stream), 23 `getCount`; `findVertexData`, `buildVertexDataList`, `isVertexDataSupported`;
    `igVertexStreamDispatchView` (slots 24/25) and `igVisualContextDispatchView::setVertexArray` (slot 259) replace the old stand-ins.
    `igVertexArrayLock` keeps DW4's name and layout: the kit's igComponentEditInfo orders its fields differently and has no
@@ -534,7 +550,24 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    hook and slot-45 names are DW4's own); the hooks and `convert` return `unsigned char` as retail's callers mask them;
    `_pClut` is `igSmartPointer<igClut>`, `_pNameString` an `igStringRef`; `setName` takes the string as the kit does;
    igImageMipMapList's element meta is now the Gap class's. reduceAux (0x157ad0) and the tile copy at 0x15a750 have no
-   source yet. Still flat: igVertexArray2Helper, igFileImage, igFileImagePng and igExternalImageEntry;
+   source yet. `igFileImage` (abstract, no members), `igFileImagePng` (typed `_file` `igSmartPointer<igFile>`;
+   overrides `releaseDefaults`, `copy`, `load(const char *)` and `toggleComponentOrder`; retail's `copy` calls
+   `src->getMeta()` after igImage's, as igPsx2Image's does: no kit inline or assert explains the call, which is
+   spelled as the bare virtual call; the PNG reader at 0x167860 is not decompiled, its callees `cleanup`,
+   `estimatePixelFormat` and `setReadTransforms` are members over libpng's types, dw4/gfx/png.h, which reflected.h
+   reads) and `igExternalImageEntry` (kit igGfx/igExternalImageEntry.h: `load`, `loadWork`, `initDefaults`) are
+   converted. The image readers (`load`, `oldLoad`, `newLoad`, `platformLoad`, `platformSave`) call igFile's members
+   (`fopen`, `fread`, `fwrite`, `fclose`). The compiler emits the out-of-line destructors, igFileImage's `getMeta`
+   (0x180ff0), the igFile smart pointer destructor (0x150180) and the parent accessor copy at 0x14f760. Image
+   views left: `igImageConvertRows` (one stand-in for igImageConvert's slots 23-34 until igImageConvert and
+   igPsx2ImageConvert convert) and the TGA loader's `O1`/`LoaderRef` (until igTgaLoader converts).
+   `igVertexStream`/`igPsx2VertexStream` are converted (enum `_accessMode` of the kit's
+   `IG_VERTEX_ACCESS_MODE`, four values, with the inline `getAccessMode()`, which the stream's flat callers read; igPsx2VertexStream's
+   `configure`, 0x17f720, links from retail). `igVertexArray2Helper` is converted (DW4's older virtual form of
+   igGfx/igVertexArray2Helper.h: slots 21-59 in retail's order, vtable 0x5262a0, the inline `reset` at 0x180e40, the
+   statics `getWeightCount`/`getIndexCount`; `compressVertexData`, 0x163810, is declared and links from retail).
+   Still flat: igTgaLoader, igPrimLengthArray (slots 21 configure, 22 getEditablePrimLength, 23 commitPrimLengthEdits,
+   24 setPrimLength, 25 getPrimLength) and igGeometryAttr1_5;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

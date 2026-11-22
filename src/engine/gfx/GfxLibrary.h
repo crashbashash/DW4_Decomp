@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include "dw4/support/softfloat.h"
 #include "dw4/gfx/igVisualContextDispatchView.h"
-#include "dw4/gfx/igVertexStreamDispatchView.h"
+#include "dw4/gfx/igComponentEditInfo2.h"
 #include "dw4/p2/p2viewport.h"
 #include "dw4/p2/p2texture.h"
 #include "dw4/p2/p2swap.h"
@@ -58,7 +58,6 @@
 #include "dw4/maths/igMatrix44fMetaField.h"
 #include "dw4/maths/igMathConstants.h"
 #include "dw4/core/igIntList.h"
-#include "dw4/core/igExternalDirEntry.h"
 #include "dw4/core/igContext.h"
 #include "dw4/core/igCompoundMetaField.h"
 #include "dw4/maths/igVec3f.h"
@@ -100,6 +99,11 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/maths/igVec2fList.h"
 #include "dw4/maths/igVec3fList.h"
 #include "dw4/maths/igVec4ucList.h"
+#include "dw4/maths/igVec3ucList.h"
+#include "dw4/maths/igVec4fList.h"
+#include "dw4/maths/igVec3uc.h"
+#include "dw4/maths/igVec4uc.h"
+#include "dw4/gfx/igVertexData.h"
 #include "dw4/gfx/igVertexArrayLock.h"
 #include "dw4/gfx/igPointSpriteExt.h"
 #include "dw4/core/igMemoryPool.h"
@@ -204,65 +208,15 @@ extern "C" void igVisualContext_GetMetaObjectFunction(void);
 extern "C" int FUN_0014a170(void);
 extern "C" void igVisualContext_InitFields(void);
 extern "C" void igPsx2VisualContext_GetMetaObjectFunction(void);
-extern "C" class igVertexArray2HelperAccess *igVertexArray2Helper_Create(int arg0);
-extern "C" igMetaObject *igVertexArray2Helper_GetMetaObject(void);
 
-extern "C" int g_igVertexArray2Helper_vtable[4];
-struct Obj_14a560 {
-    int *vt; char p4[4]; char *m8; T *m12; 
-    inline void rel8() {
-        char **self = &m8;
-        if (self) {
-            char *o = *self;
-            if (o) {
-                int *a1 = (int *)(o - 8);
-                int v0 = *(int *)(o - 4) - 1;
-                *(int *)(o - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
-                }
-            }
-        }
-    }
-    inline void rel12() {
-        T **self = &m12;
-        if (self) {
-            T *object = *self;
-            if (object) {
-                --object->references;
-                if (((unsigned long long)(long long)object->references & 0x7fffffULL) == 0)
-                    igObject_Destroy((igObject *)object);
-            }
-        }
-    }
-};
-extern "C" int igVertexArray2Helper_GetVTable(void);
-extern "C" void igVertexArray2Helper_EnsureRegistered(void);
-
-extern "C" CallbackArray *igVertexArray2Helper_Register(void);
-extern "C" void igVertexArray2Helper_GetMetaObjectFunction(void);
-
-extern "C" void igVertexArray2Helper_InitFields(void);
 
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
 
-extern "C" int IG_VERTEX_STREAM_COMPILE_MODE_GetMetaEnum(void);
-extern "C" int IG_VERTEX_ACCESS_MODE_GetMetaEnum(void);
-extern "C" int igVertexStream_Create(int arg0);
-extern "C" igMetaObject *igVertexStream_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igVertexStream_GetMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U { int vt; char b[48]; };
-extern "C" int g_igVertexStream_vtable[4];
-extern "C" int igVertexStream_GetVTable(void);
-extern "C" void igVertexStream_EnsureRegistered(void);
-extern "C" CallbackArray *igVertexStream_Register(void);
-extern "C" void igVertexStream_GetMetaObjectFunction(void);
-extern "C" void igVertexStream_InitFields(void);
-extern "C" void igPsx2VertexStream_GetMetaObjectFunction(void);
 extern "C" int igVertexDataList_Create(int arg0);
 extern "C" igMetaObject *igVertexDataList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igVertexDataList_GetMetaObject(void);
@@ -402,10 +356,6 @@ extern "C" CallbackArray *igImageUtils_Register(void);
 extern "C" void igImageUtils_GetMetaObjectFunction(void);
 extern "C" igSmartPointer<igObject> *FUN_0014dd40(igSmartPointer<igObject> *self, short deleteFlag);
 extern "C" igMetaObject *igImage_GetPublishedMetaObject(void);
-extern "C" igMetaObject *igFileImage_GetMetaObject(void);
-extern "C" void igFileImage_EnsureRegistered(void);
-extern "C" CallbackArray *igFileImage_Register(void);
-extern "C" void igFileImage_GetMetaObjectFunction(void);
 extern "C" int CONTEXT_TRACKABLE_GetMetaEnum(void);
 extern "C" igMetaObject *igTrackedElementMetaField_GetMetaObject(void);
 
@@ -472,21 +422,6 @@ extern "C" int igGenericCapabilityManager_GetVTable(void);
 extern "C" void igGenericCapabilityManager_EnsureRegistered(void);
 extern "C" CallbackArray *igGenericCapabilityManager_Register(void);
 extern "C" void igGenericCapabilityManager_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igExternalImageEntry_GetMetaObject(void);
-struct W_14f470 { int *vt; int f[11]; };
-extern "C" int g_igExternalImageEntry_vtable[4];
-extern "C" int igExternalImageEntry_GetVTable(void);
-
-struct Str { int *p;
-    ~Str() { if (p != 0) { int *h = p - 2; int r = p[-1] - 1; p[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-};
-struct W_14f580 { int *vt; Str s4; Str s8; char pad[16]; Str s28; Str s32; char pad2[4]; Str s40; };
-extern "C" W_14f580 *FUN_0014f580(W_14f580 *t, short flag);
-extern "C" void thunk_igExternalImageEntry_GetMetaObject_0014f750(void);
-extern "C" igMetaObject *igExternalDirEntry_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igExternalImageEntry_Register(void);
-extern "C" void igExternalImageEntry_GetMetaObjectFunction(void);
-extern "C" int FUN_0014f760(void);
 extern "C" igMetaObject *igDisableExt_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igDisableExt_GetMetaObject(void);
 extern "C" void igDisableExt_EnsureRegistered(void);
@@ -525,27 +460,6 @@ extern "C" CallbackArray *igTgaLoader_Register(void);
 extern "C" void igTgaLoader_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igImageLoader_GetPublishedMetaObject(void);
 extern "C" void igTgaLoader_InitFields(void);
-extern "C" int igFileImagePng_Create(int arg0);
-extern "C" igMetaObject *igFileImagePng_GetMetaObject(void);
-extern "C" int g_igFileImagePng_vtable[4];
-union U_150420 { int vt; char b[96]; };
-extern "C" int igFileImagePng_GetVTable(void);
-extern "C" int DAT_00526800[4];
-extern "C" int DAT_00526c50[4];
-struct S_150490 {
-    void *f0;
-    char pad0[64];
-    void *f44;
-    char pad1[16];
-    void *f58;
-};
-extern "C" void *FUN_00150490(struct S_150490 *arg0, short arg1);
-extern "C" void igFileImagePng_EnsureRegistered(void);
-extern "C" igMetaObject *igFileImage_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igFileImagePng_Register(void);
-extern "C" void igFileImagePng_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igFileImage_GetPublishedMetaObject(void);
-extern "C" void igFileImagePng_InitFields(void);
 struct VTableProbe { int *vt; char pad[1564]; };
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 struct S_temp_a0_1506b0 { char pad4[4]; int f4; };
@@ -590,16 +504,7 @@ extern "C" void igPsx2VisualContext_EnsureRegistered(void);
 extern "C" CallbackArray *igPsx2VisualContext_Register(void);
 extern "C" igMetaObject *igVisualContext_GetPublishedMetaObject(void);
 extern "C" void igPsx2VisualContext_InitFields(void);
-extern "C" igMetaObject *igPsx2VertexStream_GetMetaObject(void);
-extern "C" int g_igPsx2VertexStream_vtable[4];
 union U_151f70 { int vt; char b[140]; };
-extern "C" int igPsx2VertexStream_GetVTable(void);
-extern "C" void igPsx2VertexStream_EnsureRegistered(void);
-extern "C" igMetaObject *igVertexStream_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igPsx2VertexStream_Register(void);
-extern "C" igMetaObject *igVertexStream_GetPublishedMetaObject(void);
-extern "C" void igPsx2VertexStream_InitFields(void);
-extern "C" void thunk_FUN_0017f5a0(void);
 union U_152250 { int vt; char b[32]; };
 extern "C" void thunk_igPsx2VertexArray2_GetMetaObject_0014acf0(void);
 extern "C" void igPsx2VertexArray2_InitFields_00152350(void);
@@ -731,13 +636,10 @@ class DW4VC_100_2 : public igVirtualObject { public: virtual void d1(); virtual 
   };
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable slot */
 class A { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(igObject *); };
-extern "C" int igExternalImageEntry_LoadExternalFile(A *arg0);
 class V_1551f0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(char *); };
 struct S_1551f0 { char pad0[32]; char *f32; char pad1[4]; char *f40; };
 
-extern "C" int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1);
 extern "C" int text_igImageDirectory[4];
-extern "C" void igExternalImageEntry_InitDefaults(int arg0);
 extern "C" int Gap__Gfx__igGenericCapabilityManager__vfunc_23(void);
 class FieldTypeSource {
 public:
@@ -844,7 +746,6 @@ struct C { int f0; int f4; int f8; int fc; };
 struct B { char pad[16]; struct C **tab; };
 struct A_1562d0 { char pad[308]; struct B *b; };
 extern "C" int FUN_001562d0(struct A_1562d0 *arg0, int arg1);
-class VA { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void *vX(int, int); };
 extern "C" int FUN_00156ae0(int arg0, int arg1, float fparg0);
 typedef void (*igImageRowConvert)(void *dst, void *src, int count, int flags);
 class igImageConvertRows : public igVirtualObject {
@@ -856,6 +757,17 @@ public:
     virtual igImageRowConvert v23(int order, int format, int toPlain);
     /* The row converter from `fromFormat` to `toFormat` for a width x height image, or 0. */
     virtual igImageRowConvert findConverter(int order, IG_GFX_TEXTURE_FORMAT fromFormat, IG_GFX_TEXTURE_FORMAT toFormat, int width, int height);
+    /* The in-place pixel conversions (slots 25-34): pixels, a count, and the image's _order. */
+    virtual void v25(void *pixels, int count, unsigned int *order);
+    virtual void v26(void *pixels, int count, unsigned int *order);
+    virtual void v27(void *pixels, int count, unsigned int *order);
+    virtual void v28(void *pixels, int count, unsigned int *order);
+    virtual void v29(void *pixels, int count, unsigned int *order);
+    virtual void v30(void *pixels, int count, unsigned int *order);
+    virtual void v31(void *pixels, int count, unsigned int *order);
+    virtual void v32(void *pixels, int count, unsigned int *order);
+    virtual void v33(void *pixels, int count, unsigned int *order);
+    virtual void v34(void *pixels, int count, unsigned int *order);
 };
 /* igMemoryPool: allocation (slot 52), aligned allocation (53), zeroed array allocation (54) and free (64). */
 class igMemoryPoolView : public igVirtualObject {
@@ -884,27 +796,6 @@ static inline igMemoryPoolView *poolOf(const Gap::Core::igObject *object, const 
     igMemoryPoolView *pool = object->getMemoryPool();
     return (g_useOwnerAllocator != 0) ? pool : Memory_GetAllocatorBySelector(handle);
 }
-
-class VStream { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int v24(); virtual int v25(void *, int, int); };
-/* igImageConvert's in-place pixel conversions (vtable slots 25-34): pixels, a count, and the image's _order. */
-class igImageConvertView : public igVirtualObject {
-public:
-    virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
-    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
-    virtual void v25(void *pixels, int count, unsigned int *order);
-    virtual void v26(void *pixels, int count, unsigned int *order);
-    virtual void v27(void *pixels, int count, unsigned int *order);
-    virtual void v28(void *pixels, int count, unsigned int *order);
-    virtual void v29(void *pixels, int count, unsigned int *order);
-    virtual void v30(void *pixels, int count, unsigned int *order);
-    virtual void v31(void *pixels, int count, unsigned int *order);
-    virtual void v32(void *pixels, int count, unsigned int *order);
-    virtual void v33(void *pixels, int count, unsigned int *order);
-    virtual void v34(void *pixels, int count, unsigned int *order);
-};
-class VStream_158f50 : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v23(int, const char *); virtual void v24(); virtual int v25(void *, int, int); };
 /* igPsx2LongList vfunc 36: release the list's storage. Frees the storage block at +0x38 through
  * its object allocator, then frees the +0x34 buffer, but only when the list owns it (flag at
  * +0x3C). Those members lie past the reflected igPsx2LongList, so they are reached through the
@@ -915,11 +806,11 @@ typedef struct LongListStorageView {
     int storage;                /* +0x38: block released with Gap::Core::igObject::free */
     unsigned char ownsBuffer;   /* +0x3C: nonzero when buffer must be freed */
 } LongListStorageView;
-extern "C" void FUN_001592c0(LongListStorageView *self);
 
-typedef struct E { long long a; long long b; } E;
-typedef struct Img { char pad[8]; int w; int h; char pad2[36]; E *data; } Img;
-extern "C" void FUN_0015a6a0(Img *arg0, E *out);
+struct ImageBlock16 { long long a; long long b; };
+/* Copies a compressed image's 16-byte blocks into tile order (2x2 groups of blocks, the lower row's halves
+ * swapped); FUN_0015a750 calls it. */
+extern "C" void FUN_0015a6a0(Gap::Gfx::igImage *self, ImageBlock16 *out);
 /* Copies an uncompressed image into tiles (4x4 or 8x4/8x8 pixels by depth); 32-bit pixels split into high and low
  * halves 32 bytes apart. Compressed images go through FUN_0015a6a0. */
 extern "C" void FUN_0015a750(igImage *self, unsigned char *out);
@@ -933,7 +824,7 @@ extern "C" void FUN_0015ad20(void *loader, igImage *image, void *pixels);
 /* An image loader's size query: Gap::Gfx::igImage::estimateImageSize for `image` (the loader is unused). */
 extern "C" void FUN_0015ad30(void *loader, igImage *image, int format, int width, int height, int *size,
                              int *components, int *rowBytes);
-extern "C" int FUN_0015ad50(char *arg0);
+extern "C" const char *FUN_0015ad50(const char *path);
 extern "C" void FUN_0015b1e0(void *arg0);
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int, int); };
 extern "C" int Gap__Bec__ParticleArray__vfunc_22(ParticleArray *arg0, int arg1);
@@ -1206,55 +1097,6 @@ extern "C" void igPointSpriteExt_GetRadian(igPointSpriteExtView *self);
 extern "C" void igPrimLengthArray1_1_UserMakeConcrete(igPrimLengthArray1_1 *self);
 extern "C" int FUN_0015e130(unsigned int v);
 extern "C" igVertexFormat FUN_0015e160(unsigned int vtype);
-/* igVertexArray2 as its internal-buffer conversion uses it: slot 23 (+100) answers the vertex count. */
-class igVertexArray2View : public igVirtualObject {
-public:
-    virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
-    virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12();
-    virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18();
-    virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22();
-    virtual unsigned int getVertexCount(int stream);
-    char *_name;
-    igSmartPointer<igVertexArrayAccess> _internalBuffer;
-};
-/* igVertexArray2Helper's per-vertex getters (each returns the value, or a pointer to it). */
-class igVertexArray2HelperAccess : public igVirtualObject {
-public:
-    virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
-    virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12();
-    virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18();
-    virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
-    virtual unsigned int getUsageFlags();
-    virtual void s26(); virtual void s27();
-    virtual igVec3f *getPosition(unsigned int index);
-    virtual void s29(); virtual void s30();
-    virtual igVec3f *getNormal(unsigned int index);
-    virtual void s32(); virtual void s33();
-    virtual igVec3f *getBinormal(unsigned int index);
-    virtual void s35(); virtual void s36();
-    virtual igVec3f *getTangent(unsigned int index);
-    virtual void s38(); virtual void s39();
-    virtual unsigned int getColor(unsigned int index);
-    virtual void s41(); virtual void s42();
-    virtual float getWeight(unsigned int weight, unsigned int index);
-    virtual void s44();
-    virtual unsigned char getBlendIndex(unsigned int blend, unsigned int index);
-    virtual void s46(); virtual void s47();
-    virtual igVec2f *getTextureCoord(unsigned int set, unsigned int index);
-    virtual void s49();
-    virtual float getPointSize(unsigned int index);
-    virtual void s51();
-    virtual void getPointSize2(unsigned int index, igVec2f *size);
-    virtual void s53(); virtual void s54(); virtual void s55();
-    virtual void getFormat(igVertexFormat *format);
-    char *_name;
-    igVertexArray2View *_vertexArray;
-    void setVertexArray(igVertexArray2View *array) {
-        if (array != 0) array->_refCount = array->_refCount + 1;
-        igVirtualObject::release(_vertexArray);
-        _vertexArray = array;
-    }
-};
 /* Copies vertex `srcIndex` of `src` to vertex `dstIndex` of `dst`, for the arrays `format` names. */
 extern "C" void FUN_0015dbc0(igVertexArrayAccess *dst, unsigned int dstIndex, igVertexArrayAccess *src, unsigned int srcIndex, const igVertexFormat *format);
 /* What igParticleArray stores in _updateFunction and igParticleArray_Update calls: two counters, the particle
@@ -1371,200 +1213,13 @@ struct RcRef {
 };
 struct S_15f430 { char p0[8]; int count; char p12[4]; int **items; };
 typedef struct L { int p0,p4; int n; int p12; int *data; } L;
-extern "C" int *FUN_0015f4a0(struct S_15f430 *s, int a1, int a2);
+extern "C" int *FUN_0015f4a0(struct S_15f430 *s, int a1, unsigned int a2);
 extern "C" void *FUN_0015f510(L *l, int a1, int a2, int a3);
 
-extern "C" int DAT_005610a8[];
-#define REF_COUNT_MASK 0x7FFFFF
-extern "C" void Gap__Gfx__igVertexStream__vfunc_27(igVertexStream *self);
-class A162b50;
-struct VertexArrayFormat;
-extern "C" int DAT_005610b0[4];
-/* Builds the stream objects of a new vertex array. When the helper has no igVertexArray2 yet (+12
- * == 0) it creates one and, for every stream kind requested in the layout word *arg1, creates a
- * data list of `arg2` elements and wraps it in a stream record (kind in +16) appended to the
- * array's stream list (+16): bit 0 / bit 1 / bit 2 give kinds 1 / 3 / 2 (12 / 12 / 4 byte
- * elements); bits 16..19 (count) kind 4, one record per index (8 byte elements, index in +20);
- * bits 4..7 (count) kind 5, arg2 * count 4-byte elements, count in +24; bits 8..11 (count) kind 6,
- * arg2 * count 1-byte elements, count in +24; bits 20..21 (mode) kind 9, mode 1 = 4-byte list,
- * mode 2 = 8-byte list; bit 22 / bit 23 kinds 7 / 8 (12 byte elements). */
-
-/* reference-counted engine object header: refcount (low 23 bits) at +4 */
-struct RC { int vt; int rc; };
-/* data list header: element count at +8, capacity at +12 */
-struct DataList { int vt; int rc; int count; int cap; };
-/* stream record: list at +12, kind at +16, index/count at +20/+24 */
-struct StreamRec { int vt; int rc; int pad8; DataList *list; int kind; int index; int count; };
-/* matching construct: stack smart-pointer slot (empty destructor) */
-struct RP { RC *p; ~RP() {} };
-#define REL_15ff10(x) { RC *q_ = (x); if (q_ != 0) { q_->rc = q_->rc - 1; if (((unsigned long long)((long long)q_->rc << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q_); } }
-#define SIZE_LIST(lst, n, esz) { DataList *dl_ = (lst); if ((n) >= 0) { if ((n) <= dl_->cap) { dl_->count = (n); } else { ((Gap::Core::igDataList *)dl_)->resizeAndSetCount((n), (esz)); } } }
-#define ATTACH(rec, lst) { RC *l_ = (RC *)(lst); StreamRec *r_ = (rec); if (l_ != 0) l_->rc = l_->rc + 1; REL_15ff10((RC *)r_->list) r_->list = (DataList *)l_; }
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigned int *arg1, int arg2);
-struct VertexArrayFormat : igObject {
-    char pad8[16];
-    int primitiveMode;
-};
-struct VertexFormatOwner : igObject {
-    char pad8[12];
-    VertexArrayFormat *format;
-
-    void setFormat(const igSmartPointer<VertexArrayFormat> &next) {
-        VertexArrayFormat *object = next.p;
-        VertexArrayFormat *previous;
-
-        igObject::ref(object);
-        previous = format;
-        igObject::release(previous);
-        format = object;
-    }
-};
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_26(igVertexArray2Helper *helper, unsigned int flags);
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_27(igVertexArray2Helper *self);
-struct A28 {
-    char pad[8]; int f8; char pad2[4]; igVec3f *f16;
-    static inline A28 *Cast(A28 *p) {
-        if (p != 0 && ((Gap::Core::igObject *)p)->isOfType(g_igVec3fList_metaObject) != 0) {
-            return p;
-        }
-        return 0;
-    }
-};
-struct H { char pad[12]; void *f12; };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_28(H *arg0, int arg1, igVec3f *arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_29(igVertexArray2Helper *arg0, int arg1, float *arg2);
-struct A30 { int a,b,c,d; };
-struct B_15ff10 { int a,b,c,d,e; };
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_30(struct A30 *arg0, int arg1);
-struct A_15ff10 { char pad[12]; int f12; };
-struct M { char pad[8]; int cnt; char p2[4]; char *data; };
-struct H31 { char pad[12]; struct A_15ff10 *a; };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_31(struct H31 *arg0, int arg1, float *arg2);
-typedef struct O_15ff10 { char pad[12]; void *f12; } O_15ff10;
-typedef struct Q_15ff10 { char pad[16]; igVec3f *f16; } Q_15ff10;
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_32(A_15ff10 *arg0, int arg1, igVec3f *arg2);
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_33(igVertexArray2Helper *arg0, int arg1);
-typedef struct Q34 { char pad[8]; int f8; char pad2[4]; igVec3f *f16; } Q34;
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_34(A_15ff10 *arg0, int arg1, igVec3f *arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_35(igVertexArray2Helper *arg0, int arg1, float *arg2);
-extern "C" igVec3f *Gap__Gfx__igVertexArray2Helper__vfunc_36(A_15ff10 *arg0, int arg1);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_37(igVertexArray2Helper *arg0, int arg1, void *arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_38(igVertexArray2Helper *arg0, int arg1, void *arg2);
-extern "C" igVec3f *Gap__Gfx__igVertexArray2Helper__vfunc_39(A_15ff10 *arg0, int arg1);
-struct B4 { unsigned char b[4]; };
-union U_15ff10 { int i; B4 b; };
-class VC_15ff10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
-struct T_15ff10 : VC_15ff10 { int f4; int f8; int f12; int *f16; };
-struct S_15ff10 { char pad[12]; T_15ff10 *f12; };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_40(igVertexArray2Helper *arg0, int arg1, U_15ff10 arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_41(igVertexArray2Helper *arg0, int arg1, int arg2);
-class Y_15ff10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); char pad[12]; int *f16; };
-struct X_15ff10 { char pad[12]; Y_15ff10 *f12; };
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_42(A_15ff10 *arg0, int arg1);
-struct T43 { char pad[16]; int *f16; };
-struct S43 { char pad[12]; T43 *f12; };
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_43(igVertexArray2Helper *arg0, int arg1, int arg2);
-struct T44 : VC_15ff10 { int f4; int f8; int f12; float *f16; };
-struct S44 { char pad[12]; T44 *f12; int f16; int f20; int f24; };
-struct V2_15ff10 { float f[2]; V2_15ff10(){} V2_15ff10(const V2_15ff10 &o){ f[0]=o.f[0]; f[1]=o.f[1]; } V2_15ff10 &operator=(const V2_15ff10 &o){ f[0]=o.f[0]; f[1]=o.f[1]; return *this; } float &operator[](int i){ return f[i]; } };
-struct V3 { float f[3]; V3(){} V3(const V3 &o){ f[0]=o.f[0]; f[1]=o.f[1]; f[2]=o.f[2]; } V3 &operator=(const V3 &o){ f[0]=o.f[0]; f[1]=o.f[1]; f[2]=o.f[2]; return *this; } float &operator[](int i){ return f[i]; } };
-struct V4 { float f[4]; V4(){} V4(const V4 &o){ f[0]=o.f[0]; f[1]=o.f[1]; f[2]=o.f[2]; f[3]=o.f[3]; } V4 &operator=(const V4 &o){ f[0]=o.f[0]; f[1]=o.f[1]; f[2]=o.f[2]; f[3]=o.f[3]; return *this; } float &operator[](int i){ return f[i]; } };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_44(igVertexArray2Helper *arg0, int arg1, int arg2, float arg3);
-extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_45(igVertexArray2Helper *arg0, int arg1, int arg2);
-class ByteList {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19();
-    virtual int getMeta();
-    int _refCount;
-    int _count;
-    int _capacity;
-    int _data;
-};
-struct VertexData { char pad[12]; ByteList *list; int f16; int f20; int stride; };
-struct Byte3 { unsigned char c[3]; Byte3() {} Byte3(const Byte3 &o) { c[0] = o.c[0]; c[1] = o.c[1]; c[2] = o.c[2]; } Byte3 &operator=(const Byte3 &o) { c[0] = o.c[0]; c[1] = o.c[1]; c[2] = o.c[2]; return *this; } unsigned char &operator[](int i) { return c[i]; } };
-struct Byte4 { unsigned char c[4]; Byte4() {} Byte4(const Byte4 &o) { c[0] = o.c[0]; c[1] = o.c[1]; c[2] = o.c[2]; c[3] = o.c[3]; } Byte4 &operator=(const Byte4 &o) { c[0] = o.c[0]; c[1] = o.c[1]; c[2] = o.c[2]; c[3] = o.c[3]; return *this; } unsigned char &operator[](int i) { return c[i]; } };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_46(igVertexArray2Helper *helper, int component, int index, unsigned char value);
-struct B3 { unsigned char b[3]; };
-struct T47 : VC_15ff10 { int f4; int f8; int f12; unsigned char *f16; };
-struct S47 { char pad[12]; T47 *f12; int f16; int f20; int f24; };
-extern "C" unsigned char Gap__Gfx__igVertexArray2Helper__vfunc_47(igVertexArray2Helper *arg0, int arg1, int arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_48(igVertexArray2Helper *arg0, int arg1, int arg2, void *arg3);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_49(igVertexArray2Helper *arg0, int arg1, int arg2, float *arg3);
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_50(igVertexArray2Helper *arg0, int arg1, int arg2);
-typedef struct Q51 { char pad[16]; float *f16; } Q51;
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_51(A_15ff10 *arg0, int arg1, float fparg0);
-extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_52(A_15ff10 *arg0, int arg1);
-struct V53 { float x, y; };
-struct A53 {
-    char pad[8]; int f8; char pad2[4]; V53 *f16;
-    static inline A53 *Cast(A53 *p) {
-        if (p != 0 && ((Gap::Core::igObject *)p)->isOfType(g_igVec2fList_metaObject) != 0) {
-            return p;
-        }
-        return 0;
-    }
-};
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_53(H *arg0, int arg1, V53 *arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_54(igVertexArray2Helper *arg0, int arg1, void *arg2);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_24(igVertexArray2Helper *self);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_25(igVertexArray2Helper *self);
-class S124 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual int vX(int); };
-class S136 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual int vX(int); };
-class S148 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(int); };
-class S160 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual int vX(int); };
-class S172 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual int vX(int); };
-class S184 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual float vX(int, int); };
-class S196 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual int vX(int, int); };
-class S216 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual float vX(int); };
-class S224 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void vX(int, void *); };
-class S208 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual int vX(int, int); };
-class D112 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vY(int, int); };
-class D124 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void vY(int, int); };
-class D136 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void vY(int, int); };
-class D148 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vY(int, int); };
-class D160 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void vY(int, int); };
-class D176 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void vY(int, int, float); };
-class D184 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void vY(int, int, int); };
-class D204 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void vY(int, float); };
-class D212 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void vY(int, void *); };
-class D192 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void vY(int, int, int); };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_56(void **arg0, int arg1, void **arg2, int arg3, int *arg4);
-extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_57(void);
-class H58 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int v96(); virtual int v100(); int pad4[2]; void *f12; };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_58(H58 *arg0, unsigned int *arg1);
-class C_15ff10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int v88(); };
-class A162b50 { public: int pad[3]; C_15ff10 *f12; int pad2[2]; int f24; };
-extern "C" int FUN_00162b50(A162b50 *arg0);
-struct O162ca0 { int p0; int p4; int p8; DW4VC_88_0 *obj; int p10; int p14; int f18; };
-extern "C" int FUN_00162ca0(void *a0);
-struct FloatList { int vt; int rc; int count; int cap; float *data; };
-struct VData { char pad[12]; FloatList *list; };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_59(igVertexArray2Helper *self, int type, float *out, int index);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_60(igVertexArray2Helper *self, int type, float *out, int index);
-extern "C" int FUN_00163770(float fparg0, unsigned int arg0);
-extern "C" float FUN_00163800(int arg0, int arg1);
-/* igVertexArray2Helper slot 61's view of one igVertexData: the list is an object reference the
- * slot swaps for the quantised one. */
-struct igQuantizedVertexData {
-    int _vtable;
-    unsigned int _refCount;
-    int _name;
-    igSmartPointer<igObject> _data;
-    int _componentType;
-    unsigned int _componentIndex;
-    unsigned int _componentSize;
-    int _userID;
-    unsigned int _componentFraction;
-};
-struct igVec2fListView { int vt; int rc; int count; int cap; igVec2f *data; };
-struct igVec3fListView { int vt; int rc; int count; int cap; igVec3f *data; };
-struct igVec4fListView { int vt; int rc; int count; int cap; igVec4f *data; };
-extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_61(igVertexArray2Helper *self, int type, int bytes,
-                                                          bool useFixed, bool isSigned, int bits, int index);
+/* compressVertexData's fixed-point conversions: `value` with `fractionBits` fraction bits, and back (integer part). */
+extern "C" int igVertexArray2Helper_FloatToFixedPoint(float value, unsigned int fractionBits);
+extern "C" float igVertexArray2Helper_FixedPointToFloat(int value, int fractionBits);
 extern "C" ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage);
 extern "C" int *FUN_001649f0(void);
 extern "C" int *FUN_00164a60(void);
@@ -1943,28 +1598,6 @@ extern "C" void FUN_00167330(png_structp png, int arg1, int arg2);
 extern "C" void FUN_00167380(void);
 extern "C" void FUN_00167390(void);
 extern "C" void FUN_001673a0(png_structp png_ptr, png_row_infop row_info, png_bytep data);
-extern "C" void thunk_FUN_001592c0(LongListStorageView *self);
-/* igImage copy: dimensions, format, name and bit depths from `source`; pixels and palette only when `deep`. A self
- * copy only makes borrowed pixels local. */
-extern "C" void FUN_001563b0(igImage *self, igImage *source, int deep);
-extern "C" void Gap__Gfx__igFileImagePng__vfunc_23(igImage *self, void **source, int deep);
-class Obj_167410 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
-struct Owner_167410 { char pad[92]; Obj_167410 *f92; };
-extern "C" int FUN_00167410(Owner_167410 *arg0, png_structp arg1, png_infop arg2, png_infop arg3, void *arg4, void *arg5, int arg6, int arg7);
-typedef struct PngSignificantBits {
-    unsigned char red;
-    unsigned char green;
-    unsigned char blue;
-    unsigned char gray;
-    unsigned char alpha;
-} PngSignificantBits;
-extern "C" int FUN_00167540(void *png, int bitDepth, int colorType, PngSignificantBits *bits, int *format);
-/* libpng's palette entry (png_color). */
-struct PngColor {
-    unsigned char red;
-    unsigned char green;
-    unsigned char blue;
-};
 /* igClut's slot 24: replaces the entries (format, count, data). */
 class igClutEntries : public igVirtualObject {
 public:
@@ -1976,14 +1609,6 @@ public:
     /* Slot 25, the TGA loader's palette store (same arguments). */
     virtual int storeEntries(int format, int count, void *entries);
 };
-/* igFileImagePng: an igImage that keeps the file it reads from. */
-struct igFileImagePngView : public igImage {
-    igSmartPointer<VStream_158f50> _file;
-};
-extern "C" int Gap__Gfx__igFileImagePng__vfunc_33(igFileImagePngView *self, int name);
-/* Sets libpng's read transforms for an image (16-bit stripped, small palettes and grey unpacked, tRNS to alpha). */
-extern "C" int FUN_001681c0(igImage *self, png_structp png, png_infop info);
-extern "C" int Gap__Gfx__igFileImagePng__vfunc_45(void);
 extern "C" void igTgaLoader_ReleaseDefaults(igObject *self);
 class O_1682e0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); int rc; };
 struct S_1682e0 { char pad[8]; O_1682e0 *f8; int f12; int f16; int f20; int f24; int f28; };
@@ -2378,17 +2003,9 @@ extern "C" void Gap__Gfx__igPsx2DecalExt__vfunc_29(igPsx2DecalExt *self, int con
 
 extern "C" void Gap__Gfx__igPsx2DecalExt__vfunc_30(igPsx2DecalExt *self, int arg1);
 
-class O0 : public igObject {
-public:
- };
 class O1 : public igVirtualObject {
 public:
  virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v21(void*,void*);
-  
-};
-class O2 : public igVirtualObject {
-public:
- virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int v31(int);
   
 };
 struct LoaderRef {
@@ -2402,37 +2019,6 @@ struct LoaderRef {
         }
     }
 };
-struct ReaderRef {
-    O2 *p;
-    ReaderRef(O2 *object) : p(object) {}
-    ~ReaderRef() {
-        O2 *o;
-        if ((o = p) != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
-class Strm {
-public:
-    virtual void d0();virtual void d1();virtual void d2();virtual void d3();virtual void d4();virtual void d5();virtual void d6();virtual void d7();
-    virtual void d8();virtual void d9();virtual void d10();virtual void d11();virtual void d12();virtual void d13();virtual void d14();virtual void d15();
-    virtual void d16();virtual void d17();virtual void d18();virtual void d19();virtual void d20();virtual void d21();virtual void d22();virtual void d23();
-    virtual void d24();
-    virtual void Read(void *, int, int);
-};
-struct Stream : public igVirtualObject {
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void close(); virtual void d25(); virtual void d26(); virtual int write(void *, int, int);
-    
-    void release() {
-        _refCount = _refCount - 1;
-        if ((_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(this);
-        }
-    }
-};
-class Strm_16ece0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void v24(); virtual int v25(void *, int, int); };
-struct ImageBuffer { char p[48]; int size; int data; };
 extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_25(void);
 extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_26(void);
 extern "C" void Gap__Gfx__igPsx2ImageConvert__vfunc_27(void *arg0, unsigned char *arg1, int arg2, int *arg3);
@@ -4088,14 +3674,6 @@ struct D_17eb90 { char p[8]; int *f8; };
 extern "C" bool FUN_0017df40(B_17eb90 *, int, int, int *, int *, int *, int *);
 extern "C" void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, bool useTexture);
 struct Rc_17f2b0 : public igObject { };
-
-extern "C" void FUN_0017f5a0(void);
-typedef struct S0_17f630 { char pad16[16]; unsigned char f10; char pad24[7]; int f18; char pad128[100]; int f80; int f84; int f88; } S0_17f630;
-
-extern "C" void igPsx2VertexStream_UserWriteFilePreProcess(S0_17f630 *arg0);
-typedef struct S0_17f6c0 { char pad12[12]; int fC; char f10; char pad128[111]; int f80; int f84; int f88; } S0_17f6c0;
-
-extern "C" void igPsx2VertexStream_UserPostLoad(S0_17f6c0 *arg0);
 extern "C" int igPsx2VisualContext_GetPixelPipelineMode(igPsx2VisualContext *self);
 struct L_17fd80 { char p[8]; unsigned int n; char q[4]; unsigned int *data; 
 static inline unsigned int cvt(unsigned int v, int mode) {
@@ -4106,16 +3684,6 @@ static inline unsigned int cvt(unsigned int v, int mode) {
 }
 };
 extern "C" void FUN_0017fd80(L_17fd80 **arg0, L_17fd80 **arg1, int arg2);
-struct Obj_17fe50;
-class Buf_17fe50 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int v23(); int w4; int w8; int w12; int f16; };
-struct Obj_17fe50 : public igObject { int w8; Buf_17fe50 *buf; int p16; int p20; int f24; };
-struct Dst { int f0; int f4; int f8; int f12; int f16; int f20; int f24; };
-struct Src_17fe50 { char pad[20]; int f20; int f24; };
-extern "C" void Gap__Gfx__igPsx2VertexStream__vfunc_24(Src_17fe50 *self, Dst *x);
-class A_17ff60 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); int pad4[2]; int f12; unsigned char f16; char pad17[23]; long long f40; char pad48[80]; int f128; int f132; int f136; };
-extern "C" void Gap__Gfx__igPsx2VertexStream__vfunc_27(A_17ff60 *arg0);
-extern "C" int Gap__Gfx__igVertexStream__vfunc_23(igVertexStream *self);
-extern "C" void FUN_00180020(long long *arg0);
 struct S_180030 { char pad[72]; int f72; int f76; int pad2; int f84; char pad3[1336]; char f1424; };
 class V2_180060 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void *v220(unsigned int, int); };
 struct O_180060 { char p72_[72]; unsigned int f72; int f76; char *f80; char *f84; char pad88[1332]; int f1420; char f1424; };
@@ -4127,8 +3695,6 @@ typedef struct ResourceSource { char pad[20]; int f20; } ResourceSource;
 extern "C" void FUN_00180ab0(ResourceBuilder *builder, BuildResource *srcPositions, BuildResource *outPositions, BuildResource *srcNormals, BuildResource *outNormals, BuildResource *weights, BuildResource *indices, int weightCount);
 #define RELEASE(x) { BuildResource *q = (x); if (q != 0) { q->_refCount = q->_refCount - 1; if ((q->_refCount & 0x7FFFFF) == 0) igObject_Destroy(q); } }
 extern "C" void FUN_001805a0(ResourceBuilder *arg0, ResourceSource *arg1, int arg2);
-extern "C" igMetaObject *igPsx2VertexStream_GetMeta(void);
-extern "C" void Gap__Gfx__igVertexStream__vfunc_25(void);
 extern "C" int igPsx2UserUCodeExt_GetMeta(void);
 extern "C" int igContextExt_UpdateFrameRateDisplay(void);
 extern "C" void igContext_DetectDriverDatabaseProperties(void);
@@ -4172,15 +3738,9 @@ public:
 };
 extern "C" void igVisualContext_DrawIndexed(igPsx2VisualContextSlots_180dd0 *self);
 extern "C" int igTgaLoader_GetMeta(void);
-extern "C" igMetaObject *igFileImagePng_GetMeta(void);
 extern "C" int igVisualContextCapabilityManager_GetMeta(void);
 extern "C" int FUN_00180e10(void);
 extern "C" int FUN_00180e20(void);
-extern "C" int igVertexArray2Helper_GetMeta(void);
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_55(igVertexArray2Helper *self);
-extern "C" int igVertexStream_GetMeta(void);
-extern "C" void Gap__Gfx__igVertexStream__vfunc_24(void);
-extern "C" int Gap__Gfx__igVertexStream__vfunc_26(void);
 extern "C" int igPrimLengthArray1_1_GetMeta(void);
 extern "C" int igPointSpriteExt_GetMeta(void);
 extern "C" int FUN_00180f10(void);
@@ -4188,11 +3748,9 @@ extern "C" int igParticleArray_GetMeta(void);
 extern "C" void Gap__Bec__ParticleArray__vfunc_32(ParticleArray *arg0, float arg1);
 extern "C" void Gap__Bec__ParticleArray__vfunc_33(ParticleArray *arg0, float arg1);
 extern "C" int igGenericCapabilityManager_GetMeta(void);
-extern "C" igMetaObject *igExternalImageEntry_GetMeta(void);
 extern "C" void FUN_00180fa0(igParticleFormat *self);
 extern "C" igMetaObject *FUN_00180fd0(void);
 extern "C" int igPsx2LongList_GetMeta(void);
-extern "C" int FUN_00180ff0(void);
 extern "C" int igCustomStateCollection_GetMeta(void);
 extern "C" igMetaObject *igCustomStateCollectionList_GetMeta(void);
 extern "C" igMetaObject *igCustomStateField_GetMeta(void);

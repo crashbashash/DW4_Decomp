@@ -12,10 +12,7 @@ __internalObjectList *__internalObjectList::_instantiateFromPool(igMemoryPoolVie
         arkRegister();
         list = (__internalObjectList *)igMetaObject_CreateInstance(_Meta, pool);
     } else {
-        list = (__internalObjectList *)igObject_AllocateRawStorage(sizeof(__internalObjectList), 0, pool);
-        if (list != 0) {
-            list = (__internalObjectList *)InternalObjectList_Construct((::__internalObjectList *)list, 1);
-        }
+        list = new (0, pool) __internalObjectList(true);
         list->initDefaults();
         list->userConstruct(0);
     }
@@ -28,7 +25,7 @@ igObject *__internalObjectList::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(__internalObjectList), 0), 0) __internalObjectList(*this);
+    return new (0) __internalObjectList(*this);
 }
 
 igMetaObject *__internalObjectList::getClassTypeLazy()

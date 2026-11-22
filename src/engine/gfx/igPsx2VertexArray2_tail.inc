@@ -4,11 +4,11 @@ namespace Gfx {
 bool igPsx2VertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArray, igPrimLengthArray *primLengthArray, igVisualContext *vc)
 {
     if (_vertexStream == 0) {
-        igSmartPointer<igVertexStream> stream((igVertexStream *)igVertexStream_Create((int)getMemoryPool()));
+        igSmartPointer<igVertexStream> stream(igVertexStream::_instantiateFromPool(getMemoryPool()));
         _vertexStream = stream;
     }
     igVertexStream *vs = _vertexStream.p;
-    if (vs->_isConfigured != 0) {
+    if (vs->isConfigured()) {
         return true;
     }
     igSmartPointer<igVertexDataList> list((igVertexDataList *)igVertexDataList_Create((int)getMemoryPool()));
@@ -26,9 +26,9 @@ bool igPsx2VertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArr
             break;
         }
     }
-    vs->_primitive = primitive;
+    vs->setPrimitive(primitive);
     ((igVisualContextDispatchView *)vc)->setVertexArray((::igVertexArray2 *)this, 0);
-    return ((igVertexStreamDispatchView *)vs)->configure(list, (::igIndexArray *)indexArray, primLengthArray, vc);
+    return vs->configure(list, indexArray, primLengthArray, vc);
 }
 
 void igPsx2VertexArray2::releaseDefaults()
@@ -39,7 +39,7 @@ void igPsx2VertexArray2::releaseDefaults()
 void igPsx2VertexArray2::reset()
 {
     if (_vertexStream != 0) {
-        ((igVertexStreamDispatchView *)_vertexStream.p)->reset();
+        _vertexStream->reset();
     }
 }
 }

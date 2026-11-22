@@ -133,3 +133,16 @@ igMemoryFile	_buffer	char *
 igFolder	_folderName	igStringRef
 igFile	_readMode	ReadMode
 igFile	_openMode	OpenMode
+igFileImagePng	_file	igSmartPointer<igFile>
+igMemoryFileEntry	_buffer	void *
+igPsx2File	_fBuf	unsigned char *
+igPsx2File	_prefix	igStringRef
+igVertexStream	_stream	void *
+igVertexStream	_isConfigured	bool
+igVertexStream	_vertexDataList	igSmartPointer<igVertexDataList>
+igVertexStream	_accessMode	IG_VERTEX_ACCESS_MODE
+igVertexStream	_primitive	IG_GFX_DRAW
+igVertexStream	_streamMode	IG_VERTEX_STREAM_COMPILE_MODE
+igPsx2VertexStream	_dmaBuffer	unsigned char *
+igPsx2VertexStream	_dmaBufferStruct	unsigned char *
+igVertexArray2Helper	_vertexArray	igSmartPointer<igVertexArray2>

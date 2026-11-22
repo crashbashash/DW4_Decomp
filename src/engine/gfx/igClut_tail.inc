@@ -161,7 +161,7 @@ bool igClut::load(const char *fileName)
 {
     const char *extension;
 
-    extension = (const char *)FUN_0015ad50((char *)fileName);
+    extension = FUN_0015ad50(fileName);
     if (extension != 0 && (strcmp(extension, ".act") == 0 || strcmp(extension, ".ACT") == 0)) {
         return loadAct(fileName);
     }

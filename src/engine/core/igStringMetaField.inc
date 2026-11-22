@@ -20,7 +20,7 @@ igMetaField *igStringMetaField_Create(igMemoryPoolView *pool) {
         Gap::Core::igStringMetaField::arkRegister();
         field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)Gap::Core::igStringMetaField::getClassMeta()), pool));
     } else {
-        field = ((void **)igObject_AllocateRawStorage(0x3C, 0, pool));
+        field = ((void **)Gap::Core::igObject::operator new(0x3C, 0, pool));
         if (field != 0) {
             field = ((void **)igStringMetaField_Construct((igStringMetaField *)field, 1));
         }
@@ -39,7 +39,7 @@ igObject *igStringMetaField::cloneViaMetadata(int copyMode)
         arkRegister();
         return igObject::cloneViaMetadata(copyMode);
     }
-    return new (igObject_AllocateRawStorageDefault(sizeof(igStringMetaField), 0), 0) igStringMetaField(*this);
+    return new (0) igStringMetaField(*this);
 }
 
 igMetaObject *igStringMetaField::getClassTypeSafe()

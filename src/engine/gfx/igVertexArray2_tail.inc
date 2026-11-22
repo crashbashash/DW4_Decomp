@@ -22,13 +22,13 @@ bool igVertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArray, 
     if (array == 0) {
         return false;
     }
-    igSmartPointer<igVertexArray2HelperAccess> helper(igVertexArray2Helper_Create((int)getMemoryPool()));
+    igSmartPointer<igVertexArray2Helper> helper(igVertexArray2Helper::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
     if (helper == 0) {
         return false;
     }
-    helper->setVertexArray((igVertexArray2View *)this);
+    helper->setVertexArray(this);
     igVertexFormat format;
-    helper->getFormat(&format);
+    helper->getVertexFormat(&format);
     unsigned int count = getCount(0);
     array->configure(format, count, helper->getUsageFlags(), vc);
     unsigned int j;
@@ -59,7 +59,7 @@ bool igVertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArray, 
     if (format.getBlendIndexCount() != 0) {
         for (i = 0; i < count; i++) {
             for (j = 0; j < format.getBlendIndexCount(); j++) {
-                array->setBlendMatrixIndex(j, i, helper->getBlendIndex(j, i));
+                array->setBlendMatrixIndex(j, i, helper->getBlendMatrixIndex(j, i));
             }
         }
     }
@@ -78,12 +78,12 @@ bool igVertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArray, 
     if (c) {
         if ((c & 0xFF) == 1) {
             for (i = 0; i < count; i++) {
-                array->setPointSpriteSize(i, helper->getPointSize(i));
+                array->setPointSpriteSize(i, helper->getPointSpriteSize(i));
             }
         } else if ((c & 0xFF) == 2) {
             for (i = 0; i < count; i++) {
                 igVec2f size;
-                helper->getPointSize2(i, &size);
+                helper->getPointSpriteSize(i, size);
                 array->setPointSpriteSize(i, size);
             }
         }
@@ -121,7 +121,7 @@ unsigned int igVertexArray2::getCount(unsigned int index) const
         if (meta == ((igDataList *)data->_data)->getMeta()) {
             return ((igDataList *)data->_data)->getCount();
         }
-        meta = (igMetaObject *)DAT_005610a8[0];
+        meta = (igMetaObject *)g_igVec4fList_metaObject;
         if (meta == ((igDataList *)data->_data)->getMeta()) {
             return ((igDataList *)data->_data)->getCount();
         }

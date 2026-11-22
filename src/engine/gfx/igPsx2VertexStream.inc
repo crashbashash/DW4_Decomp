@@ -1,16 +1,17 @@
-igMetaObject *g_igPsx2VertexStream_metaObject;
-igMetaField *g_igPsx2VertexStream_scaleAlphaStateMetaField;
-igMetaField *g_igPsx2VertexStream_syncSequenceMetaField;
-igMetaField *g_igPsx2VertexStream_textureCoordCompiledMetaField;
-igMetaField *g_igPsx2VertexStream_multipassCompiledMetaField;
-igMetaField *g_igPsx2VertexStream_blendMatrixCountMetaField;
-igMetaField *g_igPsx2VertexStream_blendIndexCountMetaField;
-igMetaField *g_igPsx2VertexStream_vertexCountCompiledMetaField;
-igMetaField *g_igPsx2VertexStream_renderListHandleMetaField;
-igMetaField *g_igPsx2VertexStream_dmaBufferMetaField;
-igMetaField *g_igPsx2VertexStream_dmaBufferStructMetaField;
+namespace Gap {
+namespace Gfx {
 
-void igPsx2VertexStream_GetMetaObjectFunction(void) {
-    igPsx2VertexStream_GetMetaObject();
+igMetaObject *igPsx2VertexStream::_Meta;
+igMetaField *igPsx2VertexStream::k_scaleAlphaState;
+igMetaField *igPsx2VertexStream::k_syncSequence;
+igMetaField *igPsx2VertexStream::k_textureCoordCompiled;
+igMetaField *igPsx2VertexStream::k_multipassCompiled;
+igMetaField *igPsx2VertexStream::k_blendMatrixCount;
+igMetaField *igPsx2VertexStream::k_blendIndexCount;
+igMetaField *igPsx2VertexStream::k_vertexCountCompiled;
+igMetaField *igPsx2VertexStream::k_renderListHandle;
+igMetaField *igPsx2VertexStream::k_dmaBuffer;
+igMetaField *igPsx2VertexStream::k_dmaBufferStruct;
+}
 }
 

@@ -58,8 +58,8 @@ namespace Gap {
 namespace Core {
 
 static inline int openPath(igRegistry *self, const igStringObjRef &path) {
-    igFileView *file = (igFileView *)self->_registryFile.p;
-    return file->Open(registryText(path.p), ((char *)"r"));
+    igFile *file = self->_registryFile.p;
+    return (int)file->fopen(registryText(path.p), "r");
 }
 
 void igRegistry::initDefaults() {
@@ -73,28 +73,28 @@ bool igRegistry::load(const char *registryFile, const char *path) {
     if (fileName.p == 0 || strlen(fileName.p) == 0) {
         fileName = "alchemy.ini";
     }
-    found = ((igFileView *)_registryFile.p)->Open(fileName.p, ((char *)"r"));
+    found = (int)_registryFile.p->fopen(fileName.p, "r");
     if (found == 0) {
         if (path == 0 || strlen(path) == 0) {
             path = ((char *)igObjectSystem_GetRootPath((int *)(((*(void * *)&g_objectSystem)))));
         }
         if (path != 0 && strlen(path) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
-            folder.p->setFolderName((char *)path);
-            found = openPath(this, folder.p->GetFullPath(fileName.p));
+            igSmartPointer<igFolder> folder(igFolder::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
+            folder.p->setFolderName(path);
+            found = openPath(this, folder.p->getPathToFile(fileName.p));
         }
     }
     if (found == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
-        folder.p->setFolderName(((char *)igObjectSystem_GetBasePath((int *)(((*(void * *)&g_objectSystem))))));
-        found = openPath(this, folder.p->GetFullPath(fileName.p));
+        igSmartPointer<igFolder> folder(igFolder::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
+        folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)(((*(void * *)&g_objectSystem)))));
+        found = openPath(this, folder.p->getPathToFile(fileName.p));
     }
     if (found == 0) {
         return false;
     }
     reset();
     parseRegistry(_registryFile, true);
-    ((igFileView *)_registryFile.p)->Close();
+    _registryFile.p->fclose();
     return true;
 }
 
@@ -564,7 +564,7 @@ void igRegistry::parseRegistry(igFile *file, unsigned char replaceDuplicates) {
 }
 
 bool igRegistry::readLine(igFile *file, char *buffer, int *lineNum) {
-    int c = ((igFileView *)file)->GetChar();
+    int c = file->fgetc();
     int prev = 0;
     bool comment = false;
     int n = 0;
@@ -572,10 +572,10 @@ bool igRegistry::readLine(igFile *file, char *buffer, int *lineNum) {
     bool lead = true;
     while (c != -1 && c != 0) {
         while (lead) {
-            if (c == 0x20 || c == 9) { prev = c; c = ((igFileView *)file)->GetChar(); }
+            if (c == 0x20 || c == 9) { prev = c; c = file->fgetc(); }
             else lead = false;
         }
-        if (c == 13) { c = ((igFileView *)file)->GetChar(); continue; }
+        if (c == 13) { c = file->fgetc(); continue; }
         if (c != 10) {
             if (!comment) {
                 if (c == 0x3B) comment = true;
@@ -593,7 +593,7 @@ bool igRegistry::readLine(igFile *file, char *buffer, int *lineNum) {
         if (!comment) n -= 1;
     next:
         prev = c;
-        c = ((igFileView *)file)->GetChar();
+        c = file->fgetc();
     }
     if (n > 0 || c != -1) {
         ret = true;
@@ -667,7 +667,7 @@ void igRegistry::preProcessLine(igFile *file, char *lineBuffer, int lineNum, uns
         igSmartPointer<igRegistry> include(_instantiateFromPool(getMemoryPool()));
         found = 0;
         igStringObjRef directory((igStringObj *)igStringObj_Create((int)getMemoryPool()));
-        igStringObj_Set(directory.get(), ((igFileView *)file)->_fileName);
+        igStringObj_Set(directory.get(), file->_fileName.p);
         igStringObj_RemovePathFilename(directory.get());
         if (directory.get()->_length != 0) {
             igRegistry *target = include.get();

@@ -394,27 +394,6 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
     }
 }
 
-/* igVertexStream's access mode as the kit declares it (alchemy-kit_202309 igGfx/igVertexStream.h): the
- * IG_VERTEX_ACCESS_MODE field and its inline getAccessMode(), until the vertex streams convert (the flat struct
- * keeps the field an int). The draw below compares what the getter returns: that value keeps the enum type through
- * the optimizer, and the test the two compares merge into keeps its `+ 0` (retail's `addu v1,v1,zero` at
- * 0x17f1bc); an int field, or a cast to the enum in the getter, loses it. */
-struct igVertexStreamAccessView : public igObject {
-    enum IG_VERTEX_ACCESS_MODE {
-        IG_VERTEX_ACCESS_READ_WRITE,
-        IG_VERTEX_ACCESS_READ,
-        IG_VERTEX_ACCESS_WRITE,
-        IG_VERTEX_ACCESS_WRITE_ONCE,
-        IG_VERTEX_ACCESS_FREQUENT_UPDATES
-    };
-    int _name;
-    int _stream;
-    unsigned char _isConfigured;
-    int _vertexDataList;
-    IG_VERTEX_ACCESS_MODE _accessMode;
-    inline IG_VERTEX_ACCESS_MODE getAccessMode() { return _accessMode; }
-};
-
 /* The vertices a draw of `count` primitives reads. */
 static inline unsigned int PrimitiveVertexCount(int primitive, unsigned int count) {
     switch (primitive) {
@@ -444,26 +423,24 @@ static inline unsigned int PrimitiveVertexCount(int primitive, unsigned int coun
  * draws the vertex data directly. A stream the CPU reads or writes back (read-write or read access) or one just
  * blended in software records the VIF1 wait sequence of the draw. */
 void FUN_0017f080(igPsx2VisualContext *vc, int primitive, unsigned int count, int vertexOffset, int primitiveOffset) {
-    igPsx2VertexArray2 *array = (igPsx2VertexArray2 *)vc->_vertexArray2[0];
-    igPsx2VertexStream *stream;
+    Gap::Gfx::igPsx2VertexArray2 *array = (Gap::Gfx::igPsx2VertexArray2 *)vc->_vertexArray2[0];
+    Gap::Gfx::igPsx2VertexStream *stream;
     bool useRenderList;
     bool useTexture;
     int blendState;
     bool sync;
 
-    if (array->_vertexStream == 0 || !((igPsx2VertexStream *)array->_vertexStream)->_isConfigured) {
-        ((Gap::Gfx::igVertexArray2 *)array)->configure((IG_GFX_DRAW)primitive,
-                                                       (Gap::Gfx::igIndexArray *)vc->_pIndexArray,
-                                                       (igPrimLengthArray *)vc->_pStripLengthArray,
-                                                       (igVisualContext *)vc);
+    if (array->_vertexStream == 0 || !array->_vertexStream->isConfigured()) {
+        array->configure((IG_GFX_DRAW)primitive, (Gap::Gfx::igIndexArray *)vc->_pIndexArray,
+                         (igPrimLengthArray *)vc->_pStripLengthArray, (igVisualContext *)vc);
     }
-    stream = (igPsx2VertexStream *)array->_vertexStream;
+    stream = (Gap::Gfx::igPsx2VertexStream *)array->_vertexStream.p;
     useRenderList = stream->_renderListHandle != 0;
     useTexture = false;
     blendState = FUN_001774c0(vc, (Geometry1774 *)stream, &useTexture);
     count = PrimitiveVertexCount(primitive, count);
-    sync = ((igVertexStreamAccessView *)stream)->getAccessMode() == igVertexStreamAccessView::IG_VERTEX_ACCESS_READ_WRITE
-        || ((igVertexStreamAccessView *)stream)->getAccessMode() == igVertexStreamAccessView::IG_VERTEX_ACCESS_READ;
+    sync = stream->getAccessMode() == Gap::Gfx::igVertexStream::IG_VERTEX_ACCESS_READ_WRITE
+        || stream->getAccessMode() == Gap::Gfx::igVertexStream::IG_VERTEX_ACCESS_READ;
     if (blendState == 3 || blendState == 1
         || (useRenderList && (vertexOffset != 0 || primitiveOffset != 0 || count != stream->_vertexCountCompiled))) {
         if (blendState == 1) {
@@ -475,7 +452,7 @@ void FUN_0017f080(igPsx2VisualContext *vc, int primitive, unsigned int count, in
     if (useRenderList) {
         p2CallDisplayList((p2DisplayList *)stream->_renderListHandle);
     } else {
-        FUN_0017eb90((B_17eb90 *)vc, stream->_vertexDataList, primitive, count, vertexOffset, primitiveOffset, useTexture);
+        FUN_0017eb90((B_17eb90 *)vc, (int)stream->_vertexDataList.p, primitive, count, vertexOffset, primitiveOffset, useTexture);
     }
     if (sync) {
         stream->_syncSequence = p2GetVif1WaitSequence();
