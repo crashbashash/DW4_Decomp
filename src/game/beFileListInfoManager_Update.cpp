@@ -146,7 +146,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 REL_STR(old)
                 s0->_stageName = (int)nw;
             }
-            igResource_StartAsyncLoading(g_globalContext);
+            g_globalContext->enableAsynchronousLoading();
             {
             igSmartPointer<igStringObj> stageObj((igStringObj *)((beSystem *)self->_system)->_globalStrObj, kRetainReference);
             igStringObj_Set(stageObj.p, (const char *)((beSystem *)self->_system)->_stageName);
@@ -159,7 +159,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 int r;
                 int a2;
                 if (a1 == 0) { a2 = (int)g_stringObjEmptyText; } else { a2 = a1; }
-                r = (int)igResource_LoadDirectory((igResource *)g_globalContext, (const char *)a2);
+                r = (int)g_globalContext->load((const char *)a2);
                 ((Gap::Core::igObjectList *)self->_dirList)->append((Gap::Core::igObject *)r);
             }
             }
@@ -176,14 +176,14 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             int j;
             igObjectList *s5;
             s1 = ((int **)((igDirectoryList *)self->_dirList)->_data)[0];
-            if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, (igDirectory *)s1) == 0) {
+            if (g_globalContext->isLoadFinished((Gap::Core::igDirectory *)s1) == 0) {
                 break;
             }
             s4 = (igObjectList *)s1[7];
             for (k = 0; k < s4->_count; k++) {
                 igInsightCore_AddInfo((igInsightCore *)self->_insight, (igObject *)((int *)s4->_data)[k]);
             }
-            igResource_UnloadDirectory((igResource *)g_globalContext, (const char *)s1[5]);
+            g_globalContext->unload((const char *)s1[5]);
             CLEAR(igDirectoryList, self->_dirList)
             s5 = (igObjectList *)((beFileListInfo **)((igInfoList *)self->_infoList)->_data)[0]->_fnames;
             if (self->_isReadOnetime == 0) {
@@ -373,7 +373,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     List_RemoveWordAt((igDataList *)l, 0);
                     ((int *)l->_data)[l->_count] = 0;
                 }
-                igResource_StopAsyncLoading(g_globalContext);
+                g_globalContext->disableAsynchronousLoading();
                 break;
             }
             break;

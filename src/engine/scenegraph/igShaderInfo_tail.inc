@@ -2,13 +2,11 @@ void FUN_001d8ab0(void) {
     igShaderFactoryList_EnsureRegistered();
     igSmartPointer<igObject> info((igObject *)FUN_00198cc0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     ((Gap::Core::igNamedObject *)info.p)->setName("shaderInfo");
-    igSmartPointer<igObject> list = igResource_GetDirectory(g_globalContext, (const char *)text_system);
-    ((Gap::Core::igDirectory *)list.p)->appendInfo((Gap::Core::igInfo *)info.p);
+    g_globalContext->getDirectory((const char *)text_system)->appendInfo((Gap::Core::igInfo *)info.p);
 }
 
 void FUN_001d8b90(void) {
-    igSmartPointer<igObject> list = igResource_GetDirectory(g_globalContext, (const char *)text_system);
-    ((Gap::Core::igDirectory *)list.p)->removeInfo((char const *)("shaderInfo"));
+    g_globalContext->getDirectory((const char *)text_system)->removeInfo((char const *)("shaderInfo"));
 }
 
 int igShaderInfo_FindObjectReference(ShaderFieldTable *self, int arg1, ShaderFieldRecord *key) {

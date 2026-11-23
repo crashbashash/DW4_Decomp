@@ -16,7 +16,7 @@ void igMemoryRefMetaField::setAlignmentType(const char *name) {
         _alignmentType = -1;
         return;
     }
-    *(::igTDataList<igStringObj *> **)&names = g_globalContext->_alignmentStrings;
+    *(::igTDataList<igStringObj *> **)&names = (::igTDataList<igStringObj *> *)g_globalContext->_alignmentStrings.p;
     held = names;
     if (held != 0) { held->ref(); }
     n = countOf(names);

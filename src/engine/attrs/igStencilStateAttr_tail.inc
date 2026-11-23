@@ -8,7 +8,7 @@ void igStencilStateAttr::apply(igVisualContext *vc)
 
 void igStencilStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getStencilState());
+    setState(vc->getStencilState());
 }
 
 void igStencilStateAttr::setState(bool enabled)

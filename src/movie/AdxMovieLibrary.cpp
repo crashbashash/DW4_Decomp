@@ -1071,7 +1071,7 @@ void igCriMovieCodec_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCriMovieCodec_Register);
 }
 
-static igMetaObjectCallback g_igCriMovieCodec_callbackList[] = { igVisualContext_EnsureRegistered, igAudioContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCriMovieCodec_callbackList[] = { Gap::Gfx::igVisualContext::arkRegister, igAudioContext_EnsureRegistered, 0 };
 
 CallbackArray *igCriMovieCodec_Register(void) {
     AdxMovieLibrary_MarkRegistered();
@@ -1133,7 +1133,7 @@ void igCriMovieCodec_InitFields(void) {
     initializedField = (igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField);
     initializedField->_persistent = 0;
     visualContextField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1);
-    visualContextField->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    visualContextField->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
     visualContextField->_persistent = 0;
     audioContextField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2);
     audioContextField->_metaObject = (int)igAudioContext_GetOrCreateMetaObject();

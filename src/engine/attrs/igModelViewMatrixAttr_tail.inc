@@ -32,7 +32,7 @@ void igModelViewMatrixAttr::synchronizeDefault(igVisualContext *vc)
 {
     igMatrix44f m;
 
-    ((igVisualContextDispatchView *)vc)->getMatrix(IG_GFX_MATRIX_STACK_MODELVIEW, m);
+    vc->getMatrix(IG_GFX_MATRIX_STACK_MODELVIEW, m);
     setMatrix(m);
 }
 

@@ -8,7 +8,7 @@ void igCopyRenderDestinationAttr::apply(igVisualContext *pVC)
     if (_pRDAttr != 0) {
         handle = _pRDAttr->getHandle();
     } else {
-        handle = ((igVisualContextDispatchView *)pVC)->getCurrentRenderDestination();
+        handle = pVC->getCurrentRenderDestination();
     }
     switch (_copyType) {
     case FROM_RENDERDESTINATION_TO_TEXTURE:

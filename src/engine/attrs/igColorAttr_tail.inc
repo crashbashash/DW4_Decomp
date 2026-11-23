@@ -20,7 +20,7 @@ void igColorAttr::apply(igVisualContext *vc)
 
 void igColorAttr::synchronizeDefault(igVisualContext *vc)
 {
-    _colorPacked = ((igVisualContextDispatchView *)vc)->getColor();
+    _colorPacked = vc->getColor();
 }
 
 void igColorAttr::colorChanged(igObject *obj)

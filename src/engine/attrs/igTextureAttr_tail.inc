@@ -107,7 +107,7 @@ void igTextureAttr::apply(igVisualContext *vc)
                 } else {
                     levelImage = ((igImage **)((::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps)->_data)[level - 1];
                 }
-                igPsx2VisualContext_SetTextureSourceLevel(vc, _texId, (::igImage *)levelImage, level);
+                igPsx2VisualContext_SetTextureSourceLevel((igPsx2VisualContext *)vc, _texId, (::igImage *)levelImage, level);
             }
             break;
         }
@@ -177,7 +177,7 @@ void igTextureAttr::releaseDefaults()
 void igTextureAttr::reset()
 {
     if (_texId != -1 && _vc != 0)
-        ((igVisualContextDispatchView *)(igVisualContext *)_vc)->deleteTexture(_texId);
+        _vc->deleteTexture(_texId);
     _texId = -1;
     _vc = 0;
 }

@@ -6,7 +6,7 @@ void igTextureCubeAttr::apply(igVisualContext *vc)
     if (_texId < 0) {
         switch (_applyType) {
         case NOT_SET:
-            if (((igVisualContextDispatchView *)vc)->getCapability(IG_GFX_CAPABILITY_CUBE_MAP_SUPPORT) != 0 && _cubeImage[0] != 0) {
+            if (vc->getCapability(IG_GFX_CAPABILITY_CUBE_MAP_SUPPORT) != 0 && _cubeImage[0] != 0) {
                 _applyType = CUBE_MAP;
             } else {
                 _applyType = SPHERE_MAP;

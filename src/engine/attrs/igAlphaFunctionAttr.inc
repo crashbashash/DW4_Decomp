@@ -80,8 +80,8 @@ void igAlphaFunctionAttr::apply(igVisualContext *vc)
 
 void igAlphaFunctionAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setAlphaFunc(((igVisualContextDispatchView *)vc)->getAlphaFunc());
-    setRefValue(((igVisualContextDispatchView *)vc)->getAlphaRefValue());
+    setAlphaFunc(vc->getAlphaFunc());
+    setRefValue(vc->getAlphaRefValue());
 }
 
 /* Setter: stores the alpha-test reference value (`_refValue`, an igFloatMetaField of the reflected

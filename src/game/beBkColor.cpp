@@ -22,8 +22,8 @@ void beBkColor_UpdateRam(beBkColor *self) {
     if (self->_isClear == 0) {
         igWindowDispatchView *window = (igWindowDispatchView *)((igInsightCore *)self->_insight)->_window;
         beBkColorInfo *info = ((beBkColorInfo **)((beBaseInfoList *)self->_infoList)->_data)[0];
-        igVisualContextDispatchView *context = window->getVisualContext();
-        context->setClearColor(info->_rgba.vec);
+        Gap::Gfx::igVisualContext *context = window->getVisualContext();
+        context->setClearColor(info->_rgba);
         self->_isClear = 1;
     }
 }

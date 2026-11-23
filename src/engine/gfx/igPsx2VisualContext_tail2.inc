@@ -329,7 +329,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
     bool allocated = false;
     int format;
     if (pixels == 0 || image->imageSize < 0 || ((int)pixels & 15) != 0) {
-        pixels = ((BufferAllocator *)igVisualContext_GetImageMemoryPool((int *)self))->allocate(width * height * 4, 16);
+        pixels = ((BufferAllocator *)((Gap::Gfx::igVisualContext *)self)->getImageMemoryPool())->allocate(width * height * 4, 16);
         allocated = true;
     }
     if (entry->kind == 2) {
@@ -547,7 +547,7 @@ void FUN_0016a860(Arg *arg0) {
     Buf860 *b;
     sp5C = 64;
     igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &sp5C, 64, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)arg0));
+    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)arg0)->getListMemoryPool());
     if (p != 0) {
         n = sp5C;
         p->f8 = 0;
@@ -763,7 +763,7 @@ void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
     if (e->f10 != 0 && e->f8 != 0) {
         p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)p2GetImageTexture((p2Image *)e->f8)));
     } else if (e->f10 == 0) {
-        o = (void **)igVisualContext_GetImageMemoryPool((int *)arg0);
+        o = (void **)((Gap::Gfx::igVisualContext *)arg0)->getImageMemoryPool();
         e->f10 = ((VC_220 *)o)->vX(n * 4, 128);
     }
     if (e->f10 != 0) {
@@ -931,8 +931,8 @@ OpenResult igPsx2VisualContext_Open(OpenContext *self) {
     int height;
 
     self->openBase();
-    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create(igVisualContext_GetInternalMemoryPool((int *)self)));
-    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create(igVisualContext_GetInternalMemoryPool((int *)self)));
+    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)self)->getInternalMemoryPool()));
+    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)self)->getInternalMemoryPool()));
     int size;
     int syncMode;
     record = self->bufferRecord(self->_currentBuf);
@@ -1244,8 +1244,8 @@ int igPsx2VisualContext_CreateRenderList(igPsx2VisualContext *self) {
     s0 = s1->f12[s1->f4 - 1];
     s1->f4 = s1->f4 - 1;
     {
-        Nd192 *n = new (igVisualContext_GetDriverDataMemoryPool((int *)arg0)) Nd192;
-        int v = (int)(igIntList_Create(igVisualContext_GetDriverDataMemoryPool((int *)arg0)));
+        Nd192 *n = new ((int)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool()) Nd192;
+        int v = (int)(igIntList_Create((int)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool()));
         arg0->f960->f16[s0] = (Ent192 *)n;
         n->a = v;
     }

@@ -13,7 +13,7 @@ void igLightStateAttr::apply(igVisualContext *vc)
 void igLightStateAttr::synchronizeDefault(igVisualContext *vc)
 {
     if (_light != 0)
-        setState(((igVisualContextDispatchView *)vc)->getLightState(_light->getHandle()));
+        setState(vc->getLightState(_light->getHandle()));
 }
 
 /* Setter for the attribute's reflected _enabled flag. */

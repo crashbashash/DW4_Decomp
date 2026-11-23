@@ -154,3 +154,39 @@ igTgaLoader	_tempMap	unsigned char *
 igTgaLoader	_tempRow	unsigned char *
 igPrimLengthArray	_lengthData	unsigned char *
 igGeometryAttr1_5	_stripLengths	igSmartPointer<igPrimLengthArray>
+igResource	_imageDirectory	igSmartPointer<igDirectory>
+igResource	_directoryList	igSmartPointer<igDirectoryList>
+igResource	_relativeFilePath	igStringRef
+igResource	_absoluteFilePath	igStringRef
+igResource	_loadQueue	igSmartPointer< ::igQueue>
+igResource	_loadThread	igSmartPointer< ::igThread>
+igResource	_alignmentStrings	igSmartPointer< ::igStringObjList>
+igResource	_alignmentValues	igSmartPointer<igIntList>
+igResource	_temporaryMemoryPool	igSmartPointer< ::igMemoryPool>
+igResource	_dataMemoryPool	igSmartPointer< ::igMemoryPool>
+igResource	_objectMemoryPool	igSmartPointer< ::igMemoryPool>
+igDirectory	_managingResource	igResource *
+igContext	_pExtList	igSmartPointer<igContextExtInfoList>
+igContext	_pExtInstances	igSmartPointer<igContextExtList>
+igVisualContext	_driverDataMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_vertexMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_internalMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_temporaryMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_imageMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_textureMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_statisticsMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_listMemoryPool	igSmartPointer<igMemoryPool>
+igVisualContext	_timer	igSmartPointer<igTimer>
+igVisualContext	_showFrameRate	bool
+igVisualContext	_commandLineFrameRate	bool
+igVisualContext	_inverseTranspose	igMatrix44f *
+igVisualContext	_blendMatrices	const igMatrix44f *
+igVisualContext	_renderingTime	long long
+igVisualContext	_scissorType	IG_GFX_SCISSOR_TYPE
+igVisualContext	_viewMatrixHint	igMatrix44f
+igVisualContext	_viewMatrixInverse	igMatrix44f
+igVisualContext	_viewMatrixDirty	bool
+igVisualContext	_vertexArray2	igSmartPointer<igVertexArray2>
+igVisualContext	_customStates	igSmartPointer<igCustomStateCollectionList>
+igVisualContext	_customFields	igSmartPointer<igCustomStateFieldList>
+igVisualContext	_ditherState	bool

@@ -273,6 +273,15 @@ registrar, but both sides there share a profile, so those boundaries are not mov
 `profile_split.units` in the debt ratchet counts them.
 zlib and libpng are the exception that is settled: they build with `combat` and fail under `b52`.
 
+**The Attrs library was built without the float accumulator.** Its unit (`0x130000`) has the `-O4,s` Alchemy
+profile, but retail's attrs code has no `madd.s`, `adda.s` or `mula.s`: `igGeometryAttr1_5::transformVectors`
+(`0x13dbb0`) adds the squares of `igVec3f::length()` with plain `mul.s`/`add.s`, the only unfused sum of two
+products in any b52 unit. b52 has no command-line switch for it, and no other build in `local/mwcps2/` explains it
+(3.0-011126, 3.0b22, 3.0b38, 3.0.1b44, 3.0b50, 3.0.3 and `combat` all fuse the same source into `adda.s`/`madd.s`,
+measured 2026-11-23), so `src/engine/attrs/AttrsLibrary.cpp` begins
+with `#pragma usefloatacc off` (owner, 2026-11-23); the other Alchemy libraries fuse in retail and keep it on
+([MWCC pragmas](mwcc-pragmas.md)).
+
 **Alchemy builds bottom-up.** Retail keeps out-of-line copies of Alchemy's smallest inline members, and only
 bottom-up inlining leaves calls to them.
 

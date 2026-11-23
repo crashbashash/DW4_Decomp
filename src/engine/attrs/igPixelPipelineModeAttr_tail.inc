@@ -8,7 +8,7 @@ void igPixelPipelineModeAttr::apply(igVisualContext *vc)
 
 void igPixelPipelineModeAttr::synchronizeDefault(igVisualContext *vc)
 {
-    _pipelineMode = ((igVisualContextDispatchView *)vc)->getPixelPipelineMode();
+    _pipelineMode = vc->getPixelPipelineMode();
 }
 }
 }

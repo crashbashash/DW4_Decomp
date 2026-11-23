@@ -2,7 +2,6 @@
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/game/beModelCtrlDispatchView.h"
 #include "dw4/game/ndmw/beNDMWItemBaseDispatchView.h"
-#include "dw4/gfx/igVisualContextDispatchView.h"
 #include "dw4/core/StringPool.h"
 #include "dw4/game/be.h"
 #include "dw4/game/beBaseInfoDataList.h"
@@ -443,7 +442,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             pos[1] += 10.0f;
             Vec3f_TransformProjective(eye, pos, view);
             Vec3f_TransformProjective(pos, eye, projection);
-            ((igVisualContextDispatchView *)((igInsightCore *)self->_insight)->_visualContext)->getViewport(&x, &y, &w, &h);
+            ((Gap::Gfx::igVisualContext *)((igInsightCore *)self->_insight)->_visualContext)->getViewport(x, y, w, h);
             screenX = x + ((1.0f + pos[0]) * w) / 2.0f;
             screenY = h - (y + ((1.0f + pos[1]) * h) / 2.0f);
             screenX -= w / 2;

@@ -606,7 +606,7 @@ void FUN_001788e0(StatContext88 *arg0, int arg1) {
             if ((temp_a0->refs & 0x7fffff) == 0) {
                 igObject_Destroy((igObject *)temp_a0);
             }
-            ((StatAllocator *)igVisualContext_GetStatisticsMemoryPool((int *)arg0))->vX(temp_s1);
+            ((StatAllocator *)((Gap::Gfx::igVisualContext *)arg0)->getStatisticsMemoryPool())->vX(temp_s1);
         } while (temp_s0 != 0);
     }
     arg0->f610 = 0;
@@ -845,8 +845,8 @@ void FUN_00179e00(StatContext *arg0) {
     int idx;
     StatNode *n;
     int a1;
-    Ref_1778e0 sectionName((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
-    Ref_1778e0 indexText((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
+    Ref_1778e0 sectionName((O_1778e0 *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)arg0)->getStatisticsMemoryPool()));
+    Ref_1778e0 indexText((O_1778e0 *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)arg0)->getStatisticsMemoryPool()));
     s3 = ((G_1778e0 *)g_objectSystem)->f56;
     s2 = 0;
     igStringObj_Set((igStringObj *)(O_1778e0 *)sectionName, "STATISTICS_CAPTURE_");
@@ -856,13 +856,13 @@ void FUN_00179e00(StatContext *arg0) {
     if (a1 == 0) a1 = (int)g_stringObjEmptyText;
     igStringObj_Insert((igStringObj *)(O_1778e0 *)sectionName, (char *)a1, x, y); }
     while ((idx = ((Gap::Core::igRegistry *)s3)->findSection((char *)(sectionName->f8 == 0 ? (int)g_stringObjEmptyText : sectionName->f8), 0)) != -1) {
-        n = (StatNode *)((StatAllocator *)igVisualContext_GetStatisticsMemoryPool((int *)arg0))->v52(960);
+        n = (StatNode *)((StatAllocator *)((Gap::Gfx::igVisualContext *)arg0)->getStatisticsMemoryPool())->v52(960);
         if (n == 0) break;
         n->f16 = 1;
         n->f0 = s2;
         igGetRegistryValue_Int((igRegistry *)s3, idx, "numCapture", &n->f4, 1, 0);
         igGetRegistryValue_Int((igRegistry *)s3, idx, "startCapture", &n->f8, -1 - n->f4, 0);
-        n->f12 = (O_1778e0 *)((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
+        n->f12 = (O_1778e0 *)((O_1778e0 *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)arg0)->getStatisticsMemoryPool()));
         igGetRegistryValue_StringObj((igRegistry *)s3, idx, "stringCapture", (igStringObj **)&n->f12, "", 0);
         s2 += 1;
         n->f952 = arg0->f1552;
@@ -973,7 +973,7 @@ void FUN_0017a300(Self_17a070 *self) {
     int i;
     textureArraySize = 0x40;
     igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_TEXTURE_ARRAY_SIZE", &textureArraySize, 0x40, 0);
-    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)self));
+    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)self)->getListMemoryPool());
     if (r != 0) {
         bi = (int)r;
         b = (Buf_17a070 *)bi;
@@ -1015,7 +1015,7 @@ void FUN_0017a300(Self_17a070 *self) {
         self->a564[i] = 0;
         i++;
     } while (i < 16);
-    o = (T *)igIntList_Create(igVisualContext_GetListMemoryPool((int *)self));
+    o = (T *)igIntList_Create((int)((Gap::Gfx::igVisualContext *)self)->getListMemoryPool());
     if (o != 0) o->references = o->references + 1;
     {
         T *old2 = self->f332;
@@ -1239,7 +1239,7 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     entry->depth = -1;
     entry->mipCount = mipLevels > 6 ? 6 : mipLevels;
     entry->mipImages = 0;
-    entry->buffers = ((TexMemoryPool *)igVisualContext_GetInternalMemoryPool((int *)context))->allocate(32);
+    entry->buffers = ((TexMemoryPool *)((Gap::Gfx::igVisualContext *)context)->getInternalMemoryPool())->allocate(32);
     for (i = 0; i < 8; i++) {
         entry->buffers[i] = 0;
     }
@@ -1268,7 +1268,7 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     if (entry->mipCount != 0) {
         unsigned int mip;
 
-        entry->mipImages = ((TexMemoryPool *)igVisualContext_GetInternalMemoryPool((int *)context))->allocateArray(4, 6);
+        entry->mipImages = ((TexMemoryPool *)((Gap::Gfx::igVisualContext *)context)->getInternalMemoryPool())->allocateArray(4, 6);
         for (mip = 0; mip < 6; mip++) {
             entry->mipImages[mip].clear();
         }
@@ -1473,7 +1473,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
             int i;
 
             for (i = 0; i < count; i++) {
-                igSmartPointer<MipImage> mip((MipImage *)Gap::Gfx::igImage::_instantiateFromPool((igMemoryPoolView *)igVisualContext_GetImageMemoryPool((int *)context)));
+                igSmartPointer<MipImage> mip((MipImage *)Gap::Gfx::igImage::_instantiateFromPool((igMemoryPoolView *)((Gap::Gfx::igVisualContext *)context)->getImageMemoryPool()));
                 int mipFormat;
 
                 mip->reduceFrom(previous);

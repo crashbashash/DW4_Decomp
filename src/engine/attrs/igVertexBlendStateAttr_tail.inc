@@ -8,7 +8,7 @@ void igVertexBlendStateAttr::apply(igVisualContext *vc)
 
 void igVertexBlendStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getVertexBlendingState());
+    setState(vc->getVertexBlendingState());
 }
 
 /* Setter for the reflected bool field _enabled. */

@@ -10,7 +10,7 @@ void igProjectionMatrixAttr::synchronizeDefault(igVisualContext *vc)
 {
     igMatrix44f m;
 
-    ((igVisualContextDispatchView *)vc)->getMatrix(IG_GFX_MATRIX_STACK_PROJECTION, m);
+    vc->getMatrix(IG_GFX_MATRIX_STACK_PROJECTION, m);
     setMatrix(m);
 }
 

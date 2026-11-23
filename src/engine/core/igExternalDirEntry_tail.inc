@@ -79,13 +79,13 @@ bool igExternalDirEntry::resolve(igResolveFunction *userFunction)
 {
     igMemoryPoolView *pool;
     igResource *resource = g_objectSystem->resource;
-    igSmartPointer< ::igObject> directory = igResource_GetDirectory(resource, _directoryName.p);
+    igSmartPointer<igDirectory> directory = resource->getDirectory(_directoryName.p);
     if (directory.get() == 0) {
         pool = getMemoryPool();
         directory.release();
-        directory.p = (::igObject *)Gap::Core::igDirectory::_instantiateFromPool(pool);
-        ((igDirectory *)(directory.get()))->setDirectoryName(_directoryName.p);
-        igResource_AddDirectory((int *)resource, (int)directory.get());
+        directory.p = igDirectory::_instantiateFromPool(pool);
+        directory->setDirectoryName(_directoryName.p);
+        resource->appendDirectory(directory.get());
     }
     ((igDirectoryDispatchView *)directory.get())->ResolveExternalEntry((igExternalDirEntryView *)this);
     if (_ref == 0) load(userFunction);

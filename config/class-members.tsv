@@ -1581,6 +1581,31 @@ igDirectory	static igMetaField *k_autoWriteFilePreProcessState;
 igDirectory	static igMetaField *k_useMemoryPoolAssignmentsState;
 igDirectory	static igMetaField *k_forceWriteMemoryPoolInfoFromMetaState;
 igDirectory	static igMetaField *k_loadingSemaphore;
+igDirectory	public: inline void setName(const char *nameParam) { _name = nameParam; }
+igDirectory	inline const char *getName() const { return _name.p; }
+igDirectory	inline const igDirectoryList *getExternalDirectoryList() const { return _externalDirectoryList; }
+igDirectory	inline const igInfoList *getInfoList() const { return _infoList; }
+igDirectory	inline void setManagingResource(igResource *managingResourceParam) { _managingResource = managingResourceParam; }
+igDirectory	inline const igResource *getManagingResource() const { return _managingResource; }
+igDirectory	inline void setValidState(bool validStateParam) { _validState = validStateParam; }
+igDirectory	inline bool getValidState() const { return _validState; }
+igDirectory	inline void setCompatibleState(bool compatibleStateParam) { _compatibleState = compatibleStateParam; }
+igDirectory	inline bool getCompatibleState() const { return _compatibleState; }
+igDirectory	inline const igShortListList *getMetaFieldPerObjectIndices() const { return _metaFieldPerObjectIndices; }
+igDirectory	inline void setConcreteState(bool concreteStateParam) { _concreteState = concreteStateParam; }
+igDirectory	inline bool getConcreteState() const { return _concreteState; }
+igDirectory	inline void setSharingState(bool sharingStateParam) { _sharingState = sharingStateParam; }
+igDirectory	inline bool getSharingState() const { return _sharingState; }
+igDirectory	inline void setTrackUniqueEntries(bool trackUniqueEntriesParam) { _trackUniqueEntries = trackUniqueEntriesParam; }
+igDirectory	inline bool getTrackUniqueEntries() const { return _trackUniqueEntries; }
+igDirectory	inline const igDirectory *getUniqueEntryList() const { return _uniqueEntryList; }
+igDirectory	inline const igPointerList *getRefList() const { return _refList; }
+igDirectory	inline void setAutoWriteFilePreProcessState(bool autoWriteFilePreProcessStateParam) { _autoWriteFilePreProcessState = autoWriteFilePreProcessStateParam; }
+igDirectory	inline bool getAutoWriteFilePreProcessState() const { return _autoWriteFilePreProcessState; }
+igDirectory	inline void setUseMemoryPoolAssignmentsState(bool useMemoryPoolAssignmentsStateParam) { _useMemoryPoolAssignmentsState = useMemoryPoolAssignmentsStateParam; }
+igDirectory	inline bool getUseMemoryPoolAssignmentsState() const { return _useMemoryPoolAssignmentsState; }
+igDirectory	inline void setForceWriteMemoryPoolInfoFromMetaState(bool forceWriteMemoryPoolInfoFromMetaStateParam) { _forceWriteMemoryPoolInfoFromMetaState = forceWriteMemoryPoolInfoFromMetaStateParam; }
+igDirectory	inline bool getForceWriteMemoryPoolInfoFromMetaState() const { return _forceWriteMemoryPoolInfoFromMetaState; }
 igDirectory	int addObject(igObject *obj, const char *name, int resolveMethod);
 igDirectory	int addObjectRef(igObject *obj, const char *name, int resolveMethod);
 igDirectory	int addMemoryRef(igMemoryRefMetaField *containingMetaField, void *mem, igMetaField *memType, int alignmentIndex, const char *name, int resolveMethod, unsigned char doRefOnRead);
@@ -2327,6 +2352,23 @@ igPsx2ImageConvert	virtual void swapLA88(unsigned char *pixels, int count, unsig
 igPsx2ImageConvert	virtual void swapRGBA2222(unsigned char *pixels, int count, unsigned int *order);
 igPsx2ImageConvert	virtual void swapLA44(unsigned char *pixels, int count, unsigned int *order);
 igPsx2ImageConvert	virtual void swapRGBA3328(unsigned char *pixels, int count, unsigned int *order);
+igPsx2ImageConvert	static void pal_8_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgba_5551_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgb_565_To_rgb_888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgba_4444_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgb_888_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgb_888_To_rgba_5551(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgb_888_To_rgb_565(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgba_8888_To_rgb_888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgba_8888_To_rgba_5551(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void rgba_8888_To_rgba_4444(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void la_44_To_la_88(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void la_88_To_la_44(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void la_88_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void la_88_To_pal_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void la_88_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void la_44_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+igPsx2ImageConvert	static void alpha_8_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
 igImageLoader	IG_ABSTRACT_OBJECT_DEFINE(igImageLoader)
 igImageLoader	public: virtual bool load(igStringObj *fileName, igImage *image) = 0;
 igTgaLoader	IG_OBJECT_DEFINE(igTgaLoader)
@@ -2386,3 +2428,365 @@ igGeometryAttr1_5	virtual void synchronizeDefault(igVisualContext *vc);
 igGeometryAttr1_5	virtual void userPostLoad();
 igGeometryAttr1_5	protected: virtual unsigned int getNumVerts() const;
 igGeometryAttr1_5	protected: static void transformVectors(IG_GFX_VERTEX_COMPONENT component, igVertexArray *vertexArray, const float *matrix);
+igResource	IG_OBJECT_DEFINE(igResource)
+igResource	public: static igMetaField *k_useMemoryPoolAssignmentsState;
+igResource	private: static igMetaField *k_imageDirectory;
+igResource	static igMetaField *k_directoryList;
+igResource	static igMetaField *k_relativeFilePath;
+igResource	static igMetaField *k_absoluteFilePath;
+igResource	static igMetaField *k_asyncLoadState;
+igResource	static igMetaField *k_loadQueue;
+igResource	static igMetaField *k_loadThread;
+igResource	static igMetaField *k_autoCompatibility;
+igResource	static igMetaField *k_alignmentStrings;
+igResource	static igMetaField *k_alignmentValues;
+igResource	static igMetaField *k_postProcessAsyncronousFilesState;
+igResource	static igMetaField *k_temporaryMemoryPool;
+igResource	static igMetaField *k_dataMemoryPool;
+igResource	static igMetaField *k_objectMemoryPool;
+igResource	static igMetaField *k_IGBSharingState;
+igResource	static igMetaField *k_IGBChunkSize;
+igResource	public: inline const igDirectoryList *getDirectoryList() const { return _directoryList; }
+igResource	inline void setRelativeFilePath(const char *relativeFilePathParam) { _relativeFilePath = relativeFilePathParam; }
+igResource	inline const char *getRelativeFilePath() const { return _relativeFilePath.p; }
+igResource	inline void setAbsoluteFilePath(const char *absoluteFilePathParam) { _absoluteFilePath = absoluteFilePathParam; }
+igResource	inline const char *getAbsoluteFilePath() const { return _absoluteFilePath.p; }
+igResource	inline void setAsynchronousLoadState(bool asynchronousLoadStateParam) { _asyncLoadState = asynchronousLoadStateParam; }
+igResource	inline bool getAsynchronousLoadState() const { return _asyncLoadState; }
+igResource	inline void setLoadQueue(::igQueue *loadQueueParam) { _loadQueue = loadQueueParam; }
+igResource	inline const ::igQueue *getLoadQueue() const { return _loadQueue; }
+igResource	inline void setAutoCompatibility(bool autoCompatibilityParam) { _autoCompatibility = autoCompatibilityParam; }
+igResource	inline bool getAutoCompatibility() const { return _autoCompatibility; }
+igResource	inline ::igStringObjList *getAlignmentStrings() const { return _alignmentStrings; }
+igResource	inline igIntList *getAlignmentValues() const { return _alignmentValues; }
+igResource	inline void setPostProcessAsynchronousFilesState(bool postProcessAsynchronousFilesStateParam) { _postProcessAsyncronousFilesState = postProcessAsynchronousFilesStateParam; }
+igResource	inline bool getPostProcessAsynchronousFilesState() const { return _postProcessAsyncronousFilesState; }
+igResource	inline void setTemporaryMemoryPool(::igMemoryPool *temporaryMemoryPoolParam) { _temporaryMemoryPool = temporaryMemoryPoolParam; }
+igResource	inline ::igMemoryPool *getTemporaryMemoryPool() const { return _temporaryMemoryPool; }
+igResource	inline void setDataMemoryPool(::igMemoryPool *dataMemoryPoolParam) { _dataMemoryPool = dataMemoryPoolParam; }
+igResource	inline ::igMemoryPool *getDataMemoryPool() const { return _dataMemoryPool; }
+igResource	inline void setObjectMemoryPool(::igMemoryPool *objectMemoryPoolParam) { _objectMemoryPool = objectMemoryPoolParam; }
+igResource	inline ::igMemoryPool *getObjectMemoryPool() const { return _objectMemoryPool; }
+igResource	inline void setIGBSharingState(bool iGBSharingStateParam) { _IGBSharingState = iGBSharingStateParam; }
+igResource	inline bool getIGBSharingState() const { return _IGBSharingState; }
+igResource	inline void setIGBChunkSize(int iGBChunkSizeParam) { _IGBChunkSize = iGBChunkSizeParam; }
+igResource	inline int getIGBChunkSize() const { return _IGBChunkSize; }
+igResource	inline void setUseMemoryPoolAssignmentsState(bool useMemoryPoolAssignmentsStateParam) { _useMemoryPoolAssignmentsState = useMemoryPoolAssignmentsStateParam; }
+igResource	inline bool getUseMemoryPoolAssignmentsState() const { return _useMemoryPoolAssignmentsState; }
+igResource	static int _asynchronousLoadingThreadStackSize;
+igResource	static inline int getAsynchronousLoadingThreadStackSize() { return _asynchronousLoadingThreadStackSize; }
+igResource	static inline void setAsynchronousLoadingThreadStackSize(int size) { _asynchronousLoadingThreadStackSize = size; }
+igResource	static igResource *getGlobalResource();
+igResource	igSmartPointer<igDirectory> getDirectory(const char *directoryName);
+igResource	igDirectory *getImageDirectory();
+igResource	void appendDirectory(igDirectory *directory);
+igResource	void addAlignmentPair(const char *name, int size);
+igResource	igDirectory *load(const char *directoryName);
+igResource	void unload(const char *directoryName);
+igResource	void unloadAll();
+igResource	void unloadAllIGBs();
+igResource	igDirectory *loadSynchronous(const char *directoryName);
+igResource	igInfo *getInfoByType(const char *dirName, const char *infoTypeName, int index);
+igResource	void disableAsynchronousLoading();
+igResource	void enableAsynchronousLoading();
+igResource	virtual void releaseDefaults();
+igResource	void makeCompatible(const char *dirName);
+igResource	igIGBFile *doLoad(igIGBFile *fdir);
+igResource	bool isLoadFinished(igDirectory *loadingDirectory);
+igVisualContext	IG_ABSTRACT_OBJECT_DEFINE(igVisualContext)
+igVisualContext	static igMetaField *k_contextIndex;
+igVisualContext	protected: static igMetaField *k_timer;
+igVisualContext	static igMetaField *k_showFrameRate;
+igVisualContext	static igMetaField *k_commandLineFrameRate;
+igVisualContext	static igMetaField *k_primitiveCount;
+igVisualContext	static igMetaField *k_frameStartTime;
+igVisualContext	static igMetaField *k_blendMatricesCount;
+igVisualContext	static igMetaField *k_blendIndex;
+igVisualContext	static igMetaField *k_inverseTranspose;
+igVisualContext	static igMetaField *k_blendMatrices;
+igVisualContext	static igMetaField *k_inverseTransposeCount;
+igVisualContext	static igMetaField *k_renderingTime;
+igVisualContext	static igMetaField *k_scissorType;
+igVisualContext	static igMetaField *k_viewMatrixHint;
+igVisualContext	static igMetaField *k_viewMatrixInverse;
+igVisualContext	static igMetaField *k_viewMatrixDirty;
+igVisualContext	static igMetaField *k_vertexArray2;
+igVisualContext	static igMetaField *k_customStates;
+igVisualContext	static igMetaField *k_customFields;
+igVisualContext	static igMetaField *k_ditherState;
+igVisualContext	private: static igMetaField *k_driverDataMemoryPool;
+igVisualContext	static igMetaField *k_vertexMemoryPool;
+igVisualContext	static igMetaField *k_internalMemoryPool;
+igVisualContext	static igMetaField *k_temporaryMemoryPool;
+igVisualContext	static igMetaField *k_imageMemoryPool;
+igVisualContext	static igMetaField *k_textureMemoryPool;
+igVisualContext	static igMetaField *k_statisticsMemoryPool;
+igVisualContext	static igMetaField *k_listMemoryPool;
+igVisualContext	protected: igVisualContext();
+igVisualContext	~igVisualContext();
+igVisualContext	public: virtual void constructFields(int flag);
+igVisualContext	virtual void userConstruct(int flag);
+igVisualContext	virtual void userDestruct();
+igVisualContext	igMemoryPool *getDriverDataMemoryPool() const;
+igVisualContext	igMemoryPool *getVertexMemoryPool() const;
+igVisualContext	igMemoryPool *getInternalMemoryPool() const;
+igVisualContext	igMemoryPool *getImageMemoryPool() const;
+igVisualContext	igMemoryPool *getStatisticsMemoryPool() const;
+igVisualContext	igMemoryPool *getListMemoryPool() const;
+igVisualContext	static void setImageMemoryPool(igMemoryPool *pool);
+igVisualContext	protected: static igMemoryPool *_defaultDriverDataMemoryPool;
+igVisualContext	static igMemoryPool *_defaultVertexMemoryPool;
+igVisualContext	static igMemoryPool *_defaultInternalMemoryPool;
+igVisualContext	static igMemoryPool *_defaultTemporaryMemoryPool;
+igVisualContext	static igMemoryPool *_defaultImageMemoryPool;
+igVisualContext	static igMemoryPool *_defaultTextureMemoryPool;
+igVisualContext	static igMemoryPool *_defaultStatisticsMemoryPool;
+igVisualContext	static igMemoryPool *_defaultListMemoryPool;
+igVisualContext	public: inline virtual void makeCurrent() { igContext::makeCurrent(); }
+igVisualContext	inline virtual bool isCurrent() const { return igContext::isCurrent(); }
+igVisualContext	virtual void updateFrameRateDisplay(float frameTime, float drawTime);
+igVisualContext	virtual void updatePrimitiveCountDisplay(float frameTime);
+igVisualContext	virtual void outputText(int x, int y, const char *str);
+igVisualContext	virtual void loadDefaultDriverDatabase();
+igVisualContext	virtual igResult open() = 0;
+igVisualContext	inline virtual void activate() {}
+igVisualContext	inline virtual void deactivate() {}
+igVisualContext	virtual void reset();
+igVisualContext	virtual int getLastError();
+igVisualContext	virtual int getCapability(IG_GFX_CAPABILITY which) const = 0;
+igVisualContext	virtual void setNativeWindowHandle(void *pHandle) = 0;
+igVisualContext	virtual void *getNativeWindowHandle() const = 0;
+igVisualContext	virtual void setNativeDeviceHandle(void *pHandle) = 0;
+igVisualContext	virtual void *getNativeDeviceHandle() const = 0;
+igVisualContext	virtual void setNativeRenderContextHandle(void *pHandle) = 0;
+igVisualContext	virtual void *getNativeRenderContextHandle() const = 0;
+igVisualContext	virtual void setNativeVisualInfo(void *pInfo) = 0;
+igVisualContext	virtual void *getNativeVisualInfo() const = 0;
+igVisualContext	virtual int createRenderDestination(igRenderDestinationFormat *pFormat) = 0;
+igVisualContext	inline virtual void deleteRenderDestination(int handle) {}
+igVisualContext	virtual void setRenderDestination(int iHandle) = 0;
+igVisualContext	virtual void setRenderDestination(int iHandle, int *piTex) = 0;
+igVisualContext	virtual int getCurrentRenderDestination() const = 0;
+igVisualContext	virtual IG_GFX_RENDERDESTINATION_TYPE getRenderDestinationType(int iHandle) const = 0;
+igVisualContext	virtual bool setRenderDestinationSize(int iHandle, int iWidth, int iHeight) = 0;
+igVisualContext	virtual void getRenderDestinationSize(int iHandle, int &piWidth, int &piHeight) const = 0;
+igVisualContext	virtual int getColorBitsPerPixel(int iHandle) const = 0;
+igVisualContext	virtual int getAlphaBitsPerPixel(int iHandle) const = 0;
+igVisualContext	virtual int getDepthBitsPerPixel(int iHandle) const = 0;
+igVisualContext	virtual int getStencilBitsPerPixel(int iHandle) const = 0;
+igVisualContext	virtual float getPixelAspectRatio(int iHandle) const = 0;
+igVisualContext	virtual void setVertexArray(igVertexArray *vertexArray) = 0;
+igVisualContext	virtual void setIndexArray(igIndexArray *indexArray) = 0;
+igVisualContext	virtual igVertexArray *getVertexArray() const = 0;
+igVisualContext	virtual igIndexArray *getIndexArray() const = 0;
+igVisualContext	virtual void setPrimLengthArray(igPrimLengthArray *lengthArray) = 0;
+igVisualContext	virtual igPrimLengthArray *getPrimLengthArray() const = 0;
+igVisualContext	virtual void setColor(const igVec4f &rgba) = 0;
+igVisualContext	virtual void setColor(unsigned int abgr) = 0;
+igVisualContext	virtual void getColor(igVec4f &rgba) const = 0;
+igVisualContext	virtual unsigned int getColor() const = 0;
+igVisualContext	virtual void setVertexMask(igVertexComponentFilter attr) = 0;
+igVisualContext	virtual igVertexComponentFilter getVertexMask() const = 0;
+igVisualContext	virtual void draw(IG_GFX_DRAW primType, int numPrimitives, int offset) = 0;
+igVisualContext	inline virtual void drawIndexed(IG_GFX_DRAW primType, int numPrimitives, int indexOffset, int minVertexIndex, int maxVertexIndex) { draw(primType, numPrimitives, indexOffset); }
+igVisualContext	virtual void drawNonIndexed(IG_GFX_DRAW primType, int numPrimitives, int vertexOffset);
+igVisualContext	virtual void drawMultiple(IG_GFX_DRAW_MULTIPLE stripType, int numStrips, int vertexOffset, int primitiveOffset) = 0;
+igVisualContext	virtual void setLightingState(bool enb) = 0;
+igVisualContext	virtual bool getLightingState() const = 0;
+igVisualContext	virtual int createLight(IG_GFX_LIGHT_TYPE type) = 0;
+igVisualContext	virtual void deleteLight(int lighthandle) = 0;
+igVisualContext	virtual bool setLightState(int lightHandle, bool enable) = 0;
+igVisualContext	virtual bool getLightState(int lightHandle) const = 0;
+igVisualContext	virtual IG_GFX_LIGHT_TYPE getLightType(int handle) const = 0;
+igVisualContext	virtual void setLightDiffuse(int handle, const igVec4f &d) = 0;
+igVisualContext	virtual void getLightDiffuse(int handle, igVec4f &d) const = 0;
+igVisualContext	virtual void setLightAmbient(int handle, const igVec4f &a) = 0;
+igVisualContext	virtual void getLightAmbient(int handle, igVec4f &a) const = 0;
+igVisualContext	virtual void setLightSpecular(int handle, const igVec4f &s) = 0;
+igVisualContext	virtual void getLightSpecular(int handle, igVec4f &s) const = 0;
+igVisualContext	virtual void setLightPosition(int handle, const igVec3f &p) = 0;
+igVisualContext	virtual void getLightPosition(int handle, igVec3f &p) const = 0;
+igVisualContext	virtual void setLightDirection(int handle, const igVec3f &d) = 0;
+igVisualContext	virtual void getLightDirection(int handle, igVec3f &d) const = 0;
+igVisualContext	virtual void setLightCutoffAngle(int handle, float c) = 0;
+igVisualContext	virtual float getLightCutoffAngle(int handle) const = 0;
+igVisualContext	virtual void setLightFalloffRate(int handle, float e) = 0;
+igVisualContext	virtual float getLightFalloffRate(int handle) const = 0;
+igVisualContext	virtual void setLightAttenuation(int handle, const igVec3f &a) = 0;
+igVisualContext	virtual void getLightAttenuation(int handle, igVec3f &a) const = 0;
+igVisualContext	virtual void setMaterialShininess(float sh) = 0;
+igVisualContext	virtual float getMaterialShininess() const = 0;
+igVisualContext	virtual void setMaterialColorMode(int mode) = 0;
+igVisualContext	virtual int getMaterialColorMode() const = 0;
+igVisualContext	virtual void setMaterialDiffuse(const igVec4f &d) = 0;
+igVisualContext	virtual void getMaterialDiffuse(igVec4f &d) const = 0;
+igVisualContext	virtual void setMaterialEmissive(const igVec4f &e) = 0;
+igVisualContext	virtual void getMaterialEmissive(igVec4f &d) const = 0;
+igVisualContext	virtual void setMaterialAmbient(const igVec4f &a) = 0;
+igVisualContext	virtual void getMaterialAmbient(igVec4f &a) const = 0;
+igVisualContext	virtual void setMaterialSpecular(const igVec4f &s) = 0;
+igVisualContext	virtual void getMaterialSpecular(igVec4f &s) const = 0;
+igVisualContext	virtual void setMaterialSpecularState(bool enable) = 0;
+igVisualContext	virtual bool getMaterialSpecularState() const = 0;
+igVisualContext	virtual void setMaterial(const igVec4f &ambient, const igVec4f &diffuse, const igVec4f &specular, const igVec4f &emission, const float shininess) = 0;
+igVisualContext	virtual void setNormalizeNormalsState(bool bEnable) = 0;
+igVisualContext	virtual bool getNormalizeNormalsState() const = 0;
+igVisualContext	virtual void setSceneAmbient(const igVec4f &sceneAmbient) = 0;
+igVisualContext	virtual void getSceneAmbient(igVec4f &sceneAmbient) const = 0;
+igVisualContext	virtual void setTextureStageState(int stage, bool enable) = 0;
+igVisualContext	virtual bool getTextureStageState(int stage) const = 0;
+igVisualContext	virtual int createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode, unsigned int imageCount) = 0;
+igVisualContext	virtual int createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode) = 0;
+igVisualContext	virtual void getTextureInfo(int handle, int &width, int &height, int &format, int &source, unsigned int &textureMode) const = 0;
+igVisualContext	virtual void setTextureRegion(int handle, int iLevel, int offsetX, int offsetY, int width, int height, igImage *image) = 0;
+igVisualContext	virtual void setTextureComponentSize(int handle, int redBits, int greenBits, int blueBits, int alphaBits) = 0;
+igVisualContext	virtual void setTextureComponentSizeIntensityAlpha(int handle, int intensityBits, int alphaBits) = 0;
+igVisualContext	virtual void getTextureComponentSize(int handle, int &redBits, int &greenBits, int &blueBits, int &alphaBits, bool &palletized) const = 0;
+igVisualContext	virtual void getTextureComponentSizeIntensityAlpha(int handle, int &intensityBits, int &alphaBits, bool &palletized) const = 0;
+igVisualContext	virtual bool setTexture(int texHandle, int stage) = 0;
+igVisualContext	virtual bool loadTexture(int texHandle) = 0;
+igVisualContext	virtual int getCurrentTexture(int stage) const = 0;
+igVisualContext	virtual void unloadTexture(int texHandle) = 0;
+igVisualContext	virtual void deleteTexture(int texHandle) = 0;
+igVisualContext	virtual bool setTextureSource(int handle, igImage *image) = 0;
+igVisualContext	virtual bool setTextureSource(int handle, igImage *image, unsigned int level) = 0;
+igVisualContext	virtual bool setTextureSource(int handle, int srcHandle) = 0;
+igVisualContext	virtual igImage *getTextureImage(int handle) const = 0;
+igVisualContext	virtual void setTextureAddressingMode(int handle, IG_GFX_TEXTURE_WRAP wrapU, IG_GFX_TEXTURE_WRAP wrapV) = 0;
+igVisualContext	virtual void getTextureAddressingMode(int handle, IG_GFX_TEXTURE_WRAP &wrapU, IG_GFX_TEXTURE_WRAP &wrapV) const = 0;
+igVisualContext	virtual void setTextureMinificationFilter(int handle, IG_GFX_TEXTURE_FILTER filter) = 0;
+igVisualContext	virtual IG_GFX_TEXTURE_FILTER getTextureMinificationFilter(int handle) const = 0;
+igVisualContext	virtual void setTextureMagnificationFilter(int handle, IG_GFX_TEXTURE_FILTER filter) = 0;
+igVisualContext	virtual IG_GFX_TEXTURE_FILTER getTextureMagnificationFilter(int handle) const = 0;
+igVisualContext	virtual int getAvailableTextureMemory(int which) const = 0;
+igVisualContext	virtual void setVertexPipelineMode(int mode);
+igVisualContext	virtual int getVertexPipelineMode() const;
+igVisualContext	virtual void setDitherState(bool enable);
+igVisualContext	virtual void setPixelPipelineMode(IG_GFX_PIXEL_PIPELINE_MODE mode);
+igVisualContext	virtual IG_GFX_PIXEL_PIPELINE_MODE getPixelPipelineMode() const;
+igVisualContext	virtual void setTextureStageFunc(int stage, int func) = 0;
+igVisualContext	virtual int getTextureStageFunc(int stage) const = 0;
+igVisualContext	virtual void setTextureStageCoordSource(int stage, IG_GFX_TEXTURE_COORD_SOURCE source, int coordIndex) = 0;
+igVisualContext	virtual void getTextureStageCoordSource(int stage, IG_GFX_TEXTURE_COORD_SOURCE &source, int &coordIndex) const = 0;
+igVisualContext	virtual void setBlendingState(bool enable) = 0;
+igVisualContext	virtual bool getBlendingState() const = 0;
+igVisualContext	virtual void setBlendingSource(IG_GFX_BLENDING_FUNCTION srcMode) = 0;
+igVisualContext	virtual IG_GFX_BLENDING_FUNCTION getBlendingSource() const = 0;
+igVisualContext	virtual void setBlendingDestination(IG_GFX_BLENDING_FUNCTION destMode) = 0;
+igVisualContext	virtual IG_GFX_BLENDING_FUNCTION getBlendingDestination() const = 0;
+igVisualContext	virtual void setBlendingSourceDestination(IG_GFX_BLENDING_FUNCTION srcMode, IG_GFX_BLENDING_FUNCTION destMode) = 0;
+igVisualContext	virtual void setStencilState(bool enable) = 0;
+igVisualContext	virtual bool getStencilState() const = 0;
+igVisualContext	virtual void setStencilRefVal(unsigned int stenRef) = 0;
+igVisualContext	virtual unsigned int getStencilRefVal() const = 0;
+igVisualContext	virtual void setStencilFunc(IG_GFX_STENCIL_FUNCTION stenFunc) = 0;
+igVisualContext	virtual IG_GFX_STENCIL_FUNCTION getStencilFunc() const = 0;
+igVisualContext	virtual void setStencilOps(IG_GFX_STENCIL_OPERATION sfail, IG_GFX_STENCIL_OPERATION zpass, IG_GFX_STENCIL_OPERATION zfail) = 0;
+igVisualContext	virtual void getStencilOps(IG_GFX_STENCIL_OPERATION &sfail, IG_GFX_STENCIL_OPERATION &zpass, IG_GFX_STENCIL_OPERATION &zfail) const = 0;
+igVisualContext	virtual void setStencilReadMask(unsigned int stenRef) = 0;
+igVisualContext	virtual unsigned int getStencilReadMask() const = 0;
+igVisualContext	virtual void setStencilWriteMask(unsigned int stenRef) = 0;
+igVisualContext	virtual unsigned int getStencilWriteMask() const = 0;
+igVisualContext	virtual bool copyRenderDestinationToTexture(int srcHandle, int hTexture, int srcX, int srcY, int width, int height, int destX, int destY) = 0;
+igVisualContext	virtual bool copyRenderDestinationToMemory(int srcHandle, igImage *destImage, int srcX, int srcY, int width, int height) = 0;
+igVisualContext	virtual bool beginDraw() = 0;
+igVisualContext	virtual void endDraw() = 0;
+igVisualContext	virtual void flushDraw() = 0;
+igVisualContext	virtual void clearRenderDestination(unsigned int which) = 0;
+igVisualContext	virtual void setClearColor(const igVec4f &rgba) = 0;
+igVisualContext	virtual void setClearColor(unsigned int color) = 0;
+igVisualContext	virtual void getClearColor(igVec4f &abgr) const = 0;
+igVisualContext	virtual unsigned int getClearColor() const = 0;
+igVisualContext	virtual void setClearDepth(float val) = 0;
+igVisualContext	virtual float getClearDepth() const = 0;
+igVisualContext	virtual void setClearStencil(unsigned int val) = 0;
+igVisualContext	virtual unsigned int getClearStencil() const = 0;
+igVisualContext	virtual void setViewport(int x, int y, int w, int h, float nearZ, float farZ) = 0;
+igVisualContext	virtual void getViewport(int &x, int &y, int &w, int &h) const = 0;
+igVisualContext	virtual void getViewport(int &x, int &y, int &w, int &h, float &nearZ, float &farZ) const = 0;
+igVisualContext	virtual void setScissor(int x, int y, int w, int h) = 0;
+igVisualContext	virtual void getScissor(int &x, int &y, int &w, int &h) const = 0;
+igVisualContext	virtual void setScissorType(IG_GFX_SCISSOR_TYPE type) = 0;
+igVisualContext	inline virtual IG_GFX_SCISSOR_TYPE getScissorType() const { return _scissorType; }
+igVisualContext	virtual int createRenderList() = 0;
+igVisualContext	virtual void deleteRenderList(int dlistHandle) = 0;
+igVisualContext	virtual void beginRenderListDraw(int dlistHandle) = 0;
+igVisualContext	virtual bool endRenderListDraw() = 0;
+igVisualContext	virtual bool executeRenderList(int dlistHandle) = 0;
+igVisualContext	virtual void setBlendingMatrices(const unsigned int matrixCount, const igMatrix44f *matrixArray);
+igVisualContext	virtual int getBlendingMatricesCount();
+igVisualContext	virtual void setStackSize(IG_GFX_MATRIX_STACK which, int depth) = 0;
+igVisualContext	virtual int getStackSize(IG_GFX_MATRIX_STACK which) const = 0;
+igVisualContext	virtual void pushMatrix(IG_GFX_MATRIX_STACK which) = 0;
+igVisualContext	virtual void popMatrix(IG_GFX_MATRIX_STACK which) = 0;
+igVisualContext	virtual void setMatrix(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+igVisualContext	virtual void pushPreMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+igVisualContext	virtual void pushPostMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+igVisualContext	virtual void preMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+igVisualContext	virtual void postMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+igVisualContext	virtual void getMatrix(IG_GFX_MATRIX_STACK which, igMatrix44f &mat) const = 0;
+igVisualContext	virtual void setTextureMatrixState(int stage, bool enable) = 0;
+igVisualContext	virtual bool getTextureMatrixState(int stage) const = 0;
+igVisualContext	virtual void setVertexBlendingState(bool enable) = 0;
+igVisualContext	virtual bool getVertexBlendingState() const = 0;
+igVisualContext	virtual void setViewMatrixHint(const igMatrix44f &mat);
+igVisualContext	virtual void getViewMatrixHint(igMatrix44f &mat) const;
+igVisualContext	virtual void getViewMatrixInverse(igMatrix44f &mat);
+igVisualContext	virtual void resetToDefault(int which);
+igVisualContext	virtual void setAlphaTestState(bool enb) = 0;
+igVisualContext	virtual bool getAlphaTestState() const = 0;
+igVisualContext	virtual void setAlphaFunc(IG_GFX_ALPHA_FUNCTION afunc) = 0;
+igVisualContext	virtual IG_GFX_ALPHA_FUNCTION getAlphaFunc() const = 0;
+igVisualContext	virtual void setAlphaRefValue(float val) = 0;
+igVisualContext	virtual float getAlphaRefValue() const = 0;
+igVisualContext	virtual void setViewportClippingState(bool enable) = 0;
+igVisualContext	virtual bool getViewportClippingState() const = 0;
+igVisualContext	virtual void setColorMask(bool r, bool g, bool b, bool a) = 0;
+igVisualContext	virtual void getColorMask(bool &r, bool &g, bool &b, bool &a) const = 0;
+igVisualContext	virtual void setShadingMode(IG_GFX_SHADING_MODE mode) = 0;
+igVisualContext	virtual IG_GFX_SHADING_MODE getShadingMode() const = 0;
+igVisualContext	virtual void setCullFaceState(bool enable) = 0;
+igVisualContext	virtual bool getCullFaceState() const = 0;
+igVisualContext	virtual void setCullFaceMode(IG_GFX_CULL_FACE_MODE m) = 0;
+igVisualContext	virtual IG_GFX_CULL_FACE_MODE getCullFaceMode() const = 0;
+igVisualContext	virtual void setDepthTestState(bool enable) = 0;
+igVisualContext	virtual bool getDepthTestState() const = 0;
+igVisualContext	virtual void setDepthTestFunction(int func) = 0;
+igVisualContext	virtual int getDepthTestFunction() const = 0;
+igVisualContext	virtual void setDepthWriteState(bool enable) = 0;
+igVisualContext	virtual bool getDepthWriteState() const = 0;
+igVisualContext	virtual void setRenderMode(IG_GFX_RENDER_MODE mode) = 0;
+igVisualContext	virtual IG_GFX_RENDER_MODE getRenderMode() const = 0;
+igVisualContext	virtual void setFogState(bool enable) = 0;
+igVisualContext	virtual bool getFogState() const = 0;
+igVisualContext	virtual void setFogDensity(float density) = 0;
+igVisualContext	virtual float getFogDensity() const = 0;
+igVisualContext	virtual void setFogMode(IG_GFX_FOG_MODE mode) = 0;
+igVisualContext	virtual IG_GFX_FOG_MODE getFogMode() const = 0;
+igVisualContext	virtual void setFogColor(const igVec4f &color) = 0;
+igVisualContext	virtual void getFogColor(igVec4f &color) const = 0;
+igVisualContext	virtual void setFogNear(float fogNear) = 0;
+igVisualContext	virtual float getFogNear() const = 0;
+igVisualContext	virtual void setFogFar(float fogFar) = 0;
+igVisualContext	virtual float getFogFar() const = 0;
+igVisualContext	virtual igResult setVideoMode(igVideoFormat &pFormat) = 0;
+igVisualContext	virtual void getVideoMode(igVideoFormat &pMode) = 0;
+igVisualContext	virtual bool setStatistic(unsigned int stat, bool enb) = 0;
+igVisualContext	virtual bool getStatistic(unsigned int stat) = 0;
+igVisualContext	virtual bool getStatisticCapability(unsigned int stat) = 0;
+igVisualContext	virtual void getStatistic() = 0;
+igVisualContext	virtual float getStatisticValue(unsigned int stat) = 0;
+igVisualContext	inline virtual bool setTextureSource(int handle, void *buffer) { return false; }
+igVisualContext	virtual void setVertexArray(igVertexArray2 *va, unsigned int stream);
+igVisualContext	virtual igVertexArray2 *getVertexArray(unsigned int stream);
+igVisualContext	virtual igMetaObject *getShaderConstantMeta(unsigned int constant);
+igVisualContext	virtual int vfunc_262();
+igVisualContext	virtual int vfunc_263();
+igVisualContext	virtual int createCustomStateCollection(igCustomState **states, unsigned int count, const char *name);
+igVisualContext	virtual igCustomState *getCustomState(int collection, unsigned int index);
+igVisualContext	virtual igResult deleteCustomStateCollection(int collection);
+igVisualContext	virtual void clearCustomStates();
+igVisualContext	virtual int findCustomStateCollection(const char *name);
+igVisualContext	virtual int getShaderConstantIndex(const char *name);
+igVisualContext	virtual int getShaderConstantCollection(int constant);
+igVisualContext	virtual igVertexArray *softwareBlendVertex(const igVertexArray *vertexArray);

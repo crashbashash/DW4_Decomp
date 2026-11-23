@@ -48,7 +48,7 @@ void igVisualContextCapabilityManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVisualContextCapabilityManager_Register);
 }
 
-static igMetaObjectCallback g_igVisualContextCapabilityManager_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igVisualContextCapabilityManager_callbackList[] = { Gap::Gfx::igVisualContext::arkRegister, 0 };
 
 CallbackArray *igVisualContextCapabilityManager_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -97,7 +97,7 @@ void igVisualContextCapabilityManager_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVisualContextCapabilityManager_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
     ((igMetaField *)temp_s1)->_persistent = 0;
     igMetaObject_NameFields(meta, g_igVisualContextCapabilityManager_fieldTable, g_igVisualContextCapabilityManager_fieldHandles, g_igVisualContextCapabilityManager_fieldOffsets, fieldStart);
 }

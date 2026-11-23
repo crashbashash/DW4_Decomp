@@ -17,10 +17,10 @@ void FUN_00180060(O_180060 *arg0) {
         if (arg0->f1420 < (int)arg0->f72) {
             s0 = arg0->f80;
             if (s0 != 0) {
-                ((V1 *)igVisualContext_GetDriverDataMemoryPool((int *)arg0))->v264(s0);
+                ((V1 *)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool())->v264(s0);
                 arg0->f80 = 0;
             }
-            arg0->f80 = (char *)((V2_180060 *)igVisualContext_GetDriverDataMemoryPool((int *)arg0))->v220(arg0->f72 << 6, 0x10);
+            arg0->f80 = (char *)((V2_180060 *)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool())->v220(arg0->f72 << 6, 0x10);
             arg0->f1420 = arg0->f72;
         }
         for (i = 0; i < arg0->f72; i++) {

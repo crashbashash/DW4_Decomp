@@ -44,7 +44,7 @@ void FUN_001702c0(igPsx2VisualContext *vc) {
     int i;
     sp5C = 0x20;
     igGetRegistryValue_Int(*(igRegistry **)((char *)g_objectSystem + 56), 4, "IG_GFX_VC_LIGHT_ARRAY_SIZE", &sp5C, 0x20, 0);
-    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)vc));
+    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)vc)->getListMemoryPool());
     if (r != 0) {
         bi = (int)r;
         b = (Buf_17a070 *)bi;
@@ -79,12 +79,12 @@ void FUN_001702c0(igPsx2VisualContext *vc) {
         r = (Buf_17a070 *)bi;
     }
     vc->_pLightList = (int)r;
-    lights = Memory_AllocateAlignedWithAllocator(0x70, 0x10, (igMemoryPoolView *)igVisualContext_GetInternalMemoryPool((int *)vc));
+    lights = Memory_AllocateAlignedWithAllocator(0x70, 0x10, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)vc)->getInternalMemoryPool());
     if (lights != 0) FUN_001716c0(lights);
     vc->_currentMaterial = (int)lights;
     FUN_001716c0((void *)vc->_currentMaterial);
     DAT_00560850[0] = ((LightCapsDispatch *)vc)->getCapability(9);
-    DAT_00560858[0] = ((PoolAllocDispatch *)igVisualContext_GetInternalMemoryPool((int *)vc))->allocate(DAT_00560850[0] * 4);
+    DAT_00560858[0] = ((PoolAllocDispatch *)((Gap::Gfx::igVisualContext *)vc)->getInternalMemoryPool())->allocate(DAT_00560850[0] * 4);
     for (i = 0; i < DAT_00560850[0]; i++) {
         ((int *)DAT_00560858[0])[i] = -1;
     }

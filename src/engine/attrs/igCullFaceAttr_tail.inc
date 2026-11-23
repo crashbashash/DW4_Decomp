@@ -3,8 +3,8 @@ namespace Attrs {
 
 void igCullFaceAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getCullFaceState());
-    setMode(((igVisualContextDispatchView *)vc)->getCullFaceMode());
+    setState(vc->getCullFaceState());
+    setMode(vc->getCullFaceMode());
 }
 
 /* Setter for the cull mode (`_mode`, +16); slot 33 is the matching `_enabled` setter. */

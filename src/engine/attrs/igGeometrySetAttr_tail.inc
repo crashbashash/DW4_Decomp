@@ -90,7 +90,7 @@ void igGeometrySetAttr::reset()
     }
     int handle = _renderListHandle;
     if (handle != -1) {
-        ((igVisualContextDispatchView *)(igVisualContext *)_vc)->deleteRenderList(handle);
+        _vc->deleteRenderList(handle);
     }
     _renderListHandle = -1;
     _vc = 0;

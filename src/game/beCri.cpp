@@ -1054,7 +1054,7 @@ static inline int AsMemoryRefField(int field) {
 void beCriSfpData_SetupBufferAlignment(void) {
     int field;
 
-    igResource_AddAlignment((igResource *)g_globalContext, "sndfBuffer", 0x20);
+    g_globalContext->addAlignmentPair("sndfBuffer", 0x20);
     field = (int)igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
     field = AsMemoryRefField(field);
     ((Gap::Core::igMemoryRefMetaField *)field)->setAlignmentType("sndfBuffer");

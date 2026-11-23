@@ -14,11 +14,11 @@ void igFogAttr::synchronizeDefault(igVisualContext *vc)
 {
     igVec4f color;
 
-    setMode(((igVisualContextDispatchView *)vc)->getFogMode());
-    setDensity(((igVisualContextDispatchView *)vc)->getFogDensity());
-    ((igVisualContextDispatchView *)vc)->getFogColor(color);
+    setMode(vc->getFogMode());
+    setDensity(vc->getFogDensity());
+    vc->getFogColor(color);
     setColor(color);
-    setNearFar(((igVisualContextDispatchView *)vc)->getFogNear(), ((igVisualContextDispatchView *)vc)->getFogFar());
+    setNearFar(vc->getFogNear(), vc->getFogFar());
 }
 }
 }

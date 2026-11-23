@@ -124,7 +124,7 @@ void igInsightCore_InitializeDrawing(igInsightCore *core) {
     temp_s1 = arg0->f28->f8->n;
     var_s0 = 0;
     while (var_s0 < temp_s1) {
-        ((Gap::Gui::igRenderer *)arg0->f28->f8->items[var_s0])->setVisualContext((igVisualContext *)arg0->f24);
+        ((Gap::Gui::igRenderer *)arg0->f28->f8->items[var_s0])->setVisualContext((Gap::Gfx::igVisualContext *)arg0->f24);
         var_s0 += 1;
     }
 }

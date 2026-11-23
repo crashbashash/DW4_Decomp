@@ -16,9 +16,9 @@ void igClearAttr::apply(igVisualContext *vc)
 
 void igClearAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setStencil(((igVisualContextDispatchView *)vc)->getClearStencil());
-    setDepth(((igVisualContextDispatchView *)vc)->getClearDepth());
-    _colorPacked = ((igVisualContextDispatchView *)vc)->getClearColor();
+    setStencil(vc->getClearStencil());
+    setDepth(vc->getClearDepth());
+    _colorPacked = vc->getClearColor();
 }
 
 void igClearAttr::initDefaults()

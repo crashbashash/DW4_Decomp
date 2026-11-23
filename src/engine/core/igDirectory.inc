@@ -34,7 +34,7 @@ void igDirectory::arkRegister()
 
 CallbackArray *igDirectory::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Core::igDirEntry::arkRegister, Gap::Core::igDirectoryList::arkRegister, Gap::Core::igInfoList::arkRegister, igResource_EnsureRegistered, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, Gap::Core::igSemaphore::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igDirEntry::arkRegister, Gap::Core::igDirectoryList::arkRegister, Gap::Core::igInfoList::arkRegister, Gap::Core::igResource::arkRegister, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, Gap::Core::igSemaphore::arkRegister, 0 };
 
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -79,7 +79,7 @@ void igDirectory::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
-        metaField->_metaObject = (int)igResource_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Core::igResource::getClassTypeLazy();
         metaField->_refCounted = 0;
     }
     {

@@ -30,7 +30,7 @@ void igVisualContextAttrDefaultManager::arkRegister()
 
 CallbackArray *igVisualContextAttrDefaultManager::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igVisualContext_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igVisualContext::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -60,7 +60,7 @@ void igVisualContextAttrDefaultManager::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 1);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
         metaField->_persistent = 0;
         metaField->_deepCopyMethod = 1;
         metaField->_shallowCopyMethod = 1;

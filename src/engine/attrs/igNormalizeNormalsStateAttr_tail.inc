@@ -8,7 +8,7 @@ void igNormalizeNormalsStateAttr::apply(igVisualContext *vc)
 
 void igNormalizeNormalsStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    _enabled = ((igVisualContextDispatchView *)vc)->getNormalizeNormalsState();
+    _enabled = vc->getNormalizeNormalsState();
 }
 }
 }

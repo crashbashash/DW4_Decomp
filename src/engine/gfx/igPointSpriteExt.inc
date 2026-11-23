@@ -119,7 +119,7 @@ void igPointSpriteExt_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPointSpriteExt_Register);
 }
 
-static igMetaObjectCallback g_igPointSpriteExt_callbackList[] = { igVisualContext_EnsureRegistered, Gap::Gfx::igVertexArray::arkRegister, 0 };
+static igMetaObjectCallback g_igPointSpriteExt_callbackList[] = { Gap::Gfx::igVisualContext::arkRegister, Gap::Gfx::igVertexArray::arkRegister, 0 };
 
 CallbackArray *igPointSpriteExt_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -235,7 +235,7 @@ void igPointSpriteExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPointSpriteExt_ctorTable, 0x12);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
     ((igMetaField *)temp_s2)->_persistent = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));

@@ -5,7 +5,6 @@
 #include "dw4/gfx/igVertexArrayLock.h"
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/scenegraph/igCommonTraversalDispatchView.h"
-#include "dw4/gfx/igVisualContextDispatchView.h"
 #include "dw4/game/ParticleTimer.h"
 #include "dw4/game/ParticleArray.h"
 #include "dw4/scenegraph/igAttrStackManager.h"
@@ -132,7 +131,7 @@ static inline void createContext(ParticleArray *self) {
     if (self->_context == 0) {
         assignReference(self->_context, igVisualContext_FindFirst());
         if (self->_configured && particleFormat(self)->_spriteType != 0 && self->_pointSpriteInterface == 0) {
-            assignReference(self->_pointSpriteInterface, ((igVisualContextDispatchView *)self->_context)->GetExtension("igPointSpriteExt"));
+            assignReference(self->_pointSpriteInterface, ((Gap::Gfx::igVisualContext *)self->_context)->getExt("igPointSpriteExt"));
         }
     }
 }
@@ -269,7 +268,7 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
     self->_particleOffset = offset;
     self->_aliveParticleNum = num;
     if (self->_pointSpriteInterface == 0) {
-        assignReference(self->_pointSpriteInterface, ((igVisualContextDispatchView *)self->_context)->GetExtension("igPointSpriteExt"));
+        assignReference(self->_pointSpriteInterface, ((Gap::Gfx::igVisualContext *)self->_context)->getExt("igPointSpriteExt"));
     }
     if (self->_vertexArray1 == 0) {
         int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();

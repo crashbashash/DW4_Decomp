@@ -26,7 +26,7 @@ void igVisualContextList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVisualContextList_Register);
 }
 
-static igMetaObjectCallback g_igVisualContextList_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igVisualContextList_callbackList[] = { Gap::Gfx::igVisualContext::arkRegister, 0 };
 
 CallbackArray *igVisualContextList_Register(void) {
     GfxLibrary_MarkRegistered();

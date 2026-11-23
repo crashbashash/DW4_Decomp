@@ -199,20 +199,13 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self) {
 
 /* Points one pool of the global context at the allocator `selector` names (the owner's allocator
  * when g_useOwnerAllocator is set), holding a reference to it. */
-#define SET_POOL(pool, selector) { \
-    igResource *context; \
+#define SET_POOL(setter, selector) { \
+    Gap::Core::igResource *context; \
     int allocator; \
     int ownerAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool(); \
-    igObject *old; \
     if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = (int)Memory_GetAllocatorBySelector(selector); } \
-    context = (igResource *)g_globalContext; \
-    if (allocator != 0) ((igObject *)allocator)->_refCount = ((igObject *)allocator)->_refCount + 1; \
-    old = (igObject *)context->pool; \
-    if (old != 0) { \
-        old->_refCount = old->_refCount - 1; \
-        if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); \
-    } \
-    context->pool = allocator; }
+    context = g_globalContext; \
+    context->setter((igMemoryPool *)allocator); }
 
 /* One step of loading the file list, called each frame until it returns 1 (every file loaded).
  * With no directory pending it starts loading the next file, the first times switching the global
@@ -235,7 +228,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
     dirs = (igDirectoryList *)self->_dirList;
     if (dirs->_count != 0) {
         dir = ((igDirectory **)dirs->_data)[0];
-        if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, dir)) {
+        if (g_globalContext->isLoadFinished((Gap::Core::igDirectory *)dir)) {
             igStringRef rootAttr(ROOTATTR_2);
             infos = (igInfoList *)dir->_infoList;
             i = 0;
@@ -291,7 +284,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                     offset += 4;
                 } while (i < infos->_count);
             }
-            igResource_UnloadDirectory((igResource *)g_globalContext, (const char *)dir->_name);
+            g_globalContext->unload((const char *)dir->_name);
             CLEAR(igDirectoryList, self->_dirList)
             self->_loaded = self->_loaded + 1;
         }
@@ -299,16 +292,16 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
         int remaining = self->_onetimeCount;
         if (remaining > -1) {
             if (remaining == 2) {
-                SET_POOL(_objectMemoryPool, kIGMemoryPoolHandleUser0)
-                SET_POOL(_dataMemoryPool, kIGMemoryPoolHandleUser0)
+                SET_POOL(setObjectMemoryPool, kIGMemoryPoolHandleUser0)
+                SET_POOL(setDataMemoryPool, kIGMemoryPoolHandleUser0)
             } else if (remaining == 0) {
-                SET_POOL(_objectMemoryPool, kIGMemoryPoolHandleUser1)
-                SET_POOL(_dataMemoryPool, kIGMemoryPoolHandleUser1)
+                SET_POOL(setObjectMemoryPool, kIGMemoryPoolHandleUser1)
+                SET_POOL(setDataMemoryPool, kIGMemoryPoolHandleUser1)
             }
             self->_onetimeCount = self->_onetimeCount - 1;
         }
         igStringRef fileName = StringList_CopyRetained(fileNames, self->_loaded);
-        ((Gap::Core::igObjectList *)self->_dirList)->append((Gap::Core::igObject *)(igResource_LoadDirectory((igResource *)g_globalContext, fileName.p)));
+        ((Gap::Core::igObjectList *)self->_dirList)->append((Gap::Core::igObject *)(g_globalContext->load(fileName.p)));
     }
     return 0;
 }

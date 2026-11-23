@@ -30,7 +30,7 @@ void igTextureMatrixAttr::synchronizeDefault(igVisualContext *vc)
 {
     igMatrix44f m;
 
-    ((igVisualContextDispatchView *)vc)->getMatrix((IG_GFX_MATRIX_STACK)(_unitID + IG_GFX_MATRIX_STACK_TEXTURE_0), m);
+    vc->getMatrix((IG_GFX_MATRIX_STACK)(_unitID + IG_GFX_MATRIX_STACK_TEXTURE_0), m);
     setMatrix(m);
     _isProjective = igPsx2VisualContext_GetTextureMatrixProjectiveState((igPsx2VisualContext *)vc, _unitID);
 }

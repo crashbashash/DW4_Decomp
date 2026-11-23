@@ -12,7 +12,7 @@
 struct igMemoryPoolView;
 struct igRegistry;
 struct igDriverDatabase;
-struct igResource;
+namespace Gap { namespace Core { class igResource; } }
 struct igPluginHelper;
 struct igSymbolTable;
 struct igEventTrackerView;
@@ -43,7 +43,7 @@ struct ObjectSystemView {
     struct igMemoryPoolView *systemPool;    /* the allocator of record 4 (System) */
     struct igRegistry *configRegistry;
     struct igDriverDatabase *driverDatabase;
-    struct igResource *resource;         /* the resource manager: named directories and objects */
+    Gap::Core::igResource *resource;     /* the resource manager: named directories and objects */
     struct igMemoryPoolView *resourceTempPool;   /* the resource manager's temporary pool over a raw buffer */
     unsigned int resourceTempPoolSize;    /* "resourceTempMemoryPoolSize": no temporary pool when zero */
     struct igPluginHelper *pluginHelper;

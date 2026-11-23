@@ -32,6 +32,7 @@
 #include "dw4/gfx/igVertexComponentFilter.h"
 #include "dw4/gfx/igVertexData.h"
 #include "dw4/gfx/igVertexFormat.h"
+#include "dw4/gfx/igVisualContextTypes.h"
 #include "dw4/gfx/png.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/maths/igRay.h"
@@ -21039,8 +21040,8 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igStringRef.h"
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCopyRenderDestinationAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryAttr; class igGeometryAttr1_5; class igGeometryAttrList; class igGeometryMaskAttr; class igGeometrySetAttr; class igImageMipMapList; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderDestinationAttr; class igRenderListAttr; class igSetRenderDestinationAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureAttr; class igTextureBindAttr; class igTextureCoordSourceAttr; class igTextureCubeAttr; class igTextureFunctionAttr; class igTextureList; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
-namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFile; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igFolder; class igInfo; class igInfoList; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMediaFile; class igMediaList; class igMemoryDirEntry; class igMemoryFile; class igMemoryFileEntry; class igMemoryFileEntryList; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igPsx2File; class igPsx2Folder; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igRegistry; class igRegistryValue; class igRegistryValueList; class igSemaphore; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
-namespace Gfx { class igClut; class igExternalImageEntry; class igFileImage; class igFileImagePng; class igImage; class igImageConvert; class igImageLoader; class igImageUtils; class igIndexArray; class igMemoryImage; class igPrimLengthArray; class igPrimLengthArray1_1; class igPsx2Clut; class igPsx2Image; class igPsx2ImageConvert; class igPsx2IndexArray; class igPsx2VertexArray1_1; class igPsx2VertexArray2; class igPsx2VertexStream; class igTgaLoader; class igVertexArray; class igVertexArray1_1; class igVertexArray2; class igVertexArray2Helper; class igVertexStream; }
+namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFile; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igFolder; class igInfo; class igInfoList; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMediaFile; class igMediaList; class igMemoryDirEntry; class igMemoryFile; class igMemoryFileEntry; class igMemoryFileEntryList; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igPsx2File; class igPsx2Folder; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igRegistry; class igRegistryValue; class igRegistryValueList; class igResource; class igSemaphore; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
+namespace Gfx { class igClut; class igExternalImageEntry; class igFileImage; class igFileImagePng; class igImage; class igImageConvert; class igImageLoader; class igImageUtils; class igIndexArray; class igMemoryImage; class igPrimLengthArray; class igPrimLengthArray1_1; class igPsx2Clut; class igPsx2Image; class igPsx2ImageConvert; class igPsx2IndexArray; class igPsx2VertexArray1_1; class igPsx2VertexArray2; class igPsx2VertexStream; class igTgaLoader; class igVertexArray; class igVertexArray1_1; class igVertexArray2; class igVertexArray2Helper; class igVertexStream; class igVisualContext; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
 namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec3fMetaField; class igVec4fArrayMetaField; class igVec4fMetaField; class igVec4ucMetaField; }
@@ -21179,6 +21180,7 @@ using Core::igRegistryValueList;
 using Attrs::igRenderDestinationAttr;
 using Attrs::igRenderListAttr;
 using Gui::igRenderer;
+using Core::igResource;
 using Core::igSemaphore;
 using Attrs::igSetRenderDestinationAttr;
 using Attrs::igShadeModelAttr;
@@ -21231,6 +21233,7 @@ using Gfx::igVertexStream;
 using Attrs::igViewportAttr;
 using Core::igVirtualCFuncMetaField;
 using Attrs::igVisualAttribute;
+using Gfx::igVisualContext;
 using Attrs::igVisualContextAttrDefaultManager;
 }
 
@@ -21995,6 +21998,493 @@ public:
 }
 
 namespace Gap {
+namespace Core {
+/* handle 0x5868f8, 5 field(s), sizeof 20 (registered instance size) */
+class igContext : public Gap::Core::igObject {
+public:
+    igSmartPointer<igContextExtInfoList> _pExtList; /* +8    igObjectRefMetaField */
+    int _iNumExts;                                 /* +12   igIntMetaField */
+    igSmartPointer<igContextExtList> _pExtInstances; /* +16   igObjectRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igContext)
+protected:
+    static igMetaField *k_pExtList;
+    static igMetaField *k_iNumExts;
+    static igMetaField *k_pExtInstances;
+public:
+    void generateExtList();
+    const igMetaObject *getExtMeta(char *pExtName);
+    igContextExt *findExtInstance(const igMetaObject *extMeta);
+    virtual void makeCurrent();
+    virtual bool isCurrent() const;
+    virtual const igContextExtInfoList *getExtList();
+    virtual igContextExt *getExt(char *pExtName);
+    inline virtual void detectDriverDatabaseProperties(igDriverDatabase *driverDB) {}
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585788, 2 field(s), sizeof 8 (registered instance size) */
+class igTimer : public Gap::Core::igObject {
+public:
+    IG_ABSTRACT_OBJECT_DEFINE(igTimer)
+    virtual double getResolutionAsDouble() const = 0;
+    virtual long long getResolutionAsLong() const = 0;
+    virtual double getTimeAsDouble() const = 0;
+    virtual long long getTimeAsLong() const = 0;
+    virtual void start() = 0;
+    virtual void stop() = 0;
+    virtual void reset() = 0;
+    virtual void resetAndStop() = 0;
+    virtual void resetAndStart() = 0;
+    virtual void setResetTime(double resetTime) = 0;
+    virtual void setResetTime(long long resetTime) = 0;
+    virtual double getResetTimeAsDouble() const = 0;
+    virtual long long getResetTimeAsLong() const = 0;
+    virtual bool isStopped() const = 0;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585bd8, 3 field(s), sizeof 12 (registered instance size) */
+class igNamedObject : public Gap::Core::igObject {
+public:
+    igStringRef _name;                             /* +8    igStringMetaField */
+    IG_OBJECT_DEFINE(igNamedObject)
+    static igMetaField *k_name;
+    void setName(const char *name);
+    inline const char *getName() const { return _name.p ? (const char *)_name.p : ""; }
+    inline const igStringRef &getNameRef() const { return _name; }
+};
+}
+}
+
+namespace Gap {
+namespace Gfx {
+/* handle 0x55fa10, 9 field(s), sizeof 36 (registered instance size) */
+class igVertexStream : public Gap::Core::igNamedObject {
+public:
+    enum IG_VERTEX_ACCESS_MODE { IG_VERTEX_ACCESS_READ_WRITE, IG_VERTEX_ACCESS_READ, IG_VERTEX_ACCESS_WRITE, IG_VERTEX_ACCESS_WRITE_ONCE };
+    enum IG_VERTEX_STREAM_COMPILE_MODE { IG_VERTEX_STREAM_COMPILE_ALL = 0, IG_VERTEX_STREAM_COMPILE_COMPACT_MAX = 1, IG_VERTEX_STREAM_COMPILE_EVERYTHING = 2 };
+    void *_stream;                                 /* +12   igRawRefMetaField */
+    bool _isConfigured;                            /* +16   igBoolMetaField */
+    char _pad17[3];
+    igSmartPointer<igVertexDataList> _vertexDataList; /* +20   igObjectRefMetaField */
+    IG_VERTEX_ACCESS_MODE _accessMode;             /* +24   igEnumMetaField */
+    IG_GFX_DRAW _primitive;                        /* +28   igEnumMetaField */
+    IG_VERTEX_STREAM_COMPILE_MODE _streamMode;     /* +32   igEnumMetaField */
+    IG_OBJECT_DEFINE(igVertexStream)
+    static igMetaEnum *getIG_VERTEX_ACCESS_MODEMetaEnum();
+private:
+    static igMetaEnum *IG_VERTEX_ACCESS_MODE_Meta;
+public:
+    static igMetaEnum *getIG_VERTEX_STREAM_COMPILE_MODEMetaEnum();
+private:
+    static igMetaEnum *IG_VERTEX_STREAM_COMPILE_MODE_Meta;
+protected:
+    static igMetaField *k_stream;
+    static igMetaField *k_isConfigured;
+    static igMetaField *k_vertexDataList;
+    static igMetaField *k_accessMode;
+    static igMetaField *k_primitive;
+    static igMetaField *k_streamMode;
+public:
+    inline void setVertexDataList(igVertexDataList *vertexDataListParam) { _vertexDataList = vertexDataListParam; }
+    inline igVertexDataList *getVertexDataList() const { return _vertexDataList; }
+    inline void setPrimitive(IG_GFX_DRAW primitiveParam) { _primitive = primitiveParam; }
+    inline IG_GFX_DRAW getPrimitive() const { return _primitive; }
+    inline void setStreamMode(IG_VERTEX_STREAM_COMPILE_MODE streamModeParam) { _streamMode = streamModeParam; }
+    inline IG_VERTEX_STREAM_COMPILE_MODE getStreamMode() const { return _streamMode; }
+    inline void setAccessMode(IG_VERTEX_ACCESS_MODE mode) { _accessMode = mode; }
+    inline IG_VERTEX_ACCESS_MODE getAccessMode() { return _accessMode; }
+    inline virtual void *getRawVertexStream() { return _stream; }
+    virtual void getEditableComponent(igComponentEditInfo2 &componentInfo) {}
+    virtual void commitComponentEdits(const igComponentEditInfo2 &componentInfo) {}
+    inline bool isConfigured() { return _isConfigured; }
+    inline virtual bool configure(igSmartPointer<igVertexDataList> vertexDataList, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0) { return false; }
+    virtual void reset();
+};
+}
+}
+
+namespace Gap {
+namespace Gfx {
+/* handle 0x55f9e0, 6 field(s), sizeof 24 (registered instance size) */
+class igVertexArray2 : public Gap::Core::igNamedObject {
+public:
+    igSmartPointer<igObject> _internalBuffer;      /* +12   igObjectRefMetaField */
+    igSmartPointer<igObjectList> _objList;         /* +16   igObjectRefMetaField */
+    igSmartPointer<igVertexStream> _vertexStream;  /* +20   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igVertexArray2)
+private:
+    static igMetaField *k_internalBuffer;
+protected:
+    static igMetaField *k_objList;
+    static igMetaField *k_vertexStream;
+public:
+    inline void setVertexStream(igVertexStream *vertexStreamParam) { _vertexStream = vertexStreamParam; }
+    inline igVertexStream *getVertexStream() const { return _vertexStream; }
+    inline igObjectList *getObjectList() { return _objList; }
+    virtual bool configure(IG_GFX_DRAW primitive, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0);
+    inline virtual void reset() {}
+    virtual unsigned int getCount(unsigned int index = 0) const;
+    igVertexData *findVertexData(unsigned int type, unsigned int index = 0) const;
+    void buildVertexDataList(igSmartPointer<igVertexDataList> list);
+    bool isVertexDataSupported(const igVertexData *vertexData) const;
+};
+}
+}
+
+namespace Gap {
+namespace Gfx {
+/* handle 0x55f8e8, 33 field(s), sizeof 320 (registered instance size) */
+class igVisualContext : public Gap::Core::igContext {
+public:
+    int _contextIndex;                             /* +20   igIntMetaField */
+    igSmartPointer<igMemoryPool> _driverDataMemoryPool; /* +24   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _vertexMemoryPool; /* +28   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _internalMemoryPool; /* +32   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _temporaryMemoryPool; /* +36   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _imageMemoryPool; /* +40   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _textureMemoryPool; /* +44   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _statisticsMemoryPool; /* +48   igObjectRefMetaField */
+    igSmartPointer<igMemoryPool> _listMemoryPool;  /* +52   igObjectRefMetaField */
+    igSmartPointer<igTimer> _timer;                /* +56   igObjectRefMetaField */
+    bool _showFrameRate;                           /* +60   igBoolMetaField */
+    bool _commandLineFrameRate;                    /* +61   igBoolMetaField */
+    char _pad62[2];
+    int _primitiveCount;                           /* +64   igIntMetaField */
+    float _frameStartTime;                         /* +68   igFloatMetaField */
+    int _blendMatricesCount;                       /* +72   igIntMetaField */
+    unsigned int _blendIndex;                      /* +76   igUnsignedIntMetaField */
+    igMatrix44f *_inverseTranspose;                /* +80   igMemoryRefMetaField */
+    const igMatrix44f *_blendMatrices;             /* +84   igRawRefMetaField */
+    unsigned int _inverseTransposeCount;           /* +88   igUnsignedIntMetaField */
+    char _pad92[4];
+    long long _renderingTime;                      /* +96   igLongMetaField */
+    IG_GFX_SCISSOR_TYPE _scissorType;              /* +104  igEnumMetaField */
+    igMatrix44f _viewMatrixHint;                   /* +108  igMatrix44fMetaField */
+    igMatrix44f _viewMatrixInverse;                /* +172  igMatrix44fMetaField */
+    bool _viewMatrixDirty;                         /* +236  igBoolMetaField */
+    char _pad237[3];
+    igSmartPointer<igVertexArray2> _vertexArray2[16]; /* +240  igObjectRefArrayMetaField */
+    igSmartPointer<igCustomStateCollectionList> _customStates; /* +304  igObjectRefMetaField */
+    igSmartPointer<igCustomStateFieldList> _customFields; /* +308  igObjectRefMetaField */
+    bool _ditherState;                             /* +312  igBoolMetaField */
+    char _pad313[7];
+    IG_ABSTRACT_OBJECT_DEFINE(igVisualContext)
+    static igMetaField *k_contextIndex;
+protected:
+    static igMetaField *k_timer;
+public:
+    static igMetaField *k_showFrameRate;
+    static igMetaField *k_commandLineFrameRate;
+    static igMetaField *k_primitiveCount;
+    static igMetaField *k_frameStartTime;
+    static igMetaField *k_blendMatricesCount;
+    static igMetaField *k_blendIndex;
+    static igMetaField *k_inverseTranspose;
+    static igMetaField *k_blendMatrices;
+    static igMetaField *k_inverseTransposeCount;
+    static igMetaField *k_renderingTime;
+    static igMetaField *k_scissorType;
+    static igMetaField *k_viewMatrixHint;
+    static igMetaField *k_viewMatrixInverse;
+    static igMetaField *k_viewMatrixDirty;
+    static igMetaField *k_vertexArray2;
+    static igMetaField *k_customStates;
+    static igMetaField *k_customFields;
+    static igMetaField *k_ditherState;
+private:
+    static igMetaField *k_driverDataMemoryPool;
+public:
+    static igMetaField *k_vertexMemoryPool;
+    static igMetaField *k_internalMemoryPool;
+    static igMetaField *k_temporaryMemoryPool;
+    static igMetaField *k_imageMemoryPool;
+    static igMetaField *k_textureMemoryPool;
+    static igMetaField *k_statisticsMemoryPool;
+    static igMetaField *k_listMemoryPool;
+protected:
+    igVisualContext();
+public:
+    ~igVisualContext();
+    virtual void constructFields(int flag);
+    virtual void userConstruct(int flag);
+    virtual void userDestruct();
+    igMemoryPool *getDriverDataMemoryPool() const;
+    igMemoryPool *getVertexMemoryPool() const;
+    igMemoryPool *getInternalMemoryPool() const;
+    igMemoryPool *getImageMemoryPool() const;
+    igMemoryPool *getStatisticsMemoryPool() const;
+    igMemoryPool *getListMemoryPool() const;
+    static void setImageMemoryPool(igMemoryPool *pool);
+protected:
+    static igMemoryPool *_defaultDriverDataMemoryPool;
+public:
+    static igMemoryPool *_defaultVertexMemoryPool;
+    static igMemoryPool *_defaultInternalMemoryPool;
+    static igMemoryPool *_defaultTemporaryMemoryPool;
+    static igMemoryPool *_defaultImageMemoryPool;
+    static igMemoryPool *_defaultTextureMemoryPool;
+    static igMemoryPool *_defaultStatisticsMemoryPool;
+    static igMemoryPool *_defaultListMemoryPool;
+    inline virtual void makeCurrent() { igContext::makeCurrent(); }
+    inline virtual bool isCurrent() const { return igContext::isCurrent(); }
+    virtual void updateFrameRateDisplay(float frameTime, float drawTime);
+    virtual void updatePrimitiveCountDisplay(float frameTime);
+    virtual void outputText(int x, int y, const char *str);
+    virtual void loadDefaultDriverDatabase();
+    virtual igResult open() = 0;
+    inline virtual void activate() {}
+    inline virtual void deactivate() {}
+    virtual void reset();
+    virtual int getLastError();
+    virtual int getCapability(IG_GFX_CAPABILITY which) const = 0;
+    virtual void setNativeWindowHandle(void *pHandle) = 0;
+    virtual void *getNativeWindowHandle() const = 0;
+    virtual void setNativeDeviceHandle(void *pHandle) = 0;
+    virtual void *getNativeDeviceHandle() const = 0;
+    virtual void setNativeRenderContextHandle(void *pHandle) = 0;
+    virtual void *getNativeRenderContextHandle() const = 0;
+    virtual void setNativeVisualInfo(void *pInfo) = 0;
+    virtual void *getNativeVisualInfo() const = 0;
+    virtual int createRenderDestination(igRenderDestinationFormat *pFormat) = 0;
+    inline virtual void deleteRenderDestination(int handle) {}
+    virtual void setRenderDestination(int iHandle) = 0;
+    virtual void setRenderDestination(int iHandle, int *piTex) = 0;
+    virtual int getCurrentRenderDestination() const = 0;
+    virtual IG_GFX_RENDERDESTINATION_TYPE getRenderDestinationType(int iHandle) const = 0;
+    virtual bool setRenderDestinationSize(int iHandle, int iWidth, int iHeight) = 0;
+    virtual void getRenderDestinationSize(int iHandle, int &piWidth, int &piHeight) const = 0;
+    virtual int getColorBitsPerPixel(int iHandle) const = 0;
+    virtual int getAlphaBitsPerPixel(int iHandle) const = 0;
+    virtual int getDepthBitsPerPixel(int iHandle) const = 0;
+    virtual int getStencilBitsPerPixel(int iHandle) const = 0;
+    virtual float getPixelAspectRatio(int iHandle) const = 0;
+    virtual void setVertexArray(igVertexArray *vertexArray) = 0;
+    virtual void setIndexArray(igIndexArray *indexArray) = 0;
+    virtual igVertexArray *getVertexArray() const = 0;
+    virtual igIndexArray *getIndexArray() const = 0;
+    virtual void setPrimLengthArray(igPrimLengthArray *lengthArray) = 0;
+    virtual igPrimLengthArray *getPrimLengthArray() const = 0;
+    virtual void setColor(const igVec4f &rgba) = 0;
+    virtual void setColor(unsigned int abgr) = 0;
+    virtual void getColor(igVec4f &rgba) const = 0;
+    virtual unsigned int getColor() const = 0;
+    virtual void setVertexMask(igVertexComponentFilter attr) = 0;
+    virtual igVertexComponentFilter getVertexMask() const = 0;
+    virtual void draw(IG_GFX_DRAW primType, int numPrimitives, int offset) = 0;
+    inline virtual void drawIndexed(IG_GFX_DRAW primType, int numPrimitives, int indexOffset, int minVertexIndex, int maxVertexIndex) { draw(primType, numPrimitives, indexOffset); }
+    virtual void drawNonIndexed(IG_GFX_DRAW primType, int numPrimitives, int vertexOffset);
+    virtual void drawMultiple(IG_GFX_DRAW_MULTIPLE stripType, int numStrips, int vertexOffset, int primitiveOffset) = 0;
+    virtual void setLightingState(bool enb) = 0;
+    virtual bool getLightingState() const = 0;
+    virtual int createLight(IG_GFX_LIGHT_TYPE type) = 0;
+    virtual void deleteLight(int lighthandle) = 0;
+    virtual bool setLightState(int lightHandle, bool enable) = 0;
+    virtual bool getLightState(int lightHandle) const = 0;
+    virtual IG_GFX_LIGHT_TYPE getLightType(int handle) const = 0;
+    virtual void setLightDiffuse(int handle, const igVec4f &d) = 0;
+    virtual void getLightDiffuse(int handle, igVec4f &d) const = 0;
+    virtual void setLightAmbient(int handle, const igVec4f &a) = 0;
+    virtual void getLightAmbient(int handle, igVec4f &a) const = 0;
+    virtual void setLightSpecular(int handle, const igVec4f &s) = 0;
+    virtual void getLightSpecular(int handle, igVec4f &s) const = 0;
+    virtual void setLightPosition(int handle, const igVec3f &p) = 0;
+    virtual void getLightPosition(int handle, igVec3f &p) const = 0;
+    virtual void setLightDirection(int handle, const igVec3f &d) = 0;
+    virtual void getLightDirection(int handle, igVec3f &d) const = 0;
+    virtual void setLightCutoffAngle(int handle, float c) = 0;
+    virtual float getLightCutoffAngle(int handle) const = 0;
+    virtual void setLightFalloffRate(int handle, float e) = 0;
+    virtual float getLightFalloffRate(int handle) const = 0;
+    virtual void setLightAttenuation(int handle, const igVec3f &a) = 0;
+    virtual void getLightAttenuation(int handle, igVec3f &a) const = 0;
+    virtual void setMaterialShininess(float sh) = 0;
+    virtual float getMaterialShininess() const = 0;
+    virtual void setMaterialColorMode(int mode) = 0;
+    virtual int getMaterialColorMode() const = 0;
+    virtual void setMaterialDiffuse(const igVec4f &d) = 0;
+    virtual void getMaterialDiffuse(igVec4f &d) const = 0;
+    virtual void setMaterialEmissive(const igVec4f &e) = 0;
+    virtual void getMaterialEmissive(igVec4f &d) const = 0;
+    virtual void setMaterialAmbient(const igVec4f &a) = 0;
+    virtual void getMaterialAmbient(igVec4f &a) const = 0;
+    virtual void setMaterialSpecular(const igVec4f &s) = 0;
+    virtual void getMaterialSpecular(igVec4f &s) const = 0;
+    virtual void setMaterialSpecularState(bool enable) = 0;
+    virtual bool getMaterialSpecularState() const = 0;
+    virtual void setMaterial(const igVec4f &ambient, const igVec4f &diffuse, const igVec4f &specular, const igVec4f &emission, const float shininess) = 0;
+    virtual void setNormalizeNormalsState(bool bEnable) = 0;
+    virtual bool getNormalizeNormalsState() const = 0;
+    virtual void setSceneAmbient(const igVec4f &sceneAmbient) = 0;
+    virtual void getSceneAmbient(igVec4f &sceneAmbient) const = 0;
+    virtual void setTextureStageState(int stage, bool enable) = 0;
+    virtual bool getTextureStageState(int stage) const = 0;
+    virtual int createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode, unsigned int imageCount) = 0;
+    virtual int createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode) = 0;
+    virtual void getTextureInfo(int handle, int &width, int &height, int &format, int &source, unsigned int &textureMode) const = 0;
+    virtual void setTextureRegion(int handle, int iLevel, int offsetX, int offsetY, int width, int height, igImage *image) = 0;
+    virtual void setTextureComponentSize(int handle, int redBits, int greenBits, int blueBits, int alphaBits) = 0;
+    virtual void setTextureComponentSizeIntensityAlpha(int handle, int intensityBits, int alphaBits) = 0;
+    virtual void getTextureComponentSize(int handle, int &redBits, int &greenBits, int &blueBits, int &alphaBits, bool &palletized) const = 0;
+    virtual void getTextureComponentSizeIntensityAlpha(int handle, int &intensityBits, int &alphaBits, bool &palletized) const = 0;
+    virtual bool setTexture(int texHandle, int stage) = 0;
+    virtual bool loadTexture(int texHandle) = 0;
+    virtual int getCurrentTexture(int stage) const = 0;
+    virtual void unloadTexture(int texHandle) = 0;
+    virtual void deleteTexture(int texHandle) = 0;
+    virtual bool setTextureSource(int handle, igImage *image) = 0;
+    virtual bool setTextureSource(int handle, igImage *image, unsigned int level) = 0;
+    virtual bool setTextureSource(int handle, int srcHandle) = 0;
+    virtual igImage *getTextureImage(int handle) const = 0;
+    virtual void setTextureAddressingMode(int handle, IG_GFX_TEXTURE_WRAP wrapU, IG_GFX_TEXTURE_WRAP wrapV) = 0;
+    virtual void getTextureAddressingMode(int handle, IG_GFX_TEXTURE_WRAP &wrapU, IG_GFX_TEXTURE_WRAP &wrapV) const = 0;
+    virtual void setTextureMinificationFilter(int handle, IG_GFX_TEXTURE_FILTER filter) = 0;
+    virtual IG_GFX_TEXTURE_FILTER getTextureMinificationFilter(int handle) const = 0;
+    virtual void setTextureMagnificationFilter(int handle, IG_GFX_TEXTURE_FILTER filter) = 0;
+    virtual IG_GFX_TEXTURE_FILTER getTextureMagnificationFilter(int handle) const = 0;
+    virtual int getAvailableTextureMemory(int which) const = 0;
+    virtual void setVertexPipelineMode(int mode);
+    virtual int getVertexPipelineMode() const;
+    virtual void setDitherState(bool enable);
+    virtual void setPixelPipelineMode(IG_GFX_PIXEL_PIPELINE_MODE mode);
+    virtual IG_GFX_PIXEL_PIPELINE_MODE getPixelPipelineMode() const;
+    virtual void setTextureStageFunc(int stage, int func) = 0;
+    virtual int getTextureStageFunc(int stage) const = 0;
+    virtual void setTextureStageCoordSource(int stage, IG_GFX_TEXTURE_COORD_SOURCE source, int coordIndex) = 0;
+    virtual void getTextureStageCoordSource(int stage, IG_GFX_TEXTURE_COORD_SOURCE &source, int &coordIndex) const = 0;
+    virtual void setBlendingState(bool enable) = 0;
+    virtual bool getBlendingState() const = 0;
+    virtual void setBlendingSource(IG_GFX_BLENDING_FUNCTION srcMode) = 0;
+    virtual IG_GFX_BLENDING_FUNCTION getBlendingSource() const = 0;
+    virtual void setBlendingDestination(IG_GFX_BLENDING_FUNCTION destMode) = 0;
+    virtual IG_GFX_BLENDING_FUNCTION getBlendingDestination() const = 0;
+    virtual void setBlendingSourceDestination(IG_GFX_BLENDING_FUNCTION srcMode, IG_GFX_BLENDING_FUNCTION destMode) = 0;
+    virtual void setStencilState(bool enable) = 0;
+    virtual bool getStencilState() const = 0;
+    virtual void setStencilRefVal(unsigned int stenRef) = 0;
+    virtual unsigned int getStencilRefVal() const = 0;
+    virtual void setStencilFunc(IG_GFX_STENCIL_FUNCTION stenFunc) = 0;
+    virtual IG_GFX_STENCIL_FUNCTION getStencilFunc() const = 0;
+    virtual void setStencilOps(IG_GFX_STENCIL_OPERATION sfail, IG_GFX_STENCIL_OPERATION zpass, IG_GFX_STENCIL_OPERATION zfail) = 0;
+    virtual void getStencilOps(IG_GFX_STENCIL_OPERATION &sfail, IG_GFX_STENCIL_OPERATION &zpass, IG_GFX_STENCIL_OPERATION &zfail) const = 0;
+    virtual void setStencilReadMask(unsigned int stenRef) = 0;
+    virtual unsigned int getStencilReadMask() const = 0;
+    virtual void setStencilWriteMask(unsigned int stenRef) = 0;
+    virtual unsigned int getStencilWriteMask() const = 0;
+    virtual bool copyRenderDestinationToTexture(int srcHandle, int hTexture, int srcX, int srcY, int width, int height, int destX, int destY) = 0;
+    virtual bool copyRenderDestinationToMemory(int srcHandle, igImage *destImage, int srcX, int srcY, int width, int height) = 0;
+    virtual bool beginDraw() = 0;
+    virtual void endDraw() = 0;
+    virtual void flushDraw() = 0;
+    virtual void clearRenderDestination(unsigned int which) = 0;
+    virtual void setClearColor(const igVec4f &rgba) = 0;
+    virtual void setClearColor(unsigned int color) = 0;
+    virtual void getClearColor(igVec4f &abgr) const = 0;
+    virtual unsigned int getClearColor() const = 0;
+    virtual void setClearDepth(float val) = 0;
+    virtual float getClearDepth() const = 0;
+    virtual void setClearStencil(unsigned int val) = 0;
+    virtual unsigned int getClearStencil() const = 0;
+    virtual void setViewport(int x, int y, int w, int h, float nearZ, float farZ) = 0;
+    virtual void getViewport(int &x, int &y, int &w, int &h) const = 0;
+    virtual void getViewport(int &x, int &y, int &w, int &h, float &nearZ, float &farZ) const = 0;
+    virtual void setScissor(int x, int y, int w, int h) = 0;
+    virtual void getScissor(int &x, int &y, int &w, int &h) const = 0;
+    virtual void setScissorType(IG_GFX_SCISSOR_TYPE type) = 0;
+    inline virtual IG_GFX_SCISSOR_TYPE getScissorType() const { return _scissorType; }
+    virtual int createRenderList() = 0;
+    virtual void deleteRenderList(int dlistHandle) = 0;
+    virtual void beginRenderListDraw(int dlistHandle) = 0;
+    virtual bool endRenderListDraw() = 0;
+    virtual bool executeRenderList(int dlistHandle) = 0;
+    virtual void setBlendingMatrices(const unsigned int matrixCount, const igMatrix44f *matrixArray);
+    virtual int getBlendingMatricesCount();
+    virtual void setStackSize(IG_GFX_MATRIX_STACK which, int depth) = 0;
+    virtual int getStackSize(IG_GFX_MATRIX_STACK which) const = 0;
+    virtual void pushMatrix(IG_GFX_MATRIX_STACK which) = 0;
+    virtual void popMatrix(IG_GFX_MATRIX_STACK which) = 0;
+    virtual void setMatrix(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+    virtual void pushPreMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+    virtual void pushPostMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+    virtual void preMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+    virtual void postMultiply(IG_GFX_MATRIX_STACK which, const igMatrix44f &mat) = 0;
+    virtual void getMatrix(IG_GFX_MATRIX_STACK which, igMatrix44f &mat) const = 0;
+    virtual void setTextureMatrixState(int stage, bool enable) = 0;
+    virtual bool getTextureMatrixState(int stage) const = 0;
+    virtual void setVertexBlendingState(bool enable) = 0;
+    virtual bool getVertexBlendingState() const = 0;
+    virtual void setViewMatrixHint(const igMatrix44f &mat);
+    virtual void getViewMatrixHint(igMatrix44f &mat) const;
+    virtual void getViewMatrixInverse(igMatrix44f &mat);
+    virtual void resetToDefault(int which);
+    virtual void setAlphaTestState(bool enb) = 0;
+    virtual bool getAlphaTestState() const = 0;
+    virtual void setAlphaFunc(IG_GFX_ALPHA_FUNCTION afunc) = 0;
+    virtual IG_GFX_ALPHA_FUNCTION getAlphaFunc() const = 0;
+    virtual void setAlphaRefValue(float val) = 0;
+    virtual float getAlphaRefValue() const = 0;
+    virtual void setViewportClippingState(bool enable) = 0;
+    virtual bool getViewportClippingState() const = 0;
+    virtual void setColorMask(bool r, bool g, bool b, bool a) = 0;
+    virtual void getColorMask(bool &r, bool &g, bool &b, bool &a) const = 0;
+    virtual void setShadingMode(IG_GFX_SHADING_MODE mode) = 0;
+    virtual IG_GFX_SHADING_MODE getShadingMode() const = 0;
+    virtual void setCullFaceState(bool enable) = 0;
+    virtual bool getCullFaceState() const = 0;
+    virtual void setCullFaceMode(IG_GFX_CULL_FACE_MODE m) = 0;
+    virtual IG_GFX_CULL_FACE_MODE getCullFaceMode() const = 0;
+    virtual void setDepthTestState(bool enable) = 0;
+    virtual bool getDepthTestState() const = 0;
+    virtual void setDepthTestFunction(int func) = 0;
+    virtual int getDepthTestFunction() const = 0;
+    virtual void setDepthWriteState(bool enable) = 0;
+    virtual bool getDepthWriteState() const = 0;
+    virtual void setRenderMode(IG_GFX_RENDER_MODE mode) = 0;
+    virtual IG_GFX_RENDER_MODE getRenderMode() const = 0;
+    virtual void setFogState(bool enable) = 0;
+    virtual bool getFogState() const = 0;
+    virtual void setFogDensity(float density) = 0;
+    virtual float getFogDensity() const = 0;
+    virtual void setFogMode(IG_GFX_FOG_MODE mode) = 0;
+    virtual IG_GFX_FOG_MODE getFogMode() const = 0;
+    virtual void setFogColor(const igVec4f &color) = 0;
+    virtual void getFogColor(igVec4f &color) const = 0;
+    virtual void setFogNear(float fogNear) = 0;
+    virtual float getFogNear() const = 0;
+    virtual void setFogFar(float fogFar) = 0;
+    virtual float getFogFar() const = 0;
+    virtual igResult setVideoMode(igVideoFormat &pFormat) = 0;
+    virtual void getVideoMode(igVideoFormat &pMode) = 0;
+    virtual bool setStatistic(unsigned int stat, bool enb) = 0;
+    virtual bool getStatistic(unsigned int stat) = 0;
+    virtual bool getStatisticCapability(unsigned int stat) = 0;
+    virtual void getStatistic() = 0;
+    virtual float getStatisticValue(unsigned int stat) = 0;
+    inline virtual bool setTextureSource(int handle, void *buffer) { return false; }
+    virtual void setVertexArray(igVertexArray2 *va, unsigned int stream);
+    virtual igVertexArray2 *getVertexArray(unsigned int stream);
+    virtual igMetaObject *getShaderConstantMeta(unsigned int constant);
+    virtual int vfunc_262();
+    virtual int vfunc_263();
+    virtual int createCustomStateCollection(igCustomState **states, unsigned int count, const char *name);
+    virtual igCustomState *getCustomState(int collection, unsigned int index);
+    virtual igResult deleteCustomStateCollection(int collection);
+    virtual void clearCustomStates();
+    virtual int findCustomStateCollection(const char *name);
+    virtual int getShaderConstantIndex(const char *name);
+    virtual int getShaderConstantCollection(int constant);
+    virtual igVertexArray *softwareBlendVertex(const igVertexArray *vertexArray);
+};
+}
+}
+
+namespace Gap {
 namespace Gui {
 /* handle 0x58c208, 3 field(s), sizeof 12 (registered instance size) */
 class igRenderer : public Gap::Core::igObject {
@@ -22191,32 +22681,6 @@ public:
     virtual void endianSwap(igObject *obj) const;
     virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
-};
-}
-}
-
-namespace Gap {
-namespace Core {
-/* handle 0x5868f8, 5 field(s), sizeof 20 (registered instance size) */
-class igContext : public Gap::Core::igObject {
-public:
-    int _pExtList;                                 /* +8    igObjectRefMetaField */
-    int _iNumExts;                                 /* +12   igIntMetaField */
-    int _pExtInstances;                            /* +16   igObjectRefMetaField */
-    IG_ABSTRACT_OBJECT_DEFINE(igContext)
-protected:
-    static igMetaField *k_pExtList;
-    static igMetaField *k_iNumExts;
-    static igMetaField *k_pExtInstances;
-public:
-    void generateExtList();
-    const igMetaObject *getExtMeta(char *pExtName);
-    igContextExt *findExtInstance(const igMetaObject *extMeta);
-    virtual void makeCurrent();
-    virtual bool isCurrent() const;
-    virtual const igContextExtInfoList *getExtList();
-    virtual igContextExt *getExt(char *pExtName);
-    inline virtual void detectDriverDatabaseProperties(igDriverDatabase *driverDB) {}
 };
 }
 }
@@ -22649,21 +23113,6 @@ public:
 
 namespace Gap {
 namespace Core {
-/* handle 0x585bd8, 3 field(s), sizeof 12 (registered instance size) */
-class igNamedObject : public Gap::Core::igObject {
-public:
-    igStringRef _name;                             /* +8    igStringMetaField */
-    IG_OBJECT_DEFINE(igNamedObject)
-    static igMetaField *k_name;
-    void setName(const char *name);
-    inline const char *getName() const { return _name.p ? (const char *)_name.p : ""; }
-    inline const igStringRef &getNameRef() const { return _name; }
-};
-}
-}
-
-namespace Gap {
-namespace Core {
 /* handle 0x586710, 7 field(s), sizeof 28 (registered instance size) */
 class igDirEntry : public Gap::Core::igNamedObject {
 public:
@@ -22773,7 +23222,7 @@ public:
     igStringRef _name;                             /* +20   igStringMetaField */
     igSmartPointer<igDirectoryList> _externalDirectoryList; /* +24   igObjectRefMetaField */
     igSmartPointer<igInfoList> _infoList;          /* +28   igObjectRefMetaField */
-    int _managingResource;                         /* +32   igObjectRefMetaField */
+    igResource *_managingResource;                 /* +32   igObjectRefMetaField */
     unsigned char _sharingState;                   /* +36   igBoolMetaField */
     unsigned char _trackUniqueEntries;             /* +37   igBoolMetaField */
     char _pad38[2];
@@ -22811,6 +23260,31 @@ public:
     static igMetaField *k_useMemoryPoolAssignmentsState;
     static igMetaField *k_forceWriteMemoryPoolInfoFromMetaState;
     static igMetaField *k_loadingSemaphore;
+    inline void setName(const char *nameParam) { _name = nameParam; }
+    inline const char *getName() const { return _name.p; }
+    inline const igDirectoryList *getExternalDirectoryList() const { return _externalDirectoryList; }
+    inline const igInfoList *getInfoList() const { return _infoList; }
+    inline void setManagingResource(igResource *managingResourceParam) { _managingResource = managingResourceParam; }
+    inline const igResource *getManagingResource() const { return _managingResource; }
+    inline void setValidState(bool validStateParam) { _validState = validStateParam; }
+    inline bool getValidState() const { return _validState; }
+    inline void setCompatibleState(bool compatibleStateParam) { _compatibleState = compatibleStateParam; }
+    inline bool getCompatibleState() const { return _compatibleState; }
+    inline const igShortListList *getMetaFieldPerObjectIndices() const { return _metaFieldPerObjectIndices; }
+    inline void setConcreteState(bool concreteStateParam) { _concreteState = concreteStateParam; }
+    inline bool getConcreteState() const { return _concreteState; }
+    inline void setSharingState(bool sharingStateParam) { _sharingState = sharingStateParam; }
+    inline bool getSharingState() const { return _sharingState; }
+    inline void setTrackUniqueEntries(bool trackUniqueEntriesParam) { _trackUniqueEntries = trackUniqueEntriesParam; }
+    inline bool getTrackUniqueEntries() const { return _trackUniqueEntries; }
+    inline const igDirectory *getUniqueEntryList() const { return _uniqueEntryList; }
+    inline const igPointerList *getRefList() const { return _refList; }
+    inline void setAutoWriteFilePreProcessState(bool autoWriteFilePreProcessStateParam) { _autoWriteFilePreProcessState = autoWriteFilePreProcessStateParam; }
+    inline bool getAutoWriteFilePreProcessState() const { return _autoWriteFilePreProcessState; }
+    inline void setUseMemoryPoolAssignmentsState(bool useMemoryPoolAssignmentsStateParam) { _useMemoryPoolAssignmentsState = useMemoryPoolAssignmentsStateParam; }
+    inline bool getUseMemoryPoolAssignmentsState() const { return _useMemoryPoolAssignmentsState; }
+    inline void setForceWriteMemoryPoolInfoFromMetaState(bool forceWriteMemoryPoolInfoFromMetaStateParam) { _forceWriteMemoryPoolInfoFromMetaState = forceWriteMemoryPoolInfoFromMetaStateParam; }
+    inline bool getForceWriteMemoryPoolInfoFromMetaState() const { return _forceWriteMemoryPoolInfoFromMetaState; }
     int addObject(igObject *obj, const char *name, int resolveMethod);
     int addObjectRef(igObject *obj, const char *name, int resolveMethod);
     int addMemoryRef(igMemoryRefMetaField *containingMetaField, void *mem, igMetaField *memType, int alignmentIndex, const char *name, int resolveMethod, unsigned char doRefOnRead);
@@ -24716,6 +25190,23 @@ public:
     virtual void swapRGBA2222(unsigned char *pixels, int count, unsigned int *order);
     virtual void swapLA44(unsigned char *pixels, int count, unsigned int *order);
     virtual void swapRGBA3328(unsigned char *pixels, int count, unsigned int *order);
+    static void pal_8_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgba_5551_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgb_565_To_rgb_888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgba_4444_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgb_888_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgb_888_To_rgba_5551(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgb_888_To_rgb_565(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgba_8888_To_rgb_888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgba_8888_To_rgba_5551(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void rgba_8888_To_rgba_4444(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void la_44_To_la_88(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void la_88_To_la_44(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void la_88_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void la_88_To_pal_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void la_88_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void la_44_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
+    static void alpha_8_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc);
 };
 }
 }
@@ -24844,82 +25335,6 @@ public:
 protected:
     void allocateBlendedVertexLists();
     void freeBlendedVertexLists();
-};
-}
-}
-
-namespace Gap {
-namespace Gfx {
-/* handle 0x55fa10, 9 field(s), sizeof 36 (registered instance size) */
-class igVertexStream : public Gap::Core::igNamedObject {
-public:
-    enum IG_VERTEX_ACCESS_MODE { IG_VERTEX_ACCESS_READ_WRITE, IG_VERTEX_ACCESS_READ, IG_VERTEX_ACCESS_WRITE, IG_VERTEX_ACCESS_WRITE_ONCE };
-    enum IG_VERTEX_STREAM_COMPILE_MODE { IG_VERTEX_STREAM_COMPILE_ALL = 0, IG_VERTEX_STREAM_COMPILE_COMPACT_MAX = 1, IG_VERTEX_STREAM_COMPILE_EVERYTHING = 2 };
-    void *_stream;                                 /* +12   igRawRefMetaField */
-    bool _isConfigured;                            /* +16   igBoolMetaField */
-    char _pad17[3];
-    igSmartPointer<igVertexDataList> _vertexDataList; /* +20   igObjectRefMetaField */
-    IG_VERTEX_ACCESS_MODE _accessMode;             /* +24   igEnumMetaField */
-    IG_GFX_DRAW _primitive;                        /* +28   igEnumMetaField */
-    IG_VERTEX_STREAM_COMPILE_MODE _streamMode;     /* +32   igEnumMetaField */
-    IG_OBJECT_DEFINE(igVertexStream)
-    static igMetaEnum *getIG_VERTEX_ACCESS_MODEMetaEnum();
-private:
-    static igMetaEnum *IG_VERTEX_ACCESS_MODE_Meta;
-public:
-    static igMetaEnum *getIG_VERTEX_STREAM_COMPILE_MODEMetaEnum();
-private:
-    static igMetaEnum *IG_VERTEX_STREAM_COMPILE_MODE_Meta;
-protected:
-    static igMetaField *k_stream;
-    static igMetaField *k_isConfigured;
-    static igMetaField *k_vertexDataList;
-    static igMetaField *k_accessMode;
-    static igMetaField *k_primitive;
-    static igMetaField *k_streamMode;
-public:
-    inline void setVertexDataList(igVertexDataList *vertexDataListParam) { _vertexDataList = vertexDataListParam; }
-    inline igVertexDataList *getVertexDataList() const { return _vertexDataList; }
-    inline void setPrimitive(IG_GFX_DRAW primitiveParam) { _primitive = primitiveParam; }
-    inline IG_GFX_DRAW getPrimitive() const { return _primitive; }
-    inline void setStreamMode(IG_VERTEX_STREAM_COMPILE_MODE streamModeParam) { _streamMode = streamModeParam; }
-    inline IG_VERTEX_STREAM_COMPILE_MODE getStreamMode() const { return _streamMode; }
-    inline void setAccessMode(IG_VERTEX_ACCESS_MODE mode) { _accessMode = mode; }
-    inline IG_VERTEX_ACCESS_MODE getAccessMode() { return _accessMode; }
-    inline virtual void *getRawVertexStream() { return _stream; }
-    virtual void getEditableComponent(igComponentEditInfo2 &componentInfo) {}
-    virtual void commitComponentEdits(const igComponentEditInfo2 &componentInfo) {}
-    inline bool isConfigured() { return _isConfigured; }
-    inline virtual bool configure(igSmartPointer<igVertexDataList> vertexDataList, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0) { return false; }
-    virtual void reset();
-};
-}
-}
-
-namespace Gap {
-namespace Gfx {
-/* handle 0x55f9e0, 6 field(s), sizeof 24 (registered instance size) */
-class igVertexArray2 : public Gap::Core::igNamedObject {
-public:
-    igSmartPointer<igObject> _internalBuffer;      /* +12   igObjectRefMetaField */
-    igSmartPointer<igObjectList> _objList;         /* +16   igObjectRefMetaField */
-    igSmartPointer<igVertexStream> _vertexStream;  /* +20   igObjectRefMetaField */
-    IG_OBJECT_DEFINE(igVertexArray2)
-private:
-    static igMetaField *k_internalBuffer;
-protected:
-    static igMetaField *k_objList;
-    static igMetaField *k_vertexStream;
-public:
-    inline void setVertexStream(igVertexStream *vertexStreamParam) { _vertexStream = vertexStreamParam; }
-    inline igVertexStream *getVertexStream() const { return _vertexStream; }
-    inline igObjectList *getObjectList() { return _objList; }
-    virtual bool configure(IG_GFX_DRAW primitive, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0);
-    inline virtual void reset() {}
-    virtual unsigned int getCount(unsigned int index = 0) const;
-    igVertexData *findVertexData(unsigned int type, unsigned int index = 0) const;
-    void buildVertexDataList(igSmartPointer<igVertexDataList> list);
-    bool isVertexDataSupported(const igVertexData *vertexData) const;
 };
 }
 }
@@ -25109,6 +25524,104 @@ public:
     virtual void synchronizeDefault(igVisualContext *vc);
     virtual void reset();
     inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585978, 19 field(s), sizeof 76 (registered instance size) */
+class igResource : public Gap::Core::igObject {
+public:
+    unsigned char _useMemoryPoolAssignmentsState;  /* +8    igBoolMetaField */
+    char _pad9[3];
+    igSmartPointer<igDirectory> _imageDirectory;   /* +12   igObjectRefMetaField */
+    igSmartPointer<igDirectoryList> _directoryList; /* +16   igObjectRefMetaField */
+    igStringRef _relativeFilePath;                 /* +20   igStringMetaField */
+    igStringRef _absoluteFilePath;                 /* +24   igStringMetaField */
+    unsigned char _asyncLoadState;                 /* +28   igBoolMetaField */
+    char _pad29[3];
+    igSmartPointer< ::igQueue> _loadQueue;         /* +32   igObjectRefMetaField */
+    igSmartPointer< ::igThread> _loadThread;       /* +36   igObjectRefMetaField */
+    unsigned char _autoCompatibility;              /* +40   igBoolMetaField */
+    char _pad41[3];
+    igSmartPointer< ::igStringObjList> _alignmentStrings; /* +44   igObjectRefMetaField */
+    igSmartPointer<igIntList> _alignmentValues;    /* +48   igObjectRefMetaField */
+    unsigned char _postProcessAsyncronousFilesState; /* +52   igBoolMetaField */
+    char _pad53[3];
+    igSmartPointer< ::igMemoryPool> _temporaryMemoryPool; /* +56   igObjectRefMetaField */
+    igSmartPointer< ::igMemoryPool> _dataMemoryPool; /* +60   igObjectRefMetaField */
+    igSmartPointer< ::igMemoryPool> _objectMemoryPool; /* +64   igObjectRefMetaField */
+    unsigned char _IGBSharingState;                /* +68   igBoolMetaField */
+    char _pad69[3];
+    int _IGBChunkSize;                             /* +72   igIntMetaField */
+    IG_OBJECT_DEFINE(igResource)
+    static igMetaField *k_useMemoryPoolAssignmentsState;
+private:
+    static igMetaField *k_imageDirectory;
+public:
+    static igMetaField *k_directoryList;
+    static igMetaField *k_relativeFilePath;
+    static igMetaField *k_absoluteFilePath;
+    static igMetaField *k_asyncLoadState;
+    static igMetaField *k_loadQueue;
+    static igMetaField *k_loadThread;
+    static igMetaField *k_autoCompatibility;
+    static igMetaField *k_alignmentStrings;
+    static igMetaField *k_alignmentValues;
+    static igMetaField *k_postProcessAsyncronousFilesState;
+    static igMetaField *k_temporaryMemoryPool;
+    static igMetaField *k_dataMemoryPool;
+    static igMetaField *k_objectMemoryPool;
+    static igMetaField *k_IGBSharingState;
+    static igMetaField *k_IGBChunkSize;
+    inline const igDirectoryList *getDirectoryList() const { return _directoryList; }
+    inline void setRelativeFilePath(const char *relativeFilePathParam) { _relativeFilePath = relativeFilePathParam; }
+    inline const char *getRelativeFilePath() const { return _relativeFilePath.p; }
+    inline void setAbsoluteFilePath(const char *absoluteFilePathParam) { _absoluteFilePath = absoluteFilePathParam; }
+    inline const char *getAbsoluteFilePath() const { return _absoluteFilePath.p; }
+    inline void setAsynchronousLoadState(bool asynchronousLoadStateParam) { _asyncLoadState = asynchronousLoadStateParam; }
+    inline bool getAsynchronousLoadState() const { return _asyncLoadState; }
+    inline void setLoadQueue(::igQueue *loadQueueParam) { _loadQueue = loadQueueParam; }
+    inline const ::igQueue *getLoadQueue() const { return _loadQueue; }
+    inline void setAutoCompatibility(bool autoCompatibilityParam) { _autoCompatibility = autoCompatibilityParam; }
+    inline bool getAutoCompatibility() const { return _autoCompatibility; }
+    inline ::igStringObjList *getAlignmentStrings() const { return _alignmentStrings; }
+    inline igIntList *getAlignmentValues() const { return _alignmentValues; }
+    inline void setPostProcessAsynchronousFilesState(bool postProcessAsynchronousFilesStateParam) { _postProcessAsyncronousFilesState = postProcessAsynchronousFilesStateParam; }
+    inline bool getPostProcessAsynchronousFilesState() const { return _postProcessAsyncronousFilesState; }
+    inline void setTemporaryMemoryPool(::igMemoryPool *temporaryMemoryPoolParam) { _temporaryMemoryPool = temporaryMemoryPoolParam; }
+    inline ::igMemoryPool *getTemporaryMemoryPool() const { return _temporaryMemoryPool; }
+    inline void setDataMemoryPool(::igMemoryPool *dataMemoryPoolParam) { _dataMemoryPool = dataMemoryPoolParam; }
+    inline ::igMemoryPool *getDataMemoryPool() const { return _dataMemoryPool; }
+    inline void setObjectMemoryPool(::igMemoryPool *objectMemoryPoolParam) { _objectMemoryPool = objectMemoryPoolParam; }
+    inline ::igMemoryPool *getObjectMemoryPool() const { return _objectMemoryPool; }
+    inline void setIGBSharingState(bool iGBSharingStateParam) { _IGBSharingState = iGBSharingStateParam; }
+    inline bool getIGBSharingState() const { return _IGBSharingState; }
+    inline void setIGBChunkSize(int iGBChunkSizeParam) { _IGBChunkSize = iGBChunkSizeParam; }
+    inline int getIGBChunkSize() const { return _IGBChunkSize; }
+    inline void setUseMemoryPoolAssignmentsState(bool useMemoryPoolAssignmentsStateParam) { _useMemoryPoolAssignmentsState = useMemoryPoolAssignmentsStateParam; }
+    inline bool getUseMemoryPoolAssignmentsState() const { return _useMemoryPoolAssignmentsState; }
+    static int _asynchronousLoadingThreadStackSize;
+    static inline int getAsynchronousLoadingThreadStackSize() { return _asynchronousLoadingThreadStackSize; }
+    static inline void setAsynchronousLoadingThreadStackSize(int size) { _asynchronousLoadingThreadStackSize = size; }
+    static igResource *getGlobalResource();
+    igSmartPointer<igDirectory> getDirectory(const char *directoryName);
+    igDirectory *getImageDirectory();
+    void appendDirectory(igDirectory *directory);
+    void addAlignmentPair(const char *name, int size);
+    igDirectory *load(const char *directoryName);
+    void unload(const char *directoryName);
+    void unloadAll();
+    void unloadAllIGBs();
+    igDirectory *loadSynchronous(const char *directoryName);
+    igInfo *getInfoByType(const char *dirName, const char *infoTypeName, int index);
+    void disableAsynchronousLoading();
+    void enableAsynchronousLoading();
+    virtual void releaseDefaults();
+    void makeCompatible(const char *dirName);
+    igIGBFile *doLoad(igIGBFile *fdir);
+    bool isLoadFinished(igDirectory *loadingDirectory);
 };
 }
 }
@@ -25662,30 +26175,6 @@ public:
     inline void set(long long time) { _time = time; }
     inline long long get() { return _time; }
     virtual void synchronizeDefault(igVisualContext *visualContext);
-};
-}
-}
-
-namespace Gap {
-namespace Core {
-/* handle 0x585788, 2 field(s), sizeof 8 (registered instance size) */
-class igTimer : public Gap::Core::igObject {
-public:
-    IG_ABSTRACT_OBJECT_DEFINE(igTimer)
-    virtual double getResolutionAsDouble() const = 0;
-    virtual long long getResolutionAsLong() const = 0;
-    virtual double getTimeAsDouble() const = 0;
-    virtual long long getTimeAsLong() const = 0;
-    virtual void start() = 0;
-    virtual void stop() = 0;
-    virtual void reset() = 0;
-    virtual void resetAndStop() = 0;
-    virtual void resetAndStart() = 0;
-    virtual void setResetTime(double resetTime) = 0;
-    virtual void setResetTime(long long resetTime) = 0;
-    virtual double getResetTimeAsDouble() const = 0;
-    virtual long long getResetTimeAsLong() const = 0;
-    virtual bool isStopped() const = 0;
 };
 }
 }

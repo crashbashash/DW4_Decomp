@@ -342,7 +342,7 @@ static inline char *nameOf(const igSmartPointer<igTDataList<igStringObj *> > &r,
 }
 
 igResult igIGBFile_BuildAlignmentBuffer(igIGBFileView *self) {
-    igSmartPointer<igTDataList<igStringObj *> > names(g_globalContext->_alignmentStrings, kRetainReference);
+    igSmartPointer<igTDataList<igStringObj *> > names((igTDataList<igStringObj *> *)g_globalContext->_alignmentStrings.p, kRetainReference);
     int i;
     int *lengths;
     char *out;
@@ -1367,8 +1367,8 @@ igResult igIGBFile_ReadAlignmentTable(igIGBFileView *self) {
     if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, self->_alignmentCount); }
     name = (char *)sizes + self->_alignmentCount * 4;
     {
-    igSmartPointer<igTDataList<igStringObj *> > names(g_globalContext->_alignmentStrings, kRetainReference);
-    igSmartPointer<igTDataList<int> > values(g_globalContext->_alignmentValues, kRetainReference);
+    igSmartPointer<igTDataList<igStringObj *> > names((igTDataList<igStringObj *> *)g_globalContext->_alignmentStrings.p, kRetainReference);
+    igSmartPointer<igTDataList<int> > values((igTDataList<int> *)g_globalContext->_alignmentValues.p, kRetainReference);
     nameCount = 0;
     if (names.p != 0) { nameCount = names.p->_count; }
     assignReference(self->_alignmentListInFile, igSmartPointer<igTDataList<int> >((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool)));
@@ -1548,7 +1548,7 @@ igResult igIGBFile_ReadExternalDirectories(igIGBFileView *self) {
         int *sizes;
         char *name;
         int i;
-        igResource *dir;
+        Gap::Core::igResource *dir;
         if (self->_file->Read(&hdr, 12, 1) != 1) { return g_resultFailure; }
         if (self->_endianSwap != 0) { self->imf->SwapBytes(&hdr, 3); }
         self->_externalDirectoryBufferSize = hdr.size - 12;
@@ -1558,13 +1558,13 @@ igResult igIGBFile_ReadExternalDirectories(igIGBFileView *self) {
         sizes = self->_externalDirectoryBuffer;
         if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, count); }
         name = (char *)sizes + count * 4;
-        if (self->_managingResource == 0) { self->_managingResource = ((igResource *)igResource_GetDefaultResource()); }
+        if (self->_managingResource == 0) { self->_managingResource = Gap::Core::igResource::getGlobalResource(); }
         if (self->_managingResource != 0) {
-            setPooled(&self->_previousResourceFilePath, (char *)self->_managingResource->_relativeFilePath);
+            setPooled(&self->_previousResourceFilePath, (char *)self->_managingResource->_relativeFilePath.p);
             { char *n; n = self->_basePath; dir = self->_managingResource; setPooled((char **)&dir->_relativeFilePath, n); }
         }
         for (i = 0; i < count; i++) {
-            ((Gap::Core::igObjectList *)self->_externalDirectoryList)->append((Gap::Core::igObject *)(((int)igResource_GetOrLoadDirectory(self->_managingResource, (int)name))));
+            ((Gap::Core::igObjectList *)self->_externalDirectoryList)->append((Gap::Core::igObject *)(((int)self->_managingResource->loadSynchronous((char const *)name))));
             name += sizes[i];
         }
         self->_temporaryMemoryPool->Free(self->_externalDirectoryBuffer);
@@ -1738,7 +1738,7 @@ void igIGBFile_ReadFilePostProcess(int *result, igIGBFileView *self) {
     if (self->_readFilePostProcessedState == 0) {
         igResult postProcessed = igIGBFile_PostProcessEntries(self);
         if (self->_managingResource != 0) {
-            igResource_FinishAsyncLoad(self->_managingResource, (int)self->_name);
+            self->_managingResource->makeCompatible((char const *)self->_name);
         }
         self->_readFilePostProcessedState = 1;
         *result = postProcessed.v;

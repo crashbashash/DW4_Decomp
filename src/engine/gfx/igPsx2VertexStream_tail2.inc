@@ -10,7 +10,7 @@ namespace Gfx {
 
 void igPsx2VertexStream::userRegister()
 {
-    igResource_AddAlignment((igResource *)g_globalContext, "DMABuffer_PS2", 0x10);
+    g_globalContext->addAlignmentPair("DMABuffer_PS2", 0x10);
     castMemoryRefMetaField(igMetaObject_FindFieldByName(_Meta, "_dmaBuffer"))->setAlignmentType("DMABuffer_PS2");
 }
 

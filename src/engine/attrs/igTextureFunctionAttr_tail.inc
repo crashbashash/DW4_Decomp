@@ -48,9 +48,9 @@ void igTextureFunctionAttr::releaseDefaults()
 
 void igTextureFunctionAttr::synchronizeDefault(igVisualContext *vc)
 {
-    _mode = ((igVisualContextDispatchView *)vc)->getTextureStageFunc(_unitID);
+    _mode = vc->getTextureStageFunc(_unitID);
     if (_extension == 0)
-        _extension = (igMultiTextureExt *)((igVisualContextDispatchView *)vc)->GetExtension("igMultiTextureExt");
+        _extension = (igMultiTextureExt *)vc->getExt("igMultiTextureExt");
 }
 
 int igTextureFunctionAttr::getUnitCount(igCapabilityManager *capabilityManager)

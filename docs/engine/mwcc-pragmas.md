@@ -93,7 +93,8 @@ in `src/`), **runtime** (the Metrowerks runtime files only).
 | `far_call on` | Verified: each call loads its target from a `gp`-relative `@dp` word and goes through `jalr` | owner, counted |
 | `interrupt on` | Verified: the function saves every register it touches and ends with `eret` | owner, counted |
 | `padloop on` | Verified: no change on b52 (see mvc2 below) | owner, counted |
-| `usefloatacc`, `fast_fptosi`, `fastmath`, `prefetch`, `inline_intrinsics` | Verified: no change in the probes. `strcpy`/`memcpy` stay calls under `inline_intrinsics on` ([understanding shapes](understanding-shapes.md#types-and-values)) | owner, counted |
+| `usefloatacc off` | Verified: a sum of products is no longer formed in the FPU accumulator: `x*x + y*y + z*z` compiles to `mul.s, mul.s, add.s, mul.s, add.s` instead of `mul.s, mul.s, adda.s, madd.s`. The Attrs library was built this way: `src/engine/attrs/AttrsLibrary.cpp` sets it once at file scope ([build profiles](build-profiles.md#what-each-library-was-built-with)) | owner, counted; approved for `AttrsLibrary.cpp` only (owner, 2026-11-23) |
+| `fast_fptosi`, `fastmath`, `prefetch`, `inline_intrinsics` | Verified: no change in the probes. `strcpy`/`memcpy` stay calls under `inline_intrinsics on` ([understanding shapes](understanding-shapes.md#types-and-values)) | owner, counted |
 
 ### Data and language
 

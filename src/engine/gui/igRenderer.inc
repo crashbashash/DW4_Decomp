@@ -18,7 +18,7 @@ void igRenderer::arkRegister()
 
 CallbackArray *igRenderer::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igVisualContext_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igVisualContext::arkRegister, 0 };
 
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -48,7 +48,7 @@ void igRenderer::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 1);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }

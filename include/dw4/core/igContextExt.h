@@ -10,8 +10,6 @@ extern "C" {
 #endif
 extern struct igMetaObject *g_igContextExt_metaObject;
 struct CallbackArray *igContextExt_Register(void);
-void igContextExt_MakeCurrent(void);
-int igContextExt_IsCurrent(void);
 #ifdef __cplusplus
 }
 #endif

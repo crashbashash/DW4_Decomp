@@ -192,3 +192,5 @@ igTgaLoader	Gfx
 igPrimLengthArray	Gfx
 igPrimLengthArray1_1	Gfx
 igGeometryAttr1_5	Attrs
+igResource	Core
+igVisualContext	Gfx

@@ -35,7 +35,7 @@ void igTextureCoordSourceAttr::synchronizeDefault(igVisualContext *vc)
     IG_GFX_TEXTURE_COORD_SOURCE source = (IG_GFX_TEXTURE_COORD_SOURCE)_mode;
     int index;
 
-    ((igVisualContextDispatchView *)vc)->getTextureStageCoordSource(_unitID, source, index);
+    vc->getTextureStageCoordSource(_unitID, source, index);
     _mode = source;
     _texCoordIndex = index;
 }

@@ -29,7 +29,7 @@ void igVertexBlendMatrixAttr::synchronizeDefault(igVisualContext *vc)
 {
     igMatrix44f m;
 
-    ((igVisualContextDispatchView *)vc)->getMatrix((IG_GFX_MATRIX_STACK)(_blendMatID + IG_GFX_MATRIX_STACK_VERTEX_BLEND_0), m);
+    vc->getMatrix((IG_GFX_MATRIX_STACK)(_blendMatID + IG_GFX_MATRIX_STACK_VERTEX_BLEND_0), m);
     setMatrix(m);
 }
 

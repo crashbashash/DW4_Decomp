@@ -31,6 +31,15 @@ public:
         Parent::resizeAndSetCount(newCount, sizeof(T));
     }
     inline const T *getArray() const { return (const T *)_data; }
+    inline void append(const T &item) {
+        const int count = getCount();
+        if (count < _capacity) {
+            _count++;
+        } else {
+            Parent::resizeAndSetCount(count + 1, sizeof(T));
+        }
+        getArrayInternal()[count] = item;
+    }
     inline T &get(int index) const { return getArrayInternal()[index]; }
     inline void set(int index, const T &value) {
         if (!(_count != 0)) {

@@ -23,7 +23,6 @@
 #include "dw4/gui/igOnOffModel.h"
 #include "dw4/gui/igRadioGroup.h"
 #include "dw4/gui/igRenderer.h"
-#include "dw4/gfx/igVisualContextDispatchView.h"
 #include "dw4/gui/igRendererOrderedList.h"
 #include "dw4/gui/igTextElement.h"
 #include "dw4/gui/igView.h"

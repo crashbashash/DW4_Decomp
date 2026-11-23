@@ -27,7 +27,7 @@ void igTextureStateAttr::setUnitID(short id)
 
 void igTextureStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getTextureStageState(_unitID));
+    setState(vc->getTextureStageState(_unitID));
 }
 
 /* Setter for the reflected bool field _enabled. */

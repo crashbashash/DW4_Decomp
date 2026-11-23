@@ -3,7 +3,7 @@ igMetaObject *igVisualContextList_GetMeta(void) {
 }
 
 igMetaObject *igVisualContextList_GetElementMeta(void) {
-    return g_igVisualContext_metaObject;
+    return Gap::Gfx::igVisualContext::getClassMeta();
 }
 
 int FUN_001810c0(void) {

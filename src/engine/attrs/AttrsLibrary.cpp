@@ -1,3 +1,6 @@
+/* The attrs library was built without the float accumulator: retail's attrs unit has no madd.s/adda.s/mula.s,
+ * and igGeometryAttr1_5::transformVectors adds the squares of its length with plain mul.s/add.s. */
+#pragma usefloatacc off
 #include "src/engine/attrs/AttrsLibrary.h"
 #include "dw4/support/unregisteredClasses.h"
 

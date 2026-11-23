@@ -113,33 +113,6 @@ igSmartPointer<igObject> *igSmartPointer_igTimer_Destruct(igSmartPointer<igObjec
     return self;
 }
 
-Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
-    if (arg0) {
-        arg0->vt = DAT_00525e50;
-        arg0->rel(&arg0->m308);
-        arg0->rel(&arg0->m304);
-        __destroy_arr((char *)arg0 + 240, (void (*)(void *, short))((ConstructorDestructor)&FUN_00137360), 4, 16);
-        arg0->rel(&arg0->m56);
-        arg0->rel(&arg0->m52);
-        arg0->rel(&arg0->m48);
-        arg0->rel(&arg0->m44);
-        arg0->rel(&arg0->m40);
-        arg0->rel(&arg0->m36);
-        arg0->rel(&arg0->m32);
-        arg0->rel(&arg0->m28);
-        arg0->rel(&arg0->m24);
-        if (arg0) {
-            arg0->vt = DAT_00530a10;
-            arg0->rel(&arg0->m16);
-            arg0->rel(&arg0->m8);
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
 igSmartPointer<igObject> *igSmartPointer_igIntList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
@@ -217,35 +190,6 @@ int *igSmartPointer_igIntList_Construct(int *p)
     return p;
 }
 
-void *FUN_001510e0(igVisualContext *arg0) {
-    igObject_InitHeader((igObject *)arg0);
-    arg0->_vtable = (int)(&DAT_00530a10[0]);
-    arg0->_pExtList = 0;
-    arg0->_pExtInstances = 0;
-    arg0->_vtable = (int)(&DAT_00525e50[0]);
-    arg0->_driverDataMemoryPool = 0;
-    arg0->_vertexMemoryPool = 0;
-    arg0->_internalMemoryPool = 0;
-    arg0->_temporaryMemoryPool = 0;
-    arg0->_imageMemoryPool = 0;
-    arg0->_textureMemoryPool = 0;
-    arg0->_statisticsMemoryPool = 0;
-    arg0->_listMemoryPool = 0;
-    arg0->_timer = 0;
-    igMatrix44f_SetIdentity(&arg0->_viewMatrixHint[0]);
-    igMatrix44f_SetIdentity(&arg0->_viewMatrixInverse[0]);
-    /* the element constructor and destructor in the runtime's ConstructorDestructor form */
-    __construct_array(&arg0->_vertexArray2[0], (ConstructorDestructor)FUN_00151190, (ConstructorDestructor)&FUN_00137360, 4, 0x10);
-    arg0->_customStates = 0;
-    arg0->_customFields = 0;
-    return arg0;
-}
-
-int *FUN_00151190(int *arg0) {
-    *arg0 = 0;
-    return arg0;
-}
-
 void igPsx2VisualContext_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2VisualContext_Register);
@@ -258,8 +202,8 @@ CallbackArray *igPsx2VisualContext_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2VisualContext_metaObject,
-        igVisualContext_Register,
-        igVisualContext_GetPublishedMetaObject,
+        Gap::Gfx::igVisualContext::arkRegisterInternal,
+        Gap::Gfx::igVisualContext::getClassMeta,
         igPsx2VisualContext_GetMetaObjectFunction,
         "igPsx2VisualContext",
         0x618, /* instance size */
@@ -268,10 +212,6 @@ CallbackArray *igPsx2VisualContext_Register(void) {
         0, /* extra callback item */
         g_igPsx2VisualContext_callbackList /* callback list */
     );
-}
-
-igMetaObject *igVisualContext_GetPublishedMetaObject(void) {
-    return g_igVisualContext_metaObject;
 }
 
 static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
@@ -1179,6 +1119,6 @@ void igPsx2VisualContext_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x90))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x91))->_persistent = 0;
     igMetaObject_NameFields(meta, g_igPsx2VisualContext_fieldTable, g_igPsx2VisualContext_fieldHandles, g_igPsx2VisualContext_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPsx2VisualContext_metaObject) + 64) = (int)(&igVisualContext_GetMetaObjectFunction);
+    *(int *)((char *)(g_igPsx2VisualContext_metaObject) + 64) = (int)(&Gap::Gfx::igVisualContext::getClassMetaSafe);
 }
 

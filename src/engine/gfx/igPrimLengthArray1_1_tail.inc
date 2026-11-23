@@ -33,7 +33,7 @@ void igVertexArray1_1::resetFields(int flag)
 
 void igVertexArray1_1::userRegister()
 {
-    igResource_AddAlignment((igResource *)g_globalContext, "VertexArrayData", 0x10);
+    g_globalContext->addAlignmentPair("VertexArrayData", 0x10);
     ((igMemoryRefMetaField *)k_blendWeights)->setAlignmentType("VertexArrayData");
 }
 

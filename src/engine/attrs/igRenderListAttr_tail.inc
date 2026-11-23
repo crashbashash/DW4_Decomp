@@ -23,13 +23,15 @@ void igRenderListAttr::releaseDefaults()
 void igRenderListAttr::reset()
 {
     if (_handle != -1)
-        ((igVisualContextDispatchView *)(igVisualContext *)_vc)->deleteRenderList(_handle);
+        _vc->deleteRenderList(_handle);
     _handle = -1;
     _vc = 0;
 }
 }
 }
 
+/* Retail's attrs copy of igVisualContext's inline getScissorType (slot 189), which the igVisualContext and
+ * igPsx2VisualContext vtables bind; no attrs code names the member, so the copy stays a C definition. */
 int igVisualContext_GetScissorType(igVisualContext *self) {
     return self->_scissorType;
 }

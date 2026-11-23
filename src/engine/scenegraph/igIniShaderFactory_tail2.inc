@@ -145,7 +145,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
     }
     if (self->mode != 0) {
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType((igResource *)g_globalContext, (const char *)text_system, "igShaderInfo", 0);
+            IniSourceList *source = (IniSourceList *)g_globalContext->getInfoByType((const char *)text_system, "igShaderInfo", 0);
             IniFieldEntry *entry;
             if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(g_igShaderInfo_metaObject) == 0) {
                 SET_OUT(result);
@@ -248,7 +248,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
     if (self->mode != 0) {
         IniSectionText *found;
         if (self->mode == 3) {
-            IniSourceList *source = (IniSourceList *)igDirectory_GetNthObjectOfType((igResource *)g_globalContext, (const char *)text_system, "igShaderInfo", 0);
+            IniSourceList *source = (IniSourceList *)g_globalContext->getInfoByType((const char *)text_system, "igShaderInfo", 0);
             IniFieldEntry_1cdbb0 *entry;
             if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(g_igShaderInfo_metaObject) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);

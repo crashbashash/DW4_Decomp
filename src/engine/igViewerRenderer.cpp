@@ -1,7 +1,6 @@
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/support/reflected.h"
 #include "dw4/viewer/DisableFeature.h"
-#include "dw4/gfx/igVisualContextDispatchView.h"
 #include "dw4/viewer/igViewerRenderer.h"
 
 #include "dw4/core/igObject.h"
@@ -32,10 +31,6 @@
 extern "C" {
 
 extern int text_igDisableExt[4];
-
-/* The matrix setter of the visual context; IG_GFX_MATRIX_PROJECTION is the type the projection
- * matrix attribute passes. */
-enum { IG_GFX_MATRIX_PROJECTION = 0 };
 
 void igViewerRenderer_UpdateAttr(igViewerRenderer *self, igObject *attr);
 void igViewerRenderer_SetOverride(igViewerRenderer *self, igObject *attr, int override);
@@ -144,8 +139,8 @@ void igViewerRenderer_PopLightStates(igViewerRenderer *self) {
 void igViewerRenderer_Traverse(igViewerRenderer *self) {
     igObject *previous;
     igObject *output;
-    ((igVisualContextDispatchView *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_PROJECTION, (int)((igViewerParameters *)self->_parameters)->_projectionMatrix);
-    ((igVisualContextDispatchView *)self->_visualContext)->SetViewMatrixHint(((igViewerParameters *)self->_parameters)->_viewMatrix);
+    ((Gap::Gfx::igVisualContext *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_STACK_PROJECTION, *(const igMatrix44f *)((igViewerParameters *)self->_parameters)->_projectionMatrix);
+    ((Gap::Gfx::igVisualContext *)self->_visualContext)->setViewMatrixHint(*(const igMatrix44f *)((igViewerParameters *)self->_parameters)->_viewMatrix);
     previous = (igObject *)self->_lightOutput;
     igObject::release(previous);
     self->_lightOutput = 0;
@@ -177,7 +172,7 @@ void igViewerRenderer_Traverse(igViewerRenderer *self) {
 }
 
 void igViewerRenderer_InitializeDrawing(igViewerRenderer *self) {
-    igObject *extension = ((igVisualContextDispatchView *)self->_visualContext)->GetExtension((const char *)text_igDisableExt);
+    igObject *extension = ((Gap::Gfx::igVisualContext *)self->_visualContext)->getExt((char *)text_igDisableExt);
     igObject::ref(extension);
     igObject *previous = (igObject *)self->_disableExtension;
     igObject::release(previous);
@@ -218,7 +213,7 @@ void Gap__Viewer__igViewerRenderer__Render(igViewerRenderer *self) {
     int count = ((igBitMask *)params->_disables)->_bitCount;
     int i;
     int j;
-    ((igVisualContextDispatchView *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_PROJECTION, (int)&params->_projectionMatrix[0]);
+    ((Gap::Gfx::igVisualContext *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_STACK_PROJECTION, *(const igMatrix44f *)params->_projectionMatrix);
     if (self->_disableExtension != 0) {
         for (i = 0; i < count; i++) {
             if (g_viewerDisableFeatures[i].supported

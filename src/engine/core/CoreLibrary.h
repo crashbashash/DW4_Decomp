@@ -210,8 +210,8 @@ union igRefCountWord {
     info->field = s_; }
 #define RESERVED(n) virtual void reserved_##n()
 #define REL(o) if ((o) != 0) { (o)->_refCount = (int)(o)->_refCount - 1; if (((unsigned long long)((long long)(int)(o)->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy((igObject *)(o)); } }
-#define REL_O(p) { igObject *q_ = (igObject *)(p); if (q_) { q_->_refCount = q_->_refCount - 1; if (((unsigned long long)(long long)(int)q_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q_); } }
-#define ASSIGN_O(o, fld, val) { igObject *n_ = (val); (o) = (igIGBFile *)file.p; if (n_ != 0) n_->_refCount = n_->_refCount + 1; REL_O((o)->fld) (o)->fld = (int)n_; }
+#define REL_O(p) { ::igObject *q_ = (::igObject *)(p); if (q_) { q_->_refCount = q_->_refCount - 1; if (((unsigned long long)(long long)(int)q_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q_); } }
+#define ASSIGN_O(o, fld, val) { ::igObject *n_ = (val); (o) = (igIGBFile *)file.p; if (n_ != 0) n_->_refCount = n_->_refCount + 1; REL_O((o)->fld) (o)->fld = (int)n_; }
 #define OFF(p) (((TaggedBlockHeader *)(p))->big == 0 ? 4 : 12)
 #define NEXT(p) (*(int *)((char *)(p) + OFF(p) + 4))
 #define PREV(p) (*(int *)((char *)(p) + OFF(p)))
@@ -316,13 +316,6 @@ extern "C" void igStringObj_InitFields(void);
 extern "C" void igPsx2Semaphore_GetMetaObjectFunction(void);
 extern "C" void **igSmartPointer_igLocationTable_Destruct(void **arg0, int arg1);
 extern "C" void **igSmartPointer_igCallStackTable_Destruct(void **arg0, short arg1);
-extern "C" void *igResource_Create(int pool);
-extern "C" igMetaObject *igResource_GetOrCreateMetaObject(void);
-extern "C" int igResource_GetVTable(void);
-extern "C" void igResource_EnsureRegistered(void);
-extern "C" CallbackArray *igResource_Register(void);
-extern "C" void igResource_GetMetaObjectFunction(void);
-extern "C" void igResource_InitFields(void);
 extern "C" void * igQueue_Create(int arg0);
 extern "C" igMetaObject *igQueue_GetOrCreateMetaObject(void);
 extern "C" void igQueue_EnsureRegistered(void);
@@ -894,9 +887,7 @@ extern "C" int igReport_DefaultHandler(int arg0, int arg1);
 extern "C" int igReport_VReport(int arg0, const char *arg1, int arg2);
 extern "C" void igReport_ReadSettings(void);
 extern "C" void igReport_RestoreDefaults(void);
-extern "C" void igResource_AddDirectory(int *p, int extra1);
-extern "C" void igResource_AsyncLoadThreadProc(int *arg0, void *arg1);
-extern "C" int igResource_GetDefaultResource(void);
+extern "C" void igResource_AsyncLoadThreadProc(int *result, Gap::Core::igDirectory *file);
 extern "C" void igResource_WrapRootInSceneInfo(int arg0);
 extern "C" int **igShortMetaField_Construct(int **arg0, int extra1);
 extern "C" int igStringObj_VFormat(int arg0, int extra1, int extra2);
@@ -1141,7 +1132,6 @@ extern "C" int igElfFile_GetMeta(void);
 extern "C" int igSymbolTable_GetMeta(void);
 extern "C" int igStringTable_GetMeta(void);
 extern "C" igMetaObject *igStringRefList_GetMeta(void);
-extern "C" int igResource_GetMeta(void);
 extern "C" igMetaObject *igQueue_GetMeta(void);
 extern "C" int igPluginHelper_GetMeta(void);
 extern "C" int igNamedObjectInfo_GetMeta(void);
@@ -1249,10 +1239,6 @@ extern "C" int text_shallowCopyMethod[4];
 extern "C" int text_destruct[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igCallStackTracer_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" void **igSmartPointer_igSemaphore_Destruct(igObject **self, short flag);
-extern "C" igMetaObject *g_igResource_metaObject;
-extern "C" igMetaObject *igResource_GetMetaObject(void);
-extern "C" int g_igResource_vtable[4];
-extern "C" igQueue **igSmartPointer_igQueue_Destruct(igQueue **arg0, short arg1);
 extern "C" igMetaObject *g_igQueue_metaObject;
 extern "C" igMetaObject *igQueue_GetMetaObject(void);
 extern "C" igMetaObject *g_igPluginHelper_metaObject;
@@ -1664,7 +1650,7 @@ struct igDirectoryView;
 class igDirEntryView;
 struct igDirectoryView : public igVirtualObject {
     int _count; int _capacity; igDirEntryView **_data; int _name;
-    igTDataList<igDirectoryView *> *_externalDirectoryList; igTDataList<igInfo *> *_infoList; igResource *_managingResource;
+    igTDataList<igDirectoryView *> *_externalDirectoryList; igTDataList<igInfo *> *_infoList; Gap::Core::igResource *_managingResource;
     unsigned char _sharingState; unsigned char _trackUniqueEntries; char _pad38[2];
     igObjectList *_uniqueEntryList; igTDataList<int> *_refList;
     unsigned char _loadPendingState; unsigned char _validState; unsigned char _compatibleState; char _pad51[1];
@@ -1973,21 +1959,6 @@ class igLongTimerView;
 extern "C" int g_igIGBFile_inheritedFieldCountFill[4];
 extern "C" int g_igIGBFile_persistentFieldCountFill[4];
 extern "C" igMetaField *g_igIGBFile_infoListPlaceField;
-/* igResource: the resource manager (g_globalContext): loaded directories, the asynchronous loader,
- * and the memory alignment names and values .igb files are matched against. */
-class igStandardQueueView;
-class igPsx2ThreadView;
-struct igResourceView : public igObject {
-    unsigned char _useMemoryPoolAssignmentsState; char _pad9[3];
-    int _imageDirectory; int _directoryList; int _relativeFilePath; int _absoluteFilePath;
-    unsigned char _asyncLoadState; char _pad29[3];
-    igSmartPointer<igStandardQueueView> _loadQueue;
-    igSmartPointer<igPsx2ThreadView> _loadThread;
-    unsigned char _autoCompatibility; char _pad41[3];
-    igTDataList<igStringObj *> *_alignmentStrings;
-    igTDataList<int> *_alignmentValues;
-    int addDirectory(igObject *directory);
-};
 extern "C" igResult igIGBFile_BuildIndexBuffer(igIGBFileView *self);
 extern "C" igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file);
 extern "C" igResult igIGBFile_OpenFile(igIGBFileView *self, const char *fileName, int mode);
@@ -2501,15 +2472,9 @@ extern "C" int igStandardQueue_StopServiceThreads(igStandardQueueView *queue);
 extern "C" void *igStringMetaField_Construct(igStringMetaField *self, int extra1);
 extern "C" void *igUnsignedIntMetaField_Construct(igMetaField *self, int extra1);
 extern "C" char DAT_004d3d11[16];
-extern "C" igDirectory *igResource_GetImageDirectory(igResource *self);
 /* igResource (reflected.h) with its asynchronous-loading fields: the queue the loader thread
  * serves and the thread. */
 
-extern "C" void igResource_ReleaseDefaults(igResource *self);
-extern "C" void *igResource_GetOrLoadDirectory(igResource *arg0, int arg1);
-extern "C" igIGBFileView *igResource_ReadFileWithSearchPaths(igResource *self, igIGBFileView *file);
-extern "C" void igResource_ClearDirectories(igResource *self);
-extern "C" void igResource_RemoveIGBFiles(igResource *self);
 extern "C" void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromName, const char *toName);
 static inline igObjectRefMetaField *AsObjectRefMetaField(void *p) {
     if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)((void *)Gap::Core::igObjectRefMetaField::getClassMeta())) != 0) { return (igObjectRefMetaField *)p; }
@@ -2519,7 +2484,6 @@ static inline void *AsObjectList(void *p) {
     if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)((void *)Gap::Core::igObjectList::getClassMeta())) != 0) { return p; }
     return 0;
 }
-extern "C" void igResource_FinishAsyncLoad(igResource *arg0, int arg1);
 extern "C" void igStringObj_SetN(igStringObj *arg0, int arg1, int arg2);
 /* An igStringObj's text: its buffer, or the shared empty text when it has none. */
 static inline char *igStringObj_Text(igStringObj *s) { return (char *)s->_buffer == 0 ? g_stringObjEmptyText : (char *)s->_buffer; }

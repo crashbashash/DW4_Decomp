@@ -153,7 +153,7 @@ void FUN_001690d0(Arg0d0 *arg0) {
     Buf860 *b;
     sp5C = 4;
     igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_RD_ARRAY_SIZE", &sp5C, 4, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)arg0));
+    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)arg0)->getListMemoryPool());
     if (p != 0) {
         n = sp5C;
         p->f8 = 0;

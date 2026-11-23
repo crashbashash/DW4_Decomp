@@ -58,7 +58,7 @@ struct igMovieInfoListView : igObject {
 class igMovieCodecDispatchView : public igObjectDispatchView {
 public:
     virtual int isReusable();                                                                    /* slot 21 */
-    virtual void initialize(igVisualContextDispatchView *visualContext, igObject *audioContext);  /* slot 22 */
+    virtual void initialize(Gap::Gfx::igVisualContext *visualContext, igObject *audioContext);  /* slot 22 */
     virtual int open(igMovieInfo *movie);                                                        /* slot 23 */
     virtual int close(igMovieInfo *movie);                                                       /* slot 24 */
     virtual int play(igMovieInfo *movie);                                                        /* slot 25 */

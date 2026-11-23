@@ -8,7 +8,7 @@ void igAlphaStateAttr::apply(igVisualContext *vc)
 
 void igAlphaStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getAlphaTestState());
+    setState(vc->getAlphaTestState());
 }
 
 void igAlphaStateAttr::setState(bool enabled)

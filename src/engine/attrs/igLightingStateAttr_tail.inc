@@ -8,7 +8,7 @@ void igLightingStateAttr::apply(igVisualContext *vc)
 
 void igLightingStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getLightingState());
+    setState(vc->getLightingState());
 }
 
 /* Setter for the attribute's reflected _enabled flag; lighting off means unlit geometry. */

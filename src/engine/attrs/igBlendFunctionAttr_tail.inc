@@ -22,10 +22,10 @@ void igBlendFunctionAttr::apply(igVisualContext *vc)
 
 void igBlendFunctionAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setSource(((igVisualContextDispatchView *)vc)->getBlendingSource());
-    setDestination(((igVisualContextDispatchView *)vc)->getBlendingDestination());
+    setSource(vc->getBlendingSource());
+    setDestination(vc->getBlendingDestination());
     if (_extension == 0)
-        _extension = (igBlendEquationExt *)((igVisualContextDispatchView *)vc)->GetExtension("igBlendEquationExt");
+        _extension = (igBlendEquationExt *)vc->getExt("igBlendEquationExt");
 }
 
 /* Setter for the destination blend factor (`_dst`, +16); `_src` at +12 is the source factor. */

@@ -21,7 +21,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "dw4/support/softfloat.h"
-#include "dw4/gfx/igVisualContextDispatchView.h"
 #include "dw4/gfx/igComponentEditInfo2.h"
 #include "dw4/p2/p2viewport.h"
 #include "dw4/p2/p2texture.h"
@@ -199,12 +198,7 @@ extern "C" void igVisualContextList_EnsureRegistered(void);
 extern "C" CallbackArray *igVisualContextList_Register(void);
 extern "C" void igVisualContextList_GetMetaObjectFunction(void);
 
-extern "C" igMetaObject *igVisualContext_GetMetaObject(void);
 
-extern "C" CallbackArray *igVisualContext_Register(void);
-extern "C" void igVisualContext_GetMetaObjectFunction(void);
-extern "C" int FUN_0014a170(void);
-extern "C" void igVisualContext_InitFields(void);
 extern "C" void igPsx2VisualContext_GetMetaObjectFunction(void);
 
 
@@ -419,7 +413,6 @@ extern "C" void** FUN_001372e0(igObject**, short);
 extern "C" void** FUN_00137360(void**, long long);
 
 extern "C" int g_igPsx2VisualContext_vtable[4];
-extern "C" int DAT_00525e50[4];
 struct Obj_1506b0 {
     int *vt; T *m4; T *m8; T *m12; T *m16; T *m20; T *m24; T *m28; T *m32; T *m36; T *m40; T *m44; T *m48; T *m52; T *m56;
     char p60[244]; T *m304; T *m308;
@@ -453,7 +446,6 @@ extern "C" void *FUN_001510e0(igVisualContext *arg0);
 extern "C" int *FUN_00151190(int *arg0);
 extern "C" void igPsx2VisualContext_EnsureRegistered(void);
 extern "C" CallbackArray *igPsx2VisualContext_Register(void);
-extern "C" igMetaObject *igVisualContext_GetPublishedMetaObject(void);
 extern "C" void igPsx2VisualContext_InitFields(void);
 union U_151f70 { int vt; char b[140]; };
 union U_152250 { int vt; char b[32]; };
@@ -603,7 +595,6 @@ struct FieldTypeTable {
     FieldTypeList *extraTypes;
 };
 
-extern "C" int FUN_00155340(FieldTypeTable *table, unsigned int type);
 
 extern "C" int FUN_00155490(void);
 struct Ref_1554a0 : public igObject { char *str; int len; };
@@ -654,39 +645,25 @@ struct igCustomStateFieldView : public igObject {
     int _stateCollectionHandle;
     igSmartPointer<igMetaFieldView> _stateField;
 };
-/* igVisualContext's custom-state registry: the collections and the fields that name their members. */
-struct igCustomStateOwner {
-    char _pad0[304];
-    igSmartPointer<igObjectRefList> _customStates;
-    igSmartPointer<igObjectRefList> _customFields;
-};
-extern "C" int FUN_001555e0(igCustomStateOwner *self, igMetaObjectSource **states, unsigned int count, int name);
 typedef struct Obj_155c00 { int vt; int refs; int pad; int id; } Obj_155c00;
 typedef struct List { int vt; int r; int count; int cap; Obj_155c00 **data; } List;
 typedef struct Owner { char pad[304]; List *a; List *b; } Owner;
 
-#define REL(o) if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy((igObject *)o);}
-extern "C" void FUN_00155c00(igResult *out, Owner *owner, int id);
+#define REL(o) if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy((::igObject *)o);}
 typedef struct Rc { int w0; int refs; } Rc;
 typedef struct Ls { char p0[8]; int cnt; char p1[4]; Rc **data; } Ls;
 typedef struct O_155db0 { char p0[304]; Ls *f304; Ls *f308; } O_155db0;
-extern "C" void FUN_00155db0(O_155db0 *arg0);
 struct Entry : public igObject { char pad[12]; char *name; };
 struct EntryList { int w0; int w4; int count; int capacity; Entry **data; };
 struct Table { char pad[304]; EntryList *entries; };
 
-extern "C" int FUN_00155f10(Table *table, int key);
 struct KeyedEntry : public igObject { char *name; };
 struct KeyedEntryList { int w0; int w4; int count; int capacity; KeyedEntry **data; };
 struct KeyedEntryOwner { char pad[308]; KeyedEntryList *entries; };
 struct NamedValue { const char *name; int value; };
-extern "C" int igVisualContext_GetStateFieldHandle(KeyedEntryOwner *table, int key);
-extern "C" int FUN_001562b0(void);
-extern "C" int FUN_001562c0(void);
 struct C { int f0; int f4; int f8; int fc; };
 struct B { char pad[16]; struct C **tab; };
 struct A_1562d0 { char pad[308]; struct B *b; };
-extern "C" int FUN_001562d0(struct A_1562d0 *arg0, int arg1);
 extern "C" int FUN_00156ae0(int arg0, int arg1, float fparg0);
 /* igMemoryPool: allocation (slot 52), aligned allocation (53), zeroed array allocation (54) and free (64). */
 class igMemoryPoolView : public igVirtualObject {
@@ -1184,35 +1161,13 @@ struct igVisualContextFieldsView {
     igObjectSlotView *customFields;
 };
 
-/* The pools igVisualContext_constructFields hands a new context, set beforehand by the static setters
- * (igVisualContext_SetImageMemoryPool); a null entry takes the owner's allocator. */
-extern "C" igObjectSlotView *g_igVisualContext_defaultDriverDataMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultVertexMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultInternalMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultTemporaryMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultImageMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultTextureMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultStatisticsMemoryPool[4];
-extern "C" igObjectSlotView *g_igVisualContext_defaultListMemoryPool[4];
-
 extern "C" void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags);
-struct VisualContextCapabilityManager;
 struct PropertyRoot {
     char pad0[56];
     void *properties;
 };
-struct VisualContextCapabilityManager {
-    int _vtable;
-    unsigned int _refCount;
-    char pad8[12];
-    int index;
-    char pad24[36];
-    unsigned char showFrameRate;
-    unsigned char commandLineFrame;
-};
-typedef igTDataList<VisualContextCapabilityManager *> ManagerList;
+typedef igTDataList<Gap::Gfx::igVisualContext *> LiveContextList;
 
-extern "C" void FUN_00165a80(VisualContextCapabilityManager *self);
 /* The lookup key lives in a stack object with a destructor, so it is kept in memory and its load
  * is hoisted. */
 struct RefObj { int w0; int references; int count; int capacity; void **data; };
@@ -1232,18 +1187,10 @@ struct Finder {
 };
 extern "C" void FUN_00165bb0(char *arg0);
 extern "C" void igVisualContext_Reset(void *arg0);
-extern "C" int igVisualContext_GetDriverDataMemoryPool(int *p);
-extern "C" int igVisualContext_GetVertexMemoryPool(int *p);
-extern "C" int igVisualContext_GetInternalMemoryPool(int *p);
-extern "C" int igVisualContext_GetImageMemoryPool(int *p);
-extern "C" int igVisualContext_GetStatisticsMemoryPool(int *p);
-extern "C" int igVisualContext_GetListMemoryPool(int *p);
 class V1 { public: virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual void a20(); virtual void a21(); virtual void a22(); virtual void a23(); virtual void a24(); virtual void a25(); virtual void a26(); virtual void a27(); virtual void a28(); virtual void a29(); virtual void a30(); virtual void a31(); virtual void a32(); virtual void a33(); virtual void a34(); virtual void a35(); virtual void a36(); virtual void a37(); virtual void a38(); virtual void a39(); virtual void a40(); virtual void a41(); virtual void a42(); virtual void a43(); virtual void a44(); virtual void a45(); virtual void a46(); virtual void a47(); virtual void a48(); virtual void a49(); virtual void a50(); virtual void a51(); virtual void a52(); virtual void a53(); virtual void a54(); virtual void a55(); virtual void a56(); virtual void a57(); virtual void a58(); virtual void a59(); virtual void a60(); virtual void a61(); virtual void a62(); virtual void a63(); virtual void v264(void *); };
 class V2_165d30 { public: virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10(); virtual void b11(); virtual void b12(); virtual void b13(); virtual void b14(); virtual void b15(); virtual void b16(); virtual void b17(); virtual void b18(); virtual void b19(); virtual void b20(); virtual void b21(); virtual void b22(); virtual void b23(); virtual void b24(); virtual void b25(); virtual void b26(); virtual void b27(); virtual void b28(); virtual void b29(); virtual void b30(); virtual void b31(); virtual void b32(); virtual void b33(); virtual void b34(); virtual void b35(); virtual void b36(); virtual void b37(); virtual void b38(); virtual void b39(); virtual void b40(); virtual void b41(); virtual void b42(); virtual void b43(); virtual void b44(); virtual void b45(); virtual void b46(); virtual void b47(); virtual void b48(); virtual void b49(); virtual void b50(); virtual void b51(); virtual void b52(); virtual void *v220(unsigned int, int); };
 struct O_165d30 { char p72_[72]; unsigned int f72; int f76; void *f80; int f84; unsigned int f88; };
 
-extern "C" void igVisualContext_SetBlendingMatrices(O_165d30 *arg0, unsigned int arg1, int arg2);
-extern "C" int igVisualContext_GetBlendingMatricesCount(igVisualContext *self);
 
 struct Mat;
 struct Self;
@@ -1316,7 +1263,6 @@ struct V_165e50 { float x, y, z;
 };
 struct Mat { float m[16]; };
 struct Self { char pad[72]; int matCount; char pad2[8]; Mat *mats; };
-extern "C" void *FUN_00165e50(Self *self, Obj_165e50 *src);
 /* Resets a visual context to its default render state; the flags select which state groups. Vtable
  * entries are 4 bytes starting at +8, so slot N is at offset 8 + 4*N; slots are named by index
  * because the methods are unnamed. */
@@ -1415,7 +1361,6 @@ public:
 /* "fillMode" */
 struct SystemConfig { char pad[56]; void *settings; };
 extern "C" void igVisualContext_ResetToDefault(igVisualContext_166400 *ctx, int flags);
-extern "C" void FUN_00166a60(void *arg0, char arg1);
 
 extern "C" float DAT_0048a470[4];
 extern "C" float DAT_005607a0[4];
@@ -1425,13 +1370,9 @@ extern "C" float DAT_005607b8[4];
 extern "C" float DAT_005607c0[4];
 extern "C" float DAT_00560838[4];
 class C_166a70 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27();  virtual void vX(int, int, int *); char pad[57]; unsigned char f61; };
-extern "C" void igVisualContext_UpdateFrameRateDisplay(void *arg0_, float fparg0, float fparg1);
-extern "C" void igVisualContext_OutputText(void);
-extern "C" void igVisualContext_UpdatePrimitiveCountDisplay(void);
 class DW4VC_240_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual int vX(int); };
 class DW4VC_248_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual int vX(); };
 class DW4VC_284_3 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual int vX(int, int, int); };
-extern "C" void igVisualContext_DrawNonIndexed(void **arg0, int arg1, int arg2, int arg3);
 struct L_166d40 { char pad[8]; int count; int pad2; int *items; };
 struct ShaderSetup {
     char pad[56];
@@ -1439,12 +1380,6 @@ struct ShaderSetup {
     void *builder;
 };
 
-extern "C" void igVisualContext_LoadDefaultDriverDatabase(int value);
-extern "C" void igVisualContext_SetVertexPipelineMode(void);
-extern "C" int igVisualContext_GetVertexPipelineMode(void);
-extern "C" void FUN_00166fb0(void);
-extern "C" int FUN_00166fc0(void);
-extern "C" int igVisualContext_GetLastError(void);
 /* The object FUN_00166fe0 stores: slot 23 is called with four zeroes when it has nothing at +12 yet. */
 class SlotObject_166fe0 : public igVirtualObject {
 public:
@@ -1456,34 +1391,13 @@ public:
     int f8;
     igSmartPointer<igObject> f12;
 };
-class SlotOwner_166fe0 {
-public:
-    virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
-    virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35();
-    virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41();
-    virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
-    virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53();
-    virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58();
-    virtual void v59(igObject *);
-    char pad4[236];
-    igSmartPointer<SlotObject_166fe0> slots[1];
-};
-extern "C" void FUN_00166fe0(SlotOwner_166fe0 *self, SlotObject_166fe0 *object, int index);
 extern "C" igSmartPointer<igObject> FUN_00167130(SlotObject_166fe0 *object);
-extern "C" int igVisualContext_GetVertexArray2(int arg0, int arg1);
-extern "C" void igVisualContext_SetViewMatrixHint(struct MatrixInverseCache *self, const float *matrix);
-extern "C" void igVisualContext_GetViewMatrixHint(char * arg0, int arg1);
 typedef struct MatrixInverseCache {
     char pad0[108];
     float matrix[16];
     float inverse[16];
     unsigned char inverseDirty;
 } MatrixInverseCache;
-extern "C" void igVisualContext_GetViewMatrixInverse(MatrixInverseCache *self, float *out);
 /* Dummy class: igVisualContext virtual at vtable byte offset 148. */
 class VisualContextQuerySlot {
 public:
@@ -1875,24 +1789,7 @@ typedef struct ImagePalette {
     char pad18[4];
     unsigned char used;
 } ImagePalette;
-extern "C" void FUN_0016f7f0(unsigned int *dst, unsigned short *src, int count);
-extern "C" void FUN_0016f690(unsigned int *dst, unsigned char *src, int count, ImagePalette *palette);
-extern "C" void FUN_0016f700(unsigned int *dst, unsigned short *src, int count);
-extern "C" void FUN_0016f780(unsigned char *dst, unsigned short *src, int count);
-extern "C" void FUN_0016f8a0(unsigned int *dst, unsigned char *src, int count, unsigned char *alphaSrc);
-extern "C" void FUN_0016f930(unsigned short *dst, unsigned char *src, int count, unsigned char *alphaSrc);
-extern "C" void FUN_0016f9b0(unsigned short *dst, unsigned char *src, int count);
-extern "C" void FUN_0016fa10(unsigned char *dst, unsigned int *src, int count);
-extern "C" void FUN_0016fa60(unsigned short *dst, unsigned int *src, int count);
-extern "C" void FUN_0016fae0(unsigned short *dst, unsigned int *src, int count);
-extern "C" void FUN_0016fb60(unsigned short *dst, unsigned char *src, int count);
-extern "C" void FUN_0016fbd0(unsigned char *dst, unsigned short *src, int count);
-extern "C" void FUN_0016fc20(unsigned int *dst, unsigned short *src, int count);
-extern "C" void FUN_0016fc80(unsigned char *dst, unsigned short *src, int count);
-extern "C" void FUN_0016fcd0(unsigned char *dst, unsigned short *src, int count);
 extern "C" void *thunk_memcpy(void *d, const void *s, unsigned int n);
-extern "C" void FUN_0016fd50(unsigned char *dst, unsigned char *src, int count);
-extern "C" void FUN_0016fdb0(unsigned char *dst, unsigned char *src, int count);
 extern "C" void FUN_0016fe00(void *dst, const void *src, unsigned int size);
 extern "C" void FUN_0016fe20(void *dst, const void *src, unsigned int size);
 extern "C" void Gap__Gfx__igPsx2MultiTextureExt__vfunc_29(igPsx2MultiTextureExt *self, int context);
@@ -3524,7 +3421,6 @@ extern "C" void FUN_00180ab0(ResourceBuilder *builder, BuildResource *srcPositio
 extern "C" void FUN_001805a0(ResourceBuilder *arg0, ResourceSource *arg1, int arg2);
 extern "C" int igPsx2UserUCodeExt_GetMeta(void);
 extern "C" int igContextExt_UpdateFrameRateDisplay(void);
-extern "C" void igContext_DetectDriverDatabaseProperties(void);
 extern "C" int igPsx2PointSpriteExt_GetMeta(void);
 extern "C" int igPsx2ParticleArray_GetMeta(void);
 extern "C" float Gap__Bec__ParticleArray__vfunc_31(ParticleArray *arg0);
@@ -3545,10 +3441,6 @@ extern "C" int igPsx2VisualContext_GetNativeVisualInfo(igPsx2VisualContext *self
 extern "C" unsigned char igPsx2VisualContext_GetMaterialSpecularState(igPsx2VisualContext *self);
 extern "C" void igPsx2VisualContext_GetTextureInfo(void);
 extern "C" int igPsx2VisualContext_GetTextureMatrixState(igPsx2VisualContext *self);
-extern "C" void igVisualContext_MakeCurrent(void);
-extern "C" void igVisualContext_IsCurrent(void);
-extern "C" void igVisualContext_Activate(void);
-extern "C" void igVisualContext_Deactivate(void);
 class igPsx2VisualContextSlots_180dd0 {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -3562,10 +3454,7 @@ public:
     virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68();
     virtual void vfunc_69();
 };
-extern "C" void igVisualContext_DrawIndexed(igPsx2VisualContextSlots_180dd0 *self);
 extern "C" int igVisualContextCapabilityManager_GetMeta(void);
-extern "C" int FUN_00180e10(void);
-extern "C" int FUN_00180e20(void);
 extern "C" int igPointSpriteExt_GetMeta(void);
 extern "C" int FUN_00180f10(void);
 extern "C" int igParticleArray_GetMeta(void);
@@ -3955,6 +3844,6 @@ extern "C" void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObje
 struct PackedVertexWriter { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7(); virtual void a8(); virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19(); virtual void a20(); virtual void a21(); virtual void a22(); virtual void a23(); virtual void a24(); virtual void a25(); virtual void a26();  virtual void v116(unsigned, int *); virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); virtual void b4(); virtual void b5(); virtual void b6(); virtual void b7(); virtual void b8(); virtual void b9(); virtual void b10();  virtual void v164(unsigned, int); virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4(); virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9(); virtual void c10(); virtual void c11(); virtual void c12();  virtual void v220(unsigned, igVec2f); int refs; };
 struct VertexArrayWriter { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33();  virtual void v144(unsigned, int *); virtual void d35(); virtual void v152(unsigned, int); int pad[5]; PackedVertexWriter *f24; };
 extern "C" void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexWriter *arg4, VertexArrayWriter *arg5, float fparg0);
-extern "C" ManagerList *DAT_00560758;
+extern "C" LiveContextList *DAT_00560758;
 
 #endif

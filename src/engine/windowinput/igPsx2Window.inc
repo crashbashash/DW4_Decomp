@@ -72,7 +72,7 @@ void igPsx2Window_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2Window_Register);
 }
 
-static igMetaObjectCallback g_igPsx2Window_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2Window_callbackList[] = { Gap::Gfx::igVisualContext::arkRegister, 0 };
 
 CallbackArray *igPsx2Window_Register(void) {
     WindowInputLibrary_MarkRegistered();
@@ -163,7 +163,7 @@ void igPsx2Window_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)))->setDefault(0x280);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)))->setDefault(0x1C0);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4));
-    *(int *)((char *)(temp_s1) + 56) = (int)igVisualContext_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1) + 56) = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5)))->setDefault(1);
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)))->setDefault(0);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7)))->setDefault(-1);

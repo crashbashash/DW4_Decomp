@@ -105,7 +105,7 @@ int igDirectory::loadRelease() {
             _loadingSemaphore->releaseResource();
         }
         if (_managingResource != 0) {
-            ::igTDataList< ::igObject *> *list = (::igTDataList< ::igObject *> *)((igResource *)_managingResource)->_directoryList;
+            ::igTDataList< ::igObject *> *list = (::igTDataList< ::igObject *> *)_managingResource->_directoryList.p;
             int index = list->find((::igObject *)this);
             ::igObject *o = list->_data[index];
             if (o != 0) {

@@ -5,74 +5,38 @@ int Gap__Gfx__igGenericCapabilityManager__vfunc_23(void) {
     return 1;
 }
 
-int FUN_00155340(FieldTypeTable *table, unsigned int type) {
+namespace Gap {
+namespace Gfx {
+
+igMetaObject *igVisualContext::getShaderConstantMeta(unsigned int constant)
+{
     FieldTypeList *list;
 
-    if (type < 47) {
-        switch (type) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-        case 24:
-        case 25:
-        case 26:
-        case 27:
-        case 28:
-        case 29:
-        case 30:
-        case 31:
-        case 32:
-        case 33:
-        case 34:
-        case 35:
-        case 36:
-        case 37:
-        case 38:
-        case 39:
-            return (int)Gap::Math::igVec4fMetaField::getClassMeta();
-        case 40:
-        case 41:
-        case 42:
-        case 43:
-        case 44:
-        case 45:
-        case 46:
-            return (int)Gap::Math::igMatrix44fMetaField::getClassMeta();
+    if (constant < 47) {
+        switch (constant) {
+        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+        case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
+        case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+        case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
+            return Gap::Math::igVec4fMetaField::getClassMeta();
+        case 40: case 41: case 42: case 43: case 44: case 45: case 46:
+            return Gap::Math::igMatrix44fMetaField::getClassMeta();
         default:
             return 0;
         }
     }
-    list = table->extraTypes;
-    if ((int)type < list->_count + 47) {
-        int index = type - 47;
+    list = (FieldTypeList *)_customFields.p;
+    if ((int)constant < list->_count + 47) {
+        int index = constant - 47;
         igSmartPointer<FieldTypeEntry> entry(list->_data[index], kRetainReference);
         if (entry == 0) {
             return 0;
         }
-        return entry->source->getMetaObject();
+        return (igMetaObject *)entry->source->getMetaObject();
     }
     return 0;
+}
+}
 }
 
 int FUN_00155490(void) {
@@ -112,86 +76,94 @@ StringRef FUN_001554a0(int arg1) {
 
 void *igObject_GetMetaObject_Virtual(void){return Gap::Core::igObject::getClassMeta();}
 
-void FUN_00155c00(igResult *out, Owner *owner, int id) {
+namespace Gap {
+namespace Gfx {
+
+igResult igVisualContext::deleteCustomStateCollection(int collection)
+{
     int i;
-    List *l = owner->a;
-    if (id >= l->count || l->data[id] == 0) {
-        *out = g_resultFailure;
-        return;
+    List *states = (List *)_customStates.p;
+    if (collection >= states->count || states->data[collection] == 0) {
+        return g_resultFailure;
     }
-    for (i = 0; i < owner->b->count; i++) {
-        List *lb = owner->b;
-        Obj_155c00 *o = lb->data[i];
-        if (o && id == o->id) {
-            REL(o);
-            if (lb->count && i >= 0 && i < lb->count) lb->data[i] = 0;
+    for (i = 0; i < ((List *)_customFields.p)->count; i++) {
+        List *fields = (List *)_customFields.p;
+        Obj_155c00 *field = fields->data[i];
+        if (field && collection == field->id) {
+            REL(field);
+            if (fields->count && i >= 0 && i < fields->count) fields->data[i] = 0;
         }
     }
     {
-        List *la = owner->a;
-        Obj_155c00 *o = la->data[id];
-        REL(o);
-        if (la->count && id >= 0 && id < la->count) la->data[id] = 0;
+        List *list = (List *)_customStates.p;
+        Obj_155c00 *state = list->data[collection];
+        REL(state);
+        if (list->count && collection >= 0 && collection < list->count) list->data[collection] = 0;
     }
-    *out = g_resultSuccess;
+    return g_resultSuccess;
 }
 
-void FUN_00155db0(O_155db0 *arg0) {
-    Ls *s2;
-    int s1;
-    int s0;
-    int n2;
-    int a1;
+void igVisualContext::clearCustomStates()
+{
+    Ls *list;
+    int count;
+    int i;
+    int zeroCount;
+    int j;
     Rc *o;
-    s2 = arg0->f308;
-    s1 = s2->cnt;
-    for (s0 = 0; s0 < s1; s0++) {
-        o = s2->data[s0];
+
+    list = (Ls *)_customFields.p;
+    count = list->cnt;
+    for (i = 0; i < count; i++) {
+        o = list->data[i];
         if (o != 0) {
             o->refs = o->refs - 1;
             if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) {
-                igObject_Destroy((igObject *)o);
+                igObject_Destroy((::igObject *)o);
             }
         }
     }
-    n2 = s2->cnt;
-    for (a1 = 0; a1 < n2; a1++) {
-        s2->data[a1] = 0;
+    zeroCount = list->cnt;
+    for (j = 0; j < zeroCount; j++) {
+        list->data[j] = 0;
     }
-    s2->cnt = 0;
-    s2 = arg0->f304;
-    s1 = s2->cnt;
-    for (s0 = 0; s0 < s1; s0++) {
-        o = s2->data[s0];
+    list->cnt = 0;
+    list = (Ls *)_customStates.p;
+    count = list->cnt;
+    for (i = 0; i < count; i++) {
+        o = list->data[i];
         if (o != 0) {
             o->refs = o->refs - 1;
             if (((unsigned long long)(long long)o->refs & 0x7fffffULL) == 0) {
-                igObject_Destroy((igObject *)o);
+                igObject_Destroy((::igObject *)o);
             }
         }
     }
-    n2 = s2->cnt;
-    for (a1 = 0; a1 < n2; a1++) {
-        s2->data[a1] = 0;
+    zeroCount = list->cnt;
+    for (j = 0; j < zeroCount; j++) {
+        list->data[j] = 0;
     }
-    s2->cnt = 0;
+    list->cnt = 0;
 }
 
-int FUN_00155f10(Table *table, int key) {
-    StringRef name = FUN_001554a0(key);
+int igVisualContext::findCustomStateCollection(const char *name)
+{
+    StringRef interned = FUN_001554a0((int)name);
     int i = 0;
-    if (table->entries->count > 0) {
-        for (; i < table->entries->count; i++) {
-            igSmartPointer<Entry> entry(table->entries->data[i], kRetainReference);
+    if (((EntryList *)_customStates.p)->count > 0) {
+        for (; i < ((EntryList *)_customStates.p)->count; i++) {
+            igSmartPointer<Entry> entry(((EntryList *)_customStates.p)->data[i], kRetainReference);
             if (entry.p == 0) {
                 continue;
             }
-            if (entry.p->name == name.p) {
+            if (entry.p->name == interned.p) {
                 return i;
             }
         }
     }
     return -1;
+}
+}
 }
 
 static inline const char *nameOf(const KeyedEntry *entry) {
@@ -248,46 +220,50 @@ static NamedValue g_gfxShaderConstantNames[47] = {
     { "matrix.blending", 46 },
 };
 
-int igVisualContext_GetStateFieldHandle(KeyedEntryOwner *table, int key) {
-    StringRef name = FUN_001554a0(key);
+namespace Gap {
+namespace Gfx {
+
+int igVisualContext::getShaderConstantIndex(const char *name)
+{
+    StringRef interned = FUN_001554a0((int)name);
     int i = 0;
-    if (table->entries->count > 0) {
-        for (i = 0; i < table->entries->count; i++) {
-            igSmartPointer<KeyedEntry> entry(table->entries->data[i], kRetainReference);
-            if (entry.p && nameOf(entry.p) == name.p) {
+    if (((KeyedEntryList *)_customFields.p)->count > 0) {
+        for (i = 0; i < ((KeyedEntryList *)_customFields.p)->count; i++) {
+            igSmartPointer<KeyedEntry> entry(((KeyedEntryList *)_customFields.p)->data[i], kRetainReference);
+            if (entry.p && nameOf(entry.p) == interned.p) {
                 return i + 47;
             }
         }
     }
     for (i = 0; i < 47; i++) {
-        if (strcmp(g_gfxShaderConstantNames[i].name, name.p) == 0) {
+        if (strcmp(g_gfxShaderConstantNames[i].name, interned.p) == 0) {
             return g_gfxShaderConstantNames[i].value;
         }
     }
     return -1;
 }
 
-int FUN_001562b0(void) {
+int igVisualContext::vfunc_262()
+{
     return -1;
 }
 
-int FUN_001562c0(void) {
+int igVisualContext::vfunc_263()
+{
     return -1;
 }
 
-int FUN_001562d0(struct A_1562d0 *arg0, int arg1) {
-    if (arg1 >= 0x2F) {
-        return (*(struct C **)((char *)arg0->b->tab + arg1 * 4 - 188))->fc;
+int igVisualContext::getShaderConstantCollection(int constant)
+{
+    if (constant >= 47) {
+        return ((igCustomStateField **)_customFields->_data)[constant - 47]->_stateCollectionHandle;
     }
     return -1;
 }
 
-namespace Gap {
-namespace Gfx {
-
 void igImage::userRegister()
 {
-    igResource_AddAlignment((igResource *)g_globalContext, "ImageData", 0x10);
+    g_globalContext->addAlignmentPair("ImageData", 0x10);
     ((igMemoryRefMetaField *)k_pImage)->setAlignmentType("ImageData");
 }
 

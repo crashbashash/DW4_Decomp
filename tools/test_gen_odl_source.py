@@ -296,7 +296,7 @@ class RetailRoles(unittest.TestCase):
             os.path.join(ROOT, "include", "dw4", "support", "reflected.h"))
         self.assertEqual(failed, {})
         text = "\n".join(written[0][1])
-        self.assertIn("static igMetaObjectCallback regFunctions[] = { igVisualContext_EnsureRegistered, 0 };",
+        self.assertIn("static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igVisualContext::arkRegister, 0 };",
                       text)
         self.assertIn("    GuiLibrary_MarkRegistered();\n    return igMetaObject_RegisterClass(\n        true,\n"
                       "        &_Meta,\n        Gap::Core::igObject::arkRegisterInternal,\n"
@@ -304,7 +304,7 @@ class RetailRoles(unittest.TestCase):
                       "        (igMetaObjectCallback)getClassMetaSafe,\n        \"igRenderer\",\n"
                       "        sizeof(igRenderer),\n        0,\n        &arkRegisterInitialize,\n        0,\n"
                       "        regFunctions\n    );", text)
-        self.assertIn("metaField->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();", text)
+        self.assertIn("metaField->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();", text)
         self.assertEqual(rows, [("igRenderer", "IG_ABSTRACT_OBJECT_DEFINE(igRenderer)"),
                                 ("igRenderer", "static igMetaField *k_visualContext;")])
 

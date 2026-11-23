@@ -23,7 +23,7 @@ void igColorMaskAttr::synchronizeDefault(igVisualContext *vc)
     bool b;
     bool a;
 
-    ((igVisualContextDispatchView *)vc)->getColorMask(r, g, b, a);
+    vc->getColorMask(r, g, b, a);
     _red = r;
     _green = g;
     _blue = b;

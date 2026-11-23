@@ -10,7 +10,7 @@ void igGeometryMaskAttr::apply(igVisualContext *vc)
 
 void igGeometryMaskAttr::synchronizeDefault(igVisualContext *vc)
 {
-    igVertexComponentFilter mask = ((igVisualContextDispatchView *)vc)->getVertexMask();
+    igVertexComponentFilter mask = vc->getVertexMask();
 
     _mask = mask;
 }

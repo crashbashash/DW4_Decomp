@@ -381,7 +381,7 @@ extern "C" int main(int argc, char **argv) {
     App args;
     igCommandLine_ParseArgs(&args, argc, argv);
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
-    igVisualContext_SetImageMemoryPool(allocator);
+    Gap::Gfx::igVisualContext::setImageMemoryPool((igMemoryPool *)allocator);
     ReleaseObject((igObject **)&g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = 0;
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
@@ -580,7 +580,7 @@ void GameMain_ReloadScene(Blk *app, int) {
 void GameMain_RunGame(Blk *app) {
     beSystem *system;
     int nextStage;
-    float clearColor[4];
+    igVec4f clearColor;
     if (app->viewer.window.p != 0) {
         g_activeApp = app;
         AcquireSharedOptions();
@@ -621,11 +621,11 @@ void GameMain_RunGame(Blk *app) {
             system->_nextStage = nextStage;
         }
         {
-            igVisualContextDispatchView *context = ((igWindowDispatchView *)app->viewer.window.p)->getVisualContext();
-            clearColor[0] = 0.0f;
-            clearColor[3] = 1.0f;
-            clearColor[1] = 0.0f;
-            clearColor[2] = 0.0f;
+            Gap::Gfx::igVisualContext *context = ((igWindowDispatchView *)app->viewer.window.p)->getVisualContext();
+            clearColor.vec[0] = 0.0f;
+            clearColor.vec[3] = 1.0f;
+            clearColor.vec[1] = 0.0f;
+            clearColor.vec[2] = 0.0f;
             context->setClearColor(clearColor);
         }
         while (app->isFinished == 0 && system->_isShutDown == 0) {
@@ -777,7 +777,7 @@ void GameMain_ClearScene(Blk *app) {
     ViewerSetup_ClearInfos(&app->viewer);
     sceneInfo = AsSceneInfoManager(igInsightCore_FindManager((igInsightCore *)app->viewer.core.p, g_igViewerSceneInfoManager_metaObject));
     ((igCommonTraversalDispatchView *)((igViewerRenderer *)sceneInfo->_viewerRenderer)->_sceneTraversal)->reset();
-    ((igVisualContextDispatchView *)((igInsightCore *)app->viewer.core.p)->_visualContext)->releaseVertexArrays();
+    ((Gap::Gfx::igVisualContext *)((igInsightCore *)app->viewer.core.p)->_visualContext)->reset();
     RELEASE_SHIFTED(g_igEnbayaContextPool_instance.p);
     g_igEnbayaContextPool_instance.p = 0;
     { igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator(); allocator = g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0); }

@@ -2,11 +2,11 @@ namespace Gap {
 namespace Gui {
 
 void igClearRenderer::initializeDrawing() {
-    igVisualContextDispatchView *context;
+    igVisualContext *context;
 
-    ((igVisualContextDispatchView *)_visualContext.p)->setClearStencil(0);
+    _visualContext->setClearStencil(0);
     _buffersToClear = 3;
-    context = (igVisualContextDispatchView *)_visualContext.p;
+    context = _visualContext;
     if (context->getStencilBitsPerPixel(context->getCurrentRenderDestination()) > 0) {
         _buffersToClear = _buffersToClear | 4;
     }
@@ -14,7 +14,7 @@ void igClearRenderer::initializeDrawing() {
 
 void igClearRenderer::draw()
 {
-    ((igVisualContextDispatchView *)_visualContext.p)->clearRenderDestination(_buffersToClear);
+    _visualContext->clearRenderDestination(_buffersToClear);
 }
 }
 }

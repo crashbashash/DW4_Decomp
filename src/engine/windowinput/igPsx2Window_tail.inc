@@ -80,48 +80,47 @@ int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width,
     self->_width = width;
     self->_height = height;
     if (self->_vc != 0) {
-        self->_renderDestinationHandle = ((VisualContext *)self->_vc)->currentRenderDestination();
+        self->_renderDestinationHandle = ((Gap::Gfx::igVisualContext *)self->_vc)->getCurrentRenderDestination();
         if (self->_renderDestinationHandle == -1) {
-            RenderDestinationDesc desc;
-            desc.kind = 1;
-            desc.width = width;
-            desc.height = height;
-            desc.bpp = self->_bpp;
-            desc.alpha = self->_alpha;
-            desc.bppDepth = self->_bppDepth;
-            desc.clearDepth = 0.0f;
-            desc.scale = 1.0f;
-            self->_renderDestinationHandle = ((VisualContext *)self->_vc)->createRenderDestination(&desc);
+            igRenderDestinationFormat desc;
+            desc._iType = IG_GFX_RENDERDESTINATION_DOUBLE_BUFFERED_VISUAL;
+            desc._iWidth = width;
+            desc._iHeight = height;
+            desc._iColorBitsPerPixel = self->_bpp;
+            desc._iAlphaBitsPerPixel = self->_alpha;
+            desc._iDepthBitsPerPixel = self->_bppDepth;
+            desc._iStencilBitsPerPixel = 0;
+            desc._fPixelAspectRatio = 1.0f;
+            self->_renderDestinationHandle = ((Gap::Gfx::igVisualContext *)self->_vc)->createRenderDestination(&desc);
         }
         int w;
         int h;
-        ((VisualContext *)self->_vc)->getRenderDestinationSize(self->_renderDestinationHandle, &w, &h);
+        ((Gap::Gfx::igVisualContext *)self->_vc)->getRenderDestinationSize(self->_renderDestinationHandle, w, h);
         self->_width = w;
         self->_height = h;
     } else {
-        VisualContext *created = (VisualContext *)(igVisualContext_CreateInstance((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
-        if (created != 0) created->_refCount = created->_refCount + 1;
+        Gap::Gfx::igVisualContext *created = Gap::Gfx::igVisualContext::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool());
+        Gap::Core::igObject::ref(created);
         igObject::release((igObject *)self->_vc);
         self->_vc = (int)created;
-        VisualContext *vc = (VisualContext *)self->_vc;
+        Gap::Gfx::igVisualContext *vc = (Gap::Gfx::igVisualContext *)self->_vc;
         if (vc == 0) {
             printf("error creating visual context\n");
             return 0;
         }
-        vc->_refCount = vc->_refCount - 1;
-        if ((vc->_refCount & 0x7FFFFF) == 0) igObject_Destroy((igObject *)vc);
-        RenderDestinationDesc desc;
-        desc.kind = 1;
-        desc.width = width;
-        desc.height = height;
-        desc.bpp = self->_bpp;
-        desc.alpha = self->_alpha;
-        desc.bppDepth = self->_bppDepth;
-        desc.clearDepth = 0.0f;
-        desc.scale = 1.0f;
-        self->_renderDestinationHandle = ((VisualContext *)self->_vc)->createRenderDestination(&desc);
+        vc->release();
+        igRenderDestinationFormat desc;
+        desc._iType = IG_GFX_RENDERDESTINATION_DOUBLE_BUFFERED_VISUAL;
+        desc._iWidth = width;
+        desc._iHeight = height;
+        desc._iColorBitsPerPixel = self->_bpp;
+        desc._iAlphaBitsPerPixel = self->_alpha;
+        desc._iDepthBitsPerPixel = self->_bppDepth;
+        desc._iStencilBitsPerPixel = 0;
+        desc._fPixelAspectRatio = 1.0f;
+        self->_renderDestinationHandle = ((Gap::Gfx::igVisualContext *)self->_vc)->createRenderDestination(&desc);
     }
-    ((VisualContext *)self->_vc)->beginWindow();
+    ((Gap::Gfx::igVisualContext *)self->_vc)->open();
     self->_open = 1;
     return 1;
 }

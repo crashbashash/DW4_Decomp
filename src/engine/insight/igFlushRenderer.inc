@@ -784,7 +784,7 @@ namespace Insight {
 
 void igFlushRenderer::draw()
 {
-    ((igVisualContextDispatchView *)_visualContext.p)->flushDraw();
+    _visualContext->flushDraw();
 }
 }
 }
@@ -830,12 +830,12 @@ static inline const char *textOf(const TextValue *value) {
     return s;
 }
 
-FrameBufferFormat igInsightCore_CreateRenderDestinationFormat(SharedViewerOptions *options) {
+igRenderDestinationFormat igInsightCore_CreateRenderDestinationFormat(SharedViewerOptions *options) {
     igSmartPointer<TextValue> text((TextValue *)igStringObj_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
-    FrameBufferFormat format;
-    format.enabled = 1;
-    format.width = options->width;
-    format.height = options->height;
+    igRenderDestinationFormat format;
+    format._iType = IG_GFX_RENDERDESTINATION_DOUBLE_BUFFERED_VISUAL;
+    format._iWidth = options->width;
+    format._iHeight = options->height;
     if (options->reportVideoFormat) {
         printf("Requested format: ");
     }
@@ -855,11 +855,11 @@ FrameBufferFormat igInsightCore_CreateRenderDestinationFormat(SharedViewerOption
     if (options->reportVideoFormat) {
         printf("stencil=%s\n", textOf(text.p));
     }
-    format.colorBits = options->colorBits;
-    format.alphaBits = options->alphaBits;
-    format.depthBits = options->depthBits;
-    format.stencilBits = options->stencilBits;
-    format.scale = 1.0f;
+    format._iColorBitsPerPixel = options->colorBits;
+    format._iAlphaBitsPerPixel = options->alphaBits;
+    format._iDepthBitsPerPixel = options->depthBits;
+    format._iStencilBitsPerPixel = options->stencilBits;
+    format._fPixelAspectRatio = 1.0f;
     return format;
 }
 
@@ -874,7 +874,7 @@ igSmartPointer<igWindow> igInsightCore_CreateWindow(int allocator) {
     int frameBuffer;
     SharedViewerOptions *options;
     int contextAllocator;
-    const igVisualContextView *context;
+    const Gap::Gfx::igVisualContext *context;
     int colorBits;
     int alphaBits;
     int depthBits;
@@ -904,42 +904,42 @@ igSmartPointer<igWindow> igInsightCore_CreateWindow(int allocator) {
     } else {
         contextAllocator = windowAllocator;
     }
-    igSmartPointer<igVisualContextView> visualContext((igVisualContextView *)igVisualContext_CreateInstance(contextAllocator));
-    VideoMode mode;
-    mode.pal = 0;
-    mode.interlace = 0;
-    mode.refreshRate = 0.0f;
-    mode.swapInterval = 0;
-    mode.enable = 1;
-    mode.swapInterval = options->swapInterval;
-    mode.interlace = 0;
-    mode.refreshRate = 59.9399986f;
-    mode.outputFormat = 2;
-    mode.fullHeight = 1;
-    mode.pal = 0;
-    mode.interlace = 1;
+    igSmartPointer<Gap::Gfx::igVisualContext> visualContext(Gap::Gfx::igVisualContext::_instantiateFromPool((igMemoryPoolView *)contextAllocator));
+    igVideoFormat mode;
+    mode._iVideoType = 0;
+    mode._bInterlaced = false;
+    mode._fRefreshRate = 0.0f;
+    mode._iSwapInterval = 0;
+    mode._bFullScreen = true;
+    mode._iSwapInterval = options->swapInterval;
+    mode._bInterlaced = false;
+    mode._fRefreshRate = 59.9399986f;
+    mode._iFieldCount = 2;
+    mode._iFieldSize = 1;
+    mode._iVideoType = 0;
+    mode._bInterlaced = true;
     if (options->palVideoMode != 0) {
-        mode.refreshRate = 50.0f;
-        mode.pal = 1;
+        mode._fRefreshRate = 50.0f;
+        mode._iVideoType = 1;
     }
-    if (options->halfBuffer != 0) mode.fullHeight = 0;
-    visualContext->setVideoMode(&mode);
-    FrameBufferFormat requested = igInsightCore_CreateRenderDestinationFormat(options);
-    frameBuffer = visualContext->addFrameBuffer(&requested);
+    if (options->halfBuffer != 0) mode._iFieldSize = 0;
+    visualContext->setVideoMode(mode);
+    igRenderDestinationFormat requested = igInsightCore_CreateRenderDestinationFormat(options);
+    frameBuffer = visualContext->createRenderDestination(&requested);
     ((igWindowView *)window.p)->setVisualContext(visualContext);
     if (((igWindowView *)window.p)->open("", options->width, options->height) == 0) {
         return igSmartPointer<igWindow>(0, kRetainReference);
     }
     if (options->reportVideoFormat != 0) {
         context = visualContext.p;
-        colorBits = context->getColorBits(frameBuffer);
-        alphaBits = context->getAlphaBits(frameBuffer);
-        depthBits = context->getDepthBits(frameBuffer);
-        printf("Actual format: color=%d, alpha=%d, depth=%d, stencil=%d\n", colorBits, alphaBits, depthBits, context->getStencilBits(frameBuffer));
+        colorBits = context->getColorBitsPerPixel(frameBuffer);
+        alphaBits = context->getAlphaBitsPerPixel(frameBuffer);
+        depthBits = context->getDepthBitsPerPixel(frameBuffer);
+        printf("Actual format: color=%d, alpha=%d, depth=%d, stencil=%d\n", colorBits, alphaBits, depthBits, context->getStencilBitsPerPixel(frameBuffer));
     }
     fflush(stdout);
-    visualContext->setClearColor(options->clearColor);
-    visualContext->setCapability0(1);
+    visualContext->setClearColor(*(const igVec4f *)options->clearColor);
+    visualContext->setDepthTestState(true);
     releaseSharedOptions();
     return window;
 }

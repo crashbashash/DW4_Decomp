@@ -1005,6 +1005,17 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 
 ### Types and values
 
+- **A sum of float products left unfused is the float accumulator switched off (madd fusion).**
+  - *Symptom:* retail `mul.s, mul.s, add.s, mul.s, add.s` for `x*x + y*y + z*z` (or any `a*b + c*d`) where b52
+    emits `mul.s, mul.s, adda.s, madd.s` (one word shorter); every spelling of the sum that avoids the fusion
+    (`s += ...` chains, separate locals) changes the load order and registers instead.
+  - *Cause:* b52 forms a sum of two products in the FPU accumulator (`mula.s`/`adda.s`/`madd.s`) whenever both
+    are single-use products; `#pragma usefloatacc off` turns that off, and the plain expression then gives
+    retail's order exactly. No command-line switch and no other MWCC build here does it.
+  - *Spelling:* the plain expression (kit `igVec3f::length()`) with `#pragma usefloatacc off` at the top of the
+    file, when the whole library shows no accumulator instruction (owner rule 2026-11-23); check the unit's retail
+    for `madd.s`/`adda.s`/`mula.s` first. Products that are reused (quaternion terms) stay unfused without it.
+  - *Unit:* `src/engine/attrs/AttrsLibrary.cpp` (0x13dbb0, `igGeometryAttr1_5::transformVectors`).
 - **An unsigned `-4` is one value for the header lookup and the rounding mask.**
   - *Symptom:* `li s0,-4` in each of three arms that find a block's header (`addiu s1,s4,-4` beside it uses the
     immediate), and the rounding after the join is `and a0,v0,s0`; in a sibling the value is stored to a

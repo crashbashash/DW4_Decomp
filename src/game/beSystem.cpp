@@ -45,10 +45,10 @@ void beSystem_Start(beSystem *self)
     StringTokenHeader *tokenHeader;
     int tokenRefCount;
     void *objectPool;
-    igResource *objectResource;
+    Gap::Core::igResource *objectResource;
     void *pool;
-    igResource *dataResource;
-    igResource *temporaryResource;
+    Gap::Core::igResource *dataResource;
+    Gap::Core::igResource *temporaryResource;
 
     self->_isFirstTime = 0;
     self->_isActive = 1;
@@ -72,29 +72,23 @@ void beSystem_Start(beSystem *self)
     self->_nextStage = (int)stageToken;
     igObject::release((igObject *)self->_bootDirectory);
     self->_bootDirectory = 0;
-    g_resourceLoaderStackSize = 100000;
-    ((igResource *)g_globalContext)->_useMemoryPoolAssignmentsState = 0;
+    Gap::Core::igResource::_asynchronousLoadingThreadStackSize = 100000;
+    g_globalContext->_useMemoryPoolAssignmentsState = 0;
 
     objectPool = ((Gap::Core::igObject *)self)->getMemoryPool();
     objectPool = g_useOwnerAllocator != 0 ? objectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-    objectResource = (igResource *)g_globalContext;
-    igObject::ref(((igObject *)objectPool));
-    igObject::release((igObject *)objectResource->_objectMemoryPool);
-    objectResource->_objectMemoryPool = (int)objectPool;
+    objectResource = g_globalContext;
+    objectResource->setObjectMemoryPool((igMemoryPool *)objectPool);
 
     pool = ((Gap::Core::igObject *)self)->getMemoryPool();
     pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-    dataResource = (igResource *)g_globalContext;
-    igObject::ref(((igObject *)pool));
-    igObject::release((igObject *)dataResource->_dataMemoryPool);
-    dataResource->_dataMemoryPool = (int)pool;
+    dataResource = g_globalContext;
+    dataResource->setDataMemoryPool((igMemoryPool *)pool);
 
     pool = ((Gap::Core::igObject *)self)->getMemoryPool(); /* matching construct: manual — the temporary pool reuses the data pool's variable */
     pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-    temporaryResource = (igResource *)g_globalContext;
-    igObject::ref(((igObject *)pool));
-    igObject::release((igObject *)temporaryResource->_temporaryMemoryPool);
-    temporaryResource->_temporaryMemoryPool = (int)pool;
+    temporaryResource = g_globalContext;
+    temporaryResource->setTemporaryMemoryPool((igMemoryPool *)pool);
 }
 
 void beSystem_Stop(void)
@@ -126,12 +120,12 @@ void beSystem_Update(beSystem *self)
     void *ndmwDataPool;
     void *defaultObjectPool;
     void *defaultDataPool;
-    igResource *ndmwObjectResource;
-    igResource *ndmwDataResource;
-    igResource *defaultObjectResource;
-    igResource *defaultDataResource;
+    Gap::Core::igResource *ndmwObjectResource;
+    Gap::Core::igResource *ndmwDataResource;
+    Gap::Core::igResource *defaultObjectResource;
+    Gap::Core::igResource *defaultDataResource;
     igObject *oldRef;
-    igDirectory *directory;
+    Gap::Core::igDirectory *directory;
     igObjectList *infos;
     int index;
     int byteOffset;
@@ -150,33 +144,25 @@ void beSystem_Update(beSystem *self)
             if (strcmp((const char *)self->_nextStage, (const char *)ndmw_igb) == 0) {
                 ndmwObjectPool = ((Gap::Core::igObject *)self)->getMemoryPool();
                 ndmwObjectPool = g_useOwnerAllocator != 0 ? ndmwObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-                ndmwObjectResource = (igResource *)g_globalContext;
-                igObject::ref(((igObject *)ndmwObjectPool));
-                igObject::release((igObject *)ndmwObjectResource->_objectMemoryPool);
-                ndmwObjectResource->_objectMemoryPool = (int)ndmwObjectPool;
+                ndmwObjectResource = g_globalContext;
+                ndmwObjectResource->setObjectMemoryPool((igMemoryPool *)ndmwObjectPool);
                 ndmwDataPool = ((Gap::Core::igObject *)self)->getMemoryPool();
                 ndmwDataPool = g_useOwnerAllocator != 0 ? ndmwDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-                ndmwDataResource = (igResource *)g_globalContext;
-                igObject::ref(((igObject *)ndmwDataPool));
-                igObject::release((igObject *)ndmwDataResource->_dataMemoryPool);
-                ndmwDataResource->_dataMemoryPool = (int)ndmwDataPool;
+                ndmwDataResource = g_globalContext;
+                ndmwDataResource->setDataMemoryPool((igMemoryPool *)ndmwDataPool);
             } else {
                 defaultObjectPool = ((Gap::Core::igObject *)self)->getMemoryPool();
                 defaultObjectPool = g_useOwnerAllocator != 0 ? defaultObjectPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                defaultObjectResource = (igResource *)g_globalContext;
-                igObject::ref(((igObject *)defaultObjectPool));
-                igObject::release((igObject *)defaultObjectResource->_objectMemoryPool);
-                defaultObjectResource->_objectMemoryPool = (int)defaultObjectPool;
+                defaultObjectResource = g_globalContext;
+                defaultObjectResource->setObjectMemoryPool((igMemoryPool *)defaultObjectPool);
                 defaultDataPool = ((Gap::Core::igObject *)self)->getMemoryPool();
                 defaultDataPool = g_useOwnerAllocator != 0 ? defaultDataPool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                defaultDataResource = (igResource *)g_globalContext;
-                igObject::ref(((igObject *)defaultDataPool));
-                igObject::release((igObject *)defaultDataResource->_dataMemoryPool);
-                defaultDataResource->_dataMemoryPool = (int)defaultDataPool;
+                defaultDataResource = g_globalContext;
+                defaultDataResource->setDataMemoryPool((igMemoryPool *)defaultDataPool);
             }
-            igResource_StartAsyncLoading(g_globalContext);
-            directory = igResource_LoadDirectory((igResource *)g_globalContext, (const char *)self->_nextStage);
-            igObject::ref(directory);
+            g_globalContext->enableAsynchronousLoading();
+            directory = g_globalContext->load((const char *)self->_nextStage);
+            Gap::Core::igObject::ref(directory);
             igObject::release((igObject *)self->_bootDirectory);
             self->_bootDirectory = (int)directory;
             if (g_stringPool == 0) {
@@ -198,7 +184,7 @@ void beSystem_Update(beSystem *self)
             }
             self->_nextStage = (int)emptyToken;
         } else if (self->_bootDirectory != 0) {
-            if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, (igDirectory *)self->_bootDirectory)) {
+            if (g_globalContext->isLoadFinished((Gap::Core::igDirectory *)self->_bootDirectory)) {
                 infos = (igObjectList *)((igDirectory *)self->_bootDirectory)->_infoList;
                 index = 0;
                 if (0 < infos->_count) {
@@ -209,10 +195,10 @@ void beSystem_Update(beSystem *self)
                         byteOffset += 4;
                     } while (index < infos->_count);
                 }
-                igResource_UnloadDirectory((igResource *)g_globalContext, (const char *)((igDirectory *)self->_bootDirectory)->_name);
+                g_globalContext->unload((const char *)((igDirectory *)self->_bootDirectory)->_name);
                 igObject::release((igObject *)self->_bootDirectory);
                 self->_bootDirectory = 0;
-                igResource_StopAsyncLoading(g_globalContext);
+                g_globalContext->disableAsynchronousLoading();
             }
         } else {
             /* Unreachable: entering the handshake needs _nextStage or _bootDirectory set. */

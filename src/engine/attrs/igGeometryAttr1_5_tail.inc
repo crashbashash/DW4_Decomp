@@ -236,6 +236,25 @@ bool igGeometryAttr1_5::intersectRay(const igRay *ray, igVec3f &intersectPoint, 
     return found;
 }
 
+void igGeometryAttr1_5::transformVectors(IG_GFX_VERTEX_COMPONENT component, igVertexArray *vertexArray, const float *matrix)
+{
+    igVertexArrayLock lock;
+    igVertexArrayLock_Init(&lock);
+    lock.setType(component);
+    vertexArray->getEditableComponent(&lock, 0);
+    char *vertex = lock.data;
+    for (unsigned int i = 0; i < lock.count; i++) {
+        igVec3f *vector = (igVec3f *)vertex;
+        FUN_00192360(matrix, vector->vec, vector->vec, 1);
+        float length = vector->length();
+        if (length > 5e-7f) {
+            vector->scale(1.0f / length);
+        }
+        vertex += lock.stride;
+    }
+    vertexArray->commitComponentEdits(lock, 0);
+}
+
 void igGeometryAttr1_5::transform(const igMatrix44f &m)
 {
     /* matching construct: declaration-order sweep — vertex and i declared before format */

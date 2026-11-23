@@ -77,10 +77,6 @@ void igStringRefList_TrimCapacity(igStringRefList *l) {
     }
 }
 
-int igResource_GetMeta(void) {
-    return (int)g_igResource_metaObject;
-}
-
 igMetaObject *igQueue_GetMeta(void) {
     return g_igQueue_metaObject;
 }

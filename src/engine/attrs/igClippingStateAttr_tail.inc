@@ -8,7 +8,7 @@ void igClippingStateAttr::apply(igVisualContext *vc)
 
 void igClippingStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getViewportClippingState());
+    setState(vc->getViewportClippingState());
 }
 
 /* Setter: stores the clipping-state enable flag (`_enabled`, an igBoolMetaField of the reflected

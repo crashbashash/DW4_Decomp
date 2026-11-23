@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igDepthStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getDepthTestState());
+    setState(vc->getDepthTestState());
 }
 
 /* Setter for the attribute's reflected _enabled flag. */

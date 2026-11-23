@@ -95,7 +95,7 @@ void igInsightCore_UnregisterAllPlugins(igInsightCore *core) {
 }
 
 void igInsightCore_AddRenderer(igInsightCore *core, igObject *renderer) {
-    ((Gap::Gui::igRenderer *)renderer)->setVisualContext((igVisualContext *)core->_visualContext);
+    ((Gap::Gui::igRenderer *)renderer)->setVisualContext((Gap::Gfx::igVisualContext *)core->_visualContext);
     igRendererOrderedList_Append((igDependencyOrderedList *)core->_rendererList, renderer, 0);
 }
 

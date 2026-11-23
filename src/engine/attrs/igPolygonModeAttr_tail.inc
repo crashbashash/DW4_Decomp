@@ -8,7 +8,7 @@ void igPolygonModeAttr::apply(igVisualContext *vc)
 
 void igPolygonModeAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setMode(((igVisualContextDispatchView *)vc)->getRenderMode());
+    setMode(vc->getRenderMode());
 }
 
 /* Setter for the attribute's reflected _mode enum field (+0x0c); stores the value as given without

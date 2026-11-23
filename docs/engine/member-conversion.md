@@ -91,7 +91,7 @@ Where converted and unconverted code meet, the boundary keeps the retail **C nam
   needed.
 
 A converted class calls through a typed member or a `…DispatchView` with named slots, such as
-`igVisualContextDispatchView` for the renderers' visual context. Stand-in views with `dN` slots (`O_…`/`E_…`,
+`igWindowDispatchView` for the window the game draws into. Stand-in views with `dN` slots (`O_…`/`E_…`,
 local `…View` classes) go away as their users convert.
 
 ## Converting a class, in order
@@ -433,15 +433,26 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `Gap::Core::igFile *`. Still view-based: `igMediaFileView`/`igMemoryFileView`, igIGBFile's `igFileView`,
    scenegraph's `IniFileObject`/`IniPathResolver` (the ini loader) and insight's `NamedObject` folder, and GameMain's
    `Blk::folder` (typing it `Gap::Core::igFolder` moves `Blk::Blk` from 448 to 372 bytes: the intern pool is no
-   longer inlined there). Not converted yet: `igResource` (alchemy-kit_202309 igCore/igResource.h; members the
-   image has: `getDirectory`, `getImageDirectory`, `appendDirectory`, `addAlignmentPair`, `load`, `unload`,
+   longer inlined there). `igResource` (alchemy-kit_202309 igCore/igResource.h; spec scratch/CoreIGB/specs/resource.py)
+   is converted: `getDirectory`, `getImageDirectory`, `appendDirectory`, `addAlignmentPair`, `load`, `unload`,
    `unloadAll`, `unloadAllIGBs`, `loadSynchronous`, `getInfoByType` (`igDirectory_GetNthObjectOfType`), the two
    asynchronous-loading switches, `releaseDefaults`, `makeCompatible` (`igResource_FinishAsyncLoad`), `doLoad`
-   (`igResource_ReadFileWithSearchPaths`) and `isLoadFinished`; its queue, thread, alignment lists and pools are
-   smart pointers of flat or Gap classes, and `g_globalContext` and `ObjectSystemView::resource` the Gap class) and
-   `igIGBFile` (about 2,400 lines; needs `igDirectory_Construct`/`_Destroy`
-   copies stamping `igTObjectList<igDirEntry>`'s vtable, its `igFileView`/`igIGBFileView` uses retired, and the
-   protected igObject construction members reached as the kit's friend).
+   (`igResource_ReadFileWithSearchPaths`), `isLoadFinished`, the kit's pool/queue/alignment inlines and
+   `getGlobalResource`; its queue, thread, alignment lists and pools are smart pointers of flat or Gap classes,
+   `g_globalContext` and `ObjectSystemView::resource` are `Gap::Core::igResource *`, and `igResourceView` is gone.
+   `igDirectory` gained the kit's accessor inlines (`setName`, `setManagingResource`, ...) and a typed
+   `_managingResource` (`igResource *`); `igTDataList<T>::append(const T &)` is the kit's. A named
+   `igSmartPointer<Gap class>` local drops the release reload retail shows, so `igShaderInfo`'s two callers use the
+   returned temporary (`g_globalContext->getDirectory(...)->appendInfo(...)`). Not converted yet: `igIGBFile` (about
+   2,400 lines; needs `igDirectory_Construct`/`_Destroy` copies stamping `igTObjectList<igDirEntry>`'s vtable, its
+   `igFileView`/`igIGBFileView` uses retired, and the protected igObject construction members reached as the kit's
+   `friend class igIGBFile`). Its vtable (0x52fe50) holds igIGBFile's own slots 26-34: `setObjectBufferPlace`
+   (`igIGBFile_SetCurrentPosition`), `getObjectBufferPlace`, `writeFile`, `readFile`, `readFilePostProcess`,
+   `readFilePostProcessRecursive`, DW4's `ensureConcrete`, `readMemoryRefBuffer`, `writeMemoryRefBuffer`, plus
+   overrides 4 `destructFields` and 13 `resetFields`; the registration's extra callback is `arkRegisterUser`
+   calling `userRegister` (`igIGBFile_RegisterBlindObjectsConfig`). A first classconv attempt (spec
+   scratch/CoreIGB/specs/igb.py) needs the C heads with out-parameters rewritten and the `RELEASE_REF`/`REL_O`
+   macros in CoreLibrary.h qualified `::igObject` before the member bodies compile in Gap scope.
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no
@@ -451,7 +462,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igClippingStateAttr`, `igDepthStateAttr`, `igDepthWriteStateAttr`, `igFogStateAttr`, `igLightingStateAttr`,
    `igMatrixOptStateAttr`, `igStencilStateAttr`, `igVertexBlendStateAttr`, `igNormalizeNormalsStateAttr`: `_enabled`
    typed `bool`, `setState` out of line as slot 30 since retail keeps it beside `apply`, `synchronizeDefault`
-   through `igVisualContextDispatchView`'s state getters, named from igPsx2VisualContext's overrides). The attrs
+   through igVisualContext's state getters, named from igPsx2VisualContext's overrides). The attrs
    unit compiles each converted attr's vtable (a `.vtables` data row) and the inline copies it names (getMeta, igAttr's
    empty slots), placed by name at their retail addresses, so conversion order inside the unit is free; igAttr's and
    igVisualAttribute's vtables (absent from retail) and the inline copies only they name are `stripped`. Also
@@ -462,8 +473,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    reflected.h reads) over the reflected `int` storage, a cast to the enum is what retail's codegen shows; a
    virtual setter is out of line where retail keeps it beside `apply` and the kit's inline where it sits in the
    unit's inline tail; matrix fields are the kit's `igMatrix44f` (typed-fields.tsv) where retail's vtable probe
-   constructs one; `synchronizeDefault` reads `igVisualContextDispatchView`'s getters (slots 51-250, named after
-   igPsx2VisualContext's overrides with the kit's igGfx/igVisualContext.h names and enum types), in retail's call
+   constructs one; `synchronizeDefault` reads igVisualContext's getters (`vc->getAlphaFunc()`, slots 51-250, named
+   after igPsx2VisualContext's overrides with the kit's igGfx/igVisualContext.h names and enum types), in retail's call
    order. Classes tools/gen_odl_source.py cannot write (`--list` says CANNOT) get igen's registration by hand
    (`gen` empty in the spec). The unit-ID family is converted too (`igTextureStateAttr`,
    `igTextureMatrixStateAttr`, `igTextureCoordSourceAttr`, `igTextureUnloadAttr`, `igTexGenMatrixAttr`,
@@ -489,9 +500,9 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    reads them through flat list casts); `igAttrList`, `igAttrListList`, `igModelViewMatrixAttrList` and
    `igBlendMatrixPaletteAttrList` derive from the kit's `igTObjectList<T>` (include/dw4/core/igTObjectList.h, whose
    `getElementMeta` is `T::getClassMeta()`), so attrs compiles igObjectList's vtable and inline copies.
-   `igLightAttr` (`_vc` an `igSmartPointer<igVisualContext>`, flat until gfx converts; the kit's igBool `_changed`
-   and `_cacheable`; `lightChanged` the invariance callback; `reset` through `igVisualContextDispatchView`'s
-   `deleteLight`, slot 76) and `igLightStateAttr` (`_light` an `igSmartPointer<igLightAttr>`), with `igLightList` and
+   `igLightAttr` (`_vc` an `igSmartPointer<igVisualContext>` over the Gap class; the kit's igBool `_changed`
+   and `_cacheable`; `lightChanged` the invariance callback; `reset` calls `_vc->deleteLight`, slot 76) and
+   `igLightStateAttr` (`_light` an `igSmartPointer<igLightAttr>`), with `igLightList` and
    `igLightStateAttrList` over `igTObjectList<T>`, are converted. So is the texture group (`igTextureAttr`,
    `igTextureCubeAttr`, `igTextureBindAttr`, `igCopyRenderDestinationAttr`, `igRenderDestinationAttr`,
    `igSetRenderDestinationAttr`, `igTextureList`, `igImageMipMapList`; spec scratch/Attrs5/specs/texture.py): the
@@ -547,23 +558,35 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    Core's `igContext` is converted (alchemy-kit_202309 igCore/igContext.h: `IG_ABSTRACT_OBJECT_DEFINE`, the protected
    handles, `generateExtList`, `getExtMeta`, `findExtInstance`, DW4's slots 21-25 `makeCurrent`, `isCurrent`,
    `getExtList`, `getExt` and the inline `detectDriverDatabaseProperties`; the kit's `synchronizeContextExt` and
-   `userRelease` are not in DW4's vtable). Its extension fields stay reference words, and its inline slot 25's
-   copy (gfx, 0x180c10) stays a C definition until gfx builds the vtable in C++: retail's igContext vtable
-   (0x530a10) and igVisualContext vtable (0x525e50) are gfx's data, and DW4's `igContextExt` registers under
-   igContext (an ext's probe stamps 0x530a10). Gfx then converts `igVisualContext` (alchemy-kit_202309
-   igGfx/igVisualContext.h) and `igPsx2VisualContext`. What retail shows: igVisualContext has its own vtable,
-   pure slots written 0, with its own definitions in slots 1 (`constructFields`), 7/8 (userConstruct/Destruct),
-   20, 21-22, 26-29, 31-34, 45 (an inline copy in attrs, 0x13ff40), 70-71, 141-145, 189 (an inline copy in attrs,
-   0x140050), 195-196, 211-214 and 258-271 (the custom-state slots at 0x155340-0x1562d0, unnamed, and 0x165e50);
-   its constructor (0x1510e0) and destructor (0x150af0) are out of line, so its typed fields (the eight memory
-   pools and the timer as smart pointers, the two `igMatrix44f`, the sixteen `igVertexArray2` references built with
-   `__construct_array`, the custom state lists) must reproduce them; igPsx2VisualContext overrides about 220 slots
-   (273 C functions), whose C heads take stand-in view receivers and need rewriting to the member's parameters
-   before memberize accepts them, and four of whose slots (0x170ed0 `setLightDirection`, `setLightAttenuation`,
-   `setTextureSourceLevel`, 0x16de00) are not decompiled. The dispatch view's named slots (the state getters 51-250,
-   `deleteRenderDestination` 45, `deleteLight` 76, `deleteRenderList` 191, `getCapability` 35, `deleteTexture` 129)
-   then become `vc->name(...)`, the attrs' `igSmartPointer<igVisualContext>` fields hold the Gap class, and the
-   view retires once no caller is left. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
+   `userRelease` are not in DW4's vtable). Its extension lists are the kit's typed smart pointers,
+   `igSmartPointer<igContextExtInfoList> _pExtList` and `igSmartPointer<igContextExtList> _pExtInstances`: retail's
+   igVisualContext destructor releases both, igContext's implicit destructor inlined. Retail's igContext vtable
+   (0x530a10) and igVisualContext vtable (0x525e50) are gfx's data, so gfx compiles them and slot 25's inline copy
+   (0x180c10); DW4's `igContextExt` registers under igContext (an ext's probe stamps 0x530a10).
+   `Gap::Gfx::igVisualContext` is converted (alchemy-kit_202309 igGfx/igVisualContext.h; spec
+   scratch/VisualCtx/specs/context.py, rows.py, ctxfields.py): the abstract class declares all of DW4's slots 26-271
+   in retail's order, pure where retail's vtable writes 0, with its own definitions in slots 1 (`constructFields`),
+   7/8 (`userConstruct`/`userDestruct`), 20, 21-22 (inline `makeCurrent`/`isCurrent`), 26-29, 31-34, 45 (the inline
+   `deleteRenderDestination`), 70 (inline), 71, 141-145, 189 (the inline `getScissorType`), 195-196, 211-214 and 258-271
+   (the custom-state slots). The older revision's slot types are `igRenderDestinationFormat` (eight words) and
+   `igVideoFormat` (ending at the video type), in include/dw4/gfx/igVisualContextTypes.h. Typed fields
+   (typed-fields.tsv): the eight memory pools and the timer as smart pointers, the two `igMatrix44f`, the sixteen
+   `igVertexArray2` references built with `__construct_array`, the two custom-state lists. Its constructor
+   (0x1510e0) and destructor (0x150af0) are written out explicitly while `igPsx2VisualContext` is flat: the
+   probe in the flat class still calls them by C name and no converted class derives from igVisualContext yet.
+   Attrs' copy of `deleteRenderDestination` (0x13ff40) is the compiler's, from `igRenderDestinationAttr::reset`'s
+   `_vc->deleteRenderDestination(...)`. No attrs code names `getScissorType` (no call and no vtable load of its slot),
+   so its attrs copy (0x140050) stays the C definition `igVisualContext_GetScissorType`, like attrs' other unnamed
+   inline copies (`setUsageFlags` at 0x13f800, igIndexArray's `reset` at 0x13d020). Every caller uses the Gap class (`vc->getAlphaFunc()`,
+   `_vc->deleteTexture(...)`, the window's `getVisualContext()`, insight's display setup through `setVideoMode`,
+   `createRenderDestination` and `setDepthTestState`); igContext's `getExt` is the extension lookup.
+   `igPsx2VisualContext` is next: about 220 slot overrides (273 C functions) whose C heads take stand-in receivers
+   (`igPsx2VisualContext *`, `Obj_*`, `void *`) and must take the member's parameters before memberize accepts them;
+   four slots are not decompiled (0x170ed0 `setLightDirection`, `setLightAttenuation`, `setTextureSourceLevel`,
+   0x16de00 `softwareBlendVertex`); its GetVTable probe calls the constructor and destructor by their C names and builds the
+   smart-pointer helpers by hand. Once it converts, igVisualContext's explicit constructor and destructor go, and
+   attrs' direct calls into its methods (`igPsx2VisualContext_ExecuteRenderList`, `SetRenderDestination`, the
+   light and texture-source setters) become member calls. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
    `GfxLibrary_MarkRegistered` (it tests and sets `g_GfxLibrary_registered` and registers the eight extensions, as
    core's latch registers its threads), so tools/gen_odl_source.py finds the gfx classes (`--library Gfx`).
    Converted so far (specs in scratch/Gfx2/specs/index.py, vertex.py, clut.py): `igIndexArray` and
@@ -595,7 +618,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    wait list. `igVertexArray2` and `igPsx2VertexArray2` (igGfx/igVertexArray2.h; spec scratch/Gfx4/specs/vertex2.py) are converted: slots 21 `configure`
    (the base one builds an internal igVertexArray through an `igSmartPointer<igVertexArray2Helper>` and copies each stream; decompiled, 0x15f7d0), 22 `reset` (empty in the base, whose copy is attrs'
    0x13e660; the PS2 class resets its vertex stream), 23 `getCount`; `findVertexData`, `buildVertexDataList`, `isVertexDataSupported`;
-   `igVertexStreamDispatchView` (slots 24/25) and `igVisualContextDispatchView::setVertexArray` (slot 259) replace the old stand-ins.
+   `igVertexStreamDispatchView` (slots 24/25) and `igVisualContext::setVertexArray` (slot 259) replace the old stand-ins.
    `igVertexArrayLock` keeps DW4's name and layout: the kit's igComponentEditInfo orders its fields differently and has no
    `_componentIndex`. `igImage`, `igMemoryImage` and `igPsx2Image` are converted (spec scratch/GfxImage/specs/image.py): igImage's 23 slots 23-45 in retail's
    order (copy, copySubImage, scale, reduce, setData, setWidth, setHeight, setPixelFormat, allocateImageMemory,
@@ -631,7 +654,18 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    call it; a conversion is an `igImageConvert::conversionFn *`. The kit's row converters retail keeps are
    igImageConvert's statics `pal_4_To_pal_8`, `pal_8_To_pal_4`, `luminance_8_To_alpha_8` and
    `alpha_8_To_luminance_8` (the last two have one body, at 0x15ab50 and 0x15ab70, told apart by the slot-24 references
-   that return them); the PS2 row converters (0x16f690-0x16fe20, returned through casts) are still free functions.
+   that return them). The PS2 row converters (0x16f690-0x16fdb0, seventeen) are `igPsx2ImageConvert` statics with
+   the kit's `conversionFn` parameters, which the two slots return without a cast. The kit declares no PS2 converter
+   (its `igImageConvert` statics are the generic ones), so the names are DW4's own, spelled `<source>_To_<target>`
+   after the format pair of the `getConversionFn`/`getPackConversionFn` case that returns each (`pal_8_To_rgba_8888`
+   reads the palette `misc` points at; `rgb_888_To_rgba_8888` and `rgb_888_To_rgba_5551` read an optional alpha byte
+   from `misc`; X_8 and X_4 targets are the kit's `pal_8` and `pal_4`). Three entries stay free and cast:
+   `thunk_memcpy` (0x16fd40, LA_44_8 to X_8, the libc thunk itself), and the functions at 0x16fe00 and 0x16fe20 (L_8
+   to X_8 and A_8 to X_8), two identical `if (dest != source) memmove(dest, source, n)` bodies the kit's names do not
+   settle. The kit's `copy_8_to_8` and `copy_4_to_4` (igImageUtils.h, under
+   `IG_GFX_IMAGECONVERT_PAL_TO_TILED_SUPPORT`) are not told apart by the tables: both bodies copy `nSample` bytes and
+   both are returned for 8-bit pairs, while no table returns a function for X_4 to X_4. Open: which of the two, if
+   either, is `copy_8_to_8`.
    `igImageLoader` (abstract; the pure `load(igStringObj *, igImage *)`: DW4's older revision takes the file name as
    the string object its caller builds) and `igTgaLoader` (typed `_file`, `_palette`, `_tempMap` and `_tempRow`; the
    kit's `cleanup`, `cGetPixel`, `estimateImageFormat`, which returns the format as retail's does, `fillBuffer`,

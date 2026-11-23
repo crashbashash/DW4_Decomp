@@ -44,15 +44,15 @@ void igMaterialAttr::synchronizeDefault(igVisualContext *vc)
 {
     igVec4f color;
 
-    ((igVisualContextDispatchView *)vc)->getMaterialAmbient(color);
+    vc->getMaterialAmbient(color);
     setAmbient(color);
-    ((igVisualContextDispatchView *)vc)->getMaterialDiffuse(color);
+    vc->getMaterialDiffuse(color);
     setDiffuse(color);
-    ((igVisualContextDispatchView *)vc)->getMaterialSpecular(color);
+    vc->getMaterialSpecular(color);
     setSpecular(color);
-    ((igVisualContextDispatchView *)vc)->getMaterialEmissive(color);
+    vc->getMaterialEmissive(color);
     setEmissive(color);
-    setShininess(((igVisualContextDispatchView *)vc)->getMaterialShininess());
+    setShininess(vc->getMaterialShininess());
 }
 }
 }

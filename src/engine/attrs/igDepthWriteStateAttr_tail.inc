@@ -8,7 +8,7 @@ void igDepthWriteStateAttr::apply(igVisualContext *vc)
 
 void igDepthWriteStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getDepthWriteState());
+    setState(vc->getDepthWriteState());
 }
 
 /* Setter for the attribute's reflected _enabled flag. */

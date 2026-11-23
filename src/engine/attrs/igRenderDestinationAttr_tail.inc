@@ -43,13 +43,13 @@ void igRenderDestinationAttr::synchronizeDefault(igVisualContext *pVC)
 {
     int size[2];
 
-    int handle = ((igVisualContextDispatchView *)pVC)->getCurrentRenderDestination();
-    _iRDHandle = ((igVisualContextDispatchView *)pVC)->getCurrentRenderDestination();
-    _iColorBitCount = ((igVisualContextDispatchView *)pVC)->getColorBitsPerPixel(handle);
-    _iAlphaBitCount = ((igVisualContextDispatchView *)pVC)->getAlphaBitsPerPixel(handle);
-    _iDepthBitCount = ((igVisualContextDispatchView *)pVC)->getDepthBitsPerPixel(handle);
-    _iStencilBitCount = ((igVisualContextDispatchView *)pVC)->getStencilBitsPerPixel(handle);
-    ((igVisualContextDispatchView *)pVC)->getRenderDestinationSize(handle, size[0], size[1]);
+    int handle = pVC->getCurrentRenderDestination();
+    _iRDHandle = pVC->getCurrentRenderDestination();
+    _iColorBitCount = pVC->getColorBitsPerPixel(handle);
+    _iAlphaBitCount = pVC->getAlphaBitsPerPixel(handle);
+    _iDepthBitCount = pVC->getDepthBitsPerPixel(handle);
+    _iStencilBitCount = pVC->getStencilBitsPerPixel(handle);
+    pVC->getRenderDestinationSize(handle, size[0], size[1]);
     setSize(size[0], size[1]);
 }
 
@@ -63,7 +63,7 @@ void igRenderDestinationAttr::reset()
 {
     if (_iCreateMode != RENDERDESTINATION_CREATE_MODE_USE_DEFAULT) {
         if (_vc != 0 && _iRDHandle >= 0) {
-            ((igVisualContextDispatchView *)(igVisualContext *)_vc)->deleteRenderDestination(_iRDHandle);
+            _vc->deleteRenderDestination(_iRDHandle);
         }
         _vc = 0;
         _iRDHandle = -1;
@@ -73,5 +73,3 @@ void igRenderDestinationAttr::reset()
 }
 
 /* igVisualContext's default for the slot igRenderDestinationAttr's release calls with its handle. */
-extern "C" void Gap__Gfx__igVisualContext__destroyRenderDestination(igObject *context, int renderDestination) {
-}

@@ -12,8 +12,8 @@ void igStencilFunctionAttr::apply(igVisualContext *vc)
 
 void igStencilFunctionAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setRefVal(((igVisualContextDispatchView *)vc)->getStencilRefVal());
-    setFunc(((igVisualContextDispatchView *)vc)->getStencilFunc());
+    setRefVal(vc->getStencilRefVal());
+    setFunc(vc->getStencilFunc());
 }
 
 /* Setter for the reflected _func field (the stencil compare function enum). */

@@ -27,7 +27,7 @@ bool igPsx2VertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArr
         }
     }
     vs->setPrimitive(primitive);
-    ((igVisualContextDispatchView *)vc)->setVertexArray((::igVertexArray2 *)this, 0);
+    vc->setVertexArray(this, 0);
     return vs->configure(list, indexArray, primLengthArray, vc);
 }
 

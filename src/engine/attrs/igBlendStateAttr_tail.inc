@@ -8,7 +8,7 @@ void igBlendStateAttr::apply(igVisualContext *vc)
 
 void igBlendStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getBlendingState());
+    setState(vc->getBlendingState());
 }
 
 /* Setter: stores the blend-state enable flag (`_enabled`, an igBoolMetaField of the reflected

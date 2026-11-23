@@ -6,10 +6,6 @@ int igContextExt_UpdateFrameRateDisplay(void) {
     return 1;
 }
 
-void igContext_DetectDriverDatabaseProperties(void) {
-
-}
-
 int igPsx2PointSpriteExt_GetMeta(void) {
     return (int)g_igPsx2PointSpriteExt_metaObject;
 }

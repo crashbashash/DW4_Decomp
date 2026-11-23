@@ -35,8 +35,8 @@
   {
    "hi": 512,
    "lo": 257,
-   "matched": 1473,
-   "matched_bytes": 521176,
+   "matched": 1474,
+   "matched_bytes": 521464,
    "total": 1487,
    "total_bytes": 526792
   },
@@ -92,8 +92,8 @@
     "functions": 0
    },
    "match": {
-    "bytes": 3300224,
-    "functions": 20299
+    "bytes": 3300512,
+    "functions": 20300
    },
    "mismatch": {
     "bytes": 0,
@@ -128,12 +128,12 @@
   },
   "foreign_orphan_bytes": 0,
   "fully_matched": {
-   "bytes": 3308512,
-   "functions": 20464
+   "bytes": 3308800,
+   "functions": 20465
   },
   "fully_verified": {
-   "bytes": 3300224,
-   "functions": 20299
+   "bytes": 3300512,
+   "functions": 20300
   },
   "recorded": true,
   "source": "data/check-categories.tsv",
@@ -142,11 +142,11 @@
  "code_bytes": {
   "asm_body": 0,
   "assembly": 8288,
-  "fully_matched": 3308512,
-  "fully_verified": 3300224,
+  "fully_matched": 3308800,
+  "fully_verified": 3300512,
   "functions_asm_body": 0,
   "functions_assembly": 165,
-  "matched": 3300224,
+  "matched": 3300512,
   "total": 3472700
  },
  "data_bytes": {
@@ -160,19 +160,19 @@
    "jtbl": 380,
    "literal": 244,
    "named": 112536,
-   "pad": 211413,
+   "pad": 211445,
    "ptr": 3040,
-   "ref": 69523,
+   "ref": 69459,
    "region": 109384,
-   "source": 526429,
+   "source": 527649,
    "str": 68640,
    "table": 22212,
-   "vtable": 97936
+   "vtable": 96748
   },
-  "matched": 526429,
-  "matched_pct": 40.5,
+  "matched": 527649,
+  "matched_pct": 40.6,
   "pct": 99.62,
-  "start_only": 185099,
+  "start_only": 185035,
   "start_only_pct": 14.24,
   "total": 1299780
  },
@@ -188,7 +188,7 @@
    },
    "boilerplate.functions": {
     "reason": null,
-    "value": 6107
+    "value": 6092
    },
    "code_only.bytes": {
     "reason": null,
@@ -272,11 +272,11 @@
    },
    "free_methods.bytes": {
     "reason": null,
-    "value": 1626128
+    "value": 1611708
    },
    "free_methods.functions": {
     "reason": null,
-    "value": 9677
+    "value": 9612
    },
    "fun_dat_refs": {
     "reason": null,
@@ -312,7 +312,7 @@
    },
    "members.offset_named": {
     "reason": null,
-    "value": 2102
+    "value": 2098
    },
    "mismatch.bytes": {
     "reason": null,
@@ -331,8 +331,8 @@
     "value": 0
    },
    "opt_pragma.statements": {
-    "reason": null,
-    "value": 0
+    "reason": "owner ruling 2026-11-23: attrs library built without the float accumulator, one file-scope #pragma usefloatacc off in AttrsLibrary.cpp (FUN_0013dbb0)",
+    "value": 1
    },
    "orphan.bytes": {
     "reason": null,
@@ -352,7 +352,7 @@
    },
    "reflected.untyped_refs": {
     "reason": null,
-    "value": 3936
+    "value": 3910
    },
    "strings.externs": {
     "reason": null,
@@ -380,11 +380,11 @@
    },
    "unmatched.bytes": {
     "reason": null,
-    "value": 164188
+    "value": 163900
    },
    "unmatched.functions": {
     "reason": null,
-    "value": 112
+    "value": 111
    },
    "vfunc_slots.functions": {
     "reason": null,
@@ -392,21 +392,21 @@
    },
    "views.local": {
     "reason": null,
-    "value": 264
+    "value": 262
    },
    "virtual_views.slots": {
     "reason": null,
-    "value": 21418
+    "value": 20900
    },
    "virtual_views.types": {
     "reason": null,
-    "value": 183
+    "value": 182
    }
   },
   "counters": {
    "asm_body.bytes": 0,
    "asm_body.functions": 0,
-   "boilerplate.functions": 6107,
+   "boilerplate.functions": 6092,
    "code_only.bytes": 0,
    "code_only.differ.bytes": 0,
    "code_only.differ.functions": 0,
@@ -427,8 +427,8 @@
    "decl.varargs": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "free_methods.bytes": 1626128,
-   "free_methods.functions": 9677,
+   "free_methods.bytes": 1611708,
+   "free_methods.functions": 9612,
    "fun_dat_refs": 2,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
@@ -437,35 +437,35 @@
    "layout.tail_fragments": 396,
    "m2c_idiom.units": 0,
    "matching_constructs": 542,
-   "members.offset_named": 2102,
+   "members.offset_named": 2098,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
    "name_defect.functions": 0,
-   "opt_pragma.statements": 0,
+   "opt_pragma.statements": 1,
    "orphan.bytes": 0,
    "profile_split.bytes": 0,
    "profile_split.units": 0,
    "raw_casts.reflected": 0,
-   "reflected.untyped_refs": 3936,
+   "reflected.untyped_refs": 3910,
    "strings.externs": 48,
    "struct.a": 0,
    "struct.b": 0,
    "struct.c": 0,
    "unapproved.bytes": 0,
    "unapproved.functions": 0,
-   "unmatched.bytes": 164188,
-   "unmatched.functions": 112,
+   "unmatched.bytes": 163900,
+   "unmatched.functions": 111,
    "vfunc_slots.functions": 403,
-   "views.local": 264,
-   "virtual_views.slots": 21418,
-   "virtual_views.types": 183
+   "views.local": 262,
+   "virtual_views.slots": 20900,
+   "virtual_views.types": 182
   }
  },
  "functions": {
-  "fully_matched": 20464,
-  "fully_verified": 20299,
-  "matched": 20299,
+  "fully_matched": 20465,
+  "fully_verified": 20300,
+  "matched": 20300,
   "named": 19315,
   "named_semantic": 15084,
   "named_semantic_matched": 14876,
@@ -529,16 +529,16 @@
   }
  ],
  "link": {
-  "asm_bytes": 164188,
-  "data_bytes": 416776,
+  "asm_bytes": 163900,
+  "data_bytes": 417964,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 8288,
   "from_assembly_units": 165,
-  "from_c_bytes": 3717000,
-  "from_c_pct": 81.85,
-  "from_c_units": 20299,
+  "from_c_bytes": 3718476,
+  "from_c_pct": 81.88,
+  "from_c_units": 20300,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
   "jtbl_bytes": 16444,
@@ -562,54 +562,54 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2743448,
+  "bytes": 2746176,
   "failing": {
    "addresses": {
-    "bytes": 449176,
-    "functions": 1972
+    "bytes": 447592,
+    "functions": 1970
    },
    "declarations": {
     "bytes": 0,
     "functions": 0
    },
    "fields": {
-    "bytes": 201996,
-    "functions": 926
+    "bytes": 199872,
+    "functions": 915
    },
    "idioms": {
-    "bytes": 258268,
-    "functions": 1336
+    "bytes": 255188,
+    "functions": 1323
    },
    "name": {
-    "bytes": 328136,
-    "functions": 1608
+    "bytes": 328424,
+    "functions": 1609
    },
    "placed": {
     "bytes": 0,
     "functions": 0
    },
    "references": {
-    "bytes": 254260,
-    "functions": 826
+    "bytes": 253204,
+    "functions": 824
    },
    "types": {
-    "bytes": 246628,
-    "functions": 897
+    "bytes": 243864,
+    "functions": 893
    },
    "virtuals": {
-    "bytes": 103052,
-    "functions": 402
+    "bytes": 99020,
+    "functions": 398
    }
   },
-  "functions": 17556,
-  "matched_functions": 20464
+  "functions": 17568,
+  "matched_functions": 20465
  },
  "regions": [
   {
    "hi": 1332400,
    "lo": 1048576,
-   "matched": 1779,
-   "matched_bytes": 266736,
+   "matched": 1780,
+   "matched_bytes": 267024,
    "total": 1943,
    "total_bytes": 275776
   },
@@ -736,11 +736,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 2895,
-  "pct": 46.38,
-  "recovered": 33006,
-  "synthetic": 5278,
-  "total": 71162,
+  "offset_casts": 2882,
+  "pct": 46.56,
+  "recovered": 33147,
+  "synthetic": 5239,
+  "total": 71190,
   "typeable": 0,
   "typeable_pct": 0.0
  }

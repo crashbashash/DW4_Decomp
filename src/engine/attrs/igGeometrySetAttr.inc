@@ -75,7 +75,7 @@ void igGeometrySetAttr::arkRegister()
 
 CallbackArray *igGeometrySetAttr::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igVisualContext_EnsureRegistered, Gap::Attrs::igGeometryAttrList::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igVisualContext::arkRegister, Gap::Attrs::igGeometryAttrList::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -105,7 +105,7 @@ void igGeometrySetAttr::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 5);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
         metaField->_persistent = 0;
         metaField->_deepCopyMethod = 1;
         metaField->_shallowCopyMethod = 1;

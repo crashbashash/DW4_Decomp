@@ -503,6 +503,16 @@ class Regenerate(unittest.TestCase):
         new = {"whole_file": True, "data": {"g": "0x00300000"}}
         self.assertIs(whole_file_rows.stable_row(new, None, "owner", {}, {}.get), new)
 
+    def test_an_external_the_file_came_to_define_is_dropped(self):
+        # a call target that linked from retail and is now defined in the file: the object has the name, but the
+        # row emits it, so the old externals entry would declare the compiler symbol twice
+        old = {"whole_file": True, "emitted": {"b": "0x00100010"},
+               "externals": {"helper": "0x00100020", "far": "0x00400000"}}
+        new = {"whole_file": True, "emitted": {"b": "0x00100010", "helper": "0x00100020"}}
+        syms = {"helper": (1, 0, 8), "far": ("UND", 0, 0)}
+        row = whole_file_rows.stable_row(new, old, "owner", syms, {}.get)
+        self.assertEqual(row["externals"], {"far": "0x00400000"})
+
     def test_a_caller_row_keeps_its_order_and_the_names_that_bind_without_it(self):
         # a unit whose code changed only at call sites: the old row's aliases and stale names that still bind stay
         # where they were, and the names the compile reads that bind without a row stay out

@@ -3,11 +3,4 @@ int igVisualContextCapabilityManager_GetMeta(void) {
 }
 
 /* Returns the metaobject handle of igVisualContext, not of igVisualContextCapabilityManager. */
-int FUN_00180e10(void) {
-    return (int)g_igVisualContext_metaObject;
-}
-
-int FUN_00180e20(void) {
-    return 0;
-}
 

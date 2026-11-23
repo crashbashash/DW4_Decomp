@@ -93,12 +93,6 @@ static inline void clearPrefix(const igSmartPointer<igObject> &holder) {
     file->_prefix.p = interned;
 }
 
-static inline void setName(igDirectory *directory, char *name) {
-    char *interned = (char *)StringPool_Intern(InternedStrings::get(), name);
-    releaseString((char *)directory->_name);
-    directory->_name = (int)interned;
-}
-
 static inline void setRegistryFile(igRegistry *registry, const igSmartPointer<igObject> &value) {
     igObject *file = value.p;
     if (file != 0) file->_refCount = file->_refCount + 1;
@@ -106,15 +100,9 @@ static inline void setRegistryFile(igRegistry *registry, const igSmartPointer<ig
     registry->_registryFile = (int)file;
 }
 
-static inline void setTemporaryMemoryPool(igResource *resource, igObject *pool) {
-    if (pool != 0) pool->_refCount = pool->_refCount + 1;
-    igObject::release((igObject *)resource->_temporaryMemoryPool);
-    resource->_temporaryMemoryPool = (int)pool;
-}
-
 char *g_alchemyVersionString = "Intrinsic Alchemy  v3.2 -0810 (Static/Release) \nBuilt by terada on Tue Aug 10 11:05:06 JST 2004";
 unsigned char g_loadAlchemyIni = 1;
-igResourceView *g_globalContext;
+Gap::Core::igResource *g_globalContext;
 char *g_alchemyIniText;
 igLongTimerView *g_igIGBFile_loadTimer;
 char *g_alchemyIniPath;
@@ -166,15 +154,15 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     self->metaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
     self->metaFieldCount = g_metaFieldList->_count;
     igReport_ReadSettings();
-    self->resource = (igResource *)igResource_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
-    g_globalContext = (igResourceView *)self->resource;
-    igSmartPointer<igObject> directory((igObject *)Gap::Core::igDirectory::_instantiateFromPool(ownerOrSystemPool()));
-    setName((igDirectory *)directory.p, (char *)"system");
-    ((igResourceView *)self->resource)->addDirectory(directory);
-    ((Gap::Core::igDirectory *)directory.p)->loadRef();
+    self->resource = Gap::Core::igResource::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+    g_globalContext = self->resource;
+    igSmartPointer<Gap::Core::igDirectory> directory(Gap::Core::igDirectory::_instantiateFromPool(ownerOrSystemPool()));
+    directory->setName("system");
+    self->resource->appendDirectory(directory.p);
+    directory->loadRef();
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     ((Gap::Core::igNamedObject *)metaFieldInfo.p)->setName("metafield info");
-    ((Gap::Core::igDirectory *)directory.p)->appendInfo((Gap::Core::igInfo *)metaFieldInfo.p);
+    directory->appendInfo((Gap::Core::igInfo *)metaFieldInfo.p);
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"failOnDllVersionMismatch", self->reportHeaderVersionMismatch, 1, 0);
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"warnOnDllDateMismatch", self->warnOnDllDateMismatch, 1, 0);
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"resourceTempMemoryPoolSize", *(int *)(&self->resourceTempPoolSize), 0, 0);
@@ -194,7 +182,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
             self->resourceTempPool->SetEventTracker(tracker);
         }
         self->resourceTempPool->Activate();
-        setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
+        self->resource->setTemporaryMemoryPool((igMemoryPool *)self->resourceTempPool);
     }
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"stringPoolStatisticsLevel", *(int *)(&self->stringPoolStatisticsLevel), 0, 0);
     Gap::Core::igFile::setSearchPathFromRegistry();
@@ -255,24 +243,21 @@ AllocatorRegistry *g_secondaryAllocatorList;
  * registered since the set-up, and release the configuration registry, the resource manager and the
  * other managers the set-up created. */
 void igObjectSystem_Finalize(ObjectSystemView *self) {
-    igResource *resource;
+    Gap::Core::igResource *resource;
     igMemoryPoolView *pool;
     igEventTrackerView *tracker;
     int count;
     int i;
-    igResource_RemoveIGBFiles(self->resource);
+    self->resource->unloadAllIGBs();
     if (self->resource->_asyncLoadState) {
-        igResource_StopAsyncLoading((igResourceView *)self->resource);
+        self->resource->disableAsynchronousLoading();
     }
     resource = self->resource;
-    igObject::release((igObject *)resource->_temporaryMemoryPool);
-    resource->_temporaryMemoryPool = 0;
+    resource->_temporaryMemoryPool.clear();
     resource = self->resource;
-    igObject::release((igObject *)resource->_objectMemoryPool);
-    resource->_objectMemoryPool = 0;
+    resource->_objectMemoryPool.clear();
     resource = self->resource;
-    igObject::release((igObject *)resource->_dataMemoryPool);
-    resource->_dataMemoryPool = 0;
+    resource->_dataMemoryPool.clear();
     StringTable_SetSynchronization(0);
     count = g_secondaryAllocatorList->count;
     for (i = 0; i < count; i++) {
@@ -306,7 +291,7 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
     }
     igArray_Destruct((CallbackArray *)self->exitCallbacks, 1);
     self->exitCallbacks = 0;
-    igResource_ClearDirectories(self->resource);
+    self->resource->unloadAll();
     releaseObject((igObject *)self->driverDatabase);
     releaseObject((igObject *)g_igIGBFile_loadTimer);
     g_metaFieldList->setCount(self->metaFieldCount);
@@ -323,8 +308,7 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
             Memory_FreeBuffer((void *)memory);
         }
         resource = self->resource;
-        igObject::release((igObject *)resource->_temporaryMemoryPool);
-        resource->_temporaryMemoryPool = 0;
+        resource->_temporaryMemoryPool.clear();
         releaseObject((igObject *)self->resourceTempPool);
         self->resourceTempPool = 0;
     }

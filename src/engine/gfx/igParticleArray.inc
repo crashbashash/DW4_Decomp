@@ -170,7 +170,7 @@ void FUN_0014cd90(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igParticleArray_Register);
 }
 
-static igMetaObjectCallback g_igParticleArray_callbackList[] = { igParticleFormat_EnsureRegistered, Gap::Gfx::igVertexArray::arkRegister, igVisualContext_EnsureRegistered, igPointSpriteExt_EnsureRegistered, Gap::Gfx::igPrimLengthArray::arkRegister, 0 };
+static igMetaObjectCallback g_igParticleArray_callbackList[] = { igParticleFormat_EnsureRegistered, Gap::Gfx::igVertexArray::arkRegister, Gap::Gfx::igVisualContext::arkRegister, igPointSpriteExt_EnsureRegistered, Gap::Gfx::igPrimLengthArray::arkRegister, 0 };
 
 CallbackArray *igParticleArray_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -314,7 +314,7 @@ void igParticleArray_InitFields(void) {
     ((igObjectRefMetaField *)vertexArrayField)->_metaObject = (int)Gap::Gfx::igVertexArray::getClassTypeLazy();
     ((igMetaField *)vertexArrayField)->_persistent = 0;
     contextField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
-    ((igObjectRefMetaField *)contextField)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)contextField)->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
     ((igMetaField *)contextField)->_persistent = 0;
     pointSpriteField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xA));
     ((igObjectRefMetaField *)pointSpriteField)->_metaObject = (int)igPointSpriteExt_GetOrCreateMetaObject();

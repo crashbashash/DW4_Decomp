@@ -47,24 +47,3 @@ int igPsx2VisualContext_GetTextureMatrixState(igPsx2VisualContext *self) {
     return self->_textureMatrixState != 0;
 }
 
-void igVisualContext_MakeCurrent(void) {
-    igContextExt_MakeCurrent();
-}
-
-void igVisualContext_IsCurrent(void) {
-    igContextExt_IsCurrent();
-}
-
-void igVisualContext_Activate(void) {
-
-}
-
-void igVisualContext_Deactivate(void) {
-
-}
-
-void igVisualContext_DrawIndexed(igPsx2VisualContextSlots_180dd0 *self)
-{
-    self->vfunc_69();
-}
-

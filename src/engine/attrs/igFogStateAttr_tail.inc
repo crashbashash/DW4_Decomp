@@ -8,7 +8,7 @@ void igFogStateAttr::apply(igVisualContext *vc)
 
 void igFogStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(((igVisualContextDispatchView *)vc)->getFogState());
+    setState(vc->getFogState());
 }
 
 void igFogStateAttr::setState(bool enabled)

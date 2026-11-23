@@ -120,11 +120,12 @@ FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
 # format word (igVertexArray1_1's `_vertexFormat` field, the argument of their configure slots), igVertexData's
 # component types (igVertexArray2Helper's getMinValue and getMaxValue take one), and dw4/gfx/png.h, libpng's types
 # (png_structp, png_infop, png_color_8p) that igFileImagePng's reader members take, igRay.h, the kit's
-# igRay::ISET_SIDES that igGeometryAttr's intersectRay takes, and igVertexArrayLock.h, the kit's vertex component
-# enum igGeometryAttr1_5's vector helper takes.
+# igRay::ISET_SIDES that igGeometryAttr's intersectRay takes, igVertexArrayLock.h, the kit's vertex component
+# enum igGeometryAttr1_5's vector helper takes, and igVisualContextTypes.h, the structures igVisualContext's slots
+# take (igRenderDestinationFormat, igVideoFormat).
 KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h",
                     "dw4/gfx/igVertexFormat.h", "dw4/gfx/igVertexData.h", "dw4/gfx/png.h", "dw4/maths/igRay.h",
-                    "dw4/gfx/igVertexArrayLock.h")
+                    "dw4/gfx/igVertexArrayLock.h", "dw4/gfx/igVisualContextTypes.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.

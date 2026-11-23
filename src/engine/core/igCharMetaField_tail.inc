@@ -397,13 +397,8 @@ void igContext::generateExtList() {
         int meta;
         int i;
         list = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)((Gap::Core::igObject *)this)->getMemoryPool())));
-        if (list != 0) ++list->_refCount;
-        ::igObject::release((::igObject *)_pExtList);
-        _pExtList = (int)list;
-        {
-            igContextExtInfoList *o = (igContextExtInfoList *)_pExtList;
-            o->release();
-        }
+        _pExtList = list;
+        _pExtList->release();
         ((igObjectDispatchView *)this)->GetMeta();
         meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
         _iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
@@ -499,13 +494,13 @@ igContextExt *igContext::getExt(char *pExtName)
     if (extension == 0) {
         extension = (::igObject *)igMetaObject_CreateInstance((::igMetaObject *)meta, (igMemoryPoolView *)(int)getMemoryPool());
         if (extension != 0) {
-            if (((igContextExtView *)extension)->IsSupported((igVisualContext *)this) == 0) {
+            if (((igContextExtView *)extension)->IsSupported((::igVisualContext *)this) == 0) {
                 extension->release();
                 extension = (::igObject *)(0);
             } else {
-                ((igObjectList *)_pExtInstances)->append((igObject *)extension);
+                ((igObjectList *)_pExtInstances.p)->append((igObject *)extension);
                 extension->release();
-                ((igContextExtView *)extension)->SetContext((igVisualContext *)this);
+                ((igContextExtView *)extension)->SetContext((::igVisualContext *)this);
             }
         }
     }
@@ -515,9 +510,9 @@ igContextExt *igContext::getExt(char *pExtName)
 igContextExt *igContext::findExtInstance(const igMetaObject *extMeta)
 {
     int i;
-    for (i = 0; i < ((igObjectList *)_pExtInstances)->_count; i++) {
-        if (((igObject *)(((int *)((igObjectList *)_pExtInstances)->_data)[i]))->isOfType((igMetaObject *)extMeta) != 0) {
-            return (igContextExt *)((int *)((igObjectList *)_pExtInstances)->_data)[i];
+    for (i = 0; i < ((igObjectList *)_pExtInstances.p)->_count; i++) {
+        if (((igObject *)(((int *)((igObjectList *)_pExtInstances.p)->_data)[i]))->isOfType((igMetaObject *)extMeta) != 0) {
+            return (igContextExt *)((int *)((igObjectList *)_pExtInstances.p)->_data)[i];
         }
     }
     return 0;

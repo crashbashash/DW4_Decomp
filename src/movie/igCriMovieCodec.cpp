@@ -1,7 +1,6 @@
 #include "dw4/support/reflected.h"
 #include "dw4/core/igMemoryPoolView.h"
 #include "dw4/core/igSmartPointer.h"
-#include "dw4/gfx/igVisualContextDispatchView.h"
 extern "C" {
 #include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/cri_adxt.h"
@@ -343,8 +342,8 @@ int igCriMovieCodec_IsReusable(void)
  * MWSFD for the display's refresh rate: NTSC 59.94 Hz or PAL 50 Hz, 60 Hz when the context
  * reports neither. */
 void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, igObject *audioContext) {
-    igVisualContextDispatchView *display;
-    VideoMode mode;
+    Gap::Gfx::igVisualContext *display;
+    igVideoFormat mode;
     MwsfdInitPrm prm;
     float refreshRate;
 
@@ -352,17 +351,17 @@ void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, 
         reinterpret_cast<igSmartPointer<igObject> &>(self->_visualContext) = visualContext;
         reinterpret_cast<igSmartPointer<igObject> &>(self->_audioContext) = audioContext;
         refreshRate = 60.0f;
-        display = (igVisualContextDispatchView *)visualContext;
+        display = (Gap::Gfx::igVisualContext *)visualContext;
         if (display != 0) {
-            mode.pal = 0;
-            mode.enable = 0;
-            mode.interlace = 0;
-            mode.refreshRate = 0.0f;
-            mode.swapInterval = 0;
-            display->getVideoMode(&mode);
-            if (mode.pal == 0 && mode.refreshRate == 59.94f) {
+            mode._iVideoType = 0;
+            mode._bFullScreen = false;
+            mode._bInterlaced = false;
+            mode._fRefreshRate = 0.0f;
+            mode._iSwapInterval = 0;
+            display->getVideoMode(mode);
+            if (mode._iVideoType == 0 && mode._fRefreshRate == 59.94f) {
                 refreshRate = 59.94f;
-            } else if (mode.pal == 1 && mode.refreshRate == 50.0f) {
+            } else if (mode._iVideoType == 1 && mode._fRefreshRate == 50.0f) {
                 refreshRate = 50.0f;
             }
         }

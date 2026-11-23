@@ -14,7 +14,7 @@ igImageConvert::conversionFn *igPsx2ImageConvert::getConversionFn(IG_GFX_IMAGE_O
     case IG_GFX_TEXTURE_FORMAT_X_8:
         switch (tFmt) {
         case IG_GFX_TEXTURE_FORMAT_X_4: return pal_8_To_pal_4;
-        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f690;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return pal_8_To_rgba_8888;
         case IG_GFX_TEXTURE_FORMAT_X_8: break;
         }
         break;
@@ -24,19 +24,19 @@ igImageConvert::conversionFn *igPsx2ImageConvert::getConversionFn(IG_GFX_IMAGE_O
         break;
     case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f700;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return rgba_5551_To_rgba_8888;
         case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: break;
         }
         break;
     case IG_GFX_TEXTURE_FORMAT_RGB_565_16:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: return (conversionFn *)FUN_0016f780;
+        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: return rgb_565_To_rgb_888;
         case IG_GFX_TEXTURE_FORMAT_RGB_565_16: break;
         }
         break;
     case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f7f0;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return rgba_4444_To_rgba_8888;
         case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16: break;
         }
         break;
@@ -44,17 +44,17 @@ igImageConvert::conversionFn *igPsx2ImageConvert::getConversionFn(IG_GFX_IMAGE_O
         break;
     case IG_GFX_TEXTURE_FORMAT_RGB_888_24:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016f8a0;
-        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: return (conversionFn *)FUN_0016f930;
-        case IG_GFX_TEXTURE_FORMAT_RGB_565_16: return (conversionFn *)FUN_0016f9b0;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return rgb_888_To_rgba_8888;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: return rgb_888_To_rgba_5551;
+        case IG_GFX_TEXTURE_FORMAT_RGB_565_16: return rgb_888_To_rgb_565;
         case IG_GFX_TEXTURE_FORMAT_RGB_888_24: break;
         }
         break;
     case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: return (conversionFn *)FUN_0016fa10;
-        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: return (conversionFn *)FUN_0016fa60;
-        case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16: return (conversionFn *)FUN_0016fae0;
+        case IG_GFX_TEXTURE_FORMAT_RGB_888_24: return rgba_8888_To_rgb_888;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: return rgba_8888_To_rgba_5551;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16: return rgba_8888_To_rgba_4444;
         case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: break;
         }
         break;
@@ -69,24 +69,24 @@ igImageConvert::conversionFn *igPsx2ImageConvert::getConversionFn(IG_GFX_IMAGE_O
         switch (tFmt) {
         case IG_GFX_TEXTURE_FORMAT_L_8: return alpha_8_To_luminance_8;
         case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)FUN_0016fe20;
-        case IG_GFX_TEXTURE_FORMAT_X_4: return (conversionFn *)FUN_0016fdb0;
+        case IG_GFX_TEXTURE_FORMAT_X_4: return alpha_8_To_pal_4;
         case IG_GFX_TEXTURE_FORMAT_A_8: break;
         }
         break;
     case IG_GFX_TEXTURE_FORMAT_LA_88_16:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return (conversionFn *)FUN_0016fc20;
-        case IG_GFX_TEXTURE_FORMAT_LA_44_8: return (conversionFn *)FUN_0016fbd0;
-        case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)FUN_0016fc80;
-        case IG_GFX_TEXTURE_FORMAT_X_4: return (conversionFn *)FUN_0016fcd0;
+        case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: return la_88_To_rgba_8888;
+        case IG_GFX_TEXTURE_FORMAT_LA_44_8: return la_88_To_la_44;
+        case IG_GFX_TEXTURE_FORMAT_X_8: return la_88_To_pal_8;
+        case IG_GFX_TEXTURE_FORMAT_X_4: return la_88_To_pal_4;
         case IG_GFX_TEXTURE_FORMAT_LA_88_16: break;
         }
         break;
     case IG_GFX_TEXTURE_FORMAT_LA_44_8:
         switch (tFmt) {
-        case IG_GFX_TEXTURE_FORMAT_LA_88_16: return (conversionFn *)FUN_0016fb60;
+        case IG_GFX_TEXTURE_FORMAT_LA_88_16: return la_44_To_la_88;
         case IG_GFX_TEXTURE_FORMAT_X_8: return (conversionFn *)thunk_memcpy;
-        case IG_GFX_TEXTURE_FORMAT_X_4: return (conversionFn *)FUN_0016fd50;
+        case IG_GFX_TEXTURE_FORMAT_X_4: return la_44_To_pal_4;
         case IG_GFX_TEXTURE_FORMAT_LA_44_8: break;
         }
         break;
@@ -98,20 +98,18 @@ igImageConvert::conversionFn *igPsx2ImageConvert::getPackConversionFn(IG_GFX_IMA
 {
     switch (packedFormat) {
     case IG_GFX_TEXTURE_FORMAT_LA_44_8:
-        return isUnpack ? (conversionFn *)FUN_0016fb60 : (conversionFn *)FUN_0016fbd0;
+        return isUnpack ? la_44_To_la_88 : la_88_To_la_44;
     case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16:
-        return isUnpack ? (conversionFn *)FUN_0016f700 : (conversionFn *)FUN_0016fa60;
+        return isUnpack ? rgba_5551_To_rgba_8888 : rgba_8888_To_rgba_5551;
     case IG_GFX_TEXTURE_FORMAT_RGB_565_16:
-        return isUnpack ? (conversionFn *)FUN_0016f780 : (conversionFn *)FUN_0016f9b0;
+        return isUnpack ? rgb_565_To_rgb_888 : rgb_888_To_rgb_565;
     case IG_GFX_TEXTURE_FORMAT_RGBA_4444_16:
-        return isUnpack ? (conversionFn *)FUN_0016f7f0 : (conversionFn *)FUN_0016fae0;
+        return isUnpack ? rgba_4444_To_rgba_8888 : rgba_8888_To_rgba_4444;
     case IG_GFX_TEXTURE_FORMAT_X_4:
         return isUnpack ? pal_4_To_pal_8 : pal_8_To_pal_4;
     default:
         return 0;
     }
-}
-}
 }
 
 static inline int ClampIndex(int index, int last)
@@ -124,29 +122,30 @@ static inline int ClampIndex(int index, int last)
 }
 
 /* matching construct: small sweep of spellings — local declaration order, s-- in the loop increment */
-void FUN_0016f690(unsigned int *dst, unsigned char *src, int count, ImagePalette *palette)
+void igPsx2ImageConvert::pal_8_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
+    ImagePalette *palette = (ImagePalette *)misc;
     unsigned int *colors;
     int last;
-    unsigned char *s = src + count - 1;
+    const unsigned char *s = source + nSample - 1;
     unsigned int *d;
     int i;
     palette->used = 1;
     colors = palette->colors;
     last = palette->lastIndex;
-    d = dst + count - 1;
-    for (i = 0; i < count; i++, s--) {
+    d = (unsigned int *)dest + nSample - 1;
+    for (i = 0; i < nSample; i++, s--) {
         *d-- = colors[ClampIndex(*s, last)];
     }
 }
 
-void FUN_0016f700(unsigned int *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::rgba_5551_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
-    unsigned int *d = dst + count - 1;
-    unsigned short *s = src + count - 1;
+    unsigned int *d = (unsigned int *)dest + nSample - 1;
+    const unsigned short *s = (const unsigned short *)source + nSample - 1;
     int i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         *d-- = ((((unsigned int)*s & 0x8000) >> 8) << 24) | ((*s & 0x7C00) << 9) | ((*s & 0x3E0) << 6)
              | ((*s & 0x1F) << 3);
         s--;
@@ -154,14 +153,14 @@ void FUN_0016f700(unsigned int *dst, unsigned short *src, int count)
 }
 
 /* matching construct: 48-variant sweep — declaration order */
-void FUN_0016f780(unsigned char *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::rgb_565_To_rgb_888(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
-    unsigned char *d = dst + count * 3 - 3;
-    unsigned short *s = src + count - 1;
+    unsigned char *d = dest + nSample * 3 - 3;
+    const unsigned short *s = (const unsigned short *)source + nSample - 1;
     int i;
     unsigned int px;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         px = *s;
         d[0] = (px & 0x1F) << 3;
         d[1] = (px >> 3) & 0xFC;
@@ -172,15 +171,15 @@ void FUN_0016f780(unsigned char *dst, unsigned short *src, int count)
 }
 
 /* matching construct: variant sweep — declaration order */
-void FUN_0016f7f0(unsigned int *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::rgba_4444_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
-    unsigned int *d = dst + count - 1;
-    unsigned short *s = src + count - 1;
+    unsigned int *d = (unsigned int *)dest + nSample - 1;
+    const unsigned short *s = (const unsigned short *)source + nSample - 1;
     int i;
     unsigned int px;
     unsigned int alpha, g, b, r;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         px = *s;
         alpha = ((px >> 8) & 0xF0) + ((px >> 12) & 0xF);
         alpha = ((alpha >> 1) + (alpha & 1)) << 24;
@@ -192,10 +191,11 @@ void FUN_0016f7f0(unsigned int *dst, unsigned short *src, int count)
     }
 }
 
-void FUN_0016f8a0(unsigned int *dst, unsigned char *src, int count, unsigned char *alphaSrc)
+void igPsx2ImageConvert::rgb_888_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
-    unsigned int *d = dst + count - 1;
-    unsigned char *s = src + count * 3 - 3;
+    const unsigned char *alphaSrc = (const unsigned char *)misc;
+    unsigned int *d = (unsigned int *)dest + nSample - 1;
+    const unsigned char *s = source + nSample * 3 - 3;
     unsigned int alpha = 0x80000000;
     int i;
 
@@ -203,14 +203,17 @@ void FUN_0016f8a0(unsigned int *dst, unsigned char *src, int count, unsigned cha
         alpha = ((unsigned int)*alphaSrc >> 1) + (*alphaSrc & 1);
         alpha <<= 24;
     }
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         *d-- = alpha | (s[2] << 16) | (s[1] << 8) | s[0];
         s -= 3;
     }
 }
 
-void FUN_0016f930(unsigned short *dst, unsigned char *src, int count, unsigned char *alphaSrc)
+void igPsx2ImageConvert::rgb_888_To_rgba_5551(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
+    const unsigned char *alphaSrc = (const unsigned char *)misc;
+    unsigned short *dst = (unsigned short *)dest;
+    const unsigned char *src = source;
     unsigned int alpha = 0x8000;
     int i;
 
@@ -218,23 +221,27 @@ void FUN_0016f930(unsigned short *dst, unsigned char *src, int count, unsigned c
         alpha = (*alphaSrc & 0x80) << 8;
         alpha &= 0x8000;
     }
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         *dst++ = alpha | ((src[2] & 0xF8u) << 7) | ((src[1] & 0xF8u) << 2) | ((src[0] & 0xF8u) >> 3);
         src += 3;
     }
 }
 
-void FUN_0016f9b0(unsigned short *dst, unsigned char *src, int count) {
+void igPsx2ImageConvert::rgb_888_To_rgb_565(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned short *dst = (unsigned short *)dest;
+    const unsigned char *src = source;
     int i;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         *dst++ = ((src[2] & 0xF8u) << 8) | ((src[1] & 0xFCu) << 3) | ((src[0] & 0xF8u) >> 3);
         src += 3;
     }
 }
 
-void FUN_0016fa10(unsigned char *dst, unsigned int *src, int count) {
+void igPsx2ImageConvert::rgba_8888_To_rgb_888(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned char *dst = dest;
+    const unsigned int *src = (const unsigned int *)source;
     int i;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         unsigned int pixel = *src;
         dst[0] = pixel;
         dst[1] = (pixel & 0xFF00) >> 8;
@@ -244,9 +251,11 @@ void FUN_0016fa10(unsigned char *dst, unsigned int *src, int count) {
     }
 }
 
-void FUN_0016fa60(unsigned short *dst, unsigned int *src, int count) {
+void igPsx2ImageConvert::rgba_8888_To_rgba_5551(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned short *dst = (unsigned short *)dest;
+    const unsigned int *src = (const unsigned int *)source;
     int i;
-    for (i = 0; i < count; i++, src++) {
+    for (i = 0; i < nSample; i++, src++) {
         unsigned int pixel = *src;
         unsigned int alpha = pixel >> 24;
         unsigned int alpha2;
@@ -259,9 +268,11 @@ void FUN_0016fa60(unsigned short *dst, unsigned int *src, int count) {
     }
 }
 
-void FUN_0016fae0(unsigned short *dst, unsigned int *src, int count) {
+void igPsx2ImageConvert::rgba_8888_To_rgba_4444(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned short *dst = (unsigned short *)dest;
+    const unsigned int *src = (const unsigned int *)source;
     int i;
-    for (i = 0; i < count; i++, src++) {
+    for (i = 0; i < nSample; i++, src++) {
         unsigned int pixel = *src;
         unsigned int alpha = pixel >> 24;
         unsigned int alpha2;
@@ -274,11 +285,11 @@ void FUN_0016fae0(unsigned short *dst, unsigned int *src, int count) {
     }
 }
 
-void FUN_0016fb60(unsigned short *dst, unsigned char *src, int count) {
-    unsigned short *d = dst + count - 1;
-    unsigned char *s = src + count - 1;
+void igPsx2ImageConvert::la_44_To_la_88(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned short *d = (unsigned short *)dest + nSample - 1;
+    const unsigned char *s = source + nSample - 1;
     int i;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         unsigned int lo = *s & 0x0F;
         unsigned int hi = *s & 0xF0;
         hi |= hi >> 4;
@@ -288,21 +299,25 @@ void FUN_0016fb60(unsigned short *dst, unsigned char *src, int count) {
     }
 }
 
-void FUN_0016fbd0(unsigned char *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::la_88_To_la_44(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
+    unsigned char *dst = dest;
+    const unsigned short *src = (const unsigned short *)source;
     int i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         *dst++ = (((unsigned int)src[0] >> 8) & 0xF0) | ((src[0] & 0xF0u) >> 4);
         src++;
     }
 }
 
-void FUN_0016fc20(unsigned int *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::la_88_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
+    unsigned int *dst = (unsigned int *)dest;
+    const unsigned short *src = (const unsigned short *)source;
     int i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         unsigned int lum = *src & 0xFF;
         unsigned int hi = *src & 0xFF00;
         unsigned int alpha = (hi >> 9) + ((hi >> 8) & 1);
@@ -311,41 +326,56 @@ void FUN_0016fc20(unsigned int *dst, unsigned short *src, int count)
     }
 }
 
-void FUN_0016fc80(unsigned char *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::la_88_To_pal_8(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
+    unsigned char *dst = dest;
+    const unsigned short *src = (const unsigned short *)source;
     int i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < nSample; i++) {
         *dst++ = (((unsigned int)src[0] >> 4) & 0xF) | (((unsigned int)src[0] >> 8) & 0xF0);
         src++;
     }
 }
 
-void FUN_0016fcd0(unsigned char *dst, unsigned short *src, int count)
+void igPsx2ImageConvert::la_88_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc)
 {
+    unsigned char *dst = dest;
+    const unsigned short *src = (const unsigned short *)source;
     int i;
 
-    for (i = 0; i < count; i += 2) {
+    for (i = 0; i < nSample; i += 2) {
         *dst++ = ((src[0] & 0xC0u) >> 2) | (((unsigned int)src[0] >> 8) & 0xC0u)
                | ((src[1] & 0xC0u) >> 6) | ((((unsigned int)src[1] >> 8) & 0xC0u) >> 4);
         src += 2;
     }
+}
+}
 }
 
 void *thunk_memcpy(void *d, const void *s, unsigned int n) {
     return (void *)memcpy(d, s, n);
 }
 
-void FUN_0016fd50(unsigned char *dst, unsigned char *src, int count) {
+namespace Gap {
+namespace Gfx {
+
+void igPsx2ImageConvert::la_44_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned char *dst = dest;
+    const unsigned char *src = source;
     int i;
-    for (i = 0; i < count; i += 2) {
+    for (i = 0; i < nSample; i += 2) {
         *dst++ = (src[0] & 0xC0u) | ((src[0] & 0x0Cu) << 2) | ((src[1] & 0xC0u) >> 4) | ((src[1] & 0x0Cu) >> 2);
         src += 2;
     }
 }
 
-void FUN_0016fdb0(unsigned char *dst, unsigned char *src, int count) {
-    int i; for (i = 0; i < count; i += 2) { *dst++ = (src[0] & 0xF0) | ((src[1] & 0xF0u) >> 4); src += 2; }
+void igPsx2ImageConvert::alpha_8_To_pal_4(unsigned char *dest, const unsigned char *source, int nSample, void *misc) {
+    unsigned char *dst = dest;
+    const unsigned char *src = source;
+    int i; for (i = 0; i < nSample; i += 2) { *dst++ = (src[0] & 0xF0) | ((src[1] & 0xF0u) >> 4); src += 2; }
+}
+}
 }
 
 void FUN_0016fe00(void *dst, const void *src, unsigned int size) {

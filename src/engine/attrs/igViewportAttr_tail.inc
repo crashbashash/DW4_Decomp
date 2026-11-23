@@ -15,7 +15,7 @@ void igViewportAttr::synchronizeDefault(igVisualContext *vc)
     float nearZ;
     float farZ;
 
-    ((igVisualContextDispatchView *)vc)->getViewport(x, y, w, h, nearZ, farZ);
+    vc->getViewport(x, y, w, h, nearZ, farZ);
     _x = x;
     _y = y;
     _w = w;

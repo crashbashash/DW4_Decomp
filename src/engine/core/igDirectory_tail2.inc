@@ -9,7 +9,7 @@ void igDirectory::userRegister() {
     Gap::Core::igExternalIndexedEntry::getClassTypeSafe();
     Gap::Core::igExternalInfoEntry::getClassTypeSafe();
     Gap::Core::igInfo::getClassTypeSafe();
-    igResource_GetMetaObject();
+    Gap::Core::igResource::getClassTypeSafe();
 }
 
 void igDirectory::releaseDefaults() {
@@ -20,7 +20,7 @@ void igDirectory::releaseDefaults() {
 
     if (_managingResource != 0) {
         for (i = 0; i < _externalDirectoryList->_count; i++) {
-            igResource_UnloadDirectory((igResource *)_managingResource, _externalDirectoryList->get(i)->_name.p);
+            _managingResource->unload(_externalDirectoryList->get(i)->_name.p);
         }
     }
     infoCount = getInfoCount();

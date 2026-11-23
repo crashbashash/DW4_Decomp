@@ -815,107 +815,55 @@ void igReport_RestoreDefaults(void) {
     ((int *)&g_reportLevel)[0] = 5;
 }
 
-igSmartPointer<igObject> igResource_GetDirectory(void *directory, const char *name) {
+namespace Gap {
+namespace Core {
+
+igSmartPointer<igDirectory> igResource::getDirectory(const char *name) {
     if (strcmp(name, "igImageDirectory") == 0) {
-        return igSmartPointer<igObject>((igObject *)igResource_GetImageDirectory((igResource *)directory), kRetainReference);
+        return igSmartPointer<igDirectory>(getImageDirectory(), kRetainReference);
     }
-    return igSmartPointer<igObject>((igObject *)((Gap::Core::igObjectList *)(((igResource *)directory)->_directoryList))->search((Gap::Core::igStringMetaField *)Gap::Core::igDirectory::k_name, name), kRetainReference);
+    return igSmartPointer<igDirectory>(_directoryList->search((igStringMetaField *)igDirectory::k_name, name), kRetainReference);
 }
 
-void igResource_AddDirectory(int *p, int directory)
+void igResource::appendDirectory(igDirectory *directory)
 {
-    ((Gap::Core::igObjectList *)(((igResource *)p)->_directoryList))->append((Gap::Core::igObject *)directory);
+    _directoryList->append(directory);
 }
 
-static inline void setNames(igResource *self, const igSmartPointer<igObject> &value) {
-    igObject *held = value.p;
-    igObject *old;
-    if (held) held->_refCount = held->_refCount + 1;
-    old = (igObject *)self->_alignmentStrings;
-    igObject::release(old);
-    self->_alignmentStrings = (int)held;
-}
-
-static inline void setValues(igResource *self, const igSmartPointer<igObject> &value) {
-    igObject *held = value.p;
-    igObject *old;
-    if (held) held->_refCount = held->_refCount + 1;
-    old = (igObject *)self->_alignmentValues;
-    igObject::release(old);
-    self->_alignmentValues = (int)held;
-}
-
-void igResource_AddAlignment(igResource *self, const char *name, int value) {
-    if (self->_alignmentStrings == 0) {
-        setNames(self, igSmartPointer<igObject>((igObject *)igStringObjList_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
-        setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
+void igResource::addAlignmentPair(const char *name, int value) {
+    if (_alignmentStrings.p == 0) {
+        _alignmentStrings = igSmartPointer< ::igStringObjList>((::igStringObjList *)igStringObjList_Create((int)getMemoryPool()));
+        _alignmentValues = igSmartPointer<igIntList>((igIntList *)igIntList_Create((int)getMemoryPool()));
     }
-    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
+    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)getMemoryPool()));
     igStringObj_Set(entry.p, name);
-    ((Gap::Core::igObjectList *)self->_alignmentStrings)->append((Gap::Core::igObject *)entry.p);
-    igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
-    int top = values->count();
-    if (top < values->_capacity) {
-        values->_count = values->_count + 1;
-    } else {
-        ((Gap::Core::igDataList *)values)->resizeAndSetCount(top + 1, 4);
-    }
-    values->_data[top] = value;
+    ((Gap::Core::igObjectList *)_alignmentStrings.p)->append((Gap::Core::igObject *)entry.p);
+    _alignmentValues->append(value);
 }
 
-static inline void setImageDirectory(igResource *owner, const igSmartPointer<igDirectory> &value) {
-    igDirectory *held = value.p;
-    igDirectory *old;
-    if (held != 0) held->_refCount = held->_refCount + 1;
-    old = (igDirectory *)owner->_imageDirectory;
-    igObject::release(old);
-    owner->_imageDirectory = (int)held;
-}
-
-igDirectory *igResource_GetImageDirectory(igResource *self) {
-    if (self->_imageDirectory == 0) {
-        int *hd;
-        int v;
-        int s2;
-        igDirectory *s0;
-        int old;
-        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)Gap::Core::igDirectory::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
-        s0 = (igDirectory *)self->_imageDirectory;
-        if (0 == g_stringPool) {
-            v = ((int)StringPool_Allocate(16));
-            if (v != 0) {
-                v = ((int)StringPool_Construct((StringPool *)v));
-            }
-            g_stringPool = (StringPool *)v;
-        }
-        s2 = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)(((char *)"igImageDirectory")));
-        old = s0->_name;
-        if (old != 0) {
-            hd = (int *)(old - 8);
-            v = *(int *)(old - 4) - 1;
-            *(int *)(old - 4) = v;
-            if (v == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
-            }
-        }
-        s0->_name = s2;
-        ((igDirectory *)self->_imageDirectory)->_managingResource = (int)self;
-        igResource_AddDirectory((int *)self, self->_imageDirectory);
+igDirectory *igResource::getImageDirectory() {
+    if (_imageDirectory.p == 0) {
+        _imageDirectory = igSmartPointer<igDirectory>(igDirectory::_instantiateFromPool(getMemoryPool()));
+        _imageDirectory->setName("igImageDirectory");
+        _imageDirectory->setManagingResource(this);
+        appendDirectory(_imageDirectory);
     }
     fflush(_impure_ptr->_stdout);
-    return (igDirectory *)self->_imageDirectory;
+    return _imageDirectory;
+}
+}
 }
 
-void igResource_AsyncLoadThreadProc(int *result, void *file) {
-    int resource;
+void igResource_AsyncLoadThreadProc(int *result, Gap::Core::igDirectory *file) {
+    Gap::Core::igResource *resource;
 
     if (file == 0) {
         *result = g_resultFailure.v;
     } else {
-        resource = (int)((igDirectoryView *)file)->_managingResource;
-        if (((igDirectoryView *)file)->_loadedRefCount > 1) {
-            igResource_ReadFileWithSearchPaths((igResource *)resource, (igIGBFileView *)file);
-            igResource_UnloadDirectory((igResource *)resource, (const char *)((igDirectoryView *)file)->_name);
+        resource = file->_managingResource;
+        if (file->_loadedRefCount > 1) {
+            resource->doLoad((igIGBFile *)file);
+            resource->unload(file->_name.p);
         }
         *result = g_resultSuccess.v;
     }

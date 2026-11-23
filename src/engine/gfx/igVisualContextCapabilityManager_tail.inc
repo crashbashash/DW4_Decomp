@@ -3,141 +3,145 @@ static inline void releaseObjectRef(igObjectSlotView *o)
     IG_OBJECT_RELEASE(o);
 }
 
-void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
+namespace Gap {
+namespace Gfx {
+
+void igVisualContext::constructFields(int flag)
 {
-    igObjectSlotView *p;
-    int pool;
+    igMemoryPool *p;
+    igMemoryPool *pool;
 
-    Gap__Core__igObject__constructFields((igObject *)self, flags);
+    igObject::constructFields(flag);
 
-    p = g_igVisualContext_defaultDriverDataMemoryPool[0];
+    p = _defaultDriverDataMemoryPool;
     if (p != 0) {
-        self->driverDataMemoryPool = p;
+        _driverDataMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
-            self->driverDataMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
+        if (p != (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igMemoryPool *)getMemoryPool();
+            p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
+            _driverDataMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            self->driverDataMemoryPool = p;
+            p = (igMemoryPool *)getMemoryPool();
+            _driverDataMemoryPool = p;
         }
     }
-    p = g_igVisualContext_defaultVertexMemoryPool[0];
+    p = _defaultVertexMemoryPool;
     if (p != 0) {
-        self->vertexMemoryPool = p;
+        _vertexMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
-            self->vertexMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
+        if (p != (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igMemoryPool *)getMemoryPool();
+            p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
+            _vertexMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            self->vertexMemoryPool = p;
+            p = (igMemoryPool *)getMemoryPool();
+            _vertexMemoryPool = p;
         }
     }
-    p = g_igVisualContext_defaultInternalMemoryPool[0];
+    p = _defaultInternalMemoryPool;
     if (p != 0) {
-        self->internalMemoryPool = p;
+        _internalMemoryPool = (igMemoryPool *)p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        self->internalMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        _internalMemoryPool = p;
     }
-    p = g_igVisualContext_defaultTemporaryMemoryPool[0];
+    p = _defaultTemporaryMemoryPool;
     if (p != 0) {
-        self->temporaryMemoryPool = p;
+        _temporaryMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-            self->temporaryMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
+        if (p != (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igMemoryPool *)getMemoryPool();
+            p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
+            _temporaryMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            self->temporaryMemoryPool = p;
+            p = (igMemoryPool *)getMemoryPool();
+            _temporaryMemoryPool = p;
         }
     }
-    p = g_igVisualContext_defaultImageMemoryPool[0];
+    p = _defaultImageMemoryPool;
     if (p != 0) {
-        self->imageMemoryPool = p;
+        _imageMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
-            self->imageMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
+        if (p != (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igMemoryPool *)getMemoryPool();
+            p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
+            _imageMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            self->imageMemoryPool = p;
+            p = (igMemoryPool *)getMemoryPool();
+            _imageMemoryPool = p;
         }
     }
-    p = g_igVisualContext_defaultTextureMemoryPool[0];
+    p = _defaultTextureMemoryPool;
     if (p != 0) {
-        self->textureMemoryPool = p;
+        _textureMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
-            self->textureMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
+        if (p != (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igMemoryPool *)getMemoryPool();
+            p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
+            _textureMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            self->textureMemoryPool = p;
+            p = (igMemoryPool *)getMemoryPool();
+            _textureMemoryPool = p;
         }
     }
-    p = g_igVisualContext_defaultStatisticsMemoryPool[0];
+    p = _defaultStatisticsMemoryPool;
     if (p != 0) {
-        self->statisticsMemoryPool = p;
+        _statisticsMemoryPool = (igMemoryPool *)p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        self->statisticsMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        _statisticsMemoryPool = p;
     }
-    p = g_igVisualContext_defaultListMemoryPool[0];
+    p = _defaultListMemoryPool;
     if (p != 0) {
-        self->listMemoryPool = p;
+        _listMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
-        if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
-            self->listMemoryPool = p;
+        p = (igMemoryPool *)getMemoryPool();
+        p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
+        if (p != (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
+            p = (igMemoryPool *)getMemoryPool();
+            p = g_useOwnerAllocator != 0 ? p : (igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
+            _listMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
-            self->listMemoryPool = p;
+            p = (igMemoryPool *)getMemoryPool();
+            _listMemoryPool = p;
         }
     }
 
-    self->timer = (igObjectSlotView *)Gap::Core::igTimer::_instantiateFromPool((igMemoryPoolView *)igVisualContext_GetInternalMemoryPool((int *)self));
-    ((igTimerDispatchView *)self->timer.p)->Restart();
+    _timer = igTimer::_instantiateFromPool((igMemoryPoolView *)getInternalMemoryPool());
+    ((igTimerDispatchView *)_timer.p)->Restart();
 
-    pool = igVisualContext_GetListMemoryPool((int *)self);
-    releaseObjectRef(self->customStates);
-    self->customStates = (igObjectSlotView *)igCustomStateCollectionList_Create(pool);
-    pool = igVisualContext_GetListMemoryPool((int *)self);
-    releaseObjectRef(self->customFields);
-    self->customFields = (igObjectSlotView *)igCustomStateFieldList_Create(pool);
+    pool = getListMemoryPool();
+    ::igObject::release(_customStates.p);
+    _customStates.p = (igCustomStateCollectionList *)igCustomStateCollectionList_Create((int)pool);
+    pool = getListMemoryPool();
+    ::igObject::release(_customFields.p);
+    _customFields.p = (igCustomStateFieldList *)igCustomStateFieldList_Create((int)pool);
 }
 
-void FUN_00165a80(VisualContextCapabilityManager *self) {
-    unsigned char showFrameRate;
-    unsigned char commandLineFrame;
+void igVisualContext::userConstruct(int flag)
+{
+    bool showFrameRate;
+    bool commandLineFrame;
     void *properties;
-    ManagerList *list;
+    igTDataList<igVisualContext *> *list;
     int count;
 
-    Gap__Core__igObject__userConstruct((igObject *)self);
+    igObject::userConstruct(flag);
     if (DAT_00560758 == 0) {
-        DAT_00560758 = (igTDataList<VisualContextCapabilityManager *> *)igVisualContextList_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+        DAT_00560758 = (igTDataList<igVisualContext *> *)igVisualContextList_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     }
-    self->index = DAT_00560758->_count;
+    _contextIndex = DAT_00560758->_count;
     list = DAT_00560758;
     count = list->count();
     if (count < list->_capacity) {
@@ -145,114 +149,108 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     } else {
         ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, 4);
     }
-    list->_data[count] = self;
+    list->_data[count] = this;
     properties = ((PropertyRoot *)g_objectSystem)->properties;
-    showFrameRate = self->showFrameRate;
-    commandLineFrame = self->commandLineFrame;
-    igGetRegistryValue_Bool((igRegistry *)properties, 4, "showFrameRate", &showFrameRate, showFrameRate, 1);
-    igGetRegistryValue_Bool((igRegistry *)properties, 4, "commandLineFrameRate", &commandLineFrame, commandLineFrame, 1);
-    self->showFrameRate = showFrameRate;
-    self->commandLineFrame = commandLineFrame;
+    showFrameRate = _showFrameRate;
+    commandLineFrame = _commandLineFrameRate;
+    igGetRegistryValue_Bool((::igRegistry *)properties, 4, "showFrameRate", (unsigned char *)&showFrameRate, showFrameRate, 1);
+    igGetRegistryValue_Bool((::igRegistry *)properties, 4, "commandLineFrameRate", (unsigned char *)&commandLineFrame, commandLineFrame, 1);
+    _showFrameRate = showFrameRate;
+    _commandLineFrameRate = commandLineFrame;
 }
 
-void FUN_00165bb0(char *arg0) {
+void igVisualContext::userDestruct()
+{
     int i;
-    RefObj *o;
-    RefObj *l;
-    o = *(RefObj **)(arg0 + 56);
-    --o->references;
-    if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((igObject *)o);
-    }
-    K key(arg0);
-    i = Finder::Find(((RefObj *)DAT_00560758), key);
+    igTDataList<igVisualContext *> *list;
+
+    _timer->release();
+    i = DAT_00560758->find(this);
     if (i >= 0) {
-        List_RemoveWordAt((igDataList *)(((RefObj *)DAT_00560758)), i);
+        List_RemoveWordAt((::igDataList *)DAT_00560758, i);
     }
-    l = ((RefObj *)DAT_00560758);
-    if (l->count == 0) {
-        --l->references;
-        if (((unsigned long long)((long long)l->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)l);
-        }
+    list = DAT_00560758;
+    if (list->_count == 0) {
+        list->release();
         DAT_00560758 = 0;
     }
-    igObject_ReleaseDefaults((igObject *)arg0);
+    igObject::releaseDefaults();
 }
 
-void igVisualContext_Reset(void *arg0)
+void igVisualContext::reset()
 {
+
 }
 
-int igVisualContext_GetDriverDataMemoryPool(int *p)
+igMemoryPool *igVisualContext::getDriverDataMemoryPool() const
 {
-    return *(int *)((char *)p + 24);
+    return _driverDataMemoryPool;
 }
 
-int igVisualContext_GetVertexMemoryPool(int *p)
+igMemoryPool *igVisualContext::getVertexMemoryPool() const
 {
-    return *(int *)((char *)p + 28);
+    return _vertexMemoryPool;
 }
 
-int igVisualContext_GetInternalMemoryPool(int *p)
+igMemoryPool *igVisualContext::getInternalMemoryPool() const
 {
-    return *(int *)((char *)p + 32);
+    return _internalMemoryPool;
 }
 
-int igVisualContext_GetImageMemoryPool(int *p)
+igMemoryPool *igVisualContext::getImageMemoryPool() const
 {
-    return *(int *)((char *)p + 40);
+    return _imageMemoryPool;
 }
 
-int igVisualContext_GetStatisticsMemoryPool(int *p)
+igMemoryPool *igVisualContext::getStatisticsMemoryPool() const
 {
-    return *(int *)((char *)p + 48);
+    return _statisticsMemoryPool;
 }
 
-int igVisualContext_GetListMemoryPool(int *p)
+igMemoryPool *igVisualContext::getListMemoryPool() const
 {
-    return *(int *)((char *)p + 52);
+    return _listMemoryPool;
 }
 
-void igVisualContext_SetImageMemoryPool(int pool) {
-    g_igVisualContext_defaultImageMemoryPool[0] = (igObjectSlotView *)pool;
+void igVisualContext::setImageMemoryPool(igMemoryPool *pool)
+{
+    _defaultImageMemoryPool = pool;
 }
 
-void igVisualContext_SetBlendingMatrices(O_165d30 *arg0, unsigned int arg1, int arg2) {
-    int v[3];
-    void *s0;
-    int off;
-    int src;
-    char *s1;
+void igVisualContext::setBlendingMatrices(const unsigned int matrixCount, const igMatrix44f *matrixArray)
+{
+    int zero[3];
+    igMatrix44f *inverse;
     unsigned int i;
 
-    arg0->f72 = arg1;
-    arg0->f84 = arg2;
-    if (arg0->f88 < arg1) {
-        s0 = arg0->f80;
-        if (s0 != 0) {
-            ((V1 *)igVisualContext_GetDriverDataMemoryPool((int *)arg0))->v264(s0);
-            arg0->f80 = 0;
+    _blendMatricesCount = matrixCount;
+    _blendMatrices = matrixArray;
+    if (_inverseTransposeCount < matrixCount) {
+        if (_inverseTranspose != 0) {
+            ((igMemoryPoolView *)getDriverDataMemoryPool())->free(_inverseTranspose);
+            _inverseTranspose = 0;
         }
-        arg0->f80 = ((V2_165d30 *)igVisualContext_GetDriverDataMemoryPool((int *)arg0))->v220(arg1 << 6, 0x10);
-        arg0->f88 = arg1;
+        _inverseTranspose = (igMatrix44f *)((igMemoryPoolView *)getDriverDataMemoryPool())->allocateAligned(matrixCount << 6, 0x10);
+        _inverseTransposeCount = matrixCount;
     }
-    s1 = (char *)arg0->f80;
-    for (i = 0; i < arg1; i++) {
-        off = i << 6;
-        igMatrix44f_Invert((float *)s1, (const float *)(arg0->f84 + off));
-        v[0] = 0;
-        v[1] = 0;
-        v[2] = 0;
-        igMatrix44f_SetTranslation((float *)s1, (float *)v);
-        FUN_001903d0((float *)s1);
-        s1 += 0x40;
+    inverse = _inverseTranspose;
+    for (i = 0; i < matrixCount; i++) {
+        igMatrix44f_Invert((float *)inverse, (const float *)(_blendMatrices + i));
+        zero[0] = 0;
+        zero[1] = 0;
+        zero[2] = 0;
+        igMatrix44f_SetTranslation((float *)inverse, (float *)zero);
+        FUN_001903d0((float *)inverse);
+        inverse += 1;
     }
-    arg0->f76 = arg0->f76 + 1;
+    _blendIndex = _blendIndex + 1;
 }
 
-int igVisualContext_GetBlendingMatricesCount(igVisualContext *self) {
-    return self->_blendMatricesCount;
+int igVisualContext::getBlendingMatricesCount()
+{
+    return _blendMatricesCount;
+}
+}
 }
 
 static inline Obj_165e50 *getAlloc(void *o) {
@@ -261,189 +259,192 @@ static inline Obj_165e50 *getAlloc(void *o) {
     return (Obj_165e50 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
 }
 
-void *FUN_00165e50(Self *self, Obj_165e50 *src) {
+namespace Gap {
+namespace Gfx {
+
+igVertexArray *igVisualContext::softwareBlendVertex(const igVertexArray *vertexArray)
+{
     /* matching construct: random sweep — the order of the local declarations */
-    int k; int nb; Obj_165e50 *dst; Mat *buf; V_165e50 *q; int m; int i; int n; int j; Fl flags; V_165e50 acc, t, nacc, nt; Obj_165e50 *al;
-    if (src != 0) {
-    dst = (Obj_165e50 *)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)igVisualContext_GetVertexMemoryPool((int *)self));
-    flags = *src->v100();
-    flags.b &= ~0xF0;
-    flags.b &= ~0xF00;
-    n = src->count;
-    dst->v96((int *)&flags, n, src->count2, self);
-    if (flags.b & 4) {
-        for (i = 0; i < n; i++) {
-            dst->v164(i, src->v172(i));
-        }
-    }
-    for (j = 0; j < (int)(((unsigned)(flags.b & 0xF0000) >> 16) & 0xFF); j++) {
-        for (i = 0; i < n; i++) {
-            dst->v200(j, i, src->v208(j, i));
-        }
-    }
-    nb = ((unsigned)(src->v100()->b & 0xF0) >> 4) & 0xFF;
-    for (i = 0; i < n; i++) {
-        V_165e50 *p = src->v124(i);
-        acc = *p;
-        for (j = 0; j < nb; j++) {
-            float w = src->v184(j, i);
-            if (!(w <= 0.0f)) {
-                Vec3f_TransformProjective((float *)&t, (const float *)p, (const float *)(self->mats + (src->v196(j, i))));
-                t -= *p;
-                t *= w;
-                acc += t;
+    int k; int nb; igVertexArray *dst; igMatrix44f *buf; const igVec3f *q; int m; int i; int n; int j; igVec3f acc, t, nacc, nt;
+    if (vertexArray != 0) {
+        dst = igVertexArray::_instantiateFromPool((igMemoryPoolView *)getVertexMemoryPool());
+        igVertexFormat flags(vertexArray->getVertexFormat());
+        flags.setBlendWeightCount(0);
+        flags.setBlendIndexCount(0);
+        n = vertexArray->getCount();
+        dst->configure(flags, n, vertexArray->getUsageFlags(), this);
+        if (flags.hasVertexColors()) {
+            for (i = 0; i < n; i++) {
+                dst->setColor(i, vertexArray->getColor(i));
             }
         }
-        dst->v116(i, &acc);
-    }
-    if (flags.b & 2) {
-        buf = getAlloc(self)->v216(self->matCount << 6);
-        for (i = 0; i < self->matCount; i++) {
-            Mat *b = buf + i;
-            igMatrix44f_Invert((float *)b, (const float *)(self->mats + i));
-            FUN_001903d0((float *)b);
+        for (j = 0; j < flags.getTextureCoordCount(); j++) {
+            for (i = 0; i < n; i++) {
+                dst->setTextureCoord(j, i, *vertexArray->getTextureCoord(j, i));
+            }
         }
-        for (k = 0; k < n; k++) {
-            q = src->v136(k);
-            nacc = *q;
-            for (m = 0; m < nb; m++) {
-                float w = src->v184(m, k);
+        nb = vertexArray->getVertexFormat().getBlendWeightCount();
+        for (i = 0; i < n; i++) {
+            const igVec3f *p = vertexArray->getPosition(i);
+            acc = *p;
+            for (j = 0; j < nb; j++) {
+                float w = vertexArray->getWeight(j, i);
                 if (!(w <= 0.0f)) {
-                    Vec3f_TransformDirection((float *)&nt, (const float *)q, (const float *)(buf + (src->v196(m, k))));
-                    nt -= *q;
-                    nt *= w;
-                    nacc += nt;
+                    Vec3f_TransformProjective((float *)&t, (const float *)p, (const float *)(_blendMatrices + vertexArray->getBlendMatrixIndex(j, i)));
+                    t -= *p;
+                    t *= w;
+                    acc += t;
                 }
             }
-            nacc.normalize();
-            dst->v128(k, &nacc);
+            dst->setPosition(i, acc);
         }
-        Memory_FreeBuffer(buf);
-    }
-    return dst;
+        if (flags.hasNormals()) {
+            buf = (igMatrix44f *)poolOf(this, kIGMemoryPoolHandleTemporary)->malloc(_blendMatricesCount << 6);
+            for (i = 0; i < _blendMatricesCount; i++) {
+                igMatrix44f *b = buf + i;
+                igMatrix44f_Invert((float *)b, (const float *)(_blendMatrices + i));
+                FUN_001903d0((float *)b);
+            }
+            for (k = 0; k < n; k++) {
+                q = vertexArray->getNormal(k);
+                nacc = *q;
+                for (m = 0; m < nb; m++) {
+                    float w = vertexArray->getWeight(m, k);
+                    if (!(w <= 0.0f)) {
+                        Vec3f_TransformDirection((float *)&nt, (const float *)q, (const float *)(buf + vertexArray->getBlendMatrixIndex(m, k)));
+                        nt -= *q;
+                        nt *= w;
+                        nacc += nt;
+                    }
+                }
+                nacc.normalize();
+                dst->setNormal(k, nacc);
+            }
+            Memory_FreeBuffer(buf);
+        }
+        return dst;
     }
     return 0;
 }
 
-void igVisualContext_ResetToDefault(igVisualContext_166400 *ctx, int flags)
+void igVisualContext::resetToDefault(int which)
 {
     void *settings = ((SystemConfig *)g_objectSystem)->settings;
     int shadingMode;
     int cullMode;
     int fillMode;
-    unsigned char cullEnable;
+    bool cullEnable;
     int i, n;
-    Vec4 clear, white, tint, ambient, diffuse, specular, lightDir, colour;
-    int hot;
+    igVec4f clear, white, diffuse, emissive, ambient, specular, fogColor, clearColor;
 
-    if (flags & 1) {
-        ctx->vfunc_73(0);
-        ctx->vfunc_111(0);
-        clear.x = 0.0f; clear.y = 0.0f; clear.z = 0.0f; clear.w = 0.0f;
-        ctx->vfunc_113(&clear);
+    if (which & 1) {
+        setLightingState(false);
+        setNormalizeNormalsState(false);
+        clear.set(0.0f, 0.0f, 0.0f, 0.0f);
+        setSceneAmbient(clear);
     }
-    if (flags & 2) {
-        white.x = 1.0f; white.y = 1.0f; white.z = 1.0f; white.w = 1.0f;
-        ctx->vfunc_63(&white);
-        ctx->vfunc_96(0.0f);
-        tint.x = 1.0f; tint.y = 1.0f; tint.z = 1.0f; tint.w = 1.0f;
-        ctx->vfunc_100(&tint);
-        ambient.x = 0.0f; ambient.y = 0.0f; ambient.z = 0.0f; ambient.w = 1.0f;
-        ctx->vfunc_102(&ambient);
-        diffuse.x = 0.0f; diffuse.y = 0.0f; diffuse.z = 0.0f; diffuse.w = 1.0f;
-        ctx->vfunc_104(&diffuse);
-        specular.x = 0.0f; specular.y = 0.0f; specular.z = 0.0f; specular.w = 1.0f;
-        ctx->vfunc_106(&specular);
-        ctx->vfunc_108(1);
-        ctx->vfunc_98(0);
+    if (which & 2) {
+        white.set(1.0f, 1.0f, 1.0f, 1.0f);
+        setColor(white);
+        setMaterialShininess(0.0f);
+        diffuse.set(1.0f, 1.0f, 1.0f, 1.0f);
+        setMaterialDiffuse(diffuse);
+        emissive.set(0.0f, 0.0f, 0.0f, 1.0f);
+        setMaterialEmissive(emissive);
+        ambient.set(0.0f, 0.0f, 0.0f, 1.0f);
+        setMaterialAmbient(ambient);
+        specular.set(0.0f, 0.0f, 0.0f, 1.0f);
+        setMaterialSpecular(specular);
+        setMaterialSpecularState(true);
+        setMaterialColorMode(0);
     }
-    if (flags & 4) {
-        n = ctx->vfunc_35(8);
+    if (which & 4) {
+        n = getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES);
         if (n > 512) n = 1;
         if (n > 16) n = 16;
         n = (n <= 0) ? 1 : n; /* ternary form: the if form schedules the loop init into the bgtz delay slot */
         i = 0;
         while (i < n) {
-            ctx->vfunc_115(i, 0);
-            ctx->vfunc_146(i, 1);
-            ctx->vfunc_148(i, 0, 0);
-            ctx->vfunc_207(i, 0);
+            setTextureStageState(i, false);
+            setTextureStageFunc(i, 1);
+            setTextureStageCoordSource(i, IG_GFX_TEXTURE_COORD_SOURCE_VERTEX, 0);
+            setTextureMatrixState(i, false);
             i++;
         }
     }
-    if (flags & 8) {
-        ctx->vfunc_150(0);
-        ctx->vfunc_156(4, 5);
+    if (which & 8) {
+        setBlendingState(false);
+        setBlendingSourceDestination(IG_GFX_BLENDING_FUNCTION_SOURCE_ALPHA, IG_GFX_BLENDING_FUNCTION_ONE_MINUS_SOURCE_ALPHA);
     }
-    if (flags & 0x80) {
-        ctx->vfunc_157(0);
-        ctx->vfunc_159(0);
-        ctx->vfunc_161(7);
-        ctx->vfunc_165(-1);
-        ctx->vfunc_167(-1);
-        ctx->vfunc_163(0, 0, 0);
+    if (which & 0x80) {
+        setStencilState(false);
+        setStencilRefVal(0);
+        setStencilFunc(IG_GFX_STENCIL_FUNCTION_ALWAYS);
+        setStencilReadMask(-1);
+        setStencilWriteMask(-1);
+        setStencilOps(IG_GFX_STENCIL_OPERATION_KEEP, IG_GFX_STENCIL_OPERATION_KEEP, IG_GFX_STENCIL_OPERATION_KEEP);
     }
-    if (flags & 0x10) {
-        ctx->vfunc_239(0);
-        ctx->vfunc_241(0.0f);
-        ctx->vfunc_243(2);
-        lightDir.x = 0.0f; lightDir.y = 0.0f; lightDir.z = 0.0f; lightDir.w = 1.0f;
-        ctx->vfunc_245(&lightDir);
-        ctx->vfunc_247(1.0f);
-        ctx->vfunc_249(1000.0f);
+    if (which & 0x10) {
+        setFogState(false);
+        setFogDensity(0.0f);
+        setFogMode(IG_GFX_FOG_MODE_EXP2);
+        fogColor.set(0.0f, 0.0f, 0.0f, 1.0f);
+        setFogColor(fogColor);
+        setFogNear(1.0f);
+        setFogFar(1000.0f);
     }
-    if (flags & 0x20) {
-        igGetRegistryValue_Int((igRegistry *)settings, 4, "shadingMode", &shadingMode, 1, 1);
-        hot = -1;
-        ctx->vfunc_67(&hot);
-        colour.x = 0.0f; colour.y = 0.0f; colour.z = 0.0f; colour.w = 1.0f;
-        ctx->vfunc_175(&colour);
-        ctx->vfunc_179(1.0f);
-        ctx->vfunc_181(0);
-        ctx->vfunc_209(0);
-        ctx->vfunc_221(1);
-        ctx->vfunc_223(1, 1, 1, 1);
-        ctx->vfunc_225(shadingMode);
+    if (which & 0x20) {
+        igGetRegistryValue_Int((::igRegistry *)settings, 4, "shadingMode", &shadingMode, 1, 1);
+        setVertexMask(igVertexComponentFilter());
+        clearColor.set(0.0f, 0.0f, 0.0f, 1.0f);
+        setClearColor(clearColor);
+        setClearDepth(1.0f);
+        setClearStencil(0);
+        setVertexBlendingState(false);
+        setViewportClippingState(true);
+        setColorMask(true, true, true, true);
+        setShadingMode((IG_GFX_SHADING_MODE)shadingMode);
     }
-    if (flags & 0x40) {
-        igGetRegistryValue_Bool((igRegistry *)settings, 4, "cullEnable", &cullEnable, 0, 1);
-        igGetRegistryValue_Int((igRegistry *)settings, 4, "cullMode", &cullMode, 0, 1);
-        igGetRegistryValue_Int((igRegistry *)settings, 4, "fillMode", &fillMode, 0, 1);
-        ctx->vfunc_215(0);
-        ctx->vfunc_217(6);
-        ctx->vfunc_219(0.0f);
-        ctx->vfunc_227(cullEnable);
-        ctx->vfunc_229(cullMode);
-        ctx->vfunc_231(1);
-        ctx->vfunc_233(3);
-        ctx->vfunc_235(1);
-        ctx->vfunc_237(fillMode);
-        ctx->vfunc_143(0);
-        ctx->vfunc_188(0);
-        ctx->vfunc_259(0, 0);
+    if (which & 0x40) {
+        igGetRegistryValue_Bool((::igRegistry *)settings, 4, "cullEnable", (unsigned char *)&cullEnable, 0, 1);
+        igGetRegistryValue_Int((::igRegistry *)settings, 4, "cullMode", &cullMode, 0, 1);
+        igGetRegistryValue_Int((::igRegistry *)settings, 4, "fillMode", &fillMode, 0, 1);
+        setAlphaTestState(false);
+        setAlphaFunc(IG_GFX_ALPHA_FUNCTION_GEQUAL);
+        setAlphaRefValue(0.0f);
+        setCullFaceState(cullEnable);
+        setCullFaceMode((IG_GFX_CULL_FACE_MODE)cullMode);
+        setDepthTestState(true);
+        setDepthTestFunction(3);
+        setDepthWriteState(true);
+        setRenderMode((IG_GFX_RENDER_MODE)fillMode);
+        setDitherState(false);
+        setScissorType(IG_GFX_SCISSOR_TYPE_EQUALS_VIEWPORT);
+        setVertexArray(0, 0);
         for (i = 1; i < 16; i++)
-            ctx->vfunc_259(0, i);
+            setVertexArray(0, i);
     }
 }
 
-void FUN_00166a60(void *arg0, char arg1) {
-    *(char *)((char *)(arg0) + 312) = arg1;
+void igVisualContext::setDitherState(bool enable)
+{
+    _ditherState = enable;
 }
 
-void igVisualContext_UpdateFrameRateDisplay(void *arg0_, float fparg0, float fparg1) {
-    C_166a70 *arg0 = (C_166a70 *)arg0_;
+void igVisualContext::updateFrameRateDisplay(float frameTime, float drawTime)
+{
     float temp_f4;
     double temp_s2;
     double temp_s1;
 
-    DAT_005607a0[0] += fparg0;
-    DAT_005607a8[0] += fparg1;
+    DAT_005607a0[0] += frameTime;
+    DAT_005607a8[0] += drawTime;
     DAT_005607b0[0] += 1;
-    if (fparg0 < DAT_0048a470[0]) {
-        DAT_0048a470[0] = fparg0;
+    if (frameTime < DAT_0048a470[0]) {
+        DAT_0048a470[0] = frameTime;
     }
-    if (!(fparg0 <= DAT_00560838[0])) {
-        DAT_00560838[0] = fparg0;
+    if (!(frameTime <= DAT_00560838[0])) {
+        DAT_00560838[0] = frameTime;
     }
     if (!(DAT_005607a0[0] < 1.5f)) {
         temp_f4 = (float) DAT_005607b0[0];
@@ -458,61 +459,67 @@ void igVisualContext_UpdateFrameRateDisplay(void *arg0_, float fparg0, float fpa
         DAT_00560838[0] = 0.0f;
         DAT_0048a470[0] = (float) 0xF4240;
     }
-    if (arg0->f61 != 0) {
+    if (_commandLineFrameRate) {
         if (DAT_005607b0[0] == 0) {
             igReport_Printf("FRAME RATE:       %s\n", (char *)g_gsEventCount);
             igReport_Flush();
         }
     } else {
-        arg0->vX(0, 0, (int *)g_gsEventCount);
+        outputText(0, 0, (const char *)g_gsEventCount);
     }
 }
 
-void igVisualContext_OutputText(void) {
+void igVisualContext::outputText(int x, int y, const char *str)
+{
 
 }
 
-void igVisualContext_UpdatePrimitiveCountDisplay(void) {
+void igVisualContext::updatePrimitiveCountDisplay(float frameTime)
+{
 
 }
 
-void igVisualContext_DrawNonIndexed(void **arg0, int arg1, int arg2, int arg3) {
-    int temp_v0;
+void igVisualContext::drawNonIndexed(IG_GFX_DRAW primType, int numPrimitives, int vertexOffset)
+{
+    igIndexArray *indexArray;
 
-    temp_v0 = ((DW4VC_248_0 *)(arg0))->vX();
-    if (temp_v0 != 0) {
-        ((DW4VC_240_1 *)(arg0))->vX((int)(0));
+    indexArray = getIndexArray();
+    if (indexArray != 0) {
+        setIndexArray(0);
     }
-    ((DW4VC_284_3 *)(arg0))->vX((int)(arg1), (int)(arg2), (int)(arg3));
-    if (temp_v0 != 0) {
-        ((DW4VC_240_1 *)(arg0))->vX((int)(temp_v0));
+    draw(primType, numPrimitives, vertexOffset);
+    if (indexArray != 0) {
+        setIndexArray(indexArray);
     }
+}
+}
 }
 
 igVisualContext *igVisualContext_FindFirst(void) {
-    int r;
+    Gap::Gfx::igVisualContext *found;
     int i;
 
-    r = 0;
-    if (((L_166d40 *)DAT_00560758) != 0) {
-        for (i = 0; i < ((L_166d40 *)DAT_00560758)->count; i++) {
-            if (((Gap::Core::igObject *)(((L_166d40 *)DAT_00560758)->items[i]))->isOfType(g_igVisualContext_metaObject) != 0) {
-                r = ((L_166d40 *)DAT_00560758)->items[i];
+    found = 0;
+    if (DAT_00560758 != 0) {
+        for (i = 0; i < DAT_00560758->_count; i++) {
+            if (DAT_00560758->_data[i]->isOfType(Gap::Gfx::igVisualContext::getClassMeta()) != 0) {
+                found = DAT_00560758->_data[i];
                 break;
             }
         }
     }
-    return (igVisualContext *)r;
+    return (igVisualContext *)found;
 }
 
-static inline int countOf(const igIntList *list) { return list->_count; }
+namespace Gap {
+namespace Gfx {
 
-void igVisualContext_LoadDefaultDriverDatabase(int value)
+void igVisualContext::loadDefaultDriverDatabase()
 {
     int count;
     void *registry = ((ShaderSetup *)g_objectSystem)->registry;
     void *builder = ((ShaderSetup *)g_objectSystem)->builder;
-    igSmartPointer<igIntList> list((igIntList *)igContextList_Create((int)igVisualContext_GetInternalMemoryPool((int *)value)));
+    igSmartPointer<igIntList> list((igIntList *)igContextList_Create((int)getInternalMemoryPool()));
     bool found = false;
 
     ((Gap::Core::igRegistry *)registry)->getValue(4, "ignoreDriverDatabase", *(unsigned char *)&found, 0, 1);
@@ -520,11 +527,11 @@ void igVisualContext_LoadDefaultDriverDatabase(int value)
     igIntList *l = list;
     count = l->_count;
     if (count < l->_capacity) {
-        l->_count = countOf(l) + 1;
+        l->_count = l->getCount() + 1;
     } else {
         ((Gap::Core::igDataList *)l)->resizeAndSetCount(count + 1, 4);
     }
-    ((int *)l->_data)[count] = value;
+    ((int *)l->_data)[count] = (int)this;
     igDriverDatabase_GatherProperties(builder, (igTDataList<igVisualContextView *> *)(igIntList *)list);
     if (igRegistry_IsLoadingEnabled() != 0) {
         if (igDriverDatabase_Load((igDriverDatabase *)builder, (const char *)"", (const char *)"") != 0) igDriverDatabase_ApplyToRegistry((igDriverDatabase *)builder, (int)registry, 4, 0);
@@ -532,53 +539,66 @@ void igVisualContext_LoadDefaultDriverDatabase(int value)
     FUN_002daab0((igDriverDatabase *)builder, (int)registry, 4, 0);
 }
 
-void igVisualContext_SetVertexPipelineMode(void) {
+void igVisualContext::setVertexPipelineMode(int mode)
+{
 
 }
 
-int igVisualContext_GetVertexPipelineMode(void) {
+int igVisualContext::getVertexPipelineMode() const
+{
     return 0;
 }
 
-void FUN_00166fb0(void) {
+void igVisualContext::setPixelPipelineMode(IG_GFX_PIXEL_PIPELINE_MODE mode)
+{
 
 }
 
-int FUN_00166fc0(void) {
-    return 0;
+IG_GFX_PIXEL_PIPELINE_MODE igVisualContext::getPixelPipelineMode() const
+{
+    return IG_GFX_PIXEL_PIPELINE_MODE_DEFAULT;
 }
 
 /* Empty slot: returns 0 without touching the receiver. */
-int igVisualContext_GetLastError(void) {
+int igVisualContext::getLastError()
+{
     return 0;
+}
+}
 }
 
 igSmartPointer<igObject> FUN_00167130(SlotObject_166fe0 *object) {
     return object->f12;
 }
 
-int igVisualContext_GetVertexArray2(int arg0, int arg1)
+namespace Gap {
+namespace Gfx {
+
+igVertexArray2 *igVisualContext::getVertexArray(unsigned int stream)
 {
-  int new_var;
-  new_var = arg1 * 4;
-  return *((int *) (((char *) (new_var + arg0)) + 240));
+    return _vertexArray2[stream];
 }
 
-void igVisualContext_SetViewMatrixHint(MatrixInverseCache *self, const float *matrix) {
-    igMatrix44f_Copy(self->matrix, matrix);
-    self->inverseDirty = 1;
+void igVisualContext::setViewMatrixHint(const igMatrix44f &mat)
+{
+    igMatrix44f_Copy(_viewMatrixHint.m, mat.m);
+    _viewMatrixDirty = true;
 }
 
-void igVisualContext_GetViewMatrixHint(char * arg0, int arg1) {
-    igMatrix44f_Copy((float *)arg1, (float *)((arg0 + 108)));
+void igVisualContext::getViewMatrixHint(igMatrix44f &mat) const
+{
+    igMatrix44f_Copy(mat.m, _viewMatrixHint.m);
 }
 
-void igVisualContext_GetViewMatrixInverse(MatrixInverseCache *self, float *out) {
-    if (self->inverseDirty) {
-        igMatrix44f_Invert(self->inverse, self->matrix);
-        self->inverseDirty = 0;
+void igVisualContext::getViewMatrixInverse(igMatrix44f &mat)
+{
+    if (_viewMatrixDirty) {
+        igMatrix44f_Invert(_viewMatrixInverse.m, _viewMatrixHint.m);
+        _viewMatrixDirty = false;
     }
-    igMatrix44f_Copy(out, self->inverse);
+    igMatrix44f_Copy(mat.m, _viewMatrixInverse.m);
+}
+}
 }
 
 int Gap__Gfx__igVisualContextCapabilityManager__vfunc_23(igVisualContextCapabilityManager *self) {

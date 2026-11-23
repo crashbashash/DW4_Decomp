@@ -8,7 +8,7 @@ void igShadeModelAttr::apply(igVisualContext *vc)
 
 void igShadeModelAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setMode(((igVisualContextDispatchView *)vc)->getShadingMode());
+    setMode(vc->getShadingMode());
 }
 
 /* Setter for the reflected _mode field (the shading mode enum). */
