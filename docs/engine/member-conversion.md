@@ -128,7 +128,8 @@ local `…View` classes) go away as their users convert.
 
 `tools/classconv.py <spec.py> {tables,memberize,splice,decls,rekey,all} [<class> ...]` runs steps 1-3 for a batch
 from a spec file (Python defining `SPECS`; its docstring lists the keys: `rows`, `typed`, `map`/`extra`/`keep`/`data`,
-`gen`, hand `bodies` in the kit's form, `boot` overrides, `lib`, `base`, `add`). It stubs every C function a hand
+`gen`, hand `bodies` in the kit's form, `ctor`/`dtor` for the out-of-line constructor and destructor, `boot`
+overrides, `lib`, `base`, `add`). It stubs every C function a hand
 body or the generator replaces with the member's parameters before `memberize.py --apply`, splices the generator's
 boilerplate and the hand bodies over the memberized definitions (a definition's head only, in code: never a call
 naming the member, nor a comment or string; an overload's, static or not, by its signature), writes a
@@ -724,8 +725,20 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
 
 - Definitions written before the namespace spelling (`void Gap::Gui::igRenderer::setVisualContext(…)` at file
   scope) compile to the same code; `tools/memberize.py --respell --apply` moves them into their namespaces.
-- A destructor a class declares out of line, and a constructor whose C form constructs its base after other
-  statements, are written by hand.
+- A constructor whose C form constructs its base after other statements is written by hand. A constructor or
+  destructor the class declares out of line, whose user body is the kit's, is a `tools/classconv.py` hand body
+  keyed `ctor`/`dtor` and mapped from its C name in `extra` (igVisualContext's, at 0x1510e0 and 0x150af0): the
+  C form is stubbed to its receiver (the destructor's delete flag dropped), memberize writes `C::C()`/`C::~C()`
+  over the stub, and the splice writes the body.
+- A C form whose parameter types differ from the member's in layout-compatible ways is converted, not refused:
+  a type spelled by its owner (`igFile::OpenMode` in igIGBFile) is the member's bare one; an integer for another
+  integer, an enum or `bool` takes the member's type under the C name; a pointer to another type is the member's
+  parameter, and the body's first line declares the C name from it (`ImagePalette *palette = (ImagePalette
+  *)misc;`), so the body reads what it read; callers cast a pointer argument the member's type does not take
+  implicitly. A 64-bit integer for a narrower one is retyped only when the memberize table row states the member's
+  signature; a pointer for a value or a reference, a float for an integer, or another parameter count is refused,
+  naming the parameter. A local the retyping adds is the tool's: check the unit, and fold it into the body when the
+  unit matches without it.
 - The flat struct `igObject` and the class `Gap::Core::igObject` are two types of one name, and
   `tools/memberize.py` writes the casts between them: a receiver or a `Class *` argument declared as the flat struct
   (or a flat subclass, or not declared) is cast to the Gap class (`((Gap::Core::igObject *)m)->realloc(…)`,
@@ -744,7 +757,9 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
   a template instance a unit's object now spells with the class's Gap scope
   (`__dt__42igSmartPointer<Q33Gap3Gfx14igVertexStream>Fv` for `__dt__32igSmartPointer<14igVertexStream>Fv`) and a
   name of a class renamed or retired (`__dt__11igScopeLockFv` for `__dt__10ScopedLockFv`; a `stripped` body the
-  object no longer compiles goes).
+  object no longer compiles goes). `tools/whole_file_rows.py` places a `stripped` body the object compiles again at
+  the retail start no other function takes, where it alone fits that one free start (igDirectory's destructor at
+  0x2c3b00 once igIGBFile converted); two candidates for one start, or one fitting two, still need `--at`.
 - `tools/classconv.py` stubs a C function with the member's parameters and its own return type; where the member
   returns another type (an unnamed descriptor getter returning `int` becomes `igVec3fMetaField *getMetaField()`),
   memberize casts the uses back: an assignment of the result to the C form's integer

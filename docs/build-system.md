@@ -78,7 +78,9 @@ conversion order are in [member conversion](engine/member-conversion.md).
 - **Destructors.** Alchemy's destructors are implicit and not virtual: `Class::~Class` for a class that declares
   none removes the C body `Class_Destroy(self, flag)` (the compiler writes the vtable stamp, the members'
   release and the delete where an object is destroyed). `Class_Destroy(p, 1)` on a pointer declared as the Gap
-  class becomes `delete p`. A declared out-of-line destructor is refused (its user body is written by hand).
+  class becomes `delete p`. A declared out-of-line destructor takes the head `Class::~Class()` over a C form
+  emptied to its head (its user body is written by hand: `tools/classconv.py`'s `dtor` hand body stubs the C form
+  and splices the body; `ctor` does the same for a constructor) and is refused over any other C body.
 - **The boundary.** Code that still names a converted member's C name keeps it: C callers, an unconverted
   subclass's direct call of a virtual default, a construction or destruction of an object still written as a
   flat struct (a GetVTable probe), and a call of a private member from outside its class (a protected one from
@@ -93,8 +95,19 @@ conversion order are in [member conversion](engine/member-conversion.md).
   rewritten like any call, its receiver cast to the class (a macro parameter parenthesised), and so is a call in
   a member function a class body defines; a statement is a declaration of the C name only when a type precedes
   it. A parameter spelled `Gap::<Library>::Class *` in a C form compares equal to the member's bare `Class *`
-  and is written bare in the class's scope. Rows a batch adds to `class-members.tsv` go after their class's
-  last row.
+  and is written bare in the class's scope, and one spelling a type nested in the class or a base by its owner
+  (`igFile::OpenMode` in igIGBFile) equal to the member's bare `OpenMode`. Rows a batch adds to `class-members.tsv`
+  go after their class's last row.
+- **Parameter types.** A C form whose parameters differ from the member's only in types of one layout takes the
+  member's: an integer for another integer, an enum or `bool` (CoreFiles2's `int` for an `unsigned int` size)
+  keeps its C name under the member's type; a pointer to another type becomes the member's parameter and the
+  body's first line declares the C name from it (`unsigned int *dst = (unsigned int *)dest;` for
+  `pal_8_To_rgba_8888(unsigned char *dest, …)`), the C name keeping the member's type where the member's name is
+  the C form's, a local's or a field's; callers cast a pointer argument the member's type does not take implicitly
+  (`(unsigned char *)buf`); an integer the member takes as a pointer is cast at each call. A 64-bit integer for a
+  narrower one is retyped only when the table row states the member's signature. A different count, or a
+  parameter that means something else (a pointer for a value or a reference, a float for an integer), is refused
+  naming the parameter. The tool notes each retyped parameter: check the unit.
 - **A reused receiver.** A C body that assigns its receiver once done with it (`self = (igRegistry *)r.p;`)
   keeps the name as a local of the receiver's declared type from that statement on: the assignment declares it
   when every later use is inside its block, else the body's first line does. An assignment inside an expression,
@@ -136,7 +149,10 @@ conversion order are in [member conversion](engine/member-conversion.md).
   map, another unit's row or the address in the name). A member whose mangled name changed only in a parameter's
   type (`platformLoad__Q33Gap3Gfx7igImageFP6igFile` once igFile is the Gap class) or in its class template's
   argument (`__dt__32igSmartPointer<14igVertexStream>Fv` once igVertexStream is) takes its former name's address
-  when it fits there and one name of that class, method, constness and parameter count went and one came.
+  when it fits there and one name of that class, method, constness and parameter count went and one came. A name
+  the present row strips that the object now compiles to the copy at a retail start no other function takes (a
+  body emitted again: igDirectory's destructor at 0x2c3b00 once igIGBFile no longer called its C copy) is placed
+  there, where it fits that one free start and no other stripped name does.
   Byte-identical functions left with the same starts (two empty virtual slots, inline destructors of one shape) take
   the starts retail names them at: the calls, pointers and vtable words of the members placed so far, read as for
   `duplicates`; one retail names outside the range is no member. What retail leaves open stops the run naming each

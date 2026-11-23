@@ -50,7 +50,10 @@ A spec file is Python defining SPECS = {<class>: dict(...)}; `import classconv` 
   keep     C suffixes that stay free functions (memberize leaves them; anything else unmapped is reported)
   data     {datum suffix: member} for `g_<Class>_<suffix>`
   gen      members whose definitions the generator writes (default GEN)
-  bodies   {member: definition}, `{C}` the class (the definition of that member is replaced)
+  bodies   {member: definition}, `{C}` the class (the definition of that member is replaced); `ctor` and `dtor`
+           (here and as `map`/`extra` members) are the constructor and the destructor the class declares out of
+           line, whose C forms are stubbed to the receiver (the destructor's delete flag dropped), memberized to
+           `C::C()`/`C::~C()` and spliced like any other hand body
   overloads   a `map`/`extra` member and its `bodies` key may be the overload's full declaration
            (`void removeInfo(const char *infoName);`), matched to the class's rows (the spec's and
            class-members.tsv's) by signature: name, parameter types and `const`, whatever the spelling's access
@@ -378,10 +381,11 @@ def ns(lib, body):
 
 
 def decl_of(rows, member):
-    """(static, return type, parameter list without defaults) of the first row declaring `member`, or None."""
+    """(static, return type, parameter list without defaults) of the first row declaring `member`, or None (a
+    constructor's name is not its destructor's)."""
     for r in rows:
         r = re.sub(_ACCESS, "", r)
-        m = re.match(r"((?:virtual|static|inline)\s+)*(.*?)\b%s\s*\(" % re.escape(member), r)
+        m = re.match(r"((?:virtual|static|inline)\s+)*(.*?)(?<![\w~])%s\s*\(" % re.escape(member), r)
         close = _closing(r, m.end() - 1) if m else None
         if close is not None:
             params = ", ".join(_top_split(p, "=")[0].strip() for p in _top_split(r[m.end():close], ","))
@@ -985,12 +989,26 @@ def step_rekey(tree):
     print(tree.run(["tools/memberize.py", "--rekey", "--apply"]).rstrip())
 
 
+def special_members(c, spec):
+    """`spec` with its `ctor` and `dtor` members named as C++ names them: `extra`/`map` values and `bodies` keys
+    `ctor` are the constructor `c`, `dtor` the destructor `~c` (a constructor or destructor the class declares out
+    of line, whose body is a hand body: its C form is stubbed, memberized and spliced as any other)."""
+    names = {"ctor": c, "dtor": "~" + c}
+    out = dict(spec)
+    for key in ("extra", "map"):
+        if key in spec:
+            out[key] = {k: names.get(v, v) for k, v in spec[key].items()}
+    if "bodies" in spec:
+        out["bodies"] = {names.get(k, k): v for k, v in spec["bodies"].items()}
+    return out
+
+
 def load_specs(path):
     sys.path.insert(0, HERE)
     s = importlib.util.spec_from_file_location("classconv_spec", path)
     mod = importlib.util.module_from_spec(s)
     s.loader.exec_module(mod)
-    return mod.SPECS
+    return {c: special_members(c, spec) for c, spec in mod.SPECS.items()}
 
 
 def main(argv=None):

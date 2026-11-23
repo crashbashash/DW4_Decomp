@@ -50,7 +50,9 @@ call it after. The range's present rows settle what they settled before, so rege
 its row unchanged and a conversion's row diff is what the conversion changed (stable_row):
 
   * a compiler name they bind keeps its address (tools/memberize.py renames a converted member's key, and empty
-    virtual functions fit many starts), and a name they strip is dropped (C++ files); a function whose name
+    virtual functions fit many starts), and a name they strip is dropped (C++ files) unless it alone fits a retail
+    start no other function takes, where it is placed (a body the object emits again: igDirectory's destructor at
+    0x2c3b00 once igIGBFile no longer calls its C copy); a function whose name
     differs from one they placed only in a parameter's type or its class template's argument
     (`platformLoad(igFile *)` once igFile is `Gap::Core::igFile`, `igSmartPointer<igVertexStream>::~igSmartPointer`
     once igVertexStream is the Gap class: the same class, name, constness and parameter count, one such name either
@@ -249,7 +251,7 @@ class Twins:
         return copy
 
 
-def locate(functions, retail, starts, placed, dropped=(), retyped=None, referenced=None):
+def locate(functions, retail, starts, placed, dropped=(), retyped=None, referenced=None, stripped=()):
     """{name: va} for the functions with a retail copy. A function that fits several starts is
     settled by the others: a file keeps its functions in order, and each start is used once. A start a
     name is placed at (symbols.txt, the present row, `--at`) is that name's: a byte-identical function
@@ -261,7 +263,12 @@ def locate(functions, retail, starts, placed, dropped=(), retyped=None, referenc
     shape) are settled by what retail says of them: `referenced(found)` ({name: va}, the addresses the retail
     calls, pointers and vtable words of the functions placed so far give the functions not placed, as reach
     reads them) places one at the start retail names it at, and one retail names outside its starts is no
-    member (a duplicate). What that leaves to a guess stops the run with the candidates."""
+    member (a duplicate). What that leaves to a guess stops the run with the candidates.
+
+    `stripped` names the present rows strip (each of `dropped` too, so it takes no start another function fits):
+    one the object now compiles to the retail copy at a start no function took is that start's member, where it
+    fits that one free start alone and no other of them fits it (igDirectory's destructor at 0x2c3b00, emitted
+    once igIGBFile's conversion stopped calling the C copy)."""
     found, open_, settled = {}, {}, set()
     for name, function in functions.items():
         if name in dropped:
@@ -312,6 +319,12 @@ def locate(functions, retail, starts, placed, dropped=(), retyped=None, referenc
                      % ", ".join("%s at %s" % (n, "/".join("0x%x" % v for v in h)) for n, h in open_.items()))
         found.update(single)
         open_ = {n: h for n, h in open_.items() if n not in single}
+    taken = set(found.values())
+    revived = {n: [va for va in starts if va not in taken and functions[n].fits(retail, va)]
+               for n in stripped if n in functions and n not in found}
+    revived = {n: hits[0] for n, hits in revived.items() if len(hits) == 1}
+    fits = collections.Counter(revived.values())
+    found.update({n: va for n, va in revived.items() if fits[va] == 1})
     return found
 
 
@@ -980,15 +993,19 @@ def main(argv=None):
     # table entry, the retail functions a partial file links from retail, the data names they spelled)
     previous = previous_rows(os.path.join(a.config, "unit-objects.json"), lo, hi)
     settled = previous_places(previous)
+    was_stripped = []
     if a.cxx:
         # a compiler name they bind (tools/memberize.py renames a converted member's key) keeps its address,
         # since members of one shape (empty virtual functions) fit several starts, and a function they strip is
-        # dropped, since byte-identical inline copies (one shape of destructor) fit the start one of them owns
+        # dropped, since byte-identical inline copies (one shape of destructor) fit the start one of them owns;
+        # one that alone fits a start nothing else takes is placed there (locate's `stripped`)
         for name, va in settled.items():
             if lo <= va < hi:
                 placed.setdefault(name, va)
         for row in previous.values():
-            a.drop.extend(name for name in row.get("stripped") or () if name not in forced)
+            was_stripped.extend(name for name in row.get("stripped") or () if name not in forced
+                                and name not in a.drop)
+        a.drop.extend(was_stripped)
     placed.update(forced)
     symbols_path = os.path.join(a.config, "symbols.txt")
 
@@ -1024,7 +1041,7 @@ def main(argv=None):
                 return reach(found, retail, syms, headers, obj, functions, records, known, hi, twins)[1]
 
             at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop,
-                        retyped(functions, settled, placed, lo, hi) if a.cxx else None, referenced)
+                        retyped(functions, settled, placed, lo, hi) if a.cxx else None, referenced, was_stripped)
             owned.update({va: name for name, va in at.items()})
             # the static initializer is a member at its retail address, after all `.text`
             initializer = static_initializer(obj, syms, headers, retail, forced, settled)

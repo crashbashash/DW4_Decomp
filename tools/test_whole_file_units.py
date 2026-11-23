@@ -378,6 +378,31 @@ class Rows(unittest.TestCase):
         self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), placed, (), hints),
                          {kept: 0x14a000, stream: 0x14aaf0})
 
+    def test_a_body_the_present_row_strips_takes_the_free_start_it_alone_fits(self):
+        # IGBFile2: the core unit 0x2b5d50's row stripped igDirectory's destructor while igIGBFile's C code called
+        # the C copy igDirectory_Destroy; once igIGBFile converted, the object emits the destructor again for
+        # retail's 0x2c3b00, and the run stopped with "no compiled function reproduces 0x2c3b00 igDirectory_Destroy"
+        # until `--at` placed it
+        dtor, inline = "__dt__Q33Gap4Core11igDirectoryFv", "__dt__30igSmartPointer<12igDirectory>Fv"
+        ctor = "__ct__Q33Gap4Core11igDirectoryFv"
+        retail = {0x2c3b00: 2, 0x2c3d60: 1}
+        functions = {ctor: self.Function(1), dtor: self.Function(2), inline: self.Function(3)}
+        placed = {ctor: 0x2c3d60, "igDirectory_Destroy": 0x2c3b00}
+        stripped = (dtor, inline)
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), placed, stripped),
+                         {ctor: 0x2c3d60})
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), placed, stripped,
+                                                stripped=stripped), {ctor: 0x2c3d60, dtor: 0x2c3b00})
+        # two stripped bodies fitting the free start, or one fitting two, are a guess: --at settles them
+        twin = "__dt__Q33Gap4Core14igDirEntryListFv"
+        functions[twin] = self.Function(2)
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), placed, stripped + (twin,),
+                                                stripped=stripped + (twin,)), {ctor: 0x2c3d60})
+        del functions[twin]
+        retail[0x2c3c00] = 2
+        self.assertEqual(whole_file_rows.locate(functions, retail, sorted(retail), placed, stripped,
+                                                stripped=stripped), {ctor: 0x2c3d60})
+
     def test_identical_functions_are_settled_by_their_retail_references(self):
         # the gfx unit 0x1493e0 once igVertexStream was converted: its two empty slots (0x180bc0, 0x180eb0) and two
         # empty inline resets of other classes all fit both starts; the vtables a member reaches name each

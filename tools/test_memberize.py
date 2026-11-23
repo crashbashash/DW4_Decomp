@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """tools/memberize.py rewrites free `<Class>_<Method>` functions and data as members, on a small tree."""
 import json
+import io
 import os
 import re
 import sys
@@ -419,6 +420,29 @@ class Memberize(unittest.TestCase):
         self.assertIn("int Widget::getCount() {", widget)
         self.assertTrue(widget.endswith("}\n}\n}\n"))
 
+    def test_an_out_of_line_destructor_takes_its_head_over_a_stub(self):
+        # VisualCtx: igVisualContext declares `~igVisualContext()`; classconv empties FUN_00150af0 to its receiver
+        # (its hand body follows in the splice), and memberize writes the destructor's head over the stub
+        self.append("config/class-members.tsv", "Widget\tvirtual ~Widget();\n")
+        self.append("src/game/Widget.inc", "Widget *Widget_Destroy(Widget *self, short deleteFlag) {\n"
+                                           "    if (deleteFlag > 0)\n        Memory_Free(self);\n    return self;\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Destroy\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"]["Widget_Destroy"] = "0x00100100"
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        write(self.table, TABLE + "Widget_Destroy\tWidget::~Widget\n")
+        before = self.read("src/game/Widget.inc")
+        self.assertEqual(self.run_tool("--apply"), 2)               # a user body: written by hand
+        self.assertEqual(before, self.read("src/game/Widget.inc"))
+        write(os.path.join(self.root, "src/game/Widget.inc"),
+              before.replace("Widget *Widget_Destroy(Widget *self, short deleteFlag) {\n    if (deleteFlag > 0)\n"
+                             "        Memory_Free(self);\n    return self;\n}\n",
+                             "Widget *Widget_Destroy(Widget *self)\n{\n}\n"))
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("Widget::~Widget()\n{\n}\n", self.read("src/game/Widget.inc"))
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        self.assertEqual(rows["0x00100000"]["emitted"]["__dt__6WidgetFv"], "0x00100100")
+
     def test_a_flat_struct_pointer_is_cast_to_the_converted_class_and_back(self):
         # the flat struct Widget (the C view) and Gap::Game::Widget are two types: a flat pointer passed as the
         # receiver or as a Widget * argument is cast to the Gap class, and a converted body passes `this` to C as
@@ -805,6 +829,92 @@ class Memberize(unittest.TestCase):
         row = json.loads(self.read("config/SLUS-20836/unit-objects.json"))["0x00100000"]
         self.assertEqual(row["stripped"], ["__dt__11igScopeLockFv", "__dt__25igSmartPointer<8igObject>Fv"])
         self.assertEqual(row["emitted"]["__dt__40igSmartPointer<Q33Gap4Core11igSemaphore>Fv"], "0x002ba970")
+
+    def test_a_c_head_naming_a_nested_enum_by_its_owner_is_the_members(self):
+        # IGBFile2: igIGBFile_OpenFile(..., igFile::OpenMode mode) was refused as "(char const*, igFile : :
+        # OpenMode) are not Gap::Core::igIGBFile::open's (char const*, OpenMode)": igIGBFile derives from igFile
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\nGadget\tGame\n")
+        self.append("config/class-members.tsv", "Widget\tenum Mode { kRead, kWrite };\n"
+                                                "Gadget\tint open(const char *fileName, Mode mode);\n")
+        self.append("src/game/Game.h", "extern \"C\" int Gadget_Open(Gadget *self, const char *name, int mode);\n")
+        self.append("src/game/Widget.inc", "int Gadget_Open(Gadget *self, const char *name, Widget::Mode mode) {\n"
+                                           "    return mode;\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Gadget_Open\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"]["Gadget_Open"] = "0x00100100"
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        write(self.table, TABLE + "Gadget_Open\tGadget::open\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        # the body moves into the class's namespaces (cxxscope.respell), its head keeping the C form's spelling
+        self.assertIn("int Gadget::open(const char *name, Widget::Mode mode) {\n    return mode;\n}",
+                      self.read("src/game/Widget.inc"))
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        self.assertEqual(rows["0x00100000"]["emitted"]["open__Q33Gap4Game6GadgetFPCcQ43Gap4Game6Widget4Mode"],
+                         "0x00100100")
+
+    def test_a_c_head_of_layout_compatible_types_takes_the_members(self):
+        # GfxConverters: FUN_0016f690(unsigned *, unsigned char *, int, ImagePalette *) was refused against
+        # igPsx2ImageConvert::pal_8_To_rgba_8888(unsigned char *dest, const unsigned char *source, int nSample,
+        # void *misc); CoreFiles2's int for an unsigned size, Psx2VC2's int for a bool
+        self.append("config/class-members.tsv",
+                    "Widget\tstatic void convert(unsigned char *dest, const unsigned char *source, int nSample, "
+                    "void *misc);\n"
+                    "Widget\tvoid reserve(unsigned int size, bool enable);\n")
+        self.append("src/game/Game.h", "struct ImagePalette { int used; unsigned int colors[16]; };\n"
+                                       "extern \"C\" void FUN_00100100(unsigned int *dst, unsigned char *src, int n, "
+                                       "ImagePalette *palette);\n"
+                                       "extern \"C\" void Widget_Reserve(Widget *self, int size, int enable);\n")
+        self.append("src/game/Widget.inc",
+                    "void FUN_00100100(unsigned int *dst, unsigned char *src, int n, ImagePalette *palette) {\n"
+                    "    palette->used = 1;\n    while (n-- > 0)\n        *dst++ = palette->colors[*src++];\n}\n"
+                    "void Widget_Reserve(Widget *self, int size, int enable) {\n"
+                    "    self->_count = enable ? size : 0;\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Convert(Widget *w, unsigned int *buf, unsigned char *bytes, ImagePalette *pal) {\n"
+                    "    FUN_00100100(buf, bytes, 4, pal);\n    FUN_00100100((unsigned int *)bytes, bytes + 1, 4, pal);\n"
+                    "    Widget_Reserve(w, 8, 1);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 FUN_00100100\n00100120 000020 Widget_Reserve\n")
+        write(self.table, TABLE + "FUN_00100100\tWidget::convert\nWidget_Reserve\tWidget::reserve\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("void Widget::convert(unsigned char *dest, const unsigned char *source, int n, void *misc) {\n"
+                      "    unsigned int *dst = (unsigned int *)dest;\n"
+                      "    unsigned char *src = (unsigned char *)source;\n"
+                      "    ImagePalette *palette = (ImagePalette *)misc;\n"
+                      "    palette->used = 1;\n", widget)
+        self.assertIn("void Widget::reserve(unsigned int size, bool enable) {\n    _count = enable ? size : 0;\n}",
+                      widget)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    Widget::convert((unsigned char *)buf, bytes, 4, pal);\n"
+                      "    Widget::convert((unsigned char *)bytes, bytes + 1, 4, pal);\n"
+                      "    w->reserve(8, 1);\n", users)
+
+    def test_a_c_head_whose_parameter_means_something_else_is_refused(self):
+        # GfxImage's FUN_00156340(const igStringRef *) for igImage::setName(igStringRef), CoreFiles's
+        # igFile_SkipToChar(long long) for readPastChar(char) unless the table row states the member's signature
+        self.append("src/game/Game.h", "struct igStringRef { char *p; };\n")
+        self.append("config/class-members.tsv", "Widget\tvoid setName(igStringRef name);\n"
+                                                "Widget\tvoid readPastChar(char c);\n")
+        self.append("src/game/Widget.inc", "void Widget_SetName(Widget *self, const igStringRef *name) {\n}\n"
+                                           "void Widget_SkipToChar(Widget *self, long long c) {\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_SetName\n"
+                                                     "00100120 000020 Widget_SkipToChar\n")
+        before = self.read("src/game/Widget.inc")
+        for row, message in (("Widget_SetName\tWidget::setName\n",
+                              "parameter 1 is a pointer (igStringRef const*) where the member takes a value "
+                              "(igStringRef)"),
+                             ("Widget_SkipToChar\tWidget::readPastChar\n",
+                              "parameter 1 is a 64-bit integer (long long) where the member takes an integer (char) "
+                              "(a table row giving the member's signature retypes it)")):
+            write(self.table, TABLE + row)
+            err = io.StringIO()
+            with mock.patch("sys.stderr", err):
+                self.assertEqual(self.run_tool("--apply"), 2)
+            self.assertIn(message, err.getvalue())
+            self.assertEqual(before, self.read("src/game/Widget.inc"))
+        write(self.table, TABLE + "Widget_SkipToChar\tvoid Widget::readPastChar(char c)\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("void Widget::readPastChar(char c) {\n}", self.read("src/game/Widget.inc"))
 
 
 class Helpers(unittest.TestCase):

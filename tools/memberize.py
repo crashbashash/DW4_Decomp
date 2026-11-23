@@ -32,7 +32,14 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     that assignment (`T *self = ...;`, or at the body's top when a later use is outside its block); a receiver
     assigned inside an expression or a loop that read it before, incremented or having its address taken is
     refused. A C function whose parameters already equal the member's (an instance member whose receiver was
-    unused) keeps its list. A member the class defines inline (its declaration has a body) loses the C
+    unused) keeps its list; a type spelled by its owner (`igFile::OpenMode` in a subclass of igFile, a Gap
+    class's `Gap::Lib::` scope) is the member's. A C parameter of another type of one layout takes the member's
+    type (retyped_params): an integer for another integer, an enum or `bool` keeps its C name; a pointer to
+    another type becomes the member's parameter, and the body's first line declares the C name from it
+    (`unsigned int *dst = (unsigned int *)dest;`), the C name keeping the member's type where the member names
+    the parameter as a local or field does; callers cast a pointer argument the member's type does not take
+    implicitly. A 64-bit integer for a narrower one needs the table row to state the member's signature. A
+    member the class defines inline (its declaration has a body) loses the C
     definition instead. A class of config/converted-classes.tsv is `Gap::<Library>::Class` (the table may name it
     bare), and its definitions are written inside its namespaces, `namespace Gap { namespace <Library> {` around
     `T Class::name(...)` (tools/cxxscope.py, the spelling of the kit's .cpp files and of igen's ODLSource, which
@@ -44,9 +51,10 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     arguments, the member initialiser ` : Base(args)`); a base constructed after other statements is refused;
   * a destructor (`Class::~Class`): Alchemy's are implicit (the class declares none; the compiler writes the
     vtable stamp, each member's release and the delete where an object is destroyed), so the C body
-    `Class_Destroy(self, flag)` goes, with its comment; a destructor the class declares out of line is refused
-    (its user body is written by hand). `Class_Destroy(p, 1)` on a pointer declared as the Gap class (or a
-    subclass) becomes `delete p`;
+    `Class_Destroy(self, flag)` goes, with its comment; a destructor the class declares out of line takes the
+    head `Class::~Class()` over a C form emptied to its head (tools/classconv.py's stub of a hand body: the user
+    body is written by hand) and is refused over any other. `Class_Destroy(p, 1)` on a pointer declared as the
+    Gap class (or a subclass) becomes `delete p`;
   * a static datum's definition `T g_x;` becomes `T Class::name;`;
   * calls and uses in C++: inside a member function of the class the bare `name(...)`; a static member elsewhere
     `Class::name(...)` (and `Class::name` as a value); an instance call `C_name(obj, a)` becomes `obj->name(a)`,
@@ -126,8 +134,9 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
 
 It refuses the batch, before writing anything, when a C name has no definition (and is not an alias of one that
 has), a file-scope `static` is named (it stays a free function), the member is not declared and the table gives
-no signature, the declaration and the C definition disagree in parameters (other than an integer the member
-takes as a pointer), a C prototype orders the parameters in a way the types and names leave open (above), an
+no signature, the declaration and the C definition disagree in their parameters' number or in what one means (a
+pointer for a value or a reference, a float for an integer; the message names the parameter), a C prototype
+orders the parameters in a way the types and names leave open (above), an
 instance member is used as a value or called without a receiver, or the receiver is assigned where it cannot
 become a local (above) or has its address taken.
 
@@ -185,7 +194,8 @@ class Conversion:
         self.va = None
         self.access = None                             # `private`/`protected` from its class-members.tsv row
         self.getter = None                             # a public static inline `{ return name; }` of the class
-        self.c_params = {}                             # index -> (C integer type, member pointer type) retyped
+        self.c_params = {}                             # index -> (C type, member type) the definition retyped
+        self.stated = False                            # the table row gives the member's signature
         self.raw_params = None                         # the parameters as its declaration spells them, names kept
         self.order = None                              # member index -> C argument index, where the C order differs
 
@@ -419,10 +429,6 @@ def conversions(rows, members, macros, types):
             continue
         elif len(same) == 1:
             want = same[0]
-            if name == "~" + base and not want.inline:
-                errors.append("table line %d: %s declares an out-of-line destructor: its user body is written by "
-                              "hand (memberize converts an implicit or inline one)" % (line, base))
-                continue
         elif not same:
             errors.append("table line %d: %s declares no member %s in config/class-members.tsv: give the full "
                           "signature" % (line, base, name))
@@ -437,6 +443,7 @@ def conversions(rows, members, macros, types):
         conv = Conversion(cname, cls, name, want.kind, bool(want.static), bool(want.const), bool(want.inline),
                           want.ret, tuple(want.params or ()), declaration, virtual)
         conv.access = declared_access(class_rows, name, macros)
+        conv.stated = full
         if conv.kind == "func":
             conv.raw_params = declared_raw_params(class_rows, name, conv.params, conv.const, macros, types, base)
         if conv.kind == "data" and conv.access:
@@ -695,19 +702,47 @@ _MEMBER_HEAD = re.compile(r"([A-Za-z_][\w:]*)\s*::\s*(?:~?[A-Za-z_]\w*|operator\
 _CODE_SPAN = re.compile(r"`\s*([A-Za-z_]\w*)\s*`")   # a backquoted identifier in a comment
 
 
-def retyped_params(c_params, params):
-    """{index: (C type, member type)} where the C form takes an integer and the member a pointer at the same
-    position (`int allocator` for `igMemoryPoolView *pool`), every other parameter equal; else None."""
-    if len(c_params) != len(params):
-        return None
+_WIDE = ("long long", "unsigned long long")
+_KIND_NAMES = {"pointer": "a pointer", "reference": "a reference", "integer": "an integer", "wide": "a 64-bit integer",
+               "float": "a float", "double": "a double", "value": "a value"}
+
+
+def param_kind(t, is_enum=lambda t: False):
+    """How a parameter of normalised type `t` is passed and read: "pointer" (a pointer, a function pointer),
+    "reference", "integer" (an integer of at most 32 bits, `bool`, an enum: one register), "wide" (`long long`),
+    "float", "double", or "value" (a class or struct by value)."""
+    t = (t or "").strip()
+    if t.endswith("&"):
+        return "reference"
+    if t.endswith("*") or "(*)" in t:
+        return "pointer"
+    if t in _INTEGERS + ("unsigned", "signed char", "bool", "wchar_t") or is_enum(t):
+        return "integer"
+    if t in _WIDE:
+        return "wide"
+    return t if t in ("float", "double") else "value"
+
+
+def retyped_params(c_params, params, is_enum=lambda t: False, stated=False):
+    """The parameters a C form declares otherwise than its member (normalised, one list as long as the other) ->
+    ({index: (C type, member type)}, None), or ({}, (index, reason)) for the first the member's type cannot take.
+    One layout takes the other: a pointer for another pointer, an integer for another integer (an enum, `bool`,
+    `unsigned`), an integer for a pointer (a memory pool passed as `int`); with `stated` (the table row gives the
+    member's signature) also a 64-bit integer for a narrower one and back. Anything else (a pointer for a value or
+    a reference, a float for an integer) means something else."""
     out = {}
     for i, (c, m) in enumerate(zip(c_params, params)):
         if c == m:
             continue
-        if c not in _INTEGERS or not (m or "").endswith("*"):
-            return None
-        out[i] = (c, m)
-    return out
+        kc, km = param_kind(c, is_enum), param_kind(m, is_enum)
+        if (kc, km) in (("pointer", "pointer"), ("integer", "integer")) or \
+                (kc, km) == ("integer", "pointer") and c in _INTEGERS + ("unsigned",) or \
+                (stated and {kc, km} <= {"integer", "wide"}):
+            out[i] = (c, m)
+            continue
+        hint = " (a table row giving the member's signature retypes it)" if {kc, km} <= {"integer", "wide"} else ""
+        return {}, (i, "is %s (%s) where the member takes %s (%s)%s" % (_KIND_NAMES[kc], c, _KIND_NAMES[km], m, hint))
+    return out, None
 
 
 def _literal(e):
@@ -1073,6 +1108,35 @@ class Planner:
     def spell(self, cls, gap):
         """How code at a place names converted class `cls` (bare): bare in Gap's scope, else qualified."""
         return cls if gap or cls not in self.converted else "Gap::%s::%s" % (self.converted[cls], cls)
+
+    def unqualified(self, t, cls):
+        """Parameter type `t` (normalised) as a member of class `cls` names it, so that a C form's spelling and
+        the member's compare: `::` written whole (declarations.Types spells `igFile : : OpenMode`), a converted
+        class's `Gap::<Library>::` scope dropped (`Gap::Core::igIGBFile *` is `igIGBFile *` in the class's scope)
+        and a type nested in `cls` or a base named bare (`igFile::OpenMode` is `OpenMode` in igIGBFile, which
+        derives from igFile)."""
+        if not t:
+            return t
+
+        def short(m):
+            parts = m.group(0).split("::")
+            if len(parts) >= 3 and parts[0] == "Gap" and parts[2] in self.converted:
+                parts = parts[2:]
+            if len(parts) > 1:
+                hit = self.scope.nested_owner(cls, parts[-1])
+                if hit and hit[0] == parts[-2]:
+                    parts = parts[-1:]
+            return "::".join(parts)
+        return re.sub(r"(?<![\w:])(?:[A-Za-z_]\w*::)+[A-Za-z_]\w*", short, re.sub(r"\s*:\s*:\s*", "::", t))
+
+    def is_enum(self, t, cls):
+        """Whether parameter type `t` (normalised) of a member of `cls` is an enum: one the class, a base or the
+        qualifying class declares, or one at file scope."""
+        parts = re.sub(r"\s*:\s*:\s*", "::", t or "").split("::")
+        if len(parts) > 1:
+            hit = self.scope.nested.get(parts[-2], {}).get(parts[-1])
+            return bool(hit) and hit[0] == "enum"
+        return self.scope.enum_of(cls, t) is not None
 
     def gap_receiver(self, conv, inside, gap):
         """Whether `this` in the member function enclosing a use is a `conv` object of the Gap class."""
@@ -1521,13 +1585,20 @@ class Planner:
         return "((%s *)%s)->" % (cls, e if _POSTFIX.match(e) else "(%s)" % e)
 
     def retyped_arguments(self, fr, conv, spans, ctx):
-        """The arguments of a call whose parameter the C form spelled as an integer and the member as a pointer
-        (a memory pool passed as `int`, conv.c_params): `(int)E` becomes `E` where E already has the member's
-        type, else `(T *)E`; an argument without the integer cast is cast (`0` stays)."""
+        """The arguments of a call whose parameter the C form declared otherwise than the member (conv.c_params).
+        An integer the member takes as a pointer (a memory pool passed as `int`): `(int)E` becomes `E` where E
+        already has the member's type, else `(T *)E`; an argument without the integer cast is cast (`0` stays).
+        A pointer to another type: `pointer_argument`. An integer of another type converts implicitly (an enum's
+        is typed_arguments' cast)."""
         for i, (s, e) in enumerate(spans):
             if i not in conv.c_params:
                 continue
             c_type, m_type = conv.c_params[i]
+            if param_kind(c_type) == "pointer":
+                self.pointer_argument(fr, conv, i, (s, e), ctx)
+                continue
+            if c_type not in _INTEGERS + ("unsigned",) or not m_type.endswith("*"):
+                continue
             arg = fr.text[s:e]
             m = re.fullmatch(r"\(\s*(%s)\s*\)\s*(.+)" % "|".join(re.escape(t) for t in _INTEGERS), arg, re.S)
             expr = m.group(2) if m else arg
@@ -1541,6 +1612,41 @@ class Planner:
                     fr.edits.append((s, e, bare))
                 continue
             fr.edits.append((s, e, "(%s *)%s" % (m_type[:-1], bare)))
+
+    def pointer_argument(self, fr, conv, i, span, ctx):
+        """An argument for parameter `i`, which the C form declared as a pointer to another type than the member's
+        (`unsigned int *dst` for `unsigned char *dest`): cast to the member's type (`(unsigned char *)dst`, an
+        argument's own pointer cast replaced), unless the C type converts to it implicitly (the member takes
+        `void *` or adds `const`), the argument is a null pointer or is declared as or cast to the member's type.
+        A converted class's pointer is gap_argument's."""
+        c_type, m_type = conv.c_params[i]
+        pointee = re.sub(r"\s*\bconst\b\s*", "", m_type[:-1]).strip()
+        if pointee == "void" or (conv.cls.startswith("Gap::") and pointee in self.converted) or \
+                _normal_type(c_type) == _normal_type(m_type) and "const" not in c_type:
+            return
+        s, e = span
+        arg = fr.text[s:e]
+        bare = _strip_parens(arg)
+        if bare in ("0", "NULL", "nullptr"):
+            return
+        raw = conv.raw_params or ()
+        spelled = self.scope.param_type(raw[i]) if i < len(raw) else m_type.replace("*", " *")
+        types = self.index.types
+
+        def same(declared):
+            got = types.param(declared)
+            return got == m_type or ("const" in m_type and _normal_type(got) == _normal_type(m_type))
+        cast = re.match(_POINTER_CAST, arg)
+        if cast:
+            if not same(arg[1:arg.index(")")]):
+                fr.edits.append((s, s + cast.end(), "(%s)" % spelled))
+            return
+        if re.fullmatch(r"[A-Za-z_]\w*", bare) and ctx is not None:
+            declared = re.search(r"([A-Za-z_][\w\s:<>]*?[\s*]*\*)\s*%s\s*[,;=)\[]" % re.escape(bare),
+                                 fr.text[ctx[1]:ctx[2]])
+            if declared and same(declared.group(1)):
+                return
+        fr.edits.append((s, e, "(%s)%s" % (spelled, bare if _postfix_expr(bare) else "(%s)" % bare)))
 
     def expr_type(self, fr, expr, ctx):
         """The normalised type of a simple expression where it can be read off the tree: a cast, a local or
@@ -1711,7 +1817,15 @@ class Planner:
         close = declarations._close(head, p)
         params = self.def_params(fr, ctx)
         receiver = None
-        if conv.kind == "func" and not conv.static and len(params) == len(conv.params) + 1:
+        if conv.special == "dtor":
+            # a destructor the class declares out of line: its user body is written by hand over the C form, which
+            # is emptied to its head first (classconv's stub); the C form's receiver and delete flag go
+            if fr.clean[brace:end].strip().strip("{}").strip() or not 1 <= len(params) <= 2:
+                raise Refused("%s: %s declares an out-of-line destructor: its user body is written by hand (a "
+                              "classconv hand body, which empties %s to its head first)"
+                              % (fr.rel, conv.cls, conv.cname))
+            receiver, params = params[0], []
+        elif conv.kind == "func" and not conv.static and len(params) == len(conv.params) + 1:
             receiver = params[0]
             params = params[1:]
         elif len(params) != len(conv.params):
@@ -1719,19 +1833,21 @@ class Planner:
                 fr.rel, conv.cname, len(params), conv.qualified, len(conv.params),
                 "" if conv.static else " (and an instance member's receiver)"))
         types = self.index.types
-        # a parameter spelled `Gap::Lib::Class *` at file scope is the member's bare `Class *` in the class's scope
-        got = tuple(re.sub(r"\bGap\s*:\s*:\s*\w+\s*:\s*:\s*(\w+)",
-                           lambda m: m.group(1) if m.group(1) in self.converted else m.group(0), q)
-                    if q else q for q in (types.param(t + " " + (n or "")) for t, n in params))
-        if got != tuple(conv.params):
-            retyped = retyped_params(got, conv.params)
-            if retyped is None:
-                raise Refused("%s: %s's parameters (%s) are not %s's (%s)" % (
-                    fr.rel, conv.cname, ", ".join(got), conv.qualified, ", ".join(conv.params)))
-            # an integer the member takes as a pointer (a memory pool passed as `int`): the head takes the
-            # member's type and the callers' arguments are cast (retyped_arguments)
+        # spelled as the class's scope names them: `Gap::Lib::Class *` at file scope is the member's bare `Class *`,
+        # `igFile::OpenMode` the bare `OpenMode` of a class deriving from igFile
+        got = tuple(self.unqualified(types.param(t + " " + (n or "")), conv.base) for t, n in params)
+        want = tuple(self.unqualified(q, conv.base) for q in conv.params)
+        if got != want:
+            retyped, refusal = retyped_params(got, want, lambda t: self.is_enum(t, conv.base), conv.stated)
+            moved = [i for i, (c, m) in retyped.items() if not (c in _INTEGERS and m.endswith("*"))]
+            if refusal is None and conv.order is not None and moved:
+                refusal = (moved[0], "is declared in the C order, which the member's callers do not keep")
+            if refusal is not None:
+                i, why = refusal
+                raise Refused("%s: %s's parameters (%s) are not %s's (%s): parameter %d %s; write its head by hand" % (
+                    fr.rel, conv.cname, ", ".join(got), conv.qualified, ", ".join(want), i + 1, why))
             conv.c_params.update(retyped)
-            params = [(retyped[i][1][:-1] + " *", n) if i in retyped else (t, n) for i, (t, n) in enumerate(params)]
+            params = self.retyped_head(fr, conv, ctx, params, retyped)
         ret = head[:head.rfind(conv.cname, 0, p)].rstrip()
         initializer = ""
         if conv.special == "ctor":
@@ -1740,6 +1856,8 @@ class Planner:
                               % (fr.rel, conv.cname))
             ret = ""                                     # a constructor returns nothing: `return self;` goes
             initializer = self.constructor_body(fr, conv, ctx, receiver[1])
+        elif conv.special == "dtor":
+            ret = ""
         else:
             ret_norm = types.strip_top_cv(types.norm(declarations._STORAGE.sub(" ", ret)))
             if ret_norm != conv.ret and conv.ret is not None:
@@ -1762,6 +1880,51 @@ class Planner:
             self.keep_flat_names(fr, brace, end)
         if receiver is not None:
             self.rewrite_receiver(fr, conv, ctx, receiver, head[p + 1:close])
+
+    def retyped_head(self, fr, conv, ctx, params, retyped):
+        """The definition's parameters [(declared type, name)] once the head takes the member's types where the C
+        form's differ (retyped_params), the body keeping what it read. An integer the member takes as a pointer or
+        as another integer (an enum, `bool`, `unsigned`) is the member's type under the C name. A pointer to
+        another type is the member's parameter (`unsigned char *dest`), and the body's first line declares the C
+        name as the C type from it (`unsigned int *dst = (unsigned int *)dest;`); where the member names no
+        parameter, or names it as the C form, a local or a field of the class does, the C name takes the
+        member's type and the body reads it as that."""
+        _name, start, end = ctx
+        brace = fr.head_end(start)
+        raw = conv.raw_params or ()
+        names = (_param_names("f(%s)" % ", ".join(raw), "f") or []) if raw else []
+        taken = local_names("", fr.clean[brace:end]) | {n for _t, n in params if n} | \
+            set(self.classes.all_fields(conv.base)) | self.declared_names.get(conv.base, set())
+        indent = re.search(r"\n([ \t]*)\S", fr.text[brace:end])
+        indent = indent.group(1) if indent and indent.group(1) else "    "
+        out, locals_ = [], []
+        for i, (t, n) in enumerate(params):
+            if i not in retyped:
+                out.append((t, n))
+                continue
+            c, m = retyped[i]
+            spelled = self.scope.param_type(raw[i]) if i < len(raw) else m.replace("*", " *")
+            if c in _INTEGERS + ("unsigned",) and m.endswith("*"):
+                out.append((m[:-1] + " *", n))           # a memory pool passed as `int`: callers cast
+                continue
+            mn = names[i] if i < len(names) else None
+            if param_kind(c) == "pointer" and n and mn and mn not in taken:
+                out.append((spelled, mn))
+                local = t.strip()
+                if conv.cls.startswith("Gap::") and not self.gap_scope(fr, start, ctx) and self.converted:
+                    local = re.sub(r"(?<!::)\b(%s)\b" % "|".join(re.escape(k) for k in sorted(
+                        self.converted, key=len, reverse=True)), r"::\1", local)
+                locals_.append("\n%s%s%s = (%s)%s;" % (indent, local if local.endswith("*") else local + " ", n,
+                                                         local, mn))
+                self.notes.append("%s: %s's parameter %s is %s's %s %s: the body reads it as the local %s %s"
+                                  % (fr.rel, conv.cname, n, conv.qualified, spelled, mn, local, n))
+                continue
+            out.append((spelled, n))
+            self.notes.append("%s: %s's parameter %s (%s) takes %s's type %s: check what the body reads"
+                              % (fr.rel, conv.cname, n, c, conv.qualified, spelled))
+        if locals_:
+            fr.edits.append((brace + 1, brace + 1, "".join(locals_)))
+        return out
 
     def keep_flat_names(self, fr, start, end):
         """A body moving from file scope into a Gap class keeps what its types meant: a bare converted class's name
@@ -2369,24 +2532,29 @@ def plan(root, table):
     for conv in convs:
         names = _param_names("f(%s)" % ", ".join(conv.raw_params or ()), "f") or [None] * len(conv.params)
         orders = set()
+        want = tuple(planner.unqualified(p, conv.base) for p in conv.params)
         for ps, c_names in protos.get(conv.cname, ()):
             c_names = c_names if c_names and len(c_names) == len(ps) else [None] * len(ps)
             if not conv.static and not conv.special and len(ps) == len(conv.params) + 1:
                 ps, c_names = ps[1:], c_names[1:]       # the receiver
-            if ps == tuple(conv.params):
+            ps = tuple(planner.unqualified(p, conv.base) for p in ps)
+            if ps == want:
                 continue                                 # the member's own form (classconv's stub)
             try:
-                order = argument_order(ps, c_names, conv.params, names,
-                                       lambda t, cls=conv.base: scope.enum_of(cls, t) is not None)
+                order = argument_order(ps, c_names, want, names,
+                                       lambda t, cls=conv.base: planner.is_enum(t, cls))
             except ValueError as e:
                 raise Refused("%s (%s) orders its parameters otherwise than %s (%s), and their types and names fit "
                               "%d orders (%s): rewrite its calls by hand" % (
-                                  conv.cname, ", ".join(ps), conv.qualified, ", ".join(conv.params), len(e.args[0]),
+                                  conv.cname, ", ".join(ps), conv.qualified, ", ".join(want), len(e.args[0]),
                                   "; ".join(", ".join(str(j + 1) for j in o) for o in e.args[0])))
             if order is not None:
                 orders.add(order)
                 ps = tuple(ps[j] for j in order)
-            conv.c_params.update(retyped_params(ps, conv.params) or {})
+            if len(ps) == len(want):
+                retyped, refusal = retyped_params(ps, want, lambda t, cls=conv.base: planner.is_enum(t, cls),
+                                                  conv.stated)
+                conv.c_params.update(retyped if refusal is None else {})
         if len(orders) > 1:
             raise Refused("%s's C prototypes order its parameters in different ways" % conv.cname)
         conv.order = orders.pop() if orders else None

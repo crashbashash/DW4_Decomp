@@ -271,6 +271,41 @@ class TreeTest(unittest.TestCase):
         self.tree.write("src/engine/core/igFooMetaField.inc", "bool igFooMetaField::createRenderList()\n{\n}\n")
         self.assertEqual(cc.unbacked_members(self.tree, "igFooMetaField", spec, pairs), [])
 
+    def test_a_constructor_and_destructor_with_hand_bodies_map_from_their_c_names(self):
+        # VisualCtx: igVisualContext's out-of-line constructor (FUN_001510e0) and destructor (FUN_00150af0) are hand
+        # bodies; no spec key reached them, so both were written by hand and their C forms deleted by hand
+        self.tree.write("config/class-members.tsv", self.tree.read("config/class-members.tsv") +
+                        "igVisualContext\tprotected: igVisualContext();\nigVisualContext\tvirtual ~igVisualContext();\n")
+        self.tree.write("src/engine/core/igVisualContext.inc",
+                        "igVisualContext *FUN_001510e0(igVisualContext *self) {\n    self->_vt = 1;\n    return self;\n}\n\n"
+                        "igVisualContext *FUN_00150af0(igVisualContext *self, short flag) {\n    if (flag > 0)\n"
+                        "        Memory_Free(self);\n    return self;\n}\n")
+        spec_file = os.path.join(self.tree.root, "spec.py")
+        with open(spec_file, "w") as f:
+            f.write("SPECS = %r\n" % {"igVisualContext": dict(
+                gen=[], extra={"FUN_001510e0": "ctor", "FUN_00150af0": "dtor"},
+                bodies={"ctor": "{C}::{C}()\n{\n    _timer = 0;\n}", "dtor": "{C}::~{C}()\n{\n    releaseAll();\n}"})})
+        specs = cc.load_specs(spec_file)
+        spec = specs["igVisualContext"]
+        pairs = cc.c_names(self.tree, "igVisualContext", spec)
+        self.assertEqual(cc.unbacked_members(self.tree, "igVisualContext", spec, pairs), [])
+        cc.stub(self.tree, "igVisualContext", spec, pairs)
+        # the C forms are emptied to their receivers, the destructor's delete flag gone
+        self.assertEqual(self.tree.read("src/engine/core/igVisualContext.inc"),
+                         "igVisualContext *FUN_001510e0(igVisualContext *self)\n{\n}\n\n"
+                         "igVisualContext *FUN_00150af0(igVisualContext *self)\n{\n}\n")
+        table, _unmapped = cc.memberize_table(self.tree, ["igVisualContext"], specs)
+        self.assertEqual(table, [("FUN_001510e0", "Gap::Core::igVisualContext::igVisualContext"),
+                                 ("FUN_00150af0", "Gap::Core::igVisualContext::~igVisualContext")])
+        # memberize writes `C::C()` and `C::~C()` over the stubs; the splice writes the hand bodies over those
+        self.tree.write("src/engine/core/igVisualContext.inc",
+                        "namespace Gap {\nnamespace Core {\n\nigVisualContext::igVisualContext()\n{\n}\n\n"
+                        "igVisualContext::~igVisualContext()\n{\n}\n}\n}\n")
+        cc.splice_class(self.tree, "igVisualContext", spec, "")
+        self.assertEqual(self.tree.read("src/engine/core/igVisualContext.inc"),
+                         "namespace Gap {\nnamespace Core {\n\nigVisualContext::igVisualContext()\n{\n"
+                         "    _timer = 0;\n}\n\nigVisualContext::~igVisualContext()\n{\n    releaseAll();\n}\n}\n}\n")
+
     def test_splice_writes_the_definition_only(self):
         os.makedirs(self.tree.path("src/engine/gfx"))
         definition = "namespace Gap {\nnamespace Gfx {\n\nbool igImage::isIndexed(int fmt)\n{\n    return 0;\n}\n}\n}\n"
