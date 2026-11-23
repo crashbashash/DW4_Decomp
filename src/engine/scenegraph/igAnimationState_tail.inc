@@ -41,13 +41,13 @@ int FUN_001af620(igAppearanceView *a, void *t) {
         FUN_001b7770((igCommonTraversal *)t, overrideName(a, i), graph);
     }
     if (a->_skin != 0) {
-        result = FUN_001d9740((void *)a->_skin, (int)(t));
+        result = ((Gap::Sg::igSkin *)a->_skin)->traverse((Gap::Sg::igTraversal *)t);
     }
     for (i = 0; i < a->_attachedSkins->_count; i++) {
-        FUN_001d9740((void *)a->_attachedSkins->_data[i], (int)(t));
+        ((Gap::Sg::igSkin *)a->_attachedSkins->_data[i])->traverse((Gap::Sg::igTraversal *)t);
     }
     for (i = 0; i < a->_attachedGraphs->_count; i++) {
-        igTraversal_TraverseNode((igTraversal *)t, (igNode *)a->_attachedGraphs->_data[i]);
+        ((Gap::Sg::igTraversal *)t)->dispatch((Gap::Core::igObject *)a->_attachedGraphs->_data[i]);
     }
     for (i = 0; i < n; i++) {
         FUN_001b7920((igCommonTraversal *)t, overrideName(a, i));

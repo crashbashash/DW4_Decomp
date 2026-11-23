@@ -1,28 +1,27 @@
-void igOnOffValueObserver_OnModelChange(igOnOffValueObserver *self, void *arg1) {
-    if ((*(int *)((char *)arg1 + 8) == (int)g_igOnOffModel_valueMetaField) || (*(int *)((char *)arg1 + 0) == 0)) {
-        FUN_00457ab0((igRadioGroup *)(self->_group), (igRadioGroupSelectedObserver *)self, (int)self);
+namespace Gap {
+namespace Gui {
+
+void igOnOffValueObserver::notify(const igNotifyEvent &event)
+{
+    if (event._field == igOnOffModel::k_value || event._eventType == igNotifyEvent::ATTACH) {
+        _group->itemValueChanged(this);
     }
 }
 
-void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
-    unsigned char temp_a2;
-    struct T_457c40 *temp_v1;
-    unsigned char *pb;
+void igOnOffValueObserver::setSelected(unsigned char selected)
+{
+    igOnOffModel *model = (igOnOffModel *)getModel();
 
-    temp_v1 = arg0->t;
-    if (temp_v1 != 0) {
-        temp_a2 = temp_v1->b;
-        pb = &temp_v1->b;
-        if (temp_a2 != arg1) {
-            *pb = arg1;
-            igNotifyEvent sp((Gap::Core::igMetaField *)g_igOnOffModel_valueMetaField);
-            ((Gap::Gui::igModel *)arg0->t)->notifyAllViews(sp);
+    if (model) {
+        // byte-only spelling: retail holds the field's address across the compare and store, and
+        // reloads the model from this for the notification
+        unsigned char *value = &model->_value;
+        if (*value != selected) {
+            *value = selected;
+            getModel()->notifyAllViews(igNotifyEvent(igOnOffModel::k_value));
         }
     }
 }
-
-namespace Gap {
-namespace Gui {
 
 void igRenderer::setVisualContext(igVisualContext *context)
 {

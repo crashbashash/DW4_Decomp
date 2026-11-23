@@ -175,15 +175,15 @@ void igProjectiveShadowShader_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igProjectiveShadowShader_Register);
 }
 
-static igMetaObjectCallback g_igProjectiveShadowShader_callbackList[] = { igNodeList_EnsureRegistered, Gap::Attrs::igNonRefCountedAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igProjectionMatrixAttr::arkRegister, igGeometry_EnsureRegistered, Gap::Attrs::igGeometryAttr::arkRegister, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igTextureMatrixAttr::arkRegister, Gap::Attrs::igRenderDestinationAttr::arkRegister, Gap::Attrs::igSetRenderDestinationAttr::arkRegister, Gap::Attrs::igTextureAttr::arkRegister, Gap::Attrs::igTextureBindAttr::arkRegister, Gap::Attrs::igCopyRenderDestinationAttr::arkRegister, Gap::Gfx::igImage::arkRegister, Gap::Attrs::igViewportAttr::arkRegister, Gap::Attrs::igLightAttr::arkRegister, Gap::Attrs::igTextureUnloadAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igProjectiveShadowShader_callbackList[] = { Gap::Sg::igNodeList::arkRegister, Gap::Attrs::igNonRefCountedAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igProjectionMatrixAttr::arkRegister, igGeometry_EnsureRegistered, Gap::Attrs::igGeometryAttr::arkRegister, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igTextureMatrixAttr::arkRegister, Gap::Attrs::igRenderDestinationAttr::arkRegister, Gap::Attrs::igSetRenderDestinationAttr::arkRegister, Gap::Attrs::igTextureAttr::arkRegister, Gap::Attrs::igTextureBindAttr::arkRegister, Gap::Attrs::igCopyRenderDestinationAttr::arkRegister, Gap::Gfx::igImage::arkRegister, Gap::Attrs::igViewportAttr::arkRegister, Gap::Attrs::igLightAttr::arkRegister, Gap::Attrs::igTextureUnloadAttr::arkRegister, 0 };
 
 CallbackArray *igProjectiveShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igProjectiveShadowShader_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igProjectiveShadowShader_GetMetaObjectFunction,
         "igProjectiveShadowShader",
         0xF0, /* instance size */
@@ -420,10 +420,10 @@ void igProjectiveShadowShader_InitFields(void) {
     ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v2);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)))->setDefault(30.0f);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
-    temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Sg::igNodeList::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
-    temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Sg::igNodeList::getClassTypeLazy();
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)))->setDefault(0.300000012f);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)))->setDefault(0x80);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)))->setDefault(0x80);

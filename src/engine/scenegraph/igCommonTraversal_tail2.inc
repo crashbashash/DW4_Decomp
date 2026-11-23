@@ -503,14 +503,14 @@ void FUN_001b42c0(TravFlattenView *self, int root) {
     for (i = 0; i < n; i++) {
         TravObject *m = ((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i));
         saved[i] = (int)table->_data[m->_id];
-        igTraversal_RegisterFunction((igTraversalFunctionList *)table, (igMetaObject *)m, (void *)((void *)FUN_001b3ad0));
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)table, (igMetaObject *)m, (igTraversalFunction *)FUN_001b3ad0);
     }
     DAT_005625f0 = self;
     clearRetained(self->_a);
     clearRetained(self->_b);
     igTraversal_TraverseChildren((igTraversal *)root, (igNode *)self);
     for (i = 0; i < n; i++) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)table, (igMetaObject *)(((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i))), (void *)((void *)saved[i]));
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)table, (igMetaObject *)(((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i))), (igTraversalFunction *)saved[i]);
     }
 }
 
@@ -652,14 +652,14 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
     for (i = 0; i < count; i++) {
         igMetaObject *node = (igMetaObject *)igMetaObject_GetTreeNode(meta, i);
         saved[i] = (int)procs->_data[node->_id];
-        igTraversal_RegisterFunction((igTraversalFunctionList *)procs, node, (void *)FUN_001b4bb0);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)procs, node, (igTraversalFunction *)FUN_001b4bb0);
     }
     DAT_00562638[0] = (VC_1b2fa0 *)self;
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_mats))->setCount(0);
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_geoms))->setCount(0);
     igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     for (i = 0; i < count; i++) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)procs, (igMetaObject *)igMetaObject_GetTreeNode(meta, i), (void *)saved[i]);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)procs, (igMetaObject *)igMetaObject_GetTreeNode(meta, i), (igTraversalFunction *)saved[i]);
     }
     FUN_001dc500((A_1dc500 *)traversal->_sorter, 0, 0);
     FUN_001b4570((LightingTexGenView *)self, traversal);
@@ -725,7 +725,7 @@ void igCommonTraversal_RegisterClass(int arg0) {
 
 void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
     igTraversal_RegisterClassFunction((int)(self), (int)(meta));
-    if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
         t.e[0].meta = (int)g_igActor_metaObject;
@@ -765,7 +765,7 @@ void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
         for (i = 0; i < 34; i++) {
             NodeProcEntry *e = &t.e[i];
             if (e->meta != 0 && igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)e->meta) != 0) {
-                igTraversal_RegisterFunction((igTraversalFunctionList *)self, (igMetaObject *)meta, (void *)e->proc);
+                Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)self, (igMetaObject *)meta, (igTraversalFunction *)e->proc);
                 return;
             }
         }
@@ -789,7 +789,7 @@ void igCommonTraversal_userConstruct(igCommonTraversal *self, int arg1) {
 }
 
 void igCommonTraversal_UserRegister(void) {
-    g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
     Gap::Attrs::igAttr::arkRegister();
     Gap::Attrs::igTextureBindAttr::arkRegister();
     Gap::Attrs::igModelViewMatrixAttr::arkRegister();

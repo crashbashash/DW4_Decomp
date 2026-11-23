@@ -5,6 +5,19 @@
 
 struct p2TextureRecord;
 
+/* The state byte of a texture record. */
+typedef struct P2TextureFlags {
+    signed char state : 7;              /* P2_TEXTURE_* */
+    signed char detached : 1;           /* left the block list while still referenced */
+} P2TextureFlags;
+
+/* P2Texture holds the state byte both as its two fields and as one object; the C++ units need the
+ * extension that admits the unnamed struct. */
+#ifdef __cplusplus
+#pragma push
+#pragma cpp_extensions on
+#endif
+
 /* A texture record. Every record that holds VRAM, and every free stretch of VRAM, is a block of one
  * list in address order (next/prev); a free block has state P2_TEXTURE_FREE. */
 typedef struct P2Texture {
@@ -25,12 +38,21 @@ typedef struct P2Texture {
     unsigned short blocks;              /* its size in VRAM blocks */
     unsigned short format;
     unsigned short alignMask;           /* the block alignment its size needs, less one */
-    signed char state : 7;              /* P2_TEXTURE_* */
-    signed char detached : 1;           /* left the block list while still referenced */
+    union {
+        P2TextureFlags flags;           /* the byte as one object, for code that holds its address */
+        struct {
+            signed char state : 7;      /* P2_TEXTURE_* */
+            signed char detached : 1;   /* left the block list while still referenced */
+        };
+    };
     char chainCount;
     char used;                          /* drawn with since the last fence */
     signed char texAlpha;               /* TEXA.TA0 while it is bound */
 } P2Texture;
+
+#ifdef __cplusplus
+#pragma pop
+#endif
 
 /* P2Texture.state */
 enum {

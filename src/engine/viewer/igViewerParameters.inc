@@ -81,7 +81,7 @@ void igViewerParameters_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerParameters_Register);
 }
 
-static igMetaObjectCallback g_igViewerParameters_callbackList[] = { igGroup_EnsureRegistered, igBitMask_EnsureRegistered, igGraphPathList_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerParameters_callbackList[] = { Gap::Sg::igGroup::arkRegister, igBitMask_EnsureRegistered, igGraphPathList_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
 CallbackArray *igViewerParameters_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -285,7 +285,7 @@ void igViewerParameters_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerParameters_ctorTable, 0x27);
     temp_s2 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
-    temp_s2->f56 = (int)(igGroup_GetOrCreateMetaObject());
+    temp_s2->f56 = (int)(Gap::Sg::igGroup::getClassTypeLazy());
     temp_s2->f52 = 1;
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     sp50[0] = 0;

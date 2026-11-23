@@ -99,7 +99,7 @@ void igTransientShaderData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTransientShaderData_Register);
 }
 
-static igMetaObjectCallback g_igTransientShaderData_callbackList[] = { Gap::Attrs::igAttrListList::arkRegister, igDataPumpInfo_EnsureRegistered, igNodeListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTransientShaderData_callbackList[] = { Gap::Attrs::igAttrListList::arkRegister, igDataPumpInfo_EnsureRegistered, Gap::Sg::igNodeListList::arkRegister, 0 };
 
 CallbackArray *igTransientShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -178,7 +178,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_childLists")));
     temp_s2 = ((Gap::Core::__internalNonRefCountedObjectList *)temp_s1->f40)->find((Gap::Core::igObject *)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = (int)igNodeListList_GetOrCreateMetaObject();
+    temp_s0->f56 = (int)Gap::Sg::igNodeListList::getClassTypeLazy();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_childListsMetaField);

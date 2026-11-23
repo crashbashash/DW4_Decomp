@@ -1,5 +1,5 @@
 void FUN_001ce710(void) {
-    *(int *)0x562790 = igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562790 = (int)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
 void igIntersectTraversal_UserUnregister(void) {
@@ -16,20 +16,20 @@ void igIntersectTraversal_UserUnregister(void) {
 
 void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
     igTraversal_RegisterClassFunction(arg0, arg1);
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGeometry_GetMetaObject()))) != 0) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igIntersectTraversal_TraverseGeometry);
+            Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igIntersectTraversal_TraverseGeometry);
             return;
         }
         if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igTransform_GetMetaObject()))) != 0) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igIntersectTraversal_TraverseTransform);
+            Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igIntersectTraversal_TraverseTransform);
             return;
         }
-        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGroup_GetMetaObject()))) != 0) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igIntersectTraversal_TraverseGroup);
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igGroup::getClassTypeSafe()))) != 0) {
+            Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igIntersectTraversal_TraverseGroup);
             return;
         }
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)((int *)igIntersectTraversal_TraverseNode));
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igIntersectTraversal_TraverseNode);
     }
 }
 

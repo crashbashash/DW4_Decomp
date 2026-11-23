@@ -1,19 +1,19 @@
-int igGroup_IsTransformable(void *arg0) {
-    Obj_1c6260 *self = (Obj_1c6260 *)arg0;
-    unsigned int n;
-    unsigned int i;
-    if (self->vX() > 1) {
-        return 0;
+namespace Gap {
+namespace Sg {
+
+bool igGroup::isTransformable() const
+{
+    if (getParentCount() > 1) {
+        return false;
     }
-    n = 0;
-    if (self->list != 0) {
-        n = self->list->count;
-    }
-    for (i = 0; i < n; i++) {
-        if (self->list->data[i]->vX() == 0) {
-            return 0;
+    unsigned int count = getChildCount();
+    for (unsigned int i = 0; i < count; i++) {
+        if (!_childList->get(i)->isTransformable()) {
+            return false;
         }
     }
-    return 1;
+    return true;
+}
+}
 }
 

@@ -250,7 +250,7 @@ void beModelCtrlInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { beDataObjInt_EnsureRegistered, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, beModelCtrlInfoAI_EnsureRegistered, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, beModelCtrlMoveObjectList_EnsureRegistered, beModelCtrlInfoRideOn_EnsureRegistered, igGroup_EnsureRegistered, beModelCtrlInfoHitBody_EnsureRegistered, beModelCtrlSubCom_EnsureRegistered, igAABox_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { beDataObjInt_EnsureRegistered, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, beModelCtrlInfoAI_EnsureRegistered, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, beModelCtrlMoveObjectList_EnsureRegistered, beModelCtrlInfoRideOn_EnsureRegistered, Gap::Sg::igGroup::arkRegister, beModelCtrlInfoHitBody_EnsureRegistered, beModelCtrlSubCom_EnsureRegistered, igAABox_EnsureRegistered, 0 };
 
 CallbackArray *beModelCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -546,7 +546,7 @@ void beModelCtrlInfoWork_InitFields(void) {
     rideOnData = (void *)(igMetaObject_GetFieldAt(meta, base + 0x28));
     ((igObjectRefMetaField *)rideOnData)->_metaObject = (int)beModelCtrlInfoRideOn_GetOrCreateMetaObject();
     debugHitBoxNode = (void *)(igMetaObject_GetFieldAt(meta, base + 0x29));
-    ((igObjectRefMetaField *)debugHitBoxNode)->_metaObject = (int)igGroup_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)debugHitBoxNode)->_metaObject = (int)Gap::Sg::igGroup::getClassTypeLazy();
     hitBody = (void *)(igMetaObject_GetFieldAt(meta, base + 0x2A));
     ((igObjectRefMetaField *)hitBody)->_metaObject = (int)beModelCtrlInfoHitBody_GetOrCreateMetaObject();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2B)))->setDefault(1);

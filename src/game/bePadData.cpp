@@ -77,8 +77,8 @@ extern "C" long long beNodeAnim_UpdateTime(beNodeAnim *node, long long now)
 
 extern "C" void beNodeAnim_RegisterTraversalFunction(void)
 {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beNodeAnim_ResolveMetaObject(),
-                                 (void *)beNodeAnim_TraversalFunction);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beNodeAnim_ResolveMetaObject(),
+                                 (igTraversalFunction *)beNodeAnim_TraversalFunction);
 }
 
 extern "C" int beLoadingNode_TraversalFunction(igCommonTraversal *trav, beNodeAnim *node)
@@ -98,8 +98,8 @@ extern "C" unsigned char beLoadingNode_IsPastPlayLimit(beLoadingNode *node)
 
 extern "C" void beLoadingNode_RegisterTraversalFunction(void)
 {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beLoadingNode_ResolveMetaObject(),
-                                 (void *)beLoadingNode_TraversalFunction);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beLoadingNode_ResolveMetaObject(),
+                                 (igTraversalFunction *)beLoadingNode_TraversalFunction);
 }
 
 extern "C" void bePadData_userConstruct(bePadData *pad)

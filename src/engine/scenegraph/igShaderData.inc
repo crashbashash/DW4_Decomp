@@ -29,7 +29,7 @@ void igShaderData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igShaderData_Register);
 }
 
-static igMetaObjectCallback g_igShaderData_callbackList[] = { Gap::Attrs::igAttrListList::arkRegister, igDataPumpInfo_EnsureRegistered, igNodeListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igShaderData_callbackList[] = { Gap::Attrs::igAttrListList::arkRegister, igDataPumpInfo_EnsureRegistered, Gap::Sg::igNodeListList::arkRegister, 0 };
 
 CallbackArray *igShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -97,7 +97,7 @@ void igShaderData_InitFields(void) {
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igDataPumpInfo_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igNodeListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Sg::igNodeListList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igShaderData_fieldTable, g_igShaderData_fieldHandles, g_igShaderData_fieldOffsets, temp_s0);
 }

@@ -1,92 +1,73 @@
-igMetaObject *g_igRadioGroupModel_metaObject;
-igMetaField *g_igRadioGroupModel_selectedMetaField;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igRadioGroupModel_GetOrCreateMetaObject(void) {
-    if (g_igRadioGroupModel_metaObject == 0) {
-        g_igRadioGroupModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igRadioGroupModel_metaObject;
-}
+igMetaObject *igRadioGroupModel::_Meta;
+igMetaField *igRadioGroupModel::k_selected;
 
-igMetaObject *igRadioGroupModel_GetMetaObject(void)
+igMetaObject *igRadioGroupModel::getClassTypeLazy()
 {
-    igMetaObject *g = g_igRadioGroupModel_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igRadioGroupModel_RunStaticInit();
-    return g_igRadioGroupModel_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igRadioGroupModel_GetVTable(void) {
-    union U_44d210 u;
-    int temp_s0;
-    S_ref *q0;
-
-    igObject_InitHeader((igObject *)u.b);
-    q0 = (S_ref *)&u.b[8];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_igModel_vtable[0];
-    u.vt = (int)&g_igRadioGroupModel_vtable[0];
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igModel_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igRadioGroupModel_RunStaticInit(void)
+igMetaObject *igRadioGroupModel::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igRadioGroupModel_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igRadioGroupModel_Register(void) {
+void *igRadioGroupModel::retrieveVTablePointer()
+{
+    igRadioGroupModel temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igRadioGroupModel::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igRadioGroupModel::arkRegisterInternal()
+{
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igRadioGroupModel_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igModel::arkRegisterInternal,
         Gap::Gui::igModel::getClassMeta,
-        thunk_igRadioGroupModel_GetMetaObject,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igRadioGroupModel",
-        0x10, /* instance size */
-        igRadioGroupModel_GetVTable,
-        &igRadioGroupModel_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igRadioGroupModel),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
-
-void thunk_igRadioGroupModel_GetMetaObject(void) {
-    igRadioGroupModel_GetMetaObject();
+}
 }
 
-static FieldFactory g_igRadioGroupModel_ctorTable[] = {
-    igIntMetaField_Create,
-};
-static const char *g_igRadioGroupModel_fieldTable[] = {
-    "_selected",
-};
-static igMetaField **g_igRadioGroupModel_fieldHandles[] = {
-    &g_igRadioGroupModel_selectedMetaField,
-};
-static int g_igRadioGroupModel_fieldOffsets[] = {
-    12,
-};
+namespace Gap {
+namespace Gui {
 
-void igRadioGroupModel_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+void igRadioGroupModel::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create };
+    static const char *names[] = { "_selected" };
+    static igMetaField **enumStorage[] = { &k_selected };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-    temp_s0 = (void *)g_igRadioGroupModel_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igRadioGroupModel_ctorTable, 1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)))->setDefault(-1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igRadioGroupModel_fieldTable, g_igRadioGroupModel_fieldHandles, g_igRadioGroupModel_fieldOffsets, temp_s1);
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+}
+}
 }
 

@@ -112,7 +112,7 @@ void igAnimationDatabase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationDatabase_Register);
 }
 
-static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { igSkeletonList_EnsureRegistered, igAnimationList_EnsureRegistered, igSkinList_EnsureRegistered, igAppearanceList_EnsureRegistered, igAnimationCombinerList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { Gap::Sg::igSkeletonList::arkRegister, igAnimationList_EnsureRegistered, Gap::Sg::igSkinList::arkRegister, igAppearanceList_EnsureRegistered, igAnimationCombinerList_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationDatabase_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -177,13 +177,13 @@ void igAnimationDatabase_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationDatabase_ctorTable, 5);
     skeletonListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)skeletonListField)->_metaObject = (int)igSkeletonList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)skeletonListField)->_metaObject = (int)Gap::Sg::igSkeletonList::getClassTypeLazy();
     ((igRefMetaField *)skeletonListField)->_construct = 1;
     animationListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)animationListField)->_metaObject = (int)igAnimationList_GetOrCreateMetaObject();
     ((igRefMetaField *)animationListField)->_construct = 1;
     skinListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)skinListField)->_metaObject = (int)igSkinList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)skinListField)->_metaObject = (int)Gap::Sg::igSkinList::getClassTypeLazy();
     ((igRefMetaField *)skinListField)->_construct = 1;
     appearanceListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     ((igObjectRefMetaField *)appearanceListField)->_metaObject = (int)igAppearanceList_GetOrCreateMetaObject();

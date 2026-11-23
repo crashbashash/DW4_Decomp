@@ -21,7 +21,7 @@ igNode *igSwitch_RemoveChildAt(igSwitch *sw, int arg1) {
     igNode *removed;
     int var_a1;
 
-    removed = igGroup_RemoveChildAt((igGroup *)sw, arg1).p;
+    removed = (::igNode *)((Gap::Sg::igGroup *)sw)->removeChild(arg1).p;
     {
         int a0v = arg0->f32;
         if (arg0->f28 != 0) {

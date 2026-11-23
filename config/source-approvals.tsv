@@ -319,11 +319,14 @@ asm	FUN_001c47f0	3	#alchemy-vu0-macro
 volatile	FUN_001c47f0	3	#alchemy-vu0-macro
 asm	igVectorMorphing_MorphVu0	3	#alchemy-vu0-macro
 volatile	igVectorMorphing_MorphVu0	3	#alchemy-vu0-macro
+asm	p2WriteLights	2	#alchemy-vu0-macro
+volatile	p2WriteLights	2	#alchemy-vu0-macro
 asm	igMatrix44f_Copy	1	#quadword-copy-registers
 asm	p2SetMatrix	1	#quadword-copy-registers
 asm	Gap__Bec__beHitLandModelTraversal__vfunc_23	2	#scratchpad-traversal-stack
 asm-function	FUN_001eba30	1	#p2-debug-breakpoint
 asm-function	FUN_001eba74	1	#p2-debug-breakpoint
+asm	p2UploadDirtyGsRegisters	2	#p2gs-dirty-register-scan
 volatile	sceDmaPutStallAddr	1	#sony-hardware-registers
 volatile	_ipuSetMpeg1	1	#sony-hardware-registers
 volatile	GetTimerPreScaleFactor	6	#sony-timer-state

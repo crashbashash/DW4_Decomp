@@ -44,8 +44,8 @@ CallbackArray *beNodeAnim_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNodeAnim_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         beNodeAnim_GetMetaObject,
         "beNodeAnim",
         0x70, /* instance size */

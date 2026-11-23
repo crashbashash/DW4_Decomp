@@ -94,6 +94,13 @@ from REV in the working tree (tools/changedunits.py), with the cache as usual. I
 of a slice, not a gate: like `--cover-limit` it leaves data/ as it is, and it names the changed config/ tables,
 check tool modules and kernel patch sources it cannot follow (those need the full run).
 
+`--lock FILE` (default `$DW4_BUILD_LOCK`, not read under make) is the build lock a sweep shares with the
+machine's other runs (tools/buildlock.py): each unit's compile and compare (its assembly, for the split) holds
+FILE shared and the sweep releases it between units, so `make check` (which holds FILE exclusively under
+`flock FILE`) waits only for the units in flight and one-unit runs interleave with the sweep. With a lock the
+sweep runs at most 4 workers unless `--jobs` or `DW4_JOBS` says otherwise. Run a sweep with the lock and no outer
+`flock`: `DW4_BUILD_LOCK=FILE python3 tools/check.py --changed-since main`.
+
 Exit status: 0 no mismatch/compile failure, 1 otherwise or a split failure.
 """
 import argparse
@@ -106,6 +113,7 @@ import sys
 import threading
 
 import asmsources
+import buildlock
 import sourceapprovals
 import buildcache
 import cc
@@ -234,9 +242,13 @@ def main(argv=None):
     ap.add_argument("--flags", default=FLAGS_DEFAULT)
     ap.add_argument("--split-only", action="store_true")
     ap.add_argument("--split-limit", type=int, default=0)
-    ap.add_argument("--jobs", type=int, default=forkpool.default_jobs(),
+    ap.add_argument("--jobs", type=int, default=None,
                     help="worker processes for the split and coverage sweeps "
-                         "(default: the cores free memory can hold; 1 = serial; tools/forkpool.py)")
+                         "(default: the cores free memory can hold, at most 4 with --lock; 1 = serial; "
+                         "tools/forkpool.py)")
+    ap.add_argument("--lock", metavar="FILE", default=None,
+                    help="the build lock: hold FILE shared around each unit's compile and compare, releasing it "
+                         "between units (default $DW4_BUILD_LOCK outside make; '' for none; tools/buildlock.py)")
     ap.add_argument("--function", help="single VA to check against --cand")
     ap.add_argument("--cand", help="C file for --function")
     ap.add_argument("--list-mismatch", action="store_true")
@@ -249,6 +261,10 @@ def main(argv=None):
                     help="check only the units whose source or included headers differ from REV in the working tree "
                          "(tools/changedunits.py; for the edit-verify loop, not a gate)")
     a = ap.parse_args(argv)
+    lock_path = buildlock.path(a.lock)
+    held = buildlock.holder(lock_path)
+    if a.jobs is None:
+        a.jobs = buildlock.sweep_jobs(lock_path, forkpool.default_jobs())
     use_cache = buildcache.enabled(a.no_cache)
 
     img = read_elf(a.elf)
@@ -273,10 +289,11 @@ def main(argv=None):
         src, tmp = ((a.cand, None) if nm is None
                     else units.standalone(a.cand, nm, symbols=a.symbols, unit_objects=a.unit_objects))
         try:
-            ok, report = vfy.verify_one(va, src, flags=a.flags, elf=a.elf, symbols=a.symbols,
-                                        mwcc=a.mwcc, wibo=a.wibo, unit_flags=a.unit_flags,
-                                        unit_compilers=a.unit_compilers, unit_objects=a.unit_objects,
-                                        units=a.units)
+            with held():
+                ok, report = vfy.verify_one(va, src, flags=a.flags, elf=a.elf, symbols=a.symbols,
+                                            mwcc=a.mwcc, wibo=a.wibo, unit_flags=a.unit_flags,
+                                            unit_compilers=a.unit_compilers, unit_objects=a.unit_objects,
+                                            units=a.units)
         finally:
             if tmp:
                 os.remove(tmp)
@@ -306,7 +323,8 @@ def main(argv=None):
                 key = buildcache.sha(split_fp, nm, va, sz, fh.read())
             if split_store.get(key):
                 return None
-        got, err = assemble_s(path)
+        with held():
+            got, err = assemble_s(path)
         if got is None:
             return (nm, "assemble failed: " + err)
         if got[:sz // 4] != [struct.unpack_from("<I", va_bytes(img, va, sz), 4 * i)[0]
@@ -512,10 +530,11 @@ def main(argv=None):
                     return (nm, hit["category"], hit.get("exc"), hit.get("diagnostic", "-"), hit.get("override"))
         src, tmp = units.standalone(path, nm, symbols=a.symbols, unit_objects=a.unit_objects)
         try:
-            ok, report = vfy.verify_one(va, src, flags=a.flags, elf=a.elf,
-                                        symbols=a.symbols, mwcc=a.mwcc, wibo=a.wibo,
-                                        unit_flags=a.unit_flags, unit_compilers=a.unit_compilers,
-                                        unit_objects=a.unit_objects, units=a.units)
+            with held():
+                ok, report = vfy.verify_one(va, src, flags=a.flags, elf=a.elf,
+                                            symbols=a.symbols, mwcc=a.mwcc, wibo=a.wibo,
+                                            unit_flags=a.unit_flags, unit_compilers=a.unit_compilers,
+                                            unit_objects=a.unit_objects, units=a.units)
         finally:
             if tmp:
                 os.remove(tmp)
@@ -602,9 +621,10 @@ def main(argv=None):
             hit = cover_store.get(key)
             if isinstance(hit, dict):
                 return group, label, hit["category"], hit.get("diagnostic", "-"), hit.get("data", [])
-        ok, report = vfy.verify_one(group.owner, path, flags=a.flags, elf=a.elf, symbols=a.symbols, mwcc=a.mwcc,
-                                    wibo=a.wibo, unit_flags=a.unit_flags, unit_compilers=a.unit_compilers,
-                                    unit_objects=a.unit_objects, units=a.units)
+        with held():
+            ok, report = vfy.verify_one(group.owner, path, flags=a.flags, elf=a.elf, symbols=a.symbols,
+                                        mwcc=a.mwcc, wibo=a.wibo, unit_flags=a.unit_flags,
+                                        unit_compilers=a.unit_compilers, unit_objects=a.unit_objects, units=a.units)
         kind, _exc, diagnostic, _override = classify(ok, report)
         found = data_spans(report)
         if key and kind != "compile":

@@ -1,147 +1,149 @@
-void igSkeleton_Update(SkeletonView *o, SkeletonSlots *clock, int unused, SkeletonMatrix *local, SkeletonMatrix *global, SkeletonMatrix *out, SkeletonOverrideListView *overrides) {
-    SkeletonMatrix *inv;
-    int count;
-    int n;
+namespace Gap {
+namespace Sg {
+
+void igSkeleton::update(igCommonTraversal *traversal, igActor *actor, const igMatrix44f *animResultArray, igMatrix44f *boneMatrixResultArray, igMatrix44f *blendMatrixResultArray, igAnimationModifierList *modifierList)
+{
+    igMatrix44f *invJoint;
+    int boneCount;
+    int modifierCount;
     int i;
     int j;
     float translation[3];
-    SkeletonMatrix m;
-    count = o->getBoneCount();
-    inv = o->_invJointArray;
-    if (overrides == 0 || (n = overrides->_count) == 0) {
-        for (i = 1; i < count; i++) {
-            SkeletonBoneInfoView *info = o->_boneInfoList->_data[i];
-            SkeletonMatrix *g;
+    float combined[16];
+
+    boneCount = ((igAnimationHierarchy *)this)->getBoneCount();
+    invJoint = _invJointArray;
+    if (modifierList == 0 || (modifierCount = modifierList->getCount()) == 0) {
+        for (i = 1; i < boneCount; i++) {
+            igSkeletonBoneInfo *info = _boneInfoList->get(i);
+            igMatrix44f *global;
             int parent = info->_parentIdx;
             if (parent == 0) {
-                g = &global[i];
-                igMatrix44f_Copy((float *)g, (const float *)&local[i]);
+                global = &boneMatrixResultArray[i];
+                igMatrix44f_Copy(global->m, animResultArray[i].m);
             } else {
-                g = &global[i];
-                FUN_00190470(g, &local[i], &global[parent]);
+                global = &boneMatrixResultArray[i];
+                FUN_00190470(global, (void *)&animResultArray[i], &boneMatrixResultArray[parent]);
             }
             if (info->_bmIdx != -1) {
-                FUN_00190470(&out[info->_bmIdx], inv, g);
-                inv++;
+                FUN_00190470(&blendMatrixResultArray[info->_bmIdx], invJoint, global);
+                invJoint++;
             }
         }
         return;
     }
-    for (i = 1; i < count; i++) {
-        int off;
-        SkeletonBoneInfoView *info;
-        SkeletonMatrix *g;
-        info = o->_boneInfoList->_data[i];
-        off = i << 6;
-        igMatrix44f_Copy((float *)&m, (const float *)((char *)local + off));
-        for (j = 0; j < n; j++) {
-            SkeletonOverrideView *ov = overrides->_data[j];
-            if (i == ov->_bone) {
-                SkeletonMatrix *src;
-                SkeletonSourceView *source = ov->_source;
-                source->update(clock->getTime());
-                src = &ov->_source->_matrix;
-                if (ov->_mode == 2) { igMatrix44f_Copy((float *)&m, (const float *)src); }
-                if (ov->_mode == 3) {
-                    igMatrix44f_GetTranslation((float *)&m, translation);
-                    igMatrix44f_Copy((float *)&m, (const float *)src);
-                    igMatrix44f_SetTranslation((float *)&m, translation);
-                } else if (ov->_mode == 0) {
-                    igMatrix44f_PreMultiply((float *)&m, (const float *)src);
-                } else if (ov->_mode == 1) {
-                    igMatrix44f_Multiply((float *)&m, (const float *)&m, (const float *)src);
+    for (i = 1; i < boneCount; i++) {
+        int offset;
+        igSkeletonBoneInfo *info;
+        igMatrix44f *global;
+        info = _boneInfoList->get(i);
+        offset = i << 6;
+        igMatrix44f_Copy(combined, (const float *)((char *)animResultArray + offset));
+        for (j = 0; j < modifierCount; j++) {
+            igAnimationModifier *modifier = modifierList->getArray()[j];
+            if (i == modifier->_boneIndex) {
+                igTransform *transform = modifier->getTransform();
+                igMatrix44f *source;
+                ((igTransformUpdateView *)transform)->update(((igCommonTraversalDispatchView *)traversal)->getTime());
+                source = (igMatrix44f *)modifier->getTransform()->_m;
+                if (modifier->_type == igAnimationModifier::kOverride) {
+                    igMatrix44f_Copy(combined, source->m);
+                }
+                if (modifier->_type == igAnimationModifier::kOverrideOrientation) {
+                    igMatrix44f_GetTranslation(combined, translation);
+                    igMatrix44f_Copy(combined, source->m);
+                    igMatrix44f_SetTranslation(combined, translation);
+                } else if (modifier->_type == igAnimationModifier::kPre) {
+                    igMatrix44f_PreMultiply(combined, source->m);
+                } else if (modifier->_type == igAnimationModifier::kPost) {
+                    igMatrix44f_Multiply(combined, combined, source->m);
                 }
             }
         }
         if (info->_parentIdx != 0) {
-            g = (SkeletonMatrix *)((char *)global + off);
-            igMatrix44f_Multiply((float *)g, (const float *)&m, (const float *)&global[info->_parentIdx]);
+            global = (igMatrix44f *)((char *)boneMatrixResultArray + offset);
+            igMatrix44f_Multiply(global->m, combined, boneMatrixResultArray[info->_parentIdx].m);
         } else {
-            g = (SkeletonMatrix *)((char *)global + off);
-            igMatrix44f_Copy((float *)g, (const float *)&m);
+            global = (igMatrix44f *)((char *)boneMatrixResultArray + offset);
+            igMatrix44f_Copy(global->m, combined);
         }
         if (info->_bmIdx != -1) {
-            igMatrix44f_Multiply((float *)&out[info->_bmIdx], (const float *)inv, (const float *)g);
-            inv++;
+            igMatrix44f_Multiply(blendMatrixResultArray[info->_bmIdx].m, invJoint->m, global->m);
+            invJoint++;
         }
     }
 }
 
-int igSkeleton_GetBoneCount(igSkeleton *self) {
-    return *(int *)((char *)(self->_boneInfoList) + 8);
+int igSkeleton::getBoneCount() const
+{
+    return _boneInfoList->getCount();
 }
 
-int igSkeleton_FindBoneIndex(S_1d9500 *arg0, int arg1) {
+int igSkeleton::findBoneIndex(const char *boneName) const
+{
     int i;
-    int *p;
 
-    for (i = 0; i < arg0->l->cnt; i++) {
-        p = arg0->l->arr[i]->f8;
-        p = p != 0 ? p : (int *)emptyString;
-        if (strcasecmp((char *)p, (char *)arg1) == 0) {
+    for (i = 0; i < _boneInfoList->getCount(); i++) {
+        if (strcasecmp(_boneInfoList->get(i)->getName(), boneName) == 0) {
             return i;
         }
     }
     return -1;
 }
 
-int igSkeleton_GetChild(O_1d95a0 *arg0, int arg1, int *arg2) {
-    int i;
-    while ((i = *arg2) < ((VC_1d95a0 *)arg0)->vX()) {
-        E_1d95a0 *e = arg0->b->arr[i];
-        *arg2 += 1;
-        if (e->f12 == arg1) {
-            return *arg2 - 1;
+int igSkeleton::getChild(int parentIndex, int &startIndex) const
+{
+    while (startIndex < getBoneCount()) {
+        igSkeletonBoneInfo *info = _boneInfoList->get(startIndex);
+        startIndex++;
+        if (info->_parentIdx == parentIndex) {
+            return startIndex - 1;
         }
     }
     return -1;
 }
 
-int igSkeleton_GetSpecifiedChild(void **arg0, int arg1, int arg2) {
-    int sp5C;
-    int temp_v0;
-    int var_s0;
+int igSkeleton::getSpecifiedChild(int boneIndex, int number) const
+{
+    int startIndex = 0;
+    int count = 0;
+    int child;
 
-    sp5C = 0;
-    var_s0 = 0;
-loop_1:
-    temp_v0 = ((V116 *)arg0)->vX(arg1, &sp5C);
-    if ((temp_v0 != -1) && (var_s0 == arg2)) {
-        return temp_v0;
-    }
-    var_s0 += 1;
-    if (temp_v0 == -1) {
-        return -1;
-    }
-    goto loop_1;
-}
-
-int igSkeleton_GetChildCount(VC_1d96d0 *arg0, int arg1) {
-    int sp4C;
-    int temp_v0;
-    int var_s0;
-
-    sp4C = 0;
-    var_s0 = 0;
     do {
-        temp_v0 = arg0->vX(arg1, &sp4C);
-        if (temp_v0 != -1) {
-            var_s0 += 1;
+        child = getChild(boneIndex, startIndex);
+        if (child != -1 && count == number) {
+            return child;
         }
-    } while (temp_v0 != -1);
-    return var_s0;
+        count++;
+    } while (child != -1);
+    return -1;
 }
 
-int FUN_001d9740(void *arg0, int arg1) {
-    int temp_v1;
-    int var_v0;
+int igSkeleton::getChildCount(int boneIndex) const
+{
+    int startIndex = 0;
+    int count = 0;
+    int child;
 
-    temp_v1 = *(int *)((char *)arg0 + 12);
-    var_v0 = 0;
-    if (temp_v1 != 0) {
-        var_v0 = igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)temp_v1);
+    do {
+        child = getChild(boneIndex, startIndex);
+        if (child != -1) {
+            count++;
+        }
+    } while (child != -1);
+    return count;
+}
+
+int igSkin::traverse(igTraversal *traversal)
+{
+    int result = 0;
+
+    if (_skinnedGraph != 0) {
+        result = ((Gap::Sg::igTraversal *)traversal)->dispatch((Gap::Core::igObject *)_skinnedGraph);
     }
-    return var_v0;
+    return result;
+}
+}
 }
 
 void **igSmartPointer_igModelViewMatrixBoneSelect_Destruct(void **arg0, short arg1) {

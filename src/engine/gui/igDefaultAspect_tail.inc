@@ -3,7 +3,7 @@ void Gap__Gui__igDefaultAspect__vfunc_25(igDefaultAspect *arg0) {
     void *l;
 
     for (i = 0; l = (void *)arg0->_elementList, i < *(int *)((char *)l + 8); i++) {
-        igGroup_AppendChild((igGroup *)arg0->_node, (igNode *)(*(int *)((char *)((*(int *)(*(int *)((char *)l + 16) + (i * 4)))) + 16)));
+        ((Gap::Sg::igGroup *)arg0->_node)->appendChild((Gap::Sg::igNode *)(*(int *)((char *)((*(int *)(*(int *)((char *)l + 16) + (i * 4)))) + 16)));
     }
     FUN_004540d0((S_4540d0 *)arg0);
     igDefaultAspect_UpdateMinimumSize(arg0);
@@ -35,7 +35,7 @@ void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
     model->f16 = maxX;
     model->f20 = maxY;
     model->f24 = maxZ;
-    igNotifyEvent msg((Gap::Core::igMetaField *)g_igGuiComponentModel_sizeMetaField);
+    igNotifyEvent msg((Gap::Core::igMetaField *)Gap::Gui::igGuiComponentModel::k_size);
     ((Gap::Gui::igModel *)self->_model)->notifyAllViews(msg);
 }
 
@@ -45,14 +45,14 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
 
     var_s0 = arg0->f40->count - 1;
     while (var_s0 >= 0) {
-        igGroup_RemoveChildAt((igGroup *)arg0->f12, var_s0);
+        ((Gap::Sg::igGroup *)arg0->f12)->removeChild(var_s0);
         var_s0 -= 1;
     }
     temp_v1 = arg0->f8;
     temp_v1->f16 = g_vec3Zero[0];
     temp_v1->f20 = DAT_004e105c[0];
     temp_v1->f24 = DAT_004e1060[0];
-    igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiComponentModel_sizeMetaField);
+    igNotifyEvent sp30((Gap::Core::igMetaField *)Gap::Gui::igGuiComponentModel::k_size);
     ((Gap::Gui::igModel *)arg0->f8)->notifyAllViews(sp30);
 }
 
@@ -60,11 +60,11 @@ void Gap__Gui__igDefaultAspect__vfunc_27(void *arg0, struct S_454050 *arg1) {
     int temp_a1;
 
     temp_a1 = arg1->f8;
-    if ((temp_a1 == (int)g_igGuiComponentModel_hasFocusMetaField) || (temp_a1 == (int)g_igGuiComponentModel_pushedMetaField) || (temp_a1 == (int)g_igOnOffModel_valueMetaField) || (temp_a1 == (int)g_igGuiComponentModel_enabledMetaField)) {
+    if ((temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_hasFocus) || (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_pushed) || (temp_a1 == (int)Gap::Gui::igOnOffModel::k_value) || (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_enabled)) {
         FUN_004540d0((S_4540d0 *)arg0);
         return;
     }
-    if (temp_a1 == (int)g_igGuiComponentModel_sizeMetaField) {
+    if (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_size) {
         FUN_00454180(arg0);
     }
 }

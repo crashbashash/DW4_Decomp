@@ -180,7 +180,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
 }
 
 void beCopyModelCtrl2_RegisterTraversal(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beCopyModelCtrl2_GetMetaObject(), (void *)beCopyModelCtrl2_TraverseCallback);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, beCopyModelCtrl2_GetMetaObject(), (igTraversalFunction *)beCopyModelCtrl2_TraverseCallback);
 }
 
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node)
@@ -237,7 +237,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
 }
 
 void beCopyTransform_RegisterTraversal(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beCopyTransform_GetMetaObject(), (void *)beCopyTransform_TraverseCallback);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, beCopyTransform_GetMetaObject(), (igTraversalFunction *)beCopyTransform_TraverseCallback);
 }
 
 /* Attach: registers with the insight, reads the IOP module path from the BECRUNTIME ini section (else

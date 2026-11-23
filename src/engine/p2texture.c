@@ -17,6 +17,8 @@ P2Texture *p2AllocTextureRecord(void);
 void p2SetProgramTextureFunction(int function);
 void p2SetTextureAlpha(char alpha0, unsigned char alpha1, int expandAlpha);
 int p2AllocTextureMemory(P2Texture *texture);
+/* Selects the mipmap levels (the textures after the first of a binding) for the draws. */
+void FUN_00208830(P2Texture **levels, int palettedStages);
 
 /* The VRAM block list, in address order, and where the next search for space starts. */
 extern P2Texture *p2TextureBlocks;
@@ -974,6 +976,11 @@ static inline int p2TextureState(const P2Texture *texture) {
     return texture->state;
 }
 
+/* The state of a texture that may be absent: an absent one counts as free. */
+static inline int p2TextureStateOrFree(const P2Texture *texture) {
+    return texture != 0 ? texture->state : P2_TEXTURE_FREE;
+}
+
 static inline void p2FenceTextureRecord(P2Texture *texture) {
     texture->state = P2_TEXTURE_FENCED;
     texture->drawSequence = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
@@ -1006,6 +1013,212 @@ void p2FenceTexture(P2Texture *texture) {
         }
         EIntr();
     }
+}
+
+/* Reads a stage mask through a pointer that cannot change it. */
+static inline int p2ReadStages(const int *stages) {
+    return *stages;
+}
+
+/* A program without a palette clears its bit of p2PalettedStages. */
+static inline void p2ClearPalettedStage(int program) {
+    if (program == 0) {
+        p2PalettedStages &= ~1;
+    } else if (program == 1) {
+        p2PalettedStages &= ~2;
+    }
+}
+
+/* Binds the texture of every level in `list` (pointers to the texture, then its palette, then the
+ * rest of its chain) to program `program`: fences what the program had bound, uploads the levels
+ * that are not in VRAM, selects the texture and makes the draws wait for the uploads. Returns 0
+ * when a level found no VRAM. */
+int FUN_0020bb20(void *list, int program, int deferred) {
+    P2Texture **textures = (P2Texture **)list;
+    int stage;
+    int uploadCount;
+    int count;
+    int sequence;
+    P2Texture *bound;
+    int state;
+    int i;
+    int result;
+    P2Texture *texture;
+    P2Texture *palette;
+    int set;
+    P2Texture *level;
+    int j;
+    int previous;
+    unsigned int stages;
+    P2Texture *uploads[8];
+    P2Texture **slot;
+
+    result = 1;
+    slot = &p2TextureStages[program];
+    bound = *slot;
+    uploadCount = 0;
+    state = p2TextureStateOrFree(bound);
+    count = textures[0]->chainCount + ((textures[0]->palette != 0) + 1);
+    if (bound != 0 && bound != textures[0] &&
+        (state == P2_TEXTURE_STALE || state == P2_TEXTURE_RESIDENT || state == P2_TEXTURE_LOADING)) {
+        {
+            if (count == 1 && textures[0]->clut != 0) {
+                palette = bound->palette;
+                state = p2TextureStateOrFree(palette);
+                if (palette != 0 && palette != textures[0] &&
+                    (state == P2_TEXTURE_RESIDENT || state == P2_TEXTURE_LOADING)) {
+                    p2FenceTexture(palette);
+                }
+            } else {
+                p2FenceTexture(bound);
+                p2TextureStageMask &= ~(1 << program);
+                stages = p2TextureStageMask;
+                stage = 0;
+                while (stages != 0) {
+                    stages >>= 1;
+                    stage++;
+                    if (stages & 1) {
+                        texture = p2TextureStages[stage];
+                        if (texture != 0) {
+                            state = p2TextureStateOrFree(texture);
+                            if (state == P2_TEXTURE_RESIDENT || state == P2_TEXTURE_LOADING) {
+                                p2FenceTexture(texture);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (count > 1 || deferred != 0) {
+        for (i = 0; i < count; i++) {
+            if (textures[i] != 0) {
+                textures[i]->used = 1;
+            } else {
+                count = i;
+                if (i == 1) {
+                    textures[0]->used = 0;
+                }
+            }
+        }
+    }
+    for (i = 0; i < count; i++) {
+        P2TextureFlags *flags = &textures[i]->flags;
+
+        switch (p2TextureState(textures[i])) {
+        case P2_TEXTURE_STALE:
+            uploads[uploadCount++] = textures[i];
+            if (textures[i]->image != 0) {
+                textures[i]->state = P2_TEXTURE_LOADING;
+                if (bound == textures[i]) {
+                    textures[i]->drawSequence = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
+                    p2AddDmaCompletion(1, &p2TextureUploadDone, textures[i]);
+                    p2SubmitDmaPacket(P2_DMA_VIF1);
+                    p2AddDmaPredicate(2, &textureDeferredPredicate, textures[i]->drawSequence);
+                }
+            }
+            break;
+        case P2_TEXTURE_UNPLACED:
+            if (p2AllocTextureMemory(textures[i]) == 0) {
+                if (uploadCount != 0) {
+                    result = 0;
+                    break;
+                }
+                if (count > 1) {
+                    for (j = 0; j < count; j++) {
+                        textures[j]->used = 0;
+                    }
+                }
+                return 0;
+            }
+            if (textures[i]->image != 0) {
+                uploads[uploadCount++] = textures[i];
+            } else {
+                textures[i]->used = 1;
+            }
+            break;
+        case P2_TEXTURE_FENCED:
+        case P2_TEXTURE_DRAWN:
+        case P2_TEXTURE_RESIDENT:
+            flags->state = P2_TEXTURE_RESIDENT;
+            break;
+        case P2_TEXTURE_FREE:
+        case P2_TEXTURE_LOADING:
+            break;
+        }
+    }
+    if (textures[0]->clut != 0) {
+        if (*slot != 0) {
+            (*slot)->palette = textures[0];
+        }
+    } else {
+        *slot = textures[0];
+    }
+    if (uploadCount != 0) {
+        p2UploadTextures(uploads, uploadCount);
+    }
+    if (count > 1 && deferred == 0) {
+        for (j = 0; j < count; j++) {
+            textures[j]->used = 0;
+        }
+    }
+    p2TextureStageMask &= ~(1 << program);
+    set = program > 1 ? program - 1 : 0;
+    p2CurrentProgram = program;
+    p2CurrentGsRegisters = &p2GsRegisterSets[set];
+    p2SetTexture(textures[0]);
+    if (count > 1) {
+        palette = textures[0]->palette;
+        previous = p2ReadStages(&p2PalettedStages);
+        if (palette != 0) {
+            p2SetClut((struct p2Clut *)palette->clut);
+            if (program == 0) {
+                p2PalettedStages |= 1;
+            } else if (program == 1 && p2TextureStages[0]->palette != p2TextureStages[1]->palette) {
+                p2PalettedStages |= 2;
+            }
+        } else {
+            p2ClearPalettedStage(program);
+        }
+        if ((previous & 2) != (p2PalettedStages & 2) ||
+            ((previous & 1) != (p2PalettedStages & 1) && (p2PalettedStages & 2))) {
+            p2DirtyFlags |= 0x11;
+        }
+        if (textures[0]->chainCount != 0) {
+            FUN_00208830(textures + 1, p2PalettedStages);
+        }
+    } else if (textures[0]->clut == 0) {
+        p2ClearPalettedStage(program);
+    }
+    p2ReserveDmaPredicates(count);
+    DIntr();
+    sequence = -1;
+    if (textureLoadedPredicate(textures[0]->uploadSequence) == 0) {
+        p2AddDmaPredicate(1, &textureLoadedPredicate, textures[0]->uploadSequence);
+        sequence = textures[0]->uploadSequence;
+    }
+    if (count > 1) {
+        palette = textures[0]->palette;
+        level = textures[0]->chain;
+        if (palette != 0 && sequence < palette->uploadSequence && textureLoadedPredicate(palette->uploadSequence) == 0) {
+            p2AddDmaPredicate(1, &textureLoadedPredicate, palette->uploadSequence);
+            sequence = textures[0]->uploadSequence;
+        }
+        while (level != 0) {
+            if (sequence < level->uploadSequence && textureLoadedPredicate(level->uploadSequence) == 0) {
+                p2AddDmaPredicate(1, &textureLoadedPredicate, level->uploadSequence);
+                sequence = textures[0]->uploadSequence;
+            }
+            level = level->chain;
+            if (level != 0 && level->state == P2_TEXTURE_UNPLACED) {
+                level = 0;
+            }
+        }
+    }
+    EIntr();
+    p2CurrentProgram = 0;
+    p2CurrentGsRegisters = &p2GsRegisterSets[0];
+    return result;
 }
 
 P2Texture *p2LoadTexture(void *image, int width, int height, int format, int deferred) {

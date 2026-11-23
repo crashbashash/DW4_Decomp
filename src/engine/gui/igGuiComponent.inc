@@ -130,7 +130,7 @@ void igGuiComponent_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGuiComponent_Register);
 }
 
-static igMetaObjectCallback g_igGuiComponent_callbackList[] = { igGuiComponentController_EnsureRegistered, igGuiComponentModel_RunStaticInit, igGuiComponentAspect_EnsureRegistered, igGuiSystem_RunStaticInit, igGuiComponentNode_RunStaticInit, 0 };
+static igMetaObjectCallback g_igGuiComponent_callbackList[] = { igGuiComponentController_EnsureRegistered, Gap::Gui::igGuiComponentModel::arkRegister, igGuiComponentAspect_EnsureRegistered, igGuiSystem_RunStaticInit, igGuiComponentNode_RunStaticInit, 0 };
 
 CallbackArray *igGuiComponent_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -206,7 +206,7 @@ void igGuiComponent_InitFields(void) {
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igGuiComponentController_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igGuiComponentModel_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Gui::igGuiComponentModel::getClassTypeLazy();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igGuiComponentAspect_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));

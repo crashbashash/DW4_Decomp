@@ -3408,7 +3408,7 @@ igView	IG_ABSTRACT_OBJECT_DEFINE(igView)
 igView	protected: static igMetaField *k_model;
 igView	public: inline igModel *getModel() const { return _model; }
 igView	void setModel(igModel *model);
-igView	virtual bool isCompatible(igModel *model) = 0;
+igView	virtual int isCompatible(igModel *model) = 0;
 igView	protected: virtual void notify(const igNotifyEvent &event) = 0;
 igView	virtual void userDestruct();
 igView	friend class igModel;
@@ -3428,3 +3428,196 @@ igSkeletonBoneInfo	static igMetaField *k_flags;
 igSkeletonBoneInfo	inline int getBmIdx() const { return _bmIdx; }
 igSkeletonBoneInfo	inline int getFlags() const { return _flags; }
 igSkeletonBoneInfoList	IG_OBJECT_DEFINE(igSkeletonBoneInfoList)
+igAnimationHierarchy	IG_ABSTRACT_OBJECT_DEFINE(igAnimationHierarchy)
+igAnimationHierarchy	protected: static igMetaField *k_boneTranslationArray;
+igAnimationHierarchy	public: virtual void update(igCommonTraversal *traversal, igActor *actor, const igMatrix44f *animResultArray, igMatrix44f *boneMatrixResultArray, igMatrix44f *blendMatrixResultArray, igAnimationModifierList *modifierList) = 0;
+igAnimationHierarchy	virtual int getBoneCount() const = 0;
+igAnimationHierarchy	virtual int getJointCount() const = 0;
+igAnimationHierarchy	virtual const char *getBoneName(int index) const = 0;
+igAnimationHierarchy	virtual int findBoneIndex(const char *boneName) const = 0;
+igAnimationHierarchy	virtual int getParent(int childIndex) const = 0;
+igAnimationHierarchy	virtual int getChild(int parentIndex, int &startIndex) const = 0;
+igAnimationHierarchy	virtual int getChildCount(int boneIndex) const = 0;
+igAnimationHierarchy	virtual int getSpecifiedChild(int boneIndex, int number) const = 0;
+igAnimationModifier	IG_OBJECT_DEFINE(igAnimationModifier)
+igAnimationModifier	public: enum ModifierType { kPre, kPost, kOverride, kOverrideOrientation };
+igAnimationModifier	static igMetaEnum *getModifierTypeMetaEnum();
+igAnimationModifier	private: static igMetaEnum *ModifierType_Meta;
+igAnimationModifier	protected: static igMetaField *k_boneIndex;
+igAnimationModifier	static igMetaField *k_transform;
+igAnimationModifier	static igMetaField *k_type;
+igAnimationModifier	public: inline void setBoneIndex(int boneIndexParam) { _boneIndex = boneIndexParam; }
+igAnimationModifier	inline int getBoneIndex() const { return _boneIndex; }
+igAnimationModifier	inline void setTransform(igTransform *transformParam) { _transform = transformParam; }
+igAnimationModifier	inline igTransform *getTransform() const { return _transform; }
+igAnimationModifier	inline void setType(ModifierType typeParam) { _type = typeParam; }
+igAnimationModifier	inline ModifierType getType() const { return (ModifierType)_type; }
+igAnimationModifierList	IG_OBJECT_DEFINE(igAnimationModifierList)
+igSkeleton	IG_OBJECT_DEFINE(igSkeleton)
+igSkeleton	protected: static igMetaField *k_boneInfoList;
+igSkeleton	static igMetaField *k_invJointArray;
+igSkeleton	static igMetaField *k_jointCount;
+igSkeleton	public: inline void setBoneInfoList(igSkeletonBoneInfoList *boneInfoListParam) { _boneInfoList = boneInfoListParam; }
+igSkeleton	inline igSkeletonBoneInfoList *getBoneInfoList() const { return _boneInfoList; }
+igSkeleton	inline igMatrix44f *getInvJointArray() const { return _invJointArray; }
+igSkeleton	inline void setJointCount(int jointCountParam) { _jointCount = jointCountParam; }
+igSkeleton	virtual void update(igCommonTraversal *traversal, igActor *actor, const igMatrix44f *animResultArray, igMatrix44f *boneMatrixResultArray, igMatrix44f *blendMatrixResultArray, igAnimationModifierList *modifierList);
+igSkeleton	virtual int getBoneCount() const;
+igSkeleton	inline virtual int getJointCount() const { return _jointCount; }
+igSkeleton	inline virtual const char *getBoneName(int index) const { return _boneInfoList->get(index)->getName(); }
+igSkeleton	virtual int findBoneIndex(const char *boneName) const;
+igSkeleton	inline virtual int getParent(int childIndex) const { return _boneInfoList->get(childIndex)->_parentIdx; }
+igSkeleton	virtual int getChild(int parentIndex, int &startIndex) const;
+igSkeleton	virtual int getChildCount(int boneIndex) const;
+igSkeleton	virtual int getSpecifiedChild(int boneIndex, int number) const;
+igSkeletonList	IG_OBJECT_DEFINE(igSkeletonList)
+igSkin	IG_OBJECT_DEFINE(igSkin)
+igSkin	protected: static igMetaField *k_skinnedGraph;
+igSkin	static igMetaField *k_bound;
+igSkin	public: inline void setSkinnedGraph(igNode *skinnedGraphParam) { _skinnedGraph = skinnedGraphParam; }
+igSkin	inline void setBound(igAABox *boundParam) { _bound = boundParam; }
+igSkin	inline igAABox *getBound() const { return _bound; }
+igSkin	int traverse(igTraversal *traversal);
+igSkin	inline igNode *getSkinnedGraph() { return _skinnedGraph; }
+igSkinList	IG_OBJECT_DEFINE(igSkinList)
+igTraversalFunctionList	IG_OBJECT_DEFINE(igTraversalFunctionList)
+igTraversal	IG_OBJECT_DEFINE(igTraversal)
+igTraversal	private: static igMetaField *k_nodeSelectProcEnabled;
+igTraversal	private: static igMetaField *k_nodeSelectProc;
+igTraversal	protected: static igMetaField *k_timeLong;
+igTraversal	protected: static igMetaField *k_userTimeState;
+igTraversal	protected: static igMetaField *k_travProcs;
+igTraversal	public: inline void setUserTimeState(bool userTimeStateParam) { _userTimeState = userTimeStateParam; }
+igTraversal	inline bool getUserTimeState() const { return _userTimeState; }
+igTraversal	private: static igTraversalFunctionList *travProcs;
+igTraversal	private: static void registerClass(igMetaObject *meta);
+igTraversal	protected: void cacheTravProcs() { _travProcs = travProcs; }
+igTraversal	protected: static void _registerClass(igTraversalFunctionList *tpl, igMetaObject *meta);
+igTraversal	public: inline static igTraversalFunctionList *_getTraversalFunctions() { return travProcs; }
+igTraversal	inline static void _setTraversalFunctions(igTraversalFunctionList *list) { travProcs = list; }
+igTraversal	static void userRegister();
+igTraversal	static void userUnregister();
+igTraversal	virtual void userConstruct(int flag);
+igTraversal	int dispatch(igObject *node);
+igTraversal	virtual void begin(igNode *root);
+igTraversal	virtual void end(igNode *root);
+igTraversal	virtual void apply(igNode *root);
+igTraversal	inline void setNodeSelectFunctionState(bool en) { _nodeSelectProcEnabled = en; }
+igTraversal	inline bool getNodeSelectFunctionState() { return _nodeSelectProcEnabled; }
+igTraversal	inline void setNodeSelectFunction(igTravNodeSelectFunction *func) { _nodeSelectProc = func; }
+igTraversal	inline igTravNodeSelectFunction *getNodeSelectFunction() { return _nodeSelectProc; }
+igTraversal	virtual long long getTimeAsLong();
+igTraversal	inline virtual void setTimeAsLong(long long time) { _timeLong = time; }
+igTraversal	inline void setTime(long long time) { setTimeAsLong(time); }
+igTraversal	inline long long getTime() { return getTimeAsLong(); }
+igTraversal	inline igTraversalFunctionList *getTraversalFunctions() { return _travProcs; }
+igTraversal	inline void setTraversalFunctions(igTraversalFunctionList *tp) { _travProcs = tp; }
+igTraversal	static inline int getNodeHandle(igMetaObject *meta) { return meta->_id; }
+igTraversal	static inline void setNodeHandle(igMetaObject *meta, int newNodeHandle) { meta->_id = newNodeHandle; }
+igTraversal	static void _setFunction(igTraversalFunctionList *tpl, igMetaObject *meta, igTraversalFunction *func);
+igTraversal	private: static void arkRegisterUser();
+igNode	IG_OBJECT_DEFINE(igNode)
+igNode	enum NODE_FLAGS { START_BIT = 1, HAS_LIGHT = 1, HAS_TRANSFORM = 2, USE_RENDER_LIST = 4, USE_RENDER_LIST_DELETE_ORIGINAL = 8, IS_COLLIDABLE = 16, IS_INVISIBLE = 32, IS_DYNAMIC = 64, IS_DYNAMIC_GEOMETRY = 128, ENDBIT = IS_DYNAMIC };
+igNode	private: static igMetaField *k_bound;
+igNode	static igMetaField *k_parentList;
+igNode	static igMetaField *k_flags;
+igNode	static igMetaField *k_handle;
+igNode	protected: static unsigned int flagMask;
+igNode	public: virtual void userConstruct(int flag);
+igNode	virtual void userDestruct();
+igNode	virtual void resetFields(int flag);
+igNode	virtual void userPostLoad();
+igNode	inline int getHandle() const { return _handle; }
+igNode	inline igVolume *getBound() { return _bound; }
+igNode	inline void setBound(igVolume *bound) { _bound = bound; }
+igNode	virtual int getParentCount() const;
+igNode	virtual igNode *getParent(int i) const;
+igNode	inline virtual bool hasChildren() { return false; }
+igNode	inline virtual bool isTransformable() const { return (getParentCount() <= 1); }
+igNode	inline virtual void transform(const igMatrix44f &matrix) { }
+igNode	inline virtual void setFlags(int flags, const bool b) { if (b) _flags |= flags; else _flags &= ~flags; }
+igNode	inline int getFlags() const { return _flags; }
+igNode	inline virtual void setFlags(int flags) { _flags = flags; }
+igNode	void propagateFlagsUp(unsigned int flags);
+igNode	virtual unsigned int getInherantFlags();
+igNode	inline virtual void reset() { }
+igNode	virtual void insertGroupAbove(igGroup *groupToInsert);
+igNode	virtual bool addParent(igNode *parent);
+igNode	virtual bool removeParent(igNode *parent);
+igNodeList	IG_OBJECT_DEFINE(igNodeList)
+igNodeListList	IG_OBJECT_DEFINE(igNodeListList)
+igNonRefCountedNodeList	IG_OBJECT_DEFINE(igNonRefCountedNodeList)
+igGroup	IG_OBJECT_DEFINE(igGroup)
+igGroup	protected: static igMetaField *k_childList;
+igGroup	public: virtual void userDestruct();
+igGroup	virtual void userPostLoad();
+igGroup	inline int getChildCount() const { if (_childList != 0) { return _childList->getCount(); } return 0; }
+igGroup	inline igNode *getChild(int i) const { return _childList->get(i); }
+igGroup	inline int getChild(const igNode *child) const { return _childList->find(child, 0); }
+igGroup	inline igNodeList *getChildList() { return _childList; }
+igGroup	int appendChild(igNode *child);
+igGroup	virtual bool insertChild(int i, igNode *child);
+igGroup	igSmartPointer<igNode> removeChild(int i);
+igGroup	int removeChild(igNode *child);
+igGroup	void removeFlagsUp(unsigned int flags);
+igGroup	inline virtual bool hasChildren() { return (getChildCount() > 0); }
+igGroup	inline virtual bool isChildrenOrdered() const { return false; }
+igGroup	virtual bool isTransformable() const;
+igGroup	virtual void transform(const igMatrix44f &matrix);
+igGuiComponentModel	IG_OBJECT_DEFINE(igGuiComponentModel)
+igGuiComponentModel	public: static igMetaField *k_enabled;
+igGuiComponentModel	static igMetaField *k_hasFocus;
+igGuiComponentModel	static igMetaField *k_mouseOver;
+igGuiComponentModel	static igMetaField *k_pushed;
+igGuiComponentModel	static igMetaField *k_size;
+igGuiComponentModel	static igMetaField *k_childHasFocus;
+igGuiComponentModel	protected: static igMetaField *k_component;
+igGuiComponentModel	public: inline void setComponent(igGuiComponent *componentParam) { _component = componentParam; }
+igGuiComponentModel	inline igGuiComponent *getComponent() const { return _component; }
+igGuiComponentModel	inline unsigned char getEnabled() const { return _enabled; }
+igGuiComponentModel	inline unsigned char getHasFocus() const { return _hasFocus; }
+igGuiComponentModel	inline unsigned char getMouseOver() const { return _mouseOver; }
+igGuiComponentModel	inline unsigned char getPushed() const { return _pushed; }
+igGuiComponentModel	inline unsigned char getChildHasFocus() const { return _childHasFocus; }
+igGuiComponentModel	void setHasFocus(unsigned char hasFocus);
+igGuiComponentModel	void setChildHasFocus(unsigned char hasFocus);
+igGuiComponentModel	void setMouseOver(unsigned char mouseOver);
+igGuiComponentModel	void setPushed(unsigned char pushed);
+igOnOffModel	IG_OBJECT_DEFINE(igOnOffModel)
+igOnOffModel	public: static igMetaField *k_value;
+igRadioGroupModel	IG_OBJECT_DEFINE(igRadioGroupModel)
+igRadioGroupModel	public: static igMetaField *k_selected;
+igRadioGroup	IG_OBJECT_DEFINE(igRadioGroup)
+igRadioGroup	private: static igMetaField *k_model;
+igRadioGroup	static igMetaField *k_selectedObserver;
+igRadioGroup	static igMetaField *k_observerList;
+igRadioGroup	static igMetaField *k_alwaysSelected;
+igRadioGroup	static igMetaField *k_lastSelected;
+igRadioGroup	static igMetaField *k_defaultSelected;
+igRadioGroup	public: inline const igOnOffValueObserverList *getObserverList() const { return _observerList; }
+igRadioGroup	inline void setAlwaysSelected(unsigned char alwaysSelectedParam) { _alwaysSelected = alwaysSelectedParam; }
+igRadioGroup	inline unsigned char getAlwaysSelected() const { return _alwaysSelected; }
+igRadioGroup	inline void setDefaultSelected(int defaultSelectedParam) { _defaultSelected = defaultSelectedParam; }
+igRadioGroup	inline int getDefaultSelected() const { return _defaultSelected; }
+igRadioGroup	inline int getSelected() { return _model->_selected; }
+igRadioGroup	inline igRadioGroupModel *getRadioModel() const { return _model; }
+igRadioGroup	private: void globalValueChanged();
+igRadioGroup	void itemValueChanged(igOnOffValueObserver *observer);
+igRadioGroup	virtual void resetFields(int persistent);
+igRadioGroup	friend class igOnOffValueObserver;
+igRadioGroup	friend class igRadioGroupSelectedObserver;
+igRadioGroupSelectedObserver	IG_OBJECT_DEFINE(igRadioGroupSelectedObserver)
+igRadioGroupSelectedObserver	private: static igMetaField *k_group;
+igRadioGroupSelectedObserver	public: inline void setGroup(igRadioGroup *groupParam) { _group = groupParam; }
+igRadioGroupSelectedObserver	inline const igRadioGroup *getGroup() const { return _group; }
+igRadioGroupSelectedObserver	private: virtual int isCompatible(igModel *model) { return model->isOfType(igRadioGroupModel::getClassTypeSafe()); }
+igRadioGroupSelectedObserver	virtual void notify(const igNotifyEvent &event);
+igOnOffValueObserver	IG_OBJECT_DEFINE(igOnOffValueObserver)
+igOnOffValueObserver	private: static igMetaField *k_group;
+igOnOffValueObserver	public: inline void setGroup(igRadioGroup *groupParam) { _group = groupParam; }
+igOnOffValueObserver	inline const igRadioGroup *getGroup() const { return _group; }
+igOnOffValueObserver	private: virtual int isCompatible(igModel *model) { return model->isOfType(igOnOffModel::getClassTypeSafe()); }
+igOnOffValueObserver	virtual void notify(const igNotifyEvent &event);
+igOnOffValueObserver	void setSelected(unsigned char selected);
+igOnOffValueObserver	friend class igRadioGroup;
+igOnOffValueObserverList	IG_OBJECT_DEFINE(igOnOffValueObserverList)

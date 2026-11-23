@@ -1,23 +1,14 @@
-int igNode_IsTransformable(void **arg0) {
-    return ((DW4VC_92_0 *)(arg0))->vX() < 2;
-}
+namespace Gap {
+namespace Sg {
 
-void igGroup_Transform(int *arg0, int arg1) {
-    unsigned int n;
-    unsigned int i;
-
-    if (arg0[7] != 0) {
-        n = ((Q_1c6340 *)arg0[7])->count;
-    } else {
-        n = 0;
-    }
-    for (i = 0; i < n; i++) {
-        ((Q_1c6340 *)arg0[7])->data[i]->vX(arg1);
+void igGroup::transform(const igMatrix44f &matrix)
+{
+    unsigned int count = getChildCount();
+    for (unsigned int i = 0; i < count; i++) {
+        _childList->get(i)->transform(matrix);
     }
 }
-
-void igNode_Transform(void) {
-
+}
 }
 
 char g_invarianceFunctionFieldResolved;

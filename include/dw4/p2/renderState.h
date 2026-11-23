@@ -34,7 +34,7 @@ void p2PrepareRenderState(int mask);
 /* Sets the vertex format bits and the program capability mask from the current program, the bound
  * arrays and the primitive. */
 void p2BuildVertexFormat(void);
-int p2BuildFunctionTables(void);
+void p2BuildFunctionTables(void);
 void p2SetupProgramVariants(void);
 void p2FreeVariantTables(void);
 

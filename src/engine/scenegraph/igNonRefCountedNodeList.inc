@@ -1,53 +1,52 @@
-igMetaObject *g_igNonRefCountedNodeList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igNonRefCountedNodeList_GetOrCreateMetaObject(void) {
-    if (g_igNonRefCountedNodeList_metaObject == 0) {
-        g_igNonRefCountedNodeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igNonRefCountedNodeList_metaObject;
-}
+igMetaObject *igNonRefCountedNodeList::_Meta;
 
-igMetaObject *igNonRefCountedNodeList_GetMetaObject(void)
+igMetaObject *igNonRefCountedNodeList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igNonRefCountedNodeList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNonRefCountedNodeList_EnsureRegistered();
-    return g_igNonRefCountedNodeList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igNonRefCountedNodeList_GetVTable(void) {
-    struct Obj_19c960 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igNonRefCountedNodeList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igNonRefCountedNodeList_EnsureRegistered(void)
+igMetaObject *igNonRefCountedNodeList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igNonRefCountedNodeList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igNonRefCountedNodeList_callbackList[] = { igNode_EnsureRegistered, 0 };
+void *igNonRefCountedNodeList::retrieveVTablePointer()
+{
+    igNonRefCountedNodeList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igNonRefCountedNodeList_Register(void) {
+void igNonRefCountedNodeList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNonRefCountedNodeList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igNode::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNonRefCountedNodeList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
         Gap::Core::igNonRefCountedObjectList::getClassMeta,
-        igNonRefCountedNodeList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNonRefCountedNodeList",
-        0x14, /* instance size */
-        igNonRefCountedNodeList_GetVTable,
+        sizeof(igNonRefCountedNodeList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igNonRefCountedNodeList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igNonRefCountedNodeList_GetMetaObjectFunction(void) {
-    igNonRefCountedNodeList_GetMetaObject();
+}
 }
 

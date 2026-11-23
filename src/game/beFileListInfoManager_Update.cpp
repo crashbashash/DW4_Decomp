@@ -416,7 +416,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                             beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)nm);
                             beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETLAYERNODE_2);
                             if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) > 0) {
-                                igGroup_AppendChild((igGroup *)beMessenger_GetObject((beMessenger *)self->_messenger, 0), (igNode *)obj);
+                                ((Gap::Sg::igGroup *)(beMessenger_GetObject((beMessenger *)self->_messenger, 0)))->appendChild((Gap::Sg::igNode *)obj);
                             }
                         }
                     }

@@ -510,25 +510,3 @@ int igPsx2EnvironmentMapShader_IsTransformable(void) {
     return 0;
 }
 
-int igGroup_HasChildren(igGroup *self) {
-    int var_v0;
-    void *temp_v0;
-
-    temp_v0 = (void *)(self->_childList);
-    if (temp_v0 != 0) {
-        var_v0 = *(int *)((char *)(temp_v0) + 8);
-    } else {
-        var_v0 = 0;
-    }
-    return var_v0 > 0;
-}
-
-int igGroup_IsChildrenOrdered(void) {
-    return 0;
-}
-
-void igNode_SetFlags(int a0, int a1)
-{
-    *(int *)((char *)a0 + 20) = a1;
-}
-

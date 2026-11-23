@@ -3,7 +3,7 @@ void FUN_001bb1f0(int arg0) {
 }
 
 void FUN_001bb200(void) {
-    *(int *)0x562648 = igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562648 = (int)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
 void FUN_001bb230(void) {
@@ -56,67 +56,67 @@ void igCompileTraversal_userDestruct(void **self) {
 void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
     igCommonTraversal_RegisterClassFunction((void *)arg0, (void *)arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igProjectiveShadowShader_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseProjectiveShadowShader);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseProjectiveShadowShader);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igDOFShader_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcd90);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcd90);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igEnvironmentMapShader2_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseEnvironmentMapShader2);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseEnvironmentMapShader2);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igMultiTextureShader_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcda0);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcda0);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igCartoonShader_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcdb0);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcdb0);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igBumpMapShader_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcdc0);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcdc0);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igPlanarShadowShader_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraversePlanarShadowShader);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraversePlanarShadowShader);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igShader_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcde0);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcde0);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igGeometry_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseGeometry);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseGeometry);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_unlinkedTransformClass_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseJointTransform);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseJointTransform);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igTransform_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseTransform);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseTransform);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igCompiledGraph_metaObject[0]) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bd0e0);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bd0e0);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igModelViewMatrixBoneSelect_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseModelViewMatrixBoneSelect);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseModelViewMatrixBoneSelect);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igBlendMatrixSelect_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseBlendMatrixSelect);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseBlendMatrixSelect);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igActor_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseActor);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseActor);
         return;
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igSegment_metaObject) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseSegment);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseSegment);
     }
 }
 

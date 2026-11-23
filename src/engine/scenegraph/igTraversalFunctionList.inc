@@ -1,57 +1,57 @@
-int igTraversalFunctionList_CreateInstance(int arg0) {
-    igTraversalFunctionList_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igTraversalFunctionList_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igTraversalFunctionList_metaObject;
-
-igMetaObject *igTraversalFunctionList_GetOrCreateMetaObject(void) {
-    if (g_igTraversalFunctionList_metaObject == 0) {
-        g_igTraversalFunctionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTraversalFunctionList_metaObject;
-}
-
-igMetaObject *igTraversalFunctionList_GetMetaObject(void)
+igTraversalFunctionList *igTraversalFunctionList::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igTraversalFunctionList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTraversalFunctionList_EnsureRegistered();
-    return g_igTraversalFunctionList_metaObject;
+    arkRegister();
+    return (igTraversalFunctionList *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igTraversalFunctionList_GetVTable(void) {
-    struct Obj_19a7c0 obj;
+igMetaObject *igTraversalFunctionList::_Meta;
 
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igTraversalFunctionList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igTraversalFunctionList_EnsureRegistered(void)
+igMetaObject *igTraversalFunctionList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igTraversalFunctionList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igTraversalFunctionList_Register(void) {
+igMetaObject *igTraversalFunctionList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igTraversalFunctionList::retrieveVTablePointer()
+{
+    igTraversalFunctionList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igTraversalFunctionList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTraversalFunctionList::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTraversalFunctionList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igDataList::arkRegisterInternal,
         Gap::Core::igDataList::getClassMeta,
-        igTraversalFunctionList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTraversalFunctionList",
-        0x14, /* instance size */
-        igTraversalFunctionList_GetVTable,
+        sizeof(igTraversalFunctionList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igTraversalFunctionList_GetMetaObjectFunction(void) {
-    igTraversalFunctionList_GetMetaObject();
+}
 }
 
 igSmartPointer<igObject> *igSmartPointer_igProjectionMatrixAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

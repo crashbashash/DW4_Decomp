@@ -1,62 +1,49 @@
-void FUN_00457a10(struct RadioGroupView *s) {
-    struct RadioButtonListView *b;
-    int idx;
-    int c;
-    idx = s->a->sel;
-    if (s->cur != idx) {
-        b = s->b;
-        if (idx < b->n) {
-            if (idx >= 0) {
-                FUN_00457c40((S_457c40 *)b->arr[idx], 1);
+namespace Gap {
+namespace Gui {
+
+void igRadioGroup::globalValueChanged()
+{
+    if (_lastSelected != _model->_selected) {
+        igOnOffValueObserverList *observers = _observerList;
+
+        if (_model->_selected < observers->getCount()) {
+            if (_model->_selected >= 0) {
+                observers->get(_model->_selected)->setSelected(1);
             }
-            c = s->cur;
-            if (c >= 0) {
-                FUN_00457c40((S_457c40 *)s->b->arr[c], 0);
+            if (_lastSelected >= 0) {
+                _observerList->get(_lastSelected)->setSelected(0);
             }
-            s->cur = s->a->sel;
+            _lastSelected = _model->_selected;
         }
     }
 }
 
-void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int arg2) {
-    int idx;
-    int flag;
-    igObjectList *l;
-    igRadioGroupModel *s;
-    int *pf;
-    l = (igObjectList *)arg0->_observerList;
-    flag = ((igOnOffModel *)arg1->_model)->_value;
-    K_457ab0 key(arg1);
-    idx = Finder_457ab0::Find(l, key);
-    if (flag != 0) {
-        s = (igRadioGroupModel *)arg0->_model;
-        pf = &s->_selected;
-        if (idx != s->_selected) {
-            *pf = idx;
-            igNotifyEvent m((Gap::Core::igMetaField *)g_igRadioGroupModel_selectedMetaField);
-            ((Gap::Gui::igModel *)((void *)arg0->_model))->notifyAllViews(m);
+void igRadioGroup::itemValueChanged(igOnOffValueObserver *observer)
+{
+    unsigned char selected = ((igOnOffModel *)observer->getModel())->_value;
+    int index = _observerList->find(observer, 0);
+
+    if (selected) {
+        if (index != _model->_selected) {
+            _model->_selected = index;
+            _model->notifyAllViews(igNotifyEvent(igRadioGroupModel::k_selected));
         }
-    } else {
-        s = (igRadioGroupModel *)arg0->_model;
-        pf = &s->_selected;
-        if (idx == s->_selected) {
-            if (arg0->_alwaysSelected != 0) {
-                FUN_00457c40((S_457c40 *)arg1, 1);
-                return;
-            }
-            *pf = -1;
-            igNotifyEvent m2((Gap::Core::igMetaField *)g_igRadioGroupModel_selectedMetaField);
-            ((Gap::Gui::igModel *)((void *)arg0->_model))->notifyAllViews(m2);
+    } else if (index == _model->_selected) {
+        if (_alwaysSelected) {
+            observer->setSelected(1);
+            return;
         }
+        _model->_selected = -1;
+        _model->notifyAllViews(igNotifyEvent(igRadioGroupModel::k_selected));
     }
 }
 
-void igRadioGroupSelectedObserver_OnModelChange(igRadioGroupSelectedObserver *self, void *arg1) {
-    int temp_a1;
-
-    temp_a1 = *(int *)((char *)arg1 + 8);
-    if (temp_a1 == (int)g_igRadioGroupModel_selectedMetaField) {
-        FUN_00457a10((RadioGroupView *)self->_group);
+void igRadioGroupSelectedObserver::notify(const igNotifyEvent &event)
+{
+    if (event._field == igRadioGroupModel::k_selected) {
+        _group->globalValueChanged();
     }
+}
+}
 }
 

@@ -55,7 +55,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
     igSmartPointer<igAABox> uncachedBox((igAABox *)igAABox_CreateInstance((int)((Gap::Core::igObject *)node)->getMemoryPool()));
     makeEmpty(uncachedBox);
     unsigned char ok = boundCacheable(node, cacheBound);
-    if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) {
+    if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) {
         igGroup *group = (igGroup *)node;
         unsigned count = 0;
         if (group->_childList != 0) count = ((igNodeList *)group->_childList)->_count;

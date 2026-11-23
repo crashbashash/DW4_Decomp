@@ -1,73 +1,64 @@
-igMetaObject *g_igOnOffValueObserver_metaObject;
-igMetaField *g_igOnOffValueObserver_groupMetaField;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igOnOffValueObserver_GetMetaObject(void)
+igMetaObject *igOnOffValueObserver::_Meta;
+igMetaField *igOnOffValueObserver::k_group;
+
+igMetaObject *igOnOffValueObserver::getClassTypeSafe()
 {
-    igMetaObject *g = g_igOnOffValueObserver_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igOnOffValueObserver_EnsureRegistered();
-    return g_igOnOffValueObserver_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igOnOffValueObserver_GetVTable(void) {
-    struct Obj_44ca40 obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igOnOffValueObserver_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igOnOffValueObserver_EnsureRegistered(void)
+void *igOnOffValueObserver::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igOnOffValueObserver_Register);
+    igOnOffValueObserver temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igOnOffValueObserver_callbackList[] = { igRadioGroup_EnsureRegistered, 0 };
+void igOnOffValueObserver::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igOnOffValueObserver_Register(void) {
+CallbackArray *igOnOffValueObserver::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igRadioGroup::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igOnOffValueObserver_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igView::arkRegisterInternal,
         Gap::Gui::igView::getClassMeta,
-        igOnOffValueObserver_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igOnOffValueObserver",
-        0x10, /* instance size */
-        igOnOffValueObserver_GetVTable,
-        &igOnOffValueObserver_InitFields,
-        0, /* extra callback item */
-        g_igOnOffValueObserver_callbackList /* callback list */
+        sizeof(igOnOffValueObserver),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igOnOffValueObserver_GetMetaObjectFunction(void) {
-    igOnOffValueObserver_GetMetaObject();
+void igOnOffValueObserver::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_group" };
+    static igMetaField **enumStorage[] = { &k_group };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Gui::igRadioGroup::getClassTypeLazy();
+        metaField->_refCounted = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igOnOffValueObserver_ctorTable[] = {
-    igObjectRefMetaField_Create,
-};
-static const char *g_igOnOffValueObserver_fieldTable[] = {
-    "_group",
-};
-static igMetaField **g_igOnOffValueObserver_fieldHandles[] = {
-    &g_igOnOffValueObserver_groupMetaField,
-};
-static int g_igOnOffValueObserver_fieldOffsets[] = {
-    12,
-};
-
-void igOnOffValueObserver_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igOnOffValueObserver_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igOnOffValueObserver_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igRadioGroup_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igOnOffValueObserver_fieldTable, g_igOnOffValueObserver_fieldHandles, g_igOnOffValueObserver_fieldOffsets, temp_s2);
+}
 }
 

@@ -187,7 +187,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
 }
 
 void beLOA_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beLOA_GetMetaObject(), (void *)beLOA_TraversalFunction);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beLOA_GetMetaObject(), (igTraversalFunction *)beLOA_TraversalFunction);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)

@@ -8,6 +8,9 @@ extern "C" {
 #endif
 
 extern struct p2Vu0Lock p2Vu0LockState;
+void p2LockVu0(const char *owner);
+void p2UnlockVu0(void);
+int p2GetVu0Program(void);
 
 #ifdef __cplusplus
 }

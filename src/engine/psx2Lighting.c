@@ -4,6 +4,7 @@
 #include "dw4/p2/dmaChannel.h"
 #include "dw4/p2/p2draw.h"
 #include "dw4/p2/p2lighting.h"
+#include "dw4/p2/p2vu0.h"
 #include "dw4/p2/renderState.h"
 #include "dw4/p2/p2viewport.h"
 #include <math.h>
@@ -44,7 +45,7 @@ enum {
     P2_NORMAL_ARRAYS = 0xE180
 };
 
-void p2WriteLights(unsigned int *cursor, int linearAttenuation);
+float *p2WriteLights(unsigned int *packet, int linearAttenuation);
 
 extern char p2LightingEnabled;
 extern char p2LightsNeedTransform;
@@ -570,6 +571,129 @@ void p2WriteDirectionalLights(float rows[][4]) {
             }
         }
     }
+}
+
+void FUN_001fbaf0(float **cursor, char mode51);
+
+/* Writes the lit path's constant block for the VU1 light programs and returns the advanced cursor: the
+ * material's emission (plus each directional light's ambient times the material ambient when the
+ * infinite-light program lights the draw) with the local-light count, the material ambient and diffuse,
+ * the scene colour, then per local light its attenuation and the shininess, its eye position, its
+ * ambient and its diffuse colour. With linear attenuation only, a light's record is the eye position
+ * and the diffuse colour with the linear term in w.
+ * Byte-only order: the locals are declared light first and i last, the order the saved registers take
+ * (s4 light, s3 material, s2 and s1 the two flags, s0 i). */
+float *p2WriteLights(unsigned int *packet, int linearAttenuation) {
+    p2Light *light;
+    p2Material *material;
+    int cpuLightLoading;
+    int eyeLocalLight;
+    int colorMaterial;
+    unsigned char mode51;
+    float *cursor;
+    float inverse[16];
+    int i;
+
+    material = p2Materials[0];
+    cpuLightLoading = (p2ProgramFlags[p2CurrentProgram] >> 21) & 1;
+    eyeLocalLight = (p2ProgramFlags[p2CurrentProgram] >> 20) & 1;
+    colorMaterial = (p2ProgramFlags[p2CurrentProgram] >> 12) & 1;
+    mode51 = p2IsMode51();
+    cursor = (float *)packet;
+
+    *(__int128 *)cursor = *(__int128 *)material->emission;
+    ((int *)cursor)[3] = p2LocalLightCount;
+    if (p2UseLocalLightProgram[2] && (!colorMaterial || !mode51)) {
+        for (i = 0; i < p2DirectionalLightCount; i++) {
+            light = p2Lights[p2DirectionalLights[i]];
+            if (light != 0) {
+                /* the cursor is address-taken (FUN_001fbaf0 advances it), so the block reads a copy */
+                float *record = cursor;
+                float *ambient = light->ambient;
+                /* volatile: retail reloads the cursor and p2DirectionalLightCount every pass and keeps
+                 * i and light in their saved registers, as only a volatile block gives */
+                asm volatile {
+                    lqc2 vf1, 0(record)
+                    lqc2 vf2, 0(material)
+                    lqc2 vf3, 0(ambient)
+                    vmulaw.xyz ACC, vf1, vf0w
+                    vmadd.xyz vf1, vf3, vf2
+                    sqc2 vf1, 0(record)
+                }
+            }
+        }
+    }
+    cursor += 4;
+    *(__int128 *)cursor = *(__int128 *)material->ambient;
+    cursor += 4;
+    *(__int128 *)cursor = *(__int128 *)material->diffuse;
+    cursor += 4;
+    *(__int128 *)cursor = *(__int128 *)p2LightingColor;
+    cursor += 4;
+    if (!eyeLocalLight && p2LocalLightCount != 0) {
+        if (cpuLightLoading) {
+            p2InvertMatrix(p2LightMatrix, inverse);
+        } else {
+            p2LightCalcPending = 1;
+        }
+    }
+    for (i = 0; i < p2LocalLightCount; i++) {
+        light = p2Lights[p2LocalLights[i]];
+        if (light != 0) {
+            if (!linearAttenuation) {
+                *(__int128 *)cursor = *(__int128 *)light->attenuation;
+                cursor[3] = material->shininess;
+                cursor += 4;
+            }
+            if (!eyeLocalLight && cpuLightLoading) {
+                /* a homogeneous point: the light's eye position with w 1 */
+                float position[4] = { light->eyePosition[0], light->eyePosition[1], light->eyePosition[2], 1.0f };
+                float eye[4];
+                /* array operands cannot be asm registers; byte-only order: result declared first */
+                float *result;
+                float *vector;
+                float *rows;
+                p2LockVu0("p2lighting");
+                vector = position;
+                rows = inverse;
+                result = eye;
+                asm volatile {
+                    lqc2 vf3, 0(vector)
+                    lqc2 vf4, 0(rows)
+                    lqc2 vf5, 16(rows)
+                    lqc2 vf6, 32(rows)
+                    lqc2 vf7, 48(rows)
+                    vmulax.xyzw ACC, vf4, vf3x
+                    vmadday.xyzw ACC, vf5, vf3y
+                    vmaddaz.xyzw ACC, vf6, vf3z
+                    vmaddw.xyzw vf3, vf7, vf3w
+                    vdiv Q, vf0w, vf3w
+                    vwaitq
+                    vmulq.xyz vf3, vf3, Q
+                    sqc2 vf3, 0(result)
+                }
+                p2UnlockVu0();
+                *cursor++ = eye[0];
+                *cursor++ = eye[1];
+                *cursor++ = eye[2];
+                *cursor++ = 1.0f;
+            } else {
+                *(__int128 *)cursor = *(__int128 *)light->eyePosition;
+                cursor += 4;
+            }
+            if (!linearAttenuation) {
+                *(__int128 *)cursor = *(__int128 *)light->ambient;
+                cursor += 4;
+            }
+            *(__int128 *)cursor = *(__int128 *)light->diffuse;
+            cursor[3] = linearAttenuation ? light->attenuation[1] : light->diffuse[3];
+            cursor += 4;
+        }
+    }
+    if (p2UseLocalLightProgram[2]) {
+        FUN_001fbaf0(&cursor, (char)mode51);
+    }
+    return cursor;
 }
 
 /* Copies a 4x4 matrix: four quadwords through a2 and a3 when both are 16-byte aligned, else word by word. */

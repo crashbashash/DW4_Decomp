@@ -61,8 +61,8 @@ CallbackArray *beLOA_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLOA_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         beLOA_GetMetaObjectFunction,
         "beLOA",
         0x60, /* instance size */

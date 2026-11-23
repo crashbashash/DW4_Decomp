@@ -101,7 +101,7 @@ int igViewerRenderer_ObjectsTraverseNodeSelect(igTraversal *traversal, igNode *n
         kind = (int *)g_igTransform_metaObject;
         if ((int *)((igObjectDispatchView *)node)->GetMeta() == kind
             || (kind = (int *)g_igLightSet_metaObject, (int *)((igObjectDispatchView *)node)->GetMeta() == kind)) return 0;
-        if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) return 2;
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) return 2;
     }
     return 1;
 }
@@ -378,10 +378,10 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_shadeModelAttr);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_polygonModeAttr);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_lightingAttr);
-    igGroup_AppendChild((igGroup *)self->_attrSet, (igNode *)self->_headlightTransform);
-    igGroup_AppendChild((igGroup *)self->_headlightTransform, (igNode *)self->_headlightSet);
+    ((Gap::Sg::igGroup *)self->_attrSet)->appendChild((Gap::Sg::igNode *)self->_headlightTransform);
+    ((Gap::Sg::igGroup *)self->_headlightTransform)->appendChild((Gap::Sg::igNode *)self->_headlightSet);
     ((Gap::Core::igObjectList *)(((igLightSet *)self->_headlightSet)->_lights))->append((Gap::Core::igObject *)self->_headlightAttr);
-    igGroup_AppendChild((igGroup *)self->_attrSet, (igNode *)self->_attrSetOverride);
+    ((Gap::Sg::igGroup *)self->_attrSet)->appendChild((Gap::Sg::igNode *)self->_attrSetOverride);
     ((igTraversal *)self->_lightTraversal)->_nodeSelectProcEnabled = 1;
     ((igTraversal *)self->_lightTraversal)->_nodeSelectProc = (int)&igViewerRenderer_ObjectsTraverseNodeSelect;
     ((igTraversal *)self->_lightTraversal)->_userTimeState = 1;
@@ -460,12 +460,12 @@ void igViewerRenderer_UpdateScene(igViewerRenderer *self) {
         childCount = 0;
     }
     if (childCount > 0) {
-        igGroup_RemoveChildAt(sceneRoot, 0);
+        ((Gap::Sg::igGroup *)sceneRoot)->removeChild(0);
     }
     CLEAR((igObjectList *)self->_lightStateList)
     CLEAR((igObjectList *)self->_lightList)
     if (((igViewerParameters *)self->_parameters)->_scene != 0) {
-        igGroup_AppendChild((igGroup *)self->_attrSetOverride, (igNode *)((igViewerParameters *)self->_parameters)->_scene);
+        ((Gap::Sg::igGroup *)self->_attrSetOverride)->appendChild((Gap::Sg::igNode *)((igViewerParameters *)self->_parameters)->_scene);
         igViewerRenderer_FindLights(self, (igGroup *)((igViewerParameters *)self->_parameters)->_scene);
     }
     count = ((igObjectList *)self->_lightList)->_count;
@@ -488,7 +488,7 @@ void igViewerRenderer_UpdateScene(igViewerRenderer *self) {
 void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node) {
     int count; int i; int offset;
     if (node->_flags & 1) {
-        if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) {
             count = 0;
             if (node->_childList != 0) count = ((igNodeList *)node->_childList)->_count;
             i = 0;

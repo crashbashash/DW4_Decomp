@@ -2466,6 +2466,8 @@
 0x00490f50	p2SpriteSizePacket	recovered-global
 0x00490f80	p2GsRegisterGifTag	recovered-global
 0x00490f90	p2GsRegisterDmaTag	recovered-global
+0x00490fa0	p2DirtyGsRegisterGifTag	recovered-global
+0x00490fb0	p2DirtyGsRegisterDmaTag	recovered-global
 0x00490fc0	p2FinishPacketTag	recovered-global
 0x00490fd0	p2FinishPacketUnpack	recovered-global
 0x00490fd8	p2FinishPacketMark	recovered-global
@@ -2478,6 +2480,8 @@
 0x00491020	p2RestartPacketMscal	recovered-global
 0x00491030	p2RestartPacketGifTag	recovered-global
 0x00491040	p2GifCallTag	recovered-global
+0x00491050	p2GsRegisterGifDmaTag	recovered-global
+0x00491060	p2GsRegisterGifBatchTag	recovered-global
 0x004910d0	p2InfiniteLightVariants	recovered-global
 0x00491110	p2LocalObjectLightVariants	recovered-global
 0x00491190	p2LocalLightVariants	recovered-global

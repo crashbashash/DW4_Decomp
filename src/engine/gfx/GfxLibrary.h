@@ -1156,7 +1156,7 @@ extern "C" void FUN_00203580(int x, int y, int width, int height, int layout, vo
 extern "C" void FUN_00203c50(int x, int y, int width, int height, int target, void *pixels, int flags);
 extern "C" void FUN_00209cf0(int a, int b, int c, int d, int e, int f, int g);
 /* Makes a texture's GS buffers current for `stage`; nonzero on success. */
-extern "C" int FUN_0020bb20(P2Texture **textures, int stage, int flag);
+extern "C" int FUN_0020bb20(void *list, int stage, int flag);
 
 extern "C" int DAT_0048a4e0[4];
 extern "C" int DAT_0048a4ec[4];

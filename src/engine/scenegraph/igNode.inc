@@ -1,154 +1,91 @@
-igMetaObject *g_igNode_metaObject;
-igMetaField *g_igNode_boundMetaField;
-igMetaField *g_igNode_parentListMetaField;
-igMetaField *g_igNode_flagsMetaField;
-igMetaField *g_igNode_handleMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igNode_GetOrCreateMetaObject(void) {
-    if (g_igNode_metaObject == 0) {
-        g_igNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igNode_metaObject;
-}
+unsigned int igNode::flagMask = 3;
 
-igMetaObject *igNode_GetMetaObject(void)
+igMetaObject *igNode::_Meta;
+igMetaField *igNode::k_bound;
+igMetaField *igNode::k_parentList;
+igMetaField *igNode::k_flags;
+igMetaField *igNode::k_handle;
+
+igMetaObject *igNode::getClassTypeLazy()
 {
-    igMetaObject *g = g_igNode_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNode_EnsureRegistered();
-    return g_igNode_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igNode_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    char *q2;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
-
-    igObject_InitHeader((igObject *)u.b);
-    q2 = &u.b[8];
-    *(int *)q2 = 0;
-    u.vt = (int)&g_igNode_vtable[0];
-    q1 = (S_ref *)&u.b[12];
-    *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[16];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igNode_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q2 != 0) {
-        temp_v1 = *(int **)q2;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igNode_EnsureRegistered(void)
+igMetaObject *igNode::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igNode_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igNode_callbackList[] = { igVolume_EnsureRegistered, igNonRefCountedNodeList_EnsureRegistered, 0 };
+void *igNode::retrieveVTablePointer()
+{
+    igNode temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igNode_Register(void) {
+void igNode::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNode::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igVolume_EnsureRegistered, Gap::Sg::igNonRefCountedNodeList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNode_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igNode_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNode",
-        0x1C, /* instance size */
-        igNode_GetVTable,
-        &igNode_InitFields,
-        0, /* extra callback item */
-        g_igNode_callbackList /* callback list */
+        sizeof(igNode),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igNode_GetMetaObjectFunction(void) {
-    igNode_GetMetaObject();
+void igNode::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create };
+    static const char *names[] = { "_bound", "_parentList", "_flags", "_handle" };
+    static igMetaField **enumStorage[] = { &k_bound, &k_parentList, &k_flags, &k_handle };
+    static int offsets[] = { 12, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igVolume_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Sg::igNonRefCountedNodeList::getClassTypeLazy();
+        metaField->_resetMethod = 3;
+        metaField->_construct = 1;
+        metaField->_persistent = 0;
+        metaField->_deepCopyMethod = 4;
+        metaField->_shallowCopyMethod = 4;
+        metaField->_constructCopyMethod = 4;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igNode_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igNode_fieldTable[] = {
-    "_bound",
-    "_parentList",
-    "_flags",
-    "_handle",
-};
-static igMetaField **g_igNode_fieldHandles[] = {
-    &g_igNode_boundMetaField,
-    &g_igNode_parentListMetaField,
-    &g_igNode_flagsMetaField,
-    &g_igNode_handleMetaField,
-};
-static int g_igNode_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-};
-
-void igNode_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_v0;
-    void *temp_s1;
-
-    temp_s1 = (void *)g_igNode_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igNode_ctorTable, 4);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igVolume_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNonRefCountedNodeList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_2)->_resetMethod = 3;
-    ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
-    ((igObjectRefMetaField *)temp_s2_2)->_persistent = 0;
-    ((igObjectRefMetaField *)temp_s2_2)->_deepCopyMethod = 4;
-    ((igObjectRefMetaField *)temp_s2_2)->_shallowCopyMethod = 4;
-    ((igObjectRefMetaField *)temp_s2_2)->_constructCopyMethod = 4;
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((Gap::Core::igIntMetaField *)temp_v0)->setDefault(-1);
-    ((igIntMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igNode_fieldTable, g_igNode_fieldHandles, g_igNode_fieldOffsets, temp_s0);
+}
 }
 
 void **igSmartPointer_igRenderListAttr_Destruct(void **arg0, long long arg1) {

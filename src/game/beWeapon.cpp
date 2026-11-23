@@ -130,7 +130,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                     igSmartPointer<igModelViewMatrixBoneSelect> boneSelect(igModelViewMatrixBoneSelect_CreateInstance(allocator));
                     boneSelect.p->_matrixIndex = bone;
-                    igGroup_AppendChild((igGroup *)boneSelect.p, (igNode *)(((igObject **)((igObjectList *)info->_nodeList)->_data)[j]));
+                    ((Gap::Sg::igGroup *)boneSelect.p)->appendChild((Gap::Sg::igNode *)(((igObject **)((igObjectList *)info->_nodeList)->_data)[j]));
                     int appearanceCount = appearances->_count;
                     for (int k = 0; k < appearanceCount; k++) {
                         igAppearance_AttachGraph((igAppearance *)(((igObject **)appearances->_data)[k]), (igNode *)boneSelect.p);

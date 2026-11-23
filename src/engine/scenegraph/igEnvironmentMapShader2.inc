@@ -41,8 +41,8 @@ CallbackArray *igEnvironmentMapShader2_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igEnvironmentMapShader2_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igEnvironmentMapShader2_GetMetaObjectFunction,
         "igEnvironmentMapShader2",
         0x70, /* instance size */

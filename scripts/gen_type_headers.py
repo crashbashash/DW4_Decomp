@@ -129,7 +129,7 @@ FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
 KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h",
                     "dw4/gfx/igVertexFormat.h", "dw4/gfx/igVertexData.h", "dw4/gfx/png.h", "dw4/maths/igRay.h",
                     "dw4/gfx/igVertexArrayLock.h", "dw4/gfx/igVisualContextTypes.h",
-                    "dw4/gui/igNotifyEvent.h")
+                    "dw4/gui/igNotifyEvent.h", "dw4/scenegraph/igTraversal.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.
@@ -414,6 +414,9 @@ def converted_classes(converted, parent, layouts, members, bases=None):
                 sys.exit("config/converted-classes.tsv: %s derives from %s, which is not converted"
                          % (cls, base))
             visit(base, chain + (cls,))
+            for element in re.findall(r"\b(\w+)\s*[>,]", bases.get(cls, "")):
+                if element in converted and element in layouts and element not in visiting:
+                    visit(element, chain + (cls,))
         visiting.add(cls)
         for _off, _size, line in layouts[cls][4]:
             for held in re.findall(r"\bigSmartPointer<(\w+)>", line):
@@ -517,6 +520,8 @@ def converted_classes(converted, parent, layouts, members, bases=None):
         out.append("}")
         if cls == "igObject" and smart:
             out.append("#include \"dw4/core/igSmartPointer.h\"")
+            # the scene graph's bounds are igVolume references; igMath is not converted, its flat stand-in follows
+            out.append("#include \"dw4/maths/igVolume.h\"")
     for cls in order:
         view = members.get(FLAT_VIEW + cls)
         if view:

@@ -261,7 +261,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
         insertKey.set(str);
         pos = List_LowerBound((igDataList *)names, &insertKey, (int (*)(int *, void *))((void *)FUN_001b7740));
         List_InsertWords((igDataList *)names, pos, 1, &insertKey);
-        stack = ((igObject *)FUN_0019cba0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+        stack = ((igObject *)Gap::Sg::igNodeList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         newStackRef.p = stack;
         stacks = self->_segmentOverrideStacks;
         newStackRef.retain();
@@ -324,7 +324,7 @@ int igCommonTraversal_TraverseSwitch(void *t, void *arg) {
     for (i = 0; i < count; i++) {
         int m = 1 << (i & 31);
         if (m & ((int *)mask->_data)[(unsigned int)i >> 5]) {
-            r = igTraversal_TraverseNode((igTraversal *)t, (igNode *)(((int *)n->_childList->_data)[i]));
+            r = ((Gap::Sg::igTraversal *)t)->dispatch((Gap::Core::igObject *)(((int *)n->_childList->_data)[i]));
             if (r == 1) break;
             if (r == 2) return 2;
         }

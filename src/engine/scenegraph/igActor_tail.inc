@@ -379,11 +379,11 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
         }
         switch (g->_mode) {
         case 0:
-            igTraversal_TraverseNode((igTraversal *)o, (igNode *)(g->_children->_data[i % nChild]));
+            ((Gap::Sg::igTraversal *)o)->dispatch((Gap::Core::igObject *)(g->_children->_data[i % nChild]));
             break;
         case 1:
             for (j = 0; j < nChild; j++) {
-                igTraversal_TraverseNode((igTraversal *)o, (igNode *)g->_children->_data[j]);
+                ((Gap::Sg::igTraversal *)o)->dispatch((Gap::Core::igObject *)g->_children->_data[j]);
             }
             break;
         }
@@ -491,7 +491,7 @@ int igCommonTraversal_TraverseLod(CullTraversalView *o, CullNodeView *node) {
     Vec3f_TransformProjective((float *)&out, (const float *)&center, currentEntry_1ba080(stack)->_matrix);
     child = ((int)FUN_001d0520((RangeLookup *)node, out.x * out.x + out.y * out.y + out.z * out.z));
     if (child != 0) {
-        if (igTraversal_TraverseNode((igTraversal *)o, (igNode *)child) == 2) return 2;
+        if (((Gap::Sg::igTraversal *)o)->dispatch((Gap::Core::igObject *)child) == 2) return 2;
         return 0;
     }
     return 0;

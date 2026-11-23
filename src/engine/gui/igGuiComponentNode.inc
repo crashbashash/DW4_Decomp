@@ -43,8 +43,8 @@ CallbackArray *igGuiComponentNode_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiComponentNode_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         thunk_igGuiComponentNode_GetMetaObject,
         "igGuiComponentNode",
         0x24, /* instance size */

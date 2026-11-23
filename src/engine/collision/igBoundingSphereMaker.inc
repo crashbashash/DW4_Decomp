@@ -192,7 +192,7 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
     unsigned int var_s0;
     struct Ls *temp_v0;
 
-    if (((Gap::Core::igObject *)arg1)->isOfType(g_igGroup_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) {
         temp_v0 = arg1->f28;
         var_s1 = 0;
         if (temp_v0 != 0) {

@@ -1,70 +1,62 @@
-igMetaObject *igAnimationHierarchy_GetOrCreateMetaObject(void) {
-    if (g_igAnimationHierarchy_metaObject == 0) {
-        g_igAnimationHierarchy_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationHierarchy_metaObject;
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationHierarchy_GetMetaObject(void)
+igMetaObject *igAnimationHierarchy::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationHierarchy_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationHierarchy_EnsureRegistered();
-    return g_igAnimationHierarchy_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igAnimationHierarchy_EnsureRegistered(void)
+igMetaObject *igAnimationHierarchy::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationHierarchy_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igAnimationHierarchy_Register(void) {
+void igAnimationHierarchy::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationHierarchy::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igAnimationHierarchy_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igAnimationHierarchy_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationHierarchy",
-        0x10, /* instance size */
+        sizeof(igAnimationHierarchy),
         0,
-        &igAnimationHierarchy_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igAnimationHierarchy_GetMetaObjectFunction(void) {
-    igAnimationHierarchy_GetMetaObject();
+void igAnimationHierarchy::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create };
+    static const char *names[] = { "_boneTranslationArray" };
+    static igMetaField **enumStorage[] = { &k_boneTranslationArray };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Math::igVec3fMetaField::getMetaField();
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igAnimationHierarchy_ctorTable[] = {
-    (FieldFactory)igMemoryRefMetaField_Create,
-};
-static const char *g_igAnimationHierarchy_fieldTable[] = {
-    "_boneTranslationArray",
-};
-static igMetaField **g_igAnimationHierarchy_fieldHandles[] = {
-    &g_igAnimationHierarchy_boneTranslationArrayMetaField,
-};
-static int g_igAnimationHierarchy_fieldOffsets[] = {
-    12,
-};
-
-void igAnimationHierarchy_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igAnimationHierarchy_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationHierarchy_ctorTable, 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = (int)Gap::Math::igVec3fMetaField::getMetaField();
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationHierarchy_fieldTable, g_igAnimationHierarchy_fieldHandles, g_igAnimationHierarchy_fieldOffsets, temp_s2);
+}
 }
 

@@ -36,8 +36,8 @@ CallbackArray *beResetNode_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beResetNode_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         beResetNode_GetMetaObjectFunction,
         "beResetNode",
         0x24, /* instance size */

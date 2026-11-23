@@ -43,7 +43,7 @@ void igIterateGraph_EnsureRegistered(void)
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igIterateGraph_Register);
 }
 
-static igMetaObjectCallback g_igIterateGraph_callbackList[] = { igNonRefCountedNodeList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
+static igMetaObjectCallback g_igIterateGraph_callbackList[] = { Gap::Sg::igNonRefCountedNodeList::arkRegister, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *igIterateGraph_Register(void) {
     BaseLibrary_MarkRegistered();
@@ -97,7 +97,7 @@ void igIterateGraph_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igIterateGraph_ctorTable, 3);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igNonRefCountedNodeList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)Gap::Sg::igNonRefCountedNodeList::getClassTypeLazy();
     ((igRefMetaField *)field2)->_construct = 1;
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();

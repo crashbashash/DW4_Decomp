@@ -15,26 +15,6 @@ int igTextElement_GetMeta(void) {
     return (int)g_igTextElement_metaObject;
 }
 
-igMetaObject *igOnOffValueObserver_GetMeta(void) {
-    return g_igOnOffValueObserver_metaObject;
-}
-
-void igOnOffValueObserver_IsCompatible(void *arg0, int arg1) {
-    ((Gap::Core::igObject *)arg1)->isOfType(igOnOffModel_GetMetaObject());
-}
-
-igMetaObject *igRadioGroupSelectedObserver_GetMeta(void) {
-    return g_igRadioGroupSelectedObserver_metaObject;
-}
-
-void igRadioGroupSelectedObserver_IsCompatible(void *arg0, int arg1) {
-    ((Gap::Core::igObject *)arg1)->isOfType(igRadioGroupModel_GetMetaObject());
-}
-
-igMetaObject *igRadioGroup_GetMeta(void) {
-    return g_igRadioGroup_metaObject;
-}
-
 igMetaObject *igHotKeyEventReceiver_GetMeta(void) {
     return g_igHotKeyEventReceiver_metaObject;
 }
@@ -104,7 +84,7 @@ int igDefaultAspect_GetMeta(void) {
 }
 
 void igDefaultAspect_IsCompatible(igDefaultAspect *self, int model) {
-    ((Gap::Core::igObject *)model)->isOfType(igGuiComponentModel_GetMetaObject());
+    ((Gap::Core::igObject *)model)->isOfType(Gap::Gui::igGuiComponentModel::getClassTypeSafe());
 }
 
 igMetaObject *igOnOffColorChanger_GetMeta(void) {
@@ -175,24 +155,8 @@ igMetaObject *igHotKeyBindingList_GetMeta(void) {
     return g_igHotKeyBindingList_metaObject;
 }
 
-igMetaObject *igOnOffModel_GetMeta(void) {
-    return g_igOnOffModel_metaObject;
-}
-
-igMetaObject *igRadioGroupModel_GetMeta(void) {
-    return g_igRadioGroupModel_metaObject;
-}
-
-igMetaObject *igOnOffValueObserverList_GetMeta(void) {
-    return g_igOnOffValueObserverList_metaObject;
-}
-
 igMetaObject *igRendererOrderedList_GetMeta(void) {
     return g_igRendererOrderedList_metaObject;
-}
-
-int igGuiComponentModel_GetMeta(void) {
-    return (int)g_igGuiComponentModel_metaObject;
 }
 
 int FUN_00458310(void) {
@@ -218,10 +182,6 @@ int igFieldChangeViewList_GetElementMeta(void) {
 
 igMetaObject *igHotKeyBindingList_GetElementMeta(void) {
     return g_igHotKeyBinding_metaObject;
-}
-
-igMetaObject *igOnOffValueObserverList_GetElementMeta(void) {
-    return g_igOnOffValueObserver_metaObject;
 }
 
 igMetaObject *igGuiComponentList_GetElementMeta(void) {

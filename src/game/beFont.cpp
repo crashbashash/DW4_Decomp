@@ -396,7 +396,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETLAYERNODE");
         if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) <= 0) { abandonLoad(ram); result = 1; goto end; }
         group = (igNodeView *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        if (g_igGroup_metaObject != group->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
+        if (Gap::Sg::igGroup::getClassMeta() != group->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
         list = group->_childList;
         childCount = 0;
         if (list != 0) childCount = list->_count;

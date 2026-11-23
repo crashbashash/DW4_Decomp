@@ -111,15 +111,15 @@ void FUN_0019e440(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igIntersectTraversal_Register);
 }
 
-static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { igMatrixStack_EnsureRegistered, igNodeList_EnsureRegistered, igProbe_EnsureRegistered, igVolumeList_EnsureRegistered, igRay_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { igMatrixStack_EnsureRegistered, Gap::Sg::igNodeList::arkRegister, igProbe_EnsureRegistered, igVolumeList_EnsureRegistered, igRay_EnsureRegistered, 0 };
 
 CallbackArray *igIntersectTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igIntersectTraversal_metaObject,
-        igTraversal_Register,
-        igTraversal_GetPublishedMetaObject,
+        Gap::Sg::igTraversal::arkRegisterInternal,
+        Gap::Sg::igTraversal::getClassMeta,
         igIntersectTraversal_GetMetaObjectFunction,
         "igIntersectTraversal",
         0x40, /* instance size */
@@ -132,10 +132,6 @@ CallbackArray *igIntersectTraversal_Register(void) {
 
 void igIntersectTraversal_GetMetaObjectFunction(void) {
     igIntersectTraversal_GetMetaObject();
-}
-
-igMetaObject *igTraversal_GetPublishedMetaObject(void) {
-    return g_igTraversal_metaObject;
 }
 
 static FieldFactory g_igIntersectTraversal_ctorTable[] = {
@@ -191,7 +187,7 @@ void igIntersectTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igProbe_GetOrCreateMetaObject();

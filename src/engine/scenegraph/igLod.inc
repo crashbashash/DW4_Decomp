@@ -45,15 +45,15 @@ void igLod_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLod_Register);
 }
 
-static igMetaObjectCallback g_igLod_callbackList[] = { Gap::Core::igFloatList::arkRegister, igNode_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLod_callbackList[] = { Gap::Core::igFloatList::arkRegister, Gap::Sg::igNode::arkRegister, 0 };
 
 CallbackArray *igLod_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLod_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igLod_GetMetaObjectFunction,
         "igLod",
         0x44, /* instance size */
@@ -126,7 +126,7 @@ void igLod_InitFields(void) {
     ((igMetaField *)rangeListField)->_deepCopyMethod = 0;
     ((igMetaField *)rangeListField)->_shallowCopyMethod = 2;
     lastRangeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)lastRangeField)->_metaObject = (int)igNode_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lastRangeField)->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
     ((igMetaField *)lastRangeField)->_persistent = 0;
     lastIndexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((Gap::Core::igIntMetaField *)lastIndexField)->setDefault(-1);

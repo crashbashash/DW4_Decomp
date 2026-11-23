@@ -69,7 +69,7 @@ static inline ShaderObject_1ca6c0 *asMaterial(ShaderObject_1ca6c0 *o) {
 }
 
 static inline ShaderObject_1ca6c0 *asTexture(ShaderObject_1ca6c0 *o) {
-    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igNodeList_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Sg::igNodeList::getClassMeta()) != 0) {
         return o;
     }
     return 0;
@@ -233,7 +233,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             second = primary.p;
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)primary.p, shared.p, keys.p, values.p);
         }
-        found = FUN_001c8c80(self, pass, "childNodes", (void *)g_igNodeList_metaObject, shared.p);
+        found = FUN_001c8c80(self, pass, "childNodes", (void *)Gap::Sg::igNodeList::getClassMeta(), shared.p);
         held = (ShaderObject_1ca6c0 *)found.p;
         if (held != 0) {
             third = asTexture(held);

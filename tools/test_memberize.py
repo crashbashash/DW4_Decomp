@@ -801,7 +801,7 @@ class Memberize(unittest.TestCase):
                            "__dt__48igSmartPointer<Q33Gap3Gfx20igVertexArray2Helper>Fv"},
             "0x00400000": {"__dt__25igSmartPointer<8igObject>Fv",
                            "getElementMeta__Q33Gap4Core39igTObjectList<Q33Gap4Core11igMediaFile>CFv"}}
-        with mock.patch.object(memberize, "unit_object_names", lambda root, unit, row: objects[unit], create=True):
+        with mock.patch.object(memberize, "unit_object_names", lambda root, unit, row, hold: objects[unit], create=True):
             self.assertEqual(memberize.main(["--rekey", "--apply", "--root", self.root]), 0)
         rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
         emitted = rows["0x00100000"]["emitted"]
@@ -824,7 +824,7 @@ class Memberize(unittest.TestCase):
         write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
         objects = {"0x00100000": {"__dt__11igScopeLockFv", "__dt__25igSmartPointer<8igObject>Fv",
                                   "__dt__40igSmartPointer<Q33Gap4Core11igSemaphore>Fv"}}
-        with mock.patch.object(memberize, "unit_object_names", lambda root, unit, row: objects[unit]):
+        with mock.patch.object(memberize, "unit_object_names", lambda root, unit, row, hold: objects[unit]):
             self.assertEqual(memberize.main(["--rekey", "--apply", "--root", self.root]), 0)
         row = json.loads(self.read("config/SLUS-20836/unit-objects.json"))["0x00100000"]
         self.assertEqual(row["stripped"], ["__dt__11igScopeLockFv", "__dt__25igSmartPointer<8igObject>Fv"])

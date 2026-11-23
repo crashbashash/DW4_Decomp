@@ -183,10 +183,6 @@ igModel *igModel_Destroy(igModel *self, short deleteFlag) {
     return self;
 }
 
-igMetaObject *igGuiComponentModel_GetPublishedMetaObject(void) {
-    return g_igGuiComponentModel_metaObject;
-}
-
 void **FUN_0044c1c0(void **arg0, int arg1) {
     int *o;
 

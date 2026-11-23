@@ -264,3 +264,22 @@ igPsx2VisualContext	_fogMode	IG_GFX_FOG_MODE
 igPsx2VisualContext	_pixelPipelineMode	IG_GFX_PIXEL_PIPELINE_MODE
 igView	_model	igModel *
 igModel	_views	igSmartPointer<igNonRefCountedViewList>
+igAnimationHierarchy	_boneTranslationArray	igVec3f *
+igAnimationModifier	_transform	igSmartPointer<igTransform>
+igSkeleton	_boneInfoList	igSmartPointer<igSkeletonBoneInfoList>
+igSkeleton	_invJointArray	igMatrix44f *
+igSkin	_skinnedGraph	igSmartPointer<igNode>
+igSkin	_bound	igSmartPointer<igAABox>
+igTraversal	_nodeSelectProcEnabled	bool
+igTraversal	_nodeSelectProc	igTravNodeSelectFunction *
+igTraversal	_userTimeState	bool
+igTraversal	_travProcs	igSmartPointer<igTraversalFunctionList>
+igNode	_bound	igSmartPointer<igVolume>
+igNode	_parentList	igSmartPointer<igNonRefCountedNodeList>
+igGroup	_childList	igSmartPointer<igNodeList>
+igGuiComponentModel	_component	igGuiComponent *
+igRadioGroup	_model	igSmartPointer<igRadioGroupModel>
+igRadioGroup	_selectedObserver	igSmartPointer<igRadioGroupSelectedObserver>
+igRadioGroup	_observerList	igSmartPointer<igOnOffValueObserverList>
+igRadioGroupSelectedObserver	_group	igRadioGroup *
+igOnOffValueObserver	_group	igRadioGroup *

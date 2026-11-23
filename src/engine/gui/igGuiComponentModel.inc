@@ -1,135 +1,90 @@
-igMetaObject *g_igGuiComponentModel_metaObject;
-igMetaField *g_igGuiComponentModel_componentMetaField;
-igMetaField *g_igGuiComponentModel_enabledMetaField;
-igMetaField *g_igGuiComponentModel_hasFocusMetaField;
-igMetaField *g_igGuiComponentModel_mouseOverMetaField;
-igMetaField *g_igGuiComponentModel_pushedMetaField;
-igMetaField *g_igGuiComponentModel_sizeMetaField;
-igMetaField *g_igGuiComponentModel_childHasFocusMetaField;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igGuiComponentModel_GetOrCreateMetaObject(void) {
-    if (g_igGuiComponentModel_metaObject == 0) {
-        g_igGuiComponentModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igGuiComponentModel_metaObject;
-}
+igMetaObject *igGuiComponentModel::_Meta;
+igMetaField *igGuiComponentModel::k_component;
+igMetaField *igGuiComponentModel::k_enabled;
+igMetaField *igGuiComponentModel::k_hasFocus;
+igMetaField *igGuiComponentModel::k_mouseOver;
+igMetaField *igGuiComponentModel::k_pushed;
+igMetaField *igGuiComponentModel::k_size;
+igMetaField *igGuiComponentModel::k_childHasFocus;
 
-igMetaObject *igGuiComponentModel_GetMetaObject(void)
+igMetaObject *igGuiComponentModel::getClassTypeLazy()
 {
-    igMetaObject *g = g_igGuiComponentModel_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igGuiComponentModel_RunStaticInit();
-    return g_igGuiComponentModel_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igGuiComponentModel_GetVTable(void) {
-    union U_44f830 u;
-    int temp_s0;
-    S_ref *q0;
-
-    igObject_InitHeader((igObject *)u.b);
-    q0 = (S_ref *)&u.b[8];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_igModel_vtable[0];
-    u.vt = (int)&g_igGuiComponentModel_vtable[0];
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igModel_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igGuiComponentModel_RunStaticInit(void)
+igMetaObject *igGuiComponentModel::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igGuiComponentModel_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igGuiComponentModel_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
+void *igGuiComponentModel::retrieveVTablePointer()
+{
+    igGuiComponentModel temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igGuiComponentModel_Register(void) {
+void igGuiComponentModel::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igGuiComponentModel::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igGuiComponent_EnsureRegistered, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igGuiComponentModel_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igModel::arkRegisterInternal,
         Gap::Gui::igModel::getClassMeta,
-        thunk_igGuiComponentModel_GetMetaObject,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igGuiComponentModel",
-        0x24, /* instance size */
-        igGuiComponentModel_GetVTable,
-        &igGuiComponentModel_InitFields,
-        0, /* extra callback item */
-        g_igGuiComponentModel_callbackList /* callback list */
+        sizeof(igGuiComponentModel),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
-
-void thunk_igGuiComponentModel_GetMetaObject(void) {
-    igGuiComponentModel_GetMetaObject();
+}
 }
 
-static FieldFactory g_igGuiComponentModel_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    igBoolMetaField_Create,
-};
-static const char *g_igGuiComponentModel_fieldTable[] = {
-    "_component",
-    "_enabled",
-    "_hasFocus",
-    "_mouseOver",
-    "_pushed",
-    "_size",
-    "_childHasFocus",
-};
-static igMetaField **g_igGuiComponentModel_fieldHandles[] = {
-    &g_igGuiComponentModel_componentMetaField,
-    &g_igGuiComponentModel_enabledMetaField,
-    &g_igGuiComponentModel_hasFocusMetaField,
-    &g_igGuiComponentModel_mouseOverMetaField,
-    &g_igGuiComponentModel_pushedMetaField,
-    &g_igGuiComponentModel_sizeMetaField,
-    &g_igGuiComponentModel_childHasFocusMetaField,
-};
-static int g_igGuiComponentModel_fieldOffsets[] = {
-    32,
-    12,
-    13,
-    14,
-    15,
-    16,
-    28,
-};
+namespace Gap {
+namespace Gui {
 
-void igGuiComponentModel_InitFields(void) {
-    int temp_s2;
-    void *temp_a0;
-    void *temp_s1;
-    struct { int a; int b; int c; } z;
-    void *temp_s0;
+void igGuiComponentModel::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, igBoolMetaField_Create };
+    static const char *names[] = { "_component", "_enabled", "_hasFocus", "_mouseOver", "_pushed", "_size", "_childHasFocus" };
+    static igMetaField **enumStorage[] = { &k_component, &k_enabled, &k_hasFocus, &k_mouseOver, &k_pushed, &k_size, &k_childHasFocus };
+    static int offsets[] = { 32, 12, 13, 14, 15, 16, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-    temp_s0 = (void *)g_igGuiComponentModel_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGuiComponentModel_ctorTable, 7);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();
-    *(char *)(60 + (char *)(temp_s1)) = 0;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)))->setDefault(1);
-    temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5));
-    z.a = 0;
-    z.b = 0;
-    z.c = 0;
-    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)&z);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiComponentModel_fieldTable, g_igGuiComponentModel_fieldHandles, g_igGuiComponentModel_fieldOffsets, temp_s2);
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_refCounted = 0;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(1);
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+}
+}
 }
 

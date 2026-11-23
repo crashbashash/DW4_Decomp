@@ -202,3 +202,24 @@ igViewList	Gui	igTObjectList<igView>
 igNonRefCountedViewList	Gui	igTNonRefCountedObjectList<igView>
 igSkeletonBoneInfo	Sg
 igSkeletonBoneInfoList	Sg	igTObjectList<igSkeletonBoneInfo>
+igAnimationHierarchy	Sg
+igAnimationModifier	Sg
+igAnimationModifierList	Sg	igTObjectList<igAnimationModifier>
+igSkeleton	Sg
+igSkeletonList	Sg	igTObjectList<igSkeleton>
+igSkin	Sg
+igSkinList	Sg	igTObjectList<igSkin>
+igTraversalFunctionList	Sg	igTDataList<igTraversalFunctionPtr>
+igTraversal	Sg
+igNode	Sg
+igNodeList	Sg	igTObjectList<igNode>
+igNodeListList	Sg	igTObjectList<igNodeList>
+igNonRefCountedNodeList	Sg	igTNonRefCountedObjectList<igNode>
+igGroup	Sg
+igGuiComponentModel	Gui
+igOnOffModel	Gui
+igRadioGroupModel	Gui
+igRadioGroup	Gui
+igRadioGroupSelectedObserver	Gui
+igOnOffValueObserver	Gui
+igOnOffValueObserverList	Gui	igTObjectList<igOnOffValueObserver>

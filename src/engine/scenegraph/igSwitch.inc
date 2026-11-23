@@ -61,8 +61,8 @@ CallbackArray *igSwitch_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSwitch_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igSwitch_GetMetaObjectFunction,
         "igSwitch",
         0x24, /* instance size */

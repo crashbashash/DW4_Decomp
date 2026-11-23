@@ -547,7 +547,7 @@ void igViewerSceneInfoManager_RemoveAllInfo(igViewerSceneInfoManager *self) {
     scene = (igGroup *)((igViewerParameters *)self->_parameters)->_scene;
     index = (scene->_childList != 0 ? ((igNodeList *)scene->_childList)->_count : 0) - 1;
     while (index >= 0) {
-        igGroup_RemoveChildAt(scene, index);
+        ((Gap::Sg::igGroup *)scene)->removeChild(index);
         index -= 1;
     }
     igNotifyEvent sceneChanged((Gap::Core::igMetaField *)g_igViewerParameters_sceneMetaField);
@@ -588,7 +588,7 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
         if (info->_cameras == 0) {
             igSceneInfo_CollectCameras(info);
         }
-        igGroup_AppendChild((igGroup *)(((igViewerParameters *)self->_parameters)->_scene), (igNode *)info->_sceneGraph);
+        ((Gap::Sg::igGroup *)(((igViewerParameters *)self->_parameters)->_scene))->appendChild((Gap::Sg::igNode *)info->_sceneGraph);
         igNotifyEvent sceneChanged((Gap::Core::igMetaField *)g_igViewerParameters_sceneMetaField);
         ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(sceneChanged);
         igViewerRenderer_UpdateScene((igViewerRenderer *)self->_viewerRenderer);
@@ -999,7 +999,7 @@ igMetaObject *igStatisticsItem_GetMeta(void) {
 }
 
 void igStatisticsItem_IsCompatible(igStatisticsItem *self, igObject *model) {
-    ((Gap::Core::igObject *)model)->isOfType(igOnOffModel_GetMetaObject());
+    ((Gap::Core::igObject *)model)->isOfType(Gap::Gui::igOnOffModel::getClassTypeSafe());
 }
 
 }

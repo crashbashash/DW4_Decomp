@@ -731,15 +731,44 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    where the kit declares them plain, and the concrete class's vtable (0x526590) holds the overrides next to the
    empty `userMakeConcrete` (slot 18, 0x15db80); `_lengthData` is an `unsigned char *` under C++, `configure`
    (0x167240) reallocates it to four bytes a strip or frees it. The particle array reads its first strip length
-   through `getPrimLength`, and igPsx2VisualContext holds it as an `igSmartPointer<igPrimLengthArray>`;
+   through `getPrimLength`, and igPsx2VisualContext holds it as an `igSmartPointer<igPrimLengthArray>`.
+   Scenegraph so far (`Gap::Sg`, spec scratch/SgTraversal/specs/trav.py): `igTraversalFunctionList` (over the kit's
+   `igTDataList<igTraversalFunctionPtr>`, its template `trimCapacity`/`getElementSize` copies the compiler's) and
+   `igTraversal` (alchemy-kit_202309 igSg/igTraversal.h with the kit's `IG_TRAVERSAL_DEFINE` members written out:
+   the per-class static function table `travProcs` (0x562a38), `registerClass`, `_registerClass`, `_setFunction`,
+   `userRegister`, `userUnregister`, the slot-9 `userConstruct`, `dispatch` (`igTraversal_TraverseNode`, which
+   runs the node-select function and then the table entry of the node's handle) and DW4's five virtuals 23-27
+   `begin`, `end`, `apply` (the scratchpad-stack wrapper, owner-approved asm), `getTimeAsLong`, `setTimeAsLong`).
+   The kit's `igTraverseNode`/`igTraverseGroup` stay free as `igTraversal_TraverseLeaf`/`igTraversal_TraverseChildren`.
+   A traversal function's type is the flat `igTraversalFunction` (include/dw4/scenegraph/igTraversal.h, read by
+   reflected.h), so registrations cast the function. The subclasses (igCommonTraversal, igCompileTraversal,
+   igFrustCullTraversal, igIntersectTraversal, beHitLandModelTraversal) are still flat and reach igTraversal's
+   constructor, destructor and base slots by their C names. Not started: those subclasses, igProbe, igSorter, the
+   render packages, the attribute stacks and the pools.
    Gui: `igView`, `igModel`, `igViewList` and `igNonRefCountedViewList` are converted (alchemy-kit_202309
    igGui/igView.h, igModel.h): slot 21 `isCompatible` and slot 22 `notify` are igView's pure virtuals, `igModel`
    has `appendView`, `removeView` (each notifies the view with an ATTACH or DETACH `igNotifyEvent`),
    `notifyAllViews` and `userDestruct`. `igNotifyEvent` (include/dw4/gui/igNotifyEvent.h, a reflected.h kit
    header) replaces the `ModelChange`/`ViewModelEvent`/`ViewerMessage` stand-ins and the hand-built int arrays.
-   Next in the Gui, Insight and Viewer libraries: the component and radio-group models and views (specs not
-   landed), then the windows, managers and the viewer classes.
-6. the game's `be*` classes last.
+   The component and radio-group classes are converted too (`igGuiComponentModel`, `igOnOffModel`,
+   `igRadioGroupModel`, `igRadioGroup`, `igRadioGroupSelectedObserver`, `igOnOffValueObserver` and its list; spec
+   `scratch/GuiLib/specs/radio.py`). `igView::isCompatible` returns `int`: retail's overrides do not normalise
+   `isOfType`'s result. Next in the Gui, Insight and Viewer libraries: the windows, managers and the viewer classes.
+6. the scene graph's node hierarchy (spec scratch/SgNodes/specs/node.py): `Gap::Sg::igNode` (alchemy-kit_202309
+   igSg/igNode.h; slots 21 `getParentCount` ... 32 `removeParent` in retail's order, DW4's `userConstruct`/`userDestruct`
+   standing for the kit's userInstantiate/userRelease, `_bound` an `igSmartPointer<igVolume>` over a flat `igVolume`
+   stand-in, `_parentList` an `igSmartPointer<igNonRefCountedNodeList>`, `flagMask` the static at 0x48da58),
+   `igNodeList`, `igNodeListList`, `igNonRefCountedNodeList` (over the kit's `igTObjectList`/`igTNonRefCountedObjectList`)
+   and `igGroup` (`_childList` an `igSmartPointer<igNodeList>`; slot 33 `insertChild`, 34 `isChildrenOrdered`) are converted.
+   Byte-only spellings, each commented in the source: `addParent`/`removeParent` open-code the list append and use the flat
+   list's by-value `find`; `igGroup::userPostLoad` keeps retail's out-of-line loop entry tests as gotos; `insertGroupAbove`
+   holds its reference through `retainHeld`/`releaseHeld` over an `int *` slot (igSmartPointer's inlined release does not
+   reload the pointer); `insertChild` holds the element in a record whose address escapes. The implicit destructors are
+   the compiler's (`igNode_Destroy`, `igGroup_Destroy` remain as C names for the flat subclasses). Next in the family:
+   `igAttrSet` (slots 31 `reset`, 35 `setAttrs`, 36 `setTriggerState`), `igGeometry` (37 `getTotalTriangles`),
+   `igTransform`, `igSwitch`, `igLod`, `igBillboard`, `igCamera` (an igNode), `igSegment`, `igSceneInfo` (an igInfo),
+   `igGraphPath`, `igGeometryList`.
+7. the game's `be*` classes last.
 
 ## Known differences and gaps
 

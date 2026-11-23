@@ -208,7 +208,7 @@ class SourceApprovals(unittest.TestCase):
         for name in ("f", "g", "h"):
             reach = sa._Reach(text, name)
             defs, _bodies, statements = reach.plan[:3]
-            gone = [(s, e) for nm, s, e in defs if nm not in reach.keep]
+            gone = [(s, e) for key, _nm, s, e in defs if key not in reach.keep]
             gone += [(s, e) for k, (s, e, _keys, _passes) in enumerate(statements) if k not in reach.reached()]
             expected = "".join(" " if c != "\n" and any(s <= i < e for s, e in gone) else c
                                for i, c in enumerate(text))
@@ -251,6 +251,31 @@ class SourceApprovals(unittest.TestCase):
 
     def test_the_shipped_table_has_no_stale_row(self):
         self.assertEqual(sa.stale(), [])
+
+    def test_a_row_naming_a_member_by_its_symbol_counts_that_member(self):
+        # Gap__Bec__beHitLandModelTraversal__vfunc_23 became igTraversal::apply: compiler-names.tsv binds its
+        # compiler name apply__Q33Gap2Sg11igTraversalFP6igNode to the symbol, and the library unit defines other
+        # `apply`s, one with an asm statement of its own
+        symbol = "Gap__Bec__beHitLandModelTraversal__vfunc_23"
+        path = self.write("a.cpp", 'void igOther::apply(igNode *root) { asm("nop"); }\n'
+                                   'void igTraversal::apply(igNode *root) { asm("nop"); asm("nop"); }\n'
+                                   "void igLast::apply(igNode *root) { }\n")
+        self.assertEqual(sa.definition(path, symbol), "igTraversal::apply")
+        self.assertEqual(sa.definition(path, "apply__Q33Gap2Sg11igTraversalFP6igNode"), "igTraversal::apply")
+        self.assertEqual(sa.uses(path, symbol)["asm"], 2)
+        rows = {("asm", symbol): (2, "#x")}
+        index = {symbol: path, "apply": path}
+        self.assertEqual(sa.stale(rows, index), [])
+        self.assertEqual(sa.stale({("asm", symbol): (1, "#x")}, index),
+                         ["asm %s: the row covers 1, the source has 2" % symbol])
+        # igTraversal::apply's two statements are approved, igOther::apply's is not
+        text = open(path).read()
+        self.assertEqual({start for _path, start in sa.approved_statements([path], rows, index)},
+                         {text.index('asm("nop"); asm'), text.rindex('asm("nop"); }')})
+        # listed once, under the symbol; the other `apply`s under their bare name
+        self.assertEqual([(name, why) for name, _path, why in sa.awaiting(index, rows) if _path == path],
+                         [("apply", "1 asm without an approval row")])
+        self.assertIn((symbol, path, "2 asm without an approval row"), sa.awaiting(index, {}))
 
     def test_an_inline_helper_is_not_listed_as_awaiting_approval(self):
         path = self.write("a.c", 'static inline int h(void) { volatile int x; asm("nop"); return x; }\n'

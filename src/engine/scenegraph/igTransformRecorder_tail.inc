@@ -170,7 +170,7 @@ int igCommonTraversal_TraverseSegment(int arg0, struct S_1bafb0 *arg1) {
         var_a1_2 = arg1->f8;
         var_a1_2 = var_a1_2 ? var_a1_2 : (int *)emptyString;
         FUN_001b7770((igCommonTraversal *)arg0, (int)var_a1_2, 0);
-        var_s0 = igTraversal_TraverseNode((igTraversal *)arg0, (igNode *)temp_v0);
+        var_s0 = ((Gap::Sg::igTraversal *)arg0)->dispatch((Gap::Core::igObject *)temp_v0);
         var_a1_3 = arg1->f8;
         var_a1_3 = var_a1_3 ? var_a1_3 : (int *)emptyString;
         FUN_001b7920((igCommonTraversal *)arg0, (int)var_a1_3);
@@ -190,6 +190,6 @@ int FUN_001bb090(S_1e04c0 *self, KeyTrackView *track) {
     if (found.p == 0) {
         return 0;
     }
-    return igTraversal_TraverseNode((igTraversal *)self, (igNode *)found.p);
+    return ((Gap::Sg::igTraversal *)self)->dispatch((Gap::Core::igObject *)found.p);
 }
 

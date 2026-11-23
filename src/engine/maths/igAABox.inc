@@ -211,6 +211,53 @@ void igAABox_GetCorner(const igAABox *box, unsigned int index, float *corner) {
     }
 }
 
+static inline void igAABox_SetCorner(igVec3f &corner, const float &x, const float &y, const float &z) {
+    corner.set(x, y, z);
+}
+static inline void igAABox_ExtendByPoint(igAABox *box, const igVec3f &p) {
+    box->_min.makeMin(p);
+    box->_max.makeMax(p);
+}
+
+/* Replaces the box with the bounds of its eight corners carried through the matrix. */
+void igAABox_Transform(igAABox *box, const float *matrix) {
+    igVec3f corner[8];
+    igVec3f x, y, z;
+    int i;
+    if (!(box->_min[0] <= box->_max.vec[0])) {
+        return;
+    }
+    float ex = box->_max.vec[0] - box->_min[0];
+    float ey = box->_max[1] - box->_min.vec[1];
+    float ez = box->_max[2] - box->_min.vec[2];
+    x.set(ex, ex, ex);
+    y.set(ey, ey, ey);
+    z.set(ez, ez, ez);
+    x[0] *= matrix[0];
+    x[1] *= matrix[1];
+    x[2] *= matrix[2];
+    y[0] *= matrix[4];
+    y[1] *= matrix[5];
+    y[2] *= matrix[6];
+    z[0] *= matrix[8];
+    z[1] *= matrix[9];
+    z[2] *= matrix[10];
+    igAABox_SetCorner(corner[0], box->_min.vec[0], box->_min[1], box->_min[2]);
+    Vec3f_TransformProjective(corner[0].vec, corner[0].vec, matrix);
+    corner[1].add(corner[0], z);
+    corner[2].add(corner[0], y);
+    corner[3].add(corner[0], x);
+    corner[4].add(corner[2], z);
+    corner[5].add(corner[3], y);
+    corner[6].add(corner[3], z);
+    corner[7].add(corner[5], z);
+    box->_min[0] = box->_min[1] = box->_min[2] = 3.4028235e38f;
+    box->_max.vec[0] = box->_max.vec[1] = box->_max.vec[2] = -3.4028235e38f;
+    for (i = 0; i < 8; i++) {
+        igAABox_ExtendByPoint(box, corner[i]);
+    }
+}
+
 int FUN_0018afa0(igAABox *box, igSphere *sphere) {
     float dist;
     int i;

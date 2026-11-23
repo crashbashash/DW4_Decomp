@@ -52,7 +52,7 @@ void igGraphPath_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGraphPath_Register);
 }
 
-static igMetaObjectCallback g_igGraphPath_callbackList[] = { igNodeList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGraphPath_callbackList[] = { Gap::Sg::igNodeList::arkRegister, 0 };
 
 CallbackArray *igGraphPath_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -107,7 +107,7 @@ void igGraphPath_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igGraphPath_ctorTable, 3);
     pathField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)pathField)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)pathField)->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
     ((igMetaField *)pathField)->_resetMethod = 3;
     ((igRefMetaField *)pathField)->_construct = 1;
     centerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));

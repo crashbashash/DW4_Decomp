@@ -66,7 +66,7 @@ int FUN_00456540(int arg0, N *arg1, N *arg2, unsigned char arg3) {
         if (arg1 == arg2) {
             return r;
         }
-        FUN_004559a0((S_4559a0 *)arg1->f10, arg3);
+        ((Gap::Gui::igGuiComponentModel *)arg1->f10)->setChildHasFocus(arg3);
         r = FUN_00456540(arg0, arg1->f18, arg2, arg3);
     }
     return r;

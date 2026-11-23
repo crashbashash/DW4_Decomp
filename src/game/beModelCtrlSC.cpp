@@ -171,7 +171,7 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
 }
 
 void beModelCtrlNode2_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beModelCtrlNode2_ResolveMetaObject(), (void *)beModelCtrlNode2_TraversalFunction);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, beModelCtrlNode2_ResolveMetaObject(), (igTraversalFunction *)beModelCtrlNode2_TraversalFunction);
 }
 
 /* Start: builds the hit box around the owner's node (offset, sized by _boxSize, moved into the node's

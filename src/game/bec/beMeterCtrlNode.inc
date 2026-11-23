@@ -48,8 +48,8 @@ CallbackArray *beMeterCtrlNode_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beMeterCtrlNode_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         beMeterCtrlNode_GetMetaObject,
         "beMeterCtrlNode",
         0x34, /* instance size */

@@ -1,140 +1,82 @@
-igMetaObject *g_igTraversal_metaObject;
-igMetaField *g_igTraversal_nodeSelectProcEnabledMetaField;
-igMetaField *g_igTraversal_nodeSelectProcMetaField;
-igMetaField *g_igTraversal_timeLongMetaField;
-igMetaField *g_igTraversal_userTimeStateMetaField;
-igMetaField *g_igTraversal_travProcsMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igTraversal_GetMetaObject(void)
+igMetaObject *igTraversal::_Meta;
+igMetaField *igTraversal::k_nodeSelectProcEnabled;
+igMetaField *igTraversal::k_nodeSelectProc;
+igMetaField *igTraversal::k_timeLong;
+igMetaField *igTraversal::k_userTimeState;
+igMetaField *igTraversal::k_travProcs;
+igTraversalFunctionList *igTraversal::travProcs;
+
+igMetaObject *igTraversal::getClassTypeSafe()
 {
-    igMetaObject *g = g_igTraversal_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTraversal_EnsureRegistered();
-    return g_igTraversal_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igTraversal_GetVTable(void) {
-    struct Obj o;
-    struct R *t;
-    int r;
-    igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igTraversal_vtable[0];
-    o.p = 0;
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igTraversal_vtable[0];
-    if (&o.p != 0) {
-        t = o.p;
-        if (t != 0) {
-            t->rc = t->rc - 1;
-            if ((t->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)t);
-            }
-        }
-    }
-    return r;
-}
-
-void *FUN_00194490(struct S *arg0, short arg1) {
-    void *p;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->f0 = &g_igTraversal_vtable[0];
-        if (&arg0->f1c) {
-            p = arg0->f1c;
-            if (p != 0) {
-                rc = *(int *)((char *)(p) + 4) - 1;
-                *(int *)((char *)(p) + 4) = rc;
-                if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
-void igTraversal_EnsureRegistered(void)
+void *igTraversal::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igTraversal_Register);
+    igTraversal temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igTraversal_callbackList[] = { igTraversalFunctionList_EnsureRegistered, 0 };
+void igTraversal::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igTraversal_Register(void) {
+CallbackArray *igTraversal::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igTraversalFunctionList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTraversal_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igTraversal_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTraversal",
-        0x20, /* instance size */
-        igTraversal_GetVTable,
-        &igTraversal_InitFields,
-        &FUN_00194690, /* extra callback item */
-        g_igTraversal_callbackList /* callback list */
+        sizeof(igTraversal),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        (igMetaObjectCallback)Gap::Sg::igTraversal::arkRegisterUser,
+        regFunctions
     );
 }
 
-void igTraversal_GetMetaObjectFunction(void) {
-    igTraversal_GetMetaObject();
+void igTraversal::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igRawRefMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igBoolMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_nodeSelectProcEnabled", "_nodeSelectProc", "_timeLong", "_userTimeState", "_travProcs" };
+    static igMetaField **enumStorage[] = { &k_nodeSelectProcEnabled, &k_nodeSelectProc, &k_timeLong, &k_userTimeState, &k_travProcs };
+    static int offsets[] = { 8, 12, 16, 24, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igLongMetaField *metaField = (igLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(-1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Sg::igTraversalFunctionList::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    igMetaObject_AddExitCallback((int)thunk_FUN_001e0470);
 }
 
-static FieldFactory g_igTraversal_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igTraversal_fieldTable[] = {
-    "_nodeSelectProcEnabled",
-    "_nodeSelectProc",
-    "_timeLong",
-    "_userTimeState",
-    "_travProcs",
-};
-static igMetaField **g_igTraversal_fieldHandles[] = {
-    &g_igTraversal_nodeSelectProcEnabledMetaField,
-    &g_igTraversal_nodeSelectProcMetaField,
-    &g_igTraversal_timeLongMetaField,
-    &g_igTraversal_userTimeStateMetaField,
-    &g_igTraversal_travProcsMetaField,
-};
-static int g_igTraversal_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    24,
-    28,
-};
-
-void igTraversal_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igTraversal_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTraversal_ctorTable, 5);
-    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)))->setDefault(-1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igTraversalFunctionList_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTraversal_fieldTable, g_igTraversal_fieldHandles, g_igTraversal_fieldOffsets, temp_s2);
-    igMetaObject_AddExitCallback((int)&thunk_FUN_001e0470);
+void igTraversal::arkRegisterUser() {
+    userRegister();
+    igMetaObject_AddRegistrationCallback((int)((int *)registerClass));
 }
-
-void FUN_00194690(void) {
-    FUN_001e0410();
-    igMetaObject_AddRegistrationCallback((int)((int *)igTraversal_RegisterClass));
+}
 }
 
 void thunk_FUN_001e0470(void) {
-    FUN_001e0470();
+    Gap::Sg::igTraversal::userUnregister();
 }
 

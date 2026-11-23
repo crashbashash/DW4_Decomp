@@ -184,7 +184,7 @@ int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *
             return 0;
         }
         if (r == 2) {
-            int meta = (int)g_igNode_metaObject;
+            int meta = (int)Gap::Sg::igNode::getClassMeta();
             int got = node->getMeta();
             if (got != meta) {
                 return passStop(igTraversal_TraverseChildren((igTraversal *)(self), (igNode *)node));
@@ -263,7 +263,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
             item->setMatrix(&world);
             state = renderer->state;
             FUN_001b1030((igAttrStackManager *)state, (igAttr *)item);
-            igTraversal_TraverseNode((igTraversal *)renderer, (igNode *)child);
+            ((Gap::Sg::igTraversal *)renderer)->dispatch((Gap::Core::igObject *)child);
             FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)item);
         }
     }

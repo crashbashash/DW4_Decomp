@@ -22,7 +22,7 @@ void igGuiSystem_resetFields(A_456780 *self, int flags) {
     first.p = (R_456780 *)igActiveComponentsObserver_Create(allocator);
     ((Gap::Gui::igView *)(first.get()))->setModel((Gap::Gui::igModel *)self->f12);
     ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(first.get()));
-    igGroup_AppendChild((igGroup *)self->f20, (igNode *)self->f28);
+    ((Gap::Sg::igGroup *)self->f20)->appendChild((Gap::Sg::igNode *)self->f28);
     R_456780 *value = self->f20;
     X_456780 *x = self->f8;
     set(x->f12, value);
@@ -78,10 +78,10 @@ void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
         var_v0 = 0;
     }
     if (var_v0 > 0) {
-        igGroup_RemoveChildAt((igGroup *)temp_a1, 0);
+        ((Gap::Sg::igGroup *)temp_a1)->removeChild(0);
     }
     if (arg1 != 0) {
-        igGroup_AppendChild((igGroup *)arg0->f28, (igNode *)arg1->f8->f8);
+        ((Gap::Sg::igGroup *)arg0->f28)->appendChild((Gap::Sg::igNode *)arg1->f8->f8);
     }
     igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
     igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
@@ -137,7 +137,7 @@ void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
     if (v > 1) {
-        igGroup_RemoveChildAt((igGroup *)arg0->f20, 0);
+        ((Gap::Sg::igGroup *)arg0->f20)->removeChild(0);
     }
     if (arg1 != 0) { arg0->f20->v140(0, arg1->f28); }
     if (arg1 != 0) { arg1->f8 = (int)arg0; }

@@ -757,7 +757,7 @@ int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) 
                 if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) <= 0) return 1;
                 igObject *object = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 igGroup *layer;
-                if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igGroup_metaObject) != 0) layer = (igGroup *)object;
+                if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) layer = (igGroup *)object;
                 else layer = 0;
                 if (layer == 0) return 1;
                 igObject *child = ((igObject **)((igObjectList *)layer->_childList)->_data)[0];
@@ -771,9 +771,9 @@ int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) 
                 if (graph != 0 && ((Gap::Core::igObject *)graph)->isOfType(g_igAttrSet_metaObject) != 0) scene = (igAttrSet *)graph;
                 else scene = 0;
                 if (scene == 0) return 1;
-                igGroup_AppendChild((igGroup *)layerNode, (igNode *)scene);
+                ((Gap::Sg::igGroup *)layerNode)->appendChild((Gap::Sg::igNode *)scene);
                 igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
-                igGroup_RemoveChild((igGroup *)((igViewerParameters *)viewer->_parameters)->_scene, (igNode *)scene);
+                ((Gap::Sg::igGroup *)(((igViewerParameters *)viewer->_parameters)->_scene))->removeChild((Gap::Sg::igNode *)scene);
             }
             int playing = (int)StringPool_Intern((StringPool *)stringPool(), (const char *)nameOf(data));
             releaseString(self->_playingName);

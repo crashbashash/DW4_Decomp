@@ -52,8 +52,8 @@ CallbackArray *igCamera_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCamera_metaObject,
-        igNode_Register,
-        igNode_GetPublishedMetaObject,
+        Gap::Sg::igNode::arkRegisterInternal,
+        Gap::Sg::igNode::getClassMeta,
         igCamera_GetMetaObjectFunction,
         "igCamera",
         0x38, /* instance size */

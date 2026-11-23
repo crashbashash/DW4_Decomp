@@ -20,7 +20,6 @@ extern int p2UnusedWaitTime3[4];
 extern const char text_GS_csr_id_d_csr_rev_d[];
 /* The newest VIF1 sequence the GS has finished drawing, as p2RecordFinishedSequence records it. */
 extern long long p2FinishedSequence[4];
-void p2UploadDirtyGsRegisters(void);
 typedef union DmaTag {
     struct {
         unsigned int qwc : 16;
@@ -416,6 +415,97 @@ void p2UploadGsRegisters(int count, int *regs) {
     }
 }
 
+/* The DMA and GIF tags of the packets p2UploadDirtyGsRegisters builds, a pair of their own. */
+extern GifQuad p2DirtyGsRegisterGifTag;
+extern DmaTag p2DirtyGsRegisterDmaTag;
+
+/*
+ * Sends every register marked in p2GsDirtyRegisters, highest index first, at most 16 to a packet, clearing
+ * each mark as it goes. The scan finds the highest set bit with the EE's plzcw (leading sign bits of each
+ * 32-bit word, less one), which C cannot spell: in the low word first, then in the high word.
+ */
+void p2UploadDirtyGsRegisters(void) {
+    int more;
+    int n;
+    int reg;
+    unsigned __int128 *p;
+    unsigned int *packet;
+    unsigned __int128 *head;
+    GsRegWrite ad;
+    long long bits;
+    long long zeros;
+    int top;
+    long long *dirty;
+    int bit;
+    int base;
+
+    more = 1;
+    if (p2CurrentProgram == 0) {
+        p2GsRegisterPacketMscal.field.immediate = p2GetVuProgramAddress(p2GsRegisterProgram);
+        do {
+            n = 0;
+            asm {
+                la      dirty, p2GsDirtyRegisters
+                li      top, 31
+            }
+            packet = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+            p = (unsigned __int128 *)packet + 3;
+            while (n < 16 && more) {
+                asm {
+                    ld      bits, 0(dirty)
+                    plzcw   zeros, bits
+                    sub     bit, top, zeros
+                    li      base, -1
+                    bne     bit, zero, found
+                    dsrl32  zeros, zeros, 0
+                    sub     bit, top, zeros
+                    dmove   base, top
+                    beq     bit, zero, none
+                found:
+                    add     reg, bit, base
+                    li      zeros, 1
+                    dsllv   zeros, zeros, reg
+                    xor     bits, bits, zeros
+                    sd      bits, 0(dirty)
+                    b       done
+                none:
+                    and     more, zero, zero
+                done:
+                }
+                if (more) {
+                    ad.f.data = ((unsigned long long *)p2CurrentGsRegisters)[reg];
+                    ad.f.addr = p2GsRegisterAddresses[reg];
+                    n++;
+                    *p = ad.q;
+                    p++;
+                }
+            }
+            if (n != 0) {
+                p2DirtyGsRegisterGifTag.f.nreg = n;
+                p2DirtyGsRegisterDmaTag.f.qwc = n + 3;
+                p2GsRegisterPacketHead.code[3].field.num = n + 1;
+                packet[0] = p2DirtyGsRegisterDmaTag.w[0];
+                packet[1] = p2DirtyGsRegisterDmaTag.w[1];
+                packet[2] = p2DirtyGsRegisterDmaTag.w[2];
+                packet[3] = p2DirtyGsRegisterDmaTag.w[3];
+                head = (unsigned __int128 *)packet;
+                head++;
+                *head++ = p2GsRegisterPacketHead.q;
+                *head = p2DirtyGsRegisterGifTag.q;
+                *p = p2GsRegisterPacketTail.q;
+                p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 1);
+                if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+                    if (p2DisplayListMode != 0) {
+                        p2GrowDisplayList();
+                    } else {
+                        p2SubmitDmaPacket(1);
+                    }
+                }
+            }
+        } while (more);
+    }
+}
+
 void p2FlushGsRegisters(void) {
     if (p2GsDirtyRegisters != 0) {
         p2UploadDirtyGsRegisters();
@@ -539,6 +629,60 @@ void p2CallGifChain(unsigned int chain, int unused, int flush) {
         } else {
             p2SubmitDmaPacket(2);
         }
+    }
+}
+
+extern DmaTag p2GsRegisterGifDmaTag;
+extern GifQuad p2GsRegisterGifBatchTag;
+
+/* Writes the GS registers listed in regs, in batches of at most 16, through the GIF channel: a DMA tag
+ * and a GIF tag in A+D mode, then each register as its data and address doublewords. The tag's
+ * register list names A+D (0xE) for each register sent and NOP (0xF) for the slots above them. */
+void p2UploadGsRegistersGif(int count, int *regs, int flush) {
+    int n;
+    GifQuad tag;
+    int i;
+    unsigned long long *p;
+    unsigned long long *gif;
+    long long descriptors;
+    long long unused;
+
+    while (count > 0) {
+        n = count < 16 ? count : 16;
+        p = (unsigned long long *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
+        tag = p2GsRegisterGifBatchTag;
+        descriptors = 0;
+        tag.f.nreg = n;
+        p2GsRegisterGifDmaTag.f.qwc = n + 1;
+        ((unsigned int *)p)[0] = p2GsRegisterGifDmaTag.w[0];
+        ((unsigned int *)p)[1] = p2GsRegisterGifDmaTag.w[1];
+        ((unsigned int *)p)[2] = p2GsRegisterGifDmaTag.w[2];
+        ((unsigned int *)p)[3] = p2GsRegisterGifDmaTag.w[3];
+        gif = p + 2;
+        p[2] = ((GifTagWords *)&tag)->tag;
+        p[3] = ((GifTagWords *)&tag)->regs;
+        p += 4;
+        for (i = 0; i < n; i++) {
+            int reg = regs[i];
+            descriptors |= 0xELL << (i * 4);
+            p[0] = ((unsigned long long *)p2CurrentGsRegisters)[reg];
+            p[1] = p2GsRegisterAddresses[reg];
+            p += 2;
+        }
+        unused = -1;
+        unused <<= n * 4;
+        descriptors |= unused;
+        gif[1] = descriptors;
+        p2DmaCurrentPacket[P2_DMA_GIF]->cursor = (unsigned int)p;
+        if (flush != 0 && p2DmaCurrentPacket[P2_DMA_GIF]->cursor >= p2DmaCurrentPacket[P2_DMA_GIF]->limit) {
+            if (p2DisplayListMode != 0) {
+                p2GrowDisplayList();
+            } else {
+                p2SubmitDmaPacket(2);
+            }
+        }
+        count -= n;
+        regs += n;
     }
 }
 

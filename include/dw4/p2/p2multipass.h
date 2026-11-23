@@ -17,6 +17,8 @@ void p2UploadTex0Context2(void);
 int p2StagesTextured(int all, unsigned int textured, int uncombined);
 int p2StagesUseVertexColour(int all);
 int p2StagesUseOddCombineMode(int first);
+/* Bit n: the texture bound to stage n has a palette. */
+extern int p2PalettedStages;
 
 #ifdef __cplusplus
 }

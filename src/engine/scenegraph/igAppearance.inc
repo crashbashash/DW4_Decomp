@@ -96,7 +96,7 @@ void igAppearance_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAppearance_Register);
 }
 
-static igMetaObjectCallback g_igAppearance_callbackList[] = { igSkin_EnsureRegistered, igSkinList_EnsureRegistered, igModelViewMatrixBoneSelectListSg_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAppearance_callbackList[] = { Gap::Sg::igSkin::arkRegister, Gap::Sg::igSkinList::arkRegister, igModelViewMatrixBoneSelectListSg_EnsureRegistered, igStringObjList_EnsureRegistered, Gap::Sg::igNodeList::arkRegister, 0 };
 
 CallbackArray *igAppearance_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -161,9 +161,9 @@ void igAppearance_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAppearance_ctorTable, 5);
     skinField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)skinField)->_metaObject = (int)igSkin_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)skinField)->_metaObject = (int)Gap::Sg::igSkin::getClassTypeLazy();
     attachedSkinsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)attachedSkinsField)->_metaObject = (int)igSkinList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)attachedSkinsField)->_metaObject = (int)Gap::Sg::igSkinList::getClassTypeLazy();
     ((igRefMetaField *)attachedSkinsField)->_construct = 1;
     attachedGraphsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igObjectRefMetaField *)attachedGraphsField)->_metaObject = (int)igModelViewMatrixBoneSelectListSg_GetOrCreateMetaObject();
@@ -172,7 +172,7 @@ void igAppearance_InitFields(void) {
     ((igObjectRefMetaField *)segmentOverrideNameListField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
     ((igRefMetaField *)segmentOverrideNameListField)->_construct = 1;
     segmentOverrideGraphListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
-    ((igObjectRefMetaField *)segmentOverrideGraphListField)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)segmentOverrideGraphListField)->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
     ((igRefMetaField *)segmentOverrideGraphListField)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_igAppearance_fieldTable, g_igAppearance_fieldHandles, g_igAppearance_fieldOffsets, base);
 }

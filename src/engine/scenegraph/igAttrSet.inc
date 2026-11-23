@@ -48,8 +48,8 @@ CallbackArray *igAttrSet_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAttrSet_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igAttrSet_GetMetaObjectFunction,
         "igAttrSet",
         0x28, /* instance size */

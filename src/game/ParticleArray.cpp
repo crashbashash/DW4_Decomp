@@ -153,7 +153,7 @@ int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node) {
 }
 
 void ParticleTimer_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, ParticleTimer_GetMetaObject(), (void *)ParticleTimer_TraversalFunction);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, ParticleTimer_GetMetaObject(), (igTraversalFunction *)ParticleTimer_TraversalFunction);
 }
 
 void ParticleTimer_resetFields(ParticleTimer *self, int flags)

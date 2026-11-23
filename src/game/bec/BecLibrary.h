@@ -2831,7 +2831,6 @@ extern "C" int g_beNumberCtrlInfoList_vtable[4];
 extern "C" int g_beNumberCtrlInfo_vtable[4];
 extern "C" int g_beNumberCtrl_vtable[4];
 extern "C" int g_beLoadingNode_vtable[4];
-extern "C" int g_igGroup_vtable[4];
 extern "C" int g_beNodeAnim_vtable[4];
 extern "C" igMetaObject *g_beNodeAnim_metaObject;
 extern "C" int g_beMovieInfo_vtable[4];

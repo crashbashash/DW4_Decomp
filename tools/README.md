@@ -21,6 +21,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`gen_odl_source.py`](gen_odl_source.py) | write a library's reflection boilerplate as igen wrote it (member functions), and compare it with retail |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
 | [`forkpool.py`](forkpool.py) | run a sweep of tools/check.py or tools/linkgen.py in forked worker processes, so its Python work uses every core |
+| [`buildlock.py`](buildlock.py) | the build lock a sweep shares with the machine's other runs (`--lock FILE`, default `$DW4_BUILD_LOCK` outside make): `check.py`, `whole_file_rows.py` and `memberize.py --rekey` hold it shared around each unit's compile and release it between units, letting a waiting heavy run in first, so `make check` under `flock FILE` waits only for the units in flight |
 | [`changedunits.py`](changedunits.py) | the files changed since a git revision (committed, staged or not, new) and the translation units whose source or transitive `#include`s they touch, for `check.py --changed-since` |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
 | [`srctext.py`](srctext.py) | read a source as the compiler sees it, with a unity-built unit's `#include "src/..."` fragments expanded |

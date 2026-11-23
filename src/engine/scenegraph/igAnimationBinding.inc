@@ -70,7 +70,7 @@ void igAnimationBinding_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationBinding_Register);
 }
 
-static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { igAnimationHierarchy_EnsureRegistered, Gap::Core::igIntList::arkRegister, igBitMask_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { Gap::Sg::igAnimationHierarchy::arkRegister, Gap::Core::igIntList::arkRegister, igBitMask_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationBinding_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -134,7 +134,7 @@ void igAnimationBinding_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationBinding_ctorTable, 5);
     hierarchyField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)hierarchyField)->_metaObject = (int)igAnimationHierarchy_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hierarchyField)->_metaObject = (int)Gap::Sg::igAnimationHierarchy::getClassTypeLazy();
     boneTrackIdxArrayField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
     ((igRefMetaField *)boneTrackIdxArrayField)->_destruct = 1;

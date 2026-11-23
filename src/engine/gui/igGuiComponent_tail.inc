@@ -50,17 +50,17 @@ int FUN_004555e0(void *arg0) {
 
 void FUN_004555f0(int *p, unsigned char value)
 {
-    FUN_004558b0((S_4558b0 *)*(int *)((char *)p + 16), value);
+    ((Gap::Gui::igGuiComponentModel *)(*(int *)((char *)p + 16)))->setHasFocus(value);
 }
 
 void FUN_00455600(int *p, unsigned char value)
 {
-    FUN_00455900((S_455900 *)*(int *)((char *)p + 16), value);
+    ((Gap::Gui::igGuiComponentModel *)(*(int *)((char *)p + 16)))->setMouseOver(value);
 }
 
 void FUN_00455610(int *p, unsigned char value)
 {
-    FUN_00455950((S_455950 *)*(int *)((char *)p + 16), value);
+    ((Gap::Gui::igGuiComponentModel *)(*(int *)((char *)p + 16)))->setPushed(value);
 }
 
 unsigned char FUN_00455620(void *arg0) {

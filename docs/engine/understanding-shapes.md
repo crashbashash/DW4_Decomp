@@ -1737,6 +1737,39 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* declare the parameter with its real class and read the reflected fields through it; cast the
     loaded handle, not the object (`o = (struct Rc *)self->_parentList;`).
   - *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp` (0x195970 and the other scene-graph destroy functions).
+- **The reverse: retail's parameter is a cast copy, so the first two parameters sit in exchanged registers (b52, C).**
+  - *Symptom:* the first two parameters in exchanged saved registers through the whole function (`move s4,a1;
+    move s3,a0` in retail, `s4,a0`/`s3,a1` ours); `regalloc.py` reports "one more value live beside the second
+    parameter, numbered just after the parameters, gives retail" and no declaration order of the locals helps.
+  - *Cause:* a local declared first and set in its declaration through an explicit cast of the parameter
+    (`P2Texture **textures = (P2Texture **)list;`) is a value of its own, numbered after every parameter; the
+    same copy without the cast (initializer or assignment) merges into the parameter's node and changes nothing.
+    The parameter's declared type does not matter (`void *`, `int`, the same type: all alike), so an untyped
+    `void *list` parameter makes the cast ordinary code; the cast copy declared last is far worse.
+  - *Unit:* `src/engine/p2texture.c` (0x20bb20).
+- **A value with two definitions takes a different temporary register from a `?:` (b52).**
+  - *Symptom:* `move a0,zero; addiu a0,s3,-1; sll v0,a0,3; subu v1,v0,a0` where retail keeps the value and the
+    product in `v1` (`subu v1,v0,v1`).
+  - *Spelling:* `set = program > 1 ? program - 1 : 0;` for `set = 0; if (program > 1) set = program - 1;`; the
+    `?:` written inside the index expression instead of into the local is worse.
+  - *Unit:* `src/engine/p2texture.c` (0x20bb20).
+- **A read through a pointer to `const` is not reused by a later modify of the same word (b52).**
+  - *Symptom:* retail loads a global again for `g &= ~1` on a branch although the register that took
+    `previous = g` before the branch is still live (`lw v1,g; and v0,v1,v0` where ours has `and v0,s0,v0`).
+  - *Cause:* the load a modify-assignment or a bit-field store makes is shared with an earlier plain read of the
+    same lvalue, across branches; a read typed `const` (a getter taking `const int *`, a `const` pointer local,
+    `*(const int *)&g`) is a different load and is not shared. Casts to `int`/`unsigned`, an unsigned global, a
+    helper taking `int *` and the optimizer pragmas do not separate the two.
+  - *Unit:* `src/engine/p2texture.c` (0x20bb20, `p2ReadStages`).
+- **An address held across a `switch` with the byte loaded again: a pointer to the sub-object, taken before it (b52).**
+  - *Symptom:* `addiu a1,a0,70` in the dispatch block and `lb a0,0(a1) ... sb v0,0(a1)` in one case, where a plain
+    `p->state = v` gives `lb a1,70(a0) ... sb v0,70(a0)` (no address) and a plain `switch (p->state)` keeps the
+    address but reuses the byte the switch loaded.
+  - *Cause:* the case stores through a pointer to the member that holds the bit-fields, set before the switch
+    (`P2TextureFlags *flags = &textures[i]->flags;`), while the switch reads the state through the `const` getter.
+    A bit-field has no address, so the two bits have to sit in a named struct; `P2Texture` keeps them both ways in
+    an unnamed union (the C++ units need `#pragma cpp_extensions on` around it for the unnamed struct).
+  - *Unit:* `src/engine/p2texture.c` (0x20bb20), `include/dw4/p2/p2texture.h`.
 - **What a declaration changes at the call.** A `(...)` or K&R `()` declaration and a prototype give the same
   call when the arguments are word-sized `int`, pointer or enum values, or constants. They differ in these cases,
   so each is tested on every caller when a declaration moves to its home:
@@ -2206,6 +2239,22 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   count, a function-level count and list shared by the three branches (one web each), and a helper copying its
   list parameter into a local declared after the count (coalesced) each leave the 35 words. *Unit:*
   `src/engine/scenegraph/SceneGraphLibrary.cpp` (0x1dc610).
+- **One list shared by several appends: the values that are live beside it are declared ahead of it.** igSorter's
+  geometry append puts a geometry's set attribute, or its one or two attributes, on one list in four written-out
+  appends, three times in the function. With the list declared first (or as an inline's parameter) every
+  instruction matches but the list sits in `s0` and the appended values in `s1`, retail the reverse, counts in
+  `s2`. The list interferes with the geometry, the attribute-list pointer, the set attribute, the retained
+  attribute list of the set branch and three appended values: 7 values and 18 call-clobbered registers, degree 25
+  (K), so it stays until one of them is pushed, and the appended values, pushed first, are coloured last. Retail
+  follows when the values that outlive an append are numbered below the list: the attribute-list pointer, the
+  count of the first of the two-attribute appends (the only count live beside that pointer, degree 25; the other
+  three have 23 and are pushed in the first scan wherever they are declared) and the retained list. Spelling:
+  `attributes`, `firstCount`, `retained` declared in that order ahead of the list, which is declared at its
+  assignment (`AttrPointerList *list = ...;`); the other three counts stay block-local `int count;`. A declaration
+  without an initializer ahead of a list that is itself declared bare and assigned later moves nothing (twelve
+  orders of the four gave two outputs); one `count` variable for all four appends leaves 90 words, the count
+  ahead of the pointer 28. Found by single compiles compared word by word, the graph read from an earlier trace.
+  *Unit:* `src/engine/scenegraph/SceneGraphLibrary.cpp` (0x1db720).
 - **How a call's arguments are lowered (probed under `#pragma schedule off`).** Three steps, in this order:
   - An argument that contains a call, an inline with a statement body included, is evaluated first:
     `f3(p->x, q->y, g())` calls `g` before it loads either field.
@@ -2352,6 +2401,14 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
 - **MWCC's assembler writes `li reg,0` as `addi`.** In an MWCC `asm` function `li a1,0` assembles to
   `addi a1,zero,0`; retail's constant builds have `ori a1,zero,0`, which the source writes out. *Unit:*
   `src/engine/p2core.c` (0x1eba30).
+- **An MWCC `asm { }` instruction that names a machine register is a scheduling barrier (traced).** The operand
+  builder marks such an instruction (PCode flag `0x100`, from `0x4ccd26` on), and the scheduler makes every marked
+  instruction depend on everything before it in its block and everything after depend on it (`0x4c4060` tests
+  `0x100108`). An instruction whose operands are all C variables is not marked, and neither are the expansions of
+  `la` and `dli`. So when retail interleaves C code with an `asm` block's instructions, write the block's registers
+  as C locals and let the allocator place them: the declaration order decides which register each one gets.
+  `gdb_pcode.py` prints the flag, and `gdb_schedtrace.py` shows the barrier's edges. *Unit:* `src/engine/p2gs.c`
+  (0x1f78d0).
 - **Three shapes only `volatile` gives under ee-gcc 2.96.** No type, alias set, pointer spelling or statement
   barrier has reproduced these, so a function that needs one of them was compiled with a `volatile` access (the
   owner still decides the row, [source approvals](source-approvals.md)):

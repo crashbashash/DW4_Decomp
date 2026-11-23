@@ -1,53 +1,52 @@
-igMetaObject *g_igOnOffValueObserverList_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igOnOffValueObserverList_GetOrCreateMetaObject(void) {
-    if (g_igOnOffValueObserverList_metaObject == 0) {
-        g_igOnOffValueObserverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igOnOffValueObserverList_metaObject;
-}
+igMetaObject *igOnOffValueObserverList::_Meta;
 
-igMetaObject *igOnOffValueObserverList_GetMetaObject(void)
+igMetaObject *igOnOffValueObserverList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igOnOffValueObserverList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igOnOffValueObserverList_EnsureRegistered();
-    return g_igOnOffValueObserverList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igOnOffValueObserverList_GetVTable(void) {
-    Obj_44c920 o;
-
-    igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igOnOffValueObserverList_vtable[0];
-    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-}
-
-void igOnOffValueObserverList_EnsureRegistered(void)
+igMetaObject *igOnOffValueObserverList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igOnOffValueObserverList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igOnOffValueObserverList_callbackList[] = { igOnOffValueObserver_EnsureRegistered, 0 };
+void *igOnOffValueObserverList::retrieveVTablePointer()
+{
+    igOnOffValueObserverList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igOnOffValueObserverList_Register(void) {
+void igOnOffValueObserverList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igOnOffValueObserverList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igOnOffValueObserver::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igOnOffValueObserverList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igOnOffValueObserverList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igOnOffValueObserverList",
-        0x14, /* instance size */
-        igOnOffValueObserverList_GetVTable,
+        sizeof(igOnOffValueObserverList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igOnOffValueObserverList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igOnOffValueObserverList_GetMetaObjectFunction(void) {
-    igOnOffValueObserverList_GetMetaObject();
+}
 }
 

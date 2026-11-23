@@ -6,10 +6,11 @@ void SceneGraphLibrary_MarkRegistered(void) {
     }
 }
 
-igMetaObject *g_igGroup_metaObject;
-igMetaField *g_igGroup_childListMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igGroup_GetPublishedMetaObject(void) {
-    return g_igGroup_metaObject;
+igMetaObject *igGroup::_Meta;
+igMetaField *igGroup::k_childList;
+}
 }
 

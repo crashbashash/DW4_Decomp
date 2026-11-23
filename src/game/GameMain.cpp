@@ -257,7 +257,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igAttrList::arkRegister();
     Gap::Attrs::igAlphaStateAttr::arkRegister();
     Gap::Math::igVec4fArrayMetaField::arkRegister();
-    igTraversalFunctionList_EnsureRegistered();
+    Gap::Sg::igTraversalFunctionList::arkRegister();
     igShaderInfo_EnsureRegistered();
     igShaderFactoryList_EnsureRegistered();
     igAnimation_EnsureRegistered();
@@ -277,8 +277,8 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igGeometrySetAttr::arkRegister();
     Gap::Attrs::igGeometryAttr1_5::arkRegister();
     Gap::Attrs::igColorAttr::arkRegister();
-    igNonRefCountedNodeList_EnsureRegistered();
-    igNodeList_EnsureRegistered();
+    Gap::Sg::igNonRefCountedNodeList::arkRegister();
+    Gap::Sg::igNodeList::arkRegister();
     igSwitch_EnsureRegistered();
     igBitMask_EnsureRegistered();
     igAttrSet_EnsureRegistered();
@@ -291,12 +291,12 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Core::igBoolList::arkRegister();
     Gap::Core::igFloatList::arkRegister();
     Gap::Attrs::igVertexBlendStateAttr::arkRegister();
-    igSkin_EnsureRegistered();
-    igSkinList_EnsureRegistered();
+    Gap::Sg::igSkin::arkRegister();
+    Gap::Sg::igSkinList::arkRegister();
     Gap::Sg::igSkeletonBoneInfo::arkRegister();
     Gap::Sg::igSkeletonBoneInfoList::arkRegister();
-    igSkeleton_EnsureRegistered();
-    igSkeletonList_EnsureRegistered();
+    Gap::Sg::igSkeleton::arkRegister();
+    Gap::Sg::igSkeletonList::arkRegister();
     igModelViewMatrixBoneSelectListSg_EnsureRegistered();
     igAnimationBinding_EnsureRegistered();
     igAnimationTrack_EnsureRegistered();
@@ -310,7 +310,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igAnimationCombinerBoneInfoListList_EnsureRegistered();
     igAnimationCombinerBoneInfoList_EnsureRegistered();
     igAnimationStateList_EnsureRegistered();
-    igAnimationModifierList_EnsureRegistered();
+    Gap::Sg::igAnimationModifierList::arkRegister();
     igEnbayaTransformSource_EnsureRegistered();
     igEnbayaAnimationSource_EnsureRegistered();
     igEnbayaAnimationState_EnsureRegistered();
@@ -322,7 +322,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igDepthStateAttr::arkRegister();
     Gap::Core::igLongList::arkRegister();
     igVec3fList_EnsureRegistered();
-    igGroup_EnsureRegistered();
+    Gap::Sg::igGroup::arkRegister();
     igTransformSequence1_5_EnsureRegistered();
     igQuaternionfList_EnsureRegistered();
     Gap::Attrs::igAlphaFunctionAttr::arkRegister();

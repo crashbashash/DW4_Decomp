@@ -125,8 +125,8 @@ CallbackArray *igTransform_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTransform_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igTransform_GetMetaObjectFunction,
         "igTransform",
         0x6C, /* instance size */

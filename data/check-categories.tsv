@@ -3647,6 +3647,7 @@
 0018a8f0	FUN_0018a8f0	match	-
 0018aaa0	FUN_0018aaa0	match	-
 0018ab70	igAABox_GetCorner	match	-
+0018ac80	igAABox_Transform	match	-
 0018afa0	FUN_0018afa0	match	-
 0018b050	igAABox_IntersectBox	match	-
 0018b110	FUN_0018b110	match	-
@@ -5369,6 +5370,7 @@
 001da8b0	igSorter_userConstruct	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
 001db500	FUN_001db500	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
 001db5d0	Gap__Sg__igSorter__vfunc_24	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
+001db720	FUN_001db720	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
 001dc400	FUN_001dc400	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
 001dc500	FUN_001dc500	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
 001dc610	FUN_001dc610	match	DEFERRED duplicate 0x14a6e0 getClassMeta__Q33Gap4Core13igNamedObjectFv 12B (compared under the profile of its retail unit)
@@ -5963,10 +5965,12 @@
 001f7530	p2GsInterruptHandler	match	-
 001f76c0	p2SendGsRegister	match	-
 001f76f0	p2UploadGsRegisters	match	-
+001f78d0	p2UploadDirtyGsRegisters	match	-
 001f7ad0	p2FlushGsRegisters	match	-
 001f7b00	p2AppendGsFinish	match	-
 001f7c90	p2AppendProgramRestart	match	-
 001f7db0	p2CallGifChain	match	-
+001f7e90	p2UploadGsRegistersGif	match	-
 001f8050	p2readGSPrivRegister	match	-
 001f8190	p2writeGSPrivRegister	match	-
 001f8320	FUN_001f8320	match	-
@@ -5987,6 +5991,7 @@
 001fb0a0	p2SetLightingMode	match	-
 001fb0e0	p2AppendLightingPacket	match	-
 001fb470	p2WriteDirectionalLights	match	-
+001fb710	p2WriteLights	match	-
 001fbce0	p2SetMatrix	match	-
 001fc030	p2AdjointMatrix	match	-
 001fc2b0	p2InvertMatrix	match	-
@@ -6018,6 +6023,7 @@
 001ffcf0	p2SendGifTags	match	-
 001fffb0	p2BuildVertexFormat	match	-
 00200830	p2SelectVariantTables	match	-
+00200980	p2BuildFunctionTables	match	-
 00201810	p2SendPassSetup	match	-
 00202100	p2SendVuBufferLayout	match	-
 00202300	p2SetupProgramVariants	match	-
@@ -6075,6 +6081,7 @@
 0020b650	p2FindTextureSpace	match	-
 0020b7f0	p2AllocTextureMemory	match	-
 0020b9d0	p2FenceTexture	match	-
+0020bb20	FUN_0020bb20	match	-
 0020c270	p2LoadTexture	match	-
 0020c7b0	p2ChainTexture	match	-
 0020c7f0	p2SetTexturePalette	match	-

@@ -5,9 +5,7 @@
 extern "C" {
 #endif
 
-void igRadioGroup_EnsureRegistered(void);
 
-struct igMetaObject *igRadioGroup_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

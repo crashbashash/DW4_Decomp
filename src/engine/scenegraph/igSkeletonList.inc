@@ -1,53 +1,52 @@
-igMetaObject *g_igSkeletonList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igSkeletonList_GetOrCreateMetaObject(void) {
-    if (g_igSkeletonList_metaObject == 0) {
-        g_igSkeletonList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igSkeletonList_metaObject;
-}
+igMetaObject *igSkeletonList::_Meta;
 
-igMetaObject *igSkeletonList_GetMetaObject(void)
+igMetaObject *igSkeletonList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igSkeletonList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igSkeletonList_EnsureRegistered();
-    return g_igSkeletonList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igSkeletonList_GetVTable(void) {
-    struct Obj_198480 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igSkeletonList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igSkeletonList_EnsureRegistered(void)
+igMetaObject *igSkeletonList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igSkeletonList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igSkeletonList_callbackList[] = { igSkeleton_EnsureRegistered, 0 };
+void *igSkeletonList::retrieveVTablePointer()
+{
+    igSkeletonList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igSkeletonList_Register(void) {
+void igSkeletonList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igSkeletonList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igSkeleton::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igSkeletonList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igSkeletonList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igSkeletonList",
-        0x14, /* instance size */
-        igSkeletonList_GetVTable,
+        sizeof(igSkeletonList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igSkeletonList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igSkeletonList_GetMetaObjectFunction(void) {
-    igSkeletonList_GetMetaObject();
+}
 }
 

@@ -21,7 +21,7 @@ void igAnimationSystem_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationSystem_Register);
 }
 
-static igMetaObjectCallback g_igAnimationSystem_callbackList[] = { igAnimationHierarchy_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationSystem_callbackList[] = { Gap::Sg::igAnimationHierarchy::arkRegister, 0 };
 
 CallbackArray *igAnimationSystem_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -66,7 +66,7 @@ void igAnimationSystem_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationSystem_ctorTable, 1);
     animHierarchyField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)animHierarchyField)->_metaObject = (int)igAnimationHierarchy_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)animHierarchyField)->_metaObject = (int)Gap::Sg::igAnimationHierarchy::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationSystem_fieldTable, g_igAnimationSystem_fieldHandles, g_igAnimationSystem_fieldOffsets, base);
 }
 

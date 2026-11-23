@@ -149,10 +149,12 @@ and verify each touched unit with tools/check.py.
   memberize.py table.tsv --apply         # do it
   memberize.py --respell [--apply]       # every `T Gap::Lib::Class::m(...)` definition into its namespaces
   memberize.py --check                   # C-name declarations nothing needs any more, stale compiler names
-  memberize.py --rekey [--apply]         # rename the stale names of unit-objects.json (compiles the units)
+  memberize.py --rekey [--apply]         # rename the stale names of unit-objects.json (compiles the units;
+                                         # `--lock FILE`, default $DW4_BUILD_LOCK: each compile holds it shared)
 """
 import argparse
 import collections
+import contextlib
 import difflib
 import json
 import os
@@ -162,6 +164,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts"))
+import buildlock  # noqa: E402
 import compiler_names  # noqa: E402
 import cxxscope  # noqa: E402
 import declarations  # noqa: E402
@@ -2382,10 +2385,11 @@ def object_renames(rows, converted, declared, object_names):
 _UNIT_SOURCES = {}
 
 
-def unit_object_names(root, unit, row):
+def unit_object_names(root, unit, row, hold=None):
     """The names the object of a whole-file row's unit defines and references, compiled as tools/check.py builds it
     (tools/project.py compile_unit: the source units.scan finds for the owner, under the unit's profile), or None
-    when it cannot be."""
+    when it cannot be. The compile runs inside `hold()` (the build lock taken shared, tools/buildlock.py)."""
+    hold = hold or contextlib.nullcontext
     import cc
     import project
     import verify
@@ -2400,7 +2404,9 @@ def unit_object_names(root, unit, row):
     if source is None:
         return None
     out = os.path.join(cc.scratch_dir(), "memberize-%s.o" % unit)
-    if project.compile_unit(project.DEFAULT_VERSION, owner, os.path.join(root, source), out, quiet=True):
+    with hold():
+        failed = project.compile_unit(project.DEFAULT_VERSION, owner, os.path.join(root, source), out, quiet=True)
+    if failed:
         return None
     return set(verify.object_syms(out)[0])
 
@@ -2772,6 +2778,9 @@ def main(argv=None):
                          "converted since as its flat struct, and the names a unit's object now spells otherwise: a "
                          "template instance of a converted class, a class renamed or retired, a stripped body gone "
                          "(compiles those units; no table)")
+    ap.add_argument("--lock", metavar="FILE", default=None,
+                    help="with --rekey: hold the build lock FILE shared around each unit's compile (default "
+                         "$DW4_BUILD_LOCK outside make; '' for none; tools/buildlock.py)")
     a = ap.parse_args(argv)
     root = os.path.abspath(a.root)
     if a.check:
@@ -2794,8 +2803,9 @@ def main(argv=None):
         return 0
     if a.rekey:
         rows, stale = tree_stale_keys(root)
+        hold = buildlock.holder(buildlock.path(a.lock))
         unit_renames, notes = object_renames(rows, converted_classes(root), declared_classes(root),
-                                             lambda unit, row: unit_object_names(root, unit, row))
+                                             lambda unit, row: unit_object_names(root, unit, row, hold))
         changes, touched = rekey_rows(rows, stale, unit_renames)
         for c in changes:
             print("  unit-objects.json " + c)

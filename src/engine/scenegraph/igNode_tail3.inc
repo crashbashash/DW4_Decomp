@@ -1,39 +1,65 @@
-void igNode_userConstruct(void **arg0, int arg1) {
-    Gap__Core__igObject__userConstruct((igObject *)arg0);
-    if (arg1 == 0) {
-        ((DW4VC_112_2 *)(arg0))->vX((int)(((DW4VC_120_0 *)(arg0))->vX()), (int)(1));
+namespace Gap {
+namespace Sg {
+
+void igNode::userConstruct(int flag)
+{
+    igNamedObject::userConstruct(flag);
+    if (flag == 0) {
+        setFlags(getInherantFlags(), true);
     }
 }
 
-int igNode_GetInherantFlags(void) {
+unsigned int igNode::getInherantFlags()
+{
     return 0;
 }
 
-void igNode_InsertGroupAbove(NodeSlots *o, void *with) {
-    NodeSlots *held = o;
-    int i;
-    retain_1d3410((int *)&held);
-    i = o->getChildCount() - 1;
-    while (i >= 0) {
-        GroupChild *c = o->getChild(i);
-        NodeParentListView *l = c->_parents;
-        NodeSlots *self = o;
-        c->replaceChild(findParent(l, (int *)&self), with);
-        igGroup_RemoveChild((igGroup *)c, (igNode *)o);
-        i--;
+/* matching construct: igNodeRef's retain and release written over the held slot — retail reads the pointer back
+ * from the slot for the null test, the increment and again after the decrement, which igSmartPointer's inlined
+ * ref/release (a register copy of the pointer) does not. */
+static inline void retainHeld(int *slot)
+{
+    ::igNode *node = (::igNode *)*slot;
+    if (node != 0) {
+        node->_refCount = node->_refCount + 1;
     }
-    igGroup_AppendChild((igGroup *)with, (igNode *)o);
-    release_1d3410((int *)&held);
 }
 
-void Gap__Sg__igNode__resetFields(igNode *arg0, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
+static inline void releaseHeld(int *slot)
+{
+    if (*slot != 0) {
+        ((::igNode *)*slot)->_refCount = ((::igNode *)*slot)->_refCount - 1;
+        if ((((::igNode *)*slot)->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy((::igObject *)*slot);
+        }
+    }
 }
 
-void igNode_UserPostLoad(igNode *self) {
-    igObject_UserPostLoad();
-    self->_handle = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(self) + 0)))->vX()) + 8));
+void igNode::insertGroupAbove(igGroup *groupToInsert)
+{
+    ::igNode *held = (::igNode *)this;
+    retainHeld((int *)&held);
+    for (int i = getParentCount() - 1; i >= 0; i--) {
+        igGroup *parent = (igGroup *)getParent(i);
+        parent->insertChild(parent->getChild(this), groupToInsert);
+        parent->removeChild(this);
+    }
+    groupToInsert->appendChild(this);
+    releaseHeld((int *)&held);
+}
+
+void igNode::resetFields(int flag)
+{
+    igNamedObject::resetFields(flag);
+    _handle = getMeta()->_id;
+}
+
+void igNode::userPostLoad()
+{
+    igNamedObject::userPostLoad();
+    _handle = getMeta()->_id;
+}
+}
 }
 
 igSmartPointer<igObject> *igSmartPointer_igInfoList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

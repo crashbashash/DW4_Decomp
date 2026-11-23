@@ -23,117 +23,6 @@ int igTransformRecorder_GetVTable(void) { struct Obj_195860 o; int *p = (int *)&
  t = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
  o.vt = &g_igTransformRecorder_vtable[0]; igGroup_Destroy((igGroup *)((struct Obj_195860 *)p), 0); return t; }
 
-igSmartPointer<igObject> *igSmartPointer_igNodeList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
-igNode *igNode_Destroy(igNode *self, short deleteFlag) {
-    struct Rc *o;
-    int *a1;
-    int v0;
-    if (self != 0) {
-        self->_vtable = (int)&g_igNode_vtable[0];
-        if (&self->_parentList != 0) {
-            o = (struct Rc *)self->_parentList;
-            if (o != 0) {
-                o->rc = o->rc - 1;
-                if ((o->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy((igObject *)o);
-                }
-            }
-        }
-        if (&self->_bound != 0) {
-            o = (struct Rc *)self->_bound;
-            if (o != 0) {
-                o->rc = o->rc - 1;
-                if ((o->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy((igObject *)o);
-                }
-            }
-        }
-        if (self != 0) {
-            self->_vtable = (int)&g_igNamedObject_vtable[0];
-            if (&self->_name != 0) {
-                char *p = (char *)self->_name;
-                if (p != 0) {
-                    a1 = (int *)(p - 8);
-                    v0 = *(int *)(p - 4) - 1;
-                    *(int *)(p - 4) = v0;
-                    if (v0 == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
-                    }
-                }
-            }
-        }
-        if (deleteFlag > 0) {
-            Memory_FreeBufferAliasC(self);
-        }
-    }
-    return self;
-}
-
-igGroup *igGroup_Destroy(igGroup *self, short deleteFlag) {
-    struct Rc *o;
-    int *a1;
-    int v0;
-    if (self != 0) {
-        self->_vtable = (int)&g_igGroup_vtable[0];
-        if (&self->_childList != 0) {
-            o = (struct Rc *)self->_childList;
-            if (o != 0) {
-                o->rc = o->rc - 1;
-                if ((o->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy((igObject *)o);
-                }
-            }
-        }
-        if (self != 0) {
-            self->_vtable = (int)&g_igNode_vtable[0];
-            if (&self->_parentList != 0) {
-                o = (struct Rc *)self->_parentList;
-                if (o != 0) {
-                    o->rc = o->rc - 1;
-                    if ((o->rc & 0x7FFFFF) == 0) {
-                        igObject_Destroy((igObject *)o);
-                    }
-                }
-            }
-            if (&self->_bound != 0) {
-                o = (struct Rc *)self->_bound;
-                if (o != 0) {
-                    o->rc = o->rc - 1;
-                    if ((o->rc & 0x7FFFFF) == 0) {
-                        igObject_Destroy((igObject *)o);
-                    }
-                }
-            }
-            if (self != 0) {
-                self->_vtable = (int)&g_igNamedObject_vtable[0];
-                if (&self->_name != 0) {
-                    char *p = (char *)self->_name;
-                    if (p != 0) {
-                        a1 = (int *)(p - 8);
-                        v0 = *(int *)(p - 4) - 1;
-                        *(int *)(p - 4) = v0;
-                        if (v0 == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
-                        }
-                    }
-                }
-            }
-        }
-        if (deleteFlag > 0) {
-            Memory_FreeBufferAliasC(self);
-        }
-    }
-    return self;
-}
-
 void igTransformRecorder_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformRecorder_Register);
@@ -144,8 +33,8 @@ CallbackArray *igTransformRecorder_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTransformRecorder_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         igTransformRecorder_GetMetaObjectFunction,
         "igTransformRecorder",
         0xA0, /* instance size */

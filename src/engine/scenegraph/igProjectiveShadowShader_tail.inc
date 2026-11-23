@@ -336,7 +336,7 @@ void FUN_001d5e60(struct A_1d5e60 *arg0, int arg1) {
         n = 0;
     }
     for (i = 0; i < n; i++) {
-        igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f28->data[i]);
+        ((Gap::Sg::igTraversal *)arg1)->dispatch((Gap::Core::igObject *)arg0->f28->data[i]);
     }
 }
 
@@ -346,7 +346,7 @@ void FUN_001d5ef0(struct S60 *arg0, int arg1) {
 
     n = arg0->f60->count;
     for (i = 0; i < n; i++) {
-        igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f60->data[i]);
+        ((Gap::Sg::igTraversal *)arg1)->dispatch((Gap::Core::igObject *)arg0->f60->data[i]);
     }
 }
 
@@ -429,7 +429,7 @@ void igProjectiveShadowShader_UserPostLoad(struct S_1d6240 *arg0) {
     if (temp_v1 != 0) {
         temp_s1 = temp_v1->cnt;
         for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-            igGroup_AppendChild((igGroup *)arg0, (igNode *)arg0->f64->data[var_s0]);
+            ((Gap::Sg::igGroup *)arg0)->appendChild((Gap::Sg::igNode *)arg0->f64->data[var_s0]);
         }
         temp_a0 = (struct R_1d6240 *)arg0->f64;
         if (temp_a0 != 0) {

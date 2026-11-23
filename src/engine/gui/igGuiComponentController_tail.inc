@@ -1,5 +1,5 @@
 void igGuiComponentController_IsCompatible(igGuiComponentController *self, int model) {
-    ((Gap::Core::igObject *)model)->isOfType(igGuiComponentModel_GetMetaObject());
+    ((Gap::Core::igObject *)model)->isOfType(Gap::Gui::igGuiComponentModel::getClassTypeSafe());
 }
 
 void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void *arg1) {
@@ -8,7 +8,7 @@ void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void
 
     temp_a1 = *(int *)((char *)(arg1) + 8);
     temp_a2 = (igGuiComponentModel *)(arg0->_model);
-    if (temp_a1 == (int)g_igGuiComponentModel_enabledMetaField) {
+    if (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_enabled) {
         if (temp_a2->_enabled != 0) {
             ((DW4VC_104_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -16,7 +16,7 @@ void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void
         ((DW4VC_108_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
         return;
     }
-    if (temp_a1 == (int)g_igGuiComponentModel_hasFocusMetaField) {
+    if (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_hasFocus) {
         if (temp_a2->_hasFocus != 0) {
             ((DW4VC_112_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -24,7 +24,7 @@ void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void
         ((DW4VC_116_2_4556e0 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
         return;
     }
-    if (temp_a1 == (int)g_igGuiComponentModel_mouseOverMetaField) {
+    if (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_mouseOver) {
         if (temp_a2->_mouseOver != 0) {
             ((DW4VC_120_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -32,7 +32,7 @@ void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void
         ((DW4VC_124_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
         return;
     }
-    if (temp_a1 == (int)g_igGuiComponentModel_pushedMetaField) {
+    if (temp_a1 == (int)Gap::Gui::igGuiComponentModel::k_pushed) {
         if (temp_a2->_pushed != 0) {
             ((DW4VC_128_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2));
             return;
@@ -75,47 +75,40 @@ int Gap__Gui__igGuiComponentController__vfunc_25(void) {
     return 0;
 }
 
-void FUN_004558b0(struct S_4558b0 *arg0, unsigned char arg1) {
-    unsigned char temp_a2;
+namespace Gap {
+namespace Gui {
 
-    temp_a2 = arg0->b;
-    if (temp_a2 != arg1) {
-        arg0->b = arg1;
-        igNotifyEvent sp10((Gap::Core::igMetaField *)g_igGuiComponentModel_hasFocusMetaField);
-        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp10);
+void igGuiComponentModel::setHasFocus(unsigned char hasFocus)
+{
+    if (_hasFocus != hasFocus) {
+        _hasFocus = hasFocus;
+        notifyAllViews(igNotifyEvent(k_hasFocus));
     }
 }
 
-void FUN_00455900(struct S_455900 *arg0, unsigned char arg1) {
-    unsigned char temp_a2;
-
-    temp_a2 = arg0->f;
-    if (temp_a2 != arg1) {
-        arg0->f = arg1;
-        igNotifyEvent sp10((Gap::Core::igMetaField *)g_igGuiComponentModel_mouseOverMetaField);
-        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp10);
+void igGuiComponentModel::setMouseOver(unsigned char mouseOver)
+{
+    if (_mouseOver != mouseOver) {
+        _mouseOver = mouseOver;
+        notifyAllViews(igNotifyEvent(k_mouseOver));
     }
 }
 
-void FUN_00455950(S_455950 *arg0, unsigned char arg1) {
-    unsigned char temp_a2;
-
-    temp_a2 = arg0->b;
-    if (temp_a2 != (arg1 & 0xFF)) {
-        arg0->b = arg1;
-        igNotifyEvent sp10((Gap::Core::igMetaField *)g_igGuiComponentModel_pushedMetaField);
-        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp10);
+void igGuiComponentModel::setPushed(unsigned char pushed)
+{
+    if (_pushed != pushed) {
+        _pushed = pushed;
+        notifyAllViews(igNotifyEvent(k_pushed));
     }
 }
 
-void FUN_004559a0(struct S_4559a0 *arg0, unsigned char arg1) {
-    unsigned char temp_a2;
-
-    temp_a2 = arg0->b;
-    if (temp_a2 != arg1) {
-        arg0->b = arg1;
-        igNotifyEvent sp((Gap::Core::igMetaField *)g_igGuiComponentModel_childHasFocusMetaField);
-        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp);
+void igGuiComponentModel::setChildHasFocus(unsigned char hasFocus)
+{
+    if (_childHasFocus != hasFocus) {
+        _childHasFocus = hasFocus;
+        notifyAllViews(igNotifyEvent(k_childHasFocus));
     }
+}
+}
 }
 

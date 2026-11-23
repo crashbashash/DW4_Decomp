@@ -66,6 +66,10 @@ answers only for the ones it touches. The count voids an approval when another u
 function as `unapproved` again. A header statement is approved once every function reaching it has its row.
 A call of one of MWCC's `__I_<mnemonic>` instruction builtins (`__I_mfc0(3, 12)`,
 `__I_nop()`) emits the instruction it names from C, so it counts as an `asm` use.
+A row names the function by its symbols.txt symbol, and keeps it when the function becomes a C++ member:
+config/SLUS-20836/compiler-names.tsv binds the member's compiler name to the symbol, so the row counts what
+reaches that member, and only that member: a library unit defines many a method of one name, and each is told
+apart by its class.
 
 Three things need no row:
 
@@ -1109,6 +1113,20 @@ by the weight and three `vadd.xyzw` into the sum, and `sqc2` of the sum. The gro
   (0xb28f0) reads `useSimdBlending` and `forceOneWeightSimd` and installs a weighted and a one-weight blend, the PS2
   file's `igVectorBlending_BlendWeighted` and `igVectorBlending_BlendOneWeight`.
 
+The lit-path light block writer (0x1fb710, `p2WriteLights`, `p2lighting`, psx2Lighting whole file,
+`src/engine/psx2Lighting.c`) is C around two `asm volatile { }` blocks: the ambient accumulation into record 0
+(`lqc2` of the record, the material ambient and the light ambient, `vmulaw.xyz`, `vmadd.xyz`, `sqc2`) and the
+homogeneous transform of a light's eye position by the inverted light matrix (`lqc2` of the point and four rows,
+`vmulax`/`vmadday`/`vmaddaz`/`vmaddw`, `vdiv`, `vwaitq`, `vmulq.xyz`, `sqc2`). The record stream, the loops, the
+matrix inversion, the VU0 lock and the template-initialised point `{x, y, z, 1.0f}` are C. Two `asm` uses and two
+`volatile` keywords, one row each.
+
+* No C spells the COP2 macro instructions (see above).
+* The `volatile` is not a scheduling pin: with both blocks plain `asm { }` the function differs in 133 normalised
+  instructions (MWCC hoists the cursor copy and `p2DirectionalLightCount` out of the ambient loop and gives `i` and
+  `light` scratch registers there), with either one or both blocks `asm volatile` it matches. As for the morph, the
+  source writes both blocks that way (owner's conditional standing rule, 2026-11-17).
+
 ### quadword-copy-registers
 
 Two 64-byte matrix copies each hold one `asm` statement of `lq`/`sq`, under the owner's standing rule for quadword copies
@@ -1177,6 +1195,32 @@ are MWCC `asm` functions (`asm-function` rows, one each).
 * They are `asm` functions rather than C around blocks: the first builds its own frame and the second restores it
   (`ld ra` and the frame pop in the second's epilogue), the 64-bit constants are the assembler's `dli` expansion
   (`ori`/`dsll` chains) written out by hand, and the delay slots are filled by hand under `.set noreorder`.
+
+### p2gs-dirty-register-scan
+
+`p2UploadDirtyGsRegisters` in `src/engine/p2gs.c`, an MWCC file, sends the GS registers marked in
+`p2GsDirtyRegisters`. Each pass of its inner loop finds the highest set bit of the 64-bit mask, clears it, and appends
+that register's value and address to the VIF1 packet, at most 16 to a packet. The scan is two `asm { }` blocks: one
+sets up the mask's address and the constant 31 for each packet, and one is the scan. The loops, the register table
+reads and the packet stay C. Two `asm` uses, one row. The owner's standing rule for instructions C cannot spell
+approves it automatically: the owner's ruling for this function (2026-11-16) adds MMI `plzcw` and trapping
+`add`/`sub`/`addi` to that rule.
+
+* C has no spelling for the instructions. `plzcw` (leading sign bits of each 32-bit word, less one) has no MWCC
+  builtin and no C pattern. Retail also has the trapping `sub t0,t3,t4`, `add s0,t0,a2` and `addi`, and MWCC's C
+  code only uses `subu`, `addu` and `addiu`. The `addi`s are the block's `li`s, which MWCC's assembler writes as
+  `addi` (`li t3,31` gives `addi t3,zero,31`). `dmove` gives retail's `daddu a2,t3,zero`, where `move` gives `addu`.
+* Strip test. With the first block written in C (`dirty = &p2GsDirtyRegisters; top = 31;`), both values move out of
+  the outer loop into saved registers `s1` and `s2`. The frame then grows from 64 to 96 bytes, and 31 is an `addiu`
+  (29 rows). The scan block has no C form, as the first bullet shows.
+* Every operand is a C variable, and the only machine register named is `zero`. The register allocator places the
+  variables: `dirty` in `t2`, `top` in `t3`, `zeros` in `t4`, `bits` in `t5`, `bit` in `t0` and `base` in `a2`,
+  from the declaration order in the source (another order permutes `t2`-`t5`). Naming `t2`-`t5` in the blocks
+  gives the same registers but not the same bytes. MWCC marks an `asm` instruction that names a machine register
+  (PCode flag `0x100`, set by the operand builder from `0x4ccd26` on), and the scheduler makes a marked instruction a
+  full barrier (`0x4c4060` tests `0x100108`). `addi t3,zero,31` then holds the preheader's `p2DmaCurrentPacket`
+  load and the `&p2GsRegisterAddresses` hoist behind it, three words off retail. The expansion of `la` (and `dli`)
+  carries no mark, and with C operands no instruction does, so the preheader schedules as it does in retail.
 
 ### sfx-handle-used-flag
 

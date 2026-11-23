@@ -1,58 +1,58 @@
-int FUN_0019cba0(int arg0) {
-    igNodeList_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igNodeList_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igNodeList_metaObject;
-
-igMetaObject *igNodeList_GetOrCreateMetaObject(void) {
-    if (g_igNodeList_metaObject == 0) {
-        g_igNodeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igNodeList_metaObject;
-}
-
-igMetaObject *igNodeList_GetMetaObject(void)
+igNodeList *igNodeList::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igNodeList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNodeList_EnsureRegistered();
-    return g_igNodeList_metaObject;
+    arkRegister();
+    return (igNodeList *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igNodeList_GetVTable(void) {
-    struct Obj_19cc80 obj;
+igMetaObject *igNodeList::_Meta;
 
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igNodeList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igNodeList_EnsureRegistered(void)
+igMetaObject *igNodeList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igNodeList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igNodeList_callbackList[] = { igNode_EnsureRegistered, 0 };
+igMetaObject *igNodeList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igNodeList_Register(void) {
+void *igNodeList::retrieveVTablePointer()
+{
+    igNodeList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igNodeList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNodeList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igNode::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNodeList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igNodeList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNodeList",
-        0x14, /* instance size */
-        igNodeList_GetVTable,
+        sizeof(igNodeList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igNodeList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igNodeList_GetMetaObjectFunction(void) {
-    igNodeList_GetMetaObject();
+}
 }
 

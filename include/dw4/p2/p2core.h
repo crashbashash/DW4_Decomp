@@ -476,6 +476,7 @@ void p2UploadComponentScales(void);
 extern int p2ClearPasses;
 extern int p2ColorScalerState;
 extern int p2BlendWeightCount;
+extern int p2FogMode;
 extern int p2GsIntcHandlerId;
 void p2EnableWatchdog(int on);
 void p2SetClearPasses(int on);

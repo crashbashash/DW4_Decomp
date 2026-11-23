@@ -23,6 +23,11 @@ unit keeps because the header form changes its bytes, tools/declarations.py). Th
 `decl.local_externs` and the readable `declarations` check. Another copy, or none left, voids the row:
 `--stale` reports it and the copies count as debt again.
 
+A function row names the symbols.txt symbol. A function that became a C++ member keeps its row: the
+source defines it as `igTraversal::apply`, and config/SLUS-20836/compiler-names.tsv binds its compiler name
+(`apply__Q33Gap2Sg11igTraversalFP6igNode`) to the symbol, so the row counts what reaches that member (class
+and method: a library unit defines many an `apply`).
+
 The kernel patches' functions (tools/kpatch.py) are no image functions, but their `asm` and `volatile`
 need rows all the same, keyed by the patch function's name (`<name>_<patch>` when several patches define
 one name, tools/kpatch.py `functions`).
@@ -42,6 +47,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import asmsources  # noqa: E402
+import compiler_names  # noqa: E402
+from demangle import demangle  # noqa: E402
 import kpatch  # noqa: E402
 import inline_asm  # noqa: E402
 import units  # noqa: E402
@@ -171,7 +178,8 @@ def _reachable_slice(text, reach, start, end):
 class _Reach:
     """What function `name` reaches in `text` (see `_reachable_text`): `keep`, the definitions kept (itself and
     the inline helpers it names), and `reached()`, the file-scope statements reached, worked out on first
-    use (a use inside a definition needs only `keep`). `plan` is None when the text defines nothing."""
+    use (a use inside a definition needs only `keep`). `plan` is None when the text defines nothing. `name` is
+    a definition key (`_definition_keys`); a bare member name stands for every member of that name."""
 
     def __init__(self, text, name):
         self.plan = _reach_plan(text)
@@ -180,19 +188,22 @@ class _Reach:
         if not defs:
             self.plan, self.keep = None, set()
             return
-        if name not in bodies:
+        by_name = self.plan[5]
+        start = [name] if name in bodies else by_name.get(name)
+        if not start:
             raise KeyError("%s is not defined here" % name)
-        keep, pending = {name}, [name]
+        keep, pending = set(start), list(start)
         while pending:
             for word in bodies[pending.pop()][2]:
-                if word in bodies and word not in keep and bodies[word][4]:
-                    keep.add(word)
-                    pending.append(word)
+                for key in by_name.get(word, ()):
+                    if key not in keep and bodies[key][4]:
+                        keep.add(key)
+                        pending.append(key)
         self.keep = keep
 
     def reached(self):
         if self._reached is None:
-            _defs, bodies, statements, by_key, _spans = self.plan
+            bodies, statements, by_key = self.plan[1:4]
             # a statement is reached when one of its keys is used; reaching it uses what it passes on
             used, pending, reached = set(), [], set()
             for nm in self.keep:
@@ -216,22 +227,60 @@ _NOT_NEWLINE = re.compile(r"[^\n]")
 
 
 @functools.lru_cache(maxsize=64)
+def _definition_keys(text):
+    """((key, name, start, end)) of `units.definitions(text)`. A member defined outside its class
+    (`void igTraversal::apply(igNode *root)`) is keyed `igTraversal::apply`, since a library unit defines many
+    an `apply`; any other definition by its name."""
+    out = []
+    for name, start, end in units.definitions(text):
+        head = text[start:text.index("{", start)] if "::" not in name else ""
+        m = re.search(r"(\w+)\s*::\s*%s\s*\(" % re.escape(name), head)
+        out.append(("%s::%s" % (m.group(1), name) if m else name, name, start, end))
+    return tuple(out)
+
+
+@functools.lru_cache(maxsize=None)
+def _member_key(name):
+    """The definition key (`igTraversal::apply`) of a member's compiler name, else None."""
+    if "__" not in name:
+        return None
+    found = demangle(name)
+    return "%s::%s" % (found.class_name, found.name) if found and found.class_name and not found.data else None
+
+
+def _bound():
+    """{retail name: [compiler names]} from config/SLUS-20836/compiler-names.tsv."""
+    table = compiler_names.load()
+    if _bound_cache.get("table") is not table:
+        out = {}
+        for name, (_va, retail) in table.items():
+            out.setdefault(retail, []).append(name)
+        _bound_cache.update(table=table, out=out)
+    return _bound_cache["out"]
+
+
+_bound_cache = {}
+
+
+@functools.lru_cache(maxsize=64)
 def _reach_plan(text):
     """What `_reach` needs of one source text, built once: a library unit's thousands of members each
-    ask about the same text. -> (definitions, {name: (start, end, words, names, is inline)}, the file-scope
-    statements as (start, end, keys, passes), {key: [statement indices]}, the spans `_reachable_slice` looks
-    an offset up in: (their starts, [(start, end, definition name, None) or (start, end, None, statement
-    index)] in start order, the furthest end of each span and those before it))."""
-    defs = units.definitions(text)
+    ask about the same text. -> (`_definition_keys(text)`, {key: (start, end, words, names, is inline)}, the
+    file-scope statements as (start, end, keys, passes), {key: [statement indices]}, the spans `_reachable_slice`
+    looks an offset up in: (their starts, [(start, end, definition key, None) or (start, end, None, statement
+    index)] in start order, the furthest end of each span and those before it), {name: [definition keys]})."""
+    defs = _definition_keys(text)
     if not defs:
-        return defs, {}, [], {}, ([], [], [])
-    bodies = {}
-    for nm, s, e in defs:
+        return defs, {}, [], {}, ([], [], []), {}
+    bodies, by_name = {}, {}
+    for key, nm, s, e in defs:
         body = _blank(text[s:e])
-        bodies[nm] = (s, e, frozenset(_WORD.findall(body)), frozenset(_NAME.findall(body)),
-                      bool(_INLINE.search(text[s:text.index("{", s)])))
+        bodies[key] = (s, e, frozenset(_WORD.findall(body)), frozenset(_NAME.findall(body)),
+                       bool(_INLINE.search(text[s:text.index("{", s)])))
+        if key not in by_name.setdefault(nm, []):
+            by_name[nm].append(key)
     statements = []
-    for s, e in _file_scope_statements(text, [(s, e) for _nm, s, e in defs]):
+    for s, e in _file_scope_statements(text, [(s, e) for _key, _nm, s, e in defs]):
         body = _blank(text[s:e])
         words = set(_NAME.findall(body)) - _C_KEYWORDS
         # a type definition is reached by its tag or typedef name, not by a member's name
@@ -250,14 +299,14 @@ def _reach_plan(text):
     for k, (_s, _e, keys, _passes) in enumerate(statements):
         for key in keys:
             by_key.setdefault(key, []).append(k)
-    spans = sorted([(s, e, nm, None) for nm, s, e in defs]
+    spans = sorted([(s, e, key, None) for key, _nm, s, e in defs]
                    + [(s, e, None, k) for k, (s, e, _keys, _passes) in enumerate(statements)],
                    key=lambda span: (span[0], span[1]))
     reach_end, furthest = [], -1
     for span in spans:
         furthest = max(furthest, span[1])
         reach_end.append(furthest)
-    return defs, bodies, statements, by_key, ([span[0] for span in spans], spans, reach_end)
+    return defs, bodies, statements, by_key, ([span[0] for span in spans], spans, reach_end), by_name
 
 
 _C_KEYWORDS = frozenset(
@@ -393,16 +442,32 @@ def _header_texts(includes, seen):
 
 
 def defines(path, name):
-    """Whether `path` holds a top-level definition of `name`: a whole-file member does, while a
-    function the compiler emits from another definition (an out-of-line copy) does not."""
+    """Whether `path` holds a top-level definition of `name` (see `definition`): a whole-file member does, while
+    a function the compiler emits from another definition (an out-of-line copy) does not."""
+    return definition(path, name) is not None
+
+
+def definition(path, name):
+    """The top-level definition in `path` that answers for `name`, or None: `name` itself; the member a compiler
+    name names (`igTraversal::apply` for `apply__Q33Gap2Sg11igTraversalFP6igNode`); or the member
+    config/SLUS-20836/compiler-names.tsv binds a symbols.txt name to (`Gap__Bec__beHitLandModelTraversal__vfunc_23`,
+    that compiler name's symbol)."""
     if path not in _defined_cache:
-        _defined_cache[path] = ({nm for nm, _s, _e in units.definitions(_read(path))}
+        _defined_cache[path] = ({key for key, _nm, _s, _e in _definition_keys(_read(path))}
+                                | {nm for _key, nm, _s, _e in _definition_keys(_read(path))}
                                 | asmsources.gcc_function_names(path))
-    return name in _defined_cache[path]
+    defined = _defined_cache[path]
+    if name in defined:
+        return name
+    for compiler_name in [name] + _bound().get(name, []):
+        key = _member_key(compiler_name)
+        if key in defined:
+            return key
+    return None
 
 
 def uses(path, name):
-    """{"asm": n, "volatile": n} reaching function `name` as defined in `path`."""
+    """{"asm": n, "volatile": n} reaching function `name` as defined in `path` (see `definition`)."""
     if not in_scope(path):
         return {"asm": 0, "volatile": 0, "asm-function": 0}
     if name in asmsources.gcc_function_names(path):
@@ -412,7 +477,7 @@ def uses(path, name):
     # blanking only removes text, so a source with nothing to count has nothing to count for any of its
     # functions; a whole library unit holds thousands, and its reachable text is costly to build
     counted = bool(_USE_WORD.search(text)) and _text_count(text) != (0, 0)
-    a, v = _reaching_count(text, name) if counted else (0, 0)
+    a, v = _reaching_count(text, definition(path, name) or name) if counted else (0, 0)
     return {"asm": a, "volatile": v, "asm-function": int(name in asm_bodies)}
 
 
@@ -472,11 +537,12 @@ def _covered(path, name, rows, aliases=None):
     return row is not None and row[0] == uses(path, name)["asm"]
 
 
-def _aliases(rows):
+def _aliases(rows, index=None):
     """{(path, definition): symbol} for rows naming a static by the symbol the symbol map gives it
-    (`Copy_tlbfunc` for `tlbfunc.c`'s `Copy`), and for rows naming a patch function several patches define
-    by its key (`kGetEntryAddress_osdsrc`)."""
-    index, out = None, {}
+    (`Copy_tlbfunc` for `tlbfunc.c`'s `Copy`), a C++ member by its symbol (`definition`), and a patch function
+    several patches define by its key (`kGetEntryAddress_osdsrc`). `index` is `units.scan`'s, read from the
+    tree when a row needs it and it is None."""
+    out = {}
     patch_functions = kpatch.functions()
     for kind, symbol in rows:
         if kind not in FUNCTION_KINDS:
@@ -487,26 +553,36 @@ def _aliases(rows):
                 out[(os.path.abspath(path), name)] = symbol
             continue
         name = unitobjects.source_name(symbol)
-        if name == symbol:
+        if name == symbol and symbol not in _bound():
             continue
         index = _index() if index is None else index
         path = index.get(symbol)
-        if path is not None:
-            out[(os.path.abspath(path), name)] = symbol
+        if path is None:
+            continue
+        found = definition(path, symbol) or definition(path, name) or name
+        if found != symbol:
+            out[(os.path.abspath(path), found)] = symbol
+        # a unity-built unit's statements are counted in the fragment that holds them
+        for fragment in srctext.included(path):
+            fragment = os.path.join(ROOT, fragment)
+            found = definition(fragment, symbol) or definition(fragment, name)
+            if found not in (None, symbol):
+                out[(os.path.abspath(fragment), found)] = symbol
     return out
 
 
 def _callers(text):
-    """The definitions in a source that a row can name: an inline helper is compiled into its callers."""
-    return [name for name, start, _end in units.definitions(text)
-            if not _INLINE.search(text[start:text.index("{", start)])]
+    """{definition key: name} of the definitions in a source that a row can name (`_definition_keys`): an
+    inline helper is compiled into its callers."""
+    return {key: name for key, name, start, _end in _definition_keys(text)
+            if not _INLINE.search(text[start:text.index("{", start)])}
 
 
-def approved_statements(paths, rows=None):
+def approved_statements(paths, rows=None, index=None):
     """{(path, offset)} of the `asm` statements C could spell whose every function has a current row.
-    A statement that reaches no function, or one function without a row, stays out."""
+    A statement that reaches no function, or one function without a row, stays out. `index` as for `_aliases`."""
     rows = load() if rows is None else rows
-    aliases = _aliases(rows)
+    aliases = _aliases(rows, index)
     sources = [(path, _read(path)) for path in paths]
     approved = set()
     for path, text in sources:
@@ -612,24 +688,35 @@ def awaiting(index, rows=None):
     """[(name, path, reason)] of the functions in `index` awaiting approval, then the kernel patches'. An
     inline helper is not listed: it is compiled into its callers, whose rows cover it (`approved_statements`)."""
     rows = load() if rows is None else rows
-    callers = {}
+    callers, by_name = {}, {}
 
-    def listed(path, name):
+    def listed(path):
         if path not in callers:
-            callers[path] = set(_callers(_read(path)))
-        return name in callers[path]
+            callers[path] = _callers(_read(path))
+            by_name[path] = {}
+            for key, name in callers[path].items():
+                by_name[path].setdefault(name, []).append(key)
+        return callers[path]
 
+    # what each name answers for: a static the symbol map names apart is counted under its source name, a
+    # C++ member under its symbol (`definition`); an emitted copy answers through its owner, which the index
+    # lists itself
+    answers = {name: definition(path, name) or definition(path, unitobjects.source_name(name))
+               for name, path in index.items()}
+    # a member a symbol answers for is not listed again under its bare name
+    claimed = {(index[name], key) for name, key in answers.items()
+               if key not in (None, name) and listed(index[name]).get(key, key) != key}
     waiting = []
     for name, path in sorted(index.items()):
-        if defines(path, name):
-            if listed(path, name):
-                waiting.append((name, path, problem(path, name, rows)))
-            continue
-        # a static the symbol map names apart is counted under its source name; an emitted copy
-        # answers through its owner, which the index lists itself
-        member = unitobjects.source_name(name)
-        if member != name and defines(path, member) and listed(path, member):
-            waiting.append((name, path, problem(path, member, rows, row=name)))
+        key = answers[name]
+        if key == name:
+            # every definition of the name: a library unit defines many an `apply`
+            listed(path)
+            for member in by_name[path].get(name, ()):
+                if member == name or (path, member) not in claimed:
+                    waiting.append((name, path, problem(path, member, rows, row=name)))
+        elif key is not None and key in listed(path):
+            waiting.append((name, path, problem(path, key, rows, row=name)))
     # the kernel patches' functions are listed under their keys
     return [w for w in waiting if w[2]] + patch_problems(rows)
 

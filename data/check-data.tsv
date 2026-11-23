@@ -1107,6 +1107,7 @@
 0048da10	4	.data	00194380	match
 0048da18	4	.data	00194380	match
 0048da20	4	.data	00194380	match
+0048da58	4	.data	00194380	match
 0048daf0	8	.data	001e3ff0	match
 0048daf8	8	.data	001e3ff0	match
 0048db00	8	.data	001e3ff0	match
@@ -1151,6 +1152,7 @@
 00491078	4	.data	001f6f50	match
 00491080	4	.data	001f6f50	match
 00491088	4	.data	001f6f50	match
+004912e0	16	.data	001f8790	match
 00491330	16	.data	001fc310	match
 00491340	16	.data	001fc310	match
 00491350	8	.data	001fc310	match
@@ -5789,6 +5791,7 @@
 004e0800	29	.rodata	001493e0	match
 004e0820	40	.rodata	001493e0	match
 004e0848	14	.rodata	001493e0	match
+004e0858	1	.rodata	00194380	match
 004e0860	32	.rodata	001869e0	match
 004e0880	32	.rodata	001869e0	match
 004e08a0	32	.rodata	001869e0	match
@@ -6552,6 +6555,7 @@
 004e4f50	34	.rodata	001e74b0	match
 004e4f80	34	.rodata	001e74b0	match
 004e4fb0	33	.rodata	001e74b0	match
+004e5150	11	.data	001f8790	match
 004e5160	28	.rodata	001fc310	match
 004e5180	28	.rodata	001fc310	match
 004e5230	56	.rodata	00204100	match
@@ -6559,6 +6563,7 @@
 004e52f0	56	.rodata	00204100	match
 004e5330	21	.rodata	00206570	match
 004e5350	25	.rodata	00206570	match
+004e53d0	28	.rodata	00208170	match
 004e53f0	49	.rodata	00208170	match
 004e5430	60	.rodata	00208170	match
 004e5470	35	.rodata	0020cc10	match
@@ -13285,9 +13290,22 @@
 005274e0	244	.vtables	001869e0	match
 005275e0	244	.vtables	001869e0	match
 005276e0	244	.vtables	001869e0	match
+00528250	112	.vtables	00194380	match
+005286a0	128	.vtables	00194380	match
+00528a90	140	.vtables	00194380	match
+00528dd0	148	.vtables	00194380	match
+00529ee0	92	.vtables	00194380	match
+00529f40	100	.vtables	00194380	match
 0052a3a0	96	.vtables	002b5d50	match
+0052ab20	100	.vtables	00194380	match
+0052ab90	100	.vtables	00194380	match
+0052ac00	100	.vtables	00194380	match
+0052adb0	96	.vtables	00194380	match
 0052b270	92	.vtables	00194380	match
 0052b2d0	100	.vtables	00194380	match
+0052b340	100	.vtables	00194380	match
+0052b3b0	92	.vtables	00194380	match
+0052b410	100	.vtables	00194380	match
 0052b630	96	.vtables	002b5d50	match
 0052ca80	108	.vtables	00230f50	match
 0052d060	108	.vtables	00230f50	match
@@ -13386,7 +13404,14 @@
 00539ef0	16	.vtables	00370780	match
 00539f00	16	.vtables	00370780	match
 00540c80	108	.vtables	0044b860	match
+00540cf0	100	.vtables	0044b860	match
+00540d60	100	.vtables	0044b860	match
+00540dd0	92	.vtables	0044b860	match
 00540e30	92	.vtables	0044b860	match
+00541c40	92	.vtables	0044b860	match
+00541ca0	92	.vtables	0044b860	match
+00541d00	100	.vtables	0044b860	match
+00541e30	92	.vtables	0044b860	match
 00541f00	100	.vtables	0044b860	match
 00541f70	100	.vtables	0044b860	match
 00554990	1	.sdata	002590c0	match
@@ -13518,6 +13543,8 @@
 00554b94	1	.sbss	00194380	match
 00554b98	1	.sbss	00194380	match
 00554b9c	1	.sbss	00194380	match
+00554ba0	1	.sbss	00194380	match
+00554ba4	1	.sbss	00194380	match
 00554bac	1	.sbss	00194380	match
 00554bb4	1	.sbss	001e3ff0	match
 00554bc8	1	.sbss	00225770	match
@@ -15250,6 +15277,9 @@
 00562778	12	.bss	00194380	match
 00562788	4	.bss	00194380	match
 00562890	64	.bss	00194380	match
+00562a00	4	.bss	00194380	match
+00562a08	4	.bss	00194380	match
+00562a38	4	.bss	00194380	match
 00562a58	12	.bss	00194380	match
 00562a68	4	.bss	00194380	match
 00562a70	12	.bss	00194380	match

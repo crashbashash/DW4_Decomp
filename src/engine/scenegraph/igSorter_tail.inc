@@ -157,6 +157,357 @@ void Gap__Sg__igSorter__vfunc_24(Sorter *arg0) {
     arg0->f124 = 0;
 }
 
+extern "C" void FUN_00190200(void *bound, float *center);
+extern "C" void FUN_001dc160(igRenderPackage *package, igGeometry *geometry, igAttrStackManager *manager);
+typedef igTDataList<igAttr *> AttrPointerList;
+typedef igTDataList<igRenderPackage *> RenderPackagePointerList;
+static inline igAttrStack *attrStackOf(igAttrStackManager *manager, igMetaObject *meta) {
+    return ((igAttrStack **)((igAttrStackList *)manager->_attrStacks)->_data)[((int *)manager->_attrStackIndexTable)[meta->_id]];
+}
+
+static inline igAttr *currentAttr(igAttrStack *stack) {
+    if (stack->_cachedOverride >= 0) return ((igAttr **)stack->_data)[stack->_cachedOverride];
+    if (stack->_count != 0) return ((igAttr **)stack->_data)[(unsigned int)(stack->_count - 1)];
+    return (igAttr *)stack->_default;
+}
+
+static inline igAttr *lastAttr(igAttrStack *stack) {
+    int count = stack->_count;
+    if (count == 0) return 0;
+    return ((igAttr **)stack->_data)[(unsigned int)(count - 1)];
+}
+
+static inline igRenderPackage *nextPackage(igRenderPackagePool *pool) {
+    int index;
+    if (pool->_freeIndex >= pool->_count) {
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))&FUN_00197ab0);
+    }
+    index = pool->_freeIndex;
+    pool->_freeIndex = index + 1;
+    return ((igRenderPackage **)pool->_data)[index];
+}
+
+/* Sorts a geometry into the render packages: straight into the display list when nothing needs sorting, else into
+ * the cached package or a new one, with its view distance when packages are sorted by depth.
+ * A geometry flagged 0xC appends its set attribute (which takes the geometry's attribute list on first use), any
+ * other its attributes: one or two singly, more through append4.
+ * matching construct: saved-register colours of the appends (simplify order follows the allocator ids, K = 25).
+ * Each append is the kit's igTDataList<T>::append(const T &) written out, as in FUN_001dc610. In the three
+ * geometry appends `attributes`, `firstCount` (the count of the first of the two-attribute appends, the one count
+ * that is live beside `attributes`) and `retained` are declared ahead of `list`, which is declared at its
+ * assignment: their ids fall below the list's, they are pushed before it and it before the appended values, so
+ * the values colour s0, the list s1 and the counts s2 as in retail. With the list declared first, one count
+ * variable for all four appends, or the list as an inline's parameter, the list is pushed last and takes s0. */
+void FUN_001db720(igSorter *sorter, igGeometry *geometry, igAttrStackManager *manager) {
+    bool transparent;
+    bool sortByDistance;
+    igRenderPackage *package;
+    if (geometry == 0) {
+        FUN_001d9bb0(sorter, (int)manager);
+        return;
+    }
+    if (manager == 0) {
+        return;
+    }
+    transparent = false;
+    if (sorter->_mode & 0xD) {
+        static igMetaObject *blendMeta = Gap::Attrs::igBlendStateAttr::getClassTypeSafe();
+        if (((igBlendStateAttr *)currentAttr(attrStackOf(manager, blendMeta)))->_enabled == 1) {
+            transparent = true;
+        }
+    }
+    if (sorter->_forceNoSeparate) {
+        transparent = true;
+    }
+    if (!(sorter->_mode & 0x72) && !sorter->_isCompoundPackageOpen && !transparent) {
+        AttrPointerList *attributes;
+        int firstCount;
+        igObject *retained;
+        FUN_001b0250((PendingValueCollector *)manager, (PendingIntList *)((igDisplayListAttr *)sorter->_dlist)->_contents);
+        AttrPointerList *list = (AttrPointerList *)((igDisplayListAttr *)sorter->_dlist)->_contents;
+        if (geometry->_flags & 0xC) {
+            igGeometrySetAttr *set = *(igGeometrySetAttr **)((char *)geometry + ((igMetaField *)DAT_00562768[0])->_offset);
+            if (set->_geometryAttrList == 0) {
+                retained = (igObject *)geometry->_attributes;
+                if (retained != 0) {
+                    retained->_refCount = retained->_refCount + 1;
+                }
+                igObject::release((igObject *)set->_geometryAttrList);
+                set->_geometryAttrList = (int)retained;
+            }
+            {
+                int count;
+                igAttr *item = (igAttr *)set;
+                count = list->getCount();
+                if (count < list->_capacity) {
+                    list->_count++;
+                } else {
+                    ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                }
+                list->_data[count] = item;
+            }
+        } else {
+            attributes = (AttrPointerList *)geometry->_attributes;
+            switch (attributes->_count) {
+            case 1:
+                {
+                    int count;
+                    igAttr *item = attributes->_data[0];
+                    count = list->getCount();
+                    if (count < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                    }
+                    list->_data[count] = item;
+                }
+                break;
+            case 2:
+                {
+                    igAttr *item = attributes->_data[0];
+                    firstCount = list->getCount();
+                    if (firstCount < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(firstCount + 1, sizeof(igAttr *));
+                    }
+                    list->_data[firstCount] = item;
+                }
+                {
+                    int count;
+                    igAttr *item = attributes->_data[1];
+                    count = list->getCount();
+                    if (count < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                    }
+                    list->_data[count] = item;
+                }
+                break;
+            default:
+                List_AppendWords((igDataList *)list, attributes->_count, (const int *)attributes->_data);
+                break;
+            }
+        }
+        return;
+    }
+    sortByDistance = (sorter->_mode & 0x50) > 0 || ((sorter->_mode & 4) > 0 && transparent);
+    package = 0;
+    if (!manager->_stackChanged && sorter->_cachedPackage != 0) {
+        igRenderPackage *cached = (igRenderPackage *)sorter->_cachedPackage;
+        if (!sortByDistance) {
+            AttrPointerList *attributes;
+            int firstCount;
+            igObject *retained;
+            AttrPointerList *list = (AttrPointerList *)cached->_geomAttrs;
+            if (geometry->_flags & 0xC) {
+                igGeometrySetAttr *set = *(igGeometrySetAttr **)((char *)geometry + ((igMetaField *)DAT_00562768[0])->_offset);
+                if (set->_geometryAttrList == 0) {
+                    retained = (igObject *)geometry->_attributes;
+                    if (retained != 0) {
+                        retained->_refCount = retained->_refCount + 1;
+                    }
+                    igObject::release((igObject *)set->_geometryAttrList);
+                    set->_geometryAttrList = (int)retained;
+                }
+                {
+                    int count;
+                    igAttr *item = (igAttr *)set;
+                    count = list->getCount();
+                    if (count < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                    }
+                    list->_data[count] = item;
+                }
+            } else {
+                attributes = (AttrPointerList *)geometry->_attributes;
+                switch (attributes->_count) {
+                case 1:
+                    {
+                        int count;
+                        igAttr *item = attributes->_data[0];
+                        count = list->getCount();
+                        if (count < list->_capacity) {
+                            list->_count++;
+                        } else {
+                            ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                        }
+                        list->_data[count] = item;
+                    }
+                    break;
+                case 2:
+                    {
+                        igAttr *item = attributes->_data[0];
+                        firstCount = list->getCount();
+                        if (firstCount < list->_capacity) {
+                            list->_count++;
+                        } else {
+                            ((Gap::Core::igDataList *)list)->resizeAndSetCount(firstCount + 1, sizeof(igAttr *));
+                        }
+                        list->_data[firstCount] = item;
+                    }
+                    {
+                        int count;
+                        igAttr *item = attributes->_data[1];
+                        count = list->getCount();
+                        if (count < list->_capacity) {
+                            list->_count++;
+                        } else {
+                            ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                        }
+                        list->_data[count] = item;
+                    }
+                    break;
+                default:
+                    List_AppendWords((igDataList *)list, attributes->_count, (const int *)attributes->_data);
+                    break;
+                }
+            }
+            return;
+        }
+        package = nextPackage((igRenderPackagePool *)sorter->_renderPackagePool);
+        package->_cachedStateAttrs = package->_stateAttrs;
+        ((AttrPointerList *)package->_geomAttrs)->_count = 0;
+        AttrPointerList *attributes;
+        int firstCount;
+        igObject *retained;
+        AttrPointerList *list = (AttrPointerList *)package->_geomAttrs;
+        if (geometry->_flags & 0xC) {
+            igGeometrySetAttr *set = *(igGeometrySetAttr **)((char *)geometry + ((igMetaField *)DAT_00562768[0])->_offset);
+            if (set->_geometryAttrList == 0) {
+                retained = (igObject *)geometry->_attributes;
+                if (retained != 0) {
+                    retained->_refCount = retained->_refCount + 1;
+                }
+                igObject::release((igObject *)set->_geometryAttrList);
+                set->_geometryAttrList = (int)retained;
+            }
+            {
+                int count;
+                igAttr *item = (igAttr *)set;
+                count = list->getCount();
+                if (count < list->_capacity) {
+                    list->_count++;
+                } else {
+                    ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                }
+                list->_data[count] = item;
+            }
+        } else {
+            attributes = (AttrPointerList *)geometry->_attributes;
+            switch (attributes->_count) {
+            case 1:
+                {
+                    int count;
+                    igAttr *item = attributes->_data[0];
+                    count = list->getCount();
+                    if (count < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                    }
+                    list->_data[count] = item;
+                }
+                break;
+            case 2:
+                {
+                    igAttr *item = attributes->_data[0];
+                    firstCount = list->getCount();
+                    if (firstCount < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(firstCount + 1, sizeof(igAttr *));
+                    }
+                    list->_data[firstCount] = item;
+                }
+                {
+                    int count;
+                    igAttr *item = attributes->_data[1];
+                    count = list->getCount();
+                    if (count < list->_capacity) {
+                        list->_count++;
+                    } else {
+                        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, sizeof(igAttr *));
+                    }
+                    list->_data[count] = item;
+                }
+                break;
+            default:
+                List_AppendWords((igDataList *)list, attributes->_count, (const int *)attributes->_data);
+                break;
+            }
+        }
+        package->_cachedStateAttrs = ((igRenderPackage *)sorter->_cachedPackage)->_cachedStateAttrs;
+        package->_sortingCache = ((igRenderPackage *)sorter->_cachedPackage)->_sortingCache;
+    }
+    if (package == 0) {
+        package = nextPackage((igRenderPackagePool *)sorter->_renderPackagePool);
+        package->_cachedStateAttrs = package->_stateAttrs;
+        FUN_001dc160(package, geometry, manager);
+    }
+    sorter->_cachedPackage = (int)package;
+    if (sortByDistance) {
+        void *bound = (void *)geometry->_bound;
+        igModelViewMatrixAttr *modelView;
+        igVec3f center;
+        igVec3f view;
+        static igMetaObject *modelViewMeta = Gap::Attrs::igModelViewMatrixAttr::getClassTypeSafe();
+        modelView = (igModelViewMatrixAttr *)lastAttr(attrStackOf(manager, modelViewMeta));
+        if (bound != 0) {
+            FUN_00190200(bound, center.vec);
+        } else {
+            center = g_vec3Zero;
+        }
+        if (modelView != 0) {
+            Vec3f_TransformProjective(view.vec, center.vec, modelView->_m);
+        } else {
+            view = center;
+        }
+        if (sorter->_useZSort) {
+            package->_distance = view[2] * view[2];
+        } else {
+            package->_distance = view.length2();
+        }
+    }
+    if (sorter->_isCompoundPackageOpen) {
+        int count;
+        RenderPackagePointerList *packages = (RenderPackagePointerList *)((igRenderPackage *)sorter->_compoundPackage)->_theMass;
+        igRenderPackage *item = package;
+        count = packages->getCount();
+        if (count < packages->_capacity) {
+            packages->_count++;
+        } else {
+            ((Gap::Core::igDataList *)packages)->resizeAndSetCount(count + 1, sizeof(igRenderPackage *));
+        }
+        packages->_data[count] = item;
+    } else if (transparent) {
+        int count;
+        RenderPackagePointerList *packages = (RenderPackagePointerList *)sorter->_transpPackages;
+        igRenderPackage *item = package;
+        count = packages->getCount();
+        if (count < packages->_capacity) {
+            packages->_count++;
+        } else {
+            ((Gap::Core::igDataList *)packages)->resizeAndSetCount(count + 1, sizeof(igRenderPackage *));
+        }
+        packages->_data[count] = item;
+    } else {
+        int count;
+        RenderPackagePointerList *packages = (RenderPackagePointerList *)sorter->_opaquePackages;
+        igRenderPackage *item = package;
+        count = packages->getCount();
+        if (count < packages->_capacity) {
+            packages->_count++;
+        } else {
+            ((Gap::Core::igDataList *)packages)->resizeAndSetCount(count + 1, sizeof(igRenderPackage *));
+        }
+        packages->_data[count] = item;
+    }
+}
+
 void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2) {
     igAttrStack *e;
     int v;
@@ -325,7 +676,7 @@ int igSwitch_AppendChild(igSwitch *sw, igNode *child) {
     int a0v;
     void *temp_v0;
 
-    temp_s0 = igGroup_AppendChild((igGroup *)sw, child);
+    temp_s0 = ((Gap::Sg::igGroup *)sw)->appendChild((Gap::Sg::igNode *)child);
     temp_v0 = (void *)(*(int *)((char *)(sw) + 28));
     a0v = *(int *)((char *)(sw) + 32);
     if (temp_v0 != 0) {

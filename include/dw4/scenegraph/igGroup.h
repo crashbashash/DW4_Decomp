@@ -10,15 +10,8 @@ struct igNode;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igGroup_metaObject;
-int igGroup_AppendChild(struct igGroup *group, struct igNode *child);
-struct igGroup *igGroup_CreateInstance(int allocator);
 struct igGroup *igGroup_Destroy(struct igGroup *self, short deleteFlag);
-struct igMetaObject *igGroup_GetOrCreateMetaObject(void);
-struct CallbackArray *igGroup_Register(void);
-unsigned int igGroup_RemoveChild(struct igGroup *group, struct igNode *child);
 extern int g_igGroup_vtable[4];
-struct igMetaObject *igGroup_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }
@@ -27,7 +20,6 @@ struct igMetaObject *igGroup_GetPublishedMetaObject(void);
 #ifdef __cplusplus
 #include "dw4/core/igSmartPointer.h"
 /* The removed child, still holding the reference the group dropped. */
-extern "C" igSmartPointer<igNode> igGroup_RemoveChildAt(igGroup *group, int index);
 #endif
 
 #endif

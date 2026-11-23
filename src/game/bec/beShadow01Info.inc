@@ -49,7 +49,7 @@ void beShadow01Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beShadow01Info_Register);
 }
 
-static igMetaObjectCallback g_beShadow01Info_callbackList[] = { igNode_EnsureRegistered, igProjectiveShadowShader_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beShadow01Info_callbackList[] = { Gap::Sg::igNode::arkRegister, igProjectiveShadowShader_EnsureRegistered, 0 };
 
 CallbackArray *beShadow01Info_Register(void) {
     BecLibrary_MarkRegistered();
@@ -105,9 +105,9 @@ void beShadow01Info_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beShadow01Info_ctorTable, 3);
     receiverNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)receiverNode)->_metaObject = (int)igNode_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)receiverNode)->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
     casterNode = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)casterNode)->_metaObject = (int)igNode_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)casterNode)->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
     projShadowShader = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)projShadowShader)->_metaObject = (int)igProjectiveShadowShader_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beShadow01Info_fieldTable, g_beShadow01Info_fieldHandles, g_beShadow01Info_fieldOffsets, base);

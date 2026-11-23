@@ -95,6 +95,9 @@ function two rows place or one row gives two bodies, and a C definition left bes
 declared and not defined there (moved_vtables). `--names`
 writes a `.tsv` for tools/apply_names.py, which is what moves `FUN_` names to the library's own.
 
+`--lock FILE` (default `$DW4_BUILD_LOCK`, not read under make) holds the build lock shared around each compile
+and releases it between them (tools/buildlock.py), so a run over several files is a light run per file.
+
 Usage:
   whole_file_rows.py --src src/third_party/zlib --files adler32 crc32 --range 0x221870 0x2252d8 \\
       --compiler combat --flags "-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc" \\
@@ -106,6 +109,7 @@ Usage:
 """
 import argparse
 import collections
+import contextlib
 import glob
 import json
 import os
@@ -117,6 +121,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import buildlock
 import cc
 import compiler_names
 import demangle
@@ -163,9 +168,11 @@ class Function:
                    for i, (w, m) in enumerate(zip(self.words, self.masks)))
 
 
-def compile_file(wibo, compiler, flags, source, out):
+def compile_file(wibo, compiler, flags, source, out, hold=contextlib.nullcontext):
+    """Compile `source` to `out`, inside `hold()` (the build lock taken shared, tools/buildlock.py)."""
     argv = cc.compile_argv(wibo, compiler, flags, source, out)
-    done = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True)
+    with hold():
+        done = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True)
     if done.returncode:
         sys.exit("%s: compile failed\n%s%s" % (source, done.stdout, done.stderr))
     verify.trim_padded_names(out)
@@ -213,8 +220,8 @@ class Twins:
     compiled under it, as verify_emitted_unit does, and that compile's copy is the one retail must
     hold, with the retail extent. Under the file's own profile the file's copy is the one."""
 
-    def __init__(self, profile, source, tmp, config, wibo):
-        self.profile, self.source, self.tmp, self.wibo = profile, source, tmp, wibo
+    def __init__(self, profile, source, tmp, config, wibo, hold=contextlib.nullcontext):
+        self.profile, self.source, self.tmp, self.wibo, self.hold = profile, source, tmp, wibo, hold
         self.tables = dict(units=os.path.join(config, "units.tsv"),
                            unit_flags=os.path.join(config, "unit-flags.tsv"),
                            unit_compilers=os.path.join(config, "unit-compilers.tsv"),
@@ -241,7 +248,7 @@ class Twins:
         if profile not in self.objects:
             stem = os.path.splitext(os.path.basename(self.source))[0]
             obj = os.path.join(self.tmp, "twin%d_%s.o" % (len(self.objects), stem))
-            compile_file(self.wibo, profile.compiler, flags, self.source, obj)
+            compile_file(self.wibo, profile.compiler, flags, self.source, obj, self.hold)
             self.objects[profile] = text_functions(obj)[2]
         copy = self.objects[profile].get(name)
         extent = self.extents[address][1] if address in self.extents else None
@@ -958,7 +965,11 @@ def main(argv=None):
                          "file lost, each searched for in retail")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--names", help="write the name rows for tools/apply_names.py here")
+    ap.add_argument("--lock", metavar="FILE", default=None,
+                    help="hold the build lock FILE shared around each compile (default $DW4_BUILD_LOCK outside "
+                         "make; '' for none; tools/buildlock.py)")
     a = ap.parse_args(argv)
+    hold = buildlock.holder(buildlock.path(a.lock))
 
     units_path = os.path.join(a.config, "units.tsv")
     if a.unit_va is not None:
@@ -1029,9 +1040,9 @@ def main(argv=None):
         for stem in a.files:
             obj = os.path.join(tmp, stem + ".o")
             source = os.path.join(a.src, stem + a.ext)
-            compile_file(a.wibo, compiler, unitprofiles.command_flags(profile), source, obj)
+            compile_file(a.wibo, compiler, unitprofiles.command_flags(profile), source, obj, hold)
             syms, headers, functions = text_functions(obj)
-            twins = Twins(profile, source, tmp, a.config, a.wibo)
+            twins = Twins(profile, source, tmp, a.config, a.wibo, hold)
 
             def referenced(found, obj=obj, syms=syms, headers=headers, functions=functions, twins=twins):
                 """{name: va} the retail references of the members `found` place give the functions not placed."""

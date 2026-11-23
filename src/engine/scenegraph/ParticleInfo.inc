@@ -14,7 +14,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
     int child;
     NodeList *children;
     if (node != 0) {
-        if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) {
             children = node->children;
             count = 0;
             if (children != 0) {
@@ -385,7 +385,7 @@ void FUN_001d7910(void) {
         m = &metas[i];
         count = igMetaObject_CountTree((igMetaObject *)*m);
         for (child = 0; child < count; child++) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)DAT_005628e0[0], (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)*m, child)), (void *)igTraversal_TraverseChildren);
+            Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)DAT_005628e0[0], (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)*m, child)), (igTraversalFunction *)igTraversal_TraverseChildren);
         }
     }
     pairs = DAT_0048dac0;
@@ -397,7 +397,7 @@ void FUN_001d7910(void) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree((igMetaObject *)p->_meta);
         for (j = 0; j < n; j++) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)DAT_005628e8[0], (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)p->_meta, j)), p->_function);
+            Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)DAT_005628e8[0], (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)p->_meta, j)), (igTraversalFunction *)p->_function);
         }
     }
 }
@@ -460,7 +460,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         FUN_001b1030((igAttrStackManager *)temp_s2, (igAttr *)arg0->f228);
         temp_s5 = arg0->f84->n;
         for (var_s3 = 0; var_s3 < temp_s5; var_s3++) {
-            igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f84->arr[var_s3]);
+            ((Gap::Sg::igTraversal *)arg1)->dispatch((Gap::Core::igObject *)arg0->f84->arr[var_s3]);
         }
         FUN_001b1100((struct A_1b1100 *)temp_s2, (struct B_1b1100 *)arg0->f228);
         FUN_001b1100((struct A_1b1100 *)temp_s2, (struct B_1b1100 *)arg0->f96);
@@ -483,7 +483,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         var_s5 = temp_v0->n;
     }
     for (var_s2 = 0; var_s2 < var_s5; var_s2++) {
-        igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f28->arr[var_s2]);
+        ((Gap::Sg::igTraversal *)arg1)->dispatch((Gap::Core::igObject *)arg0->f28->arr[var_s2]);
     }
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562998)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c0)[0]);
@@ -516,7 +516,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         var_s6 = temp_v0_2->n;
     }
     for (var_s5_2 = 0; var_s5_2 < var_s6; var_s5_2++) {
-        igTraversal_TraverseNode((igTraversal *)arg1, (igNode *)arg0->f28->arr[var_s5_2]);
+        ((Gap::Sg::igTraversal *)arg1)->dispatch((Gap::Core::igObject *)arg0->f28->arr[var_s5_2]);
     }
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)arg0->f200);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562968)[0]);

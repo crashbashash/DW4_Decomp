@@ -718,9 +718,9 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                     }
                     ((Gap::Core::igObjectList *)binds.p)->append((Gap::Core::igObject *)bind.p);
                     ((Gap::Core::igObjectList *)tile->_attributes)->append((Gap::Core::igObject *)bind.p);
-                    igGroup_AppendChild((igGroup *)tile.p, (igNode *)geometry.p);
+                    ((Gap::Sg::igGroup *)tile.p)->appendChild((Gap::Sg::igNode *)geometry.p);
                     ((Gap::Core::igObjectList *)geometry->_attributes)->append((Gap::Core::igObject *)geometryAttr.p);
-                    igGroup_AppendChild((igGroup *)root.p, (igNode *)tile.p);
+                    ((Gap::Sg::igGroup *)root.p)->appendChild((Gap::Sg::igNode *)tile.p);
                     x += tileSizeX;
                 }
                 y -= tileSizeY;
@@ -737,8 +737,8 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             igSmartPointer<igTransformDispatchView> transform((igTransformDispatchView *)igTransform_CreateInstance(MovieAllocator(self)));
             ((Gap::Core::igNamedObject *)transform.p)->setName(Default_primitive_camera);
             transform->SetMatrix(view.m);
-            igGroup_AppendChild((igGroup *)transform.p, (igNode *)camera.p);
-            igGroup_AppendChild((igGroup *)root.p, (igNode *)transform.p);
+            ((Gap::Sg::igGroup *)transform.p)->appendChild((Gap::Sg::igNode *)camera.p);
+            ((Gap::Sg::igGroup *)root.p)->appendChild((Gap::Sg::igNode *)transform.p);
             char name[256];
             snprintf(name, sizeof(name), s_Scene, movie->_name != 0 ? (const char *)movie->_name : (const char *)emptyString);
             {

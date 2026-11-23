@@ -418,7 +418,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             stack->append(pushed);
             igAttrStackManager_MarkStackChanged(attrs, (igAttrStack *)stack, index);
             /* the digit's own traversal result is dropped, so a prune or abort below a digit never stops the walk */
-            igTraversal_TraverseNode((igTraversal *)traversal, (igNode *)firstChild);
+            ((Gap::Sg::igTraversal *)traversal)->dispatch((Gap::Core::igObject *)firstChild);
             result = PopSubtree(traversal, attrs, *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex], result);
             if (result == 1) {
                 result = 0;
@@ -434,7 +434,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
 }
 
 void beMeterCtrlNode_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beMeterCtrlNode_ResolveMetaObject(), (void *)beMeterCtrlNode_TraversalFunction);
+    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, beMeterCtrlNode_ResolveMetaObject(), (igTraversalFunction *)beMeterCtrlNode_TraversalFunction);
 }
 
 void beModelCtrl_DrawDebugHitBox(beModelCtrl *self, igNode *node, igAABox *box, float *color)

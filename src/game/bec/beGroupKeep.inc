@@ -34,8 +34,8 @@ CallbackArray *beGroupKeep_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beGroupKeep_metaObject,
-        igGroup_Register,
-        igGroup_GetPublishedMetaObject,
+        Gap::Sg::igGroup::arkRegisterInternal,
+        Gap::Sg::igGroup::getClassMeta,
         beGroupKeep_GetMetaObjectFunction,
         "beGroupKeep",
         0x20, /* instance size */

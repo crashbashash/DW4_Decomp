@@ -3,7 +3,7 @@ void FUN_001c4590(int arg0) {
 }
 
 void FUN_001c45a0(void) {
-    *(int *)0x562760 = igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562760 = (int)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
 void FUN_001c45d0(void) {
@@ -48,11 +48,11 @@ void igFrustCullTraversal_userConstruct(O_1c4650 *arg0, int arg1) {
 
 void igFrustCullTraversal_RegisterClassFunction(int arg0, int arg1) {
     igCommonTraversal_RegisterClassFunction((void *)arg0, (void *)arg1);
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igFrustCullTraversal_TraverseNode);
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igFrustCullTraversal_TraverseNode);
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igPlanarShadowShader_GetMetaObject()))) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igFrustCullTraversal_TraversePlanarShadowShader);
+        Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igFrustCullTraversal_TraversePlanarShadowShader);
     }
 }
 

@@ -8,6 +8,8 @@
 #include "dw4/p2/p2multipass.h"
 #include "dw4/core/igMemory.h"
 #include "dw4/p2/p2lighting.h"
+#include "dw4/p2/psx2ParticleFormat.h"
+#include "dw4/p2/p2vu0.h"
 extern int p2LookupStateCacheEntry();
 
 /* The programs that share a feature mask, one per combination of the settings of its features: the
@@ -452,8 +454,6 @@ void p2SendGifTags(void) {
 /* p2PalettedStages: both programs of a multipass draw use paletted textures */
 #define P2_STAGES_BOTH_PALETTED 3
 
-extern int p2PalettedStages;
-
 /* Chooses the vertex format and the VU program feature mask the current program, the bound arrays and the
  * draw state ask for. p2VertexFormat says which arrays the vertex program unpacks; p2VertexArrayMask keeps the
  * lighting features p2RefreshLightState chose (bits 7, 8, 13 to 15 and 29) and gets the others added.
@@ -693,11 +693,327 @@ int p2GetPassProgramAddress(int pass, int combineMode);
 #define P2_PALETTE_FLAG_BOTH 0xFF00
 #define P2_PALETTE_FLAG_OTHER 0x100
 
+extern Psx2ParticleFormat *p2CurrentParticleFormat;
+
+/* Chooses the VU1 program variant of every feature the vertex arrays use: each set bit of
+ * p2VertexArrayMask gets its slot's variant table and the index the current state selects. The
+ * variant lists then merge features that have a combined program, and the chosen programs are
+ * gathered into the function tables: table 0 holds one program a feature (and the multipass
+ * stages), table 1 the programs that run after the vertex is lit. */
+void p2BuildFunctionTables(void) {
+    long long mask;
+    unsigned char vc;
+    unsigned int flags;
+    int bit19;
+    int multipass;
+    int bit6;
+    int oldSpriteBits;
+    int oldLightingBits;
+    int bit21;
+    int lineMode;
+    int vertexColour;
+    int colourStages;
+    int bit25;
+    int extraCount;
+    int extraProgram;
+    int normals;
+    int arrayFormat;
+    int odd;
+    int formatBits;
+    int extra[3];
+    int i;
+    int n;
+    int stage;
+
+    mask = p2VertexArrayMask;
+    flags = p2ProgramFlags[p2CurrentProgram];
+    bit19 = (flags >> 19) & 1;
+    bit21 = (flags >> 21) & 1;
+    lineMode = (flags >> 15) & 3;
+    /* Byte-only spelling: the unsigned char flag set to 1 and cleared (retail's daddiu), with the
+     * combine test as its own int, gives retail's code; one || expression gives li and swaps registers. */
+    vc = 1;
+    if (!(mask & 0xE1B2)) {
+        int t = (mask & 0x1000) != 0 && p2TextureCombineMode[0] == 2;
+        if (!t) {
+            vc = 0;
+        }
+    }
+    vertexColour = vc;
+    colourStages = p2StagesUseVertexColour(1);
+    flags = p2ProgramFlags[p2CurrentProgram];
+    normals = mask & 0x180;
+    extraCount = 0;
+    extraProgram = 0;
+    oldLightingBits = p2VuProgramLightingBits;
+    oldSpriteBits = p2VuProgramSpriteBits;
+    p2VuProgramSpriteBits = 0;
+    multipass = (flags >> P2_CAP_MULTIPASS) & 1;
+    bit25 = (flags >> 25) & 1;
+    bit6 = (flags >> 6) & 1;
+    odd = (unsigned char)((mask & 0xE000) != 0 || p2StagesUseOddCombineMode(0) != 0);
+    p2VuProgramLightingBits = 0;
+    if (odd) {
+        p2VuProgramLightingBits |= 0x40;
+    }
+    if (normals && !bit21) {
+        p2VuProgramLightingBits |= p2LightingProgramBits;
+    }
+    formatBits = p2CurrentPrimitive == 7;
+    formatBits |= p2StagesTextured(0, 1, 0) ? 0 : 4;
+    formatBits |= colourStages ? 8 : 0;
+    formatBits |= vertexColour ? 2 : 0;
+    if (p2ConstantColour != 0) {
+        arrayFormat = (p2ProgramFlags[p2CurrentProgram] >> P2_CAP_ARRAY_FORMAT) & 1;
+        if ((p2VertexFormat & 2) && !(p2VertexFormat & 0x20) && !arrayFormat) {
+            p2VertexFormat &= ~2;
+        }
+    }
+    if (mask & 0x1) {
+        p2VariantSlots[0].index = 0;
+        p2VariantSlots[0].programs = p2VariantsBit0;
+    }
+    if (mask & 0x2) {
+        unsigned char counted = 0;
+
+        if (p2CurrentParticleFormat != 0 && p2CurrentParticleFormat->countD > 0) {
+            counted = 1;
+        }
+        p2VariantSlots[1].index = (p2VertexFormat & 0x100) != 0 | (counted ? 2 : 0);
+        p2VariantSlots[1].programs = p2VariantsBit1;
+    }
+    if (mask & 0x4) {
+        p2VariantSlots[2].programs = p2VariantsBit2;
+        p2VariantSlots[2].index = (p2VertexFormat & 1) | (p2BlendWeightCount - 1) << 1;
+    }
+    if (mask & 0x8) {
+        p2VariantSlots[3].index = 0;
+        p2VariantSlots[3].programs = p2VariantsBit3;
+    }
+    if (mask & 0x10) {
+        p2VariantSlots[4].index = 0;
+        p2VariantSlots[4].programs = p2VariantsBit4;
+    }
+    p2VariantSlots[11].index = odd;
+    p2VariantSlots[11].programs = p2VariantsBit11;
+    if (mask & 0x40000) {
+        p2VariantSlots[18].index = p2VariantSlots[32].index;
+        p2VariantSlots[18].programs = p2VariantsBit18;
+    }
+    if (mask & 0x80000) {
+        /* Byte-only spelling: the flags word and its array-format bit as block locals give retail's registers. */
+        unsigned int programFlags = p2ProgramFlags[p2CurrentProgram];
+        int arrayFormatBit = (programFlags >> P2_CAP_ARRAY_FORMAT) & 1;
+
+        p2VariantSlots[19].index = p2SpriteSizeMode | ((p2VertexFormat & 0x100) ? 8 : 0);
+        p2VariantSlots[19].programs = p2VariantsBit19;
+        p2VariantSlots[26].index = vertexColour != 0;
+        p2VariantSlots[26].programs = p2VariantsBit26;
+        if (!(p2VertexFormat & 0x20) && !arrayFormatBit && p2SpriteSizeMode < 3) {
+            p2VertexFormat &= ~4;
+        }
+    }
+    if (mask & 0x200) {
+        p2VariantSlots[9].index = 0;
+        p2VariantSlots[9].programs = p2VariantsBit12;
+    }
+    if (mask & 0x1000) {
+        p2VariantSlots[12].index = p2TextureCombineMode[0];
+        p2VariantSlots[12].programs = p2VariantsBit12;
+    }
+    if (mask & 0x20000) {
+        p2VariantSlots[17].index = (p2ProgramFlags[p2CurrentProgram] >> 26) & 1;
+        p2VariantSlots[17].programs = p2VariantsBit17;
+    }
+    if (mask & 0x1000000) {
+        p2VariantSlots[24].programs = p2VariantsBit24;
+        p2VariantSlots[24].index = p2FogMode;
+        if (!bit25) {
+            extra[extraCount++] = p2VariantsBit27[5 + p2FogMode];
+        }
+    }
+    if (mask & 0x20) {
+        p2VariantSlots[5].index = p2GetVu0Program();
+        p2VariantSlots[5].programs = p2VariantsBit5;
+    }
+    if (mask & 0x80000000) {
+        int oddFirst = p2StagesUseOddCombineMode(1);
+
+        p2VariantSlots[31].programs = p2VariantsBit31;
+        if (mask & 0x400) {
+            p2VariantSlots[10].index = 0;
+            p2VariantSlots[10].programs = p2VariantsBit10;
+            p2VariantSlots[31].index = 1;
+            if (p2CurrentPrimitive == 7) {
+                p2VariantSlots[10].index |= 1;
+            }
+            if (colourStages) {
+                p2VariantSlots[10].index |= 2;
+            }
+            if (!oddFirst) {
+                p2VariantSlots[10].index |= 4;
+            }
+        } else if (mask & 0x10000) {
+            p2VariantSlots[16].index = 0;
+            p2VariantSlots[16].programs = p2VariantsBit16;
+            p2VariantSlots[31].index = 1;
+            if (p2CurrentPrimitive == 7) {
+                p2VariantSlots[16].index |= 1;
+            }
+            if (colourStages) {
+                p2VariantSlots[16].index |= 2;
+            }
+            if (!oddFirst) {
+                p2VariantSlots[16].index |= 4;
+            }
+        } else if (mask & 0x200000) {
+            p2VariantSlots[21].index = 0;
+            p2VariantSlots[21].programs = p2VariantsBit21;
+            p2VariantSlots[31].index = 1;
+            if (p2CurrentPrimitive == 7) {
+                p2VariantSlots[21].index |= 1;
+            }
+            if (colourStages) {
+                p2VariantSlots[21].index |= 2;
+            }
+        } else {
+            p2VariantSlots[31].index = 0;
+        }
+    }
+    if (p2PolygonMode == 1 && (p2CurrentPrimitive == 3 || p2CurrentPrimitive == 4 || p2CurrentPrimitive == 7 ||
+                              p2CurrentPrimitive == 5)) {
+        p2VariantSlots[22].index = p2CurrentPrimitive | 8;
+        p2VariantSlots[22].programs = p2VariantsBit22;
+        p2VariantSlots[23].index = colourStages ? 0 : (unsigned char)!vertexColour;
+        p2VariantSlots[25].index = formatBits;
+        p2VariantSlots[23].programs = p2VariantsBit23;
+        p2VariantSlots[25].programs = p2VariantsBit25;
+        extraProgram = p2VariantsBit28[p2CurrentPrimitive == 5];
+        extra[extraCount++] = p2VariantsBit27[4];
+    } else if (lineMode != 0) {
+        p2VariantSlots[25].index = formatBits;
+        p2VariantSlots[22].programs = p2VariantsBit22;
+        p2VariantSlots[23].programs = p2VariantsBit23;
+        p2VariantSlots[25].programs = p2VariantsBit25;
+        p2VariantSlots[22].index = p2CurrentPrimitive | 8;
+        if (bit25) {
+            if (bit6) {
+                if (lineMode == 1) {
+                    p2VariantSlots[23].index = 4;
+                } else if (lineMode == 2) {
+                    p2VariantSlots[23].index = 5;
+                } else {
+                    p2VariantSlots[23].index = 3;
+                }
+            } else if (lineMode == 1) {
+                p2VariantSlots[23].index = 6;
+            } else if (lineMode == 2) {
+                p2VariantSlots[23].index = 7;
+            } else {
+                p2VariantSlots[23].index = 3;
+            }
+        } else {
+            p2VariantSlots[23].index = colourStages ? 0 : (unsigned char)!vertexColour;
+            extraProgram = p2VariantsBit28[p2CurrentPrimitive == 5];
+            extra[extraCount++] = p2VariantsBit27[lineMode];
+            extra[extraCount++] = p2VariantsBit27[0];
+        }
+    } else if (mask & 0x800000) {
+        p2VariantSlots[22].index = (p2VertexFormat & 0x100) ? 3 : p2CurrentPrimitive;
+        p2VariantSlots[22].programs = p2VariantsBit22;
+        p2VariantSlots[23].programs = p2VariantsBit23;
+        if (bit25) {
+            p2VariantSlots[23].index = 2;
+        } else {
+            p2VariantSlots[23].index = colourStages ? 0 : (unsigned char)!vertexColour;
+            extraProgram = p2VariantsBit28[p2CurrentPrimitive == 5];
+            extra[extraCount++] = p2VariantsBit27[0];
+        }
+        p2VariantSlots[25].index = formatBits;
+        p2VariantSlots[25].programs = p2VariantsBit25;
+    } else {
+        p2VariantSlots[25].index = formatBits;
+        p2VariantSlots[25].programs = p2VariantsBit25;
+    }
+    if (!bit19) {
+        for (i = 0; i < 6; i++) {
+            if (!p2SelectVariantTables(p2VariantLists[i], &mask)) {
+                break;
+            }
+        }
+    }
+    mask &= ~0x28000000;
+    n = 0;
+    for (i = 0; i < 32; i++) {
+        if (mask & (1 << i)) {
+            p2FunctionTables[n++] = p2VariantSlots[i].programs[p2VariantSlots[i].index];
+        }
+    }
+    if (multipass) {
+        if (mask & 0x210400) {
+            p2FunctionTables[n++] = p2VariantsBit30[5];
+            for (stage = 1; stage <= p2ExtraPassCount; stage++) {
+                unsigned int stageFlags = p2ProgramFlags[stage];
+                int combined = (stageFlags >> P2_CAP_TEXTURE_COMBINE) & 1;
+                int stageTextured = (stageFlags >> P2_CAP_TEXTURE) & 1;
+
+                if (combined && stageTextured) {
+                    if ((mask & 0x400) && p2TextureCombineMode[stage] == 4) {
+                        p2FunctionTables[n++] = p2VariantsBit9[0];
+                    } else {
+                        p2FunctionTables[n++] = p2VariantsBit12[p2TextureCombineMode[stage]];
+                    }
+                } else {
+                    p2FunctionTables[n++] = p2VariantsBit30[7];
+                }
+            }
+        } else {
+            if (p2VuProgramSpriteBits & 0x100) {
+                p2VariantSlots[31].index = 2;
+            }
+            for (stage = 2; stage <= p2ExtraPassCount; stage++) {
+                p2FunctionTables[n++] = p2VariantsBit30[5];
+                p2FunctionTables[n++] = p2VariantsBit31[p2VariantSlots[31].index];
+            }
+            /* `> 1`, not `>= 2`: byte-only, the compare then goes through at as in retail. */
+            if (p2ExtraPassCount > 1) {
+                p2FunctionTables[n++] = p2VariantsBit30[5];
+            }
+        }
+    }
+    /* `> 12`, not `>= 13`: byte-only, as above. */
+    if ((p2FunctionTableSizes[0] > 12 || n > 12) && p2FunctionTableSizes[0] != n) {
+        p2DirtyFlags |= P2_DIRTY_BLEND_MATRICES | P2_DIRTY_LIGHTS;
+    }
+    p2FunctionTableSizes[0] = n;
+    if (extraCount != 0) {
+        p2FunctionTableSizes[1] = extraCount + 2;
+        p2FunctionTables[n++] = extraProgram;
+        p2FunctionTables[n++] = p2VariantsBit30[4];
+        for (i = 0; i < extraCount; i++) {
+            p2FunctionTables[n++] = extra[i];
+        }
+    } else if (bit25 && (lineMode != 0 || (mask & 0x800000))) {
+        p2FunctionTableSizes[1] = 1;
+        p2FunctionTables[n++] = p2VariantsBit30[4];
+    } else {
+        p2FunctionTableSizes[1] = 0;
+    }
+    p2FunctionTables[n] = p2VariantsBit30[2];
+    if (oldSpriteBits != p2VuProgramSpriteBits) {
+        p2DirtyFlags |= P2_DIRTY_GIF_TAGS;
+    }
+    if (oldLightingBits != p2VuProgramLightingBits) {
+        p2DirtyFlags |= P2_DIRTY_LIGHTING_FUNCTIONS;
+    }
+}
+
 p2DmaTag p2PassSetupTag = {{ 0x10000003, 0, 0, 0 }};
 p2VifUnpack p2PassSetupUnpack = { 0x7C02004E };
 unsigned int p2PassSetupFlush = 0x10000000;
 unsigned int p2PassSetupStmask = 0x20000000;
 unsigned int p2PaletteFlagUnpack = 0x7E010049;
+extern int p2PalettedStages;
 
 /* Sends the multipass setup when the current program draws in passes: for each pass a vector of
  * its FRAME and ZBUF masks and the address of its VU program, then the palette flag. */

@@ -114,8 +114,8 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
                 igGroup *node = NODE_AT(CHILDREN(lights), j);
                 if (NAME_OF(node) != 0 && strcmp("LAYERPARENT", NAME_OF(node)) == 0) { parent = node; break; }
             }
-            if (parent != 0) igGroup_AppendChild(parent, (igNode *)self->_layerSwt);
-            else igGroup_AppendChild(lights, (igNode *)self->_layerSwt);
+            if (parent != 0) ((Gap::Sg::igGroup *)parent)->appendChild((Gap::Sg::igNode *)self->_layerSwt);
+            else ((Gap::Sg::igGroup *)lights)->appendChild((Gap::Sg::igNode *)self->_layerSwt);
             self->_isOrdered = 1;
         }
         beLayerGroupList *groups = (beLayerGroupList *)info->_groups;
@@ -124,13 +124,13 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         for (g = 0; g < groups->_count; g++) {
             void *allocator;
             PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser1)
-            igSmartPointer<igNamedObject> layer((igNamedObject *)igGroup_CreateInstance((int)allocator));
+            igSmartPointer<igNamedObject> layer((igNamedObject *)Gap::Sg::igGroup::_instantiateFromPool((igMemoryPoolView *)allocator));
             ((Gap::Core::igNamedObject *)layer.p)->setName(NAME_OF(NODE_AT(groups, g)));
             igSwitch_AppendChild(LAYER_SWITCH(self), (igNode *)layer.p);
         }
         void *noneAllocator;
         PICK_ALLOCATOR(noneAllocator, self, kIGMemoryPoolHandleUser1)
-        igSmartPointer<igNamedObject> none((igNamedObject *)igGroup_CreateInstance((int)noneAllocator));
+        igSmartPointer<igNamedObject> none((igNamedObject *)Gap::Sg::igGroup::_instantiateFromPool((igMemoryPoolView *)noneAllocator));
         ((Gap::Core::igNamedObject *)none.p)->setName("NONE");
         igSwitch_AppendChild(LAYER_SWITCH(self), (igNode *)none.p);
         int index;
@@ -152,9 +152,9 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
                     layer = NODE_AT(LAYERS(self), k);
                     if (strcmp(name, NAME_OF(layer)) == 0) { target = layer; break; }
                 }
-                if (target != 0) igGroup_AppendChild(target, (igNode *)node);
-                else igGroup_AppendChild((igGroup *)none.p, (igNode *)node);
-                igGroup_RemoveChild(root, (igNode *)node);
+                if (target != 0) ((Gap::Sg::igGroup *)target)->appendChild((Gap::Sg::igNode *)node);
+                else ((Gap::Sg::igGroup *)none.p)->appendChild((Gap::Sg::igNode *)node);
+                ((Gap::Sg::igGroup *)root)->removeChild((Gap::Sg::igNode *)node);
             }
         }
         beMessenger_AppendBool((beMessenger *)self->_messenger, 1);

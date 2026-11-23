@@ -102,7 +102,7 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
         do {
             it = *(beShadow01Info **)((char *)((beShadow01InfoList *)self->_svInfoList)->_data + off);
             if (it->_casterNode != 0) ((Gap::Core::igObjectList *)shader->_shadowCasters)->append((Gap::Core::igObject *)it->_casterNode);
-            if (it->_receiverNode != 0) igGroup_AppendChild((igGroup *)shader, (igNode *)it->_receiverNode);
+            if (it->_receiverNode != 0) ((Gap::Sg::igGroup *)shader)->appendChild((Gap::Sg::igNode *)it->_receiverNode);
             i += 1;
             off += 4;
         } while (i < n);

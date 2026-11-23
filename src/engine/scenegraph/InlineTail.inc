@@ -1,11 +1,3 @@
-int igTraversal_GetMeta(void) {
-    return ((int)g_igTraversal_metaObject);
-}
-
-void Gap__Bec__beHitLandModelTraversal__vfunc_25(beHitLandModelTraversal *arg0, long long arg1) {
-    arg0->_timeLong = arg1;
-}
-
 igMetaObject *igTransformSequence1_5_GetMeta(void) {
     return g_igTransformSequence1_5_metaObject;
 }
@@ -224,10 +216,6 @@ void Gap__Core__igObject__vfunc_36(igTransform *self, int target)
     self->_target = target;
 }
 
-void igNode_Reset(void)
-{
-}
-
 int igShaderProcessor_ConfigureRequired(void) {
     return 0;
 }
@@ -242,28 +230,6 @@ int igSwitch_IsChildrenOrdered(void) {
 
 int igSorter_GetMeta(void) {
     return ((int)g_igSorter_metaObject);
-}
-
-igMetaObject *igSkeleton_GetMeta(void) {
-    return g_igSkeleton_metaObject;
-}
-
-int igSkeleton_GetJointCount(igSkeleton *self) {
-    return self->_jointCount;
-}
-
-int *igSkeleton_GetBoneName(igSkeleton *self, int arg1) {
-    int *temp_v0;
-
-    temp_v0 = (int *)(*(int *)((char *)((*(int *)(*(int *)((char *)(self->_boneInfoList) + 16) + (arg1 * 4)))) + 8));
-    if (temp_v0 != 0) {
-        return temp_v0;
-    }
-    return (int *)emptyString;
-}
-
-int igSkeleton_GetParent(igSkeleton *self, int arg1) {
-    return *(int *)((char *)((*(int *)(*(int *)((char *)(self->_boneInfoList) + 16) + (arg1 * 4)))) + 12);
 }
 
 igMetaObject *igShaderInfo_GetMeta(void) {
@@ -301,10 +267,6 @@ void Gap__Bec__ParticleTimer__vfunc_36(ParticleTimer *a0, int a1)
     a0->_trigger = a1;
 }
 
-int igNode_HasChildren(void) {
-    return 0;
-}
-
 int igGeometry_IsChildrenOrdered(void)
 {
     return 1;
@@ -339,10 +301,6 @@ igMetaObject *igIntersectTraversal_GetMeta(void) {
 
 igMetaObject *igIniShaderFactory_GetMeta(void) {
     return g_igIniShaderFactory_metaObject;
-}
-
-igMetaObject *igGroup_GetMeta(void) {
-    return g_igGroup_metaObject;
 }
 
 int igFrustCullTraversal_GetMeta(void) {
@@ -594,14 +552,6 @@ igMetaObject *igObjectPool_GetMeta(void) {
     return g_igObjectPool_metaObject;
 }
 
-igMetaObject *igAnimationModifier_GetMeta(void) {
-    return g_igAnimationModifier_metaObject;
-}
-
-igMetaObject *igAnimationModifierList_GetMeta(void) {
-    return g_igAnimationModifierList_metaObject;
-}
-
 igMetaObject *igAnimationStateList_GetMeta(void) {
     return g_igAnimationStateList_metaObject;
 }
@@ -718,18 +668,6 @@ igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObject(void) {
     return g_igModelViewMatrixBoneSelectListSg_metaObject;
 }
 
-igMetaObject *igNodeList_GetMeta(void) {
-    return g_igNodeList_metaObject;
-}
-
-igMetaObject *igNodeListList_GetMeta(void) {
-    return g_igNodeListList_metaObject;
-}
-
-igMetaObject *igNonRefCountedNodeList_GetMeta(void) {
-    return g_igNonRefCountedNodeList_metaObject;
-}
-
 igMetaObject *igOverrideAttrSet_GetMeta(void) {
     return g_igOverrideAttrSet_metaObject;
 }
@@ -740,10 +678,6 @@ int igSegment_GetMeta(void) {
 
 int igSegment_IsTransformable(void) {
     return 0;
-}
-
-int igTraversalFunctionList_GetMeta(void) {
-    return ((int)g_igTraversalFunctionList_metaObject);
 }
 
 igMetaObject *igLightStateAttrPool_GetMeta(void) {
@@ -784,18 +718,6 @@ igMetaObject *igBlendMatricesAttrPool_GetMeta(void) {
 
 igMetaObject *igShaderFactoryList_GetMeta(void) {
     return g_igShaderFactoryList_metaObject;
-}
-
-igMetaObject *igSkeletonList_GetMeta(void) {
-    return g_igSkeletonList_metaObject;
-}
-
-igMetaObject *igSkin_GetMeta(void) {
-    return g_igSkin_metaObject;
-}
-
-igMetaObject *igSkinList_GetMeta(void) {
-    return g_igSkinList_metaObject;
 }
 
 igMetaObject *igRenderPackage_GetMeta(void) {
@@ -844,14 +766,6 @@ igMetaObject *igNonRefCountedAttrStackManagerList_GetElementMeta(void) {
 
 igMetaObject *igNonRefCountedTransformList_GetElementMeta(void) {
     return g_igTransform_metaObject;
-}
-
-igMetaObject *igNonRefCountedNodeList_GetElementMeta(void) {
-    return g_igNode_metaObject;
-}
-
-int igTraversalFunctionList_GetElementSize(igTraversalFunctionList *self) {
-    return 4;
 }
 
 int igDoubleList_GetElementSize(void) {
@@ -953,18 +867,6 @@ igMetaObject *igShaderFactoryList_GetElementMeta(void) {
     return g_igShaderFactory_metaObject;
 }
 
-igMetaObject *igSkeletonList_GetElementMeta(void) {
-    return g_igSkeleton_metaObject;
-}
-
-igMetaObject *igAnimationModifierList_GetElementMeta(void) {
-    return g_igAnimationModifier_metaObject;
-}
-
-igMetaObject *igSkinList_GetElementMeta(void) {
-    return g_igSkin_metaObject;
-}
-
 int igCompiledTransformList_GetElementMeta(void) {
     return ((int)g_igCompiledTransform_metaObject);
 }
@@ -979,14 +881,6 @@ igMetaObject *igAttrStackList_GetElementMeta(void) {
 
 igMetaObject *igTransformList_GetElementMeta(void) {
     return g_igTransform_metaObject;
-}
-
-igMetaObject *igNodeListList_GetElementMeta(void) {
-    return g_igNodeList_metaObject;
-}
-
-igMetaObject *igNodeList_GetElementMeta(void) {
-    return g_igNode_metaObject;
 }
 
 void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self) {
@@ -1006,15 +900,3 @@ void igDoubleList_TrimCapacity(igDataList *arg0) {
         ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 8);
     }
 }
-
-void igTraversalFunctionList_TrimCapacity(igTraversalFunctionList *self) {
-    int temp_a1;
-
-    temp_a1 = self->_count;
-    if (temp_a1 < self->_capacity) {
-        ((Gap::Core::igDataList *)self)->setCapacity(temp_a1, 4);
-    }
-}
-
-/* Deleting destructor; the deletion flag is a signed short. */
-/* Deleting destructor; the deletion flag is a signed short. */

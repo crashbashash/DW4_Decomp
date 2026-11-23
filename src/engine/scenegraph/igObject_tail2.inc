@@ -290,65 +290,71 @@ int FUN_001d2230(int a0, S_1d2230 *src, S_1d2230 *dst, O_1d2230 *obj, int flag) 
     return r;
 }
 
-int igNode_GetParentCount(igNode *self) {
-    void *temp_v0;
+namespace Gap {
+namespace Sg {
 
-    temp_v0 = (void *)(self->_parentList);
-    if (temp_v0 != 0) {
-        return *(int *)((char *)(temp_v0) + 8);
+int igNode::getParentCount() const
+{
+    if (_parentList != 0) {
+        return _parentList->getCount();
     }
     return 0;
 }
 
-int igNode_GetParent(void *arg0, int arg1) {
-    return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4));
+igNode *igNode::getParent(int i) const
+{
+    return _parentList->get(i);
 }
 
-int igNode_AddParent(igNode *self, int arg1) {
-        int temp_s2;
-    struct L1d *temp_s1;
-    temp_s1 = (struct L1d *)(self->_parentList);
-    if (temp_s1 != 0) {
-        temp_s2 = temp_s1->count;
-        if (temp_s2 < temp_s1->cap) {
-            temp_s1->count = 1 + count_of(temp_s1);
+static inline int count_of(const ::igTDataList< ::igObject *> *list) { return list->_count; }
+
+bool igNode::addParent(igNode *parent)
+{
+    /* matching construct: igTNonRefCountedObjectList::append open-coded over the flat list — count is read first
+     * and again for the increment (the kit's inline append takes the other register order) */
+    int count;
+    ::igTDataList< ::igObject *> *list = (::igTDataList< ::igObject *> *)_parentList.p;
+    if (list != 0) {
+        count = list->_count;
+        if (count < list->_capacity) {
+            list->_count = 1 + count_of(list);
         } else {
-            ((Gap::Core::igDataList *)temp_s1)->resizeAndSetCount(temp_s2 + 1, 4);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, 4);
         }
-        temp_s1->data[temp_s2] = arg1;
+        list->_data[count] = (::igObject *)parent;
     }
-    return 1;
+    return true;
 }
 
-int igNode_RemoveParent(ObjectListOwner *self, igObject *object) {
-    if (self->_list != 0) {
-        igTDataList<igObject *> *list;
-        int index = (list = self->_list)->find(object);
-        int result;
+bool igNode::removeParent(igNode *parent)
+{
+    if (_parentList != 0) {
+        /* matching construct: the flat list's find, whose by-value key lives in a stack slot (the kit's inline
+         * find takes it by reference and keeps it in a register) */
+        ::igTDataList< ::igObject *> *list;
+        int index = (list = (::igTDataList< ::igObject *> *)_parentList.p)->find((::igObject *)parent);
+        igResult result;
         if (index >= 0) {
-            List_RemoveWordAt((igDataList *)list, index);
-            result = g_resultSuccess.v;
+            List_RemoveWordAt((::igDataList *)list, index);
+            result = g_resultSuccess;
         } else {
-            result = g_resultFailure.v;
+            result = g_resultFailure;
         }
-        return result == g_resultSuccess.v;
+        return result == g_resultSuccess;
     }
-    return 0;
+    return false;
 }
 
-void FUN_001d32f0(S_1d32f0 *arg0, int arg1) {
-    int temp_a0;
-    int var_s0;
-
-    temp_a0 = arg0->f20;
-    arg1 = arg1 & DAT_0048da58[0];
-    if (arg1 != (arg1 & temp_a0)) {
-        var_s0 = 0;
-        arg0->f20 = temp_a0 | arg1;
-        while (var_s0 < arg0->c()) {
-            FUN_001d32f0(arg0->g(var_s0), arg0->f20);
-            var_s0 += 1;
+void igNode::propagateFlagsUp(unsigned int flags)
+{
+    flags = flags & flagMask;
+    if (flags != (flags & _flags)) {
+        _flags = _flags | flags;
+        for (int i = 0; i < getParentCount(); i++) {
+            getParent(i)->propagateFlagsUp(_flags);
         }
     }
+}
+}
 }
 

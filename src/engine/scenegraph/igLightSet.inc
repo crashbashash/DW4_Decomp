@@ -44,8 +44,8 @@ CallbackArray *igLightSet_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightSet_metaObject,
-        igNode_Register,
-        igNode_GetPublishedMetaObject,
+        Gap::Sg::igNode::arkRegisterInternal,
+        Gap::Sg::igNode::getClassMeta,
         igLightSet_GetMetaObjectFunction,
         "igLightSet",
         0x20, /* instance size */
@@ -58,10 +58,6 @@ CallbackArray *igLightSet_Register(void) {
 
 void igLightSet_GetMetaObjectFunction(void) {
     igLightSet_GetMetaObject();
-}
-
-igMetaObject *igNode_GetPublishedMetaObject(void) {
-    return g_igNode_metaObject;
 }
 
 static FieldFactory g_igLightSet_ctorTable[] = {
