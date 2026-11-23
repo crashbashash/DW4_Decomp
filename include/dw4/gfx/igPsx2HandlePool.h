@@ -5,11 +5,13 @@
 #include "dw4/core/igMemoryPoolView.h"
 #include "dw4/core/igStringRef.h"
 
-/* The 20-byte record behind igPsx2VisualContext's light list (_pLightList): a handle pool of T elements. It
- * hands out indices into `elements` and takes them back through a stack of free indices, the scheme of the
- * kit's igTHandlePool (alchemy-kit_202309, igCore/igHandlePool.h: getFreeElement, freeElement,
- * isIndexAllocated). DW4's pool is a plain record, not an igDataList: the context allocates it from its list
- * memory pool, named by the registry value that sized it (IG_GFX_VC_LIGHT_ARRAY_SIZE). */
+/* The 20-byte record behind each of igPsx2VisualContext's element pools: a handle pool of T elements. It hands out
+ * indices into `elements` and takes them back through a stack of free indices, the scheme of the kit's igTHandlePool
+ * (alchemy-kit_202309, igCore/igHandlePool.h: getFreeElement, freeElement, isIndexAllocated). DW4's pool is a plain
+ * record, not an igDataList: the context allocates it from its list memory pool and names it by the registry value
+ * that sized it. The pools and their elements: _pLightList (p2Light, IG_GFX_VC_LIGHT_ARRAY_SIZE), _pBufList
+ * (igPsx2RenderDestination, IG_GFX_VC_RD_ARRAY_SIZE), _pClutList (igPsx2ClutRecord, IG_GFX_VC_CLUT_ARRAY_SIZE),
+ * _pTexList (igPsx2TextureRecord, IG_GFX_VC_TEXTURE_ARRAY_SIZE) and _pDLists (pointers to igPsx2RenderList). */
 template <class T> struct igPsx2HandlePool {
     unsigned short capacity;      /* elements allocated in `elements` */
     unsigned short freeCapacity;  /* room in `freeHandles` */

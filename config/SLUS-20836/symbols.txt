@@ -2906,7 +2906,7 @@
 00169c20 000030 igPsx2VisualContext_ClearRenderDestination Gap::Gfx::igPsx2VisualContext::clearRenderDestination
 00169c50 0001dc igPsx2VisualContext_CopyRenderDestinationToTexture Gap::Gfx::igPsx2VisualContext::copyRenderDestinationToTexture
 00169e30 000008 igPsx2VisualContext_CopyRenderDestinationToMemory Gap::Gfx::igPsx2VisualContext::copyRenderDestinationToMemory
-00169e40 000208 FUN_00169e40
+00169e40 000208 igPsx2VisualContext_ReadRenderDestination
 0016a050 0000a4 igPsx2VisualContext_SetViewport Gap::Gfx::igPsx2VisualContext::setViewport
 0016a100 000024 igPsx2VisualContext_GetViewport Gap::Gfx::igPsx2VisualContext::getViewport
 0016a130 000034 igPsx2VisualContext_GetViewportWithDepth Gap::Gfx::igPsx2VisualContext::getViewport
@@ -2927,15 +2927,15 @@
 0016a780 00003c igPsx2VisualContext_SetScissor Gap::Gfx::igPsx2VisualContext::setScissor
 0016a7c0 000024 igPsx2VisualContext_GetScissor Gap::Gfx::igPsx2VisualContext::getScissor
 0016a7f0 000008 igPsx2VisualContext_SetScissorType Gap::Gfx::igPsx2VisualContext::setScissorType
-0016a800 000060 FUN_0016a800
-0016a860 00018c FUN_0016a860
-0016a9f0 00018c FUN_0016a9f0
-0016ab80 000194 FUN_0016ab80
-0016ad20 000178 FUN_0016ad20
-0016aea0 00008c FUN_0016aea0
-0016af30 000154 FUN_0016af30
-0016b090 000138 FUN_0016b090
-0016b1d0 0000f4 FUN_0016b1d0
+0016a800 000060 igPsx2ClutRecord_Reset
+0016a860 00018c igPsx2VisualContext_InitializeCluts
+0016a9f0 00018c igPsx2VisualContext_UninitializeCluts
+0016ab80 000194 igPsx2VisualContext_DeleteClut
+0016ad20 000178 igPsx2VisualContext_CreateClut
+0016aea0 00008c igPsx2VisualContext_CopyClutPalette
+0016af30 000154 igPsx2VisualContext_SetClut
+0016b090 000138 igPsx2VisualContext_UploadClut
+0016b1d0 0000f4 igPsx2VisualContext_FreeClutImage
 0016b2d0 000008 igPsx2VisualContext_constructFields Gap::Gfx::igPsx2VisualContext::constructFields
 0016b2e0 000604 igPsx2VisualContext_userConstruct Gap::Gfx::igPsx2VisualContext::userConstruct
 0016b8f0 0000a0 igPsx2VisualContext_userDestruct Gap::Gfx::igPsx2VisualContext::userDestruct
@@ -3217,17 +3217,17 @@
 00177930 0000b0 igPsx2VisualContext_SetStatistic Gap::Gfx::igPsx2VisualContext::setStatistic
 001779e0 0003f4 igPsx2VisualContext_GetStatistics Gap::Gfx::igPsx2VisualContext::getStatistic
 00177de0 000ab8 igPsx2VisualContext_GetStatisticValue Gap::Gfx::igPsx2VisualContext::getStatisticValue
-001788a0 000034 FUN_001788a0
-001788e0 000090 FUN_001788e0
-00178970 001488 FUN_00178970
-00179e00 00026c FUN_00179e00
-0017a070 000108 FUN_0017a070
-0017a180 00012c FUN_0017a180
-0017a2b0 000044 FUN_0017a2b0
-0017a300 000240 FUN_0017a300
-0017a540 0002a0 FUN_0017a540
-0017a7e0 000090 FUN_0017a7e0
-0017a870 00006c FUN_0017a870
+001788a0 000034 igPsx2VisualContext_ResetStatisticCaptures
+001788e0 000090 igPsx2VisualContext_ReleaseStatisticCaptures
+00178970 001488 igPsx2VisualContext_PrintStatisticCapture
+00179e00 00026c igPsx2VisualContext_LoadStatisticCaptures
+0017a070 000108 igPsx2TextureRecord_Reset
+0017a180 00012c igPsx2TextureRecord_ReleaseImages
+0017a2b0 000044 igPsx2TextureFormat_GetP2Format
+0017a300 000240 igPsx2VisualContext_InitializeTextures
+0017a540 0002a0 igPsx2VisualContext_UninitializeTextures
+0017a7e0 000090 igPsx2VisualContext_CreateFrameBufferTextures
+0017a870 00006c igPsx2VisualContext_FreeFrameBufferTextures
 0017a8e0 000008 igPsx2VisualContext_GetAvailableTextureMemory Gap::Gfx::igPsx2VisualContext::getAvailableTextureMemory
 0017a8f0 0000d8 igPsx2VisualContext_SetTextureStageState Gap::Gfx::igPsx2VisualContext::setTextureStageState
 0017a9d0 000024 igPsx2VisualContext_GetTextureStageState Gap::Gfx::igPsx2VisualContext::getTextureStageState
@@ -3240,8 +3240,8 @@
 0017b190 000040 igPsx2VisualContext_GetTextureComponentSize Gap::Gfx::igPsx2VisualContext::getTextureComponentSize
 0017b1d0 000014 igPsx2VisualContext_LoadTexture Gap::Gfx::igPsx2VisualContext::loadTexture
 0017b1f0 00020c igPsx2VisualContext_SetTexture Gap::Gfx::igPsx2VisualContext::setTexture
-0017b400 0001f0 FUN_0017b400
-0017b5f0 0003f4 FUN_0017b5f0
+0017b400 0001f0 igPsx2VisualContext_ApplyTextureState
+0017b5f0 0003f4 igPsx2VisualContext_LoadTextureBuffers
 0017b9f0 000008 igPsx2VisualContext_GetCurrentTexture Gap::Gfx::igPsx2VisualContext::getCurrentTexture
 0017ba00 000158 igPsx2VisualContext_UnloadTexture Gap::Gfx::igPsx2VisualContext::unloadTexture
 0017bb60 000214 igPsx2VisualContext_DeleteTexture Gap::Gfx::igPsx2VisualContext::deleteTexture
@@ -3256,17 +3256,17 @@
 0017c5e0 000020 igPsx2VisualContext_GetTextureMagnificationFilter Gap::Gfx::igPsx2VisualContext::getTextureMagnificationFilter
 0017c600 000094 igPsx2VisualContext_SetTextureAddressingMode Gap::Gfx::igPsx2VisualContext::setTextureAddressingMode
 0017c6a0 000038 igPsx2VisualContext_GetTextureAddressingMode Gap::Gfx::igPsx2VisualContext::getTextureAddressingMode
-0017c6e0 00002c FUN_0017c6e0
+0017c6e0 00002c igPsx2VisualContext_ResetTextureStages
 0017c710 000078 igPsx2VisualContext_SetTextureMatrixProjectiveState Gap::Gfx::igPsx2VisualContext::setTextureMatrixProjectiveState
 0017c790 00000c igPsx2VisualContext_GetTextureMatrixProjectiveState Gap::Gfx::igPsx2VisualContext::getTextureMatrixProjectiveState
 0017c7a0 0000d4 igPsx2VisualContext_SetTextureStageFunc Gap::Gfx::igPsx2VisualContext::setTextureStageFunc
-0017c880 000014 FUN_0017c880
-0017c8a0 0000dc FUN_0017c8a0
+0017c880 000014 igPsx2VisualContext_SetTextureFuncAndColorComponent
+0017c8a0 0000dc igPsx2VisualContext_SetTextureStageFuncAndColorComponent
 0017c980 000028 igPsx2VisualContext_GetTextureStageFunc Gap::Gfx::igPsx2VisualContext::getTextureStageFunc
 0017c9b0 00018c igPsx2VisualContext_SetTextureStageCoordSource Gap::Gfx::igPsx2VisualContext::setTextureStageCoordSource
 0017cb40 000034 igPsx2VisualContext_GetTextureStageCoordSource Gap::Gfx::igPsx2VisualContext::getTextureStageCoordSource
-0017cb80 000130 FUN_0017cb80
-0017ccb0 00022c FUN_0017ccb0
+0017cb80 000130 igPsx2VisualContext_GetSharedClut
+0017ccb0 00022c igPsx2VisualContext_CreateSharedClut
 0017cee0 000008 igPsx2VisualContext_SetTextureRegion Gap::Gfx::igPsx2VisualContext::setTextureRegion
 0017cef0 000114 Gap__Gfx__igPsx2UserUCodeExt__vfunc_29 Gap::Gfx::igPsx2UserUCodeExt::vfunc_29
 0017d010 00000c igPsx2VisualContext_GetMeta Gap::Gfx::igPsx2VisualContext::getMeta

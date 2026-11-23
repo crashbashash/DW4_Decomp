@@ -48,8 +48,8 @@ CallbackArray *igFieldChangeView_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFieldChangeView_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igFieldChangeView_GetMetaObjectFunction,
         "igFieldChangeView",
         0x14, /* instance size */

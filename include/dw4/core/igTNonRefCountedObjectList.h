@@ -15,6 +15,11 @@ template <class T> class igTNonRefCountedObjectList : public igNonRefCountedObje
 public:
     inline T *const *getArray() const { return (T *const *)igNonRefCountedObjectList::getArray(); }
     inline T *get(int index) const { return (T *)igNonRefCountedObjectList::get(index); }
+    inline void set(int index, T *object) { igNonRefCountedObjectList::set(index, object); }
+    inline void append(T *object) { igNonRefCountedObjectList::append(object); }
+    inline int find(const T *obj, int startIndex = 0) const {
+        return igNonRefCountedObjectList::find((igObject *const &)obj, startIndex);
+    }
     inline virtual igMetaObject *getElementMeta() const { return T::getClassMeta(); }
 };
 }

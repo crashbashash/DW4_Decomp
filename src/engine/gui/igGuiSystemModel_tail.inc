@@ -1,5 +1,4 @@
 void igGuiSystemModel_resetFields(int arg0, int arg1) {
-    int args[4];
     float vec[3];
 
     Gap__Core__igObject__resetFields((igObject *)arg0, arg1);
@@ -9,10 +8,8 @@ void igGuiSystemModel_resetFields(int arg0, int arg1) {
         vec[2] = -0.5f;
         vec[1] = 0.375f;
         igMatrix44f_SetTranslation((float *)(arg0 + 0x20), (const float *)vec);
-        args[0] = 2;
-        args[1] = 0;
-        args[2] = (int)g_igGuiSystemModel_viewMatrixMetaField;
-        igModel_NotifyViews((igModel *)arg0, (ModelChange *)args);
+        igNotifyEvent args((Gap::Core::igMetaField *)g_igGuiSystemModel_viewMatrixMetaField);
+        ((Gap::Gui::igModel *)arg0)->notifyAllViews(args);
     }
 }
 

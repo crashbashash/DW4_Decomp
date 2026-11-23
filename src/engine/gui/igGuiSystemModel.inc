@@ -62,8 +62,8 @@ CallbackArray *igGuiSystemModel_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiSystemModel_metaObject,
-        igModel_Register,
-        igModel_GetPublishedMetaObject,
+        Gap::Gui::igModel::arkRegisterInternal,
+        Gap::Gui::igModel::getClassMeta,
         thunk_igGuiSystemModel_GetMetaObject,
         "igGuiSystemModel",
         0xB8, /* instance size */

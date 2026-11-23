@@ -6,17 +6,6 @@
  * each batch boundary. While a display list is recorded the format follows the bound arrays and
  * every draw goes through the recording submit. */
 
-enum p2Primitive {
-    P2_PRIM_POINT,
-    P2_PRIM_LINE,
-    P2_PRIM_LINE_STRIP,
-    P2_PRIM_TRIANGLE,
-    P2_PRIM_TRIANGLE_STRIP,
-    P2_PRIM_TRIANGLE_FAN,
-    P2_PRIM_SPRITE,
-    P2_PRIM_TRIANGLE_STRIPS /* a list of triangle strips */
-};
-
 #include "dw4/p2/p2dma.h"
 #include "dw4/p2/p2core.h"
 #include "dw4/p2/dmaChannel.h"

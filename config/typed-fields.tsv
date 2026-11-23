@@ -262,3 +262,5 @@ igPsx2VisualContext	_stencilFunc	IG_GFX_STENCIL_FUNCTION
 igPsx2VisualContext	_renderMode	IG_GFX_RENDER_MODE
 igPsx2VisualContext	_fogMode	IG_GFX_FOG_MODE
 igPsx2VisualContext	_pixelPipelineMode	IG_GFX_PIXEL_PIPELINE_MODE
+igView	_model	igModel *
+igModel	_views	igSmartPointer<igNonRefCountedViewList>

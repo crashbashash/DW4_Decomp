@@ -88,7 +88,8 @@ import memberize  # noqa: E402
 SYMBOLS = "config/SLUS-20836/symbols.txt"
 UNIT_OBJECTS = "config/SLUS-20836/unit-objects.json"
 LIBRARY_DIRS = {"Core": "src/engine/core", "Math": "src/engine/maths", "Attrs": "src/engine/attrs",
-                "Gfx": "src/engine/gfx", "Sg": "src/engine/scenegraph"}
+                "Gfx": "src/engine/gfx", "Sg": "src/engine/scenegraph", "Gui": "src/engine/gui",
+                "Insight": "src/engine/insight", "Viewer": "src/engine/viewer"}
 
 # the C names every reflected class shares, and the members they become
 COMMON = {"GetMetaObject": "getClassTypeSafe", "GetVTable": "retrieveVTablePointer", "EnsureRegistered": "arkRegister",
@@ -384,7 +385,7 @@ def decl_of(rows, member):
     """(static, return type, parameter list without defaults) of the first row declaring `member`, or None (a
     constructor's name is not its destructor's)."""
     for r in rows:
-        r = re.sub(_ACCESS, "", r)
+        r = re.sub(_ACCESS, "", r).split("{", 1)[0]    # an inline body naming the member is no declaration
         m = re.match(r"((?:virtual|static|inline)\s+)*(.*?)(?<![\w~])%s\s*\(" % re.escape(member), r)
         close = _closing(r, m.end() - 1) if m else None
         if close is not None:

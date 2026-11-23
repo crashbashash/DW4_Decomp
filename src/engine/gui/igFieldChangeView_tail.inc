@@ -10,14 +10,11 @@ void igFieldChangeView_OnModelChange(igFieldChangeView *self, void *arg1) {
 }
 
 void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
-    int sp[3];
     int b;
     ((Gap::Core::igMetaField *)arg0->b)->setFromField((Gap::Core::igObject *)arg0->a, (Gap::Core::igMetaField *)arg2, (Gap::Core::igObject *)arg1);
     b = arg0->b;
-    sp[0] = 2;
-    sp[2] = b;
-    sp[1] = (int)arg0;
-    igModel_NotifyViews((igModel *)arg0->a, (ModelChange *)sp);
+    igNotifyEvent sp((Gap::Core::igMetaField *)b, (Gap::Gui::igView *)(int)arg0);
+    ((Gap::Gui::igModel *)arg0->a)->notifyAllViews(sp);
 }
 
 void igFieldSynchronizer_AddField(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field) {
@@ -39,7 +36,7 @@ void igFieldSynchronizer_AddField(igFieldSynchronizer *synchronizer, igObject *m
         }
     }
     t->f16 = (int)arg2;
-    igView_SetModel((igView *)sp4C.p, (igModel *)model);
+    ((Gap::Gui::igView *)sp4C.p)->setModel((Gap::Gui::igModel *)model);
 }
 
 void FUN_004552e0(int *arg0, int *arg1) {

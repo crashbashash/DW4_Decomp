@@ -141,17 +141,13 @@ struct FontLayers_453990 { char pad[32]; int order; int list; };
 void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerItem_453990 *item) {
     struct InsertRef_453990 r;
     int list;
-    int msg[4];
     item->order = self->order;
     r.p = item;
     list = self->list;
     if (r.p != 0) r.p->refCount = r.p->refCount + 1;
     List_InsertWords((igDataList *)list, index, 1, &r);
-    msg[0] = 3;
-    msg[1] = 0;
-    msg[2] = DAT_0058c618[0];
-    msg[3] = index;
-    igModel_NotifyViews((igModel *)self, (ModelChange *)msg);
+    igNotifyEvent msg(igNotifyEvent::INSERT, (Gap::Core::igMetaField *)DAT_0058c618[0], index);
+    ((Gap::Gui::igModel *)self)->notifyAllViews(msg);
 }
 
 void igGuiComponent_AppendChild(igGuiComponent *parent, igGuiComponent *child) {

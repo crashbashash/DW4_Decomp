@@ -3369,3 +3369,62 @@ igPsx2VisualContext	bool getMatrixOptimizationState();
 igPsx2VisualContext	void setTextureMatrixProjectiveState(int stage, unsigned char enable);
 igPsx2VisualContext	unsigned char getTextureMatrixProjectiveState(int stage);
 igPsx2VisualContext	int allocateTexture(int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount);
+igPsx2VisualContext	void initializeLighting();
+igPsx2VisualContext	void uninitializeLighting(int keepStorage);
+igPsx2VisualContext	void commitLight(p2Light *light);
+igPsx2VisualContext	void setMaterialSlot(int slot);
+igPsx2VisualContext	void commitMaterial(p2Material *material);
+igPsx2VisualContext	void applyBlendEquation(int stage);
+igPsx2VisualContext	void setRenderSides(int renderSides);
+igPsx2VisualContext	int setColorScalerState(int state);
+igPsx2VisualContext	void setColorScalerValue(const float *value);
+igPsx2VisualContext	void setColorClampState(int state);
+igPsx2VisualContext	void setAlphaBlendingControl(int state);
+igPsx2VisualContext	void setAlphaBlendingCorrection(int state);
+igPsx2VisualContext	void setDitherMatrix(long long matrix);
+igPsx2VisualContext	void initializeTextures();
+igPsx2VisualContext	void uninitializeTextures(int keepLists);
+igPsx2VisualContext	void createFrameBufferTextures();
+igPsx2VisualContext	void freeFrameBufferTextures(int keepTextures);
+igPsx2VisualContext	void loadTextureBuffers(igPsx2TextureRecord *record);
+igPsx2VisualContext	void resetTextureStages();
+igPsx2VisualContext	void setTextureFuncAndColorComponent(int function, unsigned char colorComponent);
+igPsx2VisualContext	void setTextureStageFuncAndColorComponent(int stage, int function, unsigned char colorComponent);
+igPsx2VisualContext	int getSharedClut(int format, int *p2Format);
+igPsx2VisualContext	bool readRenderDestination(int handle, igImage *image, int x, int y, int width, int height, int flags);
+igPsx2VisualContext	void initializeCluts();
+igPsx2VisualContext	void uninitializeCluts(int keepPool);
+igPsx2VisualContext	void deleteClut(int handle);
+igPsx2VisualContext	int createClut(int entryCount, int layout);
+igPsx2VisualContext	void copyClutPalette(int layout, int *palette, int *colors);
+igPsx2VisualContext	void setClut(int handle, igClut *clut);
+igPsx2VisualContext	bool uploadClut(int handle);
+igPsx2VisualContext	void freeClutImage(int handle);
+igPsx2VisualContext	void resetStatisticCaptures();
+igPsx2VisualContext	void releaseStatisticCaptures(int keepStorage);
+igPsx2VisualContext	void printStatisticCapture(StatisticsCapture *capture);
+igPsx2VisualContext	void loadStatisticCaptures();
+igView	IG_ABSTRACT_OBJECT_DEFINE(igView)
+igView	protected: static igMetaField *k_model;
+igView	public: inline igModel *getModel() const { return _model; }
+igView	void setModel(igModel *model);
+igView	virtual bool isCompatible(igModel *model) = 0;
+igView	protected: virtual void notify(const igNotifyEvent &event) = 0;
+igView	virtual void userDestruct();
+igView	friend class igModel;
+igModel	IG_OBJECT_DEFINE(igModel)
+igModel	private: static igMetaField *k_views;
+igModel	void appendView(igView *view);
+igModel	void removeView(igView *view);
+igModel	protected: virtual void userDestruct();
+igModel	public: void notifyAllViews(const igNotifyEvent &event);
+igModel	friend class igView;
+igViewList	IG_OBJECT_DEFINE(igViewList)
+igNonRefCountedViewList	IG_OBJECT_DEFINE(igNonRefCountedViewList)
+igSkeletonBoneInfo	IG_OBJECT_DEFINE(igSkeletonBoneInfo)
+igSkeletonBoneInfo	public: static igMetaField *k_parentIdx;
+igSkeletonBoneInfo	static igMetaField *k_bmIdx;
+igSkeletonBoneInfo	static igMetaField *k_flags;
+igSkeletonBoneInfo	inline int getBmIdx() const { return _bmIdx; }
+igSkeletonBoneInfo	inline int getFlags() const { return _flags; }
+igSkeletonBoneInfoList	IG_OBJECT_DEFINE(igSkeletonBoneInfoList)

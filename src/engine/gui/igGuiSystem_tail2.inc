@@ -59,7 +59,6 @@ void FUN_004570a0(void *arg0) {
 }
 
 int igGuiSystem_MouseMotionEvent(A_457100 *arg0, float fparg0, float fparg1) {
-    struct { int a; int b; int c; } s;
     B_457100 *temp_v1;
 
     temp_v1 = arg0->fc;
@@ -68,38 +67,29 @@ int igGuiSystem_MouseMotionEvent(A_457100 *arg0, float fparg0, float fparg1) {
     }
     temp_v1->f14 = fparg0;
     temp_v1->f18 = fparg1;
-    s.a = 2;
-    s.b = 0;
-    s.c = (int)g_igGuiSystemModel_mousePositionMetaField;
-    igModel_NotifyViews((igModel *)arg0->fc, (ModelChange *)&s);
+    igNotifyEvent s((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
+    ((Gap::Gui::igModel *)arg0->fc)->notifyAllViews(s);
     return arg0->fc->fb0 != 0;
 }
 
 int igGuiSystem_WindowResizeEvent(int *self, int x, int y) {
-    struct P_457170 p;
     float *f = (float *)self[3];
     f[3] = (float)x;
     f[4] = (float)y;
-    p.a = 2;
-    p.b = 0;
-    p.c = (int)g_igGuiSystemModel_windowSizeMetaField;
-    igModel_NotifyViews((igModel *)((void *)self[3]), (ModelChange *)&p);
+    igNotifyEvent p((Gap::Core::igMetaField *)g_igGuiSystemModel_windowSizeMetaField);
+    ((Gap::Gui::igModel *)((void *)self[3]))->notifyAllViews(p);
     return 0;
 }
 
 int igGuiSystem_WindowCloseEvent(igGuiSystem *arg0) {
-    int buf[3];
 
     *(char *)((char *)(arg0->_model) + 180) = 1;
-    buf[0] = 2;
-    buf[1] = 0;
-    buf[2] = (int)g_igGuiSystemModel_windowCloseRequestedMetaField;
-    igModel_NotifyViews((igModel *)arg0->_model, (ModelChange *)buf);
+    igNotifyEvent buf((Gap::Core::igMetaField *)g_igGuiSystemModel_windowCloseRequestedMetaField);
+    ((Gap::Gui::igModel *)arg0->_model)->notifyAllViews(buf);
     return 1;
 }
 
 int igGuiSystem_MouseButtonEvent(struct P_457220 *arg0, int arg1, char arg2) {
-    int sp[3];
     struct O_457220 *o;
 
     o = arg0->o;
@@ -110,10 +100,8 @@ int igGuiSystem_MouseButtonEvent(struct P_457220 *arg0, int arg1, char arg2) {
         return 0;
     }
     o->f1c = arg2;
-    sp[0] = 2;
-    sp[1] = 0;
-    sp[2] = (int)g_igGuiSystemModel_mousePressedMetaField;
-    igModel_NotifyViews((igModel *)arg0->o, (ModelChange *)&sp[0]);
+    igNotifyEvent sp((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePressedMetaField);
+    ((Gap::Gui::igModel *)arg0->o)->notifyAllViews(sp);
     return arg0->o->fac != 0;
 }
 

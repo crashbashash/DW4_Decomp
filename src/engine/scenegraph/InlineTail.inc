@@ -786,14 +786,6 @@ igMetaObject *igShaderFactoryList_GetMeta(void) {
     return g_igShaderFactoryList_metaObject;
 }
 
-igMetaObject *igSkeletonBoneInfo_GetMeta(void) {
-    return g_igSkeletonBoneInfo_metaObject;
-}
-
-igMetaObject *igSkeletonBoneInfoList_GetMeta(void) {
-    return g_igSkeletonBoneInfoList_metaObject;
-}
-
 igMetaObject *igSkeletonList_GetMeta(void) {
     return g_igSkeletonList_metaObject;
 }
@@ -963,10 +955,6 @@ igMetaObject *igShaderFactoryList_GetElementMeta(void) {
 
 igMetaObject *igSkeletonList_GetElementMeta(void) {
     return g_igSkeleton_metaObject;
-}
-
-igMetaObject *igSkeletonBoneInfoList_GetElementMeta(void) {
-    return g_igSkeletonBoneInfo_metaObject;
 }
 
 igMetaObject *igAnimationModifierList_GetElementMeta(void) {

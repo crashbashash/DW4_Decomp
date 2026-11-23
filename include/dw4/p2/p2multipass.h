@@ -14,6 +14,9 @@ int p2GetPassCombineMode(void);
 void p2GetPassMasks(int pass, unsigned int *frameMask, unsigned int *zbufMask);
 void p2SetPassCount(int passes);
 void p2UploadTex0Context2(void);
+int p2StagesTextured(int all, unsigned int textured, int uncombined);
+int p2StagesUseVertexColour(int all);
+int p2StagesUseOddCombineMode(int first);
 
 #ifdef __cplusplus
 }

@@ -29,9 +29,6 @@ void beCameraMode_OnDetach(beCameraMode *self) {
 }
 
 void beCameraMode_OnAttach(beCameraMode *self) {
-    int hfovChanged[4];
-    int farChanged[4];
-    int nearChanged[4];
     float farPlane;
     float nearPlane;
     igCamera *camera;
@@ -44,21 +41,15 @@ void beCameraMode_OnAttach(beCameraMode *self) {
         farPlane = camera->_farPlane;
         nearPlane = camera->_nearPlane;
         model->_hfov = camera->_horizontalFieldOfView;
-        hfovChanged[0] = 2;
-        hfovChanged[1] = 0;
-        hfovChanged[2] = (int)g_igViewModel_hfovMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)hfovChanged);
+        igNotifyEvent hfovChanged((Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(hfovChanged);
         model->_farPlane = farPlane;
-        farChanged[0] = 2;
-        farChanged[1] = 0;
-        farChanged[2] = (int)g_igViewModel_farPlaneMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)farChanged);
+        igNotifyEvent farChanged((Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(farChanged);
         nearPlane = (nearPlane == 0.0f) ? farPlane / 1000.0f : nearPlane;
         model->_nearPlane = nearPlane;
-        nearChanged[0] = 2;
-        nearChanged[1] = 0;
-        nearChanged[2] = (int)g_igViewModel_nearPlaneMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)nearChanged);
+        igNotifyEvent nearChanged((Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(nearChanged);
     }
 }
 
@@ -66,7 +57,6 @@ void beCameraMode_Update(beCameraMode *self) {
     float a, b, c;
     CameraVector4 translation;
     CameraMatrix matrix;
-    int changed[4];
     igViewModel *model;
     if (self->_camera != 0) {
         if (self->_isFreeze) {
@@ -94,10 +84,8 @@ void beCameraMode_Update(beCameraMode *self) {
         igMatrix44f_MakeEulerRotation(&matrix, a, b, c);
         igMatrix44f_SetTranslation(matrix.m, translation.v);
         igMatrix44f_InvertOrthonormal(model->_viewMatrix, matrix.m);
-        changed[0] = 2;
-        changed[1] = 0;
-        changed[2] = (int)g_igViewModel_viewMatrixMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)changed);
+        igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
 }
 

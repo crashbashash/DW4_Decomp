@@ -196,3 +196,9 @@ igResource	Core
 igVisualContext	Gfx
 igIGBFile	Core
 igPsx2VisualContext	Gfx
+igView	Gui
+igModel	Gui
+igViewList	Gui	igTObjectList<igView>
+igNonRefCountedViewList	Gui	igTNonRefCountedObjectList<igView>
+igSkeletonBoneInfo	Sg
+igSkeletonBoneInfoList	Sg	igTObjectList<igSkeletonBoneInfo>

@@ -84,8 +84,8 @@ CallbackArray *igMousePosObserver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMousePosObserver_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         thunk_igMousePosObserver_GetMetaObject,
         "igMousePosObserver",
         0x64, /* instance size */

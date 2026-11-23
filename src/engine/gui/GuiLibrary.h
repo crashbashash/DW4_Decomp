@@ -57,31 +57,10 @@ extern "C" int DAT_0058c618[4];
 extern "C" unsigned char g_GuiLibrary_registered;
 extern "C" void GuiLibrary_MarkRegistered(void);
 #include "dw4/core/igMemoryPoolContext.h"
-extern "C" igMetaObject *g_igNonRefCountedViewList_metaObject;
-extern "C" igMetaObject *igNonRefCountedViewList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igNonRefCountedViewList_GetMetaObject(void);
 struct Obj { int *vt; char pad[28]; };
 #include "dw4/core/igObject.h"
-extern "C" int g_igNonRefCountedViewList_vtable[4];
 #include "dw4/core/igObjectSystem.h"
-extern "C" int igNonRefCountedViewList_GetVTable(void);
-extern "C" void igNonRefCountedViewList_EnsureRegistered(void);
-extern "C" CallbackArray *igNonRefCountedViewList_Register(void);
-extern "C" void igNonRefCountedViewList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *g_igViewList_metaObject;
-extern "C" igMetaObject *igViewList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igViewList_GetMetaObject(void);
-extern "C" int g_igViewList_vtable[4];
-extern "C" int igViewList_GetVTable(void);
-extern "C" void igViewList_EnsureRegistered(void);
 #include "dw4/core/igObjectList.h"
-extern "C" CallbackArray *igViewList_Register(void);
-extern "C" void igViewList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *g_igView_metaObject;
-extern "C" igMetaObject *igView_GetMetaObject(void);
-extern "C" void igView_EnsureRegistered(void);
-extern "C" void igView_GetMetaObjectFunction(void);
-extern "C" void igView_InitFields(void);
 extern "C" igMetaObject *g_igTextElement_metaObject;
 extern "C" igMetaObject *igTextElement_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igTextElement_GetMetaObject(void);
@@ -131,7 +110,6 @@ extern "C" int igOnOffValueObserver_GetVTable(void);
 extern "C" void igOnOffValueObserver_EnsureRegistered(void);
 extern "C" CallbackArray *igOnOffValueObserver_Register(void);
 extern "C" void igOnOffValueObserver_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igView_GetPublishedMetaObject(void);
 extern "C" void igOnOffValueObserver_InitFields(void);
 extern "C" igMetaObject *g_igRadioGroupSelectedObserver_metaObject;
 extern "C" igMetaObject *igRadioGroupSelectedObserver_GetOrCreateMetaObject(void);
@@ -161,8 +139,6 @@ extern "C" int igRadioGroupModel_GetVTable(void);
 extern "C" void igRadioGroupModel_RunStaticInit(void);
 extern "C" CallbackArray *igRadioGroupModel_Register(void);
 extern "C" void thunk_igRadioGroupModel_GetMetaObject(void);
-extern "C" igMetaObject *g_igModel_metaObject;
-extern "C" igMetaObject *igModel_GetPublishedMetaObject(void);
 extern "C" void igRadioGroupModel_InitFields(void);
 extern "C" igMetaObject *g_igOnOffModel_metaObject;
 extern "C" int g_igOnOffModel_vtable[4];
@@ -173,13 +149,7 @@ extern "C" igMetaObject *igGuiComponentModel_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igOnOffModel_Register(void);
 extern "C" void thunk_igOnOffModel_GetMetaObject(void);
 extern "C" void igOnOffModel_InitFields(void);
-extern "C" igMetaObject *igModel_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igModel_GetMetaObject(void);
 struct Obj_44d670 { int *vt; char pad[4]; char *m; char pad2[4]; };
-extern "C" int igModel_GetVTable(void);
-extern "C" void igModel_RunStaticInit(void);
-extern "C" void thunk_igModel_GetMetaObject(void);
-extern "C" void igModel_InitFields(void);
 extern "C" igMetaObject *g_igHotKeyEventReceiver_metaObject;
 extern "C" igMetaObject *igHotKeyEventReceiver_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igHotKeyEventReceiver_GetMetaObject(void);
@@ -1001,30 +971,6 @@ class VC_457650 { public: virtual void d0(); virtual void d1(); virtual void d2(
 struct E_457650 { char pad12[12]; int f0c; VC_457650 *f10; };
 struct B_457650 { char pad8[8]; int cnt; char pad2[4]; E_457650 **arr; };
 extern "C" int igHotKeyEventReceiver_ControllerButtonEvent(igHotKeyEventReceiver *self, int arg1, int arg2, int arg3);
-class ContextHandler { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(int *out); };
-extern "C" void FUN_004576d0(igContext *context, ContextHandler *handler);
-class OV { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(void *); };
-struct K_4577f0 { void *p; K_4577f0(void *x) { p = x; } ~K_4577f0() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
-struct Flags { int a; int b; int c; int d[4]; };
-struct Finder_4577f0 {
-    static int Find(igObjectList *l, K_4577f0 &key) {
-        int n = l->_count;
-        void *p = *(void **)&key.p;
-        int i = 0;
-        for (; i < n; i++) {
-            if (p == ((void **)l->_data)[i]) {
-                return i;
-            }
-        }
-        return -1;
-    }
-};
-extern "C" void FUN_004577f0(igModel *arg0, OV *arg1);
-/* A model's view: virtual slot 22 receives each change of the model. */
-class ModelViewDispatch { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void onModelChange(ModelChange *change); };
-struct L_457950 { char pad[8]; int n; int pad2; int *arr; };
-struct O_457950 { char pad[8]; struct L_457950 *l; };
-extern "C" void igModel_userDestruct(struct O_457950 *arg0);
 extern "C" void igRadioGroup_resetFields(igRadioGroup *self, int flags);
 struct RadioButtonListView { char p[8]; int n; char q[4]; int *arr; };
 struct RadioSelectionView { char p[12]; int sel; };
@@ -1056,14 +1002,12 @@ struct Q_457e10 { char p0[12]; int count; };
 struct M_457e10 { char p0[12]; V168 *obj; };
 struct O_457e10 { char p0[24]; char buf[1]; char p1[23]; M_457e10 *m; };
 extern "C" void Gap__Gui__igTextElement__vfunc_24(O_457e10 *arg0);
-extern "C" void igView_userDestruct(beCameraMode *self);
 extern "C" int igTextElement_GetMeta(void);
 extern "C" igMetaObject *igOnOffValueObserver_GetMeta(void);
 extern "C" void igOnOffValueObserver_IsCompatible(void *arg0, int arg1);
 extern "C" igMetaObject *igRadioGroupSelectedObserver_GetMeta(void);
 extern "C" void igRadioGroupSelectedObserver_IsCompatible(void *arg0, int arg1);
 extern "C" igMetaObject *igRadioGroup_GetMeta(void);
-extern "C" igMetaObject *igModel_GetMeta(void);
 extern "C" igMetaObject *igHotKeyEventReceiver_GetMeta(void);
 extern "C" igMetaObject *igGuiSystem_GetMeta(void);
 extern "C" igMetaObject *igGuiSystemRenderer_GetMeta(void);
@@ -1105,16 +1049,12 @@ extern "C" igMetaObject *igOnOffValueObserverList_GetMeta(void);
 extern "C" igMetaObject *igRendererOrderedList_GetMeta(void);
 extern "C" int igGuiComponentModel_GetMeta(void);
 extern "C" int FUN_00458310(void);
-extern "C" int igViewList_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedViewList_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedViewList_GetElementMeta(void);
 extern "C" int igCharMetricsList_GetElementSize(void);
 extern "C" igMetaObject *igDefaultAspectElementList_GetElementMeta(void);
 extern "C" int igFieldChangeViewList_GetElementMeta(void);
 extern "C" igMetaObject *igHotKeyBindingList_GetElementMeta(void);
 extern "C" igMetaObject *igOnOffValueObserverList_GetElementMeta(void);
 extern "C" igMetaObject *igGuiComponentList_GetElementMeta(void);
-extern "C" int igViewList_GetElementMeta(void);
 extern "C" void igCharMetricsList_TrimCapacity(igCharMetricsList *self);
 extern "C" void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerItem_453990 *item);
 extern "C" void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessage_455d80 *msg);

@@ -50,8 +50,8 @@ CallbackArray *igRadioGroupModel_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRadioGroupModel_metaObject,
-        igModel_Register,
-        igModel_GetPublishedMetaObject,
+        Gap::Gui::igModel::arkRegisterInternal,
+        Gap::Gui::igModel::getClassMeta,
         thunk_igRadioGroupModel_GetMetaObject,
         "igRadioGroupModel",
         0x10, /* instance size */
@@ -64,10 +64,6 @@ CallbackArray *igRadioGroupModel_Register(void) {
 
 void thunk_igRadioGroupModel_GetMetaObject(void) {
     igRadioGroupModel_GetMetaObject();
-}
-
-igMetaObject *igModel_GetPublishedMetaObject(void) {
-    return g_igModel_metaObject;
 }
 
 static FieldFactory g_igRadioGroupModel_ctorTable[] = {

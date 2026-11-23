@@ -1,94 +1,71 @@
-igMetaObject *g_igModel_metaObject;
-igMetaField *g_igModel_viewsMetaField;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igModel_GetOrCreateMetaObject(void) {
-    if (g_igModel_metaObject == 0) {
-        g_igModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igModel_metaObject;
-}
+igMetaObject *igModel::_Meta;
+igMetaField *igModel::k_views;
 
-igMetaObject *igModel_GetMetaObject(void)
+igMetaObject *igModel::getClassTypeLazy()
 {
-    igMetaObject *g = g_igModel_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igModel_RunStaticInit();
-    return g_igModel_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igModel_GetVTable(void) {
-    struct Obj_44d670 obj;
-    char *o;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igModel_vtable[0];
-    obj.m = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igModel_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-    }
-    return t;
-}
-
-void igModel_RunStaticInit(void)
+igMetaObject *igModel::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igModel_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igModel_callbackList[] = { igNonRefCountedViewList_EnsureRegistered, 0 };
+void *igModel::retrieveVTablePointer()
+{
+    igModel temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igModel_Register(void) {
+void igModel::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igModel::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igNonRefCountedViewList::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igModel_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        thunk_igModel_GetMetaObject,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igModel",
-        0xC, /* instance size */
-        igModel_GetVTable,
-        &igModel_InitFields,
-        0, /* extra callback item */
-        g_igModel_callbackList /* callback list */
+        sizeof(igModel),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void thunk_igModel_GetMetaObject(void) {
-    igModel_GetMetaObject();
+void igModel::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_views" };
+    static igMetaField **enumStorage[] = { &k_views };
+    static int offsets[] = { 8 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Gui::igNonRefCountedViewList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igModel_ctorTable[] = {
-    igObjectRefMetaField_Create,
-};
-static const char *g_igModel_fieldTable[] = {
-    "_views",
-};
-static igMetaField **g_igModel_fieldHandles[] = {
-    &g_igModel_viewsMetaField,
-};
-static int g_igModel_fieldOffsets[] = {
-    8,
-};
-
-void igModel_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igModel_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igModel_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNonRefCountedViewList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igModel_fieldTable, g_igModel_fieldHandles, g_igModel_fieldOffsets, temp_s2);
+}
 }
 

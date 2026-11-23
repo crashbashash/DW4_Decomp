@@ -30,8 +30,8 @@ CallbackArray *igGuiComponentAspect_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igGuiComponentAspect_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igGuiComponentAspect_GetMetaObjectFunction,
         "igGuiComponentAspect",
         0x28, /* instance size */

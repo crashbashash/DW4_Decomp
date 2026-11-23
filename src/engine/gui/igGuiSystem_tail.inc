@@ -11,16 +11,16 @@ void igGuiSystem_resetFields(A_456780 *self, int flags) {
     int allocator = (int)(((Gap::Core::igObject *)self)->getMemoryPool());
     first.release();
     first.p = (R_456780 *)igWindowSizeObserver_Create(allocator);
-    igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
+    ((Gap::Gui::igView *)(first.get()))->setModel((Gap::Gui::igModel *)self->f12);
     ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(first.get()));
     igSmartPointer<R_456780> second((R_456780 *)igMousePosObserver_Create((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
     second.get()->wc = (int)self;
-    igView_SetModel((igView *)(second.get()), (igModel *)self->f12);
+    ((Gap::Gui::igView *)(second.get()))->setModel((Gap::Gui::igModel *)self->f12);
     ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(second.get()));
     allocator = (int)(((Gap::Core::igObject *)self)->getMemoryPool());
     first.release();
     first.p = (R_456780 *)igActiveComponentsObserver_Create(allocator);
-    igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
+    ((Gap::Gui::igView *)(first.get()))->setModel((Gap::Gui::igModel *)self->f12);
     ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(first.get()));
     igGroup_AppendChild((igGroup *)self->f20, (igNode *)self->f28);
     R_456780 *value = self->f20;
@@ -54,7 +54,6 @@ void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, bool visible) {
 void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
     A_456a60 *arg0 = (A_456a60 *)gui;
     R_456a60 *arg1 = (R_456a60 *)cursor;
-    V3 sp30;
     int var_v0;
     Rc_456a60 *temp_a0;
     P_456a60 *temp_a1;
@@ -85,10 +84,8 @@ void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
         igGroup_AppendChild((igGroup *)arg0->f28, (igNode *)arg1->f8->f8);
     }
     igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
-    sp30.a = 2;
-    sp30.b = 0;
-    sp30.c = (int)g_igGuiSystemModel_mousePositionMetaField;
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)&sp30);
+    igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
+    ((Gap::Gui::igModel *)arg0->f12)->notifyAllViews(sp30);
 }
 
 void FUN_00456b80(int *arg0, float *arg1) {
@@ -113,22 +110,19 @@ void FUN_00456b80(int *arg0, float *arg1) {
 }
 
 void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
-    int sp30[3];
     igGuiComponent *o;
     igObject::ref(arg1);
     o = (igGuiComponent *)arg0->_focusedComponent;
     igObject::release(o);
     arg0->_focusedComponent = (int)arg1;
-    sp30[0] = 2;
-    sp30[1] = 0;
-    sp30[2] = (int)g_igGuiSystemModel_focusedComponentMetaField;
-    igModel_NotifyViews((igModel *)arg0, (ModelChange *)sp30);
+    igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiSystemModel_focusedComponentMetaField);
+    ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp30);
 }
 
 void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
     W *arg0 = (W *)gui;
     T_456cc0 *arg1 = (T_456cc0 *)root;
-    int sp40[4]; T_456cc0 **p; T_456cc0 *old; int v; LL *l;
+    T_456cc0 **p; T_456cc0 *old; int v; LL *l;
     if (arg0->f12->f164 != 0) { arg0->f12->f164->f8 = 0; }
     p = &arg0->f12->f164;
     if (arg1 != 0) { arg1->references = arg1->references + 1; }
@@ -138,10 +132,8 @@ void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
         if (((unsigned long long)(long long)old->references & 0x7fffffULL) == 0) { igObject_Destroy((igObject *)old); }
     }
     *p = arg1;
-    sp40[0] = 2;
-    sp40[1] = 0;
-    sp40[2] = (int)g_igGuiSystemModel_rootComponentMetaField;
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp40);
+    igNotifyEvent sp40((Gap::Core::igMetaField *)g_igGuiSystemModel_rootComponentMetaField);
+    ((Gap::Gui::igModel *)arg0->f12)->notifyAllViews(sp40);
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
     if (v > 1) {

@@ -332,7 +332,7 @@ void igPsx2VisualContext::endDraw() {
         if (n->active != 0 && n->startCapture == -n->frameCount) {
             p2GetStatistics(&n->end);
             n->f936 = _timer->getTimeAsLong();
-            FUN_00178970((::igPsx2VisualContext *)this, n);
+            printStatisticCapture(n);
             n->active = 0;
         }
         n = n->next;

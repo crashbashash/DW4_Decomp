@@ -5,6 +5,17 @@
 extern "C" {
 #endif
 
+/* p2CurrentPrimitive */
+enum p2Primitive {
+    P2_PRIM_POINT,
+    P2_PRIM_LINE,
+    P2_PRIM_LINE_STRIP,
+    P2_PRIM_TRIANGLE,
+    P2_PRIM_TRIANGLE_STRIP,
+    P2_PRIM_TRIANGLE_FAN,
+    P2_PRIM_SPRITE,
+    P2_PRIM_TRIANGLE_STRIPS /* a list of triangle strips */
+};
 extern int p2CurrentPrimitive;
 extern int p2VertexFormat;
 extern int p2DrawPipeline;

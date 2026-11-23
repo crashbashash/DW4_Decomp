@@ -13286,6 +13286,8 @@
 005275e0	244	.vtables	001869e0	match
 005276e0	244	.vtables	001869e0	match
 0052a3a0	96	.vtables	002b5d50	match
+0052b270	92	.vtables	00194380	match
+0052b2d0	100	.vtables	00194380	match
 0052b630	96	.vtables	002b5d50	match
 0052ca80	108	.vtables	00230f50	match
 0052d060	108	.vtables	00230f50	match
@@ -13384,6 +13386,9 @@
 00539ef0	16	.vtables	00370780	match
 00539f00	16	.vtables	00370780	match
 00540c80	108	.vtables	0044b860	match
+00540e30	92	.vtables	0044b860	match
+00541f00	100	.vtables	0044b860	match
+00541f70	100	.vtables	0044b860	match
 00554990	1	.sdata	002590c0	match
 00554994	1	.sdata	002b5d50	match
 00554998	1	.sdata	002b5d50	match

@@ -77,8 +77,8 @@ CallbackArray *igActiveComponentsObserver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActiveComponentsObserver_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         thunk_igActiveComponentsObserver_GetMetaObject,
         "igActiveComponentsObserver",
         0x18, /* instance size */

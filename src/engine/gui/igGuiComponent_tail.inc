@@ -9,10 +9,10 @@ void FUN_00455470(A_455470 *arg0) {
     if (arg0->f20 != 0) {
         temp_a0 = arg0->f14;
         if (temp_a0 != 0) {
-            igView_SetModel((igView *)temp_a0, 0);
+            ((Gap::Gui::igView *)temp_a0)->setModel(0);
             arg0->f14->f0c = 0;
         }
-        igView_SetModel((igView *)arg0->f0c, 0);
+        ((Gap::Gui::igView *)arg0->f0c)->setModel(0);
         arg0->f10->f20 = 0;
         arg0->f20 = 0;
     }

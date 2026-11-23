@@ -1,53 +1,52 @@
-igMetaObject *g_igViewList_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igViewList_GetOrCreateMetaObject(void) {
-    if (g_igViewList_metaObject == 0) {
-        g_igViewList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igViewList_metaObject;
-}
+igMetaObject *igViewList::_Meta;
 
-igMetaObject *igViewList_GetMetaObject(void)
+igMetaObject *igViewList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igViewList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igViewList_EnsureRegistered();
-    return g_igViewList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igViewList_GetVTable(void) {
-    struct Obj obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igViewList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igViewList_EnsureRegistered(void)
+igMetaObject *igViewList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igViewList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igViewList_callbackList[] = { igView_EnsureRegistered, 0 };
+void *igViewList::retrieveVTablePointer()
+{
+    igViewList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igViewList_Register(void) {
+void igViewList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igView::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igViewList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewList",
-        0x14, /* instance size */
-        igViewList_GetVTable,
+        sizeof(igViewList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igViewList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igViewList_GetMetaObjectFunction(void) {
-    igViewList_GetMetaObject();
+}
 }
 

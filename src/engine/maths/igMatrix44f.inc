@@ -308,6 +308,68 @@ void igMatrix44f_SetEulerRotation(float *m, float x, float y, float z) {
     m[10] = cx * cy;
 }
 
+/* dst += scale * src, the scaled term written first.
+ * matching construct: operand order — `dst += scale * src` (igVec3f::addScaled) swaps the two temporaries' registers */
+static inline void addScaledRow(igVec3f &dst, float scale, const igVec3f &src) {
+    dst.vec[0] = scale * src.vec[0] + dst.vec[0];
+    dst.vec[1] = scale * src.vec[1] + dst.vec[1];
+    dst.vec[2] = scale * src.vec[2] + dst.vec[2];
+}
+
+/* Recovers the Euler angles of the matrix's rotation: the rows are scaled by 1/w, Gram-Schmidt
+ * orthonormalised, and flipped when the basis is left-handed (igMatrix44f::getEulerAngles). The
+ * pitch is the arcsine of the clamped third element; gimbal lock (cos pitch == 0) takes the roll
+ * from the second row and leaves the yaw at zero. */
+void igMatrix44f_GetEulerAngles(const float *m, float *x, float *y, float *z) {
+    igVec3f cross;
+    igVec3f r0;
+    igVec3f r1;
+    igVec3f r2;
+    float s;
+    float f;
+    r0.set(&m[0]);
+    r1.set(&m[4]);
+    r2.set(&m[8]);
+    if (m[15] != 1.0f) {
+        s = 1.0f / m[15];
+        r0.scale(s);
+        r1.scale(s);
+        r2.scale(s);
+    }
+    r0.normalize();
+    f = -r0.dot(r1);
+    addScaledRow(r1, f, r0);
+    r1.normalize();
+    f = -r0.dot(r2);
+    addScaledRow(r2, f, r0);
+    f = -r1.dot(r2);
+    addScaledRow(r2, f, r1);
+    r2.normalize();
+    FUN_00192dd0(cross.vec, r1.vec, r2.vec);
+    if (r0.dot(cross) < 0.0f) {
+        r0[0] = -r0[0];
+        r0[1] = -r0[1];
+        r0[2] = -r0[2];
+        r1[0] = -r1[0];
+        r1[1] = -r1[1];
+        r1[2] = -r1[2];
+        r2[0] = -r2[0];
+        r2[1] = -r2[1];
+        r2[2] = -r2[2];
+    }
+    f = -r0[2];
+    /* matching construct: the kit clamps with conditional macros, so the inner max is written twice (MIN(MAX(f, -1), 1)) */
+    f = ((f > -1.0f) ? f : -1.0f) < 1.0f ? ((f > -1.0f) ? f : -1.0f) : 1.0f;
+    *y = asinf(f);
+    if (cosf(*y) != 0.0f) {
+        *x = atan2f(r1[2], r2[2]);
+        *z = atan2f(r0[1], r0[0]);
+    } else {
+        *x = atan2f(r1[0], r1[1]);
+        *z = 0.0f;
+    }
+}
+
 void igMatrix44f_PreRotateAxisAngle(float *matrix, const float *axis, float angle) {
     float rotation[16];
 
@@ -409,6 +471,50 @@ void igMatrix44f_MakePerspective(float *matrix, float a, float b, float c, float
     t23 = d * -tanf(0.5f * a);
     t14 = d * -tanf(0.5f * b);
     FUN_00191910(matrix, t23, -t23, t14, -t14, d, e);
+}
+
+/* Scales the axis to unit length (igVec3f::normalize) unless it is shorter than the smallest normal float. */
+static inline void normalizeAxis(igVec3f &axis) {
+    float lengthSquared = axis.length2();
+    float length;
+    if (1.17549435e-38f < lengthSquared) {
+        length = sqrtf(lengthSquared);
+        axis.scale(1.0f / length);
+    }
+}
+
+/* The view matrix looking from `eye` at `point`: the rows of the rotation are the camera's x, y and
+ * z axes (z points from the point back to the eye), and the last row holds the eye rotated by them
+ * (igMatrix44f::makeLookAt). An axis shorter than the smallest normal float is left as it is. */
+void igMatrix44f_MakeLookAt(float *m, const float *eye, const float *point, const float *up) {
+    igVec3f z;
+    igVec3f upAxis;
+    igVec3f x;
+    igVec3f y;
+    const igVec3f &e = *(const igVec3f *)eye;
+    z.subtract(e, *(const igVec3f *)point);
+    normalizeAxis(z);
+    upAxis.set(up);
+    normalizeAxis(upAxis);
+    FUN_00192dd0(x.vec, upAxis.vec, z.vec);
+    normalizeAxis(x);
+    FUN_00192dd0(y.vec, z.vec, x.vec);
+    m[0] = x[0];
+    m[1] = y[0];
+    m[2] = z[0];
+    m[3] = 0.0f;
+    m[4] = x[1];
+    m[5] = y[1];
+    m[6] = z[1];
+    m[7] = 0.0f;
+    m[8] = x[2];
+    m[9] = y[2];
+    m[10] = z[2];
+    m[11] = 0.0f;
+    m[12] = -(m[0] * e[0] + m[4] * e[1] + m[8] * e[2]);
+    m[13] = -(m[1] * e[0] + m[5] * e[1] + m[9] * e[2]);
+    m[14] = -(m[2] * e[0] + m[6] * e[1] + m[10] * e[2]);
+    m[15] = 1.0f - (m[3] * e[0] + m[7] * e[1] + m[11] * e[2]);
 }
 
 igResult igMatrix44f_InvertOrthonormal(float *o, const float *m) {

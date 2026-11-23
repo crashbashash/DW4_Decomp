@@ -49,7 +49,6 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
         igMatrix44f_Invert(self->_inverseProjectionMatrix, model->_projectionMatrix);
     } else if (type == (int)g_igGuiSystemModel_mousePressedMetaField) {
         igObject *under;
-        int m[4];
         under = (igObject *)model->_componentUnderMouse;
         if ((igObject *)model->_focusedComponent != under) {
             FUN_00456c20(model, (igGuiComponent *)under);
@@ -62,10 +61,8 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
             igObject::release((igObject *)model->_pushedComponent);
             model->_pushedComponent = 0;
         }
-        m[0] = 2;
-        m[1] = 0;
-        m[2] = (int)g_igGuiSystemModel_pushedComponentMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)m);
+        igNotifyEvent m((Gap::Core::igMetaField *)g_igGuiSystemModel_pushedComponentMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(m);
     } else if (msg->handled == 0) {
         igMatrix44f_Invert(self->_inverseProjectionMatrix, model->_projectionMatrix);
     }
@@ -94,7 +91,6 @@ void FUN_00455f50(Z *arg0, Y *arg1) {
 void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     float v2[3];
     float v1[3];
-    int sp[3];
     igObject *s0 = 0;
     if (b->_rootComponent != 0) {
         float x, y;
@@ -124,9 +120,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
         igObject::release(t);
     }
     b->_componentUnderMouse = (int)s0;
-    sp[0] = 2;
-    sp[1] = (int)a;
-    sp[2] = (int)g_igGuiSystemModel_componentUnderMouseMetaField;
-    igModel_NotifyViews((igModel *)b, (ModelChange *)sp);
+    igNotifyEvent sp((Gap::Core::igMetaField *)g_igGuiSystemModel_componentUnderMouseMetaField, (Gap::Gui::igView *)(int)a);
+    ((Gap::Gui::igModel *)b)->notifyAllViews(sp);
 }
 

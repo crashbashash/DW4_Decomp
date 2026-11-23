@@ -94,7 +94,7 @@ void igPsx2VisualContext::setRenderDestination(int iHandle, int *piTex, int unus
     int index;
     int format;
     bool create;
-    TexEntry *tex;
+    igPsx2TextureRecord *tex;
     int colorFormat;
     igPsx2RenderDestination *buf;
     buf = &((igPsx2RenderDestinationPool *)_pBufList)->elements[iHandle];
@@ -104,7 +104,7 @@ void igPsx2VisualContext::setRenderDestination(int iHandle, int *piTex, int unus
     if (index == -1) {
         create = true;
     } else {
-        tex = &((TexList *)_pTexList)->data[index];
+        tex = &((igPsx2TexturePool *)_pTexList)->elements[index];
         if (*tex->buffers == 0) {
             create = true;
         }
@@ -135,7 +135,7 @@ void igPsx2VisualContext::setRenderDestination(int iHandle, int *piTex, int unus
         if (index == -1) {
             *piTex = allocateTexture(buf->width, buf->height, format, 3, 0, 1);
             buf->textureHandle = *piTex;
-            tex = &((TexList *)_pTexList)->data[*piTex];
+            tex = &((igPsx2TexturePool *)_pTexList)->elements[*piTex];
         }
         if (buf->colorTarget != 0) {
             unloadTexture(buf->textureHandle);
@@ -226,13 +226,13 @@ void igPsx2VisualContext::clearRenderDestination(unsigned int which) {
 
 bool igPsx2VisualContext::copyRenderDestinationToTexture(int srcHandle, int hTexture, int srcX, int srcY, int width, int height, int destX, int destY) {
     igPsx2RenderDestination *source;
-    TexEntry *texture;
+    igPsx2TextureRecord *texture;
     int filter;
 
     source = &((igPsx2RenderDestinationPool *)_pBufList)->elements[srcHandle];
-    texture = &((TexList *)_pTexList)->data[hTexture];
+    texture = &((igPsx2TexturePool *)_pTexList)->elements[hTexture];
     if (*texture->buffers == 0) {
-        *texture->buffers = (int)p2LoadTexture(0, texture->width, texture->height, FUN_0017a2b0(texture->format), 0);
+        *texture->buffers = (int)p2LoadTexture(0, texture->width, texture->height, igPsx2TextureFormat_GetP2Format(texture->format), 0);
     }
     if ((destX == -1) || (destY == -1)) {
         if (_textureStateFilter != 0) {
@@ -253,53 +253,50 @@ bool igPsx2VisualContext::copyRenderDestinationToTexture(int srcHandle, int hTex
 }
 
 bool igPsx2VisualContext::copyRenderDestinationToMemory(int srcHandle, igImage *destImage, int srcX, int srcY, int width, int height) {
-    return FUN_00169e40((VisualContextTextures *)this, srcHandle, (TextureImage *)destImage, (void *)srcX, srcY, width, height, 0);
-}
-}
+    return readRenderDestination(srcHandle, destImage, srcX, srcY, width, height, 0);
 }
 
+/* Reads the width x height region at (x, y) of render destination `handle` into `image`: into the image's own
+ * memory when it is 16-byte aligned and sized, else through a temporary buffer from the image memory pool. */
 /* matching construct: a small sweep of spellings */
-bool FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, void *source, int sourceFormat, int width, int height, int flags) {
+bool igPsx2VisualContext::readRenderDestination(int handle, igImage *image, int x, int y, int width, int height, int flags) {
     void *pixels;
-    TextureEntry *entry;
-    entry = &self->textures->entries[index];
-    pixels = image->pixels;
+    igPsx2RenderDestination *destination;
+    destination = &((igPsx2RenderDestinationPool *)_pBufList)->elements[handle];
+    pixels = image->_pImage;
     bool allocated = false;
     int format;
-    if (pixels == 0 || image->imageSize < 0 || ((int)pixels & 15) != 0) {
-        pixels = ((BufferAllocator *)((Gap::Gfx::igVisualContext *)self)->getImageMemoryPool())->allocate(width * height * 4, 16);
+    if (pixels == 0 || image->_imageSize < 0 || ((int)pixels & 15) != 0) {
+        pixels = ((igMemoryPoolView *)this->getImageMemoryPool())->AllocateAligned(width * height * 4, 16);
         allocated = true;
     }
-    if (entry->kind == 2) {
-        FUN_00203c50(source, sourceFormat, width, height, entry->layout, pixels, flags);
-        format = self->palettes->entries[entry->palette].format;
+    if (destination->type == 2) {
+        FUN_00203c50(x, y, width, height, destination->colorTarget, pixels, flags);
+        format = ((igPsx2TexturePool *)_pTexList)->elements[destination->textureHandle].format;
     } else {
-        FUN_00203580(source, sourceFormat, width, height, 1, pixels, flags);
-        if (entry->depth == 32) {
+        FUN_00203580(x, y, width, height, 1, pixels, flags);
+        if (destination->colorBitsPerPixel == 32) {
             format = 7;
-        } else if (entry->depth == 24) {
-            if (entry->indexed) {
+        } else if (destination->colorBitsPerPixel == 24) {
+            if (destination->alphaBitsPerPixel) {
                 format = 7;
             } else {
                 format = 5;
             }
-        } else if (entry->depth == 15 || entry->depth == 16) {
+        } else if (destination->colorBitsPerPixel == 15 || destination->colorBitsPerPixel == 16) {
             format = 8;
         } else {
             format = 7;
         }
     }
     if (allocated) {
-        image->setPixels(pixels, format, 100, width, height);
+        image->load(pixels, (IG_GFX_TEXTURE_FORMAT)format, (IG_GFX_IMAGE_ORDER)IG_GFX_IMAGE_ORDER_DEFAULT, width, height);
         Memory_FreeBuffer(pixels);
     } else {
-        ((Gap::Gfx::igImage *)image)->load(pixels, (IG_GFX_TEXTURE_FORMAT)format, width, height);
+        image->load(pixels, (IG_GFX_TEXTURE_FORMAT)format, width, height);
     }
     return 1;
 }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2VisualContext::setViewport(int x, int y, int w, int h, float nearZ, float farZ) {
     _iViewportX = x;
@@ -462,7 +459,7 @@ void igPsx2VisualContext::setScissorType(IG_GFX_SCISSOR_TYPE type) {
 }
 
 /* Forgets a colour table's igClut and its uploaded image state. */
-void FUN_0016a800(igPsx2ClutRecord *record) {
+void igPsx2ClutRecord_Reset(igPsx2ClutRecord *record) {
     Gap::Gfx::igClut *clut;
     clut = record->clut;
     if (clut != 0) {
@@ -476,68 +473,71 @@ void FUN_0016a800(igPsx2ClutRecord *record) {
     record->state = 0;
 }
 
-void FUN_0016a860(Gap::Gfx::igPsx2VisualContext *vc) {
+namespace Gap {
+namespace Gfx {
+
+void igPsx2VisualContext::initializeCluts() {
     int clutCount;
     igPsx2ClutPool *pool;
     clutCount = 64;
     igGetRegistryValue_Int(g_objectSystem->configRegistry, 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &clutCount, 64, 0);
-    pool = new ((igMemoryPoolView *)vc->getListMemoryPool()) igPsx2ClutPool(clutCount, "IG_GFX_VC_CLUT_ARRAY_SIZE");
-    vc->_pClutList = (int)pool;
-    vc->_currentCLUT = -1;
+    pool = new ((igMemoryPoolView *)this->getListMemoryPool()) igPsx2ClutPool(clutCount, "IG_GFX_VC_CLUT_ARRAY_SIZE");
+    _pClutList = (int)pool;
+    _currentCLUT = -1;
 }
 
-void FUN_0016a9f0(Gap::Gfx::igPsx2VisualContext *vc, int keepPool) {
+void igPsx2VisualContext::uninitializeCluts(int keepPool) {
     int handle;
     igPsx2ClutPool *pool;
-    handle = ((igPsx2ClutPool *)vc->_pClutList)->capacity - 1;
+    handle = ((igPsx2ClutPool *)_pClutList)->capacity - 1;
     for (; handle > -1; handle--) {
-        if (((igPsx2ClutPool *)vc->_pClutList)->isIndexAllocated(handle)) {
-            FUN_0016ab80(vc, handle);
+        if (((igPsx2ClutPool *)_pClutList)->isIndexAllocated(handle)) {
+            deleteClut(handle);
         }
     }
     if (keepPool == 0) {
-        pool = (igPsx2ClutPool *)vc->_pClutList;
+        pool = (igPsx2ClutPool *)_pClutList;
         delete pool;
-        vc->_pClutList = 0;
+        _pClutList = 0;
     }
 }
 
-void FUN_0016ab80(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+void igPsx2VisualContext::deleteClut(int handle) {
     igPsx2ClutPool *pool;
     igPsx2ClutRecord *record;
     Gap::Gfx::igClut *clut;
-    pool = (igPsx2ClutPool *)vc->_pClutList;
+    pool = (igPsx2ClutPool *)_pClutList;
     if (pool->isIndexAllocated(handle)) {
         record = pool->elements + handle;
         if (record->image != 0) {
-            FUN_0016b1d0(vc, handle);
+            freeClutImage(handle);
         }
         clut = record->clut;
         if (clut != 0) {
             --((::igObject *)clut)->_refCount;
-            if (!(((::igObject *)clut)->_refCount & 0x7fffff)) igObject_Destroy((igObject *)clut);
+            if (!(((::igObject *)clut)->_refCount & 0x7fffff)) igObject_Destroy((::igObject *)clut);
         }
         record->clut = 0;
         if (record->palette != 0) {
             Memory_FreeBuffer(record->palette);
         }
-        pool = (igPsx2ClutPool *)vc->_pClutList;
+        pool = (igPsx2ClutPool *)_pClutList;
         pool->freeElement(handle);
     }
 }
 
 /* Makes a colour table of `entryCount` colours (at most 256) in `layout` and returns its handle, or -1. */
-int FUN_0016ad20(Gap::Gfx::igPsx2VisualContext *vc, int entryCount, int layout) {
+int igPsx2VisualContext::createClut(int entryCount, int layout) {
     igPsx2ClutPool *pool;
     igPsx2ClutRecord *record;
     int handle;
     if (entryCount > 256) {
         return -1;
     }
-    pool = (igPsx2ClutPool *)vc->_pClutList;
+    pool = (igPsx2ClutPool *)_pClutList;
     handle = pool->getFreeElement();
-    record = ((igPsx2ClutPool *)vc->_pClutList)->elements + handle;
-    FUN_0016a800(record);
+    record = ((igPsx2ClutPool *)_pClutList)->elements + handle;
+    igPsx2ClutRecord_Reset(record);
     record->state = 0;
     record->layout = layout;
     record->entryCount = entryCount;
@@ -547,7 +547,7 @@ int FUN_0016ad20(Gap::Gfx::igPsx2VisualContext *vc, int entryCount, int layout) 
 
 /* Copies colours into a GS palette: 16 colours as they are (layout 0), or 256 with bits 3 and 4 of the index
  * exchanged (layout 1). */
-void FUN_0016aea0(Gap::Gfx::igPsx2VisualContext *vc, int layout, int *palette, int *colors) {
+void igPsx2VisualContext::copyClutPalette(int layout, int *palette, int *colors) {
     int *destination;
     int *source;
     int swizzled;
@@ -579,11 +579,11 @@ void FUN_0016aea0(Gap::Gfx::igPsx2VisualContext *vc, int layout, int *palette, i
 }
 
 /* Gives colour table `handle` the colours of `clut` and refreshes its GS palette. */
-void FUN_0016af30(Gap::Gfx::igPsx2VisualContext *vc, int handle, Gap::Gfx::igClut *clut) {
+void igPsx2VisualContext::setClut(int handle, igClut *clut) {
     igPsx2ClutRecord *record;
     int paletteSize;
     Gap::Gfx::igClut *old;
-    record = &((igPsx2ClutPool *)vc->_pClutList)->elements[handle];
+    record = &((igPsx2ClutPool *)_pClutList)->elements[handle];
     if (clut != 0) {
         ((::igObject *)clut)->_refCount = ((::igObject *)clut)->_refCount + 1;
     }
@@ -591,36 +591,36 @@ void FUN_0016af30(Gap::Gfx::igPsx2VisualContext *vc, int handle, Gap::Gfx::igClu
     if (old != 0) {
         ((::igObject *)old)->_refCount = ((::igObject *)old)->_refCount - 1;
         if (((unsigned long long)((long long)(int)((::igObject *)old)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)old);
+            igObject_Destroy((::igObject *)old);
         }
     }
     record->clut = clut;
     record->state = 0;
     paletteSize = 256;
-    if (vc->_clutOptimization != 0 && record->entryCount < 17) {
+    if (_clutOptimization != 0 && record->entryCount < 17) {
         record->layout = 0;
         paletteSize = 16;
     }
     if (record->palette != 0 && record->image != 0) {
         p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)p2GetImageTexture((p2Image *)record->image)));
     } else if (record->palette == 0) {
-        record->palette = ((igMemoryPoolView *)vc->getImageMemoryPool())->AllocateAligned(paletteSize * 4, 128);
+        record->palette = ((igMemoryPoolView *)this->getImageMemoryPool())->AllocateAligned(paletteSize * 4, 128);
     }
     if (record->palette != 0) {
         clut->_clutDirty = 1;
-        FUN_0016aea0(vc, record->layout, (int *)record->palette, (int *)clut->_pData);
+        copyClutPalette(record->layout, (int *)record->palette, (int *)clut->_pData);
     }
 }
 
 /* Uploads colour table `handle`'s palette to the GS when it changed, and makes sure its texture is resident. */
-bool FUN_0016b090(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+bool igPsx2VisualContext::uploadClut(int handle) {
     int resident;
     bool uploaded;
     int texture;
     int ignored;
     igPsx2ClutRecord *record;
     Gap::Gfx::igClut *clut;
-    record = &((igPsx2ClutPool *)vc->_pClutList)->elements[handle];
+    record = &((igPsx2ClutPool *)_pClutList)->elements[handle];
     uploaded = true;
     if (record->image == 0 || record->clut->_clutDirty != 0) {
         if (record->image != 0) {
@@ -629,7 +629,7 @@ bool FUN_0016b090(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
             p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)texture));
             clut = record->clut;
             clut->_clutDirty = 1;
-            FUN_0016aea0(vc, record->layout, (int *)record->palette, (int *)clut->_pData);
+            copyClutPalette(record->layout, (int *)record->palette, (int *)clut->_pData);
         } else {
             record->image = (int)p2CreateImage(DAT_0048a4e0[record->layout], 0, DAT_0048a4ec[0], record->palette);
         }
@@ -644,11 +644,11 @@ bool FUN_0016b090(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
 }
 
 /* Frees colour table `handle`'s GS image and palette texture. */
-void FUN_0016b1d0(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+void igPsx2VisualContext::freeClutImage(int handle) {
     igPsx2ClutPool *pool;
     int texture;
     igPsx2ClutRecord *record;
-    pool = (igPsx2ClutPool *)vc->_pClutList;
+    pool = (igPsx2ClutPool *)_pClutList;
     if (pool->isIndexAllocated(handle)) {
         record = pool->elements + handle;
         if (record->image != 0) {
@@ -658,8 +658,10 @@ void FUN_0016b1d0(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
             p2FreeImage((p2Image *)record->image);
         }
         record->image = 0;
-        vc->_currentCLUT = -1;
+        _currentCLUT = -1;
     }
+}
+}
 }
 
 /* The override is a jump to igVisualContext's constructFields: the callee takes the caller's
@@ -669,7 +671,7 @@ namespace Gap {
 namespace Gfx {
 
 void igPsx2VisualContext::constructFields(int flags) {
-    igVisualContext_constructFields((igVisualContextFieldsView *)this, flags);
+    igVisualContext::constructFields(flags);
 }
 
 void igPsx2VisualContext::userDestruct() {
@@ -678,11 +680,11 @@ void igPsx2VisualContext::userDestruct() {
         _inverseTranspose = 0;
     }
     FUN_00169260(this, 0);
-    FUN_0017a540(this, 0);
-    FUN_0016a9f0(this, 0);
-    igPsx2VisualContext_UninitializeLighting(this, 0);
+    uninitializeTextures(0);
+    uninitializeCluts(0);
+    uninitializeLighting(0);
     FUN_0016c650(this, 0);
-    FUN_001788e0((StatContext88 *)this, 0);
+    releaseStatisticCaptures(0);
     if (_iContextOpen != 0) {
         p2CloseDisplay();
     }
@@ -828,7 +830,7 @@ igResult igPsx2VisualContext::open() {
     useWatchdog = true;
     ((Gap::Core::igRegistry *)registry)->getValue(4, "useWatchdog", *(unsigned char *)&useWatchdog, 1, 0);
     p2EnableWatchdog(useWatchdog);
-    FUN_00179e00((StatContext *)this);
+    loadStatisticCaptures();
     {
         int bits = colorBits + alphaBits;
         bits = bits < 32 ? bits : 32;
@@ -904,7 +906,7 @@ igResult igPsx2VisualContext::open() {
     }
     FUN_00174090(this);
     _iContextOpen = 1;
-    FUN_0017a7e0(this);
+    createFrameBufferTextures();
     return g_resultSuccess;
 }
 

@@ -1,53 +1,52 @@
-igMetaObject *g_igNonRefCountedViewList_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igNonRefCountedViewList_GetOrCreateMetaObject(void) {
-    if (g_igNonRefCountedViewList_metaObject == 0) {
-        g_igNonRefCountedViewList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igNonRefCountedViewList_metaObject;
-}
+igMetaObject *igNonRefCountedViewList::_Meta;
 
-igMetaObject *igNonRefCountedViewList_GetMetaObject(void)
+igMetaObject *igNonRefCountedViewList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igNonRefCountedViewList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNonRefCountedViewList_EnsureRegistered();
-    return g_igNonRefCountedViewList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igNonRefCountedViewList_GetVTable(void) {
-    struct Obj obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igNonRefCountedViewList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igNonRefCountedViewList_EnsureRegistered(void)
+igMetaObject *igNonRefCountedViewList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igNonRefCountedViewList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igNonRefCountedViewList_callbackList[] = { igView_EnsureRegistered, 0 };
+void *igNonRefCountedViewList::retrieveVTablePointer()
+{
+    igNonRefCountedViewList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igNonRefCountedViewList_Register(void) {
+void igNonRefCountedViewList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNonRefCountedViewList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igView::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNonRefCountedViewList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
         Gap::Core::igNonRefCountedObjectList::getClassMeta,
-        igNonRefCountedViewList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNonRefCountedViewList",
-        0x14, /* instance size */
-        igNonRefCountedViewList_GetVTable,
+        sizeof(igNonRefCountedViewList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igNonRefCountedViewList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igNonRefCountedViewList_GetMetaObjectFunction(void) {
-    igNonRefCountedViewList_GetMetaObject();
+}
 }
 

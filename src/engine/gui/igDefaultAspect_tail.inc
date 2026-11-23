@@ -35,15 +35,11 @@ void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
     model->f16 = maxX;
     model->f20 = maxY;
     model->f24 = maxZ;
-    int msg[3];
-    msg[0] = 2;
-    msg[1] = 0;
-    msg[2] = (int)g_igGuiComponentModel_sizeMetaField;
-    igModel_NotifyViews((igModel *)self->_model, (ModelChange *)msg);
+    igNotifyEvent msg((Gap::Core::igMetaField *)g_igGuiComponentModel_sizeMetaField);
+    ((Gap::Gui::igModel *)self->_model)->notifyAllViews(msg);
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
-    int sp30[7];
     int var_s0;
     T_453f70 *temp_v1;
 
@@ -56,10 +52,8 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
     temp_v1->f16 = g_vec3Zero[0];
     temp_v1->f20 = DAT_004e105c[0];
     temp_v1->f24 = DAT_004e1060[0];
-    sp30[0] = 2;
-    sp30[1] = 0;
-    sp30[2] = (int)g_igGuiComponentModel_sizeMetaField;
-    igModel_NotifyViews((igModel *)arg0->f8, (ModelChange *)&sp30[0]);
+    igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiComponentModel_sizeMetaField);
+    ((Gap::Gui::igModel *)arg0->f8)->notifyAllViews(sp30);
 }
 
 void Gap__Gui__igDefaultAspect__vfunc_27(void *arg0, struct S_454050 *arg1) {

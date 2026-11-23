@@ -76,58 +76,46 @@ int Gap__Gui__igGuiComponentController__vfunc_25(void) {
 }
 
 void FUN_004558b0(struct S_4558b0 *arg0, unsigned char arg1) {
-    int sp10[4];
     unsigned char temp_a2;
 
     temp_a2 = arg0->b;
     if (temp_a2 != arg1) {
         arg0->b = arg1;
-        sp10[0] = 2;
-        sp10[1] = 0;
-        sp10[2] = (int)g_igGuiComponentModel_hasFocusMetaField;
-        igModel_NotifyViews((igModel *)arg0, (ModelChange *)&sp10[0]);
+        igNotifyEvent sp10((Gap::Core::igMetaField *)g_igGuiComponentModel_hasFocusMetaField);
+        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp10);
     }
 }
 
 void FUN_00455900(struct S_455900 *arg0, unsigned char arg1) {
-    int sp10[3];
     unsigned char temp_a2;
 
     temp_a2 = arg0->f;
     if (temp_a2 != arg1) {
         arg0->f = arg1;
-        sp10[0] = 2;
-        sp10[1] = 0;
-        sp10[2] = (int)g_igGuiComponentModel_mouseOverMetaField;
-        igModel_NotifyViews((igModel *)arg0, (ModelChange *)sp10);
+        igNotifyEvent sp10((Gap::Core::igMetaField *)g_igGuiComponentModel_mouseOverMetaField);
+        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp10);
     }
 }
 
 void FUN_00455950(S_455950 *arg0, unsigned char arg1) {
-    int sp10[3];
     unsigned char temp_a2;
 
     temp_a2 = arg0->b;
     if (temp_a2 != (arg1 & 0xFF)) {
         arg0->b = arg1;
-        sp10[0] = 2;
-        sp10[1] = 0;
-        sp10[2] = (int)g_igGuiComponentModel_pushedMetaField;
-        igModel_NotifyViews((igModel *)arg0, (ModelChange *)sp10);
+        igNotifyEvent sp10((Gap::Core::igMetaField *)g_igGuiComponentModel_pushedMetaField);
+        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp10);
     }
 }
 
 void FUN_004559a0(struct S_4559a0 *arg0, unsigned char arg1) {
-    int sp[3];
     unsigned char temp_a2;
 
     temp_a2 = arg0->b;
     if (temp_a2 != arg1) {
         arg0->b = arg1;
-        sp[0] = 2;
-        sp[1] = 0;
-        sp[2] = (int)g_igGuiComponentModel_childHasFocusMetaField;
-        igModel_NotifyViews((igModel *)arg0, (ModelChange *)sp);
+        igNotifyEvent sp((Gap::Core::igMetaField *)g_igGuiComponentModel_childHasFocusMetaField);
+        ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp);
     }
 }
 

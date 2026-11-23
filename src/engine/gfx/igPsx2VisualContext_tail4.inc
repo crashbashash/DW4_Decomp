@@ -36,45 +36,50 @@ void igPsx2VisualContext_ResetLight(p2Light *light) {
     light->flags = P2_LIGHT_CHANGED;
 }
 
-void igPsx2VisualContext_InitializeLighting(Gap::Gfx::igPsx2VisualContext *vc) {
+namespace Gap {
+namespace Gfx {
+
+void igPsx2VisualContext::initializeLighting() {
     int lightCount;
     igPsx2LightPool *pool;
     int i;
     lightCount = 0x20;
     igGetRegistryValue_Int(g_objectSystem->configRegistry, 4, "IG_GFX_VC_LIGHT_ARRAY_SIZE", &lightCount, 0x20, 0);
-    pool = new ((igMemoryPoolView *)vc->getListMemoryPool()) igPsx2LightPool(lightCount, "IG_GFX_VC_LIGHT_ARRAY_SIZE");
-    vc->_pLightList = (int)pool;
-    p2Material *material = (p2Material *)Memory_AllocateAlignedWithAllocator(sizeof(p2Material), 0x10, (igMemoryPoolView *)vc->getInternalMemoryPool());
+    pool = new ((igMemoryPoolView *)this->getListMemoryPool()) igPsx2LightPool(lightCount, "IG_GFX_VC_LIGHT_ARRAY_SIZE");
+    _pLightList = (int)pool;
+    p2Material *material = (p2Material *)Memory_AllocateAlignedWithAllocator(sizeof(p2Material), 0x10, (igMemoryPoolView *)this->getInternalMemoryPool());
     if (material != 0) igPsx2VisualContext_ResetMaterial(material);
-    vc->_currentMaterial = (int)material;
-    igPsx2VisualContext_ResetMaterial((p2Material *)vc->_currentMaterial);
-    DAT_00560850[0] = vc->getCapability(IG_GFX_CAPABILITY_MAX_LIGHTS);
-    DAT_00560858[0] = (int *)((igMemoryPoolView *)vc->getInternalMemoryPool())->Allocate(DAT_00560850[0] * 4);
+    _currentMaterial = (int)material;
+    igPsx2VisualContext_ResetMaterial((p2Material *)_currentMaterial);
+    DAT_00560850[0] = getCapability(IG_GFX_CAPABILITY_MAX_LIGHTS);
+    DAT_00560858[0] = (int *)((igMemoryPoolView *)this->getInternalMemoryPool())->Allocate(DAT_00560850[0] * 4);
     for (i = 0; i < DAT_00560850[0]; i++) {
         DAT_00560858[0][i] = -1;
     }
     igMatrix44f_SetIdentity(g_gfxIdentityMatrix.m);
 }
 
-void igPsx2VisualContext_UninitializeLighting(Gap::Gfx::igPsx2VisualContext *vc, int keepStorage) {
+void igPsx2VisualContext::uninitializeLighting(int keepStorage) {
     igPsx2LightPool *pool;
     int handle;
-    handle = ((igPsx2LightPool *)vc->_pLightList)->capacity - 1;
+    handle = ((igPsx2LightPool *)_pLightList)->capacity - 1;
     while (-1 < handle) {
-        if (((igPsx2LightPool *)vc->_pLightList)->isIndexAllocated(handle)) {
-            vc->deleteLight(handle);
+        if (((igPsx2LightPool *)_pLightList)->isIndexAllocated(handle)) {
+            deleteLight(handle);
         }
         handle--;
     }
     if (keepStorage == 0) {
-        pool = (igPsx2LightPool *)vc->_pLightList;
+        pool = (igPsx2LightPool *)_pLightList;
         delete pool;
-        vc->_pLightList = 0;
+        _pLightList = 0;
         Memory_FreeBuffer(DAT_00560858[0]);
-        if (vc->_currentMaterial != 0) {
-            Memory_FreeBufferAliasB((void *)vc->_currentMaterial);
+        if (_currentMaterial != 0) {
+            Memory_FreeBufferAliasB((void *)_currentMaterial);
         }
     }
+}
+}
 }
 
 /* The light a handle names: an element of the context's light pool. A macro, not an inline function: retail
@@ -161,7 +166,7 @@ bool igPsx2VisualContext::setLightState(int lightHandle, bool enable) {
                 light->slot = i;
                 DAT_00560858[0][i] = (int)light;
                 light->enabled = 1;
-                igPsx2VisualContext_CommitLight(this, light);
+                commitLight(light);
                 p2EnableLight(i);
                 return 1;
             }
@@ -194,7 +199,7 @@ void igPsx2VisualContext::setLightDiffuse(int handle, const igVec4f &d) {
         light->diffuse[1] = d[1];
         light->diffuse[2] = d[2];
         light->diffuse[3] = d[3];
-        igPsx2VisualContext_CommitLight(this, light);
+        commitLight(light);
     }
 }
 
@@ -220,7 +225,7 @@ void igPsx2VisualContext::setLightSpecular(int handle, const igVec4f &s) {
         if (oldFlags != newFlags) {
             light->flags = newFlags | P2_LIGHT_CHANGED;
         }
-        igPsx2VisualContext_CommitLight(this, light);
+        commitLight(light);
     }
 }
 
@@ -244,7 +249,7 @@ void igPsx2VisualContext::setLightAmbient(int handle, const igVec4f &a) {
         if (oldFlags != light->flags) {
             light->flags = light->flags | P2_LIGHT_CHANGED;
         }
-        igPsx2VisualContext_CommitLight(this, light);
+        commitLight(light);
     }
 }
 
@@ -265,7 +270,7 @@ void igPsx2VisualContext::setLightPosition(int handle, const igVec3f &p) {
             getMatrix(IG_GFX_MATRIX_STACK_MODELVIEW, *(igMatrix44f *)modelView);
             Vec3f_TransformProjective(light->eyePosition, p.vec, modelView);
         }
-        igPsx2VisualContext_CommitLight(this, light);
+        commitLight(light);
     }
 }
 
@@ -287,7 +292,7 @@ void igPsx2VisualContext::setLightCutoffAngle(int handle, float c) {
         if (oldFlags != light->flags) {
             light->flags = light->flags | P2_LIGHT_CHANGED;
         }
-        igPsx2VisualContext_CommitLight(this, light);
+        commitLight(light);
     }
 }
 
@@ -302,7 +307,7 @@ void igPsx2VisualContext::setLightFalloffRate(int handle, float e) {
             DAT_005608e8[0] += 1;
         }
         light->falloff = scaled;
-        igPsx2VisualContext_CommitLight(this, light);
+        commitLight(light);
     }
 }
 
@@ -363,13 +368,13 @@ float igPsx2VisualContext::getLightCutoffAngle(int handle) const {
     p2Light *light = lightAt(this, handle);
     return light->cutoffAngle;
 }
-}
-}
 
-void igPsx2VisualContext_CommitLight(Gap::Gfx::igPsx2VisualContext *vc, p2Light *light) {
+void igPsx2VisualContext::commitLight(p2Light *light) {
     if (light->enabled != 0) {
         p2SetLight(light->slot, light);
     }
+}
+}
 }
 
 void igPsx2VisualContext_ResetMaterial(p2Material *material) {
@@ -413,7 +418,7 @@ void igPsx2VisualContext::setMaterialDiffuse(const igVec4f &d) {
     material->diffuse[1] = d[1];
     material->diffuse[2] = d[2];
     material->diffuse[3] = d[3];
-    igPsx2VisualContext_CommitMaterial(this, currentMaterial(this));
+    commitMaterial(currentMaterial(this));
 }
 
 void igPsx2VisualContext::getMaterialDiffuse(igVec4f &d) const {
@@ -442,7 +447,7 @@ void igPsx2VisualContext::setMaterialAmbient(const igVec4f &a) {
     material = currentMaterial(this);
     f = &material->flags;
     if (old != material->flags) *f = material->flags | P2_MATERIAL_CHANGED;
-    igPsx2VisualContext_CommitMaterial(this, currentMaterial(this));
+    commitMaterial(currentMaterial(this));
 }
 
 void igPsx2VisualContext::getMaterialAmbient(igVec4f &a) const {
@@ -464,7 +469,7 @@ void igPsx2VisualContext::setMaterialEmissive(const igVec4f &e) {
     material->emission[1] = e[1];
     material->emission[2] = e[2];
     material->emission[3] = e[3];
-    igPsx2VisualContext_CommitMaterial(this, currentMaterial(this));
+    commitMaterial(currentMaterial(this));
 }
 
 void igPsx2VisualContext::getMaterialEmissive(igVec4f &d) const {
@@ -506,7 +511,7 @@ void igPsx2VisualContext::setMaterialSpecular(const igVec4f &s) {
     if (old != *fp) {
         *fp = *fp | P2_MATERIAL_CHANGED;
     }
-    igPsx2VisualContext_CommitMaterial(this, currentMaterial(this));
+    commitMaterial(currentMaterial(this));
 }
 
 void igPsx2VisualContext::getMaterialSpecular(igVec4f &s) const {
@@ -522,7 +527,7 @@ void igPsx2VisualContext::setMaterialShininess(float sh) {
         DAT_00560908[0] += 1;
     }
     currentMaterial(this)->shininess = sh;
-    igPsx2VisualContext_CommitMaterial(this, currentMaterial(this));
+    commitMaterial(currentMaterial(this));
 }
 
 float igPsx2VisualContext::getMaterialShininess() const {
@@ -558,20 +563,15 @@ void igPsx2VisualContext::setMaterial(const igVec4f &ambient, const igVec4f &dif
             currentMaterial(this)->flags = currentMaterial(this)->flags | P2_MATERIAL_CHANGED;
         }
     }
-    igPsx2VisualContext_CommitMaterial(this, currentMaterial(this));
-}
-}
+    commitMaterial(currentMaterial(this));
 }
 
-void igPsx2VisualContext_SetMaterialSlot(Gap::Gfx::igPsx2VisualContext *vc, int slot) {
-    if (currentMaterial(vc)->slot == slot) {
+void igPsx2VisualContext::setMaterialSlot(int slot) {
+    if (currentMaterial(this)->slot == slot) {
         DAT_0056090c[0] += 1;
     }
-    currentMaterial(vc)->slot = slot;
+    currentMaterial(this)->slot = slot;
 }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2VisualContext::setMaterialSpecularState(bool enable)
 {
@@ -638,16 +638,11 @@ void igPsx2VisualContext::getSceneAmbient(igVec4f &sceneAmbient) const {
     sceneAmbient.vec[2] = material->color[2];
     sceneAmbient.vec[3] = material->color[3];
 }
-}
-}
 
-void igPsx2VisualContext_CommitMaterial(Gap::Gfx::igPsx2VisualContext *vc, p2Material *material) {
+void igPsx2VisualContext::commitMaterial(p2Material *material) {
     p2SetMaterial(material->slot, material);
-    p2SetLightingColor(currentMaterial(vc)->color);
+    p2SetLightingColor(currentMaterial(this)->color);
 }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2VisualContext::setStackSize(IG_GFX_MATRIX_STACK which, int depth) {
     switch (which) {
@@ -1140,7 +1135,7 @@ void igPsx2VisualContext::resetToDefault(int which) {
     igContextExt *decalExt;
     igVisualContext::resetToDefault(which);
     if (which & 4) {
-        FUN_0017c880((::igPsx2VisualContext *)this, getTextureStageFunc(0), 1);
+        setTextureFuncAndColorComponent(getTextureStageFunc(0), 1);
     }
     if (which & 0x40) {
         decalExt = getExt("igDecalExt");
@@ -1149,10 +1144,10 @@ void igPsx2VisualContext::resetToDefault(int which) {
         }
     }
     if (which & 2) {
-        igPsx2VisualContext_SetMaterialSlot(this, 0);
+        setMaterialSlot(0);
     }
     if (which & 0x20) {
-        igPsx2VisualContext_SetRenderSides(this, 2);
+        setRenderSides(2);
     }
     igMatrix44f_SetIdentity(m);
     igMatrix44f_SetIdentity(m);
@@ -1162,15 +1157,15 @@ void igPsx2VisualContext::resetToDefault(int which) {
     colorScale[0] = 0.501960754f;
     colorScale[1] = 0.501960754f;
     colorScale[2] = 0.501960754f;
-    igPsx2VisualContext_SetColorScalerValue(this, colorScale);
-    igPsx2VisualContext_SetColorScalerState(this, 1);
-    igPsx2VisualContext_SetColorClampState(this, 1);
+    setColorScalerValue(colorScale);
+    setColorScalerState(1);
+    setColorClampState(1);
     FUN_001757c0((::igPsx2VisualContext *)this, 0);
     p2DisableCapability(23);
-    igPsx2VisualContext_SetAlphaBlendingControl(this, 0);
-    igPsx2VisualContext_SetAlphaBlendingCorrection(this, 0);
+    setAlphaBlendingControl(0);
+    setAlphaBlendingCorrection(0);
     setTextureMatrixProjectiveState(0, 0);
-    igPsx2VisualContext_SetDitherMatrix(this, 0x71603524 | (0x40712635LL << 32));
+    setDitherMatrix(0x71603524 | (0x40712635LL << 32));
     FUN_00174950(this, 0);
     FUN_00169be0(this, 1);
     endDraw();
@@ -1233,7 +1228,7 @@ void igPsx2VisualContext::setBlendingSource(IG_GFX_BLENDING_FUNCTION srcMode) {
         DAT_00560928[0] += 1;
     }
     _blendSrcMode[0] = srcMode;
-    igPsx2VisualContext_ApplyBlendEquation(this, 0);
+    applyBlendEquation(0);
 }
 
 void igPsx2VisualContext::setBlendingDestination(IG_GFX_BLENDING_FUNCTION destMode) {
@@ -1241,7 +1236,7 @@ void igPsx2VisualContext::setBlendingDestination(IG_GFX_BLENDING_FUNCTION destMo
         DAT_00560968[0] += 1;
     }
     _blendDestMode[0] = destMode;
-    igPsx2VisualContext_ApplyBlendEquation(this, 0);
+    applyBlendEquation(0);
 }
 
 IG_GFX_BLENDING_FUNCTION igPsx2VisualContext::getBlendingSource() const {
@@ -1261,7 +1256,7 @@ void igPsx2VisualContext::setBlendingSourceDestination(IG_GFX_BLENDING_FUNCTION 
     }
     _blendSrcMode[0] = srcMode;
     _blendDestMode[0] = destMode;
-    igPsx2VisualContext_ApplyBlendEquation(this, 0);
+    applyBlendEquation(0);
 }
 }
 }
@@ -1295,27 +1290,30 @@ void FUN_00174510(igPsx2VisualContext *self, IG_GFX_BLENDING_FUNCTION source, IG
     }
     p2CurrentProgram = n;
     p2CurrentGsRegisters = p2GsRegisterSets + j;
-    igPsx2VisualContext_ApplyBlendEquation((Gap::Gfx::igPsx2VisualContext *)self, n);
+    ((Gap::Gfx::igPsx2VisualContext *)self)->applyBlendEquation(n);
     p2CurrentProgram = 0;
     p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
+namespace Gap {
+namespace Gfx {
+
 /* Sets the GS blend equation of a stage from the stage's blend functions and constant. */
-void igPsx2VisualContext_ApplyBlendEquation(Gap::Gfx::igPsx2VisualContext *vc, int stage) {
+void igPsx2VisualContext::applyBlendEquation(int stage) {
     Psx2BlendEquation *table;
     int a = 2, b = 2, c = 2, d = 0, fix = -1;
     Psx2BlendEquation *equation;
 
-    table = DAT_0048ac00[vc->_blendSrcMode[stage]];
+    table = DAT_0048ac00[_blendSrcMode[stage]];
     if (table != 0) {
-        equation = table + vc->_blendDestMode[stage];
+        equation = table + _blendDestMode[stage];
         fix = equation->fix;
         a = equation->a;
         b = equation->b;
         c = equation->c;
         d = equation->d;
         if (fix == -2) {
-            fix = vc->_blendConst[stage];
+            fix = _blendConst[stage];
         }
     }
     if (fix == -1) {
@@ -1327,9 +1325,6 @@ void igPsx2VisualContext_ApplyBlendEquation(Gap::Gfx::igPsx2VisualContext *vc, i
     }
     p2SetBlendEquation(a, b, c, d, fix);
 }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2VisualContext::setAlphaTestState(bool enb)
 {
@@ -1659,18 +1654,13 @@ void igPsx2VisualContext::setRenderMode(IG_GFX_RENDER_MODE mode) {
 IG_GFX_RENDER_MODE igPsx2VisualContext::getRenderMode() const {
     return _renderMode;
 }
-}
-}
 
-void igPsx2VisualContext_SetRenderSides(Gap::Gfx::igPsx2VisualContext *vc, int renderSides) {
-    if (vc->_renderSides == renderSides) {
+void igPsx2VisualContext::setRenderSides(int renderSides) {
+    if (_renderSides == renderSides) {
         DAT_005609c8[0] += 1;
     }
-    vc->_renderSides = renderSides;
+    _renderSides = renderSides;
 }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2VisualContext::setFogState(bool enable) {
     if (g_igPsx2DisableExt_ext4Enabled != 0) {
@@ -1789,33 +1779,31 @@ void igPsx2VisualContext::getVideoMode(igVideoFormat &pMode) {
     pMode._iSwapInterval = videoMode->_iSwapInterval;
     pMode._iVideoType = videoMode->_iVideoType;
 }
-}
-}
 
-int igPsx2VisualContext_SetColorScalerState(Gap::Gfx::igPsx2VisualContext *vc, int state) {
-    if (vc->_colorScalerState == state) {
+int igPsx2VisualContext::setColorScalerState(int state) {
+    if (_colorScalerState == state) {
         DAT_005609e4[0] += 1;
     }
-    vc->_colorScalerState = state;
-    return p2SetColorScaler(DAT_0048a520[state], vc->_colorScalerValue.vec) != 0;
+    _colorScalerState = state;
+    return p2SetColorScaler(DAT_0048a520[state], _colorScalerValue.vec) != 0;
 }
 
-void igPsx2VisualContext_SetColorScalerValue(Gap::Gfx::igPsx2VisualContext *vc, const float *value) {
-    if (colorEqual(vc->_colorScalerValue.vec, value)) {
+void igPsx2VisualContext::setColorScalerValue(const float *value) {
+    if (colorEqual(_colorScalerValue.vec, value)) {
         DAT_005609e8[0] += 1;
     }
-    vc->_colorScalerValue.vec[0] = value[0];
-    vc->_colorScalerValue.vec[1] = value[1];
-    vc->_colorScalerValue.vec[2] = value[2];
-    vc->_colorScalerValue.vec[3] = value[3];
-    p2SetColorScaler(DAT_0048a520[vc->_colorScalerState], vc->_colorScalerValue.vec);
+    _colorScalerValue.vec[0] = value[0];
+    _colorScalerValue.vec[1] = value[1];
+    _colorScalerValue.vec[2] = value[2];
+    _colorScalerValue.vec[3] = value[3];
+    p2SetColorScaler(DAT_0048a520[_colorScalerState], _colorScalerValue.vec);
 }
 
-void igPsx2VisualContext_SetColorClampState(Gap::Gfx::igPsx2VisualContext *vc, int state) {
-    if (vc->_colorClampState == (state & 0xFF)) {
+void igPsx2VisualContext::setColorClampState(int state) {
+    if (_colorClampState == (state & 0xFF)) {
         DAT_005609ec[0] += 1;
     }
-    vc->_colorClampState = state;
+    _colorClampState = state;
     if (state != 0) {
         p2SetColourClamp(1);
         return;
@@ -1823,24 +1811,21 @@ void igPsx2VisualContext_SetColorClampState(Gap::Gfx::igPsx2VisualContext *vc, i
     p2SetColourClamp(0);
 }
 
-void igPsx2VisualContext_SetAlphaBlendingControl(Gap::Gfx::igPsx2VisualContext *vc, int state) {
-    if (vc->_alphaBlendingControl == (unsigned char)state) {
+void igPsx2VisualContext::setAlphaBlendingControl(int state) {
+    if (_alphaBlendingControl == (unsigned char)state) {
         DAT_005609f0[0] += 1;
     }
-    vc->_alphaBlendingControl = state;
+    _alphaBlendingControl = state;
     p2SetPixelAlphaBlend(state);
 }
 
-void igPsx2VisualContext_SetAlphaBlendingCorrection(Gap::Gfx::igPsx2VisualContext *vc, int state) {
-    if (vc->_alphaBlendingCorrection == (unsigned char)state) {
+void igPsx2VisualContext::setAlphaBlendingCorrection(int state) {
+    if (_alphaBlendingCorrection == (unsigned char)state) {
         DAT_005609f4[0] += 1;
     }
-    vc->_alphaBlendingCorrection = state;
+    _alphaBlendingCorrection = state;
     p2SetFrameBufferAlpha(state);
 }
-
-namespace Gap {
-namespace Gfx {
 
 void igPsx2VisualContext::setPixelPipelineMode(IG_GFX_PIXEL_PIPELINE_MODE mode) {
     if (_pixelPipelineMode == mode) {
@@ -1869,15 +1854,15 @@ void igPsx2VisualContext::setDitherState(bool enable) {
         p2DisableCapability(0xB);
     }
 }
-}
-}
 
-void igPsx2VisualContext_SetDitherMatrix(Gap::Gfx::igPsx2VisualContext *vc, long long matrix) {
-    if (vc->_ditherMatrix == matrix) {
+void igPsx2VisualContext::setDitherMatrix(long long matrix) {
+    if (_ditherMatrix == matrix) {
         DAT_00560a00[0] += 1;
     }
-    vc->_ditherMatrix = matrix;
+    _ditherMatrix = matrix;
     p2SetDitherMatrix(matrix);
+}
+}
 }
 
 void FUN_001757c0(igPsx2VisualContext *vc, int passCount) {

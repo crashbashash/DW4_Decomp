@@ -10,9 +10,6 @@ struct CallbackArray;
 extern "C" {
 #endif
 
-struct CallbackArray *igView_Register(void);
-void igView_SetModel(struct igView *view, struct igModel *model);
-struct igMetaObject *igView_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -28,8 +28,8 @@ CallbackArray *igOnOffValueObserver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOnOffValueObserver_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igOnOffValueObserver_GetMetaObjectFunction,
         "igOnOffValueObserver",
         0x10, /* instance size */
@@ -42,10 +42,6 @@ CallbackArray *igOnOffValueObserver_Register(void) {
 
 void igOnOffValueObserver_GetMetaObjectFunction(void) {
     igOnOffValueObserver_GetMetaObject();
-}
-
-igMetaObject *igView_GetPublishedMetaObject(void) {
-    return g_igView_metaObject;
 }
 
 static FieldFactory g_igOnOffValueObserver_ctorTable[] = {

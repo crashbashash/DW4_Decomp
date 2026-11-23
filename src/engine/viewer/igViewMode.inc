@@ -34,8 +34,8 @@ CallbackArray *igViewMode_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewMode_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igViewMode_GetMetaObjectFunction,
         "igViewMode",
         0x4C, /* instance size */

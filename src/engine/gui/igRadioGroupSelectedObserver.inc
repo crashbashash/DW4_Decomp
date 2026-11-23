@@ -35,8 +35,8 @@ CallbackArray *igRadioGroupSelectedObserver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRadioGroupSelectedObserver_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igRadioGroupSelectedObserver_GetMetaObjectFunction,
         "igRadioGroupSelectedObserver",
         0x10, /* instance size */

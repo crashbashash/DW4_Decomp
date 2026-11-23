@@ -90,8 +90,6 @@ void igProjectiveShadowShader_EnsureRegistered(void);
 void igSceneInfo_EnsureRegistered(void);
 void igShaderFactoryList_EnsureRegistered(void);
 void igShaderInfo_EnsureRegistered(void);
-void igSkeletonBoneInfoList_EnsureRegistered(void);
-void igSkeletonBoneInfo_EnsureRegistered(void);
 void igSkeletonList_EnsureRegistered(void);
 void igSkeleton_EnsureRegistered(void);
 void igSkinList_EnsureRegistered(void);

@@ -293,8 +293,8 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igVertexBlendStateAttr::arkRegister();
     igSkin_EnsureRegistered();
     igSkinList_EnsureRegistered();
-    igSkeletonBoneInfo_EnsureRegistered();
-    igSkeletonBoneInfoList_EnsureRegistered();
+    Gap::Sg::igSkeletonBoneInfo::arkRegister();
+    Gap::Sg::igSkeletonBoneInfoList::arkRegister();
     igSkeleton_EnsureRegistered();
     igSkeletonList_EnsureRegistered();
     igModelViewMatrixBoneSelectListSg_EnsureRegistered();
@@ -650,10 +650,6 @@ void GameMain_RunGame(Blk *app) {
 }
 
 void GameMain_RunBenchmark(Blk *app) {
-    ModelChange showGui;
-    ModelChange showBoundingBox;
-    ModelChange showNormals;
-    ModelChange flushFrames;
     int skipFrames;
     float framesPerSecond;
     int result;
@@ -669,14 +665,14 @@ void GameMain_RunBenchmark(Blk *app) {
         ViewerSetup_ResetView(&app->viewer);
         parameters = (igViewerParameters *)((igViewerSceneInfoManager *)app->viewer.sceneInfo.p)->_parameters;
         parameters->_showGui = 0;
-        showGui.type = 2; showGui.source = 0; showGui.field = g_igViewerParameters_showGuiMetaField;
-        igModel_NotifyViews((igModel *)parameters, &showGui);
+        igNotifyEvent showGui((Gap::Core::igMetaField *)g_igViewerParameters_showGuiMetaField);
+        ((Gap::Gui::igModel *)parameters)->notifyAllViews(showGui);
         parameters->_showBoundingBox = 0;
-        showBoundingBox.type = 2; showBoundingBox.source = 0; showBoundingBox.field = g_igViewerParameters_showBoundingBoxMetaField;
-        igModel_NotifyViews((igModel *)parameters, &showBoundingBox);
+        igNotifyEvent showBoundingBox((Gap::Core::igMetaField *)g_igViewerParameters_showBoundingBoxMetaField);
+        ((Gap::Gui::igModel *)parameters)->notifyAllViews(showBoundingBox);
         parameters->_showNormals = 0;
-        showNormals.type = 2; showNormals.source = 0; showNormals.field = g_igViewerParameters_showNormalsMetaField;
-        igModel_NotifyViews((igModel *)parameters, &showNormals);
+        igNotifyEvent showNormals((Gap::Core::igMetaField *)g_igViewerParameters_showNormalsMetaField);
+        ((Gap::Gui::igModel *)parameters)->notifyAllViews(showNormals);
         AcquireSharedOptions();
         skipFrames = g_sharedViewerOptions->benchmarkSkipFrames;
         if (skipFrames < 0) skipFrames = 0;
@@ -702,8 +698,8 @@ void GameMain_RunBenchmark(Blk *app) {
             } while (i < frames - 1);
         }
         parameters->_flushFrames = 1;
-        flushFrames.type = 2; flushFrames.source = 0; flushFrames.field = g_igViewerParameters_flushFramesMetaField;
-        igModel_NotifyViews((igModel *)parameters, &flushFrames);
+        igNotifyEvent flushFrames((Gap::Core::igMetaField *)g_igViewerParameters_flushFramesMetaField);
+        ((Gap::Gui::igModel *)parameters)->notifyAllViews(flushFrames);
         ViewerSetup_RunFrame(&app->viewer);
         timer->Stop();
         framesPerSecond = (1e9f * (float)frames) / (float)timer->GetElapsedTime();

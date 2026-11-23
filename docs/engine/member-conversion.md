@@ -611,16 +611,29 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `isIndexAllocated`, allocated from the list memory pool): lights (`p2Light`, include/dw4/p2/p2lighting.h),
    render destinations (`igPsx2RenderDestination`, igPsx2RenderDestination.h), colour tables (`igPsx2ClutRecord`,
    igPsx2ClutRecord.h), render lists (pointers to `igPsx2RenderList`, igPsx2RenderList.h: the recorded p2 display
-   lists and the vertex array they were compiled for) and textures (`TexEntry`). Each pool's builder, teardown and
-   the members over it read those records; the current material is a `p2Material`. The texture allocator at
-   0x17aa20, which both `createTexture` slots and `setRenderDestination` call, is the non-virtual member
-   `allocateTexture` (its `config/class-members.tsv` row declares it). Still on stand-ins: the texture side
-   (`createTexture`'s record helpers, `setTexture`, the texture-stage and buffer-set views, the `MipImage`,
-   `TexMemoryPool`, `ListAllocator` and `TexList` views of the texture pool and its images, the CLUT context view
-   of the palette upload), the statistics capture setup and report (`StatContext` views), `constructFields`
-   (`igVisualContextFieldsView`), `copyRenderDestinationToMemory`'s helper (`VisualContextTextures`), and
-   `deleteRenderDestination`'s slot view, whose extra argument keeps the pool in the second argument register as
-   retail does. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
+   lists and the vertex array they were compiled for) and textures (`igPsx2TextureRecord`,
+   igPsx2TextureRecord.h: the 136-byte record with the format, filters and wraps, the source and level-0 `igImage`,
+   the mip level images, the table of GS textures and the shared or own colour table handle). Each pool's builder,
+   teardown and the members over it read those records; the current material is a `p2Material`, a texture's image
+   the real `igImage` (`_pImage`, `_px`, `reduce`, `setPixelFormat`) and its colour table the real `igPsx2Clut`.
+   Where the compiler's address arithmetic differs from the typed element array (the texture accessors, as for the
+   render destinations) `textureAt` addresses the pool in bytes. The texture allocator at 0x17aa20, which both
+   `createTexture` slots and `setRenderDestination` call, is the non-virtual member `allocateTexture`. The
+   helpers retail calls with the context as the first argument are non-virtual members named from what they do
+   (`config/SLUS-20836/names/EngineGFX.tsv`; spec scratch/Psx2Tex/specs/members.py): `initializeLighting`,
+   `uninitializeLighting`, `commitLight`, `setMaterialSlot`, `commitMaterial`, `applyBlendEquation`,
+   `setRenderSides`, `setColorScalerState`/`Value`, `setColorClampState`, `setAlphaBlendingControl`/`Correction`,
+   `setDitherMatrix`, `initializeTextures`/`uninitializeTextures`, `createFrameBufferTextures`/
+   `freeFrameBufferTextures`, `loadTextureBuffers`, `resetTextureStages`, `setTextureFuncAndColorComponent`,
+   `setTextureStageFuncAndColorComponent`, `getSharedClut`, `readRenderDestination`, `initializeCluts`,
+   `uninitializeCluts`, `deleteClut`, `createClut`, `copyClutPalette`, `setClut`, `uploadClut`, `freeClutImage` and
+   the statistics-capture members (`resetStatisticCaptures`, `releaseStatisticCaptures`, `printStatisticCapture`,
+   `loadStatisticCaptures`, over `StatisticsCapture` and the real `igStringObj`). `ApplyTextureState` (0x17b400) and
+   `CreateSharedClut` (0x17ccb0) are not decompiled: they stay free functions linked from retail, since memberize
+   needs a definition. `constructFields` calls `igVisualContext::constructFields`. Still on stand-ins:
+   `TextureImageView260`, igImage's `setData` slot as `setTextureSource(handle, void *)` calls it (four words, where
+   igImage declares two parameters), and `deleteRenderDestination`'s slot view, whose extra argument keeps the pool in
+   the second argument register as retail does. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
    `GfxLibrary_MarkRegistered` (it tests and sets `g_GfxLibrary_registered` and registers the eight extensions, as
    core's latch registers its threads), so tools/gen_odl_source.py finds the gfx classes (`--library Gfx`).
    Converted so far (specs in scratch/Gfx2/specs/index.py, vertex.py, clut.py): `igIndexArray` and
@@ -719,6 +732,13 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    empty `userMakeConcrete` (slot 18, 0x15db80); `_lengthData` is an `unsigned char *` under C++, `configure`
    (0x167240) reallocates it to four bytes a strip or frees it. The particle array reads its first strip length
    through `getPrimLength`, and igPsx2VisualContext holds it as an `igSmartPointer<igPrimLengthArray>`;
+   Gui: `igView`, `igModel`, `igViewList` and `igNonRefCountedViewList` are converted (alchemy-kit_202309
+   igGui/igView.h, igModel.h): slot 21 `isCompatible` and slot 22 `notify` are igView's pure virtuals, `igModel`
+   has `appendView`, `removeView` (each notifies the view with an ATTACH or DETACH `igNotifyEvent`),
+   `notifyAllViews` and `userDestruct`. `igNotifyEvent` (include/dw4/gui/igNotifyEvent.h, a reflected.h kit
+   header) replaces the `ModelChange`/`ViewModelEvent`/`ViewerMessage` stand-ins and the hand-built int arrays.
+   Next in the Gui, Insight and Viewer libraries: the component and radio-group models and views (specs not
+   landed), then the windows, managers and the viewer classes.
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

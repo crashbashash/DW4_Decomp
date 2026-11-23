@@ -30,8 +30,8 @@ CallbackArray *igWindowSizeObserver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igWindowSizeObserver_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         thunk_igWindowSizeObserver_GetMetaObject,
         "igWindowSizeObserver",
         0xC, /* instance size */

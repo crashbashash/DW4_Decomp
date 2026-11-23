@@ -92,8 +92,8 @@ CallbackArray *igStatisticsItem_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igStatisticsItem_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igStatisticsItem_GetMetaObjectFunction,
         "igStatisticsItem",
         0x3C, /* instance size */

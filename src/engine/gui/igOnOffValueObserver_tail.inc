@@ -5,7 +5,6 @@ void igOnOffValueObserver_OnModelChange(igOnOffValueObserver *self, void *arg1) 
 }
 
 void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
-    int sp[3];
     unsigned char temp_a2;
     struct T_457c40 *temp_v1;
     unsigned char *pb;
@@ -16,10 +15,8 @@ void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
         pb = &temp_v1->b;
         if (temp_a2 != arg1) {
             *pb = arg1;
-            sp[0] = 2;
-            sp[1] = 0;
-            sp[2] = (int)g_igOnOffModel_valueMetaField;
-            igModel_NotifyViews((igModel *)arg0->t, (ModelChange *)sp);
+            igNotifyEvent sp((Gap::Core::igMetaField *)g_igOnOffModel_valueMetaField);
+            ((Gap::Gui::igModel *)arg0->t)->notifyAllViews(sp);
         }
     }
 }

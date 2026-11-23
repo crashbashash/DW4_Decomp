@@ -56,7 +56,6 @@ extern unsigned char p2DirectionalLights[P2_LIGHT_SLOTS];
 extern p2Light *p2Lights[P2_LIGHT_SLOTS];
 extern p2Material *p2Materials[P2_MATERIAL_SLOTS];
 extern int p2NormalArraySource;
-extern int p2NormalArrayMask;
 extern int p2LightSpecular;
 extern float p2LightMatrix[16];
 extern p2DmaTag p2LightingTag;

@@ -76,10 +76,18 @@ enum p2VertexFormatBit {
 /* The capability bits of a program's p2ProgramFlags entry. */
 enum p2Capability {
     P2_CAP_TEXTURE = 1,
+    P2_CAP_VIEWPORT_CLIPPING = 6,
+    P2_CAP_FOG = 7,
     P2_CAP_LIGHTING = 8,
     P2_CAP_VERTEX_BLEND = 9,
     P2_CAP_TEXTURE_COMBINE = 10,
+    P2_CAP_COLOUR_MATERIAL = 12,
+    P2_CAP_TEXTURE_MATRIX = 13,
+    P2_CAP_15 = 15,                     /* 15 and 16: meaning not known */
+    P2_CAP_NORMALIZE_NORMALS = 18,
+    P2_CAP_ARRAY_FORMAT = 22,           /* the format follows the bound arrays outside recording too */
     P2_CAP_MULTIPASS = 23,
+    P2_CAP_25 = 25,                     /* meaning not known */
     P2_CAP_FIXED_POINT = 27
 };
 /* p2DisplayFlags */
@@ -466,6 +474,8 @@ void p2SetSoftwareBlendSource(const float *positions, const float *matrices, con
 int p2SoftwareBlend(int count, int weights, float *out, int matrixCount);
 void p2UploadComponentScales(void);
 extern int p2ClearPasses;
+extern int p2ColorScalerState;
+extern int p2BlendWeightCount;
 extern int p2GsIntcHandlerId;
 void p2EnableWatchdog(int on);
 void p2SetClearPasses(int on);

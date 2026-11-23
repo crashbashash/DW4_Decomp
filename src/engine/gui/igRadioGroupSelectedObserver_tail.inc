@@ -33,11 +33,8 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
         pf = &s->_selected;
         if (idx != s->_selected) {
             *pf = idx;
-            Msg m;
-            m.a = 2;
-            m.b = 0;
-            m.c = (int)g_igRadioGroupModel_selectedMetaField;
-            igModel_NotifyViews((igModel *)((void *)arg0->_model), (ModelChange *)&m);
+            igNotifyEvent m((Gap::Core::igMetaField *)g_igRadioGroupModel_selectedMetaField);
+            ((Gap::Gui::igModel *)((void *)arg0->_model))->notifyAllViews(m);
         }
     } else {
         s = (igRadioGroupModel *)arg0->_model;
@@ -48,11 +45,8 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
                 return;
             }
             *pf = -1;
-            Msg m2;
-            m2.a = 2;
-            m2.b = 0;
-            m2.c = (int)g_igRadioGroupModel_selectedMetaField;
-            igModel_NotifyViews((igModel *)((void *)arg0->_model), (ModelChange *)&m2);
+            igNotifyEvent m2((Gap::Core::igMetaField *)g_igRadioGroupModel_selectedMetaField);
+            ((Gap::Gui::igModel *)((void *)arg0->_model))->notifyAllViews(m2);
         }
     }
 }

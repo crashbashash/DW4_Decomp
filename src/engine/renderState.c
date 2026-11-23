@@ -449,6 +449,195 @@ void p2SendGifTags(void) {
     }
 }
 
+/* p2PalettedStages: both programs of a multipass draw use paletted textures */
+#define P2_STAGES_BOTH_PALETTED 3
+
+extern int p2PalettedStages;
+
+/* Chooses the vertex format and the VU program feature mask the current program, the bound arrays and the
+ * draw state ask for. p2VertexFormat says which arrays the vertex program unpacks; p2VertexArrayMask keeps the
+ * lighting features p2RefreshLightState chose (bits 7, 8, 13 to 15 and 29) and gets the others added.
+ * Capabilities 15 and 16, whose meaning is not known, count with viewport clipping and lines. */
+void p2BuildVertexFormat(void) {
+    unsigned int flags;
+    int lighting;
+    int textureMatrix;
+    int textured;
+    int textureCombine;
+    int multipass;
+    int clipping;
+    int fog;
+    int caps15To16;
+    int vertexBlend;
+    int sprites;
+    int lines;
+    int normalize;
+    int arrayFormat;
+    int colourMaterial;
+    int vertexColourAll;
+    int vertexColourAny;
+    int cap25;
+    int fixedPoint;
+    int normals;
+    unsigned char colourArray;
+
+    flags = p2ProgramFlags[p2CurrentProgram];
+    lighting = (flags >> P2_CAP_LIGHTING) & 1;
+    textureMatrix = (flags >> P2_CAP_TEXTURE_MATRIX) & 1;
+    textured = p2StagesTextured(0, 1, 0);
+    flags = p2ProgramFlags[p2CurrentProgram];
+    sprites = p2CurrentPrimitive == P2_PRIM_SPRITE;
+    lines = p2PolygonMode == 1;
+    textureCombine = (flags >> P2_CAP_TEXTURE_COMBINE) & 1;
+    multipass = (flags >> P2_CAP_MULTIPASS) & 1;
+    clipping = (flags >> P2_CAP_VIEWPORT_CLIPPING) & 1;
+    fog = (flags >> P2_CAP_FOG) & 1;
+    caps15To16 = (flags >> P2_CAP_15) & 3;
+    normalize = (flags >> P2_CAP_NORMALIZE_NORMALS) & 1;
+    vertexBlend = (flags >> P2_CAP_VERTEX_BLEND) & 1;
+    arrayFormat = (flags >> P2_CAP_ARRAY_FORMAT) & 1;
+    colourMaterial = (flags >> P2_CAP_COLOUR_MATERIAL) & 1;
+    vertexColourAll = p2StagesUseVertexColour(1);
+    vertexColourAny = p2StagesUseVertexColour(0);
+    flags = p2ProgramFlags[p2CurrentProgram];
+    cap25 = (flags >> P2_CAP_25) & 1;
+    fixedPoint = (flags >> P2_CAP_FIXED_POINT) & 1;
+    normals = (unsigned char)(lighting != 0 || p2StagesUseOddCombineMode(0) != 0);
+    colourArray = !(vertexColourAll != 0 || (lighting != 0 && !colourMaterial));
+    /* the pipeline store at the end is unreachable: arrayFormat is clear here (kept as retail has it) */
+    if (!(p2VertexFormat & P2_FORMAT_RECORDING) && arrayFormat == 0) {
+        p2VertexFormat = colourArray ? P2_FORMAT_COLOURS : 0;
+        /* matching construct: MWCC — the literal 1 (P2_FORMAT_NORMALS) in the ?: gives retail's branch, the enum constant a different test */
+        p2VertexFormat |= normals ? 1 : 0;
+        p2VertexFormat |= !p2StagesTextured(0, 1, 1) ? 0 : P2_FORMAT_TEXCOORDS;
+        if (vertexBlend != 0) {
+            p2VertexFormat |= P2_FORMAT_BLEND;
+            if (p2BlendWeightCount > 1) {
+                p2VertexFormat |= P2_FORMAT_BLEND_WEIGHTS;
+            }
+        }
+        if (arrayFormat != 0) {
+            p2DrawPipeline = 1;
+        }
+    }
+    p2VertexArrayMask &= 0x2000E180;
+    if (sprites != 0) {
+        switch (p2SpriteSizeMode) {
+        case 3:
+            p2VertexFormat |= P2_FORMAT_BLEND_WEIGHTS;
+        case 0:
+            p2VertexFormat |= P2_FORMAT_SPRITE_SIZE_MODE0;
+            break;
+        case 4:
+            p2VertexFormat |= P2_FORMAT_BLEND_WEIGHTS;
+        case 1:
+            p2VertexFormat |= P2_FORMAT_SPRITE_SIZE_MODE1;
+            break;
+        case 5:
+            p2VertexFormat |= P2_FORMAT_BLEND_WEIGHTS;
+            break;
+        }
+        if (p2SpriteBytes != 0) {
+            p2VertexFormat |= P2_FORMAT_SPRITE_BYTES;
+            p2VertexArrayMask |= 0x42080800;
+        } else {
+            p2VertexArrayMask |= 0x44080800;
+        }
+    } else {
+        p2VertexArrayMask |= 0x42040800;
+    }
+    if (fixedPoint != 0) {
+        p2VertexArrayMask |= 1;
+    }
+    if ((p2ConstantColour != 0 && (p2VertexFormat & P2_FORMAT_COLOURS)) ||
+        (p2ConstantColour != 0 && (p2VertexFormat & P2_FORMAT_RECORDING))) {
+        p2VertexArrayMask |= 8;
+    }
+    if ((vertexColourAny != 0 && p2ColorScalerState == 1) || p2ColorScalerState == 2) {
+        p2VertexArrayMask |= 0x100000;
+    }
+    if (p2DrawPipeline == 4) {
+        p2VertexArrayMask |= 2;
+    }
+    if ((lighting != 0 && colourMaterial != 0) || (p2VertexArrayMask & 0x100000)) {
+        if (!(p2VertexArrayMask & 2)) {
+            p2VertexArrayMask |= 0x10;
+        }
+    }
+    if (lighting != 0) {
+        p2VertexArrayMask |= p2NormalArrayMask;
+    }
+    if (normalize != 0 && normals != 0) {
+        p2VertexArrayMask |= 0x40;
+    }
+    if (vertexBlend != 0) {
+        p2VertexArrayMask |= 4;
+    }
+    if (textureCombine != 0 && (((p2ProgramFlags[p2CurrentProgram] >> P2_CAP_TEXTURE) & 1) ||
+                                p2TextureCombineMode[p2CurrentProgram] == 2)) {
+        if (p2TextureCombineMode[p2CurrentProgram] == 4) {
+            p2VertexArrayMask |= 0x200;
+        } else {
+            p2VertexArrayMask |= 0x1000;
+        }
+    }
+    if (textureMatrix != 0 && textured != 0) {
+        p2VertexArrayMask |= 0x20000;
+    }
+    if (fog != 0) {
+        p2VertexArrayMask |= 0x01000000;
+    }
+    if ((caps15To16 != 0 && sprites == 0) || clipping != 0 || lines != 0) {
+        p2VertexArrayMask |= 0xC00000;
+        if (cap25 == 0 || lines != 0) {
+            p2VertexArrayMask |= 0x08000000;
+        }
+    }
+    if (arrayFormat != 0) {
+        p2VertexArrayMask &= ~0x0106FBC8;
+        if (p2ConstantColour != 0) {
+            p2VertexArrayMask = (p2VertexArrayMask & ~0x10) | 0x20;
+        } else {
+            p2VertexArrayMask |= 0x30;
+        }
+    }
+    if (vertexColourAll != 0) {
+        p2VertexArrayMask &= ~0xE198;
+        if (p2StagesUseOddCombineMode(0) == 0 && !(p2VertexFormat & P2_FORMAT_RECORDING) && arrayFormat == 0) {
+            p2VertexFormat &= ~(P2_FORMAT_NORMALS | P2_FORMAT_COLOURS);
+        }
+    }
+    if (lighting != 0 && colourMaterial == 0) {
+        p2VertexArrayMask &= ~0x18;
+    }
+    if (multipass != 0) {
+        /* the highest combine mode of the stages: 4 takes the modulate variant, 0 to 3 the plain one */
+        switch (p2GetPassCombineMode()) {
+        case 4:
+            p2VertexArrayMask |= 0x400;
+            break;
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            p2VertexArrayMask |= 0x10000;
+            break;
+        default:
+            if (clipping != 0 || caps15To16 != 0 || p2CurrentPrimitive == P2_PRIM_TRIANGLE_STRIPS) {
+                p2VertexArrayMask |= 0x200000;
+            } else {
+                int firstTextured = (p2ProgramFlags[0] >> P2_CAP_TEXTURE) & 1;
+                int secondTextured = (p2ProgramFlags[1] >> P2_CAP_TEXTURE) & 1;
+                if (firstTextured && secondTextured && p2PalettedStages == P2_STAGES_BOTH_PALETTED) {
+                    p2VertexArrayMask |= 0x200000;
+                }
+            }
+            break;
+        }
+        p2VertexArrayMask |= 0x80000000;
+    }
+}
+
 int p2SelectVariantTables(p2VariantTable *table, long long *out) {
     int res = 0;
     long long m;
@@ -503,14 +692,12 @@ int p2GetPassProgramAddress(int pass, int combineMode);
 /* The palette flag, the second byte of a V4-8 vector: set when both stages draw paletted textures. */
 #define P2_PALETTE_FLAG_BOTH 0xFF00
 #define P2_PALETTE_FLAG_OTHER 0x100
-#define P2_STAGES_BOTH_PALETTED 3
 
 p2DmaTag p2PassSetupTag = {{ 0x10000003, 0, 0, 0 }};
 p2VifUnpack p2PassSetupUnpack = { 0x7C02004E };
 unsigned int p2PassSetupFlush = 0x10000000;
 unsigned int p2PassSetupStmask = 0x20000000;
 unsigned int p2PaletteFlagUnpack = 0x7E010049;
-extern int p2PalettedStages;
 
 /* Sends the multipass setup when the current program draws in passes: for each pass a vector of
  * its FRAME and ZBUF masks and the address of its VU program, then the palette flag. */

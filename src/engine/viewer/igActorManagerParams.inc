@@ -53,8 +53,8 @@ CallbackArray *igActorManagerParams_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActorManagerParams_metaObject,
-        igModel_Register,
-        igModel_GetPublishedMetaObject,
+        Gap::Gui::igModel::arkRegisterInternal,
+        Gap::Gui::igModel::getClassMeta,
         igActorManagerParams_GetMetaObjectFunction,
         "igActorManagerParams",
         0x10, /* instance size */

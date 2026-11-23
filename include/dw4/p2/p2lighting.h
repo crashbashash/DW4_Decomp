@@ -110,6 +110,7 @@ void p2WriteDirectionalLights(float rows[][4]);
 void p2SetMatrix(int slot, const float *matrix);
 float p2AdjointMatrix(const float *m, float *adjoint);
 void p2InvertMatrix(const float *m, float *inverse);
+extern int p2NormalArrayMask;
 
 #ifdef __cplusplus
 }

@@ -30,10 +30,6 @@ extern "C" {
 /* The pick mode whose intersect traversal is running, for its hit callback. */
 extern igPickMode *g_pickingMode[4];
 
-/* What igModel_NotifyViews tells a model's views: type 2 is a changed field, sent by `sender`. */
-typedef struct ViewModelEvent { int type; void *sender; igMetaField *field; } ViewModelEvent;
-enum { VIEW_MODEL_FIELD_CHANGED = 2 };
-
 /* igViewMode's own virtual methods past igObject's: slots 29 and 30 are the start and stop every mode
  * overrides (igCameraMode_OnAttach, igCameraMode_OnDetach). ABI view only: never instantiated. */
 class igViewModeDispatchView : public igObjectDispatchView {
@@ -108,8 +104,8 @@ void igViewMode_IsCompatible(igViewMode *self, igObject *model) {
     ((Gap::Core::igObject *)model)->isOfType(g_igViewModel_metaObject);
 }
 
-void igViewMode_OnModelChange(igViewModeDispatchView *self, ViewModelEvent *event) {
-    igMetaField *field = event->field;
+void igViewMode_OnModelChange(igViewModeDispatchView *self, const igNotifyEvent &event) {
+    igMetaField *field = (igMetaField *)event._field;
     int type;
     if (field == g_igViewModel_viewMatrixMetaField) {
         igViewMode_UpdateInverseMatrix((igViewMode *)self);
@@ -121,12 +117,12 @@ void igViewMode_OnModelChange(igViewModeDispatchView *self, ViewModelEvent *even
         igViewMode_UpdateViewMatrix((igViewMode *)self);
         return;
     }
-    type = event->type;
-    if (type == 0) {
+    type = event._eventType;
+    if (type == igNotifyEvent::ATTACH) {
         igViewMode_UpdateInverseMatrix((igViewMode *)self);
         igViewMode_UpdateModelVectors((igViewMode *)self);
         self->OnAttach();
-    } else if (type == 1) {
+    } else if (type == igNotifyEvent::DETACH) {
         self->OnDetach();
     }
 }
@@ -146,9 +142,6 @@ void igViewMode_UpdateInverseMatrix(igViewMode *self) {
 
 void igViewMode_UpdateModelVectors(igViewMode *self) {
     float v[3];
-    ViewModelEvent positionChanged;
-    ViewModelEvent directionChanged;
-    ViewModelEvent leftChanged;
     igViewModel *model;
 
     model = (igViewModel *)self->_model;
@@ -156,23 +149,17 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     model->_position[0] = v[0];
     model->_position[1] = v[1];
     model->_position[2] = v[2];
-    positionChanged.type = VIEW_MODEL_FIELD_CHANGED;
-    positionChanged.sender = self;
-    positionChanged.field = g_igViewModel_positionMetaField;
-    igModel_NotifyViews((igModel *)model, (ModelChange *)&positionChanged);
+    igNotifyEvent positionChanged((Gap::Core::igMetaField *)g_igViewModel_positionMetaField, (Gap::Gui::igView *)self);
+    ((Gap::Gui::igModel *)model)->notifyAllViews(positionChanged);
     Vec3f_TransformDirection(model->_direction.vec, g_vec3ZAxis.vec, self->_inverseMatrix);
     model->_direction[0] = -model->_direction[0];
     model->_direction[1] = -model->_direction[1];
     model->_direction[2] = -model->_direction[2];
-    directionChanged.type = VIEW_MODEL_FIELD_CHANGED;
-    directionChanged.sender = self;
-    directionChanged.field = g_igViewModel_directionMetaField;
-    igModel_NotifyViews((igModel *)model, (ModelChange *)&directionChanged);
+    igNotifyEvent directionChanged((Gap::Core::igMetaField *)g_igViewModel_directionMetaField, (Gap::Gui::igView *)self);
+    ((Gap::Gui::igModel *)model)->notifyAllViews(directionChanged);
     Vec3f_TransformDirection(model->_viewLeftVector.vec, g_vec3XAxis.vec, self->_inverseMatrix);
-    leftChanged.type = VIEW_MODEL_FIELD_CHANGED;
-    leftChanged.sender = self;
-    leftChanged.field = g_igViewModel_viewLeftVectorMetaField;
-    igModel_NotifyViews((igModel *)model, (ModelChange *)&leftChanged);
+    igNotifyEvent leftChanged((Gap::Core::igMetaField *)g_igViewModel_viewLeftVectorMetaField, (Gap::Gui::igView *)self);
+    ((Gap::Gui::igModel *)model)->notifyAllViews(leftChanged);
 }
 
 void igViewMode_UpdateViewMatrix(igViewMode *self) {
@@ -216,9 +203,6 @@ void igCameraMode_OnDetach(igCameraMode *self) {
 }
 
 void igCameraMode_OnAttach(igCameraMode *self) {
-    int hfovChanged[4];
-    int farChanged[4];
-    int nearChanged[4];
     float farPlane;
     float nearPlane;
     igCamera *camera;
@@ -231,21 +215,15 @@ void igCameraMode_OnAttach(igCameraMode *self) {
         farPlane = camera->_farPlane;
         nearPlane = camera->_nearPlane;
         model->_hfov = (float) camera->_horizontalFieldOfView;
-        hfovChanged[0] = VIEW_MODEL_FIELD_CHANGED;
-        hfovChanged[1] = 0;
-        hfovChanged[2] = (int)g_igViewModel_hfovMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)hfovChanged);
+        igNotifyEvent hfovChanged((Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(hfovChanged);
         model->_farPlane = farPlane;
-        farChanged[0] = VIEW_MODEL_FIELD_CHANGED;
-        farChanged[1] = 0;
-        farChanged[2] = (int)g_igViewModel_farPlaneMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)farChanged);
+        igNotifyEvent farChanged((Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(farChanged);
         nearPlane = (nearPlane == 0.0f) ? farPlane / 1000.0f : nearPlane;
         model->_nearPlane = nearPlane;
-        nearChanged[0] = VIEW_MODEL_FIELD_CHANGED;
-        nearChanged[1] = 0;
-        nearChanged[2] = (int)g_igViewModel_nearPlaneMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)nearChanged);
+        igNotifyEvent nearChanged((Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(nearChanged);
     }
 }
 
@@ -253,7 +231,6 @@ void igCameraMode_Update(igCameraMode *self) {
     float x, y, z;
     float translation[4];
     float world[16];
-    int changed[4];
     igViewModel *model;
     if (self->_camera != 0) {
         igMatrix44f_SetIdentity(world);
@@ -265,10 +242,8 @@ void igCameraMode_Update(igCameraMode *self) {
         igMatrix44f_MakeEulerRotation(world, x, y, z);
         igMatrix44f_SetTranslation(world, translation);
         igMatrix44f_InvertOrthonormal(model->_viewMatrix, world);
-        changed[0] = VIEW_MODEL_FIELD_CHANGED;
-        changed[1] = 0;
-        changed[2] = (int)g_igViewModel_viewMatrixMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)changed);
+        igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
 }
 
@@ -406,7 +381,6 @@ void igFlyMode_ApplyAim(igFlyMode *self) {
 }
 
 void igFlyMode_Update(igFlyMode *self, float seconds) {
-    int changed[3];
     int model;
 
     model = self->_model;
@@ -415,10 +389,8 @@ void igFlyMode_Update(igFlyMode *self, float seconds) {
         igFlyMode_ApplyAim(self);
     }
     igFlyMode_ApplyRotation(self, seconds);
-    changed[0] = VIEW_MODEL_FIELD_CHANGED;
-    changed[1] = 0;
-    changed[2] = (int)g_igViewModel_viewMatrixMetaField;
-    igModel_NotifyViews((igModel *)model, (ModelChange *)changed);
+    igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+    ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
 }
 
 void igFlyMode_OnAttach(igFlyMode *self) {
@@ -646,11 +618,8 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         center[2] += self->_translation[2];
         self->_distance = center.length();
         igMatrix44f_TranslateWorld(model->_viewMatrix, center);
-        ViewModelEvent changed;
-        changed.type = VIEW_MODEL_FIELD_CHANGED;
-        changed.sender = 0;
-        changed.field = g_igViewModel_viewMatrixMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)&changed);
+        igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
     self->_head = 0.0f;
     self->_roll = 0.0f;
@@ -674,7 +643,6 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
     igGuiSystemModel *model = (igGuiSystemModel *)((igGuiSystem *)pickMode->_guiSystem)->_model;
     float dx = pickMode->_joystickT[0];
     float dy = pickMode->_joystickT[1];
-    ViewModelEvent event;
     bool moving = dx != g_vec2Zero[0] || dy != g_vec2Zero[1];
 
     if (moving) {
@@ -682,10 +650,8 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
         dy *= seconds;
         model->_mousePosition[0] += dx;
         model->_mousePosition[1] += dy;
-        event.type = VIEW_MODEL_FIELD_CHANGED;
-        event.sender = 0;
-        event.field = g_igGuiSystemModel_mousePositionMetaField;
-        igModel_NotifyViews((igModel *)model, (ModelChange *)&event);
+        igNotifyEvent event((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
+        ((Gap::Gui::igModel *)model)->notifyAllViews(event);
     }
 }
 
@@ -697,7 +663,6 @@ void igPickMode_OnStickEvent(igPickMode *self, int unused, int stick, float x, f
 }
 
 void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
-    ViewModelEvent changed;
     int *selected;
     igObject *object;
     if (pressed != 0) {
@@ -708,10 +673,8 @@ void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
             object = (igObject *)*selected;
             igObject::release(object);
             *selected = 0;
-            changed.type = VIEW_MODEL_FIELD_CHANGED;
-            changed.sender = 0;
-            changed.field = g_igViewerParameters_selectedObjectMetaField;
-            igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&changed);
+            igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewerParameters_selectedObjectMetaField);
+            ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(changed);
         }
     }
 }
@@ -778,7 +741,6 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit) {
 
 void igPickMode_Pick(igPickMode *self) {
     float point[3];
-    int changed[3];
     igViewModel *model;
     int *selected;
     igObject *previous, *hitPath;
@@ -807,10 +769,8 @@ void igPickMode_Pick(igPickMode *self) {
     previous = (igObject *)*selected;
     igObject::release(previous);
     *selected = (int)hitPath;
-    changed[0] = VIEW_MODEL_FIELD_CHANGED;
-    changed[1] = 0;
-    changed[2] = (int)g_igViewerParameters_selectedObjectMetaField;
-    igModel_NotifyViews((igModel *)((igViewerParameters *)self->_parameters), (ModelChange *)changed);
+    igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewerParameters_selectedObjectMetaField);
+    ((Gap::Gui::igModel *)((igViewerParameters *)self->_parameters))->notifyAllViews(changed);
 }
 
 /* Returns the metaobject handle of igPickMode, not of igViewManager. */

@@ -51,7 +51,6 @@ enum {
 };
 
 enum {
-    P2_PRIM_SPRITE = 6,
     P2_ZTST_ALWAYS = 1,
     P2_GS_REG_TEX0_2 = 0x07,
     P2_HEAP_VU = 6,
@@ -199,7 +198,6 @@ extern char p2DepthFunction[P2_PROGRAM_COUNT];
 extern char p2DepthWriteDisabled[P2_PROGRAM_COUNT];
 extern p2BlendEquation p2BlendEquations[P2_PROGRAM_COUNT];
 extern p2ProgramTextureState p2ProgramTexture;
-extern int p2ColorScalerState;
 extern int p2FogMode;
 extern float p2FogScale;
 extern float p2FogOffset;
@@ -216,7 +214,6 @@ extern const float *p2BlendMatrices;
 extern const void *p2BlendWeights;
 extern const unsigned char *p2BlendIndices;
 extern int p2BlendIndexStride;
-extern int p2BlendWeightCount;
 extern int p2BlendWeightLimit;
 extern int p2BlendMatrixBase;
 extern int p2BlendMatrixCount;

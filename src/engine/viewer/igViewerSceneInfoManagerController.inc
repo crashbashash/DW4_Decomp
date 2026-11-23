@@ -37,8 +37,8 @@ CallbackArray *igViewerSceneInfoManagerController_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerSceneInfoManagerController_metaObject,
-        igView_Register,
-        igView_GetPublishedMetaObject,
+        Gap::Gui::igView::arkRegisterInternal,
+        Gap::Gui::igView::getClassMeta,
         igViewerSceneInfoManagerController_GetMetaObjectFunction,
         "igViewerSceneInfoManagerController",
         0x14, /* instance size */

@@ -6,23 +6,11 @@ struct igMetaField;
 struct igMetaObject;
 struct CallbackArray;
 
-/* A change record igModel_NotifyViews hands to each of the model's views except `source`: type 2
- * reports that the field `field` changed. */
-struct ModelChange {
-    int type;
-    void *source;
-    struct igMetaField *field;
-    int reserved;
-};
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 extern int g_igModel_vtable[4];
 
-struct CallbackArray *igModel_Register(void);
-void igModel_NotifyViews(struct igModel *model, struct ModelChange *change);
-struct igMetaObject *igModel_GetPublishedMetaObject(void);
 struct igModel *igModel_Destroy(struct igModel *self, short deleteFlag);
 
 #ifdef __cplusplus
