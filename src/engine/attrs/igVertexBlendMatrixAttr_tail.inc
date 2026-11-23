@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igVertexBlendMatrixAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, _blendMatID + IG_GFX_MATRIX_STACK_VERTEX_BLEND_0, (char *)_m.m);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setMatrix((IG_GFX_MATRIX_STACK)(_blendMatID + IG_GFX_MATRIX_STACK_VERTEX_BLEND_0), _m);
 }
 
 void igVertexBlendMatrixAttr::synchronizeCachedUnitID(igObject *obj)

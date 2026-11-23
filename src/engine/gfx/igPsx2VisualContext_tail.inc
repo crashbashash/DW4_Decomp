@@ -28,71 +28,29 @@ int IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum(void) {
     return (int)g_igPsx2VisualContext_clippingTypePsx2MetaEnum;
 }
 
-igMetaObject *igPsx2VisualContext_GetOrCreateMetaObject(void) {
-    if (g_igPsx2VisualContext_metaObject == 0) {
-        g_igPsx2VisualContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igPsx2VisualContext_metaObject;
-}
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igPsx2VisualContext_GetMetaObject(void)
+igMetaObject *igPsx2VisualContext::getClassTypeLazy()
 {
-    igMetaObject *g = g_igPsx2VisualContext_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPsx2VisualContext_EnsureRegistered();
-    return g_igPsx2VisualContext_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igPsx2VisualContext_GetVTable(void) {
-    struct VTableProbe s;
-    char *p;
-    char *q;
-    int r;
-    p = (char *)&s;
-    FUN_001510e0((igVisualContext *)p);
-    s.vt = &g_igPsx2VisualContext_vtable[0];
-    q = (char *)&s + 332;
-    igSmartPointer_igIntList_Construct((int *)q);
-    FUN_001510a0((int)((char *)&s + 772));
-    FUN_00151090((int)(p + 876));
-    FUN_00151080((int *)(p + 940));
-    FUN_00151070((int *)(p + 944));
-    FUN_00151060((int *)(p + 948));
-    FUN_00151050((int *)(p + 972));
-    FUN_00151050((int *)(p + 976));
-    FUN_00151050((int *)(p + 980));
-    FUN_00151050((int *)(p + 984));
-    FUN_00151050((int *)(p + 988));
-    FUN_00151050((int *)(p + 992));
-    FUN_00151050((int *)(p + 996));
-    FUN_00151050((int *)(p + 1000));
-    FUN_00151050((int *)(p + 1004));
-    FUN_00151050((int *)(p + 1008));
-    FUN_00151050((int *)(p + 1012));
-    FUN_00151050((int *)(p + 1016));
-    FUN_00151090((int)(p + 1312));
-    FUN_00151030(p + 1348);
-    FUN_00151090((int)(p + 1432));
-    r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
-    s.vt = &g_igPsx2VisualContext_vtable[0];
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 1016), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 1012), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 1008), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 1004), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 1000), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 996), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 992), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 988), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 984), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 980), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 976), -1);
-    FUN_00150fb0((ObjectRefWord *)((char *)&s + 972), -1);
-    FUN_00137260((void **)((char *)&s + 948), (short)-1);
-    FUN_001372e0((igObject **)((char *)&s + 944), (short)-1);
-    FUN_00150f30((O_1506b0 *)((char *)&s + 940), -1);
-    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)q, -1);
-    FUN_00150af0((Obj_1506b0 *)&s, 0);
-    return r;
+igMetaObject *igPsx2VisualContext::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igPsx2VisualContext::retrieveVTablePointer()
+{
+    igPsx2VisualContext temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 igSmartPointer<igObject> *igSmartPointer_igMemoryPool_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
@@ -113,699 +71,35 @@ igSmartPointer<igObject> *igSmartPointer_igTimer_Destruct(igSmartPointer<igObjec
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igIntList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
+namespace Gap {
+namespace Gfx {
 
-O_1506b0 *FUN_00150f30(O_1506b0 *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0_1506b0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_00150fb0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-void *FUN_00151030(void *arg0) {
-    *(int *)((char *)(arg0) + 20) = 0;
-    *(char *)((char *)(arg0) + 0) = 0;
-    *(char *)((char *)(arg0) + 1) = 0;
-    *(int *)((char *)(arg0) + 12) = 0;
-    *(int *)((char *)(arg0) + 16) = 0;
-    return arg0;
-}
-
-int *FUN_00151050(int *p)
+void igPsx2VisualContext::arkRegister()
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-int *FUN_00151060(int *p)
+CallbackArray *igPsx2VisualContext::arkRegisterInternal()
 {
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igIntList::arkRegister, Gap::Gfx::igPsx2VertexArray1_1::arkRegister, Gap::Gfx::igIndexArray::arkRegister, Gap::Gfx::igPrimLengthArray::arkRegister, igMatrixStack_EnsureRegistered, igPsx2ScissorExt_EnsureRegistered, 0 };
 
-int *FUN_00151070(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
-
-int *FUN_00151080(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
-
-int FUN_00151090(int a) { return a; }
-
-int FUN_001510a0(int arg0) {
-    igMatrix44f_SetIdentity((float *)arg0);
-    return arg0;
-}
-
-int *igSmartPointer_igIntList_Construct(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
-
-void igPsx2VisualContext_EnsureRegistered(void)
-{
-    igMetaObject_RunStaticInit(igPsx2VisualContext_Register);
-}
-
-static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { Gap::Core::igIntList::arkRegister, Gap::Gfx::igPsx2VertexArray1_1::arkRegister, Gap::Gfx::igIndexArray::arkRegister, Gap::Gfx::igPrimLengthArray::arkRegister, igMatrixStack_EnsureRegistered, igPsx2ScissorExt_EnsureRegistered, 0 };
-
-CallbackArray *igPsx2VisualContext_Register(void) {
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPsx2VisualContext_metaObject,
+        false,
+        &_Meta,
         Gap::Gfx::igVisualContext::arkRegisterInternal,
         Gap::Gfx::igVisualContext::getClassMeta,
-        igPsx2VisualContext_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2VisualContext",
-        0x618, /* instance size */
-        igPsx2VisualContext_GetVTable,
-        &igPsx2VisualContext_InitFields,
-        0, /* extra callback item */
-        g_igPsx2VisualContext_callbackList /* callback list */
+        sizeof(igPsx2VisualContext),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
-
-static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)igBoolArrayMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolArrayMetaField_Create,
-    (FieldFactory)igEnumArrayMetaField_Create,
-    (FieldFactory)igEnumArrayMetaField_Create,
-    (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumArrayMetaField_Create,
-    (FieldFactory)igEnumArrayMetaField_Create,
-    (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igStructMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igUnsignedIntArrayMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igUnsignedLongMetaField_Create,
-};
-static const char *g_igPsx2VisualContext_fieldTable[] = {
-    "_current",
-    "_iContextOpen",
-    "_pTexList",
-    "_pClutList",
-    "_pTexLoadedList",
-    "_currentTex",
-    "_iNextFreeTexID",
-    "_currentCLUT",
-    "_currentTextureFilter",
-    "_currentTextureClampU",
-    "_currentTextureClampV",
-    "_currentTextureProjectiveState",
-    "_texPageEnable",
-    "_texStage",
-    "_texEnable",
-    "_texStageFunc",
-    "_texCoordSource",
-    "_texCoordIndex",
-    "_texGenMat",
-    "_iCLUT_I8",
-    "_iCLUT_A8",
-    "_iCLUT_IA16",
-    "_iCLUT_IA8",
-    "_pCLUT_I8",
-    "_pCLUT_A8",
-    "_pCLUT_IA16",
-    "_pCLUT_IA8",
-    "_pBufList",
-    "_currentBuf",
-    "_clearColor",
-    "_clearDepth",
-    "_uiClearColor",
-    "_uiClearDepth",
-    "_clearStencil",
-    "_iDisplayWidth",
-    "_iDisplayHeight",
-    "_iViewportX",
-    "_iViewportY",
-    "_iViewportW",
-    "_iViewportH",
-    "_viewportNear",
-    "_viewportFar",
-    "_pVertexArray",
-    "_pIndexArray",
-    "_pStripLengthArray",
-    "_vMask",
-    "_currentColor",
-    "_pDLists",
-    "_currentDListHandle",
-    "_dlistErrors",
-    "_projMat",
-    "_mvMat",
-    "_texMat",
-    "_texgenMat",
-    "_blendMat0",
-    "_blendMat1",
-    "_blendMat2",
-    "_blendMat3",
-    "_invTransBlendMat0",
-    "_invTransBlendMat1",
-    "_invTransBlendMat2",
-    "_invTransBlendMat3",
-    "_bVertexBlendingEnabled",
-    "_edgeAntiAliasEnable",
-    "_alphaEnable",
-    "_alphaFunc",
-    "_alphaVal",
-    "_bBlendingEnabled",
-    "_blendSrcMode",
-    "_blendDestMode",
-    "_blendConst",
-    "_clippingEnable",
-    "_scissoringExt",
-    "_scissorX",
-    "_scissorY",
-    "_scissorW",
-    "_scissorH",
-    "_colorMaskR",
-    "_colorMaskG",
-    "_colorMaskB",
-    "_colorMaskA",
-    "_shadingMode",
-    "_stencilState",
-    "_stencilRefVal",
-    "_cullFaceEnable",
-    "_cullFaceMode",
-    "_bDepthWrite",
-    "_depthTestEnable",
-    "_depthTestFunc",
-    "_depthWriteEnable",
-    "_stencilFunc",
-    "_renderMode",
-    "_renderSides",
-    "_fogEnable",
-    "_fogDensity",
-    "_fogMode",
-    "_fogColor",
-    "_fogNear",
-    "_fogFar",
-    "_pLightList",
-    "_bLightingEnabled",
-    "_currentMaterial",
-    "_videoMode",
-    "_bNormalizeNormalsState",
-    "_matrixOptimizationEnable",
-    "_statisticState",
-    "_scaleToPower2Warning",
-    "_mipmapMethodL",
-    "_mipmapMethodK",
-    "_mipmapL",
-    "_mipmapK",
-    "_renderlistMode",
-    "_needsValidate",
-    "_destAlphaTestState",
-    "_destAlphaTestFunc",
-    "_vertexProgramState",
-    "_inverseTransposeCount",
-    "_inverseTransposeNeedValidation",
-    "_colorScalerState",
-    "_colorScalerValue",
-    "_textureMatrixState",
-    "_colorClampState",
-    "_materialSpecularState",
-    "_bTextureColorComponent",
-    "_bMultiPassNum",
-    "_multiPassBlendState",
-    "_multiPassBlendSrc",
-    "_multiPassBlendDst",
-    "_clutOptimization",
-    "_maxStageNum",
-    "_globalMinU",
-    "_globalMinV",
-    "_globalMaxU",
-    "_globalMaxV",
-    "_globalWrapState",
-    "_globalWrapMode",
-    "_textureStateFilter",
-    "_textureMinFilter",
-    "_textureMagFilter",
-    "_pixelPipelineMode",
-    "_clippingType",
-    "_clearType",
-    "_frameBufferTexture",
-    "_alphaBlendingControl",
-    "_alphaBlendingCorrection",
-    "_ditherMatrix",
-};
-static igMetaField **g_igPsx2VisualContext_fieldHandles[] = {
-    &g_igPsx2VisualContext_currentMetaField,
-    &g_igPsx2VisualContext_iContextOpenMetaField,
-    &g_igPsx2VisualContext_pTexListMetaField,
-    &g_igPsx2VisualContext_pClutListMetaField,
-    &g_igPsx2VisualContext_pTexLoadedListMetaField,
-    &g_igPsx2VisualContext_currentTexMetaField,
-    &g_igPsx2VisualContext_iNextFreeTexIDMetaField,
-    &g_igPsx2VisualContext_currentCLUTMetaField,
-    &g_igPsx2VisualContext_currentTextureFilterMetaField,
-    &g_igPsx2VisualContext_currentTextureClampUMetaField,
-    &g_igPsx2VisualContext_currentTextureClampVMetaField,
-    &g_igPsx2VisualContext_currentTextureProjectiveStateMetaField,
-    &g_igPsx2VisualContext_texPageEnableMetaField,
-    &g_igPsx2VisualContext_texStageMetaField,
-    &g_igPsx2VisualContext_texEnableMetaField,
-    &g_igPsx2VisualContext_texStageFuncMetaField,
-    &g_igPsx2VisualContext_texCoordSourceMetaField,
-    &g_igPsx2VisualContext_texCoordIndexMetaField,
-    &g_igPsx2VisualContext_texGenMatMetaField,
-    &g_igPsx2VisualContext_iCLUT_I8MetaField,
-    &g_igPsx2VisualContext_iCLUT_A8MetaField,
-    &g_igPsx2VisualContext_iCLUT_IA16MetaField,
-    &g_igPsx2VisualContext_iCLUT_IA8MetaField,
-    &g_igPsx2VisualContext_pCLUT_I8MetaField,
-    &g_igPsx2VisualContext_pCLUT_A8MetaField,
-    &g_igPsx2VisualContext_pCLUT_IA16MetaField,
-    &g_igPsx2VisualContext_pCLUT_IA8MetaField,
-    &g_igPsx2VisualContext_pBufListMetaField,
-    &g_igPsx2VisualContext_currentBufMetaField,
-    &g_igPsx2VisualContext_clearColorMetaField,
-    &g_igPsx2VisualContext_clearDepthMetaField,
-    &g_igPsx2VisualContext_uiClearColorMetaField,
-    &g_igPsx2VisualContext_uiClearDepthMetaField,
-    &g_igPsx2VisualContext_clearStencilMetaField,
-    &g_igPsx2VisualContext_iDisplayWidthMetaField,
-    &g_igPsx2VisualContext_iDisplayHeightMetaField,
-    &g_igPsx2VisualContext_iViewportXMetaField,
-    &g_igPsx2VisualContext_iViewportYMetaField,
-    &g_igPsx2VisualContext_iViewportWMetaField,
-    &g_igPsx2VisualContext_iViewportHMetaField,
-    &g_igPsx2VisualContext_viewportNearMetaField,
-    &g_igPsx2VisualContext_viewportFarMetaField,
-    &g_igPsx2VisualContext_pVertexArrayMetaField,
-    &g_igPsx2VisualContext_pIndexArrayMetaField,
-    &g_igPsx2VisualContext_pStripLengthArrayMetaField,
-    &g_igPsx2VisualContext_vMaskMetaField,
-    &g_igPsx2VisualContext_currentColorMetaField,
-    &g_igPsx2VisualContext_pDListsMetaField,
-    &g_igPsx2VisualContext_currentDListHandleMetaField,
-    &g_igPsx2VisualContext_dlistErrorsMetaField,
-    &g_igPsx2VisualContext_projMatMetaField,
-    &g_igPsx2VisualContext_mvMatMetaField,
-    &g_igPsx2VisualContext_texMatMetaField,
-    &g_igPsx2VisualContext_texgenMatMetaField,
-    &g_igPsx2VisualContext_blendMat0MetaField,
-    &g_igPsx2VisualContext_blendMat1MetaField,
-    &g_igPsx2VisualContext_blendMat2MetaField,
-    &g_igPsx2VisualContext_blendMat3MetaField,
-    &g_igPsx2VisualContext_invTransBlendMat0MetaField,
-    &g_igPsx2VisualContext_invTransBlendMat1MetaField,
-    &g_igPsx2VisualContext_invTransBlendMat2MetaField,
-    &g_igPsx2VisualContext_invTransBlendMat3MetaField,
-    &g_igPsx2VisualContext_bVertexBlendingEnabledMetaField,
-    &g_igPsx2VisualContext_edgeAntiAliasEnableMetaField,
-    &g_igPsx2VisualContext_alphaEnableMetaField,
-    &g_igPsx2VisualContext_alphaFuncMetaField,
-    &g_igPsx2VisualContext_alphaValMetaField,
-    &g_igPsx2VisualContext_bBlendingEnabledMetaField,
-    &g_igPsx2VisualContext_blendSrcModeMetaField,
-    &g_igPsx2VisualContext_blendDestModeMetaField,
-    &g_igPsx2VisualContext_blendConstMetaField,
-    &g_igPsx2VisualContext_clippingEnableMetaField,
-    &g_igPsx2VisualContext_scissoringExtMetaField,
-    &g_igPsx2VisualContext_scissorXMetaField,
-    &g_igPsx2VisualContext_scissorYMetaField,
-    &g_igPsx2VisualContext_scissorWMetaField,
-    &g_igPsx2VisualContext_scissorHMetaField,
-    &g_igPsx2VisualContext_colorMaskRMetaField,
-    &g_igPsx2VisualContext_colorMaskGMetaField,
-    &g_igPsx2VisualContext_colorMaskBMetaField,
-    &g_igPsx2VisualContext_colorMaskAMetaField,
-    &g_igPsx2VisualContext_shadingModeMetaField,
-    &g_igPsx2VisualContext_stencilStateMetaField,
-    &g_igPsx2VisualContext_stencilRefValMetaField,
-    &g_igPsx2VisualContext_cullFaceEnableMetaField,
-    &g_igPsx2VisualContext_cullFaceModeMetaField,
-    &g_igPsx2VisualContext_bDepthWriteMetaField,
-    &g_igPsx2VisualContext_depthTestEnableMetaField,
-    &g_igPsx2VisualContext_depthTestFuncMetaField,
-    &g_igPsx2VisualContext_depthWriteEnableMetaField,
-    &g_igPsx2VisualContext_stencilFuncMetaField,
-    &g_igPsx2VisualContext_renderModeMetaField,
-    &g_igPsx2VisualContext_renderSidesMetaField,
-    &g_igPsx2VisualContext_fogEnableMetaField,
-    &g_igPsx2VisualContext_fogDensityMetaField,
-    &g_igPsx2VisualContext_fogModeMetaField,
-    &g_igPsx2VisualContext_fogColorMetaField,
-    &g_igPsx2VisualContext_fogNearMetaField,
-    &g_igPsx2VisualContext_fogFarMetaField,
-    &g_igPsx2VisualContext_pLightListMetaField,
-    &g_igPsx2VisualContext_bLightingEnabledMetaField,
-    &g_igPsx2VisualContext_currentMaterialMetaField,
-    &g_igPsx2VisualContext_videoModeMetaField,
-    &g_igPsx2VisualContext_bNormalizeNormalsStateMetaField,
-    &g_igPsx2VisualContext_matrixOptimizationEnableMetaField,
-    &g_igPsx2VisualContext_statisticStateMetaField,
-    &g_igPsx2VisualContext_scaleToPower2WarningMetaField,
-    &g_igPsx2VisualContext_mipmapMethodLMetaField,
-    &g_igPsx2VisualContext_mipmapMethodKMetaField,
-    &g_igPsx2VisualContext_mipmapLMetaField,
-    &g_igPsx2VisualContext_mipmapKMetaField,
-    &g_igPsx2VisualContext_renderlistModeMetaField,
-    &g_igPsx2VisualContext_needsValidateMetaField,
-    &g_igPsx2VisualContext_destAlphaTestStateMetaField,
-    &g_igPsx2VisualContext_destAlphaTestFuncMetaField,
-    &g_igPsx2VisualContext_vertexProgramStateMetaField,
-    &g_igPsx2VisualContext_inverseTransposeCountMetaField,
-    &g_igPsx2VisualContext_inverseTransposeNeedValidationMetaField,
-    &g_igPsx2VisualContext_colorScalerStateMetaField,
-    &g_igPsx2VisualContext_colorScalerValueMetaField,
-    &g_igPsx2VisualContext_textureMatrixStateMetaField,
-    &g_igPsx2VisualContext_colorClampStateMetaField,
-    &g_igPsx2VisualContext_materialSpecularStateMetaField,
-    &g_igPsx2VisualContext_bTextureColorComponentMetaField,
-    &g_igPsx2VisualContext_bMultiPassNumMetaField,
-    &g_igPsx2VisualContext_multiPassBlendStateMetaField,
-    &g_igPsx2VisualContext_multiPassBlendSrcMetaField,
-    &g_igPsx2VisualContext_multiPassBlendDstMetaField,
-    &g_igPsx2VisualContext_clutOptimizationMetaField,
-    &g_igPsx2VisualContext_maxStageNumMetaField,
-    &g_igPsx2VisualContext_globalMinUMetaField,
-    &g_igPsx2VisualContext_globalMinVMetaField,
-    &g_igPsx2VisualContext_globalMaxUMetaField,
-    &g_igPsx2VisualContext_globalMaxVMetaField,
-    &g_igPsx2VisualContext_globalWrapStateMetaField,
-    &g_igPsx2VisualContext_globalWrapModeMetaField,
-    &g_igPsx2VisualContext_textureStateFilterMetaField,
-    &g_igPsx2VisualContext_textureMinFilterMetaField,
-    &g_igPsx2VisualContext_textureMagFilterMetaField,
-    &g_igPsx2VisualContext_pixelPipelineModeMetaField,
-    &g_igPsx2VisualContext_clippingTypeMetaField,
-    &g_igPsx2VisualContext_clearTypeMetaField,
-    &g_igPsx2VisualContext_frameBufferTextureMetaField,
-    &g_igPsx2VisualContext_alphaBlendingControlMetaField,
-    &g_igPsx2VisualContext_alphaBlendingCorrectionMetaField,
-    &g_igPsx2VisualContext_ditherMatrixMetaField,
-};
-static int g_igPsx2VisualContext_fieldOffsets[] = {
-    321,
-    322,
-    324,
-    328,
-    332,
-    336,
-    340,
-    344,
-    348,
-    412,
-    476,
-    540,
-    556,
-    560,
-    564,
-    580,
-    644,
-    708,
-    772,
-    836,
-    840,
-    844,
-    848,
-    852,
-    856,
-    860,
-    864,
-    868,
-    872,
-    876,
-    892,
-    896,
-    900,
-    904,
-    908,
-    912,
-    916,
-    920,
-    924,
-    928,
-    932,
-    936,
-    940,
-    944,
-    948,
-    952,
-    956,
-    960,
-    964,
-    968,
-    972,
-    976,
-    980,
-    984,
-    988,
-    992,
-    996,
-    1000,
-    1004,
-    1008,
-    1012,
-    1016,
-    1020,
-    1021,
-    1022,
-    1024,
-    1028,
-    1032,
-    1036,
-    1100,
-    1164,
-    1228,
-    1232,
-    1236,
-    1240,
-    1244,
-    1248,
-    1252,
-    1253,
-    1254,
-    1255,
-    1256,
-    1260,
-    1264,
-    1268,
-    1272,
-    1276,
-    1277,
-    1280,
-    1284,
-    1288,
-    1292,
-    1296,
-    1300,
-    1304,
-    1308,
-    1312,
-    1328,
-    1332,
-    1336,
-    1340,
-    1344,
-    1348,
-    1372,
-    1373,
-    1376,
-    1380,
-    1384,
-    1388,
-    1392,
-    1396,
-    1400,
-    1404,
-    1408,
-    1412,
-    1416,
-    1420,
-    1424,
-    1428,
-    1432,
-    1448,
-    1449,
-    1450,
-    320,
-    1452,
-    1456,
-    1460,
-    1464,
-    1468,
-    1472,
-    1476,
-    1480,
-    1484,
-    1488,
-    1492,
-    1496,
-    1500,
-    1504,
-    1508,
-    1512,
-    1516,
-    1520,
-    1524,
-    1536,
-    1537,
-    1544,
-};
+}
+}
 
 static int g_igPsx2VisualContext_alphaFuncDefault = 6;
 static int g_igPsx2VisualContext_stencilFuncDefault = 2;
@@ -815,310 +109,483 @@ static int g_igPsx2VisualContext_destAlphaTestFuncDefault = 1;
 static int g_igPsx2VisualContext_colorScalerStateDefault = 1;
 static int g_igPsx2VisualContext_clearTypeDefault = 1;
 
-void igPsx2VisualContext_InitFields(void) {
-    igMetaField *temp_a0;
-    igMetaField *temp_a0_2;
-    igMetaField *temp_a0_3;
-    igMetaField *temp_s2;
-    igMetaField *temp_s2_10;
-    igMetaField *temp_s2_11;
-    igMetaField *temp_s2_12;
-    igMetaField *temp_s2_13;
-    igMetaField *temp_s2_14;
-    igMetaField *temp_s2_15;
-    igMetaField *temp_s2_16;
-    igMetaField *temp_s2_17;
-    igMetaField *temp_s2_18;
-    igMetaField *temp_s2_19;
-    igMetaField *temp_s2_20;
-    igMetaField *temp_s2_21;
-    igMetaField *temp_s2_2;
-    igMetaField *temp_s2_3;
-    igMetaField *temp_s2_4;
-    igMetaField *temp_s2_5;
-    igMetaField *temp_s2_6;
-    igMetaField *temp_s2_7;
-    igMetaField *temp_s2_8;
-    igMetaField *temp_s2_9;
-    igMetaField *temp_v0;
-    igMetaField *temp_v0_10;
-    igMetaField *temp_v0_11;
-    igMetaField *temp_v0_12;
-    igMetaField *temp_v0_13;
-    igMetaField *temp_v0_14;
-    igMetaField *temp_v0_15;
-    igMetaField *temp_v0_16;
-    igMetaField *temp_v0_17;
-    igMetaField *temp_v0_18;
-    igMetaField *temp_v0_19;
-    igMetaField *temp_v0_20;
-    igMetaField *temp_v0_21;
-    igMetaField *temp_v0_22;
-    igMetaField *temp_v0_23;
-    igMetaField *temp_v0_24;
-    igMetaField *temp_v0_25;
-    igMetaField *temp_v0_26;
-    igMetaField *temp_v0_27;
-    igMetaField *temp_v0_28;
-    igMetaField *temp_v0_29;
-    igMetaField *temp_v0_2;
-    igMetaField *temp_v0_30;
-    igMetaField *temp_v0_31;
-    igMetaField *temp_v0_32;
-    igMetaField *temp_v0_33;
-    igMetaField *temp_v0_34;
-    igMetaField *temp_v0_35;
-    igMetaField *temp_v0_36;
-    igMetaField *temp_v0_3;
-    igMetaField *temp_v0_4;
-    igMetaField *temp_v0_5;
-    igMetaField *temp_v0_6;
-    igMetaField *temp_v0_7;
-    igMetaField *temp_v0_8;
-    igMetaField *temp_v0_9;
-    int sp60[4];
-    int sp50[4];
-    float sp40[4];
-    int fieldStart;
-    igMetaObject *meta;
+namespace Gap {
+namespace Gfx {
 
-    meta = g_igPsx2VisualContext_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igPsx2VisualContext_ctorTable, 0x92);
-    temp_s2 = igMetaObject_GetFieldAt(meta, fieldStart + 4);
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 5)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 7)))->setDefault(-1);
-    temp_v0 = igMetaObject_GetFieldAt(meta, fieldStart + 8);
-    ((igIntArrayMetaField *)temp_v0)->_num = 0x10;
-    ((Gap::Core::igIntArrayMetaField *)temp_v0)->setDefault(-1);
-    temp_v0_2 = igMetaObject_GetFieldAt(meta, fieldStart + 9);
-    ((igIntArrayMetaField *)temp_v0_2)->_num = 0x10;
-    ((Gap::Core::igIntArrayMetaField *)temp_v0_2)->setDefault(-1);
-    temp_v0_3 = igMetaObject_GetFieldAt(meta, fieldStart + 0xA);
-    ((igIntArrayMetaField *)temp_v0_3)->_num = 0x10;
-    ((Gap::Core::igIntArrayMetaField *)temp_v0_3)->setDefault(-1);
-    temp_v0_4 = igMetaObject_GetFieldAt(meta, fieldStart + 0xB);
-    ((igBoolArrayMetaField *)temp_v0_4)->_num = 0x10;
-    ((Gap::Core::igBoolArrayMetaField *)temp_v0_4)->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC)))->setDefault(1);
-    { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0xE); ((igBoolArrayMetaField *)q)->_num = 0x10; }
-    temp_v0_5 = igMetaObject_GetFieldAt(meta, fieldStart + 0xF);
-    ((igEnumArrayMetaField *)temp_v0_5)->_num = 0x10;
-    ((Gap::Core::igEnumArrayMetaField *)temp_v0_5)->setDefault(0);
-    *(int (**)())&((igEnumArrayMetaField *)temp_v0_5)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_6 = igMetaObject_GetFieldAt(meta, fieldStart + 0x10);
-    ((igEnumArrayMetaField *)temp_v0_6)->_num = 0x10;
-    ((Gap::Core::igEnumArrayMetaField *)temp_v0_6)->setDefault(0);
-    *(int (**)())&((igEnumArrayMetaField *)temp_v0_6)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x11); ((igIntArrayMetaField *)q)->_num = 0x10; }
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x13)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x14)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x15)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x16)))->setDefault(-1);
-    temp_s2_2 = igMetaObject_GetFieldAt(meta, fieldStart + 0x17);
-    ((igMemoryRefMetaField *)temp_s2_2)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
-    temp_s2_3 = igMetaObject_GetFieldAt(meta, fieldStart + 0x18);
-    ((igMemoryRefMetaField *)temp_s2_3)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
-    temp_s2_4 = igMetaObject_GetFieldAt(meta, fieldStart + 0x19);
-    ((igMemoryRefMetaField *)temp_s2_4)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
-    temp_s2_5 = igMetaObject_GetFieldAt(meta, fieldStart + 0x1A);
-    ((igMemoryRefMetaField *)temp_s2_5)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x1C)))->setDefault(-1);
-    temp_a0 = igMetaObject_GetFieldAt(meta, fieldStart + 0x1D);
-    sp60[0] = 0;
-    sp60[1] = 0;
-    sp60[2] = 0;
-    sp60[3] = 0;
-    ((Gap::Math::igVec4fMetaField *)temp_a0)->setDefault(*(const igVec4f *)sp60);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x1E)))->setDefault(1.0f);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x26)))->setDefault(0x280);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x27)))->setDefault(0x1C0);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x28)))->setDefault(0.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x29)))->setDefault(1.0f);
-    temp_s2_6 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2A);
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)Gap::Gfx::igPsx2VertexArray1_1::getClassTypeLazy();
-    temp_s2_7 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2B);
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)Gap::Gfx::igIndexArray::getClassTypeLazy();
-    temp_s2_8 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2C);
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)Gap::Gfx::igPrimLengthArray::getClassTypeLazy();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x30)))->setDefault(-1);
-    temp_s2_9 = igMetaObject_GetFieldAt(meta, fieldStart + 0x32);
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_9)->_construct = 1;
-    temp_s2_10 = igMetaObject_GetFieldAt(meta, fieldStart + 0x33);
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_10)->_construct = 1;
-    temp_s2_11 = igMetaObject_GetFieldAt(meta, fieldStart + 0x34);
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_11)->_construct = 1;
-    temp_s2_12 = igMetaObject_GetFieldAt(meta, fieldStart + 0x35);
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_12)->_construct = 1;
-    temp_s2_13 = igMetaObject_GetFieldAt(meta, fieldStart + 0x36);
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_13)->_construct = 1;
-    temp_s2_14 = igMetaObject_GetFieldAt(meta, fieldStart + 0x37);
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_14)->_construct = 1;
-    temp_s2_15 = igMetaObject_GetFieldAt(meta, fieldStart + 0x38);
-    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_15)->_construct = 1;
-    temp_s2_16 = igMetaObject_GetFieldAt(meta, fieldStart + 0x39);
-    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_16)->_construct = 1;
-    temp_s2_17 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3A);
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_17)->_construct = 1;
-    temp_s2_18 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3B);
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_18)->_construct = 1;
-    temp_s2_19 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3C);
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_19)->_construct = 1;
-    temp_s2_20 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3D);
-    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_20)->_construct = 1;
-    temp_v0_7 = igMetaObject_GetFieldAt(meta, fieldStart + 0x41);
-    ((Gap::Core::igEnumMetaField *)temp_v0_7)->setDefault(g_igPsx2VisualContext_alphaFuncDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_7)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_8 = igMetaObject_GetFieldAt(meta, fieldStart + 0x44);
-    ((igEnumArrayMetaField *)temp_v0_8)->_num = 0x10;
-    ((Gap::Core::igEnumArrayMetaField *)temp_v0_8)->setDefault(0);
-    *(int (**)())&((igEnumArrayMetaField *)temp_v0_8)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_9 = igMetaObject_GetFieldAt(meta, fieldStart + 0x45);
-    ((igEnumArrayMetaField *)temp_v0_9)->_num = 0x10;
-    ((Gap::Core::igEnumArrayMetaField *)temp_v0_9)->setDefault(0);
-    *(int (**)())&((igEnumArrayMetaField *)temp_v0_9)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x46); ((igIntArrayMetaField *)q)->_num = 0x10; }
-    temp_s2_21 = igMetaObject_GetFieldAt(meta, fieldStart + 0x48);
-    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)igPsx2ScissorExt_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_21)->_refCounted = 0;
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x4B)))->setDefault(0x280);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x4C)))->setDefault(0x1C0);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x4D)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x4E)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x4F)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x50)))->setDefault(1);
-    temp_v0_10 = igMetaObject_GetFieldAt(meta, fieldStart + 0x51);
-    ((Gap::Core::igEnumMetaField *)temp_v0_10)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_10)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_11 = igMetaObject_GetFieldAt(meta, fieldStart + 0x52);
-    ((Gap::Core::igEnumMetaField *)temp_v0_11)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_11)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_12 = igMetaObject_GetFieldAt(meta, fieldStart + 0x55);
-    ((Gap::Core::igEnumMetaField *)temp_v0_12)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_12)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x56)))->setDefault(1);
-    temp_v0_13 = igMetaObject_GetFieldAt(meta, fieldStart + 0x58);
-    ((Gap::Core::igEnumMetaField *)temp_v0_13)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_13)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_14 = igMetaObject_GetFieldAt(meta, fieldStart + 0x5A);
-    ((Gap::Core::igEnumMetaField *)temp_v0_14)->setDefault(g_igPsx2VisualContext_stencilFuncDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_14)->_getMetaEnumFunction = IG_GFX_STENCIL_FUNCTION_GetMetaEnum;
-    temp_v0_15 = igMetaObject_GetFieldAt(meta, fieldStart + 0x5B);
-    ((Gap::Core::igEnumMetaField *)temp_v0_15)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_15)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_16 = igMetaObject_GetFieldAt(meta, fieldStart + 0x5C);
-    ((Gap::Core::igEnumMetaField *)temp_v0_16)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_16)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_17 = igMetaObject_GetFieldAt(meta, fieldStart + 0x5F);
-    ((Gap::Core::igEnumMetaField *)temp_v0_17)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_17)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_a0_2 = igMetaObject_GetFieldAt(meta, fieldStart + 0x60);
-    sp50[0] = 0;
-    sp50[1] = 0;
-    sp50[2] = 0;
-    sp50[3] = 0;
-    ((Gap::Math::igVec4fMetaField *)temp_a0_2)->setDefault(*(const igVec4f *)sp50);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x61)))->setDefault(1.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x62)))->setDefault(10000.0f);
-    { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x66); ((igMetaField *)q)->_size = 0x18; }
-    temp_v0_18 = igMetaObject_GetFieldAt(meta, fieldStart + 0x69);
-    ((Gap::Core::igEnumMetaField *)temp_v0_18)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_18)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x6A)))->setDefault(1);
-    temp_v0_19 = igMetaObject_GetFieldAt(meta, fieldStart + 0x6B);
-    ((Gap::Core::igEnumMetaField *)temp_v0_19)->setDefault(g_igPsx2VisualContext_mipmapMethodLDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_19)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_20 = igMetaObject_GetFieldAt(meta, fieldStart + 0x6C);
-    ((Gap::Core::igEnumMetaField *)temp_v0_20)->setDefault(g_igPsx2VisualContext_mipmapMethodKDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_20)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_21 = igMetaObject_GetFieldAt(meta, fieldStart + 0x6F);
-    ((Gap::Core::igEnumMetaField *)temp_v0_21)->setDefault(0);
-    *(int (**)())&((igEnumMetaField *)temp_v0_21)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_22 = igMetaObject_GetFieldAt(meta, fieldStart + 0x72);
-    ((Gap::Core::igEnumMetaField *)temp_v0_22)->setDefault(g_igPsx2VisualContext_destAlphaTestFuncDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_22)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_23 = igMetaObject_GetFieldAt(meta, fieldStart + 0x76);
-    ((Gap::Core::igEnumMetaField *)temp_v0_23)->setDefault(g_igPsx2VisualContext_colorScalerStateDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_23)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_a0_3 = igMetaObject_GetFieldAt(meta, fieldStart + 0x77);
-    sp40[3] = 1.0f;
-    sp40[0] = 0.501960754f;
-    sp40[1] = 0.501960754f;
-    sp40[2] = 0.501960754f;
-    ((Gap::Math::igVec4fMetaField *)temp_a0_3)->setDefault(*(const igVec4f *)sp40);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x79)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x7A)))->setDefault(1);
-    temp_v0_24 = igMetaObject_GetFieldAt(meta, fieldStart + 0x7B);
-    ((Gap::Core::igBoolMetaField *)temp_v0_24)->setDefault(1);
-    ((igMetaField *)temp_v0_24)->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x7C))->_persistent = 0;
-    temp_v0_25 = igMetaObject_GetFieldAt(meta, fieldStart + 0x7D);
-    ((Gap::Core::igBoolMetaField *)temp_v0_25)->setDefault(1);
-    ((igMetaField *)temp_v0_25)->_persistent = 0;
-    temp_v0_26 = igMetaObject_GetFieldAt(meta, fieldStart + 0x7E);
-    ((Gap::Core::igEnumMetaField *)temp_v0_26)->setDefault(0);
-    ((igMetaField *)temp_v0_26)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_26)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_27 = igMetaObject_GetFieldAt(meta, fieldStart + 0x7F);
-    ((Gap::Core::igEnumMetaField *)temp_v0_27)->setDefault(0);
-    ((igMetaField *)temp_v0_27)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_27)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
-    temp_v0_28 = igMetaObject_GetFieldAt(meta, fieldStart + 0x80);
-    ((Gap::Core::igBoolMetaField *)temp_v0_28)->setDefault(1);
-    ((igMetaField *)temp_v0_28)->_persistent = 0;
-    temp_v0_29 = igMetaObject_GetFieldAt(meta, fieldStart + 0x81);
-    ((Gap::Core::igIntMetaField *)temp_v0_29)->setDefault(0x10);
-    ((igMetaField *)temp_v0_29)->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x82))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x83))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x84))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x85))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x86))->_persistent = 0;
-    temp_v0_30 = igMetaObject_GetFieldAt(meta, fieldStart + 0x87);
-    ((Gap::Core::igEnumMetaField *)temp_v0_30)->setDefault(0);
-    ((igMetaField *)temp_v0_30)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_30)->_getMetaEnumFunction = IG_GFX_TEXTURE_WRAP_GetMetaEnum;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x88))->_persistent = 0;
-    temp_v0_31 = igMetaObject_GetFieldAt(meta, fieldStart + 0x89);
-    ((Gap::Core::igEnumMetaField *)temp_v0_31)->setDefault(0);
-    ((igMetaField *)temp_v0_31)->_persistent = 0;
-    *(igMetaEnum *(**)())&((igEnumMetaField *)temp_v0_31)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
-    temp_v0_32 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8A);
-    ((Gap::Core::igEnumMetaField *)temp_v0_32)->setDefault(0);
-    ((igMetaField *)temp_v0_32)->_persistent = 0;
-    *(igMetaEnum *(**)())&((igEnumMetaField *)temp_v0_32)->_getMetaEnumFunction = IG_GFX_TEXTURE_FILTER_GetMetaEnum;
-    temp_v0_33 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8B);
-    ((Gap::Core::igEnumMetaField *)temp_v0_33)->setDefault(0);
-    ((igMetaField *)temp_v0_33)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_33)->_getMetaEnumFunction = IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum;
-    temp_v0_34 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8C);
-    ((Gap::Core::igEnumMetaField *)temp_v0_34)->setDefault(0);
-    ((igMetaField *)temp_v0_34)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_34)->_getMetaEnumFunction = IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum;
-    temp_v0_35 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8D);
-    ((Gap::Core::igEnumMetaField *)temp_v0_35)->setDefault(g_igPsx2VisualContext_clearTypeDefault);
-    ((igMetaField *)temp_v0_35)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_35)->_getMetaEnumFunction = IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2_GetMetaEnum;
-    temp_v0_36 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8E);
-    ((igUnsignedIntArrayMetaField *)temp_v0_36)->_num = 3;
-    ((igMetaField *)temp_v0_36)->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x8F))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x90))->_persistent = 0;
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x91))->_persistent = 0;
-    igMetaObject_NameFields(meta, g_igPsx2VisualContext_fieldTable, g_igPsx2VisualContext_fieldHandles, g_igPsx2VisualContext_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPsx2VisualContext_metaObject) + 64) = (int)(&Gap::Gfx::igVisualContext::getClassMetaSafe);
+void igPsx2VisualContext::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igBoolMetaField_Create, igRawRefMetaField_Create, igRawRefMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Core::igIntArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igBoolArrayMetaField::_instantiateFromPool, igBoolMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Core::igBoolArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igEnumArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igEnumArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igRawRefMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igRawRefMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igBoolMetaField_Create, (FieldFactory)Gap::Core::igEnumArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igEnumArrayMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntArrayMetaField::_instantiateFromPool, igBoolMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igEnumMetaField_Create, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igRawRefMetaField_Create, igBoolMetaField_Create, igRawRefMetaField_Create, (FieldFactory)Gap::Core::igStructMetaField::_instantiateFromPool, igBoolMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igEnumMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, (FieldFactory)Gap::Core::igUnsignedIntArrayMetaField::_instantiateFromPool, igBoolMetaField_Create, igBoolMetaField_Create, igUnsignedLongMetaField_Create };
+    static const char *names[] = { "_current", "_iContextOpen", "_pTexList", "_pClutList", "_pTexLoadedList", "_currentTex", "_iNextFreeTexID", "_currentCLUT", "_currentTextureFilter", "_currentTextureClampU", "_currentTextureClampV", "_currentTextureProjectiveState", "_texPageEnable", "_texStage", "_texEnable", "_texStageFunc", "_texCoordSource", "_texCoordIndex", "_texGenMat", "_iCLUT_I8", "_iCLUT_A8", "_iCLUT_IA16", "_iCLUT_IA8", "_pCLUT_I8", "_pCLUT_A8", "_pCLUT_IA16", "_pCLUT_IA8", "_pBufList", "_currentBuf", "_clearColor", "_clearDepth", "_uiClearColor", "_uiClearDepth", "_clearStencil", "_iDisplayWidth", "_iDisplayHeight", "_iViewportX", "_iViewportY", "_iViewportW", "_iViewportH", "_viewportNear", "_viewportFar", "_pVertexArray", "_pIndexArray", "_pStripLengthArray", "_vMask", "_currentColor", "_pDLists", "_currentDListHandle", "_dlistErrors", "_projMat", "_mvMat", "_texMat", "_texgenMat", "_blendMat0", "_blendMat1", "_blendMat2", "_blendMat3", "_invTransBlendMat0", "_invTransBlendMat1", "_invTransBlendMat2", "_invTransBlendMat3", "_bVertexBlendingEnabled", "_edgeAntiAliasEnable", "_alphaEnable", "_alphaFunc", "_alphaVal", "_bBlendingEnabled", "_blendSrcMode", "_blendDestMode", "_blendConst", "_clippingEnable", "_scissoringExt", "_scissorX", "_scissorY", "_scissorW", "_scissorH", "_colorMaskR", "_colorMaskG", "_colorMaskB", "_colorMaskA", "_shadingMode", "_stencilState", "_stencilRefVal", "_cullFaceEnable", "_cullFaceMode", "_bDepthWrite", "_depthTestEnable", "_depthTestFunc", "_depthWriteEnable", "_stencilFunc", "_renderMode", "_renderSides", "_fogEnable", "_fogDensity", "_fogMode", "_fogColor", "_fogNear", "_fogFar", "_pLightList", "_bLightingEnabled", "_currentMaterial", "_videoMode", "_bNormalizeNormalsState", "_matrixOptimizationEnable", "_statisticState", "_scaleToPower2Warning", "_mipmapMethodL", "_mipmapMethodK", "_mipmapL", "_mipmapK", "_renderlistMode", "_needsValidate", "_destAlphaTestState", "_destAlphaTestFunc", "_vertexProgramState", "_inverseTransposeCount", "_inverseTransposeNeedValidation", "_colorScalerState", "_colorScalerValue", "_textureMatrixState", "_colorClampState", "_materialSpecularState", "_bTextureColorComponent", "_bMultiPassNum", "_multiPassBlendState", "_multiPassBlendSrc", "_multiPassBlendDst", "_clutOptimization", "_maxStageNum", "_globalMinU", "_globalMinV", "_globalMaxU", "_globalMaxV", "_globalWrapState", "_globalWrapMode", "_textureStateFilter", "_textureMinFilter", "_textureMagFilter", "_pixelPipelineMode", "_clippingType", "_clearType", "_frameBufferTexture", "_alphaBlendingControl", "_alphaBlendingCorrection", "_ditherMatrix" };
+    static igMetaField **enumStorage[] = { &k_current, &k_iContextOpen, &k_pTexList, &k_pClutList, &k_pTexLoadedList, &k_currentTex, &k_iNextFreeTexID, &k_currentCLUT, &k_currentTextureFilter, &k_currentTextureClampU, &k_currentTextureClampV, &k_currentTextureProjectiveState, &k_texPageEnable, &k_texStage, &k_texEnable, &k_texStageFunc, &k_texCoordSource, &k_texCoordIndex, &k_texGenMat, &k_iCLUT_I8, &k_iCLUT_A8, &k_iCLUT_IA16, &k_iCLUT_IA8, &k_pCLUT_I8, &k_pCLUT_A8, &k_pCLUT_IA16, &k_pCLUT_IA8, &k_pBufList, &k_currentBuf, &k_clearColor, &k_clearDepth, &k_uiClearColor, &k_uiClearDepth, &k_clearStencil, &k_iDisplayWidth, &k_iDisplayHeight, &k_iViewportX, &k_iViewportY, &k_iViewportW, &k_iViewportH, &k_viewportNear, &k_viewportFar, &k_pVertexArray, &k_pIndexArray, &k_pStripLengthArray, &k_vMask, &k_currentColor, &k_pDLists, &k_currentDListHandle, &k_dlistErrors, &k_projMat, &k_mvMat, &k_texMat, &k_texgenMat, &k_blendMat0, &k_blendMat1, &k_blendMat2, &k_blendMat3, &k_invTransBlendMat0, &k_invTransBlendMat1, &k_invTransBlendMat2, &k_invTransBlendMat3, &k_bVertexBlendingEnabled, &k_edgeAntiAliasEnable, &k_alphaEnable, &k_alphaFunc, &k_alphaVal, &k_bBlendingEnabled, &k_blendSrcMode, &k_blendDestMode, &k_blendConst, &k_clippingEnable, &k_scissoringExt, &k_scissorX, &k_scissorY, &k_scissorW, &k_scissorH, &k_colorMaskR, &k_colorMaskG, &k_colorMaskB, &k_colorMaskA, &k_shadingMode, &k_stencilState, &k_stencilRefVal, &k_cullFaceEnable, &k_cullFaceMode, &k_bDepthWrite, &k_depthTestEnable, &k_depthTestFunc, &k_depthWriteEnable, &k_stencilFunc, &k_renderMode, &k_renderSides, &k_fogEnable, &k_fogDensity, &k_fogMode, &k_fogColor, &k_fogNear, &k_fogFar, &k_pLightList, &k_bLightingEnabled, &k_currentMaterial, &k_videoMode, &k_bNormalizeNormalsState, &k_matrixOptimizationEnable, &k_statisticState, &k_scaleToPower2Warning, &k_mipmapMethodL, &k_mipmapMethodK, &k_mipmapL, &k_mipmapK, &k_renderlistMode, &k_needsValidate, &k_destAlphaTestState, &k_destAlphaTestFunc, &k_vertexProgramState, &k_inverseTransposeCount, &k_inverseTransposeNeedValidation, &k_colorScalerState, &k_colorScalerValue, &k_textureMatrixState, &k_colorClampState, &k_materialSpecularState, &k_bTextureColorComponent, &k_bMultiPassNum, &k_multiPassBlendState, &k_multiPassBlendSrc, &k_multiPassBlendDst, &k_clutOptimization, &k_maxStageNum, &k_globalMinU, &k_globalMinV, &k_globalMaxU, &k_globalMaxV, &k_globalWrapState, &k_globalWrapMode, &k_textureStateFilter, &k_textureMinFilter, &k_textureMagFilter, &k_pixelPipelineMode, &k_clippingType, &k_clearType, &k_frameBufferTexture, &k_alphaBlendingControl, &k_alphaBlendingCorrection, &k_ditherMatrix };
+    static int offsets[] = { 321, 322, 324, 328, 332, 336, 340, 344, 348, 412, 476, 540, 556, 560, 564, 580, 644, 708, 772, 836, 840, 844, 848, 852, 856, 860, 864, 868, 872, 876, 892, 896, 900, 904, 908, 912, 916, 920, 924, 928, 932, 936, 940, 944, 948, 952, 956, 960, 964, 968, 972, 976, 980, 984, 988, 992, 996, 1000, 1004, 1008, 1012, 1016, 1020, 1021, 1022, 1024, 1028, 1032, 1036, 1100, 1164, 1228, 1232, 1236, 1240, 1244, 1248, 1252, 1253, 1254, 1255, 1256, 1260, 1264, 1268, 1272, 1276, 1277, 1280, 1284, 1288, 1292, 1296, 1300, 1304, 1308, 1312, 1328, 1332, 1336, 1340, 1344, 1348, 1372, 1373, 1376, 1380, 1384, 1388, 1392, 1396, 1400, 1404, 1408, 1412, 1416, 1420, 1424, 1428, 1432, 1448, 1449, 1450, 320, 1452, 1456, 1460, 1464, 1468, 1472, 1476, 1480, 1484, 1488, 1492, 1496, 1500, 1504, 1508, 1512, 1516, 1520, 1524, 1536, 1537, 1544 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 146);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntArrayMetaField *metaField = (igIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+        metaField->_num = 16;
+        metaField->setDefault(-1);
+    }
+    {
+        igIntArrayMetaField *metaField = (igIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+        metaField->_num = 16;
+        metaField->setDefault(-1);
+    }
+    {
+        igIntArrayMetaField *metaField = (igIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);
+        metaField->_num = 16;
+        metaField->setDefault(-1);
+    }
+    {
+        igBoolArrayMetaField *metaField = (igBoolArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
+        metaField->_num = 16;
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 12);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolArrayMetaField *metaField = (igBoolArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 14);
+        metaField->_num = 16;
+    }
+    {
+        igEnumArrayMetaField *metaField = (igEnumArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 15);
+        metaField->_num = 16;
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumArrayMetaField *metaField = (igEnumArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 16);
+        metaField->_num = 16;
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igIntArrayMetaField *metaField = (igIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 17);
+        metaField->_num = 16;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 19);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 20);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 21);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 22);
+        metaField->setDefault(-1);
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 23);
+        metaField->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 24);
+        metaField->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 25);
+        metaField->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 26);
+        metaField->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 28);
+        metaField->setDefault(-1);
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 29);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 0.0f));
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 30);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 38);
+        metaField->setDefault(640);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 39);
+        metaField->setDefault(448);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 40);
+        metaField->setDefault(0.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 41);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 42);
+        metaField->_metaObject = (int)Gap::Gfx::igPsx2VertexArray1_1::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 43);
+        metaField->_metaObject = (int)Gap::Gfx::igIndexArray::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 44);
+        metaField->_metaObject = (int)Gap::Gfx::igPrimLengthArray::getClassTypeLazy();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 48);
+        metaField->setDefault(-1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 50);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 51);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 52);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 53);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 54);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 55);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 56);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 57);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 58);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 59);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 60);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 61);
+        metaField->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 65);
+        metaField->setDefault(6);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumArrayMetaField *metaField = (igEnumArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 68);
+        metaField->_num = 16;
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumArrayMetaField *metaField = (igEnumArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 69);
+        metaField->_num = 16;
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igIntArrayMetaField *metaField = (igIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 70);
+        metaField->_num = 16;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 72);
+        metaField->_metaObject = (int)igPsx2ScissorExt_GetOrCreateMetaObject();
+        metaField->_refCounted = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 75);
+        metaField->setDefault(640);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 76);
+        metaField->setDefault(448);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 77);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 78);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 79);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 80);
+        metaField->setDefault(1);
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 81);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 82);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 85);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 86);
+        metaField->setDefault(1);
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 88);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 90);
+        metaField->setDefault(2);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_STENCIL_FUNCTION_GetMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 91);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 92);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 95);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 96);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 0.0f));
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 97);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 98);
+        metaField->setDefault(10000.0f);
+    }
+    {
+        igStructMetaField *metaField = (igStructMetaField *)igMetaObject_GetFieldAt(metaObject, start + 102);
+        metaField->_size = 24;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 105);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 106);
+        metaField->setDefault(1);
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 107);
+        metaField->setDefault(1);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 108);
+        metaField->setDefault(1);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 111);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 114);
+        metaField->setDefault(1);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 118);
+        metaField->setDefault(1);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 119);
+        metaField->setDefault(igVec4f(0.5019607543945312f, 0.5019607543945312f, 0.5019607543945312f, 1.0f));
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 121);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 122);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 123);
+        metaField->setDefault(1);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 124);
+        metaField->_persistent = 0;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 125);
+        metaField->setDefault(1);
+        metaField->_persistent = 0;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 126);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 127);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 128);
+        metaField->setDefault(1);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 129);
+        metaField->setDefault(16);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 130);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 131);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 132);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 133);
+        metaField->_persistent = 0;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 134);
+        metaField->_persistent = 0;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 135);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_WRAP_GetMetaEnum;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 136);
+        metaField->_persistent = 0;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 137);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FILTER_GetMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 138);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FILTER_GetMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 139);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 140);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 141);
+        metaField->setDefault(1);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2_GetMetaEnum;
+    }
+    {
+        igUnsignedIntArrayMetaField *metaField = (igUnsignedIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 142);
+        metaField->_num = 3;
+        metaField->_persistent = 0;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 143);
+        metaField->_persistent = 0;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 144);
+        metaField->_persistent = 0;
+    }
+    {
+        igUnsignedLongMetaField *metaField = (igUnsignedLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 145);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_writeProxy = (void (*)())Gap::Gfx::igVisualContext::getClassMetaSafe;
+}
+}
 }
 

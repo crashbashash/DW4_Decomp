@@ -341,11 +341,13 @@ def load_typed_fields(path):
     return {(cls, field): ctype.strip() for cls, field, ctype in table_rows(path, 3)}
 
 
-def typed_declaration(typed, field_name, flat_decl=""):
+def typed_declaration(typed, field_name, flat_decl="", meta=""):
     """A typed field's C++ declaration. `flat_decl` is the flat struct's declaration of a field the typed-fields
-    table types: an array of reference words keeps its dimensions (igTextureCubeAttr's six image references); a
-    float array the type replaces whole (a matrix's sixteen floats) does not."""
-    dims = re.search(r"(\[\d+\])+(?=;$)", flat_decl) if flat_decl.startswith("int ") else None
+    table types and `meta` its MetaField kind: an array metafield keeps its dimensions (igTextureCubeAttr's six
+    image references, a table of sixteen bools or enums); a value the type replaces whole (a matrix's sixteen
+    floats, a structure's words) does not. Without the kind, an array of words keeps them."""
+    keep = meta.endswith("ArrayMetaField") if meta else flat_decl.startswith("int ")
+    dims = re.search(r"(\[\d+\])+(?=;$)", flat_decl) if keep else None
     return "%s%s%s%s;" % (typed, "" if typed.endswith("*") else " ", field_name, dims.group(0) if dims else "")
 
 
@@ -697,7 +699,7 @@ def main(argv=None):
                 # the whole vector, float-aligned: the kit's type under C++
                 typed = kit[0]
             if typed:
-                spelled = typed_declaration(typed, field_name, array)
+                spelled = typed_declaration(typed, field_name, array, f["type"])
                 typed_line = "    %-46s /* +%-4d %s */" % (spelled, off, f["type"])
             if typed and flat:
                 body.extend(["#ifdef __cplusplus", typed_line, "#else", line, "#endif"])

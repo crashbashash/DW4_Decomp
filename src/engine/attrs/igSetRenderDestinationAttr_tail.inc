@@ -24,13 +24,13 @@ void igSetRenderDestinationAttr::apply(igVisualContext *pVC)
         }
         texId = _pRDAttr->getTexture()->getHandle();
         if (texId > -1) {
-            igPsx2VisualContext_SetRenderDestinationWithTexture((igPsx2VisualContext *)pVC, _pRDAttr->getHandle(), &texId, 0);
+            ((igPsx2VisualContext *)pVC)->igPsx2VisualContext::setRenderDestination(_pRDAttr->getHandle(), &texId, 0);
         } else if (_pRDAttr->getTextureCreateMode() == igRenderDestinationAttr::RENDERDESTINATION_TEXTURE_CREATE_MODE_AUTO_CREATE) {
-            igPsx2VisualContext_SetRenderDestinationWithTexture((igPsx2VisualContext *)pVC, _pRDAttr->getHandle(), &texId, 0);
+            ((igPsx2VisualContext *)pVC)->igPsx2VisualContext::setRenderDestination(_pRDAttr->getHandle(), &texId, 0);
             _pRDAttr->getTexture()->setHandle(texId);
         }
     } else {
-        igPsx2VisualContext_SetRenderDestination((igPsx2VisualContext *)pVC, _pRDAttr->getHandle(), 0);
+        ((igPsx2VisualContext *)pVC)->igPsx2VisualContext::setRenderDestination(_pRDAttr->getHandle(), 0);
     }
 }
 }

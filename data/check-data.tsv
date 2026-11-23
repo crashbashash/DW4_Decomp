@@ -13257,11 +13257,13 @@
 005248e0	100	.vtables	00130000	match
 00524950	92	.vtables	001493e0	match
 005249b0	100	.vtables	002b5d50	match
+00524a20	96	.vtables	002b5d50	match
 005250b0	112	.vtables	001493e0	match
 00525120	104	.vtables	001493e0	match
 00525190	264	.vtables	001493e0	match
 005255a0	140	.vtables	001493e0	match
 00525630	184	.vtables	001493e0	match
+00525870	1096	.vtables	001493e0	match
 00525cc0	96	.vtables	001493e0	match
 00525d20	184	.vtables	001493e0	match
 00525e50	1096	.vtables	001493e0	match
@@ -13327,6 +13329,7 @@
 0052fb50	244	.vtables	002b5d50	match
 0052fce0	244	.vtables	002b5d50	match
 0052fde0	100	.vtables	002b5d50	match
+0052fe50	140	.vtables	002b5d50	match
 0052fee0	108	.vtables	002b5d50	match
 0052ff50	244	.vtables	002b5d50	match
 00530050	244	.vtables	002b5d50	match
@@ -13359,6 +13362,7 @@
 00532360	96	.vtables	002b5d50	match
 005323c0	100	.vtables	002b5d50	match
 00532430	244	.vtables	002b5d50	match
+00532590	100	.vtables	002b5d50	match
 00532600	100	.vtables	002b5d50	match
 00532670	244	.vtables	002b5d50	match
 00532770	92	.vtables	002b5d50	match

@@ -95,7 +95,7 @@ int Gap__igCreateCollisionDatabase__vfunc_33(void) {
 
 /* Selects the constructor that takes over the factory's reference. */
 
-void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a((Rc *)igIGBFile_Create(0), AdoptReference());
+void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a((Rc *)Gap::Core::igIGBFile::_instantiateFromPool(0), AdoptReference());
     ((Gap::Core::igDirectory *)(a.get()))->setDirectoryName((const char *)arg0[13]);
     igSmartPointer<Rc> b(igCollisionInfo_Create(0), AdoptReference());
     {

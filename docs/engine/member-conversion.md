@@ -369,8 +369,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    header (the `igPsx2*` platform classes, igDependencyMetaField and igMemoryDescriptorMetaField) take their
    form from retail alone. `igDirectory` and `igDirectoryList` (alchemy-kit_202309 igCore/igDirectory.h) derive
    from the kit's `igTObjectList<igDirEntry>`/`igTObjectList<igDirectory>`: the template instance's vtable is
-   retail's 0x532590, which igIGBFile's out-of-line copy of the directory constructor (`igDirectory_Construct`,
-   still C while igIGBFile is flat, as is the destructor copy `igDirectory_Destroy`) stamps between igObjectList's
+   retail's 0x532590, which the compiler's out-of-line igDirectory constructor (0x2c3d60, emitted for igIGBFile's
+   `retrieveVTablePointer` with the destructor at 0x2c3b00) stamps between igObjectList's
    and igDirectory's. `_name` is the kit's igStringRef (so `setDirectoryName` is the kit's `_name = newName`), the
    list, directory, pointer-list, short-list-list and semaphore fields smart pointers, and the members are the
    kit's names: `addObject`, `addObjectRef`, `addMemoryRef`, `addRawRef`, `findEntryByEntryName`,
@@ -398,7 +398,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `getElementMeta` copies are now the compiler's, their C names bound by the compiler-name map.
    `igDirectory_ReplaceReference` (the kit's `replaceObjectInstance`, whose by-value smart pointers DW4 passes by
    reference) and the traversal callback `igDirectory_AddObjectCallback` stay free over the Gap class;
-   `igDirectoryView` remains only as igIGBFileView's base and in the external-info helpers. `igRegistry`,
+   the directory views (`igDirectoryView`, `igDirectoryDispatchView`) are gone. `igRegistry`,
    `igRegistryValue` and `igRegistryValueList` (alchemy-kit_202309 igCore/igRegistry.h) are converted: DW4's
    registry is older than the kit's, with no section list (the value table is the `igTObjectList<igRegistryValue>`,
    the extra sections an `igStringObjList`, both smart pointers, as are the file and the value's two strings,
@@ -430,7 +430,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `get*Folders` slots return a retained null list, whose out-of-line copies in scenegraph and GameMain stay C and
    are duplicates here). The file views are gone from core, Lua, the game and the movie codec: callers use igFile's
    members (`fopen`, `fclose`, `fread`, `fgetc`, `fprintf`, `generateFilename`); the report files are
-   `Gap::Core::igFile *`. Still view-based: `igMediaFileView`/`igMemoryFileView`, igIGBFile's `igFileView`,
+   `Gap::Core::igFile *`. Still view-based: `igMediaFileView`/`igMemoryFileView` (over `igFileView`),
    scenegraph's `IniFileObject`/`IniPathResolver` (the ini loader) and insight's `NamedObject` folder, and GameMain's
    `Blk::folder` (typing it `Gap::Core::igFolder` moves `Blk::Blk` from 448 to 372 bytes: the intern pool is no
    longer inlined there). `igResource` (alchemy-kit_202309 igCore/igResource.h; spec scratch/CoreIGB/specs/resource.py)
@@ -443,16 +443,23 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igDirectory` gained the kit's accessor inlines (`setName`, `setManagingResource`, ...) and a typed
    `_managingResource` (`igResource *`); `igTDataList<T>::append(const T &)` is the kit's. A named
    `igSmartPointer<Gap class>` local drops the release reload retail shows, so `igShaderInfo`'s two callers use the
-   returned temporary (`g_globalContext->getDirectory(...)->appendInfo(...)`). Not converted yet: `igIGBFile` (about
-   2,400 lines; needs `igDirectory_Construct`/`_Destroy` copies stamping `igTObjectList<igDirEntry>`'s vtable, its
-   `igFileView`/`igIGBFileView` uses retired, and the protected igObject construction members reached as the kit's
-   `friend class igIGBFile`). Its vtable (0x52fe50) holds igIGBFile's own slots 26-34: `setObjectBufferPlace`
-   (`igIGBFile_SetCurrentPosition`), `getObjectBufferPlace`, `writeFile`, `readFile`, `readFilePostProcess`,
-   `readFilePostProcessRecursive`, DW4's `ensureConcrete`, `readMemoryRefBuffer`, `writeMemoryRefBuffer`, plus
-   overrides 4 `destructFields` and 13 `resetFields`; the registration's extra callback is `arkRegisterUser`
-   calling `userRegister` (`igIGBFile_RegisterBlindObjectsConfig`). A first classconv attempt (spec
-   scratch/CoreIGB/specs/igb.py) needs the C heads with out-parameters rewritten and the `RELEASE_REF`/`REL_O`
-   macros in CoreLibrary.h qualified `::igObject` before the member bodies compile in Gap scope.
+   returned temporary (`g_globalContext->getDirectory(...)->appendInfo(...)`). `igIGBFile` (alchemy-kit_202309
+   igCore/igIGBFile.h; specs scratch/IGBFile2/specs/igb.py, igb_helpers.py) is converted over `igDirectory`: the
+   kit's handles and accessors, the file, lists, pools and metafields as smart pointers and the storage fields as
+   `char *`, igen's registration (its field adder clones the inherited `_data`/`_count`/`_capacity` fields into
+   `k_data`/`k_count`/`k_capacity`), the static `gBlindObjectEnabled` that `userRegister` reads, and its vtable
+   (0x52fe50): slots 26-34 `setObjectBufferPlace`, `getObjectBufferPlace`, `writeFile`, `readFile`,
+   `readFilePostProcess`, `readFilePostProcessRecursive`, DW4's `ensureConcrete`, `readMemoryRefBuffer`,
+   `writeMemoryRefBuffer`, with overrides 4 `destructFields` and 13 `resetFields`. The read and write steps are
+   private members with the kit's names (`readOpen`, `readHeader`, `processMetaObjectList`, `readReadSharedEntries`,
+   `readReadSharedIndexes`, `readProcessSharedDirectory`, `readProcessDirectory`, `readNextDirEntry`,
+   `readProcessObjectEntries`, `readProcessAllOtherEntries`, `readErrorCleanup`, ...; `writeOpen` through
+   `writeReleaseAllBuffers`), and `open`, `close` and `getReadSizeFromMemory` are public; the kit's `igResult`
+   returns replace the C heads' out-parameters. The pools are flat, so their calls go through `igMemoryPoolView`.
+   The entries' slots, igResource's loaders, the external entries and the event tracker call the Gap class, and
+   `igIGBFileView` is gone. Not yet the kit's: the protected igObject construction members are still reached
+   through the C names (no `friend class igIGBFile`), the out-of-line alias `igDirectory_GetEntryAlias` the shared
+   writers call keeps its C name, and the entries' slots read the file through `igDirEntryView` elsewhere.
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no
@@ -572,21 +579,36 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igVideoFormat` (ending at the video type), in include/dw4/gfx/igVisualContextTypes.h. Typed fields
    (typed-fields.tsv): the eight memory pools and the timer as smart pointers, the two `igMatrix44f`, the sixteen
    `igVertexArray2` references built with `__construct_array`, the two custom-state lists. Its constructor
-   (0x1510e0) and destructor (0x150af0) are written out explicitly while `igPsx2VisualContext` is flat: the
-   probe in the flat class still calls them by C name and no converted class derives from igVisualContext yet.
+   (0x1510e0) and destructor (0x150af0) are implicit: igPsx2VisualContext's vtable probe constructs and destroys a
+   temporary, and the compiler emits both out of line at their retail addresses.
    Attrs' copy of `deleteRenderDestination` (0x13ff40) is the compiler's, from `igRenderDestinationAttr::reset`'s
    `_vc->deleteRenderDestination(...)`. No attrs code names `getScissorType` (no call and no vtable load of its slot),
    so its attrs copy (0x140050) stays the C definition `igVisualContext_GetScissorType`, like attrs' other unnamed
    inline copies (`setUsageFlags` at 0x13f800, igIndexArray's `reset` at 0x13d020). Every caller uses the Gap class (`vc->getAlphaFunc()`,
    `_vc->deleteTexture(...)`, the window's `getVisualContext()`, insight's display setup through `setVideoMode`,
    `createRenderDestination` and `setDepthTestState`); igContext's `getExt` is the extension lookup.
-   `igPsx2VisualContext` is next: about 220 slot overrides (273 C functions) whose C heads take stand-in receivers
-   (`igPsx2VisualContext *`, `Obj_*`, `void *`) and must take the member's parameters before memberize accepts them;
-   four slots are not decompiled (0x170ed0 `setLightDirection`, `setLightAttenuation`, `setTextureSourceLevel`,
-   0x16de00 `softwareBlendVertex`); its GetVTable probe calls the constructor and destructor by their C names and builds the
-   smart-pointer helpers by hand. Once it converts, igVisualContext's explicit constructor and destructor go, and
-   attrs' direct calls into its methods (`igPsx2VisualContext_ExecuteRenderList`, `SetRenderDestination`, the
-   light and texture-source setters) become member calls. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
+   `Gap::Gfx::igPsx2VisualContext` is converted (no kit header; spec scratch/Psx2VC2/specs/psx2vc.py, rows from
+   psx2rows.py): its slot overrides in retail's vtable order (0x525870) with igVisualContext's names, the
+   igen boilerplate, and the vtable probe in the kit's form, a temporary. The probe matches because the typed fields
+   are what retail's probe constructs: the loaded-texture list (`igSmartPointer<igIntList>`), the texgen
+   `igMatrix44f`, the vertex, index and strip-length arrays, the twelve `igSmartPointer< ::igMatrixStack>` stacks and
+   `_videoMode`, an `igVideoFormat` whose inline constructor is the kit's (0x151030; it leaves the field count and
+   size unset). The compiler emits those constructors and smart-pointer destructors (0x150eb0-0x1510d0) where the
+   old C helpers sat. Its boolean state flags are typed `bool`, its state enums the kit's igGfx enums.
+   `setTextureComponentSize` and `setTextureComponentSizeIntensityAlpha` return `bool` in DW4's revision (retail
+   returns 0 or 1). Five slots are declared and link from retail: `userConstruct` (0x16b2e0), `setLightDirection`
+   (0x170ed0), `setLightAttenuation` (0x171350), the levelled `setTextureSource` (0x17be80) and `softwareBlendVertex`
+   (0x16de00); the first virtual it declares (`constructFields`) is defined, so gfx keeps its vtable. Its PS2-only
+   members are non-virtual: `callDmaChain`, `isDisplayingFirstBuffer`, `setMatrixPsx2`/`getMatrixPsx2` (stack 14,
+   the texgen matrix), `setMatrixOptimizationState`/`getMatrixOptimizationState` and
+   `setTextureMatrixProjectiveState`/`getTextureMatrixProjectiveState`. Attrs and the movie codec call the class's
+   slots directly, never through the vtable (retail's `jal` to the PS2 implementation), so they spell the call
+   qualified: `((igPsx2VisualContext *)vc)->igPsx2VisualContext::setAlphaFunc(...)`. The two unnamed gfx helpers attrs
+   calls (the blend-function and multipass setters) still take the flat struct. Still to do for readability: many
+   override bodies read through stand-in views (`Obj_*`, `S_*`, the slot-placeholder classes in GfxLibrary.h)
+   cast from `this`, read smart pointers through `.p` into those views, and read the light, texture, CLUT and
+   buffer lists at raw offsets; the texture creator at 0x17aa20 (`igPsx2VisualContext_CreateTexture`, called by
+   both `createTexture` slots and `setRenderDestination`) stays a free function over a view. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
    `GfxLibrary_MarkRegistered` (it tests and sets `g_GfxLibrary_registered` and registers the eight extensions, as
    core's latch registers its threads), so tools/gen_odl_source.py finds the gfx classes (`--library Gfx`).
    Converted so far (specs in scratch/Gfx2/specs/index.py, vertex.py, clut.py): `igIndexArray` and
@@ -684,7 +706,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    where the kit declares them plain, and the concrete class's vtable (0x526590) holds the overrides next to the
    empty `userMakeConcrete` (slot 18, 0x15db80); `_lengthData` is an `unsigned char *` under C++, `configure`
    (0x167240) reallocates it to four bytes a strip or frees it. The particle array reads its first strip length
-   through `getPrimLength`, and `igPsx2VisualContext`'s C accessors still hold the reference as a word;
+   through `getPrimLength`, and igPsx2VisualContext holds it as an `igSmartPointer<igPrimLengthArray>`;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

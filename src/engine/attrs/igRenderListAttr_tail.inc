@@ -6,7 +6,7 @@ void igRenderListAttr::apply(igVisualContext *vc)
     int handle = _handle;
 
     if (handle >= 0)
-        igPsx2VisualContext_ExecuteRenderList((igPsx2VisualContext *)vc, handle);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::executeRenderList(handle);
 }
 
 void igRenderListAttr::synchronizeDefault(igVisualContext *vc)

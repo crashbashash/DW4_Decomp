@@ -18,7 +18,7 @@ void igObjectDirEntry::releaseDefaults() {
 }
 
 igDirEntry *igObjectDirEntry::share(igIGBFile *file) {
-    igSmartPointer< ::igObjectList> lists((::igObjectList *)file->_entryPool, kRetainReference);
+    igSmartPointer< ::igObjectList> lists((::igObjectList *)file->_entryPool.p, kRetainReference);
     if (lists.p == 0) return this;
     int index = ((igObjectDispatchView *)this)->GetMeta()->_index;
     if (lists->_count <= index) {
@@ -27,7 +27,7 @@ igDirEntry *igObjectDirEntry::share(igIGBFile *file) {
     }
     igSmartPointer< ::igObjectList> entries(asObjectEntryList(((::igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
-        int pool = file->_temporaryMemoryPool;
+        int pool = (int)file->_temporaryMemoryPool.p;
         entries.release();
         entries.p = ((::igObjectList *)igObjectList::_instantiateFromPool((igMemoryPoolView *)pool));
         objectListSetRetained(index, entries.p, lists.p);
@@ -81,10 +81,9 @@ void igObjectDirEntry::setRef(void *ref) {
 
 /* Write the referenced object's persistent fields at the file's object cursor and move past them. */
 void igObjectDirEntry::writeWrite(igIGBFile *igb) {
-    igIGBFileView *file = (igIGBFileView *)igb;
-    int cursor = file->ObjectCursor();
-    file->SetObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)_ref, (int *)cursor, (igIGBFile *)file,
-                                                                  (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
+    char *cursor = (char *)igb->getObjectBufferPlace();
+    igb->setObjectBufferPlace(cursor + igObject_WritePersistentFields((igObjectDispatchView *)_ref, (int *)cursor, igb,
+                                                                      (::igTDataList<igMetaObject *> *)igb->_metaObjectListInFile.p, igb->_endianSwap));
 }
 
 void igObjectDirEntry::writeMakeProxy(igIGBFile *igb) {
@@ -110,7 +109,7 @@ void igObjectDirEntry::writeComputeBufferSize(igIGBFile *file) {
     if (writeProxy != 0) {
         meta = writeProxy();
     }
-    _typeMetaIndex = igMetaObject_AddToMetaObjectList((::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, (igMetaObject *)meta);
+    _typeMetaIndex = igMetaObject_AddToMetaObjectList((::igTDataList<igMetaObject *> *)file->_metaObjectListInFile.p, (igMetaObject *)meta);
     bufferSize = file->_objectBufferSize;
     file->_objectBufferSize = bufferSize + ((igObject *)object)->getIoSize();
     file->_objectCount = file->_objectCount + 1;
@@ -136,26 +135,23 @@ void igObjectDirEntry::readPostRead(igIGBFile *igb)
 
 /* Read the referenced object's fields from the file's object cursor and move past them. */
 void igObjectDirEntry::readReadVersion3(igIGBFile *igb) {
-    igIGBFileView *file = (igIGBFileView *)igb;
     igObjectDispatchView *object = (igObjectDispatchView *)_ref;
-    int read = igObject_ReadFields(object, (FieldRecordHead *)file->ObjectCursor(), (igIGBFile *)file,
-                            (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
-    int cursor = file->ObjectCursor();
-    file->SetObjectCursor(cursor + read);
+    int read = igObject_ReadFields(object, (FieldRecordHead *)igb->getObjectBufferPlace(), igb,
+                            (::igTDataList<igMetaObject *> *)igb->_metaObjectListInFile.p, igb->_endianSwap);
+    char *cursor = (char *)igb->getObjectBufferPlace();
+    igb->setObjectBufferPlace(cursor + read);
 }
 
 /* Resolve the referenced object's references to other entries the same way, from the object cursor. */
 void igObjectDirEntry::readRead(igIGBFile *igb) {
-    igIGBFileView *file = (igIGBFileView *)igb;
     igObjectDispatchView *object = (igObjectDispatchView *)_ref;
-    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->ObjectCursor(), (Gap::Core::igDirectory *)file,
-                            (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
-    int cursor = file->ObjectCursor();
-    file->SetObjectCursor(cursor + read);
+    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)igb->getObjectBufferPlace(), igb,
+                            (::igTDataList<igMetaObject *> *)igb->_metaObjectListInFile.p, igb->_endianSwap);
+    char *cursor = (char *)igb->getObjectBufferPlace();
+    igb->setObjectBufferPlace(cursor + read);
 }
 
 void igObjectDirEntry::readSetup(igIGBFile *igb) {
-    igIGBFileView *file = (igIGBFileView *)igb;
     int index;
     igObject *obj;
     int pool;
@@ -164,28 +160,28 @@ void igObjectDirEntry::readSetup(igIGBFile *igb) {
     if (index == -1) {
         _typeMeta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(_typeMetaName.p);
     } else {
-        _typeMeta = ((igMetaObject **)file->_metaObjectListInFile->_data)[index];
+        _typeMeta = ((igMetaObject **)igb->_metaObjectListInFile->_data)[index];
     }
     if (_typeMeta != 0) {
         sel = _memoryPoolHandle;
         if (sel == -1 || sel == 1 || sel == 2) {
-            pool = (int)file->_objectMemoryPool;
+            pool = (int)igb->_objectMemoryPool.p;
         } else {
             pool = ((int)Memory_GetAllocatorBySelector(sel));
             if (pool == 0) {
-                pool = (int)file->_objectMemoryPool;
+                pool = (int)igb->_objectMemoryPool.p;
             }
         }
         obj = (igObject *)igMetaObject_CreateInstanceWithPool(_typeMeta, (igMemoryPoolView *)pool);
         if (obj == 0) {
-            file->_hasCriticalFailure = 1;
-            ((igDirectory *)file)->setRef(_index, (void *)(0));
+            igb->_hasCriticalFailure = 1;
+            igb->setRef(_index, (void *)(0));
             return;
         }
-        ((igDirectory *)file)->setRef(_index, (void *)obj);
+        igb->setRef(_index, (void *)obj);
         obj->release();
     } else {
-        ((igDirectory *)file)->setRef(_index, (void *)(0));
+        igb->setRef(_index, (void *)(0));
     }
 }
 

@@ -8,11 +8,13 @@
  * ABI view only: never instantiated. */
 class igTimerDispatchView : public igObjectDispatchView {
 public:
-    virtual void d21(); virtual void d22(); virtual void d23();
+    virtual void d21(); virtual void d22();
+    virtual double GetTimeAsDouble();                                       /* slot 23 */
     virtual long long GetElapsedTime();                                     /* slot 24 */
     virtual void d25();
     virtual void Stop();                                                    /* slot 26 */
-    virtual void d27(); virtual void d28();
+    virtual void Reset();                                                   /* slot 27 */
+    virtual void d28();
     virtual void Restart();                                                 /* slot 29 */
 };
 

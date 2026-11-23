@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igProjectionMatrixAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, IG_GFX_MATRIX_STACK_PROJECTION, (char *)_m.m);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setMatrix(IG_GFX_MATRIX_STACK_PROJECTION, _m);
 }
 
 void igProjectionMatrixAttr::synchronizeDefault(igVisualContext *vc)

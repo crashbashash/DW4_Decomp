@@ -5,35 +5,35 @@ namespace Attrs {
 
 void igRenderDestinationAttr::apply(igVisualContext *vc)
 {
-    RenderDestinationDesc desc;
+    igRenderDestinationFormat desc;
     int sizeX;
     int sizeY;
 
     if (!_bEnabled) {
         return;
     }
-    _iPrevRDHandle = igPsx2VisualContext_GetCurrentRenderDestination((igPsx2VisualContext *)vc);
+    _iPrevRDHandle = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::getCurrentRenderDestination();
     if (_iRDHandle < 0) {
         if (_iCreateMode != RENDERDESTINATION_CREATE_MODE_AUTONOMOUS) {
-            igPsx2VisualContext_GetRenderDestinationSize((igPsx2VisualContext *)vc, _iPrevRDHandle, &sizeX, &sizeY);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::getRenderDestinationSize(_iPrevRDHandle, sizeX, sizeY);
             _iSizeX = sizeX;
             _iSizeY = sizeY;
-            _iColorBitCount = igPsx2VisualContext_GetColorBitsPerPixel((igPsx2VisualContext *)vc, _iPrevRDHandle);
-            _iAlphaBitCount = igPsx2VisualContext_GetAlphaBitsPerPixel((igPsx2VisualContext *)vc, _iPrevRDHandle);
-            _iDepthBitCount = igPsx2VisualContext_GetDepthBitsPerPixel((igPsx2VisualContext *)vc, _iPrevRDHandle);
-            _iStencilBitCount = igPsx2VisualContext_GetStencilBitsPerPixel((igPsx2VisualContext *)vc, _iPrevRDHandle);
+            _iColorBitCount = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::getColorBitsPerPixel(_iPrevRDHandle);
+            _iAlphaBitCount = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::getAlphaBitsPerPixel(_iPrevRDHandle);
+            _iDepthBitCount = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::getDepthBitsPerPixel(_iPrevRDHandle);
+            _iStencilBitCount = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::getStencilBitsPerPixel(_iPrevRDHandle);
         }
         if (_iCreateMode == RENDERDESTINATION_CREATE_MODE_USE_DEFAULT) {
             _iRDHandle = _iPrevRDHandle;
         } else {
-            desc.sizeX = _iSizeX;
-            desc.sizeY = _iSizeY;
-            desc.colorBitCount = _iColorBitCount;
-            desc.alphaBitCount = _iAlphaBitCount;
-            desc.depthBitCount = _iDepthBitCount;
-            desc.stencilBitCount = _iStencilBitCount;
-            desc.type = _iType;
-            _iRDHandle = igPsx2VisualContext_CreateRenderDestination((igPsx2VisualContext *)vc, &desc);
+            desc._iWidth = _iSizeX;
+            desc._iHeight = _iSizeY;
+            desc._iColorBitsPerPixel = _iColorBitCount;
+            desc._iAlphaBitsPerPixel = _iAlphaBitCount;
+            desc._iDepthBitsPerPixel = _iDepthBitCount;
+            desc._iStencilBitsPerPixel = _iStencilBitCount;
+            desc._iType = (IG_GFX_RENDERDESTINATION_TYPE)_iType;
+            _iRDHandle = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::createRenderDestination(&desc);
         }
     }
     _vc = vc;

@@ -317,7 +317,7 @@ int igDirectory::addObjectRef(igObject *obj, const char *name, int resolveMethod
     }
     if (obj != 0) {
         obj->trimCapacity();
-        if (isOfType((igMetaObject *)(((int)g_igIGBFile_metaObject))) != 0) {
+        if (isOfType((igMetaObject *)(((int)Gap::Core::igIGBFile::getClassMeta()))) != 0) {
             if (_autoWriteFilePreProcessState == 1) {
                 obj->userWriteFilePreProcess();
             }

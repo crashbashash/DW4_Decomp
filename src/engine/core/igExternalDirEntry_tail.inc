@@ -33,14 +33,14 @@ void igExternalDirEntry::setRef(void *refParam)
 
 bool igExternalDirEntry::load(igResolveFunction *userFunction)
 {
-    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create((int)getMemoryPool())));
+    igSmartPointer<igIGBFile> stream(igIGBFile::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
     char *s1;
     int len;
     int c;
     char *buf;
-    stream.get()->_userLoadFunction = (int)userFunction;
-    stream.get()->ReadFile(_directoryName.p);
-    if (stream.get()->_count == 0) {
+    stream->setUserLoadFunction((void *)userFunction);
+    stream->readFile(_directoryName.p);
+    if (stream->_count == 0) {
         s1 = _directoryName.p;
         len = strlen(_externalFilePath.p);
         len = len + strlen(s1);
@@ -49,12 +49,12 @@ bool igExternalDirEntry::load(igResolveFunction *userFunction)
         strcpy(buf, _externalFilePath.p);
         strcat(buf, "/");
         strcat(buf, _directoryName.p);
-        stream.get()->ReadFile(buf);
+        stream->readFile(buf);
         free((void *)buf);
     }
-    setRef((void *)((igDirectory *)((int)(stream.get())))->findRefByEntryName((char const *)_entryName.p));
+    setRef(stream->findRefByEntryName(_entryName.p));
     if (_ref == 0) {
-        setRef((void *)((igDirectory *)((int)(stream.get())))->findRefByEntryName((char const *)("root")));
+        setRef(stream->findRefByEntryName("root"));
     }
     return _ref != 0;
 }
@@ -87,7 +87,7 @@ bool igExternalDirEntry::resolve(igResolveFunction *userFunction)
         directory->setDirectoryName(_directoryName.p);
         resource->appendDirectory(directory.get());
     }
-    ((igDirectoryDispatchView *)directory.get())->ResolveExternalEntry((igExternalDirEntryView *)this);
+    directory->resolveExternal(this);
     if (_ref == 0) load(userFunction);
     if (_ref == 0 && userFunction != 0) userFunction(this);
     if (_ref != 0) {
@@ -96,7 +96,7 @@ bool igExternalDirEntry::resolve(igResolveFunction *userFunction)
         ((igNamedObject *)entry.get())->setName(_entryName.p);
         entry->_refType = 0;
         entry->SetRef(_ref);
-        entry->_index = ((igDirectoryView *)directory.get())->_count;
+        entry->_index = directory->_count;
         ((igObjectList *)(directory.get()))->append((igObject *)entry.get());
         return 1;
     }

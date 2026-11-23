@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igDepthWriteStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetDepthWriteState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setDepthWriteState(_enabled);
 }
 
 void igDepthWriteStateAttr::synchronizeDefault(igVisualContext *vc)

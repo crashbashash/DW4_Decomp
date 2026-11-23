@@ -3,12 +3,12 @@ namespace Attrs {
 
 void igMatrixOptStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->setMatrixOptimizationState(_enabled);
 }
 
 void igMatrixOptStateAttr::synchronizeDefault(igVisualContext *vc)
 {
-    setState(igPsx2VisualContext_GetMatrixOptimizationState((igPsx2VisualContext *)vc));
+    setState(((igPsx2VisualContext *)vc)->getMatrixOptimizationState());
 }
 
 /* Setter for the attribute's reflected _enabled flag. */

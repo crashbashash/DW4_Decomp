@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igMultiPassStateAttr::apply(igVisualContext *vc)
 {
-    FUN_001757c0((igPsx2VisualContext *)vc, _numPasses);
+    FUN_001757c0((::igPsx2VisualContext *)vc, _numPasses);
 }
 
 void igMultiPassStateAttr::synchronizeDefault(igVisualContext *visualContext)

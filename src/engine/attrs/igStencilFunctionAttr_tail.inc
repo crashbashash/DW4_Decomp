@@ -3,11 +3,11 @@ namespace Attrs {
 
 void igStencilFunctionAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetStencilOps((igPsx2VisualContext *)vc, _stenFailOp, _stenPassZPassOp, _stenPassZFailOp);
-    igPsx2VisualContext_SetStencilRefVal((igPsx2VisualContext *)vc, _refVal);
-    igPsx2VisualContext_SetStencilFunc((igPsx2VisualContext *)vc, getFunc());
-    igPsx2VisualContext_SetStencilReadMask((igPsx2VisualContext *)vc, _readMask);
-    igPsx2VisualContext_SetStencilWriteMask((igPsx2VisualContext *)vc, _writeMask);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setStencilOps(_stenFailOp, _stenPassZPassOp, _stenPassZFailOp);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setStencilRefVal(_refVal);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setStencilFunc(getFunc());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setStencilReadMask(_readMask);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setStencilWriteMask(_writeMask);
 }
 
 void igStencilFunctionAttr::synchronizeDefault(igVisualContext *vc)

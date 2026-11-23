@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igPixelPipelineModeAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetPixelPipelineMode((igPsx2VisualContext *)vc, _pipelineMode);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setPixelPipelineMode(_pipelineMode);
 }
 
 void igPixelPipelineModeAttr::synchronizeDefault(igVisualContext *vc)

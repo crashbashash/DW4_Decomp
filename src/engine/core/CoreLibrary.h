@@ -122,7 +122,7 @@ template <class T> static inline void setCapacity(igTDataList<T> *list, int capa
 #include "dw4/runtime/init_cpp.h"
 #include "dw4/sony/libcdvd_calls.h"
 /* Releases a reference field through a copy, so the field is read once. */
-#define RELEASE_REF(p) do { igObject *t_ = (igObject *)(p); if (t_ != 0) { t_->_refCount = t_->_refCount - 1; if (((unsigned long long)((long long)(int)t_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(t_); } } } while (0)
+#define RELEASE_REF(p) do { ::igObject *t_ = (::igObject *)(p); if (t_ != 0) { t_->_refCount = t_->_refCount - 1; if (((unsigned long long)((long long)(int)t_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(t_); } } } while (0)
 #define REF_COUNT_MASK 0x7fffff
 /* igObject::_refCount as the fields packed into it: the reference count in the low 23 bits, a flag
  * bit, and the owning memory pool's index in the top byte. The views differ only in the width of
@@ -416,15 +416,10 @@ extern "C" void igLibrary_EnsureRegistered(void);
 extern "C" CallbackArray *igLibrary_Register(void);
 extern "C" void igLibrary_GetMetaObjectFunction(void);
 extern "C" void igLibrary_InitFields(void);
-extern "C" int igIGBFile_GetVTable(void);
 extern "C" int *igSmartPointer_igMemoryPool_Construct(int *p);
 extern "C" int *igSmartPointer_igMetaField_Construct(int *p);
 extern "C" int *igSmartPointer_igMetaFieldList_Construct(int *p);
 extern "C" int *igSmartPointer_igFile_Construct(int *p);
-extern "C" CallbackArray *igIGBFile_Register(void);
-extern "C" void igIGBFile_GetMetaObjectFunction(void);
-extern "C" void igIGBFile_InitFields(void);
-extern "C" void igIGBFile_StaticInitCallback(void);
 extern "C" void * igEventTracker_Create(int arg0);
 extern "C" igMetaObject *igEventTracker_GetOrCreateMetaObject(void);
 extern "C" int igEventTracker_GetVTable(void);
@@ -687,7 +682,6 @@ extern "C" void igCallStackTracer_Exit(void);
 extern "C" int **igCharMetaField_Construct(int **arg0, int extra1);
 extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);
 extern "C" void *igDirectory_GetEntryAlias(int *arg0, int arg1);
-struct igDirectoryView;
 extern "C" void igDriverDatabase_ReleaseDefaults(int self);
 extern "C" int igDriverDatabase_GetCurrentProperty(void *arg0, int arg1);
 extern "C" void igDriverDatabase_ClearRawDatabase(int *p);
@@ -741,15 +735,6 @@ extern "C" void igEventTracker_SetEventDataString(void *arg0, int arg1, int arg2
 extern "C" void igEventTracker_GetEventDataUnsigned3(const EventRecord *record, int slot, unsigned int *values);
 extern "C" void ***igAdxFile_GetSearchPathHolder(void);
 class igFileView;
-extern "C" int igIGBFile_GetObjectSize(void *arg0, int arg1);
-extern "C" void igIGBFile_SetDefaultName(int *arg0);
-extern "C" void igIGBFile_RegisterBlindObjectsConfig(void);
-class igIGBFileView;
-extern "C" int igIGBFile_GetCurrentPosition(igIGBFileView *arg0);
-extern "C" void igIGBFile_CloseAfterRead(igIGBFileView *arg0);
-extern "C" int igIGBFile_AbortRead(igIGBFileView *arg0);
-extern "C" void igIGBFile_EnsureConcrete(int *arg0, void *arg1);
-struct igDirectoryView;
 extern "C" int igInfo_FindObjectReference(void **arg0, int arg1, int arg2);
 extern "C" struct StringPool *StringPool_Destroy(struct StringPool *self, long long delete_flag);
 extern "C" void StringPool_OperatorDelete(int arg0);
@@ -1141,7 +1126,6 @@ extern "C" igMetaObject *igMemoryPoolContextInfo_GetMeta(void);
 extern "C" int MemoryContext_GetMeta(void);
 extern "C" int igMemoryDictionary_GetMeta(void);
 extern "C" int igLocationTable_GetMeta(void);
-extern "C" int igIGBFile_GetMeta(void);
 extern "C" int igEventTracker_GetMeta(void);
 extern "C" int igDriverDatabase_GetMeta(void);
 extern "C" int igCallStackTracer_GetMeta(void);
@@ -1255,7 +1239,6 @@ extern "C" igMetaObject *g_igPluginRepository_metaObject;
 extern "C" igMetaObject *g_igObjectStringMap_metaObject;
 extern "C" igMetaObject *igObjectStringMap_GetMetaObject(void);
 extern "C" int g_igObjectStringMap_vtable[4];
-extern "C" int g_igObjectList_vtable[4];
 extern "C" char data[];
 extern "C" int text_ref[4];
 extern "C" igMetaObject *igNamedObjectInfo_GetMetaObject(void);
@@ -1294,20 +1277,12 @@ extern "C" igMetaObject *igLibraryList_GetMetaObject(void);
 extern "C" int g_igLibraryList_vtable[4];
 extern "C" igMetaObject *g_igLibrary_metaObject;
 extern "C" igMetaObject *igLibrary_GetMetaObject(void);
-extern "C" igMetaObject *g_igIGBFile_metaObject;
-extern "C" igMetaObject *igIGBFile_GetMetaObject(void);
-extern "C" int g_igIGBFile_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igShortListList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-extern "C" int g_igDirectory_vtable[4];
 
-extern "C" igDirectory *igDirectory_Destroy(igDirectory *p, short n);
 extern "C" int g_igObjectListBase_vtable[4];
-extern "C" int g_igDataList_vtable[4];
 extern "C" int g_igDirectoryBase_vtable[4];
-extern "C" void *igDirectory_Construct(igIGBFile *arg0);
 extern "C" int text_capacity[4];
 extern "C" int text_count[4];
-extern "C" igMetaObject *g_igIGBFile_metaObject;
 extern "C" igMetaObject *g_igEventTracker_metaObject;
 extern "C" igMetaObject *igEventTracker_GetMetaObject(void);
 extern "C" int g_igEventTracker_vtable[4];
@@ -1646,20 +1621,6 @@ struct igDependencyOrderedListView {
     unsigned char _hasCircularDependencies;
 };
 extern "C" void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner);
-struct igDirectoryView;
-class igDirEntryView;
-struct igDirectoryView : public igVirtualObject {
-    int _count; int _capacity; igDirEntryView **_data; int _name;
-    igTDataList<igDirectoryView *> *_externalDirectoryList; igTDataList<igInfo *> *_infoList; Gap::Core::igResource *_managingResource;
-    unsigned char _sharingState; unsigned char _trackUniqueEntries; char _pad38[2];
-    igObjectList *_uniqueEntryList; igTDataList<int> *_refList;
-    unsigned char _loadPendingState; unsigned char _validState; unsigned char _compatibleState; char _pad51[1];
-    int _loadedRefCount; unsigned char _concreteState; char _pad57[3]; igTDataList<igTDataList<short> *> *_metaFieldPerObjectIndices;
-    unsigned char _autoWriteFilePreProcessState; unsigned char _useMemoryPoolAssignmentsState;
-    unsigned char _forceWriteMemoryPoolInfoFromMetaState; char _pad67[1];
-    Gap::Core::igSemaphore *_loadingSemaphore;
-};
-class igIGBFileView;
 class igDirEntryView : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
     virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18();
@@ -1668,36 +1629,25 @@ class igDirEntryView : public igVirtualObject { public:
     virtual void SetRef(int ref);
     virtual void RetainRef(int ref);
     virtual void d25();
-    virtual igDirEntryView *Resolve(igIGBFileView *file);                       /* vfunc_26 */
+    virtual igDirEntryView *Resolve(Gap::Core::igIGBFile *file);                /* vfunc_26 */
     virtual void SetReferenceIndex(int index);                                  /* vfunc_27 */
     virtual void ReleaseSharedRef(int ref);
     virtual void SetMemoryPool(int pool);                                       /* vfunc_29 */
     virtual int MemoryPoolIndex();                                              /* vfunc_30 */
-    virtual void ReadFinished(igIGBFileView *file);                             /* vfunc_31 */
-    virtual void ResolveEntry(igIGBFileView *file);
-    virtual void ResolveRefOld(igIGBFileView *file);
-    virtual void ResolveRef(igIGBFileView *file);
-    virtual void ReadMemory(igIGBFileView *file);
+    virtual void ReadFinished(Gap::Core::igIGBFile *file);                      /* vfunc_31 */
+    virtual void ResolveEntry(Gap::Core::igIGBFile *file);
+    virtual void ResolveRefOld(Gap::Core::igIGBFile *file);
+    virtual void ResolveRef(Gap::Core::igIGBFile *file);
+    virtual void ReadMemory(Gap::Core::igIGBFile *file);
     virtual void RegisterRef(int flag);
-    virtual void PostProcess(igIGBFileView *file);
-    virtual int PrepareWrite(igIGBFileView *file);
-    virtual int ComputeWriteSize(igIGBFileView *file);
-    virtual void WriteObject(igIGBFileView *file);
-    virtual int WriteMemory(igIGBFileView *file);
+    virtual void PostProcess(Gap::Core::igIGBFile *file);
+    virtual int PrepareWrite(Gap::Core::igIGBFile *file);
+    virtual int ComputeWriteSize(Gap::Core::igIGBFile *file);
+    virtual void WriteObject(Gap::Core::igIGBFile *file);
+    virtual int WriteMemory(Gap::Core::igIGBFile *file);
     virtual void d42();
     virtual int ResolveDirectory(int loadFunction);
     int _name; int _index; int _resolveMethod; int _refType; int _ref;
-};
-class igExternalDirEntryView : public igDirEntryView { public:
-    virtual int LoadExternalFile(int loadFunction);
-    int _directoryName; int _entryName; int _entryIndex; int _externalFilePath;
-};
-/* igDirectory's own virtual slots. ABI view only: never instantiated. */
-class igDirectoryDispatchView : public igDirectoryView { public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
-    virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22();
-    virtual int ResolveExternalEntry(igExternalDirEntryView *entry);            /* vfunc_25 */
 };
 class igExternalInfoEntryView : public igDirEntryView { public:
     char *_key; int _directoryIndex; char *_infoName;
@@ -1885,69 +1835,6 @@ extern "C" void igEventTracker_PreExit(igEventTrackerView *self);
 extern "C" void igEventTracker_Exit(igEventTrackerView *self);
 extern "C" void Gap__Core__igEventTracker__resetFields(igEventTrackerView *self);
 extern "C" int igEventTracker_GetEventDataType(EventRecord *record, int slot);
-class igIGBFileView : public igDirectoryView { public:
-    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void SetObjectCursor(int at);                                       /* vfunc_26 */
-    virtual int ObjectCursor();                                                 /* vfunc_27 */
-    virtual int WriteFile(int);
-    virtual int ReadFile(const char *path);
-    virtual igResult ReadFilePostProcess();
-    virtual igResult ReadFilePostProcessAll();
-    virtual igResult EnsureConcrete();
-    virtual igResult ReadMemoryEntries();
-    virtual int WriteMemoryRefs();
-    int _majorVersion; int _minorVersion;                           /* +72 */
-    int _chunkPlace; int _bufferPlace; int _bufferSize;             /* +80 */
-    igObject *_entryPool;                                           /* +92 */
-    int _magicCookie; int _magicVersion;
-    igFileView *_file;                                              /* +104 */
-    unsigned char _hasTemplates; char _pad109[3];
-    int _entryCount; int _indexBufferSize;                          /* +112 */
-    void *_indexBuffer;                                             /* +120 */
-    int _entryBufferSize; int _metaObjectCount; int _metaObjectBufferSize; int _metaFieldCount; int _metaFieldBufferSize;
-    int _objectCount; int _objectBufferSize; int _memoryRefCount; int _memoryRefBufferSize; /* +144 */
-    int _userLoadFunction; int _forceChunkSize;                     /* +160 */
-    bool _endianSwap; char _pad169[3];
-    void *_metaObjectBuffer; void *_dirBuf; void *_objBuf; char *_mfBuf; /* +172 */
-    igObjectList *_metaFieldListInFile;                             /* +188 */
-    igObjectList *_metaObjectListInFile;
-    int _autoOpened;
-    char *_basePath;                                                /* +200 */
-    igMetaFieldView *imf; igMetaFieldView *smf;
-    unsigned char _hasInfo; unsigned char _hasExternal; unsigned char _sharedEntries; unsigned char _hasVersion1Cruft; /* +212 */
-    int _version1CruftMultiply; int _infoListPlace;
-    int *_externalDirectoryBuffer; int _externalDirectoryBufferSize; /* +224 */
-    char *_previousResourceFilePath;
-    int *_alignmentBuffer; int _alignmentBufferSize;                /* +236 */
-    igIntList *_alignmentListInFile; int _alignmentCount;
-    int _objectBufferPlace; int _memoryBufferPlace; int _chunkSize; /* +252 */
-    char *_chunk;                                                   /* +264 */
-    int _memoryBytesCopied; int _bytesRemainingInChunk;
-    unsigned char _hasCriticalFailure; unsigned char _autoReadFilePostProcessState; unsigned char _autoWriteFilePostProcessState; unsigned char _readFilePostProcessedState;
-    igMemoryPoolView *_temporaryMemoryPool; igMemoryPoolView *_dataMemoryPool; igMemoryPoolView *_objectMemoryPool; /* +280 */
-    unsigned char _hasMemoryPoolNames; char _pad293[3];
-    int _memoryPoolNameBufferSize; int *_memoryPoolNameBuffer;      /* +296 */
-    igIntList *_memoryPoolHandles;                                  /* +304 */
-
-    /* Stores an entry, retaining it and releasing the one it replaces. */
-    void setEntry(int i, const igSmartPointer<igDirEntryView> &held) {
-        igDirEntryView *entry = held.p;
-        igVirtualObject::ref(entry);
-        igVirtualObject *old = _data[i];
-        igVirtualObject::release(old);
-        if (_count != 0 && i >= 0 && i < _count) {
-            _data[i] = entry;
-        }
-    }
-    void setEntryRaw(int i, igDirEntryView *entry) {
-        igVirtualObject::ref(entry);
-        igVirtualObject *old = _data[i];
-        igVirtualObject::release(old);
-        if (_count != 0 && i >= 0 && i < _count) {
-            _data[i] = entry;
-        }
-    }
-};
 /* igMemoryPoolInfo's own slots, after igInfo's two: 23 ReadFromRegistry, 24 UserRegistryLoad, 25 Print.
  * ABI view only: never instantiated. */
 class igMemoryPoolInfoView : public Gap::Core::igInfo { public:
@@ -1958,91 +1845,36 @@ class igMemoryPoolInfoView : public Gap::Core::igInfo { public:
 class igLongTimerView;
 extern "C" int g_igIGBFile_inheritedFieldCountFill[4];
 extern "C" int g_igIGBFile_persistentFieldCountFill[4];
-extern "C" igMetaField *g_igIGBFile_infoListPlaceField;
-extern "C" igResult igIGBFile_BuildIndexBuffer(igIGBFileView *self);
-extern "C" igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file);
-extern "C" igResult igIGBFile_OpenFile(igIGBFileView *self, const char *fileName, int mode);
-extern "C" void igIGBFile_CloseFile(igIGBFileView *self);
-extern "C" igResult igIGBFile_OpenForWrite(igIGBFileView *f, const char *fileName);
-extern "C" igResult igIGBFile_BuildMetaObjectList(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_PrepareEntriesForWrite(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_BuildMemoryPoolNameBuffer(igIGBFileView *o);
-extern "C" igResult igIGBFile_ComputeBufferSizes(igIGBFile *arg1);
 /* One metaobject record of an .igb file's metaobject table. */
 struct MetaTableRecord { int nameSize; int majorVersion; int minorVersion; int fieldCount; int parentIndex; int persistCount; };
 /* A metaobject's parent reference as a one-word key passed by reference: the key is stored to the
  * stack and reloaded from there. */
 struct MetaTableKey { int v; };
-extern "C" igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self);
-extern "C" igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_BuildAlignmentBuffer(igIGBFileView *self);
-extern "C" igResult igIGBFile_BuildExternalDirectoryBuffer(igIGBFileView *self);
-extern "C" igResult igIGBFile_BuildDirectoryBuffer(igIGBFile *file);
 #include "dw4/attrs/igObjectList.h"
 /* An object list's sorted insert: FUN_00142bb0 finds the position by the pointer's value. */
 template <class T> static inline void insertObjectSorted(igObjectList *list, T *object) {
     RetainedWord<T> word(object);
     List_InsertWords((igDataList *)list, FUN_00142bb0(list, (igObject *const *)&word), 1, &word);
 }
-extern "C" igResult igIGBFile_ShareEntries(igIGBFileView *self);
-extern "C" igResult igIGBFile_WriteEntryBuffer(igIGBFile *file);
-extern "C" igResult igIGBFile_AllocateObjectBuffer(igIGBFileView *o);
-extern "C" igResult igIGBFile_WriteHeader(igIGBFileView *o);
-extern "C" igResult igIGBFile_WriteBuffers(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_CloseAfterWrite(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_FreeReadBuffers(igIGBFileView *o);
-extern "C" igResult igIGBFile_AddInfoListEntry(void *arg1);
-extern "C" int igIGBFile_WriteFile(igIGBFileView *arg0, const char *fileName);
-extern "C" igResult igIGBFile_BeginRead(igIGBFileView *arg1, const char *fileName);
 /* The 48-byte .igb header: the table sizes and counts, the magic cookie, then the version word whose
  * top bits carry the file's flags. */
 struct IgbFileHeader {
     int entryBufferSize; int entryCount; int metaObjectBufferSize; int metaObjectCount; int objectBufferSize; int objectCount;
     int memoryRefBufferSize; int memoryRefCount; int metaFieldBufferSize; int metaFieldCount; int magicCookie; int magicVersion;
 };
-extern "C" igResult igIGBFile_ReadHeader(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_ReadMetaObjectBuffer(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_SetupBasePath(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_ReadNextChunk(igIGBFileView *arg1);
-typedef igSmartPointer<igDirEntryView> SectionObjectRef;
-extern "C" SectionObjectRef igIGBFile_ReadObject(igIGBFile *file);
-extern "C" igResult igIGBFile_ReadObjectSection(igIGBFileView *file);
-extern "C" igResult igIGBFile_ReadObjectIndex(igIGBFileView *self);
-extern "C" igResult igIGBFile_ReadFinished(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file);
-extern "C" void igIGBFile_SetCurrentPosition(igIGBFileView *self, int at);
-extern "C" igResult igIGBFile_FreeBasePath(igIGBFileView *arg1);
 /* The registered meta-field descriptors Gap::Core::igMetaField::getMetaFieldTypes returns; each entry's getMeta is its meta object. */
 static inline igObjectDispatchView *registeredMetaField(Gap::Core::__internalObjectList *fields, int index) {
     return (igObjectDispatchView *)fields->get(index);
 }
-extern "C" igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self);
-extern "C" void Gap__Core__igIGBFile__resetFields(igIGBFileView *arg0);
 /* An .igb table section header: its byte size, a version word and the entry count. */
 struct IgbSectionHeader { int size; int pad; int count; };
-extern "C" igResult igIGBFile_ReadAlignmentTable(igIGBFileView *self);
-extern "C" igResult igIGBFile_ReadObjects(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_ReadMemoryRefs(igIGBFileView *arg1);
-extern "C" void igIGBFile_CleanUpReadState(igIGBFileView *a);
-extern "C" void Gap__Core__igIGBFile__destructFields(igIGBFileView *arg0);
-extern "C" igResult igIGBFile_ReadInfoList(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_ReadExternalDirectories(igIGBFileView *self);
 struct NameHeader { int size; int count; };
-extern "C" igResult igIGBFile_ReadMemoryPoolNames(igIGBFileView *self);
-extern "C" igResult igIGBFile_MakeConcrete(igIGBFileView *arg1);
-extern "C" igResult igIGBFile_PostProcessEntries(igIGBFileView *arg1);
 /* ReadFile(path): the Alchemy .igb loader driver. Logs "readFile(%s)", notes the clock, then runs
  * the section readers in file order (header, then the version-dependent tables, then the object
  * sections). A reader that fails sends the loader to its error path igIGBFile_AbortRead. After the last
  * reader the load time is reported once through the assert/log hook; an old-format file that still
  * has external references is reported once through the same hook, which prints the file's name.
  * Each reader result is an unnamed temporary with its own stack word. */
-extern "C" int igIGBFile_ReadFile(igIGBFileView *self, const char *path);
-extern "C" void igIGBFile_ReadFilePostProcess(int *arg0, igIGBFileView *arg1);
-extern "C" igResult igIGBFile_ReadFilePostProcessAll(igIGBFileView *self);
-extern "C" int igIGBFile_WriteMemoryRefs(igIGBFileView *o);
-extern "C" igResult igIGBFile_GetSectionBuffer(igIGBFileView *arg1, int arg2);
-extern "C" void igIGBFile_ReadMemoryEntries(int *arg0, igIGBFileView *arg1);
 extern "C" void *igIntMetaField_Construct(igMetaField *self, int extra1);
 extern "C" void StringPool_DestroyChunks(StringPool *pool);
 extern "C" void igLocationTable_Clear(igLocationTableView *table);
@@ -2434,11 +2266,11 @@ extern "C" void igObject_ConstructPooled(igObject *arg0, char *arg1);
  * when there is no allocator at all. It returns the address prefix_size bytes into the block, so a
  * header can precede the object. The allocator method called is vtable offset 216 (vfunc_54), the
  * allocate-bytes slot. */
-extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
+extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, Gap::Core::igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
 /* An object record in an .igb object section: its meta-object index and byte size, then (old format)
  * the count of persistent fields written. */
 struct FieldRecordHead { int kind; int size; int fieldCount; };
-extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
+extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, Gap::Core::igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
 extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, Gap::Core::igDirectory *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
 /* An igObjectList of igObjectDirEntry, or of such lists (an igIGBFile's _entryPool, one per type meta). */
 static inline igObjectDirEntry *objectDirEntryAt(const igObjectList *list, int index) { return ((igObjectDirEntry *const *)list->_data)[index]; }

@@ -25,6 +25,14 @@ class TypedDeclaration(unittest.TestCase):
         self.assertEqual(gth.typed_declaration("bool", "_paging", "unsigned char _paging;"), "bool _paging;")
         self.assertEqual(gth.typed_declaration("igTextureAttr *", "_texture"), "igTextureAttr *_texture;")
 
+    def test_the_metafield_kind_decides_the_dimensions(self):
+        self.assertEqual(gth.typed_declaration("bool", "_texEnable", "unsigned char _texEnable[16];",
+                                               "igBoolArrayMetaField"), "bool _texEnable[16];")
+        self.assertEqual(gth.typed_declaration("igVideoFormat", "_videoMode", "int _videoMode[6];",
+                                               "igStructMetaField"), "igVideoFormat _videoMode;")
+        self.assertEqual(gth.typed_declaration("igSmartPointer<igImage>", "_cubeImage", "int _cubeImage[6];",
+                                               "igObjectRefArrayMetaField"), "igSmartPointer<igImage> _cubeImage[6];")
+
 
 class Access(unittest.TestCase):
     def test_a_label_opens_the_declaration_and_none_is_public(self):

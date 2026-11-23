@@ -11,7 +11,7 @@ void igBlendFunctionAttr::releaseDefaults()
 
 void igBlendFunctionAttr::apply(igVisualContext *vc)
 {
-    FUN_00174510((igPsx2VisualContext *)vc, getSource(), getDestination(), _blendConstant, _blendStage);
+    FUN_00174510((::igPsx2VisualContext *)vc, getSource(), getDestination(), _blendConstant, _blendStage);
     if (_extension != 0) {
         _extension->_equation = _eq;
         igPsx2BlendEquationExt_SetBlendFactors((igPsx2BlendEquationExt *)_extension, _blendA, _blendB, _blendC, _blendD,

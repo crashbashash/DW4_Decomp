@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igClippingStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetViewportClippingState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setViewportClippingState(_enabled);
 }
 
 void igClippingStateAttr::synchronizeDefault(igVisualContext *vc)

@@ -19,7 +19,8 @@ struct igRenderDestinationFormat {
 };
 
 /* The mode a visual context is set to or reports: full screen, interlaced with its field count and size, the
- * refresh rate in Hz (NTSC 59.94, PAL 50), the swap interval in vertical retraces and the video type (0 NTSC). */
+ * refresh rate in Hz (NTSC 59.94, PAL 50), the swap interval in vertical retraces and the video type (0 NTSC).
+ * The constructor is the kit's, which leaves the field count and size unset. */
 struct igVideoFormat {
     bool _bFullScreen;
     bool _bInterlaced;
@@ -28,6 +29,14 @@ struct igVideoFormat {
     float _fRefreshRate;
     int _iSwapInterval;
     int _iVideoType;
+
+    inline igVideoFormat() {
+        _iVideoType = 0;
+        _bFullScreen = false;
+        _bInterlaced = false;
+        _fRefreshRate = 0.0f;
+        _iSwapInterval = 0;
+    }
 };
 #endif
 

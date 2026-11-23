@@ -1,25 +1,30 @@
-void igPsx2VisualContext_SetVertexArray2(int *arg0, int *arg1, int arg2) {
+namespace Gap {
+namespace Gfx {
+
+void igPsx2VisualContext::setVertexArray(igVertexArray2 *va, unsigned int stream) {
     int *old;
     int *slot;
     int idx;
 
-    if (arg1 != 0) {
-        arg1[1] = arg1[1] + 1;
+    if (va != 0) {
+        ((int *)va)[1] = ((int *)va)[1] + 1;
     }
-    idx = arg2 * 4;
-    idx = idx + (int)arg0;
+    idx = stream * 4;
+    idx = idx + (int)(::igPsx2VisualContext *)this;
     slot = (int *)(idx + 240);
     old = (int *)*slot;
     if (old != 0) {
         old[1] = old[1] - 1;
         if ((old[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)old);
+            igObject_Destroy((::igObject *)old);
         }
     }
-    *slot = (int)arg1;
-    if (arg1 != 0) {
-        ((Obj_17dea0 *)arg0)->vX(0);
+    *slot = (int)va;
+    if (va != 0) {
+        ((Obj_17dea0 *)this)->vX(0);
     }
+}
+}
 }
 
 /* Bind the position, normal, color and texture-coordinate streams of `vertexData` for drawing and

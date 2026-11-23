@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igFogStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetFogState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setFogState(_enabled);
 }
 
 void igFogStateAttr::synchronizeDefault(igVisualContext *vc)

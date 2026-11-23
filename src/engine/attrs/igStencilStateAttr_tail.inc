@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igStencilStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetStencilState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setStencilState(_enabled);
 }
 
 void igStencilStateAttr::synchronizeDefault(igVisualContext *vc)

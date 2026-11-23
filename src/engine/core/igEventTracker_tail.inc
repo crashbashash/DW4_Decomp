@@ -1704,9 +1704,6 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
     bool had;
     bool trk;
     int r;
-    igObject *a;
-    igObject *old;
-    igIGBFileView *o;
     had = hasFlag(self, 2);
     self->_flags = self->_flags | 2;
     trk = hasFlag(self, 4);
@@ -1714,28 +1711,13 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         self->ResolveAllCallStackSymbols();
     }
     {
-    igSmartPointer<igIGBFileView> file(((igIGBFileView *)igIGBFile_Create((int)(((igObject *)((Gap::Core::igObject *)self)->getMemoryPool())))));
-    a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
-    o = file.p;
-    if (a != 0) a->_refCount = a->_refCount + 1;
-    old = (igObject *)o->_temporaryMemoryPool;
-    igObject::release(old);
-    o->_temporaryMemoryPool = (igMemoryPoolView *)a;
-    a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
-    o = file.p;
-    if (a != 0) a->_refCount = a->_refCount + 1;
-    old = (igObject *)o->_objectMemoryPool;
-    igObject::release(old);
-    o->_objectMemoryPool = (igMemoryPoolView *)a;
-    a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
-    o = file.p;
-    if (a != 0) a->_refCount = a->_refCount + 1;
-    old = (igObject *)o->_dataMemoryPool;
-    igObject::release(old);
-    o->_dataMemoryPool = (igMemoryPoolView *)a;
-    file.p->_useMemoryPoolAssignmentsState = 1;
-    ((Gap::Core::igDirectory *)((int)file.p))->addObject((Gap::Core::igObject *)((igObject *)self), (char const *)g_igEventTracker_memoryDataName, 0);
-    r = file.p->WriteFile(fileName);
+    igSmartPointer<Gap::Core::igIGBFile> file(Gap::Core::igIGBFile::_instantiateFromPool((igMemoryPoolView *)(igObject *)((Gap::Core::igObject *)self)->getMemoryPool()));
+    file->setTemporaryMemoryPool((igMemoryPool *)((Gap::Core::igObject *)self)->getMemoryPool());
+    file->setObjectMemoryPool((igMemoryPool *)((Gap::Core::igObject *)self)->getMemoryPool());
+    file->setDataMemoryPool((igMemoryPool *)((Gap::Core::igObject *)self)->getMemoryPool());
+    file->_useMemoryPoolAssignmentsState = 1;
+    file->addObject((Gap::Core::igObject *)((igObject *)self), g_igEventTracker_memoryDataName, 0);
+    r = file->writeFile((const char *)fileName);
     }
     self->_flags = had ? (self->_flags | 2) : (self->_flags & ~2);
     return igResult(r);

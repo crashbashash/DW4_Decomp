@@ -222,14 +222,17 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, bool *useTexture) 
     return result;
 }
 
-void igPsx2VisualContext_GetStatistic(igPsx2VisualContextSlots *self)
+namespace Gap {
+namespace Gfx {
+
+bool igPsx2VisualContext::getStatistic(unsigned int stat)
 {
-    self->vfunc_255();
+    return getStatisticCapability(stat);
 }
 
-bool igPsx2VisualContext_GetStatisticCapability(void *context, unsigned int capability) {
+bool igPsx2VisualContext::getStatisticCapability(unsigned int stat) {
     bool supported = false;
-    switch (capability) {
+    switch (stat) {
     case 0:
     case 1:
     case 2:
@@ -409,36 +412,41 @@ bool igPsx2VisualContext_GetStatisticCapability(void *context, unsigned int capa
     }
     return supported;
 }
+}
+}
 
 unsigned char g_igPsx2VisualContext_capability31Enabled;
 
 unsigned char g_igPsx2VisualContext_capability34Enabled;
 
-bool igPsx2VisualContext_SetStatistic(igPsx2VisualContextStats *self, unsigned int capability, unsigned char enabled)
-{
-    StatNodeView *node;
+namespace Gap {
+namespace Gfx {
 
-    bool supported = self->supports(capability);
+bool igPsx2VisualContext::setStatistic(unsigned int stat, bool enb)
+{
+    StatisticsCapture *node;
+
+    bool supported = ((Gap::Gfx::igVisualContext *)this)->getStatisticCapability(stat);
     if (supported) {
-        if (capability == 31) {
-            g_igPsx2VisualContext_capability31Enabled = enabled;
+        if (stat == 31) {
+            g_igPsx2VisualContext_capability31Enabled = enb;
         }
-        if (capability == 34) {
-            g_igPsx2VisualContext_capability34Enabled = enabled;
+        if (stat == 34) {
+            g_igPsx2VisualContext_capability34Enabled = enb;
         }
-        if (capability == 31) {
-        } else if (capability == 34) {
-        } else if (capability == 57) {
-            for (node = self->nodes; node != 0; node = node->next) {
-                node->f16 = 1;
-                node->f8 = 0;
+        if (stat == 31) {
+        } else if (stat == 34) {
+        } else if (stat == 57) {
+            for (node = (StatisticsCapture *)_statisticCaptures; node != 0; node = node->next) {
+                node->active = 1;
+                node->startCapture = 0;
             }
         }
     }
     return supported;
 }
 
-void igPsx2VisualContext_GetStatistics(void) {
+void igPsx2VisualContext::getStatistic() {
     if (DAT_0048ac30[0] != 0) {
         memset(&g_gsStatCurrent, 0, 0x1C8);
         DAT_00560ee8[0] = 0;
@@ -505,11 +513,11 @@ void igPsx2VisualContext_GetStatistics(void) {
     p2GetStatistics(&g_gsStatCurrent);
 }
 
-float igPsx2VisualContext_GetStatisticValue(void *unused, int id) {
+float igPsx2VisualContext::getStatisticValue(int stat) {
     float result = -1.0f;
     float elapsed = DELTA(5);
     if (!(elapsed <= 0.0f)) {
-        switch (id) {
+        switch (stat) {
         case 4: result = elapsed; break;
         case 5: result = DELTA(6); break;
         case 0: result = DELTA(0) / elapsed; break;
@@ -564,23 +572,25 @@ float igPsx2VisualContext_GetStatisticValue(void *unused, int id) {
         case 188: result = DELTA(49) / elapsed; break;
         case 190: result = DELTA(56) / elapsed; break;
         }
-        if (id >= 60 && id < 187) {
-            result = (float)g_gsEventCount[id] / elapsed;
-            g_gsEventCount[id] = 0;
+        if (stat >= 60 && stat < 187) {
+            result = (float)g_gsEventCount[stat] / elapsed;
+            g_gsEventCount[stat] = 0;
         }
     }
     if (result == -1.0f) {
-        if (id == 42) {
+        if (stat == 42) {
             GsStatBlock snapshot;
             p2GetStatistics(&snapshot);
             result = (float)snapshot.c[3];
-        } else if (id == 43) {
+        } else if (stat == 43) {
             GsStatBlock snapshot;
             p2GetStatistics(&snapshot);
             result = (float)snapshot.c[4];
         }
     }
     return result;
+}
+}
 }
 
 void FUN_001788a0(void *arg0) {
@@ -1145,25 +1155,28 @@ void FUN_0017a870(S0_17a070 *arg0, int arg1) {
     }
 }
 
-int igPsx2VisualContext_GetAvailableTextureMemory(void) {
+namespace Gap {
+namespace Gfx {
+
+int igPsx2VisualContext::getAvailableTextureMemory(int which) const {
     return 0;
 }
 
-void igPsx2VisualContext_SetTextureStageState(igPsx2VisualContext *self, int arg1, bool enabled) {
-    struct TextureStateView117 *arg0 = (struct TextureStateView117 *)self;
+void igPsx2VisualContext::setTextureStageState(int stage, bool enable) {
+    struct TextureStateView117 *arg0 = (struct TextureStateView117 *)this;
     int n;
     int j;
-    if (arg1 < 15) {
-        n = arg1;
+    if (stage < 15) {
+        n = stage;
     } else {
         n = 15;
     }
     if (n < 8) {
-        if (arg0->a[n] == enabled) {
+        if (arg0->a[n] == enable) {
             DAT_00560a08[n] += 1;
         }
     }
-    arg0->a[n] = enabled;
+    arg0->a[n] = enable;
     if (n > 1) {
         j = n - 1;
     } else {
@@ -1171,7 +1184,7 @@ void igPsx2VisualContext_SetTextureStageState(igPsx2VisualContext *self, int arg
     }
     p2CurrentProgram = n;
     p2CurrentGsRegisters = &p2GsRegisterSets[j];
-    if (enabled) {
+    if (enable) {
         p2EnableCapability(1);
     } else {
         p2DisableCapability(1);
@@ -1180,15 +1193,19 @@ void igPsx2VisualContext_SetTextureStageState(igPsx2VisualContext *self, int arg
     p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
-unsigned char igPsx2VisualContext_GetTextureStageState(int arg0, int arg1) { int i = (arg1 < 15 ? arg1 : 15); return *(unsigned char *)(i + arg0 + 564); }
-
-void igPsx2VisualContext_CreateTextureOneImage(TexContext *a0, int a1, int a2, int a3, int a4, int a5, int a6) {
-    igPsx2VisualContext_CreateTexture(a0, a1, a2, a3, a4, a5, 1);
+bool igPsx2VisualContext::getTextureStageState(int stage) const {
+    return _texEnable[stage < 15 ? stage : 15];
 }
 
-int Gap__Gfx__igPsx2VisualContext__createTexture(igPsx2VisualContext *self, int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount)
+int igPsx2VisualContext::createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode) {
+    return igPsx2VisualContext_CreateTexture((TexContext *)this, width, height, format, source, textureMode, 1);
+}
+
+int igPsx2VisualContext::createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode, unsigned int imageCount)
 {
-    return igPsx2VisualContext_CreateTexture((TexContext *)self, width, height, format, source, textureMode, imageCount);
+    return igPsx2VisualContext_CreateTexture((TexContext *)this, width, height, format, source, textureMode, imageCount);
+}
+}
 }
 
 inline void adoptNewImage(MipImage *&image, AdoptReference)
@@ -1283,8 +1300,13 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     return index;
 }
 
-int igPsx2VisualContext_SetTextureComponentSizeIntensityAlpha(void) {
+namespace Gap {
+namespace Gfx {
+
+bool igPsx2VisualContext::setTextureComponentSizeIntensityAlpha(int handle, int intensityBits, int alphaBits) {
     return 0;
+}
+}
 }
 
 struct TexBits { char pad0[112]; int pixelFormat; int redBits; int greenBits; int blueBits; int alphaBits; char pad132[4]; };
@@ -1294,8 +1316,11 @@ static inline unsigned int colourBits(unsigned int r, unsigned int g, unsigned i
     if (g != 0) return g;
     return b;
 }
-extern "C" int igPsx2VisualContext_SetTextureComponentSize(igPsx2VisualContext *vc, int index, unsigned int redBits, unsigned int greenBits, unsigned int blueBits, unsigned int alphaBits) {
-    TexBits *entry = &((TexBitsList *)vc->_pTexList)->data[index];
+namespace Gap {
+namespace Gfx {
+
+bool igPsx2VisualContext::setTextureComponentSize(int handle, unsigned int redBits, unsigned int greenBits, unsigned int blueBits, unsigned int alphaBits) {
+    TexBits *entry = &((TexBitsList *)_pTexList)->data[handle];
     int kind;
     unsigned int bits;
 
@@ -1370,26 +1395,26 @@ extern "C" int igPsx2VisualContext_SetTextureComponentSize(igPsx2VisualContext *
     return 1;
 }
 
-void igPsx2VisualContext_GetTextureComponentSizeIntensityAlpha(void) {
+void igPsx2VisualContext::getTextureComponentSizeIntensityAlpha(int handle, int &intensityBits, int &alphaBits, bool &palletized) const {
 
 }
 
-void igPsx2VisualContext_GetTextureComponentSize(igPsx2VisualContext *self, int handle, int *redBits, int *greenBits, int *blueBits, int *alphaBits, char *palletized) {
-    TexBits *entry = &((TexBitsList *)self->_pTexList)->data[handle];
+void igPsx2VisualContext::getTextureComponentSize(int handle, int &redBits, int &greenBits, int &blueBits, int &alphaBits, bool &palletized) const {
+    TexBits *entry = &((TexBitsList *)_pTexList)->data[handle];
 
-    *redBits = entry->redBits;
-    *greenBits = entry->greenBits;
-    *blueBits = entry->blueBits;
-    *alphaBits = entry->alphaBits;
-    *palletized = 0;
+    redBits = entry->redBits;
+    greenBits = entry->greenBits;
+    blueBits = entry->blueBits;
+    alphaBits = entry->alphaBits;
+    palletized = 0;
 }
 
-void igPsx2VisualContext_LoadTexture(igPsx2VisualContextSlots_17a070 *self, int value, int option)
+bool igPsx2VisualContext::loadTexture(int texHandle)
 {
-    self->vfunc_125(value, 0);
+    return setTexture(texHandle, 0);
 }
 
-unsigned char igPsx2VisualContext_SetTexture(igPsx2VisualContext *self, int index, int stage)
+bool igPsx2VisualContext::setTexture(int texHandle, int stage)
 {
     bool result;
     bool clutDirty;
@@ -1400,11 +1425,11 @@ unsigned char igPsx2VisualContext_SetTexture(igPsx2VisualContext *self, int inde
     bool reload;
     int isTarget;
 
-    if (index == -1) {
+    if (texHandle == -1) {
         p2MarkTextureStage(stage);
         return false;
     }
-    entry = &((TexList *)self->_pTexList)->data[index];
+    entry = &((TexList *)_pTexList)->data[texHandle];
     result = true;
     clutDirty = false;
     clut = 0;
@@ -1416,14 +1441,14 @@ unsigned char igPsx2VisualContext_SetTexture(igPsx2VisualContext *self, int inde
         return true;
     }
     if (entry->buffers[0] == 0) {
-        FUN_0017b5f0((TexContext *)self, entry);
+        FUN_0017b5f0((TexContext *)this, entry);
     }
     if (entry->clut >= 0 || entry->altClut >= 0) {
         if (entry->clut >= 0) {
-            clut = &((ClutList *)self->_pClutList)->data[entry->clut];
+            clut = &((ClutList *)_pClutList)->data[entry->clut];
             clutIndex = entry->clut;
         } else if (entry->altClut >= 0) {
-            clut = &((ClutList *)self->_pClutList)->data[entry->altClut];
+            clut = &((ClutList *)_pClutList)->data[entry->altClut];
             clutIndex = entry->altClut;
         }
         if (clut->data->dirty) {
@@ -1438,17 +1463,19 @@ unsigned char igPsx2VisualContext_SetTexture(igPsx2VisualContext *self, int inde
     if (isTarget && entry->reload) {
         reload = true;
     }
-    if (self->_currentTex != index || entry->stage != stage || clutDirty || reload) {
+    if (_currentTex != texHandle || entry->stage != stage || clutDirty || reload) {
         if (reload) {
             entry->reload = false;
             p2SetTextureImage((P2Texture *)entry->buffers[0], (void *)entry->image->pixels);
         }
-        FUN_0017b400((TexContext *)self, entry, stage, clut, clutIndex);
+        FUN_0017b400((TexContext *)this, entry, stage, clut, clutIndex);
         entry->stage = stage;
-        self->_currentTex = index;
-        result = FUN_0020bb20((P2Texture **)entry->buffers, stage, (unsigned char)!self->_texPageEnable) != 0;
+        _currentTex = texHandle;
+        result = FUN_0020bb20((P2Texture **)entry->buffers, stage, (unsigned char)!_texPageEnable) != 0;
     }
     return result;
+}
+}
 }
 
 void FUN_0017b5f0(TexContext *context, TexEntry *entry)
@@ -1521,13 +1548,16 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
     }
 }
 
-int igPsx2VisualContext_GetCurrentTexture(igPsx2VisualContext *self) {
-    return self->_currentTex;
+namespace Gap {
+namespace Gfx {
+
+int igPsx2VisualContext::getCurrentTexture(int stage) const {
+    return _currentTex;
 }
 
-void igPsx2VisualContext_UnloadTexture(igPsx2VisualContext *self, int index) {
-    UCodeContextView *context = (UCodeContextView *)self;
-    UCodeSlot *slot = &context->slots->_data[index];
+void igPsx2VisualContext::unloadTexture(int texHandle) {
+    UCodeContextView *context = (UCodeContextView *)this;
+    UCodeSlot *slot = &context->slots->_data[texHandle];
     int i;
 
     context->current = -1;
@@ -1558,16 +1588,16 @@ void igPsx2VisualContext_UnloadTexture(igPsx2VisualContext *self, int index) {
     }
 }
 
-void igPsx2VisualContext_DeleteTexture(TexContext *context, int index)
+void igPsx2VisualContext::deleteTexture(int texHandle)
 {
-    TexEntry *entry = &context->texList->data[index];
+    TexEntry *entry = &((TexList *)_pTexList)->data[texHandle];
     TexList *list;
 
-    context->unloadTexture(index);
+    ((Gap::Gfx::igVisualContext *)this)->unloadTexture(texHandle);
     if (entry->clut >= 0) {
         ClutObject *clut = entry->image->clut;
         if (clut != 0 && clut->locked == 0) {
-            FUN_0016ab80((Oab80 *)context, entry->clut);
+            FUN_0016ab80((Oab80 *)this, entry->clut);
             clut->handle = -1;
         }
     }
@@ -1584,30 +1614,30 @@ void igPsx2VisualContext_DeleteTexture(TexContext *context, int index)
         g_gsRawCounter[0] += (int)-((DAT_0048aca0[entry->format - 0x10000] * (entry->width * entry->height)) >> 1);
     }
     FUN_0017a180(entry);
-    list = context->texList;
-    if (index < list->count && index >= 0) {
+    list = (TexList *)_pTexList;
+    if (texHandle < list->count && texHandle >= 0) {
         if (list->freeCount >= list->freeCapacity) {
             ListAllocator *allocator = (ListAllocator *)Memory_FindBufferOwner(list);
             list->freeCapacity += 8;
             list->freeIndices = allocator->reallocate(list->freeIndices, list->freeCapacity * 2);
         }
-        list->freeIndices[list->freeCount] = index;
+        list->freeIndices[list->freeCount] = texHandle;
         list->freeCount++;
     }
 }
 
-void igPsx2VisualContext_SetTextureSource(igPsx2VisualContextSlots_17a070 *self, int value, int index, int option)
+bool igPsx2VisualContext::setTextureSource(int handle, igImage *image)
 {
-    self->vfunc_131(value, index, 0);
+    return setTextureSource(handle, image, 0);
 }
 
-int igPsx2VisualContext_SetTextureSourceFromBuffer(igPsx2VisualContext *self, int arg1, int arg2) {
+bool igPsx2VisualContext::setTextureSource(int handle, void *buffer) {
     int a0;
     int var_a3;
     int var_a4;
     char *s0;
 
-    s0 = (char *)(*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88));
+    s0 = (char *)(*(int *)((char *)(_pTexList) + 16) + (handle * 0x88));
     if (*(int *)(s0 + 20) != 2 || *(int *)(s0 + 72) == 0) {
         return 0;
     }
@@ -1620,62 +1650,64 @@ int igPsx2VisualContext_SetTextureSourceFromBuffer(igPsx2VisualContext *self, in
         var_a3 = 2;
     }
     TextureImageView260 *c = *(TextureImageView260 **)(s0 + 52);
-    c->vX(arg2, (var_a4 * (*(int *)(s0 + 32) * *(int *)(s0 + 36))) / var_a3, var_a3, var_a4);
+    c->vX((int)buffer, (var_a4 * (*(int *)(s0 + 32) * *(int *)(s0 + 36))) / var_a3, var_a3, var_a4);
     *(char *)(s0 + 81) = 1;
     return 1;
 }
 
-int igPsx2VisualContext_GetTextureImage(igPsx2VisualContext *self, int arg1) {
-    return *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88))) + 48);
+igImage *igPsx2VisualContext::getTextureImage(int handle) const {
+    return (igImage *)*(int *)((char *)((*(int *)((char *)(_pTexList) + 16) + (handle * 0x88))) + 48);
 }
 
-int igPsx2VisualContext_SetTextureSourceFromTexture(void) {
+bool igPsx2VisualContext::setTextureSource(int handle, int srcHandle) {
     return 0;
 }
 
-void igPsx2VisualContext_SetTextureMinificationFilter(igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER minFilter) {
+void igPsx2VisualContext::setTextureMinificationFilter(int handle, IG_GFX_TEXTURE_FILTER filter) {
     int temp_a3;
 
-    temp_a3 = texture * 0x88;
-    if (minFilter == *(int *)((char *)((TextureList138 *)self->_pTexList)->f16 + temp_a3 + 4)) {
+    temp_a3 = handle * 0x88;
+    if (filter == *(int *)((char *)((TextureList138 *)_pTexList)->f16 + temp_a3 + 4)) {
         DAT_00560a28[0] += 1;
     }
-    *(int *)((char *)((TextureList138 *)self->_pTexList)->f16 + temp_a3 + 4) = minFilter;
-    *(char *)((char *)((TextureList138 *)self->_pTexList)->f16 + temp_a3 + 80) = 1;
+    *(int *)((char *)((TextureList138 *)_pTexList)->f16 + temp_a3 + 4) = filter;
+    *(char *)((char *)((TextureList138 *)_pTexList)->f16 + temp_a3 + 80) = 1;
 }
 
-void igPsx2VisualContext_SetTextureMagnificationFilter(igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER magFilter) {
-    struct TextureEntry140 *e = ((struct TextureList140 *)self->_pTexList)->arr + texture; if (magFilter == e->v) { DAT_00560a2c[0] += 1; } e = ((struct TextureList140 *)self->_pTexList)->arr + texture; e->v = magFilter; e = ((struct TextureList140 *)self->_pTexList)->arr + texture; e->flag = 1;
+void igPsx2VisualContext::setTextureMagnificationFilter(int handle, IG_GFX_TEXTURE_FILTER filter) {
+    struct TextureEntry140 *e = ((struct TextureList140 *)_pTexList)->arr + handle; if (filter == e->v) { DAT_00560a2c[0] += 1; } e = ((struct TextureList140 *)_pTexList)->arr + handle; e->v = filter; e = ((struct TextureList140 *)_pTexList)->arr + handle; e->flag = 1;
 }
 
-int igPsx2VisualContext_GetTextureMinificationFilter(igPsx2VisualContext *self, int arg1) {
-    return *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88))) + 4);
+IG_GFX_TEXTURE_FILTER igPsx2VisualContext::getTextureMinificationFilter(int handle) const {
+    return (IG_GFX_TEXTURE_FILTER)*(int *)((char *)((*(int *)((char *)(_pTexList) + 16) + (handle * 0x88))) + 4);
 }
 
-int igPsx2VisualContext_GetTextureMagnificationFilter(igPsx2VisualContext *self, int arg1) {
-    return *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88))) + 8);
+IG_GFX_TEXTURE_FILTER igPsx2VisualContext::getTextureMagnificationFilter(int handle) const {
+    return (IG_GFX_TEXTURE_FILTER)*(int *)((char *)((*(int *)((char *)(_pTexList) + 16) + (handle * 0x88))) + 8);
 }
 
-void igPsx2VisualContext_SetTextureAddressingMode(igPsx2VisualContext *self, int arg1, IG_GFX_TEXTURE_WRAP arg2, IG_GFX_TEXTURE_WRAP arg3) {
+void igPsx2VisualContext::setTextureAddressingMode(int handle, IG_GFX_TEXTURE_WRAP wrapU, IG_GFX_TEXTURE_WRAP wrapV) {
     int temp_v1;
-    temp_v1 = arg1 * 0x88;
-    if (arg2 == *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 12)) {
+    temp_v1 = handle * 0x88;
+    if (wrapU == *(int *)(((struct TextureList136 *)_pTexList)->e + temp_v1 + 12)) {
         DAT_00560a34[0] += 1;
     }
-    if (arg3 == *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 16)) {
+    if (wrapV == *(int *)(((struct TextureList136 *)_pTexList)->e + temp_v1 + 16)) {
         DAT_00560a38[0] += 1;
     }
-    *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 12) = arg2;
-    *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 16) = arg3;
-    *(char *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 80) = 1;
+    *(int *)(((struct TextureList136 *)_pTexList)->e + temp_v1 + 12) = wrapU;
+    *(int *)(((struct TextureList136 *)_pTexList)->e + temp_v1 + 16) = wrapV;
+    *(char *)(((struct TextureList136 *)_pTexList)->e + temp_v1 + 80) = 1;
 }
 
-void igPsx2VisualContext_GetTextureAddressingMode(igPsx2VisualContext *self, int arg1, int *arg2, int *arg3) {
+void igPsx2VisualContext::getTextureAddressingMode(int handle, IG_GFX_TEXTURE_WRAP &wrapU, IG_GFX_TEXTURE_WRAP &wrapV) const {
     int temp_a1;
 
-    temp_a1 = arg1 * 0x88;
-    *arg2 = *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + temp_a1)) + 12);
-    *arg3 = *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + temp_a1)) + 16);
+    temp_a1 = handle * 0x88;
+    wrapU = (IG_GFX_TEXTURE_WRAP) *(int *)((char *)((*(int *)((char *)(_pTexList) + 16) + temp_a1)) + 12);
+    wrapV = (IG_GFX_TEXTURE_WRAP) *(int *)((char *)((*(int *)((char *)(_pTexList) + 16) + temp_a1)) + 16);
+}
+}
 }
 
 void FUN_0017c6e0(int arg0) {
@@ -1692,13 +1724,16 @@ void FUN_0017c6e0(int arg0) {
     } while (var_a3 < 0x10);
 }
 
-void igPsx2VisualContext_SetTextureMatrixProjectiveState(igPsx2VisualContext *self, int stage, unsigned char enable) {
+namespace Gap {
+namespace Gfx {
+
+void igPsx2VisualContext::setTextureMatrixProjectiveState(int stage, unsigned char enable) {
     if (stage < 8) {
-        if (self->_currentTextureProjectiveState[stage] == enable) {
+        if (_currentTextureProjectiveState[stage] == enable) {
             DAT_00560a3c[stage] = DAT_00560a3c[stage] + 1;
         }
     }
-    self->_currentTextureProjectiveState[stage] = enable;
+    _currentTextureProjectiveState[stage] = enable;
     if (stage == 0) {
         if (enable) {
             p2EnableCapability(0x1A);
@@ -1708,24 +1743,26 @@ void igPsx2VisualContext_SetTextureMatrixProjectiveState(igPsx2VisualContext *se
     }
 }
 
-unsigned char igPsx2VisualContext_GetTextureMatrixProjectiveState(igPsx2VisualContext *self, int stage) {
-    return self->_currentTextureProjectiveState[stage];
+unsigned char igPsx2VisualContext::getTextureMatrixProjectiveState(int stage) {
+    return _currentTextureProjectiveState[stage];
 }
 
-void igPsx2VisualContext_SetTextureStageFunc(igPsx2VisualContext *self, int arg1, int arg2) {
-    VisualContextSlots *arg0 = (VisualContextSlots *)self;
+void igPsx2VisualContext::setTextureStageFunc(int stage, int func) {
+    VisualContextSlots *arg0 = (VisualContextSlots *)this;
     int a3;
-    arg1 = arg1 < 15 ? arg1 : 15;
-    if (arg1 < 8) {
-        if (arg0->slot[arg1] == arg2) {
-            DAT_00560a5c[arg1] += 1;
+    stage = stage < 15 ? stage : 15;
+    if (stage < 8) {
+        if (arg0->slot[stage] == func) {
+            DAT_00560a5c[stage] += 1;
         }
     }
-    arg0->slot[arg1] = arg2;
-    a3 = arg1 > 1 ? arg1 - 1 : 0;
-p2CurrentProgram = arg1; p2CurrentGsRegisters = &p2GsRegisterSets[a3]; p2SetTextureFunction(DAT_0048acf0[arg2]);
+    arg0->slot[stage] = func;
+    a3 = stage > 1 ? stage - 1 : 0;
+p2CurrentProgram = stage; p2CurrentGsRegisters = &p2GsRegisterSets[a3]; p2SetTextureFunction(DAT_0048acf0[func]);
     p2CurrentProgram = 0;
     p2CurrentGsRegisters = p2GsRegisterSets;
+}
+}
 }
 
 void FUN_0017c880(igPsx2VisualContext *arg0, int arg1, unsigned char arg2) {
@@ -1760,32 +1797,36 @@ void FUN_0017c8a0(igPsx2VisualContext *context, int stage, int function, unsigne
     p2CurrentGsRegisters = p2GsRegisterSets;
 }
 
-int igPsx2VisualContext_GetTextureStageFunc(int arg0, int a1) {
- int i = a1 < 15 ? a1 : 15; int off = i * 4; int *p = (int *)(off + (int)arg0); return p[145];
+namespace Gap {
+namespace Gfx {
+
+int igPsx2VisualContext::getTextureStageFunc(int stage) const {
+    int arg0 = (int)(::igPsx2VisualContext *)this;
+ int i = stage < 15 ? stage : 15; int off = i * 4; int *p = (int *)(off + (int)arg0); return p[145];
 }
 
-void igPsx2VisualContext_SetTextureStageCoordSource(igPsx2VisualContext *self, int n, int x, int y) {
-    struct TextureStageView150 *p = (struct TextureStageView150 *)self;
+void igPsx2VisualContext::setTextureStageCoordSource(int stage, IG_GFX_TEXTURE_COORD_SOURCE source, int coordIndex) {
+    struct TextureStageView150 *p = (struct TextureStageView150 *)this;
     int i;
-    n = n < 15 ? n : 15;
-    if (n < 8) {
-        if (p->a[n] == x) {
-            DAT_00560a7c[n] += 1;
+    stage = stage < 15 ? stage : 15;
+    if (stage < 8) {
+        if (p->a[stage] == source) {
+            DAT_00560a7c[stage] += 1;
         }
-        if (p->b[n] == y) {
-            DAT_00560a9c[n] += 1;
+        if (p->b[stage] == coordIndex) {
+            DAT_00560a9c[stage] += 1;
         }
     }
-    p->a[n] = x;
-    p->b[n] = y;
-    if (n > 1) {
-        i = n - 1;
+    p->a[stage] = source;
+    p->b[stage] = coordIndex;
+    if (stage > 1) {
+        i = stage - 1;
     } else {
         i = 0;
     }
-    p2CurrentProgram = n;
+    p2CurrentProgram = stage;
     p2CurrentGsRegisters = &p2GsRegisterSets[i];
-    switch (x) {
+    switch (source) {
     case 0:
         p2DisableCapability(10);
         break;
@@ -1812,12 +1853,15 @@ void igPsx2VisualContext_SetTextureStageCoordSource(igPsx2VisualContext *self, i
 
 /* The base is kept in its own local rather than written back into the parameter; otherwise the add
  * is emitted with the operands swapped. */
-void igPsx2VisualContext_GetTextureStageCoordSource(int arg0, int arg1, int *arg2, int *arg3) {
-    int i = arg1 < 15 ? arg1 : 15;
+void igPsx2VisualContext::getTextureStageCoordSource(int stage, IG_GFX_TEXTURE_COORD_SOURCE &source, int &coordIndex) const {
+    int arg0 = (int)(::igPsx2VisualContext *)this;
+    int i = stage < 15 ? stage : 15;
     int off = i * 4;
     int p = off + arg0;
-    *arg2 = *(int *)(p + 644);
-    *arg3 = *(int *)(p + 708);
+    source = (IG_GFX_TEXTURE_COORD_SOURCE) *(int *)(p + 644);
+    coordIndex = *(int *)(p + 708);
+}
+}
 }
 
 int FUN_0017cb80(struct ClutContextCB80 *arg0, int arg1, int *arg2) {
@@ -1859,7 +1903,12 @@ int FUN_0017cb80(struct ClutContextCB80 *arg0, int arg1, int *arg2) {
     return r;
 }
 
-void igPsx2VisualContext_SetTextureRegion(void) {
+namespace Gap {
+namespace Gfx {
 
+void igPsx2VisualContext::setTextureRegion(int handle, int iLevel, int offsetX, int offsetY, int width, int height, igImage *image) {
+
+}
+}
 }
 

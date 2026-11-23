@@ -6,7 +6,7 @@ void igLightStateAttr::apply(igVisualContext *vc)
     if (_light != 0) {
         if (_light->getHandle() == -1)
             _light->apply(vc);
-        igPsx2VisualContext_SetLightState((igPsx2VisualContext *)vc, _light->getHandle(), _enabled);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightState(_light->getHandle(), _enabled);
     }
 }
 

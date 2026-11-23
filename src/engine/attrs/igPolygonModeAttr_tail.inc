@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igPolygonModeAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetRenderMode((igPsx2VisualContext *)vc, getMode());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setRenderMode(getMode());
 }
 
 void igPolygonModeAttr::synchronizeDefault(igVisualContext *vc)

@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igModelViewMatrixAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, IG_GFX_MATRIX_STACK_MODELVIEW, (char *)_m.m);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setMatrix(IG_GFX_MATRIX_STACK_MODELVIEW, _m);
 }
 
 void igModelViewMatrixAttr::userRegister()

@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igTextureCoordSourceAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetTextureStageCoordSource((igPsx2VisualContext *)vc, _unitID, getMode(), _texCoordIndex);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureStageCoordSource(_unitID, getMode(), _texCoordIndex);
 }
 
 int igTextureCoordSourceAttr::getUnitCount(igCapabilityManager *capabilityManager)

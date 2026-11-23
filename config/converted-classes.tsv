@@ -194,3 +194,5 @@ igPrimLengthArray1_1	Gfx
 igGeometryAttr1_5	Attrs
 igResource	Core
 igVisualContext	Gfx
+igIGBFile	Core
+igPsx2VisualContext	Gfx

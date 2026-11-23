@@ -23,8 +23,8 @@ void igCullFaceAttr::setState(bool enabled)
 
 void igCullFaceAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetCullFaceState((igPsx2VisualContext *)vc, _enabled);
-    igPsx2VisualContext_SetCullFaceMode((igPsx2VisualContext *)vc, getMode());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setCullFaceState(_enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setCullFaceMode(getMode());
 }
 }
 }

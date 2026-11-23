@@ -3,8 +3,8 @@ namespace Attrs {
 
 void igTextureMatrixAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetTextureMatrixProjectiveState((igPsx2VisualContext *)vc, _unitID, _isProjective);
-    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, _unitID + IG_GFX_MATRIX_STACK_TEXTURE_0, (char *)_m.m);
+    ((igPsx2VisualContext *)vc)->setTextureMatrixProjectiveState(_unitID, _isProjective);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setMatrix((IG_GFX_MATRIX_STACK)(_unitID + IG_GFX_MATRIX_STACK_TEXTURE_0), _m);
 }
 
 void igTextureMatrixAttr::synchronizeCachedUnitID(igObject *obj)
@@ -32,7 +32,7 @@ void igTextureMatrixAttr::synchronizeDefault(igVisualContext *vc)
 
     vc->getMatrix((IG_GFX_MATRIX_STACK)(_unitID + IG_GFX_MATRIX_STACK_TEXTURE_0), m);
     setMatrix(m);
-    _isProjective = igPsx2VisualContext_GetTextureMatrixProjectiveState((igPsx2VisualContext *)vc, _unitID);
+    _isProjective = ((igPsx2VisualContext *)vc)->getTextureMatrixProjectiveState(_unitID);
 }
 
 void igTextureMatrixAttr::setMatrix(const igMatrix44f &matrix)

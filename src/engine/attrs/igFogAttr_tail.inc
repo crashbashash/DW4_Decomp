@@ -3,11 +3,11 @@ namespace Attrs {
 
 void igFogAttr::apply(igVisualContext *rc)
 {
-    igPsx2VisualContext_SetFogMode((igPsx2VisualContext *)rc, (IG_GFX_FOG_MODE)_mode);
-    igPsx2VisualContext_SetFogDensity((igPsx2VisualContext *)rc, _density);
-    igPsx2VisualContext_SetFogColor((igPsx2VisualContext *)rc, &_color);
-    igPsx2VisualContext_SetFogNear((igPsx2VisualContext *)rc, _nearVal);
-    igPsx2VisualContext_SetFogFar((igPsx2VisualContext *)rc, _farVal);
+    ((igPsx2VisualContext *)rc)->igPsx2VisualContext::setFogMode((IG_GFX_FOG_MODE)_mode);
+    ((igPsx2VisualContext *)rc)->igPsx2VisualContext::setFogDensity(_density);
+    ((igPsx2VisualContext *)rc)->igPsx2VisualContext::setFogColor(_color);
+    ((igPsx2VisualContext *)rc)->igPsx2VisualContext::setFogNear(_nearVal);
+    ((igPsx2VisualContext *)rc)->igPsx2VisualContext::setFogFar(_farVal);
 }
 
 void igFogAttr::synchronizeDefault(igVisualContext *vc)

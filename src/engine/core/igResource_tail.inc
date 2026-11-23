@@ -49,137 +49,86 @@ namespace Core {
  * files, in the resource's pools) and reads it synchronously through the search paths. */
 igDirectory *igResource::loadSynchronous(char const *path) {
     igIGBFile *o;
-    ::igObject *pool;
-    int *old;
-    int v;
     o = (igIGBFile *)getDirectory((const char *)path).p;
     if (o != 0) {
-        ((Gap::Core::igDirectory *)o)->loadRef();
-        return (igDirectory *)o;
+        o->loadRef();
+        return o;
     }
-    igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create((int)RESOURCE_POOL(_temporaryMemoryPool)));
-    file.p->_sharingState = _IGBSharingState;
-    file.p->_forceChunkSize = _IGBChunkSize;
-    file.p->_useMemoryPoolAssignmentsState = _useMemoryPoolAssignmentsState;
-    pool = RESOURCE_POOL(_temporaryMemoryPool);
-    o = file.p;
-    if (pool != 0) pool->_refCount = pool->_refCount + 1;
-    REL_O(o->_temporaryMemoryPool)
-    o->_temporaryMemoryPool = (int)pool;
-    pool = RESOURCE_POOL(_dataMemoryPool);
-    o = file.p;
-    if (pool != 0) pool->_refCount = pool->_refCount + 1;
-    REL_O(o->_dataMemoryPool)
-    o->_dataMemoryPool = (int)pool;
-    pool = RESOURCE_POOL(_objectMemoryPool);
-    o = file.p;
-    if (pool != 0) pool->_refCount = pool->_refCount + 1;
-    REL_O(o->_objectMemoryPool)
-    o->_objectMemoryPool = (int)pool;
+    igSmartPointer<igIGBFile> file(igIGBFile::_instantiateFromPool((igMemoryPoolView *)RESOURCE_POOL(_temporaryMemoryPool)));
+    file->_sharingState = _IGBSharingState;
+    file->_forceChunkSize = _IGBChunkSize;
+    file->_useMemoryPoolAssignmentsState = _useMemoryPoolAssignmentsState;
+    file->setTemporaryMemoryPool((::igMemoryPool *)RESOURCE_POOL(_temporaryMemoryPool));
+    file->setDataMemoryPool((::igMemoryPool *)RESOURCE_POOL(_dataMemoryPool));
+    file->setObjectMemoryPool((::igMemoryPool *)RESOURCE_POOL(_objectMemoryPool));
     if (_asyncLoadState == 1) {
-        file.p->_autoReadFilePostProcessState = _postProcessAsyncronousFilesState;
+        file->_autoReadFilePostProcessState = _postProcessAsyncronousFilesState;
     }
-    file.p->_validState = 0;
-    file.p->_loadPendingState = 1;
-    o = file.p;
-    if (g_stringPool == 0) {
-        v = ((int)StringPool_Allocate(16));
-        if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-        g_stringPool = (StringPool *)v;
-    }
-    v = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
-    old = (int *)o->_name;
-    if (old != 0) {
-        int *hd = old - 2;
-        int c = old[-1] - 1;
-        old[-1] = c;
-        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
-    }
-    o->_name = v;
-    file.p->_managingResource = (int)(::igResource *)this;
-    ((Gap::Core::igDirectory *)file.p)->loadRef();
-    appendDirectory((igDirectory *)((igDirectory *)file.p));
-    return (igDirectory *)doLoad(file.p);
+    file->_validState = 0;
+    file->_loadPendingState = 1;
+    file->setName(path);
+    file->setManagingResource(this);
+    file->loadRef();
+    appendDirectory(file);
+    return doLoad(file);
 }
 
 igDirectory *igResource::load(const char *path) {
     igResult queued;
     igDirectory *r;
-    int v;
-    ::igObject *pool;
-    int *old;
-    int *hd;
-    int c;
-    igIGBFile *o;
-    void *res;
+    ::igMemoryPool *pool;
     r = getDirectory(path).p;
     if (r != 0) {
         r->loadRef();
         return r;
     }
-    igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create((int)_temporaryMemoryPool.p));
-    file.p->_sharingState = _IGBSharingState;
-    file.p->_forceChunkSize = _IGBChunkSize;
-    file.p->_useMemoryPoolAssignmentsState = _useMemoryPoolAssignmentsState;
-    pool = (::igObject *)_temporaryMemoryPool.p;
-    if (pool != 0) { ASSIGN_O(o, _temporaryMemoryPool, pool) }
-    pool = (::igObject *)_dataMemoryPool.p;
-    if (pool != 0) { ASSIGN_O(o, _dataMemoryPool, pool) }
-    pool = (::igObject *)_objectMemoryPool.p;
-    if (pool != 0) { ASSIGN_O(o, _objectMemoryPool, pool) }
+    igSmartPointer<igIGBFile> file(igIGBFile::_instantiateFromPool((igMemoryPoolView *)_temporaryMemoryPool.p));
+    file->_sharingState = _IGBSharingState;
+    file->_forceChunkSize = _IGBChunkSize;
+    file->_useMemoryPoolAssignmentsState = _useMemoryPoolAssignmentsState;
+    pool = _temporaryMemoryPool;
+    if (pool != 0) file->setTemporaryMemoryPool(pool);
+    pool = _dataMemoryPool;
+    if (pool != 0) file->setDataMemoryPool(pool);
+    pool = _objectMemoryPool;
+    if (pool != 0) file->setObjectMemoryPool(pool);
     if (_asyncLoadState == 1) {
-        file.p->_autoReadFilePostProcessState = _postProcessAsyncronousFilesState;
-        ((Gap::Core::igDirectory *)file.p)->createLoadingSemaphore();
+        file->_autoReadFilePostProcessState = _postProcessAsyncronousFilesState;
+        file->createLoadingSemaphore();
     }
-    file.p->_validState = 0;
-    file.p->_loadPendingState = 1;
-    o = file.p;
-    if (g_stringPool == 0) {
-        v = ((int)StringPool_Allocate(16));
-        if (v != 0) v = ((int)StringPool_Construct((StringPool *)v));
-        g_stringPool = (StringPool *)v;
-    }
-    v = (int)StringPool_Intern((StringPool *)g_stringPool, path);
-    old = (int *)o->_name;
-    if (old != 0) {
-        hd = old - 2;
-        c = old[-1] - 1;
-        old[-1] = c;
-        if (c == 0) StringChunk_ReleaseHeader((StringChunk *)(*hd), (StringTokenHeader *)hd);
-    }
-    o->_name = v;
-    file.p->_managingResource = (int)(::igResource *)this;
-    ((Gap::Core::igDirectory *)file.p)->loadRef();
-    appendDirectory((igDirectory *)((igDirectory *)file.p));
+    file->_validState = 0;
+    file->_loadPendingState = 1;
+    file->setName(path);
+    file->setManagingResource(this);
+    file->loadRef();
+    appendDirectory(file);
     if (_asyncLoadState == 0) {
-        return (igDirectory *)doLoad(file.p);
+        return doLoad(file);
     }
-    ((Gap::Core::igDirectory *)file.p)->loadRef();
+    file->loadRef();
     queued = ((igStandardQueueView *)_loadQueue.p)->Insert((int)file.p, 1);
-    res = file.p;
-    return (igDirectory *)res;
+    return file;
 }
 
-igIGBFile *igResource::doLoad(igIGBFile *fdir) {
+igIGBFile *igResource::doLoad(igIGBFile *file) {
     char buf[2048];
     int r;
-    igIGBFileView *file = (igIGBFileView *)fdir;
     if (file == 0) return 0;
     r = 0;
     if (_relativeFilePath.p != 0 && strlen(_relativeFilePath.p) != 0) {
-        sprintf(buf, "%s/%s", _relativeFilePath.p, file->_name);
-        r = file->ReadFile(buf) > 0;
+        sprintf(buf, "%s/%s", _relativeFilePath.p, file->_name.p);
+        r = file->readFile(buf) > 0;
     }
     if (r == 0) {
         if (_absoluteFilePath.p != 0 && strlen(_absoluteFilePath.p) != 0) {
-            sprintf(buf, "%s/%s", _absoluteFilePath.p, file->_name);
-            r = file->ReadFile(buf) > 0;
+            sprintf(buf, "%s/%s", _absoluteFilePath.p, file->_name.p);
+            r = file->readFile(buf) > 0;
         }
     }
     if (r == 0) {
-        file->ReadFile((const char *)file->_name);
+        file->readFile(file->_name.p);
     }
-    return fdir;
+    return file;
 }
 
 bool igResource::isLoadFinished(igDirectory *directory) {
@@ -241,7 +190,7 @@ void igResource::unloadAllIGBs() {
     ::igObject *o;
     for (i = _directoryList->_count - 1; i >= 0; i--) {
         off = i * 4;
-        if (_directoryList->get(i)->isOfType((igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
+        if (_directoryList->get(i)->isOfType((igMetaObject *)((int)Gap::Core::igIGBFile::getClassMeta())) != 0) {
             l = (::igTDataList< ::igObject *> *)_directoryList.p;
             o = *(::igObject **)((char *)l->_data + off);
             ::igObject::release(o);

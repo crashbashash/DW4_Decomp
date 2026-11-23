@@ -1,221 +1,125 @@
-igMetaObject *g_igIGBFile_metaObject;
-int g_igIGBFile_dataDescriptorCell;
-int g_igIGBFile_countDescriptorCell;
-int g_igIGBFile_capacityDescriptorCell;
-igMetaField *g_igIGBFile_magicCookieMetaField;
-igMetaField *g_igIGBFile_magicVersionMetaField;
-igMetaField *g_igIGBFile_fileMetaField;
-igMetaField *g_igIGBFile_majorVersionMetaField;
-igMetaField *g_igIGBFile_minorVersionMetaField;
-igMetaField *g_igIGBFile_hasTemplatesMetaField;
-igMetaField *g_igIGBFile_entryCountMetaField;
-igMetaField *g_igIGBFile_indexBufferSizeMetaField;
-igMetaField *g_igIGBFile_indexBufferMetaField;
-igMetaField *g_igIGBFile_entryBufferSizeMetaField;
-igMetaField *g_igIGBFile_metaObjectCountMetaField;
-igMetaField *g_igIGBFile_metaObjectBufferSizeMetaField;
-igMetaField *g_igIGBFile_metaFieldCountMetaField;
-igMetaField *g_igIGBFile_metaFieldBufferSizeMetaField;
-igMetaField *g_igIGBFile_objectCountMetaField;
-igMetaField *g_igIGBFile_objectBufferSizeMetaField;
-igMetaField *g_igIGBFile_memoryRefCountMetaField;
-igMetaField *g_igIGBFile_memoryRefBufferSizeMetaField;
-igMetaField *g_igIGBFile_userLoadFunctionMetaField;
-igMetaField *g_igIGBFile_forceChunkSizeMetaField;
-igMetaField *g_igIGBFile_endianSwapMetaField;
-igMetaField *g_igIGBFile_metaObjectBufferMetaField;
-igMetaField *g_igIGBFile_dirBufMetaField;
-igMetaField *g_igIGBFile_objBufMetaField;
-igMetaField *g_igIGBFile_mfBufMetaField;
-igMetaField *g_igIGBFile_metaFieldListInFileMetaField;
-igMetaField *g_igIGBFile_metaObjectListInFileMetaField;
-igMetaField *g_igIGBFile_autoOpenedMetaField;
-igMetaField *g_igIGBFile_basePathMetaField;
-igMetaField *g_igIGBFile_imfMetaField;
-igMetaField *g_igIGBFile_smfMetaField;
-igMetaField *g_igIGBFile_hasInfoMetaField;
-igMetaField *g_igIGBFile_hasExternalMetaField;
-igMetaField *g_igIGBFile_sharedEntriesMetaField;
-igMetaField *g_igIGBFile_hasVersion1CruftMetaField;
-igMetaField *g_igIGBFile_version1CruftMultiplyMetaField;
-igMetaField *g_igIGBFile_infoListPlaceField;
-igMetaField *g_igIGBFile_externalDirectoryBufferMetaField;
-igMetaField *g_igIGBFile_externalDirectoryBufferSizeMetaField;
-igMetaField *g_igIGBFile_previousResourceFilePathMetaField;
-igMetaField *g_igIGBFile_alignmentBufferMetaField;
-igMetaField *g_igIGBFile_alignmentBufferSizeMetaField;
-igMetaField *g_igIGBFile_alignmentListInFileMetaField;
-igMetaField *g_igIGBFile_alignmentCountMetaField;
-igMetaField *g_igIGBFile_objectBufferPlaceMetaField;
-igMetaField *g_igIGBFile_memoryBufferPlaceMetaField;
-igMetaField *g_igIGBFile_chunkSizeMetaField;
-igMetaField *g_igIGBFile_chunkMetaField;
-igMetaField *g_igIGBFile_chunkPlaceMetaField;
-igMetaField *g_igIGBFile_bufferPlaceMetaField;
-igMetaField *g_igIGBFile_bufferSizeMetaField;
-igMetaField *g_igIGBFile_memoryBytesCopiedMetaField;
-igMetaField *g_igIGBFile_bytesRemainingInChunkMetaField;
-igMetaField *g_igIGBFile_hasCriticalFailureMetaField;
-igMetaField *g_igIGBFile_autoReadFilePostProcessStateMetaField;
-igMetaField *g_igIGBFile_autoWriteFilePostProcessStateMetaField;
-igMetaField *g_igIGBFile_readFilePostProcessedStateMetaField;
-igMetaField *g_igIGBFile_temporaryMemoryPoolMetaField;
-igMetaField *g_igIGBFile_dataMemoryPoolMetaField;
-igMetaField *g_igIGBFile_objectMemoryPoolMetaField;
-igMetaField *g_igIGBFile_entryPoolMetaField;
-igMetaField *g_igIGBFile_hasMemoryPoolNamesMetaField;
-igMetaField *g_igIGBFile_memoryPoolNameBufferSizeMetaField;
-igMetaField *g_igIGBFile_memoryPoolNameBufferMetaField;
-igMetaField *g_igIGBFile_memoryPoolHandlesMetaField;
-
-void * igIGBFile_Create(int pool) {
-    igIGBFile_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igIGBFile_metaObject, (igMemoryPoolView *)pool));
-}
-
-int igIGBFile_GetOrCreateMetaObject(void) {
-    if ((int)g_igIGBFile_metaObject == 0) {
-        g_igIGBFile_metaObject = (igMetaObject *)(int)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return (int)g_igIGBFile_metaObject;
-}
-
-igMetaObject *igIGBFile_GetMetaObject(void)
-{
-    igMetaObject *g = g_igIGBFile_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igIGBFile_EnsureRegistered();
-    return g_igIGBFile_metaObject;
-}
-
-int igIGBFile_GetVTable(void) {
-    igIGBFile file;
-    int vtable;
-
-    igDirectory_Construct(&file);
-    file._vtable = (int)(&g_igIGBFile_vtable[0]);
-    igSmartPointer_igObjectList_Construct(&file._entryPool);
-    igSmartPointer_igFile_Construct(&file._file);
-    igSmartPointer_igMetaFieldList_Construct(&file._metaFieldListInFile);
-    igSmartPointer_igMetaObjectList_Construct(&file._metaObjectListInFile);
-    igSmartPointer_igMetaField_Construct(&file.imf);
-    igSmartPointer_igMetaField_Construct(&file.smf);
-    igStringRef_Construct((igStringRef *)&file._previousResourceFilePath);
-    igSmartPointer_igIntList_Construct(&file._alignmentListInFile);
-    igSmartPointer_igMemoryPool_Construct(&file._temporaryMemoryPool);
-    igSmartPointer_igMemoryPool_Construct(&file._dataMemoryPool);
-    igSmartPointer_igMemoryPool_Construct(&file._objectMemoryPool);
-    igSmartPointer_igIntList_Construct(&file._memoryPoolHandles);
-    vtable = *(int *)((char *)&file + g_objectSystem->vtableProbeOffset);
-    file._vtable = (int)(&g_igInfo_vtable[28]); /* matching construct: igIGBFile's vtable address (it follows igInfo's 28 words) spelled through another symbol, so it is rematerialised rather than reused */
-    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&file._memoryPoolHandles, -1);
-    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&file._objectMemoryPool, -1);
-    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&file._dataMemoryPool, -1);
-    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&file._temporaryMemoryPool, -1);
-    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&file._alignmentListInFile, -1);
-    igStringRef_Destruct((igStringRef *)&file._previousResourceFilePath, -1);
-    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&file.smf, -1);
-    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&file.imf, -1);
-    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&file._metaObjectListInFile, -1);
-    igSmartPointer_igMetaFieldList_Destruct((igSmartPointer<igObject> *)&file._metaFieldListInFile, -1);
-    igSmartPointer_igFile_Destruct((igSmartPointer<igObject> *)&file._file, -1);
-    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&file._entryPool, -1);
-    igDirectory_Destroy((igDirectory *)&file, 0);
-    return vtable;
-}
-
-igDirectory *igDirectory_Destroy(igDirectory *p, short n) {
-    if (p) {
-        p->_vtable = (int)&g_igDirectory_vtable[0];
-        ((igSmartPointer<igObject> *)&p->_loadingSemaphore)->~igSmartPointer();
-        ((igSmartPointer<igObject> *)&p->_metaFieldPerObjectIndices)->~igSmartPointer();
-        ((igSmartPointer<igObject> *)&p->_refList)->~igSmartPointer();
-        ((igSmartPointer<igObject> *)&p->_uniqueEntryList)->~igSmartPointer();
-        ((igSmartPointer<igObject> *)&p->_infoList)->~igSmartPointer();
-        ((igSmartPointer<igObject> *)&p->_externalDirectoryList)->~igSmartPointer();
-        ((igStringRef *)&p->_name)->~igStringRef();
-        if (n > 0) Memory_FreeBufferAliasC(p);
-    }
-    return p;
-}
-
-int *igSmartPointer_igMemoryPool_Construct(int *p)
-{
-    *p = 0;
-    return p;
-}
-
-int *igSmartPointer_igMetaField_Construct(int *p)
-{
-    *p = 0;
-    return p;
-}
-
-int *igSmartPointer_igMetaFieldList_Construct(int *p)
-{
-    *p = 0;
-    return p;
-}
-
-int *igSmartPointer_igFile_Construct(int *p)
-{
-    *p = 0;
-    return p;
-}
-
-int *igSmartPointer_igObjectList_Construct(int *p)
-{
-    *p = 0;
-    return p;
-}
-
-void *igDirectory_Construct(igIGBFile *self) {
-    igObject_InitHeader((igObject *)self);
-    self->_vtable = (int)(&g_igDataList_vtable[0]);
-    self->_vtable = (int)(&g_igObjectListBase_vtable[0]);
-    self->_vtable = (int)(&g_igObjectList_vtable[0]);
-    self->_vtable = (int)(&g_igDirectoryBase_vtable[0]);
-    self->_vtable = (int)(&g_igDirectory_vtable[0]);
-    self->_name = 0;
-    self->_externalDirectoryList = 0;
-    self->_infoList = 0;
-    self->_uniqueEntryList = 0;
-    self->_refList = 0;
-    self->_metaFieldPerObjectIndices = 0;
-    self->_loadingSemaphore = 0;
-    return self;
-}
-
-void igIGBFile_EnsureRegistered(void)
-{
-    igMetaObject_RunStaticInit(igIGBFile_Register);
-}
-
-static igMetaObjectCallback g_igIGBFile_callbackList[] = { Gap::Core::igFile::arkRegister, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, Gap::Core::igMetaField::arkRegister, Gap::Core::igIntList::arkRegister, igMemoryPool_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
-
-CallbackArray *igIGBFile_Register(void) {
-    CoreLibrary_MarkRegistered();  /* First-use initializer: sets a gp byte flag, then runs five one-time init calls. */
-    return igMetaObject_RegisterClass(
-        0,
-        &g_igIGBFile_metaObject,
-        Gap::Core::igDirectory::arkRegisterInternal,
-        Gap::Core::igDirectory::getClassMeta,
-        igIGBFile_GetMetaObjectFunction,
-        "igIGBFile",
-        sizeof(igIGBFile),
-        igIGBFile_GetVTable,
-        igIGBFile_InitFields,
-        igIGBFile_StaticInitCallback,
-        g_igIGBFile_callbackList
-    );
-}
-
-void igIGBFile_GetMetaObjectFunction(void) {
-    igIGBFile_GetMetaObject();
-}
-
 namespace Gap {
 namespace Core {
+
+igMetaObject *igIGBFile::_Meta;
+igMetaField *igIGBFile::k_data;
+igMetaField *igIGBFile::k_count;
+igMetaField *igIGBFile::k_capacity;
+igMetaField *igIGBFile::k_magicCookie;
+igMetaField *igIGBFile::k_magicVersion;
+igMetaField *igIGBFile::k_file;
+igMetaField *igIGBFile::k_majorVersion;
+igMetaField *igIGBFile::k_minorVersion;
+igMetaField *igIGBFile::k_hasTemplates;
+igMetaField *igIGBFile::k_entryCount;
+igMetaField *igIGBFile::k_indexBufferSize;
+igMetaField *igIGBFile::k_indexBuffer;
+igMetaField *igIGBFile::k_entryBufferSize;
+igMetaField *igIGBFile::k_metaObjectCount;
+igMetaField *igIGBFile::k_metaObjectBufferSize;
+igMetaField *igIGBFile::k_metaFieldCount;
+igMetaField *igIGBFile::k_metaFieldBufferSize;
+igMetaField *igIGBFile::k_objectCount;
+igMetaField *igIGBFile::k_objectBufferSize;
+igMetaField *igIGBFile::k_memoryRefCount;
+igMetaField *igIGBFile::k_memoryRefBufferSize;
+igMetaField *igIGBFile::k_userLoadFunction;
+igMetaField *igIGBFile::k_forceChunkSize;
+igMetaField *igIGBFile::k_endianSwap;
+igMetaField *igIGBFile::k_metaObjectBuffer;
+igMetaField *igIGBFile::k_dirBuf;
+igMetaField *igIGBFile::k_objBuf;
+igMetaField *igIGBFile::k_mfBuf;
+igMetaField *igIGBFile::k_metaFieldListInFile;
+igMetaField *igIGBFile::k_metaObjectListInFile;
+igMetaField *igIGBFile::k_autoOpened;
+igMetaField *igIGBFile::k_basePath;
+igMetaField *igIGBFile::k_imf;
+igMetaField *igIGBFile::k_smf;
+igMetaField *igIGBFile::k_hasInfo;
+igMetaField *igIGBFile::k_hasExternal;
+igMetaField *igIGBFile::k_sharedEntries;
+igMetaField *igIGBFile::k_hasVersion1Cruft;
+igMetaField *igIGBFile::k_version1CruftMultiply;
+igMetaField *igIGBFile::k_infoListPlace;
+igMetaField *igIGBFile::k_externalDirectoryBuffer;
+igMetaField *igIGBFile::k_externalDirectoryBufferSize;
+igMetaField *igIGBFile::k_previousResourceFilePath;
+igMetaField *igIGBFile::k_alignmentBuffer;
+igMetaField *igIGBFile::k_alignmentBufferSize;
+igMetaField *igIGBFile::k_alignmentListInFile;
+igMetaField *igIGBFile::k_alignmentCount;
+igMetaField *igIGBFile::k_objectBufferPlace;
+igMetaField *igIGBFile::k_memoryBufferPlace;
+igMetaField *igIGBFile::k_chunkSize;
+igMetaField *igIGBFile::k_chunk;
+igMetaField *igIGBFile::k_chunkPlace;
+igMetaField *igIGBFile::k_bufferPlace;
+igMetaField *igIGBFile::k_bufferSize;
+igMetaField *igIGBFile::k_memoryBytesCopied;
+igMetaField *igIGBFile::k_bytesRemainingInChunk;
+igMetaField *igIGBFile::k_hasCriticalFailure;
+igMetaField *igIGBFile::k_autoReadFilePostProcessState;
+igMetaField *igIGBFile::k_autoWriteFilePostProcessState;
+igMetaField *igIGBFile::k_readFilePostProcessedState;
+igMetaField *igIGBFile::k_temporaryMemoryPool;
+igMetaField *igIGBFile::k_dataMemoryPool;
+igMetaField *igIGBFile::k_objectMemoryPool;
+igMetaField *igIGBFile::k_entryPool;
+igMetaField *igIGBFile::k_hasMemoryPoolNames;
+igMetaField *igIGBFile::k_memoryPoolNameBufferSize;
+igMetaField *igIGBFile::k_memoryPoolNameBuffer;
+igMetaField *igIGBFile::k_memoryPoolHandles;
+
+igIGBFile *igIGBFile::_instantiateFromPool(igMemoryPoolView *pool)
+{
+    arkRegister();
+    return (igIGBFile *)igMetaObject_CreateInstance(_Meta, pool);
+}
+
+igMetaObject *igIGBFile::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+
+igMetaObject *igIGBFile::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igIGBFile::retrieveVTablePointer()
+{
+    igIGBFile temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+void igIGBFile::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igIGBFile::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igFile::arkRegister, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, Gap::Core::igMetaField::arkRegister, Gap::Core::igIntList::arkRegister, igMemoryPool_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
+
+    CoreLibrary_MarkRegistered();
+    return igMetaObject_RegisterClass(
+        false,
+        &_Meta,
+        Gap::Core::igDirectory::arkRegisterInternal,
+        Gap::Core::igDirectory::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
+        "igIGBFile",
+        sizeof(igIGBFile),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        (igMetaObjectCallback)Gap::Core::igIGBFile::arkRegisterUser,
+        regFunctions
+    );
+}
 
 igMetaObject *igDirectory::_Meta;
 igMetaField *igDirectory::k_name;
@@ -239,365 +143,180 @@ igMetaField *igDirectory::k_loadingSemaphore;
 
 igMetaEnum *igDirEntry::RefType_Meta;
 igMetaEnum *igDirEntry::ResolveMethod_Meta;
-}
-}
 
-static FieldFactory g_igIGBFile_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igIGBFile_fieldTable[] = {
-    "_magicCookie",
-    "_magicVersion",
-    "_file",
-    "_majorVersion",
-    "_minorVersion",
-    "_hasTemplates",
-    "_entryCount",
-    "_indexBufferSize",
-    "_indexBuffer",
-    "_entryBufferSize",
-    "_metaObjectCount",
-    "_metaObjectBufferSize",
-    "_metaFieldCount",
-    "_metaFieldBufferSize",
-    "_objectCount",
-    "_objectBufferSize",
-    "_memoryRefCount",
-    "_memoryRefBufferSize",
-    "_userLoadFunction",
-    "_forceChunkSize",
-    "_endianSwap",
-    "_metaObjectBuffer",
-    "_dirBuf",
-    "_objBuf",
-    "_mfBuf",
-    "_metaFieldListInFile",
-    "_metaObjectListInFile",
-    "_autoOpened",
-    "_basePath",
-    "imf",
-    "smf",
-    "_hasInfo",
-    "_hasExternal",
-    "_sharedEntries",
-    "_hasVersion1Cruft",
-    "_version1CruftMultiply",
-    "_infoListPlace",
-    "_externalDirectoryBuffer",
-    "_externalDirectoryBufferSize",
-    "_previousResourceFilePath",
-    "_alignmentBuffer",
-    "_alignmentBufferSize",
-    "_alignmentListInFile",
-    "_alignmentCount",
-    "_objectBufferPlace",
-    "_memoryBufferPlace",
-    "_chunkSize",
-    "_chunk",
-    "_chunkPlace",
-    "_bufferPlace",
-    "_bufferSize",
-    "_memoryBytesCopied",
-    "_bytesRemainingInChunk",
-    "_hasCriticalFailure",
-    "_autoReadFilePostProcessState",
-    "_autoWriteFilePostProcessState",
-    "_readFilePostProcessedState",
-    "_temporaryMemoryPool",
-    "_dataMemoryPool",
-    "_objectMemoryPool",
-    "_entryPool",
-    "_hasMemoryPoolNames",
-    "_memoryPoolNameBufferSize",
-    "_memoryPoolNameBuffer",
-    "_memoryPoolHandles",
-};
-static igMetaField **g_igIGBFile_fieldDescriptors[] = {
-    &g_igIGBFile_magicCookieMetaField,
-    &g_igIGBFile_magicVersionMetaField,
-    &g_igIGBFile_fileMetaField,
-    &g_igIGBFile_majorVersionMetaField,
-    &g_igIGBFile_minorVersionMetaField,
-    &g_igIGBFile_hasTemplatesMetaField,
-    &g_igIGBFile_entryCountMetaField,
-    &g_igIGBFile_indexBufferSizeMetaField,
-    &g_igIGBFile_indexBufferMetaField,
-    &g_igIGBFile_entryBufferSizeMetaField,
-    &g_igIGBFile_metaObjectCountMetaField,
-    &g_igIGBFile_metaObjectBufferSizeMetaField,
-    &g_igIGBFile_metaFieldCountMetaField,
-    &g_igIGBFile_metaFieldBufferSizeMetaField,
-    &g_igIGBFile_objectCountMetaField,
-    &g_igIGBFile_objectBufferSizeMetaField,
-    &g_igIGBFile_memoryRefCountMetaField,
-    &g_igIGBFile_memoryRefBufferSizeMetaField,
-    &g_igIGBFile_userLoadFunctionMetaField,
-    &g_igIGBFile_forceChunkSizeMetaField,
-    &g_igIGBFile_endianSwapMetaField,
-    &g_igIGBFile_metaObjectBufferMetaField,
-    &g_igIGBFile_dirBufMetaField,
-    &g_igIGBFile_objBufMetaField,
-    &g_igIGBFile_mfBufMetaField,
-    &g_igIGBFile_metaFieldListInFileMetaField,
-    &g_igIGBFile_metaObjectListInFileMetaField,
-    &g_igIGBFile_autoOpenedMetaField,
-    &g_igIGBFile_basePathMetaField,
-    &g_igIGBFile_imfMetaField,
-    &g_igIGBFile_smfMetaField,
-    &g_igIGBFile_hasInfoMetaField,
-    &g_igIGBFile_hasExternalMetaField,
-    &g_igIGBFile_sharedEntriesMetaField,
-    &g_igIGBFile_hasVersion1CruftMetaField,
-    &g_igIGBFile_version1CruftMultiplyMetaField,
-    &g_igIGBFile_infoListPlaceField,
-    &g_igIGBFile_externalDirectoryBufferMetaField,
-    &g_igIGBFile_externalDirectoryBufferSizeMetaField,
-    &g_igIGBFile_previousResourceFilePathMetaField,
-    &g_igIGBFile_alignmentBufferMetaField,
-    &g_igIGBFile_alignmentBufferSizeMetaField,
-    &g_igIGBFile_alignmentListInFileMetaField,
-    &g_igIGBFile_alignmentCountMetaField,
-    &g_igIGBFile_objectBufferPlaceMetaField,
-    &g_igIGBFile_memoryBufferPlaceMetaField,
-    &g_igIGBFile_chunkSizeMetaField,
-    &g_igIGBFile_chunkMetaField,
-    &g_igIGBFile_chunkPlaceMetaField,
-    &g_igIGBFile_bufferPlaceMetaField,
-    &g_igIGBFile_bufferSizeMetaField,
-    &g_igIGBFile_memoryBytesCopiedMetaField,
-    &g_igIGBFile_bytesRemainingInChunkMetaField,
-    &g_igIGBFile_hasCriticalFailureMetaField,
-    &g_igIGBFile_autoReadFilePostProcessStateMetaField,
-    &g_igIGBFile_autoWriteFilePostProcessStateMetaField,
-    &g_igIGBFile_readFilePostProcessedStateMetaField,
-    &g_igIGBFile_temporaryMemoryPoolMetaField,
-    &g_igIGBFile_dataMemoryPoolMetaField,
-    &g_igIGBFile_objectMemoryPoolMetaField,
-    &g_igIGBFile_entryPoolMetaField,
-    &g_igIGBFile_hasMemoryPoolNamesMetaField,
-    &g_igIGBFile_memoryPoolNameBufferSizeMetaField,
-    &g_igIGBFile_memoryPoolNameBufferMetaField,
-    &g_igIGBFile_memoryPoolHandlesMetaField,
-};
-static int g_igIGBFile_fieldOffsets[] = {
-    96,
-    100,
-    104,
-    72,
-    76,
-    108,
-    112,
-    116,
-    120,
-    124,
-    128,
-    132,
-    136,
-    140,
-    144,
-    148,
-    152,
-    156,
-    160,
-    164,
-    168,
-    172,
-    176,
-    180,
-    184,
-    188,
-    192,
-    196,
-    200,
-    204,
-    208,
-    212,
-    213,
-    214,
-    215,
-    216,
-    220,
-    224,
-    228,
-    232,
-    236,
-    240,
-    244,
-    248,
-    252,
-    256,
-    260,
-    264,
-    80,
-    84,
-    88,
-    268,
-    272,
-    276,
-    277,
-    278,
-    279,
-    280,
-    284,
-    288,
-    92,
-    292,
-    296,
-    300,
-    304,
-};
+void igIGBFile::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igRawRefMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igIntMetaField_Create, igStringMetaField_Create, igMemoryRefMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_magicCookie", "_magicVersion", "_file", "_majorVersion", "_minorVersion", "_hasTemplates", "_entryCount", "_indexBufferSize", "_indexBuffer", "_entryBufferSize", "_metaObjectCount", "_metaObjectBufferSize", "_metaFieldCount", "_metaFieldBufferSize", "_objectCount", "_objectBufferSize", "_memoryRefCount", "_memoryRefBufferSize", "_userLoadFunction", "_forceChunkSize", "_endianSwap", "_metaObjectBuffer", "_dirBuf", "_objBuf", "_mfBuf", "_metaFieldListInFile", "_metaObjectListInFile", "_autoOpened", "_basePath", "imf", "smf", "_hasInfo", "_hasExternal", "_sharedEntries", "_hasVersion1Cruft", "_version1CruftMultiply", "_infoListPlace", "_externalDirectoryBuffer", "_externalDirectoryBufferSize", "_previousResourceFilePath", "_alignmentBuffer", "_alignmentBufferSize", "_alignmentListInFile", "_alignmentCount", "_objectBufferPlace", "_memoryBufferPlace", "_chunkSize", "_chunk", "_chunkPlace", "_bufferPlace", "_bufferSize", "_memoryBytesCopied", "_bytesRemainingInChunk", "_hasCriticalFailure", "_autoReadFilePostProcessState", "_autoWriteFilePostProcessState", "_readFilePostProcessedState", "_temporaryMemoryPool", "_dataMemoryPool", "_objectMemoryPool", "_entryPool", "_hasMemoryPoolNames", "_memoryPoolNameBufferSize", "_memoryPoolNameBuffer", "_memoryPoolHandles" };
+    static igMetaField **enumStorage[] = { &k_magicCookie, &k_magicVersion, &k_file, &k_majorVersion, &k_minorVersion, &k_hasTemplates, &k_entryCount, &k_indexBufferSize, &k_indexBuffer, &k_entryBufferSize, &k_metaObjectCount, &k_metaObjectBufferSize, &k_metaFieldCount, &k_metaFieldBufferSize, &k_objectCount, &k_objectBufferSize, &k_memoryRefCount, &k_memoryRefBufferSize, &k_userLoadFunction, &k_forceChunkSize, &k_endianSwap, &k_metaObjectBuffer, &k_dirBuf, &k_objBuf, &k_mfBuf, &k_metaFieldListInFile, &k_metaObjectListInFile, &k_autoOpened, &k_basePath, &k_imf, &k_smf, &k_hasInfo, &k_hasExternal, &k_sharedEntries, &k_hasVersion1Cruft, &k_version1CruftMultiply, &k_infoListPlace, &k_externalDirectoryBuffer, &k_externalDirectoryBufferSize, &k_previousResourceFilePath, &k_alignmentBuffer, &k_alignmentBufferSize, &k_alignmentListInFile, &k_alignmentCount, &k_objectBufferPlace, &k_memoryBufferPlace, &k_chunkSize, &k_chunk, &k_chunkPlace, &k_bufferPlace, &k_bufferSize, &k_memoryBytesCopied, &k_bytesRemainingInChunk, &k_hasCriticalFailure, &k_autoReadFilePostProcessState, &k_autoWriteFilePostProcessState, &k_readFilePostProcessedState, &k_temporaryMemoryPool, &k_dataMemoryPool, &k_objectMemoryPool, &k_entryPool, &k_hasMemoryPoolNames, &k_memoryPoolNameBufferSize, &k_memoryPoolNameBuffer, &k_memoryPoolHandles };
+    static int offsets[] = { 96, 100, 104, 72, 76, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144, 148, 152, 156, 160, 164, 168, 172, 176, 180, 184, 188, 192, 196, 200, 204, 208, 212, 213, 214, 215, 216, 220, 224, 228, 232, 236, 240, 244, 248, 252, 256, 260, 264, 80, 84, 88, 268, 272, 276, 277, 278, 279, 280, 284, 288, 92, 292, 296, 300, 304 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-void igIGBFile_InitFields(void) {
-    igMetaObject *meta = g_igIGBFile_metaObject;
-    int base = igMetaObject_GetFieldCount(meta);
-    igMetaField *field;
-    igMetaField *clone;
-    int index;
-    igMetaObject_CreateFields(meta, g_igIGBFile_ctorTable, 0x41);
-    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
-    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)field);
-    clone = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    clone->_persistent = 0;
-    clone->_externalEnumStorage = (int)&g_igIGBFile_dataDescriptorCell;
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
-    releaseField(clone);
-    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_count));
-    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)field);
-    clone = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    clone->_persistent = 0;
-    clone->_externalEnumStorage = (int)&g_igIGBFile_countDescriptorCell;
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
-    releaseField(clone);
-    field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_capacity));
-    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)field);
-    clone = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    clone->_persistent = 0;
-    clone->_externalEnumStorage = (int)&g_igIGBFile_capacityDescriptorCell;
-    igMetaObject_FinalizeAndReplaceField(meta, index, clone);
-    releaseField(clone);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0xFADA);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(6);
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
-    ((igMetaField *)field)->_persistent = 0;
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 8));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x12))->_persistent = 0;
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x13)))->setDefault(-1);
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x15));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x16));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x17));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x18));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x19));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1A));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1C));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1D));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1E));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x24)))->setDefault(-1);
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x25));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x27)))->setDefault(0);
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x28));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x2A));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x2C));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2E)))->setDefault(-1);
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x2F));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x32)))->setDefault(-1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x36)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x37)))->setDefault(1);
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x39));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3A));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3B));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3C));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3F));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x40));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
-    igMetaObject_NameFields(meta, g_igIGBFile_fieldTable, g_igIGBFile_fieldDescriptors, g_igIGBFile_fieldOffsets, base);
+    igMetaObject_CreateFields(metaObject, instFuncs, 65);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_persistent = 0;
+        metaField->_externalEnumStorage = (int)&k_data;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_FindFieldByName(metaObject, "_count");
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
+        metaField = (igIntMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_persistent = 0;
+        metaField->_externalEnumStorage = (int)&k_count;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_FindFieldByName(metaObject, "_capacity");
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
+        metaField = (igIntMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_persistent = 0;
+        metaField->_externalEnumStorage = (int)&k_capacity;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(64218);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(6);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igRawRefMetaField *metaField = (igRawRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 18);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 19);
+        metaField->setDefault(-1);
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 21);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 22);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 23);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 24);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 25);
+        metaField->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 26);
+        metaField->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 28);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 29);
+        metaField->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 30);
+        metaField->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 36);
+        metaField->setDefault(-1);
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 37);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 39);
+        metaField->setDefault(0);
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 40);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 42);
+        metaField->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 44);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 46);
+        metaField->setDefault(-1);
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 47);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 50);
+        metaField->setDefault(-1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 54);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 55);
+        metaField->setDefault(1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 57);
+        metaField->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 58);
+        metaField->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 59);
+        metaField->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 60);
+        metaField->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 63);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 64);
+        metaField->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
 
-void igIGBFile_StaticInitCallback(void) {
-    igIGBFile_RegisterBlindObjectsConfig();
+void igIGBFile::arkRegisterUser()
+{
+    userRegister();
+}
+}
 }
 

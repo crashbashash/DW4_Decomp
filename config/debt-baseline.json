@@ -2,7 +2,7 @@
  "counters": {
   "asm_body.bytes": 0,
   "asm_body.functions": 0,
-  "boilerplate.functions": 6092,
+  "boilerplate.functions": 6076,
   "code_only.bytes": 0,
   "code_only.differ.bytes": 0,
   "code_only.differ.functions": 0,
@@ -23,8 +23,8 @@
   "decl.varargs": 0,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "free_methods.bytes": 1611708,
-  "free_methods.functions": 9612,
+  "free_methods.bytes": 1542920,
+  "free_methods.functions": 9309,
   "fun_dat_refs": 2,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
@@ -32,8 +32,8 @@
   "inventory_gap.functions": 0,
   "layout.tail_fragments": 396,
   "m2c_idiom.units": 0,
-  "matching_constructs": 542,
-  "members.offset_named": 2098,
+  "matching_constructs": 543,
+  "members.offset_named": 2059,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
@@ -46,7 +46,7 @@
   "profile_split.bytes": 0,
   "profile_split.units": 0,
   "raw_casts.reflected": 0,
-  "reflected.untyped_refs": 3910,
+  "reflected.untyped_refs": 3884,
   "strings.externs": 48,
   "struct.a": 0,
   "struct.b": 0,
@@ -56,9 +56,9 @@
   "unmatched.bytes": 163900,
   "unmatched.functions": 111,
   "vfunc_slots.functions": 403,
-  "views.local": 262,
-  "virtual_views.slots": 20900,
-  "virtual_views.types": 182
+  "views.local": 259,
+  "virtual_views.slots": 20777,
+  "virtual_views.types": 181
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

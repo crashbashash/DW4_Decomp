@@ -75,7 +75,7 @@ void igPsx2MultiTextureExt_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2MultiTextureExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2MultiTextureExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2MultiTextureExt_callbackList[] = { Gap::Gfx::igPsx2VisualContext::arkRegister, 0 };
 
 CallbackArray *igPsx2MultiTextureExt_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -152,7 +152,7 @@ void igPsx2MultiTextureExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2MultiTextureExt_ctorTable, 8);
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart);
-    ((igObjectRefMetaField *)f)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)f)->_metaObject = (int)Gap::Gfx::igPsx2VisualContext::getClassTypeLazy();
     ((igObjectRefMetaField *)f)->_refCounted = 0;
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 1);
     ((Gap::Core::igEnumMetaField *)f)->setDefault(0);

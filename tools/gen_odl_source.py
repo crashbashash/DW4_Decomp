@@ -304,6 +304,14 @@ def trace(insns, image):
         elif mn == "mtc1":
             v = get(ops[0])
             fregs[ops[1]] = ("f", v[1]) if v[0] == "k" else ("x",)
+        elif mn == "cvt.s.w":
+            # an integral float constant MWCC loads as the integer and converts (10000.0f: li, mtc1, cvt.s.w)
+            v = fregs.get(ops[1], ("x",))
+            if v[0] == "f":
+                n = v[1] - (1 << 32) if v[1] & 0x80000000 else v[1]
+                fregs[ops[0]] = ("f", struct.unpack("<I", struct.pack("<f", float(n)))[0])
+            else:
+                fregs[ops[0]] = ("x",)
         elif mn in ("sw", "sh", "sb", "sd", "sq", "swc1"):
             off, base = mem_operand(ops[1])
             b = get(base)

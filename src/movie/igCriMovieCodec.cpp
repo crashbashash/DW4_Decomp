@@ -273,7 +273,7 @@ int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie,
     pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     g_criMovieUploadPacket = Memory_AllocateAlignedWithAllocator(((unsigned int)((((columns * rows * 6) + 0xA) * 4) + 0x3F) >> 6) << 8, 0x40, pool);
     object = *visualContext;
-    if ((object != 0) && (((Gap::Core::igObject *)object)->isOfType(g_igPsx2VisualContext_metaObject) != 0)) {
+    if ((object != 0) && (((Gap::Core::igObject *)object)->isOfType(Gap::Gfx::igPsx2VisualContext::getClassMeta()) != 0)) {
         context = object;
     } else {
         context = 0;
@@ -299,7 +299,7 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
     int height;
     int answer;
 
-    firstBuffer = igPsx2VisualContext_IsDisplayingFirstBuffer(g_criMovieVisualContext.p);
+    firstBuffer = ((Gap::Gfx::igPsx2VisualContext *)g_criMovieVisualContext.p)->isDisplayingFirstBuffer();
     width = movie->_width;
     height = movie->_height;
     if (g_criMovieUploadPacket == 0 && g_criMovieDmaWarningMuted == 0) {
@@ -311,7 +311,7 @@ int CriMovie_SubmitFrame(igMovieInfo *movie, void *image) {
         }
     }
     g_criMovieUploadPacketSize = CriMovie_BuildFrameUpload(g_criMovieUploadPacket, image, 0, (firstBuffer != 0) ? 448 : 0, width, height, 1);
-    igPsx2VisualContext_CallDmaChain(g_criMovieVisualContext.p, g_criMovieUploadPacket, g_criMovieUploadPacketSize, 1);
+    ((Gap::Gfx::igPsx2VisualContext *)g_criMovieVisualContext.p)->callDmaChain(g_criMovieUploadPacket, g_criMovieUploadPacketSize, 1);
     return 1;
 }
 
@@ -343,8 +343,6 @@ int igCriMovieCodec_IsReusable(void)
  * reports neither. */
 void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, igObject *audioContext) {
     Gap::Gfx::igVisualContext *display;
-    igVideoFormat mode;
-    MwsfdInitPrm prm;
     float refreshRate;
 
     if (self->_initialized == 0) {
@@ -353,11 +351,8 @@ void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, 
         refreshRate = 60.0f;
         display = (Gap::Gfx::igVisualContext *)visualContext;
         if (display != 0) {
-            mode._iVideoType = 0;
-            mode._bFullScreen = false;
-            mode._bInterlaced = false;
-            mode._fRefreshRate = 0.0f;
-            mode._iSwapInterval = 0;
+            igVideoFormat mode;
+
             display->getVideoMode(mode);
             if (mode._iVideoType == 0 && mode._fRefreshRate == 59.94f) {
                 refreshRate = 59.94f;
@@ -365,6 +360,8 @@ void igCriMovieCodec_Initialize(igCriMovieCodec *self, igObject *visualContext, 
                 refreshRate = 50.0f;
             }
         }
+        MwsfdInitPrm prm;
+
         memset(&prm, 0, sizeof(prm));
         prm.vhz = refreshRate;
         prm.dispLatency = 1;

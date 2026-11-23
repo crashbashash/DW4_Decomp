@@ -4,36 +4,36 @@ namespace Attrs {
 void igLightAttr::apply(igVisualContext *vc)
 {
     if (_lightId == -1) {
-        _lightId = igPsx2VisualContext_CreateLight((igPsx2VisualContext *)vc, _lightType);
+        _lightId = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::createLight((IG_GFX_LIGHT_TYPE)_lightType);
         _vc = vc;
         _changed = true;
     }
     if (!_cacheable || _changed) {
-        igPsx2VisualContext_SetLightAmbient((igPsx2VisualContext *)vc, _lightId, _ambient.vec);
-        igPsx2VisualContext_SetLightDiffuse((igPsx2VisualContext *)vc, _lightId, _diffuse.vec);
-        igPsx2VisualContext_SetLightSpecular((igPsx2VisualContext *)vc, _lightId, _specular.vec);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightAmbient(_lightId, _ambient);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightDiffuse(_lightId, _diffuse);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightSpecular(_lightId, _specular);
         switch (_lightType) {
         case IG_GFX_LIGHT_TYPE_POINT:
-            igPsx2VisualContext_SetLightAttenuation((igPsx2VisualContext *)vc, _lightId, _attenuation.vec);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightAttenuation(_lightId, _attenuation);
             break;
         case IG_GFX_LIGHT_TYPE_SPOT:
-            igPsx2VisualContext_SetLightCutoffAngle((igPsx2VisualContext *)vc, _lightId, _cutoff);
-            igPsx2VisualContext_SetLightFalloffRate((igPsx2VisualContext *)vc, _lightId, _falloff);
-            igPsx2VisualContext_SetLightAttenuation((igPsx2VisualContext *)vc, _lightId, _attenuation.vec);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightCutoffAngle(_lightId, _cutoff);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightFalloffRate(_lightId, _falloff);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightAttenuation(_lightId, _attenuation);
             break;
         }
         _changed = false;
     }
     switch (_lightType) {
     case IG_GFX_LIGHT_TYPE_DIRECTIONAL:
-        igPsx2VisualContext_SetLightDirection((igPsx2VisualContext *)vc, _lightId, _direction.vec);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightDirection(_lightId, _direction);
         break;
     case IG_GFX_LIGHT_TYPE_POINT:
-        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)vc, _lightId, _position.vec);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightPosition(_lightId, _position);
         break;
     case IG_GFX_LIGHT_TYPE_SPOT:
-        igPsx2VisualContext_SetLightDirection((igPsx2VisualContext *)vc, _lightId, _direction.vec);
-        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)vc, _lightId, _position.vec);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightDirection(_lightId, _direction);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightPosition(_lightId, _position);
         break;
     }
 }

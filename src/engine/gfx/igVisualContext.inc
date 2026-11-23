@@ -205,7 +205,7 @@ void igVisualContext::arkRegisterInitialize()
         metaField->_resetMethod = 3;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
-    *(void (**)())&_Meta->_abstractProxy = (void (*)())igPsx2VisualContext_GetMetaObjectFunction;
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Gfx::igPsx2VisualContext::getClassMetaSafe;
 }
 
 igMemoryPool *igVisualContext::_defaultDriverDataMemoryPool;
@@ -216,16 +216,6 @@ igMemoryPool *igVisualContext::_defaultImageMemoryPool;
 igMemoryPool *igVisualContext::_defaultTextureMemoryPool;
 igMemoryPool *igVisualContext::_defaultStatisticsMemoryPool;
 igMemoryPool *igVisualContext::_defaultListMemoryPool;
-
-/* Out of line, as retail has them (0x1510e0, 0x150af0): igPsx2VisualContext's vtable probe, still a flat
- * struct, calls them by their C names, and no converted class derives from igVisualContext yet to emit them. */
-igVisualContext::igVisualContext()
-{
-}
-
-igVisualContext::~igVisualContext()
-{
-}
 }
 }
 

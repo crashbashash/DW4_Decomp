@@ -7,9 +7,6 @@
 extern "C" {
 #endif
 
-int igIGBFile_GetOrCreateMetaObject(void);
-void igIGBFile_EnsureRegistered(void);
-void *igIGBFile_Create(int pool);
 
 #ifdef __cplusplus
 }

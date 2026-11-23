@@ -906,10 +906,6 @@ igSmartPointer<igWindow> igInsightCore_CreateWindow(int allocator) {
     }
     igSmartPointer<Gap::Gfx::igVisualContext> visualContext(Gap::Gfx::igVisualContext::_instantiateFromPool((igMemoryPoolView *)contextAllocator));
     igVideoFormat mode;
-    mode._iVideoType = 0;
-    mode._bInterlaced = false;
-    mode._fRefreshRate = 0.0f;
-    mode._iSwapInterval = 0;
     mode._bFullScreen = true;
     mode._iSwapInterval = options->swapInterval;
     mode._bInterlaced = false;

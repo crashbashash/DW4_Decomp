@@ -5,12 +5,12 @@ void igClearAttr::apply(igVisualContext *vc)
 {
     unsigned int mode;
 
-    igPsx2VisualContext_SetClearDepth((igPsx2VisualContext *)vc, getDepth());
-    igPsx2VisualContext_SetClearColorPacked((igPsx2VisualContext *)vc, _colorPacked);
-    igPsx2VisualContext_SetClearStencil((igPsx2VisualContext *)vc, getStencil());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setClearDepth(getDepth());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setClearColor(_colorPacked);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setClearStencil(getStencil());
     mode = getMode();
     if (mode != 0) {
-        igPsx2VisualContext_ClearRenderDestination((igPsx2VisualContext *)vc, mode);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::clearRenderDestination(mode);
     }
 }
 

@@ -5,7 +5,7 @@ void igGeometryMaskAttr::apply(igVisualContext *vc)
 {
     igVertexComponentFilter mask = getMask();
 
-    igPsx2VisualContext_SetVertexMask((igPsx2VisualContext *)vc, (int *)&mask);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setVertexMask(mask);
 }
 
 void igGeometryMaskAttr::synchronizeDefault(igVisualContext *vc)

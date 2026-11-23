@@ -13,7 +13,7 @@ void igColorMaskAttr::setMask(bool r, bool g, bool b, bool a)
 
 void igColorMaskAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetColorMask((igPsx2VisualContext *)vc, _red, _green, _blue, _alpha);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setColorMask(_red, _green, _blue, _alpha);
 }
 
 void igColorMaskAttr::synchronizeDefault(igVisualContext *vc)

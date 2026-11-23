@@ -15,10 +15,10 @@ void igCopyRenderDestinationAttr::apply(igVisualContext *pVC)
         if (_pTextureAttr->getHandle() < 0) {
             _pTextureAttr->apply(pVC);
         }
-        igPsx2VisualContext_CopyRenderDestinationToTexture((igPsx2VisualContext *)pVC, handle, _pTextureAttr->getHandle(), _sourceX, _sourceY, _sizeW, _sizeH, _destinationX, (long long)_destinationY);
+        ((igPsx2VisualContext *)pVC)->igPsx2VisualContext::copyRenderDestinationToTexture(handle, _pTextureAttr->getHandle(), _sourceX, _sourceY, _sizeW, _sizeH, _destinationX, _destinationY);
         return;
     case FROM_RENDERDESTINATION_TO_MEMORY:
-        igPsx2VisualContext_CopyRenderDestinationToMemory((igPsx2VisualContext *)pVC, handle, (int)(igImage *)_pImage, _sourceX, _sourceY, _sizeW, _sizeH);
+        ((igPsx2VisualContext *)pVC)->igPsx2VisualContext::copyRenderDestinationToMemory(handle, (igImage *)_pImage, _sourceX, _sourceY, _sizeW, _sizeH);
         break;
     case NOT_SET:
         break;

@@ -1867,7 +1867,6 @@ struct List_1c0f00 {
 };
 struct Meta { char p0[60]; void *f60; };
 extern void *DAT_00562728[4];
-extern char DAT_00560000[];
 /* Returns a decoding context to the pool's free list. */
 extern "C" void FUN_001c16a0(igEnbayaContextPool *pool, void *context, int boneCount);
 

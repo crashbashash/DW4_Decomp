@@ -17,7 +17,7 @@
         if ((obj) != 0) {                                                                         \
             (obj)->_refCount = (int)(obj)->_refCount - 1;                                         \
             if (((unsigned long long)((long long)(int)(obj)->_refCount << 0x29) >> 0x29) == 0) { \
-                igObject_Destroy((igObject *)(obj));                                              \
+                igObject_Destroy((::igObject *)(obj));                                            \
             }                                                                                     \
         }                                                                                         \
     } while (0)

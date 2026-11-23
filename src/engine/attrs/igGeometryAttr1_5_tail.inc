@@ -50,14 +50,14 @@ void igGeometryAttr1_5::apply(igVisualContext *vc)
     int overlap;
     igPrimLengthArray *lengths;
 
-    igPsx2VisualContext_SetVertexArray((igPsx2VisualContext *)vc, (::igVertexArray *)_vertexArray.p);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setVertexArray(_vertexArray);
     offset = _offset;
     numPrims = _numPrims;
     primType = _primType;
     lengths = _stripLengths;
     indexArray = _indexArray;
     if (indexArray != 0) {
-        igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)vc, (::igIndexArray *)indexArray);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setIndexArray(indexArray);
     }
     if (lengths != 0) {
         if (primType == IG_GFX_DRAW_LINE_STRIP) {
@@ -77,20 +77,20 @@ void igGeometryAttr1_5::apply(igVisualContext *vc)
         case 0:
             break;
         case 1:
-            igPsx2VisualContext_Draw((igPsx2VisualContext *)vc, primType, lengths->getPrimLength(0) - overlap, offset);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::draw((IG_GFX_DRAW)primType, lengths->getPrimLength(0) - overlap, offset);
             break;
         default:
-            igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)vc, (::igPrimLengthArray *)lengths);
-            igPsx2VisualContext_DrawMultiple((igPsx2VisualContext *)vc, drawMultiple, numPrims, offset, 0);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setPrimLengthArray(lengths);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::drawMultiple((IG_GFX_DRAW_MULTIPLE)drawMultiple, numPrims, offset, 0);
         }
         if (lengths != 0) {
-            igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)vc, 0);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setPrimLengthArray(0);
         }
     } else {
-        igPsx2VisualContext_Draw((igPsx2VisualContext *)vc, primType, numPrims, offset);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::draw((IG_GFX_DRAW)primType, numPrims, offset);
     }
     if (indexArray != 0) {
-        igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)vc, 0);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setIndexArray(0);
     }
 }
 }

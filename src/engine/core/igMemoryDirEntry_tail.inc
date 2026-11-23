@@ -7,9 +7,9 @@ int igMemoryDirEntry::refNeedsEntryForPostFileReadCleanup()
 }
 
 void igMemoryDirEntry::readSetup(igIGBFile *file) {
-    ::igObjectList *fields = (::igObjectList *)file->_metaFieldListInFile;
+    ::igObjectList *fields = (::igObjectList *)file->_metaFieldListInFile.p;
     int align = 16;
-    igSmartPointer< ::igIntList> alignments((::igIntList *)file->_alignmentListInFile, kRetainReference);
+    igSmartPointer< ::igIntList> alignments((::igIntList *)file->_alignmentListInFile.p, kRetainReference);
     igMemoryPoolView *pool;
 
     if (0 <= _alignmentTypeIndex) {
@@ -21,11 +21,11 @@ void igMemoryDirEntry::readSetup(igIGBFile *file) {
         }
     }
     if ((_memoryPoolHandle == -1) || (_memoryPoolHandle == 1) || (_memoryPoolHandle == 2)) {
-        pool = (igMemoryPoolView *)file->_dataMemoryPool;
+        pool = (igMemoryPoolView *)file->_dataMemoryPool.p;
     } else {
         pool = (igMemoryPoolView *)Memory_GetAllocatorBySelector(_memoryPoolHandle);
         if (pool == 0) {
-            pool = (igMemoryPoolView *)file->_dataMemoryPool;
+            pool = (igMemoryPoolView *)file->_dataMemoryPool.p;
         }
     }
     if (align < 5) {
@@ -40,7 +40,7 @@ void igMemoryDirEntry::writeMemorySpecial(igIGBFile *file) {
     int s3 = file->_memoryBufferPlace;
     int s6 = file->_memoryBytesCopied;
     int s2 = file->_bytesRemainingInChunk;
-    int s8 = file->_chunk;
+    int s8 = (int)file->_chunk;
     int cnt = _memSize;
     igMetaFieldView *s1 = (igMetaFieldView *)_memType;
     int esz = ((::igMetaField *)s1)->_size;
@@ -71,7 +71,7 @@ void igMemoryDirEntry::writeMemorySpecial(igIGBFile *file) {
         s2 -= s0;
         i += s0;
         if (s2 == 0) {
-            s6 += s4 * ((Gap::Core::igFile *)file->_file)->fwrite((void *)s8, s4, 1);
+            s6 += s4 * file->_file->fwrite((void *)s8, s4, 1);
             t2 = file->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
@@ -81,7 +81,7 @@ void igMemoryDirEntry::writeMemorySpecial(igIGBFile *file) {
         s0 = ((s3 + 3) & ~3) % s4;
         s2 = s2 - (s0 - s3);
         if (s0 < s3) {
-            s6 += s4 * ((Gap::Core::igFile *)file->_file)->fwrite((void *)s8, s4, 1);
+            s6 += s4 * file->_file->fwrite((void *)s8, s4, 1);
             t2 = file->_memoryRefBufferSize - s6;
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
@@ -117,7 +117,7 @@ namespace Gap {
 namespace Core {
 
 igDirEntry *igMemoryDirEntry::share(igIGBFile *file) {
-    igSmartPointer< ::igObjectList> lists((::igObjectList *)file->_entryPool, kRetainReference);
+    igSmartPointer< ::igObjectList> lists((::igObjectList *)file->_entryPool.p, kRetainReference);
     if (lists.p == 0) return this;
     int index = ((igObjectDispatchView *)this)->GetMeta()->_index;
     if (lists->_count <= index) {
@@ -126,7 +126,7 @@ igDirEntry *igMemoryDirEntry::share(igIGBFile *file) {
     }
     igSmartPointer< ::igObjectList> entries(asEntryList(((::igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
-        int pool = file->_temporaryMemoryPool;
+        int pool = (int)file->_temporaryMemoryPool.p;
         entries.release();
         entries.p = ((::igObjectList *)igObjectList::_instantiateFromPool((igMemoryPoolView *)pool));
         objectListSetRetained(index, entries.p, lists.p);
@@ -165,14 +165,14 @@ void igMemoryDirEntry::readMemorySpecial(igIGBFile *file) {
     s3 = file->_memoryBufferPlace;
     s2 = file->_memoryBytesCopied;
     s1 = file->_bytesRemainingInChunk;
-    base = file->_chunk;
+    base = (int)file->_chunk;
     while (s6 < s8) {
         if (s1 == 0) {
             t = file->_memoryRefBufferSize;
             if (t < s4 + s2) {
                 s4 = t - s2;
             }
-            s2 += s4 * ((Gap::Core::igFile *)file->_file)->fread((void *)base, s4, 1);
+            s2 += s4 * file->_file->fread((void *)base, s4, 1);
             s1 = s4;
         }
         s0 = s8 - s6;
@@ -206,10 +206,9 @@ void igMemoryDirEntry::readReadVersion3(igIGBFile *igb)
 }
 
 void igMemoryDirEntry::readRead(igIGBFile *igb) {
-    igIGBFileView *r = (igIGBFileView *)igb;
-    igMetaFieldView *f = ((igMetaFieldView **)r->_metaFieldListInFile->_data)[_memTypeIndex];
+    igMetaFieldView *f = ((igMetaFieldView **)igb->_metaFieldListInFile->_data)[_memTypeIndex];
     _memType = (int)f;
-    if (((((Gap::Core::igObject *)f)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) ^ 1) && r->_endianSwap != 0) {
+    if (((((Gap::Core::igObject *)f)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) ^ 1) && igb->_endianSwap != 0) {
         f->SwapBytes((void *)_ref, _memSize / f->_size);
     }
     if (((Gap::Core::igObject *)f)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) {
@@ -225,7 +224,7 @@ void igMemoryDirEntry::readRead(igIGBFile *igb) {
         }
         for (i = 0; i < count; i++) {
             int p = base + i * esize;
-            f->ReadRawFieldMem(p, p, (int)r, r->_endianSwap);
+            f->ReadRawFieldMem(p, p, (int)igb, igb->_endianSwap);
         }
         if (isSwap != 0) {
             ((::igObjectRefMetaField *)f)->_refCounted = saved;

@@ -10,7 +10,7 @@ void igTextureMatrixStateAttr::synchronizeCachedUnitID(igObject *obj)
 
 void igTextureMatrixStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetTextureMatrixState((igPsx2VisualContext *)vc, _unitID, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureMatrixState(_unitID, _enabled);
 }
 
 void igTextureMatrixStateAttr::userPostLoad()

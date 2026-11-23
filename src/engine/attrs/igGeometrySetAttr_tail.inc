@@ -7,12 +7,12 @@ bool igGeometrySetAttr::createRenderList(igVisualContext *vc)
     int handle;
     igGeometryAttr **p;
     igGeometryAttr **end;
-    handle = igPsx2VisualContext_CreateRenderList((igPsx2VisualContext *)vc);
+    handle = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::createRenderList();
     if (handle < 0) {
         _renderListState = 0;
         return false;
     }
-    igPsx2VisualContext_BeginRenderListDraw((igPsx2VisualContext *)vc, handle);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::beginRenderListDraw(handle);
     ok = true;
     p = (igGeometryAttr **)_geometryAttrList->_data;
     end = p + _geometryAttrList->getCount();
@@ -23,7 +23,8 @@ bool igGeometrySetAttr::createRenderList(igVisualContext *vc)
         }
         (*p)->apply(vc);
     }
-    if ((igPsx2VisualContext_EndRenderListDraw((igPsx2VisualContext *)vc) & 0xFF) && ok) {
+    /* matching construct: retail masks the returned flag to a byte (andi 0xff) before the test */
+    if ((((igPsx2VisualContext *)vc)->igPsx2VisualContext::endRenderListDraw() & 0xFF) && ok) {
         setVisualContext(vc);
         _renderListHandle = handle;
         if (_renderListState == 2) {
@@ -34,7 +35,7 @@ bool igGeometrySetAttr::createRenderList(igVisualContext *vc)
             }
         }
     } else {
-        igPsx2VisualContext_DeleteRenderList((igPsx2VisualContext *)vc, handle);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::deleteRenderList(handle);
         _renderListState = 0;
     }
     return ok;
@@ -53,7 +54,7 @@ void igGeometrySetAttr::apply(igVisualContext *vc)
             built = createRenderList(vc);
         }
         if (_renderListHandle >= 0 && _drawState != 0) {
-            built = igPsx2VisualContext_ExecuteRenderList((igPsx2VisualContext *)vc, _renderListHandle);
+            built = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::executeRenderList(_renderListHandle);
         }
     }
     if (built == 0 && _drawState != 0) {

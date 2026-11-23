@@ -1,5 +1,10 @@
-int igPsx2VisualContext_GetPixelPipelineMode(igPsx2VisualContext *self) {
-    return self->_pixelPipelineMode;
+namespace Gap {
+namespace Gfx {
+
+IG_GFX_PIXEL_PIPELINE_MODE igPsx2VisualContext::getPixelPipelineMode() const {
+    return _pixelPipelineMode;
+}
+}
 }
 
 void FUN_0017fd80(L_17fd80 **arg0, L_17fd80 **arg1, int arg2) {

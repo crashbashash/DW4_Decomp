@@ -99,7 +99,7 @@ void igTextureAttr::apply(igVisualContext *vc)
             if (image == 0) {
                 return;
             }
-            _texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)vc, image->_px, image->_py, image->_pfmt, 0, _mipmapMode, _imageCount);
+            _texId = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::createTexture(image->_px, image->_py, (IG_GFX_TEXTURE_FORMAT)image->_pfmt, (IG_GFX_TEXTURE_SOURCE)0, _mipmapMode, _imageCount);
             for (level = 0; level < _imageCount; level++) {
                 igImage *levelImage;
                 if (level == 0) {
@@ -107,7 +107,7 @@ void igTextureAttr::apply(igVisualContext *vc)
                 } else {
                     levelImage = ((igImage **)((::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps)->_data)[level - 1];
                 }
-                igPsx2VisualContext_SetTextureSourceLevel((igPsx2VisualContext *)vc, _texId, (::igImage *)levelImage, level);
+                ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureSource(_texId, levelImage, level);
             }
             break;
         }
@@ -116,7 +116,7 @@ void igTextureAttr::apply(igVisualContext *vc)
             if (image == 0) {
                 return;
             }
-            _texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)vc, image->_px, image->_py, image->_pfmt, 2, 0, 1);
+            _texId = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::createTexture(image->_px, image->_py, (IG_GFX_TEXTURE_FORMAT)image->_pfmt, (IG_GFX_TEXTURE_SOURCE)2, 0, 1);
             break;
         case IG_GFX_TEXTURE_SOURCE_BUFFER:
         case IG_GFX_TEXTURE_SOURCE_BUFFER_REF:
@@ -124,17 +124,17 @@ void igTextureAttr::apply(igVisualContext *vc)
             if (image == 0) {
                 return;
             }
-            _texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)vc, image->_px, image->_py, image->_pfmt, 3, 0, 1);
+            _texId = ((igPsx2VisualContext *)vc)->igPsx2VisualContext::createTexture(image->_px, image->_py, (IG_GFX_TEXTURE_FORMAT)image->_pfmt, (IG_GFX_TEXTURE_SOURCE)3, 0, 1);
             break;
         }
         _vc = vc;
     }
     if (_source == IG_GFX_TEXTURE_SOURCE_VIDEO) {
-        igPsx2VisualContext_SetTextureSourceFromBuffer((igPsx2VisualContext *)vc, _texId, _videoBuffer);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureSource(_texId, (void *)_videoBuffer);
     }
-    igPsx2VisualContext_SetTextureAddressingMode((igPsx2VisualContext *)vc, _texId, getWrapS(), getWrapT());
-    igPsx2VisualContext_SetTextureMinificationFilter((igPsx2VisualContext *)vc, _texId, getMinificationFilter());
-    igPsx2VisualContext_SetTextureMagnificationFilter((igPsx2VisualContext *)vc, _texId, getMagnificationFilter());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureAddressingMode(_texId, getWrapS(), getWrapT());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureMinificationFilter(_texId, getMinificationFilter());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureMagnificationFilter(_texId, getMagnificationFilter());
 }
 
 void igTextureAttr::setImage(igImage *img, int level)

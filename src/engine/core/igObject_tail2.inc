@@ -470,7 +470,7 @@ int igObject::getIoSize() const {
 }
 }
 
-int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
+int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, Gap::Core::igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
     igMetaObject *meta = object->GetMeta();
     if (meta->_persistent == 0) {
         return 0;
@@ -492,13 +492,13 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     for (; i < count; i++) {
         igMetaField *field = (igMetaField *)igMetaObject_GetFieldAt(writeMeta, i);
         if (field->_persistent == 1 && field->_isRunTime == 0) {
-            buffer = (int *)((char *)buffer + ((Gap::Core::igMetaField *)field)->writeToMemory((Gap::Core::igObject *)object, buffer, (Gap::Core::igDirectory *)file, endianSwap));
+            buffer = (int *)((char *)buffer + ((Gap::Core::igMetaField *)field)->writeToMemory((Gap::Core::igObject *)object, buffer, file, endianSwap));
         }
     }
     return ((Gap::Core::igObject *)object)->getIoSize();
 }
 
-int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
+int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, Gap::Core::igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
     igMetaObject *meta;
     char *data;
     int i;
@@ -532,7 +532,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
                 if (endianSwap) Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(data, 2);
             } else {
                 readFields += 1;
-                data += ((Gap::Core::igMetaField *)field)->readFromMemoryVersion3((Gap::Core::igObject *)object, data, (Gap::Core::igDirectory *)file, endianSwap);
+                data += ((Gap::Core::igMetaField *)field)->readFromMemoryVersion3((Gap::Core::igObject *)object, data, file, endianSwap);
             }
         }
     }

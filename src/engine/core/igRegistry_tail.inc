@@ -862,7 +862,7 @@ void igResource_AsyncLoadThreadProc(int *result, Gap::Core::igDirectory *file) {
     } else {
         resource = file->_managingResource;
         if (file->_loadedRefCount > 1) {
-            resource->doLoad((igIGBFile *)file);
+            resource->doLoad((Gap::Core::igIGBFile *)file);
             resource->unload(file->_name.p);
         }
         *result = g_resultSuccess.v;

@@ -45,7 +45,7 @@ void igPsx2ScissorExt_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2ScissorExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2ScissorExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2ScissorExt_callbackList[] = { Gap::Gfx::igPsx2VisualContext::arkRegister, 0 };
 
 CallbackArray *igPsx2ScissorExt_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -110,7 +110,7 @@ void igPsx2ScissorExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2ScissorExt_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gfx::igPsx2VisualContext::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->setDefault(0x280);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 5)))->setDefault(0x1C0);

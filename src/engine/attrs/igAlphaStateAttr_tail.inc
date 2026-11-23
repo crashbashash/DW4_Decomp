@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igAlphaStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetAlphaTestState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setAlphaTestState(_enabled);
 }
 
 void igAlphaStateAttr::synchronizeDefault(igVisualContext *vc)

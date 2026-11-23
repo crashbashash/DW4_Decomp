@@ -33,7 +33,7 @@ void igTextureBindAttr::applyFast(igVisualContext *vc)
 {
     igTextureAttr *texture = _texture;
 
-    igPsx2VisualContext_SetTexture((igPsx2VisualContext *)vc, texture ? texture->getHandle() : -1, _unitID);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTexture(texture ? texture->getHandle() : -1, _unitID);
 }
 
 void igTextureBindAttr::apply(igVisualContext *vc)
@@ -41,13 +41,13 @@ void igTextureBindAttr::apply(igVisualContext *vc)
     int texId;
 
     if (_texture == 0) {
-        igPsx2VisualContext_SetTexture((igPsx2VisualContext *)vc, -1, _unitID);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTexture(-1, _unitID);
         return;
     }
     _texture->apply(vc);
     texId = _texture->getHandle();
     if (texId >= 0) {
-        igPsx2VisualContext_SetTexture((igPsx2VisualContext *)vc, texId, _unitID);
+        ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTexture(texId, _unitID);
     }
 }
 

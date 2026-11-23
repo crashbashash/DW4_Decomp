@@ -147,7 +147,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     }
     self->driverDatabase = (igDriverDatabase *)igDriverDatabase_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     igDriverDatabase_GatherProperties(self->driverDatabase, 0);
-    igIGBFile_EnsureRegistered();
+    Gap::Core::igIGBFile::arkRegister();
     self->pluginHelper = (igPluginHelper *)igPluginHelper_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     igPluginHelper_LoadPluginsFromRegistry(self->pluginHelper);
     igPluginHelper_AddRepository(self->pluginHelper, (int)"Alchemy", (int)"plugins", 1);

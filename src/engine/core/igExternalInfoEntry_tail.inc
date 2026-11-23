@@ -23,7 +23,7 @@ bool igDirectory_AddExternalInfoRef(Gap::Core::igDirectory *directory, Gap::Core
         return 0;
     }
     igSmartPointer<igExternalInfoEntryView> entry((igExternalInfoEntryView *)Gap::Core::igExternalInfoEntry::_instantiateFromPool(directory->getMemoryPool()));
-    entry.get()->setDirectoryIndex(((igSmartPointer<igTDataList<igDirectoryView *> > &)directory->_externalDirectoryList)->find((igDirectoryView *)info->_directory));
+    entry.get()->setDirectoryIndex(directory->_externalDirectoryList->find(info->_directory, 0));
     entry.get()->setInfoName(info->_name.p != 0 ? (char *)info->_name.p : (char *)emptyString);
     entry.get()->setKey((char *)key);
     entry.get()->SetRef((int)object);

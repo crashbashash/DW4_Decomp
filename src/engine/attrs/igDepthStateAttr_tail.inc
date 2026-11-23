@@ -14,7 +14,7 @@ void igDepthStateAttr::setState(bool enabled)
 
 void igDepthStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetDepthTestState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setDepthTestState(_enabled);
 }
 }
 }

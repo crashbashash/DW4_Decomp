@@ -73,7 +73,7 @@ void igTextureFunctionAttr::apply(igVisualContext *vc)
         int functionType = _functionType;
 
         if (_call_state == 2) {
-            igPsx2VisualContext_SetTextureStageFunc((igPsx2VisualContext *)vc, _unitID, _mode);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureStageFunc(_unitID, _mode);
             return;
         }
         if (_unitID > 0)
@@ -81,7 +81,7 @@ void igTextureFunctionAttr::apply(igVisualContext *vc)
         ((igMultiTextureExtDispatchView *)_extension)->setTextureStageType(_unitID, functionType, _type);
         return;
     }
-    igPsx2VisualContext_SetTextureStageFunc((igPsx2VisualContext *)vc, _unitID, _mode);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setTextureStageFunc(_unitID, _mode);
 }
 }
 }

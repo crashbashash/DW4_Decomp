@@ -37,7 +37,7 @@ void igMaterialAttr::setEmissive(const igVec4f &e)
 
 void igMaterialAttr::apply(igVisualContext *rc)
 {
-    igPsx2VisualContext_SetMaterial((igPsx2VisualContext *)rc, _ambient.vec, _diffuse.vec, _specular.vec, _emission.vec, _shininess);
+    ((igPsx2VisualContext *)rc)->igPsx2VisualContext::setMaterial(_ambient, _diffuse, _specular, _emission, _shininess);
 }
 
 void igMaterialAttr::synchronizeDefault(igVisualContext *vc)

@@ -1,176 +1,149 @@
 inline bool igResult::failed() const { return v == g_resultFailure.v; }
 
-int igIGBFile_GetObjectSize(void *self, int record) {
-    int size;
-    Gap::Core::igIntMetaField *intField;
+namespace Gap {
+namespace Core {
 
-    size = ((FieldRecordHead *)record)->size;
-    if (((igIGBFileView *)self)->_endianSwap != 0) {
-        intField = Gap::Core::igIntMetaField::getMetaField();
+int igIGBFile::getReadSizeFromMemory(void *src) {
+    int size;
+    igIntMetaField *intField;
+
+    size = ((FieldRecordHead *)src)->size;
+    if (_endianSwap != 0) {
+        intField = igIntMetaField::getMetaField();
         intField->endianSwapMemory(&size, 1);
     }
     return size;
 }
 
-igResult igIGBFile_OpenFile(igIGBFileView *self, const char *fileName, int mode) {
-    if (fileName == 0 && self->_file == 0) {
+igResult igIGBFile::open(const char *fileName, igFile::OpenMode e) {
+    if (fileName == 0 && _file == 0) {
         return g_resultFailure;
     }
-    if (fileName == 0 && self->_file != 0) {
-        return self->_file->OpenWithMode(mode);
+    if (fileName == 0 && _file != 0) {
+        return _file->open(e);
     }
-    if (self->_file == 0 && fileName != 0) {
-        assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)self->_temporaryMemoryPool)));
-        if (self->_file == 0) {
+    if (_file == 0 && fileName != 0) {
+        _file = igSmartPointer<igFile>(igFile::_instantiateFromPool((igMemoryPoolView *)_temporaryMemoryPool.p));
+        if (_file == 0) {
             return g_resultFailure;
         }
-        ((Gap::Core::igFile *)self->_file)->setFileName(fileName);
-        return self->_file->OpenWithMode(mode);
+        _file->setFileName(fileName);
+        return _file->open(e);
     }
-    self->_file->CloseHandle();
-    assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)self->_temporaryMemoryPool)));
-    ((Gap::Core::igFile *)self->_file)->setFileName(fileName);
-    return self->_file->OpenWithMode(mode);
+    _file->close();
+    _file = igSmartPointer<igFile>(igFile::_instantiateFromPool((igMemoryPoolView *)_temporaryMemoryPool.p));
+    _file->setFileName(fileName);
+    return _file->open(e);
 }
 
-void igIGBFile_CloseFile(igIGBFileView *self) {
-    igFileView *r;
-    if (self->_file != 0) {
-        self->_file->CloseHandle();
-        r = self->_file;
-        if (r != 0) {
-            r->_refCount = r->_refCount - 1;
-            if ((r->_refCount & 0x7FFFFF) == 0) igObject_Destroy(r);
-        }
-        self->_file = 0;
+void igIGBFile::close() {
+    if (_file != 0) {
+        _file->close();
+        _file = 0;
     }
 }
 
-void igIGBFile_SetDefaultName(int *self) {
-    int fileName;
-    int *header;
-    int pool;
-    int c;
-    void *baseName;
+/* Names an unnamed directory after its file: the file name past the last path separator. */
+void igIGBFile::setDirectoryNameBasedOnFileName() {
+    const char *fileName;
     int i;
-    int count;
-    void *oldName;
-    void *name;
+    int c;
 
-    name = (void *)(self[5]);
-    if ((!name) || (strcmp((const char *)name, "") == 0)) {
-        fileName = ((int *)self[26])[3];
-        i = strlen((const char *)fileName) - 1;
-        while (i > 0 && 0x2F != (c = *(char *)((fileName + i) - 1)) && c != 0x5C) {
+    if (_name.p == 0 || strcmp(_name.p, "") == 0) {
+        fileName = _file->_fileName.p;
+        i = strlen(fileName) - 1;
+        while (i > 0 && '/' != (c = *((fileName + i) - 1)) && c != '\\') {
             i = i - 1;
         }
-        if (0 == ((*(void * *)&g_stringPool))) {
-            pool = (int)StringPool_Allocate(0x10);
-            if (pool) {
-                pool = (int)StringPool_Construct((StringPool *)((void *)pool));
-            }
-            ((*(void * *)&g_stringPool)) = (void *)pool;
-        }
-        baseName = (void *)(((char *)StringPool_Intern((StringPool *)(((*(void * *)&g_stringPool))), (const char *)(fileName + i))));
-        oldName = (void *)(self[5]);
-        if (oldName) {
-            header = (int *)((char *)oldName - 8);
-            count = *(int *)((char *)(oldName) - 4) - 1;
-            *(int *)((char *)(oldName) - 4) = count;
-            if (!count) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-            }
-        }
-        self[5] = (int)(baseName);
+        setName(fileName + i);
     }
 }
 
-igResult igIGBFile_OpenForWrite(igIGBFileView *f, const char *fileName) {
-    if (f->_file == 0 && fileName == 0) {
+igResult igIGBFile::writeOpen(const char *fileName) {
+    if (_file == 0 && fileName == 0) {
         return g_resultFailure;
     }
-    if (f->_file == 0) {
-        if (igIGBFile_OpenFile(f, fileName, 5) == g_resultFailure) {
+    if (_file == 0) {
+        if (open(fileName, igFile::kWriteBinary) == g_resultFailure) {
             if (fileName != 0) {
-                igFileView *h = f->_file;
-                IG_OBJECT_RELEASE(h);
-                f->_file = 0;
+                _file = 0;
             }
             return g_resultFailure;
         }
-        f->_autoOpened = 1;
+        _autoOpened = 1;
     }
-    if (f->_file == 0) {
+    if (_file == 0) {
         return g_resultFailure;
     }
-    igIGBFile_SetDefaultName((int *)f);
-    ((Gap::Core::igFile *)((int)f->_file))->setOpenMode(Gap::Core::igFile::kWriteBinary);
+    setDirectoryNameBasedOnFileName();
+    _file->setOpenMode(igFile::kWriteBinary);
     return g_resultSuccess;
 }
 
-igResult igIGBFile_BuildMetaObjectList(igIGBFileView *self) {
+igResult igIGBFile::writeCreateMetaObjectList() {
     igMetaObject *meta;
     unsigned int n;
     unsigned int i;
-    assignReference(self->_metaObjectListInFile, igSmartPointer<igObjectList>((igObjectList *)igMetaObjectList_Create((int)self->_temporaryMemoryPool)));
-    igMetaObject_AddToMetaObjectList((igTDataList<igMetaObject *> *)self->_metaObjectListInFile, (igMetaObject *)Gap::Core::igDirEntry::getClassMeta());
-    meta = Gap::Core::igDirEntry::getClassMeta();
-    n = ((unsigned int)igMetaObject_CountTree((igMetaObject *)meta));
+    _metaObjectListInFile = igSmartPointer< ::igMetaObjectList>((::igMetaObjectList *)igMetaObjectList_Create((int)_temporaryMemoryPool.p));
+    igMetaObject_AddToMetaObjectList((::igTDataList<igMetaObject *> *)_metaObjectListInFile.p, igDirEntry::getClassMeta());
+    meta = igDirEntry::getClassMeta();
+    n = (unsigned int)igMetaObject_CountTree(meta);
     for (i = 0; i < n; i++) {
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_metaObjectListInFile))->appendUnique((Gap::Core::igObject *)(((int)igMetaObject_GetTreeNode((igMetaObject *)meta, (int)i))));
+        ((igObjectList *)_metaObjectListInFile.p)->appendUnique((igObject *)igMetaObject_GetTreeNode(meta, (int)i));
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_PrepareEntriesForWrite(igIGBFileView *self) {
+igResult igIGBFile::writeMakeProxies() {
     int i;
 
-    for (i = 0; i < self->_count; i++) {
-        self->_data[i]->_index = i;
-        self->_data[i]->PrepareWrite(self);
+    for (i = 0; i < _count; i++) {
+        getNonShared(i)->_index = i;
+        getNonShared(i)->writeMakeProxy(this);
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_BuildMemoryPoolNameBuffer(igIGBFileView *o) {
-    int i; int s; char *p; int j; int n; int a;
-    o->_memoryPoolNameBufferSize = 8;
+/* The memory pool names, in pool order: the buffer's size and the name count, then the names. */
+igResult igIGBFile::writeCreateMemoryPoolReferences() {
+    int i; const char *name; char *p; int j; int n; int length;
+    _memoryPoolNameBufferSize = 8;
     i = 0;
     do {
-        a = strlen((const char *)Memory_GetPoolNameByIndex(i)) + 1;
+        length = strlen((const char *)Memory_GetPoolNameByIndex(i)) + 1;
         i++;
-        o->_memoryPoolNameBufferSize = o->_memoryPoolNameBufferSize + a;
+        _memoryPoolNameBufferSize = _memoryPoolNameBufferSize + length;
     } while (i < 46);
-    o->_memoryPoolNameBuffer = (int *)o->_temporaryMemoryPool->Allocate(o->_memoryPoolNameBufferSize);
+    _memoryPoolNameBuffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->Allocate(_memoryPoolNameBufferSize);
     j = 0;
-    p = (char *)o->_memoryPoolNameBuffer;
-    ((int *)p)[0] = o->_memoryPoolNameBufferSize;
+    p = _memoryPoolNameBuffer;
+    ((int *)p)[0] = _memoryPoolNameBufferSize;
     ((int *)p)[1] = 46;
     p += 8;
     do {
-        s = Memory_GetPoolNameByIndex(j);
-        n = strlen((const char *)s) + 1;
-        memcpy(p, (void *)s, n);
+        name = (const char *)Memory_GetPoolNameByIndex(j);
+        n = strlen(name) + 1;
+        memcpy(p, name, n);
         j++;
         p += n;
     } while (j < 46);
-    if (o->_endianSwap) o->imf->SwapBytes(o->_memoryPoolNameBuffer, 2);
+    if (_endianSwap) imf->endianSwapMemory(_memoryPoolNameBuffer, 2);
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ComputeBufferSizes(igIGBFile *self) {
+igResult igIGBFile::writeComputeBufferSizes() {
     int i;
-    void *entry;
 
-    self->_objectCount = 0;
-    self->_memoryRefCount = 0;
-    self->_objectBufferSize = 0;
-    self->_memoryRefBufferSize = 0;
-    for (i = 0; i < self->_count; i++) {
-        entry = (void *)(*(int *)(self->_data + (i * 4)));
-        ((igDirEntryView *)entry)->ComputeWriteSize((igIGBFileView *)self);
+    _objectCount = 0;
+    _memoryRefCount = 0;
+    _objectBufferSize = 0;
+    _memoryRefBufferSize = 0;
+    for (i = 0; i < _count; i++) {
+        getNonShared(i)->writeComputeBufferSize(this);
     }
     return g_resultSuccess;
+}
+}
 }
 
 static inline void bump(const igSmartPointer<igTDataList<int> > &r, int off) { int *c = (int *)((char *)r.p->_data + off); *c = *c + 1; }
@@ -188,14 +161,17 @@ static inline int indexOfParent(igObjectList *l, const MetaTableKey &key) {
     return -1;
 }
 
-igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self) {
+namespace Gap {
+namespace Core {
+
+igResult igIGBFile::writeCreateMetaObjectBuffer() {
     int base;
     int i;
-    self->_metaObjectCount = self->_metaObjectListInFile->_count;
-    self->_metaObjectBufferSize = self->_metaObjectCount * 24;
+    _metaObjectCount = _metaObjectListInFile->_count;
+    _metaObjectBufferSize = _metaObjectCount * 24;
     {
-    igSmartPointer<igTDataList<int> > inherited((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
-    fillWords(inherited.p, self->_metaObjectCount, 0);
+    igSmartPointer< ::igTDataList<int> > inherited((::igTDataList<int> *)igIntList_Create((int)_temporaryMemoryPool.p));
+    fillWords(inherited.p, _metaObjectCount, 0);
     {
         int n = inherited.p->_count;
         int *d = inherited.p->_data;
@@ -203,56 +179,56 @@ igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self) {
         for (k = 0; k < n; k++) { d[k] = g_igIGBFile_inheritedFieldCountFill[0]; }
     }
     {
-    igSmartPointer<igTDataList<int> > persistent((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool));
-    fillWords(persistent.p, self->_metaObjectCount, 0);
+    igSmartPointer< ::igTDataList<int> > persistent((::igTDataList<int> *)igIntList_Create((int)_temporaryMemoryPool.p));
+    fillWords(persistent.p, _metaObjectCount, 0);
     {
         int n = persistent.p->_count;
         int *d = persistent.p->_data;
         int k;
         for (k = 0; k < n; k++) { d[k] = g_igIGBFile_persistentFieldCountFill[0]; }
     }
-    base = igMetaObject_GetFieldCount((igMetaObject *)Gap::Core::igObject::getClassMeta());
-    for (i = 0; i < self->_metaObjectCount; i++) {
+    base = igMetaObject_GetFieldCount(igObject::getClassMeta());
+    for (i = 0; i < _metaObjectCount; i++) {
         int j;
-        __internalObjectList *fields;
+        ::__internalObjectList *fields;
         int n;
         igMetaObject *t;
         int off;
         off = i * 4;
-        t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
-        fields = (__internalObjectList *)t->_metaFields;
+        t = *(igMetaObject **)((char *)_metaObjectListInFile->_data + off);
+        fields = (::__internalObjectList *)t->_metaFields;
         n = fields->_count;
         for (j = base; j < n; j++) {
-            igMetaField *f = ((igMetaField **)fields->_data)[j];
+            ::igMetaField *f = ((::igMetaField **)fields->_data)[j];
             if (f->_isRunTime == 0) {
                 if (f->_persistent != 0) {
-                    self->_metaObjectBufferSize = self->_metaObjectBufferSize + 6;
+                    _metaObjectBufferSize = _metaObjectBufferSize + 6;
                     bump(inherited, off);
                 }
                 bump(persistent, off);
             }
         }
-        self->_metaObjectBufferSize = self->_metaObjectBufferSize + (strlen((char *)t->_name) + 1);
-        self->_metaObjectBufferSize = (self->_metaObjectBufferSize + 1) & ~1;
+        _metaObjectBufferSize = _metaObjectBufferSize + (strlen((char *)t->_name) + 1);
+        _metaObjectBufferSize = (_metaObjectBufferSize + 1) & ~1;
     }
-    self->_metaObjectBuffer = self->_temporaryMemoryPool->AllocateAligned(self->_metaObjectBufferSize, 16);
+    _metaObjectBuffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_metaObjectBufferSize, 16);
     {
         igMetaObject *t;
         int off;
         int k;
-        MetaTableRecord *rec = (MetaTableRecord *)self->_metaObjectBuffer;
-        for (k = 0; k < self->_metaObjectCount; k++) {
+        MetaTableRecord *rec = (MetaTableRecord *)_metaObjectBuffer;
+        for (k = 0; k < _metaObjectCount; k++) {
             MetaTableKey key;
             int len;
             off = k * 4;
-            t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
+            t = *(igMetaObject **)((char *)_metaObjectListInFile->_data + off);
             len = strlen((char *)t->_name) + 1;
             rec->nameSize = (len + 1) & ~1;
             rec->majorVersion = t->_majorVersion;
             rec->minorVersion = t->_minorVersion;
             rec->fieldCount = *(int *)((char *)inherited.p->_data + off);
             {
-                igObjectList *l = self->_metaObjectListInFile;
+                ::igObjectList *l = (::igObjectList *)_metaObjectListInFile.p;
                 *(int *)&key = t->_parent;
                 rec->parentIndex = indexOfParent(l, key);
             }
@@ -261,539 +237,476 @@ igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self) {
         }
     }
     {
-        char *out = (char *)((MetaTableRecord *)self->_metaObjectBuffer + self->_metaObjectCount);
-        igMetaFieldView *desc;
+        char *out = (char *)((MetaTableRecord *)_metaObjectBuffer + _metaObjectCount);
+        igShortMetaField *desc;
         short *p;
-        igMetaField *f;
+        ::igMetaField *f;
         int k;
         int j;
         int n;
         int off;
         igMetaObject *t;
-        __internalObjectList *fields;
-        desc = (igMetaFieldView *)((void *)Gap::Core::igShortMetaField::getMetaField());
-        for (k = 0; k < self->_metaObjectCount; k++) {
+        ::__internalObjectList *fields;
+        desc = igShortMetaField::getMetaField();
+        for (k = 0; k < _metaObjectCount; k++) {
             off = k * 4;
-            t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
+            t = *(igMetaObject **)((char *)_metaObjectListInFile->_data + off);
             strcpy(out, (char *)t->_name);
-            fields = (__internalObjectList *)t->_metaFields;
+            fields = (::__internalObjectList *)t->_metaFields;
             j = base;
             n = fields->_count;
-            out += ((MetaTableRecord *)self->_metaObjectBuffer)[k].nameSize;
+            out += ((MetaTableRecord *)_metaObjectBuffer)[k].nameSize;
             p = (short *)out;
             for (; j < n; j++) {
-                f = ((igMetaField **)fields->_data)[j];
+                f = ((::igMetaField **)fields->_data)[j];
                 if (f->_persistent != 0 && f->_isRunTime == 0) {
-                    p[0] = ((Gap::Core::igMetaField *)f)->getTypeIndex();
+                    p[0] = ((igMetaField *)f)->getTypeIndex();
                     p[1] = f->_internalIndex;
                     p[2] = f->_size;
                     p += 3;
                 }
             }
-            if (self->_endianSwap != 0) {
-                desc->SwapBytes(out, *(int *)((char *)inherited.p->_data + off) * 3);
+            if (_endianSwap != 0) {
+                desc->endianSwapMemory(out, *(int *)((char *)inherited.p->_data + off) * 3);
             }
             out = (char *)p;
         }
     }
-    if (self->_endianSwap != 0) { self->imf->SwapBytes(self->_metaObjectBuffer, self->_metaObjectCount * 6); }
+    if (_endianSwap != 0) { imf->endianSwapMemory(_metaObjectBuffer, _metaObjectCount * 6); }
     return g_resultSuccess;
     }
     }
 }
 
-igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *self) {
+/* The registered metafield types: a record per type (its name's length and version), then the names. */
+igResult igIGBFile::writeCreateMetaFieldBuffer() {
     int i;
     int j;
-    int s5;
-    int *s4;
-    char *s2;
-    igObjectDispatchView *p;
-    self->_metaFieldCount = Gap::Core::igMetaField::getMetaFieldTypes()->_count;
-    self->_metaFieldBufferSize = self->_metaFieldCount * 12;
-    for (i = 0; i < self->_metaFieldCount; i++) {
-        self->_metaFieldBufferSize = self->_metaFieldBufferSize + (strlen((const char *)registeredMetaField(Gap::Core::igMetaField::getMetaFieldTypes(), i)->GetMeta()->_name) + 1);
+    int k;
+    int *records;
+    char *name;
+    igObjectDispatchView *type;
+    _metaFieldCount = igMetaField::getMetaFieldTypes()->_count;
+    _metaFieldBufferSize = _metaFieldCount * 12;
+    for (i = 0; i < _metaFieldCount; i++) {
+        _metaFieldBufferSize = _metaFieldBufferSize + (strlen((const char *)registeredMetaField(igMetaField::getMetaFieldTypes(), i)->GetMeta()->_name) + 1);
     }
-    self->_mfBuf = (char *)self->_temporaryMemoryPool->AllocateAligned(self->_metaFieldBufferSize, 16);
-    s5 = 0;
-    s4 = (int *)self->_mfBuf;
-    for (i = 0; i < self->_metaFieldCount; i++) {
-        p = registeredMetaField(Gap::Core::igMetaField::getMetaFieldTypes(), i);
-        s4[s5] = strlen((const char *)p->GetMeta()->_name) + 1;
-        s5++;
-        s4[s5] = p->GetMeta()->_majorVersion;
-        s5++;
-        s4[s5] = p->GetMeta()->_minorVersion;
-        s5++;
+    _mfBuf = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_metaFieldBufferSize, 16);
+    k = 0;
+    records = (int *)_mfBuf;
+    for (i = 0; i < _metaFieldCount; i++) {
+        type = registeredMetaField(igMetaField::getMetaFieldTypes(), i);
+        records[k] = strlen((const char *)type->GetMeta()->_name) + 1;
+        k++;
+        records[k] = type->GetMeta()->_majorVersion;
+        k++;
+        records[k] = type->GetMeta()->_minorVersion;
+        k++;
     }
-    s2 = self->_mfBuf + self->_metaFieldCount * 12;
-    for (j = 0; j < self->_metaFieldCount; j++) {
-        strcpy(s2, (const char *)registeredMetaField(Gap::Core::igMetaField::getMetaFieldTypes(), j)->GetMeta()->_name);
-        s2 += *(int *)(self->_mfBuf + j * 12);
+    name = _mfBuf + _metaFieldCount * 12;
+    for (j = 0; j < _metaFieldCount; j++) {
+        strcpy(name, (const char *)registeredMetaField(igMetaField::getMetaFieldTypes(), j)->GetMeta()->_name);
+        name += *(int *)(_mfBuf + j * 12);
     }
-    if (self->_endianSwap != 0) self->imf->SwapBytes(self->_mfBuf, self->_metaFieldCount * 3);
+    if (_endianSwap != 0) imf->endianSwapMemory(_mfBuf, _metaFieldCount * 3);
     return g_resultSuccess;
 }
+}
+}
 
-static inline char *nameOf(const igSmartPointer<igTDataList<igStringObj *> > &r, int i) {
+static inline char *nameOf(const igSmartPointer<igTDataList< ::igStringObj *> > &r, int i) {
     char *n = (char *)r.p->_data[i]->_buffer;
     n = (n == 0) ? (g_stringObjEmptyText) : n;
     return n;
 }
 
-igResult igIGBFile_BuildAlignmentBuffer(igIGBFileView *self) {
-    igSmartPointer<igTDataList<igStringObj *> > names((igTDataList<igStringObj *> *)g_globalContext->_alignmentStrings.p, kRetainReference);
+namespace Gap {
+namespace Core {
+
+/* The alignment names the global resource knows: the buffer's size, a version word and the count, each name's
+ * length, then the names. */
+igResult igIGBFile::writeCreateMemoryAlignmentBuffer() {
+    igSmartPointer< ::igTDataList< ::igStringObj *> > names((::igTDataList< ::igStringObj *> *)g_globalContext->_alignmentStrings.p, kRetainReference);
     int i;
     int *lengths;
     char *out;
-    self->_alignmentCount = (names.p != 0) ? names.p->_count : 0;
+    _alignmentCount = (names.p != 0) ? names.p->_count : 0;
     i = 0;
-    self->_alignmentBufferSize = self->_alignmentCount * 4 + 12;
-    for (; i < self->_alignmentCount; i++) {
-        self->_alignmentBufferSize += strlen(nameOf(names, i)) + 1;
+    _alignmentBufferSize = _alignmentCount * 4 + 12;
+    for (; i < _alignmentCount; i++) {
+        _alignmentBufferSize += strlen(nameOf(names, i)) + 1;
     }
-    self->_alignmentBuffer = (int *)self->_temporaryMemoryPool->AllocateAligned(self->_alignmentBufferSize, 16);
+    _alignmentBuffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_alignmentBufferSize, 16);
     {
-        int *b = self->_alignmentBuffer;
-        lengths = b + 3;
-        b[0] = self->_alignmentBufferSize;
-        b[1] = 1;
-        b[2] = self->_alignmentCount;
+        int *header = (int *)_alignmentBuffer;
+        lengths = header + 3;
+        header[0] = _alignmentBufferSize;
+        header[1] = 1;
+        header[2] = _alignmentCount;
     }
-    for (i = 0; i < self->_alignmentCount; i++) {
+    for (i = 0; i < _alignmentCount; i++) {
         lengths[i] = strlen(nameOf(names, i)) + 1;
     }
-    out = (char *)(lengths + self->_alignmentCount);
-    for (i = 0; i < self->_alignmentCount; i++) {
+    out = (char *)(lengths + _alignmentCount);
+    for (i = 0; i < _alignmentCount; i++) {
         strcpy(out, nameOf(names, i));
         out += lengths[i];
     }
-    if (self->_endianSwap != 0) { self->imf->SwapBytes(self->_alignmentBuffer, self->_alignmentCount + 3); }
+    if (_endianSwap != 0) { imf->endianSwapMemory(_alignmentBuffer, _alignmentCount + 3); }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_BuildExternalDirectoryBuffer(igIGBFileView *self) {
-    igTDataList<igDirectoryView *> *l = self->_externalDirectoryList;
-    int n, i, k;
-    if (l != 0) { n = l->_count; if (n > 0) {
-        char *p;
-        int *q;
+/* The external directories' names, laid out as the alignment names are. */
+igResult igIGBFile::writeCreateExternalDirectoryBuffer() {
+    igDirectoryList *list = _externalDirectoryList;
+    int count, i, k;
+    if (list != 0 && (count = list->_count) > 0) {
+        char *name;
+        int *lengths;
         int total;
-        self->_hasExternal = 1;
-        total = (n + 3) * 4;
-        self->_externalDirectoryBufferSize = total;
-        for (i = 0; i < n; i++) {
-            self->_externalDirectoryBufferSize = self->_externalDirectoryBufferSize + (strlen((const char *)self->_externalDirectoryList->_data[i]->_name) + 1);
+        _hasExternal = 1;
+        total = (count + 3) * 4;
+        _externalDirectoryBufferSize = total;
+        for (i = 0; i < count; i++) {
+            _externalDirectoryBufferSize = _externalDirectoryBufferSize + (strlen(_externalDirectoryList->get(i)->_name.p) + 1);
         }
-        self->_externalDirectoryBuffer = (int *)self->_temporaryMemoryPool->AllocateAligned(self->_externalDirectoryBufferSize, 16);
-        self->_externalDirectoryBuffer[0] = self->_externalDirectoryBufferSize;
-        self->_externalDirectoryBuffer[1] = 1;
-        self->_externalDirectoryBuffer[2] = n;
-        q = self->_externalDirectoryBuffer + 3;
-        for (i = 0; i < n; i++) {
-            q[i] = strlen((const char *)self->_externalDirectoryList->_data[i]->_name) + 1;
+        _externalDirectoryBuffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_externalDirectoryBufferSize, 16);
+        ((int *)_externalDirectoryBuffer)[0] = _externalDirectoryBufferSize;
+        ((int *)_externalDirectoryBuffer)[1] = 1;
+        ((int *)_externalDirectoryBuffer)[2] = count;
+        lengths = (int *)_externalDirectoryBuffer + 3;
+        for (i = 0; i < count; i++) {
+            lengths[i] = strlen(_externalDirectoryList->get(i)->_name.p) + 1;
         }
-        p = (char *)self->_externalDirectoryBuffer + total;
-        for (k = 0; k < n; k++) {
-            strcpy(p, (const char *)self->_externalDirectoryList->_data[k]->_name);
-            p += strlen(p) + 1;
+        name = _externalDirectoryBuffer + total;
+        for (k = 0; k < count; k++) {
+            strcpy(name, _externalDirectoryList->get(k)->_name.p);
+            name += strlen(name) + 1;
         }
-        if (self->_endianSwap != 0) {
-            self->imf->SwapBytes(self->_externalDirectoryBuffer, n + 2);
+        if (_endianSwap != 0) {
+            imf->endianSwapMemory(_externalDirectoryBuffer, count + 2);
         }
-    goto done; } } self->_hasExternal = 0; done:
+    } else {
+        _hasExternal = 0;
+    }
     return g_resultSuccess;
 }
 
 /* Lays the unique entries out in one buffer: sizes them, allocates, then writes each. */
-igResult igIGBFile_BuildDirectoryBuffer(igIGBFile *file) {
+igResult igIGBFile::writeCreateAndFillSharedEntryBuffer() {
     char *cursor;
     int i;
-    file->_entryBufferSize = 0;
-    file->_entryCount = ((igObjectList *)file->_uniqueEntryList)->_count;
-    for (i = 0; i < file->_entryCount; i++) {
-        file->_entryBufferSize = file->_entryBufferSize + ((Gap::Core::igObject *)(igDirectory_GetEntryAlias((int *)file->_uniqueEntryList, i)))->getIoSize();
+    _entryBufferSize = 0;
+    _entryCount = _uniqueEntryList->_count;
+    for (i = 0; i < _entryCount; i++) {
+        _entryBufferSize = _entryBufferSize + ((igObject *)igDirectory_GetEntryAlias((int *)_uniqueEntryList.p, i))->getIoSize();
     }
-    file->_dirBuf = (int)((igMemoryPoolView *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
-    cursor = (char *)file->_dirBuf;
-    for (i = 0; i < file->_entryCount; i++) {
-        cursor += igObject_WritePersistentFields((igObjectDispatchView *)igDirectory_GetEntryAlias((int *)file->_uniqueEntryList, i), (int *)cursor, 0, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+    _dirBuf = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_entryBufferSize, 16);
+    cursor = _dirBuf;
+    for (i = 0; i < _entryCount; i++) {
+        cursor += igObject_WritePersistentFields((igObjectDispatchView *)igDirectory_GetEntryAlias((int *)_uniqueEntryList.p, i), (int *)cursor, 0, (::igTDataList<igMetaObject *> *)_metaObjectListInFile.p, _endianSwap);
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_BuildIndexBuffer(igIGBFileView *self) {
-    int count = self->_count;
+/* For each entry, the index of its shared entry among the unique ones. */
+igResult igIGBFile::writeCreateAndFillEntryIndexBuffer() {
+    int count = _count;
     int i;
-    self->_indexBufferSize = count * 2 + 8;
-    self->_indexBuffer = self->_temporaryMemoryPool->AllocateAligned(self->_indexBufferSize, 16);
-    ((int *)self->_indexBuffer)[0] = self->_indexBufferSize;
-    ((int *)self->_indexBuffer)[1] = count;
+    _indexBufferSize = count * 2 + 8;
+    _indexBuffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_indexBufferSize, 16);
+    ((int *)_indexBuffer)[0] = _indexBufferSize;
+    ((int *)_indexBuffer)[1] = count;
     for (i = 0; i < count; i++) {
-        igTDataList<igDirEntryView *> *unique = (igTDataList<igDirEntryView *> *)self->_uniqueEntryList;
-        ((short *)((char *)self->_indexBuffer + 8))[i] = unique->sortedFind(&self->_data[i]);
+        ::igTDataList<igDirEntry *> *unique = (::igTDataList<igDirEntry *> *)_uniqueEntryList.p;
+        ((short *)(_indexBuffer + 8))[i] = unique->sortedFind((igDirEntry **)_data + i);
     }
-    if (self->_endianSwap != 0) {
-        self->imf->SwapBytes(self->_indexBuffer, 2);
-        self->smf->SwapBytes((char *)self->_indexBuffer + 8, count);
+    if (_endianSwap != 0) {
+        imf->endianSwapMemory(_indexBuffer, 2);
+        smf->endianSwapMemory(_indexBuffer + 8, count);
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ShareEntries(igIGBFileView *self) {
+/* Replaces each entry by the one it shares with the entries before it, keeping each reference in _refList. */
+igResult igIGBFile::writeShareEntries() {
     int n;
     int i;
-    if (self->_sharedEntries != 0) { return g_resultSuccess; }
+    if (_sharedEntries != 0) { return g_resultSuccess; }
     {
-        igTDataList<int> *old = self->_refList;
-        int pool = (int)self->_temporaryMemoryPool;
-        IG_OBJECT_RELEASE(old);
-        self->_refList = (igTDataList<int> *)igPointerList_Create(pool);
+        int pool = (int)_temporaryMemoryPool.p;
+        _refList.release();
+        _refList.p = (igPointerList *)igPointerList_Create(pool);
+    }
+    _refList->setCount(_count);
+    {
+        igMemoryPoolView *pool = (igMemoryPoolView *)_temporaryMemoryPool.p;
+        _entryPool.release();
+        _entryPool.p = igObjectList::_instantiateFromPool(pool);
     }
     {
-        int c = self->_count;
-        igTDataList<int> *l = self->_refList;
-        if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(c, 4); } }
+        igMemoryPoolView *pool = (igMemoryPoolView *)_temporaryMemoryPool.p;
+        _uniqueEntryList.release();
+        _uniqueEntryList.p = igDirectory::_instantiateFromPool(pool);
     }
-    {
-        igObject *old = self->_entryPool;
-        int pool = (int)self->_temporaryMemoryPool;
-        IG_OBJECT_RELEASE(old);
-        self->_entryPool = (igObject *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool);
-    }
-    {
-        igObjectList *old = self->_uniqueEntryList;
-        int pool = (int)self->_temporaryMemoryPool;
-        IG_OBJECT_RELEASE(old);
-        self->_uniqueEntryList = (igObjectList *)Gap::Core::igDirectory::_instantiateFromPool((igMemoryPoolView *)pool);
-    }
-    n = self->_count;
+    n = _count;
     for (i = 0; i < n; i++) {
-        igDirEntryView *o = self->_data[i];
-        igDirEntryView *r;
-        igDirEntryView *old;
-        int c;
-        if (o == o->Resolve(self)) {
-            insertObjectSorted(self->_uniqueEntryList, o);
+        igDirEntry *entry = ((igDirEntry **)_data)[i];
+        if (entry == entry->share(this)) {
+            insertObjectSorted((::igObjectList *)_uniqueEntryList.p, entry);
         }
-        {
-            int word;
-            igTDataList<int> *w = self->_refList;
-            word = o->_ref;
-            int k = w->_count;
-            if (k != 0 && i >= 0 && k > i) { ((int *)w->_data)[i] = word; }
-        }
-        o->SetReferenceIndex(o->_ref);
-        o->SetRef(0);
-        o->_index = i;
-        r = o->Resolve(self);
-        if (r != 0) { r->_refCount = r->_refCount + 1; }
-        old = self->_data[i];
-        IG_OBJECT_RELEASE(old);
-        c = self->_count;
-        if (c != 0 && i >= 0 && c > i) { self->_data[i] = r; }
+        _refList->set(i, entry->getRef());
+        entry->refEntry(entry->getRef());
+        entry->setRef(0);
+        entry->_index = i;
+        set(i, entry->share(this));
     }
-    self->_sharedEntries = 1;
+    _sharedEntries = 1;
     return g_resultSuccess;
 }
 
 /* The same layout for the file's own object list. */
-igResult igIGBFile_WriteEntryBuffer(igIGBFile *file) {
+igResult igIGBFile::writeCreateAndFillEntryBuffer() {
     char *cursor;
     int i;
-    file->_entryBufferSize = 0;
-    file->_entryCount = file->_count;
-    for (i = 0; i < file->_entryCount; i++) {
-        file->_entryBufferSize = file->_entryBufferSize + ((Gap::Core::igObject *)(((igObjectDispatchView **)file->_data)[i]))->getIoSize();
+    _entryBufferSize = 0;
+    _entryCount = _count;
+    for (i = 0; i < _entryCount; i++) {
+        _entryBufferSize = _entryBufferSize + getNonShared(i)->getIoSize();
     }
-    file->_dirBuf = (int)((igMemoryPoolView *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
-    cursor = (char *)file->_dirBuf;
-    for (i = 0; i < file->_entryCount; i++) {
-        cursor += igObject_WritePersistentFields(((igObjectDispatchView **)file->_data)[i], (int *)cursor, 0, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+    _dirBuf = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_entryBufferSize, 16);
+    cursor = _dirBuf;
+    for (i = 0; i < _entryCount; i++) {
+        cursor += igObject_WritePersistentFields((igObjectDispatchView *)getNonShared(i), (int *)cursor, 0, (::igTDataList<igMetaObject *> *)_metaObjectListInFile.p, _endianSwap);
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_AllocateObjectBuffer(igIGBFileView *o) {
+igResult igIGBFile::writeCreateAndFillObjectBuffer() {
     int i;
     int n;
-    igMemoryPoolView *p = o->_temporaryMemoryPool; int x = o->_objectBufferSize;
-    o->_objBuf = p->AllocateAligned(x, 16);
-    o->_objectBufferPlace = (int)o->_objBuf;
-    n = o->_count;
+    _objBuf = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_objectBufferSize, 16);
+    _objectBufferPlace = _objBuf;
+    n = _count;
     for (i = 0; i < n; i++) {
-        ((igDirEntryView *)((Gap::Core::igDirectory *)o)->get(i))->WriteObject(o);
+        get(i)->writeWrite(this);
     }
     return g_resultSuccess;
 }
 
 /* The 48-byte header: the table sizes and counts, then the magic cookie and the version word with the
  * file's flags in its top bits. */
-igResult igIGBFile_WriteHeader(igIGBFileView *o) {
-    int *t = (int *)o->_temporaryMemoryPool->AllocateAligned(48, 16);
-    memset(t, 0, 48);
-    t[0] = o->_entryBufferSize; t[1] = o->_entryCount; t[2] = o->_metaObjectBufferSize; t[3] = o->_metaObjectCount; t[4] = o->_objectBufferSize; t[5] = o->_objectCount;
-    t[6] = o->_memoryRefBufferSize; t[7] = o->_memoryRefCount; t[8] = o->_metaFieldBufferSize; t[9] = o->_metaFieldCount; t[10] = o->_magicCookie;
-    int v = o->_magicVersion;
-    if (o->_hasInfo) v |= 0x80000000;
-    if (o->_hasExternal) v |= 0x40000000;
-    if (o->_sharingState) v |= 0x20000000;
-    if (o->_useMemoryPoolAssignmentsState) v |= 0x10000000;
-    t[11] = v;
-    if (o->_endianSwap) o->imf->SwapBytes(t, 12);
-    o->_file->Write(t, 4, 12);
-    o->_temporaryMemoryPool->Free(t);
+igResult igIGBFile::writeCreateAndWriteHeader() {
+    IgbFileHeader *header = (IgbFileHeader *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(48, 16);
+    memset(header, 0, 48);
+    header->entryBufferSize = _entryBufferSize; header->entryCount = _entryCount;
+    header->metaObjectBufferSize = _metaObjectBufferSize; header->metaObjectCount = _metaObjectCount;
+    header->objectBufferSize = _objectBufferSize; header->objectCount = _objectCount;
+    header->memoryRefBufferSize = _memoryRefBufferSize; header->memoryRefCount = _memoryRefCount;
+    header->metaFieldBufferSize = _metaFieldBufferSize; header->metaFieldCount = _metaFieldCount;
+    header->magicCookie = _magicCookie;
+    int version = _magicVersion;
+    if (_hasInfo) version |= 0x80000000;
+    if (_hasExternal) version |= 0x40000000;
+    if (_sharingState) version |= 0x20000000;
+    if (_useMemoryPoolAssignmentsState) version |= 0x10000000;
+    header->magicVersion = version;
+    if (_endianSwap) imf->endianSwapMemory(header, 12);
+    _file->fwrite(header, 4, 12);
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(header);
     return g_resultSuccess;
 }
 
-igResult igIGBFile_WriteBuffers(igIGBFileView *self) {
-    int s4 = self->_file->Write(self->_mfBuf, self->_metaFieldBufferSize, 1);
-    int s3 = self->_file->Write(self->_alignmentBuffer, self->_alignmentBufferSize, 1);
-    int s2 = self->_file->Write(self->_metaObjectBuffer, self->_metaObjectBufferSize, 1);
-    if (self->_externalDirectoryBuffer != 0) {
-        self->_file->Write(self->_externalDirectoryBuffer, self->_externalDirectoryBufferSize, 1);
-        self->_temporaryMemoryPool->Free(self->_externalDirectoryBuffer);
-        self->_externalDirectoryBuffer = 0;
+/* Writes the tables in file order, then the objects and the memory blocks; fails only when nothing was written. */
+igResult igIGBFile::writeWriteAllBuffers() {
+    int metaFields = _file->fwrite(_mfBuf, _metaFieldBufferSize, 1);
+    int alignments = _file->fwrite(_alignmentBuffer, _alignmentBufferSize, 1);
+    int metaObjects = _file->fwrite(_metaObjectBuffer, _metaObjectBufferSize, 1);
+    if (_externalDirectoryBuffer != 0) {
+        _file->fwrite(_externalDirectoryBuffer, _externalDirectoryBufferSize, 1);
+        ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_externalDirectoryBuffer);
+        _externalDirectoryBuffer = 0;
     }
-    int s1 = 1;
-    if (self->_useMemoryPoolAssignmentsState != 0) {
-        s1 = self->_file->Write(self->_memoryPoolNameBuffer, self->_memoryPoolNameBufferSize, s1);
+    int poolNames = 1;
+    if (_useMemoryPoolAssignmentsState != 0) {
+        poolNames = _file->fwrite(_memoryPoolNameBuffer, _memoryPoolNameBufferSize, poolNames);
     }
-    int s0 = self->_file->Write(self->_dirBuf, self->_entryBufferSize, 1);
-    if (self->_endianSwap != 0) {
-        self->imf->SwapBytes(self->_indexBuffer, 2);
+    int entries = _file->fwrite(_dirBuf, _entryBufferSize, 1);
+    if (_endianSwap != 0) {
+        imf->endianSwapMemory(_indexBuffer, 2);
     }
-    int s7 = self->_file->Write(self->_indexBuffer, self->_indexBufferSize, 1);
-    if (self->_infoListPlace > -1) {
-        if (self->_endianSwap != 0) {
-            self->imf->SwapBytes((char *)self + g_igIGBFile_infoListPlaceField->_offset, 1);
+    int indices = _file->fwrite(_indexBuffer, _indexBufferSize, 1);
+    if (_infoListPlace > -1) {
+        if (_endianSwap != 0) {
+            imf->endianSwapMemory((char *)this + k_infoListPlace->_offset, 1);
         }
-        self->_file->Write((char *)self + g_igIGBFile_infoListPlaceField->_offset, 4, 1);
+        _file->fwrite((char *)this + k_infoListPlace->_offset, 4, 1);
     }
-    int s8 = self->_file->Write(self->_objBuf, self->_objectBufferSize, 1);
-    int v = self->WriteMemoryRefs();
-    if (s7 + (s3 + (s4 + (v + (s8 + (s0 + (s2 + s1)))))) == 0) {
+    int objects = _file->fwrite(_objBuf, _objectBufferSize, 1);
+    int memory = writeMemoryRefBuffer();
+    if (indices + (alignments + (metaFields + (memory + (objects + (entries + (metaObjects + poolNames)))))) == 0) {
         return g_resultFailure;
     } else {
         return g_resultSuccess;
     }
 }
 
-igResult igIGBFile_CloseAfterWrite(igIGBFileView *self) {
-    if (self->_autoOpened != 0) {
-        igIGBFile_CloseFile(self);
-    }
-    return igResult(*(int *)0x4FB410);
-}
-
-igResult igIGBFile_FreeReadBuffers(igIGBFileView *o) {
-    o->_temporaryMemoryPool->Free(o->_metaObjectBuffer); o->_metaObjectBuffer = 0;
-    o->_temporaryMemoryPool->Free(o->_dirBuf); o->_dirBuf = 0;
-    o->_temporaryMemoryPool->Free(o->_objBuf); o->_objBuf = 0;
-    o->_temporaryMemoryPool->Free(o->_mfBuf); o->_mfBuf = 0;
-    o->_temporaryMemoryPool->Free(o->_alignmentBuffer); o->_alignmentBuffer = 0;
-    if (o->_indexBuffer) o->_temporaryMemoryPool->Free(o->_indexBuffer);
-    o->_memoryPoolNameBufferSize = 0;
-    if (o->_memoryPoolNameBuffer) { o->_temporaryMemoryPool->Free(o->_memoryPoolNameBuffer); o->_memoryPoolNameBuffer = 0; }
-    igIntList *r = o->_memoryPoolHandles;
-    igObject::release(r);
-    o->_memoryPoolHandles = 0;
-    return g_resultSuccess;
-}
-
-igResult igIGBFile_AddInfoListEntry(void *self) {
-    void *infoList;
-
-    infoList = (void *)(((igIGBFileView *)self)->_infoList);
-    if (((igTDataList<igInfo *> *)infoList)->_count > 0) {
-        ((igIGBFileView *)self)->_infoListPlace = ((Gap::Core::igDirectory *)((int)self))->addObject((Gap::Core::igObject *)((igObject *)infoList), 0, 0);
-        ((igIGBFileView *)self)->_hasInfo = 1;
+igResult igIGBFile::writeClose() {
+    if (_autoOpened != 0) {
+        close();
     }
     return g_resultSuccess;
 }
 
-int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
-    int *pp; igObject *t; igObject *t2; igObject *a; igObject *b;
-    ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
-    igResult openResult = igIGBFile_OpenForWrite(self, fileName);
-    pp = (int *)((int)&openResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult infoResult = igIGBFile_AddInfoListEntry(self);
-    pp = (int *)((int)&infoResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self))->bubbleSort((Gap::Core::igRefMetaField *)Gap::Core::igDirEntry::k_ref);
-    a = (igObject *)Gap::Core::igIntMetaField::getMetaField();
-    if (a != 0) a->_refCount = a->_refCount + 1;
-    t = (igObject *)self->imf;
-    IG_OBJECT_RELEASE(t);
-    self->imf = (igMetaFieldView *)a;
-    b = (igObject *)Gap::Core::igShortMetaField::getMetaField();
-    if (b != 0) b->_refCount = b->_refCount + 1;
-    t2 = (igObject *)self->smf;
-    IG_OBJECT_RELEASE(t2);
-    self->smf = (igMetaFieldView *)b;
-    igResult metaObjectListResult = igIGBFile_BuildMetaObjectList(self);
-    pp = (int *)((int)&metaObjectListResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult prepareResult = igIGBFile_PrepareEntriesForWrite(self);
-    pp = (int *)((int)&prepareResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult poolNamesResult = igIGBFile_BuildMemoryPoolNameBuffer(self);
-    pp = (int *)((int)&poolNamesResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult sizesResult = igIGBFile_ComputeBufferSizes((igIGBFile *)self);
-    pp = (int *)((int)&sizesResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult metaObjectBufferResult = igIGBFile_BuildMetaObjectBuffer(self);
-    pp = (int *)((int)&metaObjectBufferResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult metaFieldBufferResult = igIGBFile_BuildMetaFieldBuffer(self);
-    pp = (int *)((int)&metaFieldBufferResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult alignmentResult = igIGBFile_BuildAlignmentBuffer(self);
-    pp = (int *)((int)&alignmentResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult externalResult = igIGBFile_BuildExternalDirectoryBuffer(self);
-    pp = (int *)((int)&externalResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    if (self->_sharingState == 0) {
-    igResult entryResult = igIGBFile_WriteEntryBuffer((igIGBFile *)self);
-    pp = (int *)((int)&entryResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
+igResult igIGBFile::writeReleaseAllBuffers() {
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_metaObjectBuffer); _metaObjectBuffer = 0;
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_dirBuf); _dirBuf = 0;
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_objBuf); _objBuf = 0;
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_mfBuf); _mfBuf = 0;
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_alignmentBuffer); _alignmentBuffer = 0;
+    if (_indexBuffer) ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_indexBuffer);
+    _memoryPoolNameBufferSize = 0;
+    if (_memoryPoolNameBuffer) { ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_memoryPoolNameBuffer); _memoryPoolNameBuffer = 0; }
+    _memoryPoolHandles = 0;
+    return g_resultSuccess;
+}
+
+/* Adds the info list as an object entry, when the file has infos. */
+igResult igIGBFile::writeProcessInfoList() {
+    igInfoList *infoList = _infoList;
+    if (infoList->_count > 0) {
+        _infoListPlace = addObject(infoList, 0, 0);
+        _hasInfo = 1;
+    }
+    return g_resultSuccess;
+}
+
+int igIGBFile::writeFile(const char *fileName)
+{
+    ((igRegistry *)g_objectSystem->configRegistry)->getValue(2, "forceWriteMemoryPoolInfoFromMetaState", _forceWriteMemoryPoolInfoFromMetaState, 0, 0);
+    if (writeOpen(fileName).failed()) return 0;
+    if (writeProcessInfoList().failed()) return 0;
+    bubbleSort((igRefMetaField *)igDirEntry::k_ref);
+    imf = igIntMetaField::getMetaField();
+    smf = igShortMetaField::getMetaField();
+    if (writeCreateMetaObjectList().failed()) return 0;
+    if (writeMakeProxies().failed()) return 0;
+    if (writeCreateMemoryPoolReferences().failed()) return 0;
+    if (writeComputeBufferSizes().failed()) return 0;
+    if (writeCreateMetaObjectBuffer().failed()) return 0;
+    if (writeCreateMetaFieldBuffer().failed()) return 0;
+    if (writeCreateMemoryAlignmentBuffer().failed()) return 0;
+    if (writeCreateExternalDirectoryBuffer().failed()) return 0;
+    if (_sharingState == 0) {
+        if (writeCreateAndFillEntryBuffer().failed()) return 0;
     } else {
-    igResult shareResult = igIGBFile_ShareEntries(self);
-    pp = (int *)((int)&shareResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult directoryResult = igIGBFile_BuildDirectoryBuffer((igIGBFile *)self);
-    pp = (int *)((int)&directoryResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult sharedBufferResult = igIGBFile_BuildIndexBuffer(self);
-    pp = (int *)((int)&sharedBufferResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
+        if (writeShareEntries().failed()) return 0;
+        if (writeCreateAndFillSharedEntryBuffer().failed()) return 0;
+        if (writeCreateAndFillEntryIndexBuffer().failed()) return 0;
     }
-    igResult objectBufferResult = igIGBFile_AllocateObjectBuffer(self);
-    pp = (int *)((int)&objectBufferResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult headerResult = igIGBFile_WriteHeader(self);
-    pp = (int *)((int)&headerResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult buffersResult = igIGBFile_WriteBuffers(self);
-    pp = (int *)((int)&buffersResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult closeResult = igIGBFile_CloseAfterWrite(self);
-    pp = (int *)((int)&closeResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    igResult freeResult = igIGBFile_FreeReadBuffers(self);
-    pp = (int *)((int)&freeResult + 0);
-    if (*pp == g_resultFailure.v) return 0;
-    if (self->_autoWriteFilePostProcessState == 1) { igResult concreteResult = self->EnsureConcrete(); }
-    return self->_count;
+    if (writeCreateAndFillObjectBuffer().failed()) return 0;
+    if (writeCreateAndWriteHeader().failed()) return 0;
+    if (writeWriteAllBuffers().failed()) return 0;
+    if (writeClose().failed()) return 0;
+    if (writeReleaseAllBuffers().failed()) return 0;
+    if (_autoWriteFilePostProcessState == 1) {
+        ensureConcrete();
+    }
+    return _count;
 }
 
-igResult igIGBFile_BeginRead(igIGBFileView *self, const char *fileName) {
-    igFileView *o;
-    int *pp;
-    if ((self->_file == 0) && (fileName == 0)) {
+igResult igIGBFile::readOpen(const char *fileName) {
+    if ((_file == 0) && (fileName == 0)) {
         return g_resultFailure;
     }
-    if (self->_file == 0) {
-        igResult r = igIGBFile_OpenFile(self, fileName, 4);
-        pp = (int *)((int)&r + 0);
-        if (*pp == g_resultFailure.v) {
+    if (_file == 0) {
+        if (open(fileName, igFile::kReadBinary).failed()) {
             if (fileName != 0) {
-                o = self->_file;
-                IG_OBJECT_RELEASE(o);
-                self->_file = 0;
+                _file = 0;
             }
             return g_resultFailure;
         }
-        self->_autoOpened = 1;
+        _autoOpened = 1;
     }
-    if (self->_file == 0) {
+    if (_file == 0) {
         return g_resultFailure;
     }
-    igIGBFile_SetDefaultName((int *)self);
-    ((Gap::Core::igFile *)((int)self->_file))->setOpenMode(Gap::Core::igFile::kReadBinary);
+    setDirectoryNameBasedOnFileName();
+    _file->setOpenMode(igFile::kReadBinary);
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ReadHeader(igIGBFileView *self) {
-    IgbFileHeader *h;
-    igObject *o;
-    igObject *t;
+/* Reads the 48-byte header, detecting a file written with the other byte order by its magic cookie. */
+igResult igIGBFile::readHeader() {
+    IgbFileHeader *header;
 
-    if (igIGBFile_GetSectionBuffer(self, 0xC0) == g_resultFailure) {
+    if (allocateReadChunkBuffer(0xC0) == g_resultFailure) {
         return g_resultFailure;
     }
-    h = (IgbFileHeader *)self->_chunk;
-    self->_file->Read(h, 4, 0xC);
-    o = (igObject *)Gap::Core::igIntMetaField::getMetaField();
-    igObject::ref(o);
-    t = (igObject *)self->imf;
-    IG_OBJECT_RELEASE(t);
-    self->imf = (igMetaFieldView *)o;
-    o = (igObject *)Gap::Core::igShortMetaField::getMetaField();
-    igObject::ref(o);
-    t = (igObject *)self->smf;
-    IG_OBJECT_RELEASE(t);
-    self->smf = (igMetaFieldView *)o;
-    if (h->magicCookie != self->_magicCookie) {
-        self->imf->SwapBytes(h, 0xC);
-        if (h->magicCookie == self->_magicCookie) {
-            self->_endianSwap = 1;
+    header = (IgbFileHeader *)_chunk;
+    _file->fread(header, 4, 12);
+    imf = igIntMetaField::getMetaField();
+    smf = igShortMetaField::getMetaField();
+    if (header->magicCookie != _magicCookie) {
+        imf->endianSwapMemory(header, 12);
+        if (header->magicCookie == _magicCookie) {
+            _endianSwap = 1;
         }
     } else {
-        self->_endianSwap = 0;
+        _endianSwap = 0;
     }
-    if (h->magicCookie != self->_magicCookie) {
+    if (header->magicCookie != _magicCookie) {
         return g_resultFailure;
     } else {
-        self->_magicVersion = (int)*(unsigned short *)&h->magicVersion;
-        if ((int)self->_magicVersion > 7) {
+        /* the version number is the version word's low half; its top bits are the file's flags */
+        _magicVersion = *(unsigned short *)&header->magicVersion;
+        if (_magicVersion > 7) {
             return g_resultFailure;
         } else {
-            self->_hasInfo = (h->magicVersion & 0x80000000) != 0;
-            self->_hasExternal = (h->magicVersion & 0x40000000) > 0;
-            self->_sharedEntries = (h->magicVersion & 0x20000000) > 0;
-            self->_hasVersion1Cruft = h->magicVersion == 1;
-            self->_hasMemoryPoolNames = (h->magicVersion & 0x10000000) > 0;
-            if (self->_hasVersion1Cruft != 0) {
-                self->_version1CruftMultiply = 1;
+            _hasInfo = (header->magicVersion & 0x80000000) != 0;
+            _hasExternal = (header->magicVersion & 0x40000000) > 0;
+            _sharedEntries = (header->magicVersion & 0x20000000) > 0;
+            _hasVersion1Cruft = header->magicVersion == 1;
+            _hasMemoryPoolNames = (header->magicVersion & 0x10000000) > 0;
+            if (_hasVersion1Cruft != 0) {
+                _version1CruftMultiply = 1;
             } else {
-                self->_version1CruftMultiply = 0;
+                _version1CruftMultiply = 0;
             }
-            self->_entryBufferSize = h->entryBufferSize;
-            self->_entryCount = h->entryCount;
-            self->_metaObjectBufferSize = h->metaObjectBufferSize;
-            self->_metaObjectCount = h->metaObjectCount;
-            self->_objectBufferSize = h->objectBufferSize;
-            self->_objectCount = h->objectCount;
-            self->_memoryRefBufferSize = h->memoryRefBufferSize;
-            self->_memoryRefCount = h->memoryRefCount;
-            self->_metaFieldBufferSize = h->metaFieldBufferSize;
-            self->_metaFieldCount = h->metaFieldCount;
+            _entryBufferSize = header->entryBufferSize;
+            _entryCount = header->entryCount;
+            _metaObjectBufferSize = header->metaObjectBufferSize;
+            _metaObjectCount = header->metaObjectCount;
+            _objectBufferSize = header->objectBufferSize;
+            _objectCount = header->objectCount;
+            _memoryRefBufferSize = header->memoryRefBufferSize;
+            _memoryRefCount = header->memoryRefCount;
+            _metaFieldBufferSize = header->metaFieldBufferSize;
+            _metaFieldCount = header->metaFieldCount;
             return g_resultSuccess;
         }
     }
 }
 
-igResult igIGBFile_ReadMetaObjectBuffer(igIGBFileView *self) {
+igResult igIGBFile::readMetaObjectBuffer() {
     bool readOk;
     int status;
 
-    if (igIGBFile_GetSectionBuffer(self, self->_metaObjectBufferSize) == g_resultFailure) {
+    if (allocateReadChunkBuffer(_metaObjectBufferSize) == g_resultFailure) {
         return g_resultFailure;
     }
-    self->_metaObjectBuffer = self->_chunk;
+    _metaObjectBuffer = _chunk;
     readOk = true;
-    if (self->_metaObjectBufferSize != 0) {
-        readOk = self->_file->Read(self->_metaObjectBuffer, self->_metaObjectBufferSize, 1) == 1;
+    if (_metaObjectBufferSize != 0) {
+        readOk = _file->fread(_metaObjectBuffer, _metaObjectBufferSize, 1) == 1;
     }
     status = g_resultSuccess.v;
-    if (!(int)readOk) {
+    if (!readOk) {
         status = g_resultFailure.v;
     }
     return igResult(status);
+}
+}
 }
 
 /* One persistent field of a metaobject in the file: the index of its type in the file's field
@@ -813,7 +726,10 @@ static inline void appendAlignedField(igMetaObject *meta, igMetaField *field) {
     igMetaObject_FinalizeAndAppendField(meta, field);
 }
 
-unsigned char g_igIGBFile_blindObjects;
+namespace Gap {
+namespace Core {
+
+unsigned char igIGBFile::gBlindObjectEnabled;
 
 /* Reads the file's metaobject table into _metaObjectListInFile. From version 4 each record also
  * lists the persistent fields its class had when the file was written, and the file's slot numbers
@@ -821,7 +737,7 @@ unsigned char g_igIGBFile_blindObjects;
  * each slot moved by the number of fields the class that declares it gained or lost since. A class
  * this program does not have fails the read, unless blind objects are on: then a stand-in class is
  * built from its parent and the listed fields, with one-byte fields filling the unlisted slots. */
-igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
+igResult igIGBFile::processMetaObjectList() {
     int i;
     int fieldWords;
     bool hasFields;
@@ -829,10 +745,10 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
     MetaTableRecord *record;
     char *name;
     int stride;
-    assignReference(file->_metaObjectListInFile, igSmartPointer<igObjectList>((igObjectList *)igMetaObjectList_Create((int)file->_temporaryMemoryPool)));
-    setCapacity((igTDataList<igObject *> *)file->_metaObjectListInFile, file->_metaObjectCount);
+    _metaObjectListInFile = igSmartPointer< ::igMetaObjectList>((::igMetaObjectList *)igMetaObjectList_Create((int)_temporaryMemoryPool.p));
+    ::setCapacity((::igTDataList< ::igObject *> *)_metaObjectListInFile.p, _metaObjectCount);
     igSmartPointer<igShortListData> slotShifts;
-    if (file->_magicVersion < 4) {
+    if (_magicVersion < 4) {
         stride = 3;
         fieldWords = 0;
         hasFields = false;
@@ -840,22 +756,22 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
         fieldWords = 3;
         hasFields = true;
         stride = 6;
-        assignReference(file->_metaFieldPerObjectIndices, igSmartPointer<igTDataList<igShortListData *> >(igShortListList_Create(file->_temporaryMemoryPool)));
-        setCapacity(file->_metaFieldPerObjectIndices, file->_metaObjectCount);
+        _metaFieldPerObjectIndices = igSmartPointer< ::igShortListList>((::igShortListList *)igShortListList_Create((igMemoryPoolView *)_temporaryMemoryPool.p));
+        ::setCapacity((::igTDataList<igShortListData *> *)_metaFieldPerObjectIndices.p, _metaObjectCount);
         {
-            igMemoryPoolView *pool = file->_temporaryMemoryPool;
+            igMemoryPoolView *pool = (igMemoryPoolView *)_temporaryMemoryPool.p;
             slotShifts.release();
             slotShifts.p = igShortList_Create(pool);
         }
-        setCapacity(slotShifts.p, file->_metaObjectCount);
+        ::setCapacity(slotShifts.p, _metaObjectCount);
     }
-    if (file->_endianSwap != 0) {
-        file->imf->SwapBytes(file->_metaObjectBuffer, stride * file->_metaObjectCount);
+    if (_endianSwap != 0) {
+        imf->endianSwapMemory(_metaObjectBuffer, stride * _metaObjectCount);
     }
-    records = (MetaTableRecord *)file->_metaObjectBuffer;
+    records = (MetaTableRecord *)_metaObjectBuffer;
     record = records;
-    name = (char *)((int *)record + stride * file->_metaObjectCount);
-    for (i = 0; i < file->_metaObjectCount; i++) {
+    name = (char *)((int *)record + stride * _metaObjectCount);
+    for (i = 0; i < _metaObjectCount; i++) {
         igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(name);
         if (meta != 0) {
             int majorVersion = record->majorVersion;
@@ -863,17 +779,17 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
                 majorVersion = 1;
             }
             if (majorVersion == meta->_majorVersion && record->minorVersion == meta->_minorVersion) {
-                ((Gap::Core::igObjectList *)file->_metaObjectListInFile)->append((Gap::Core::igObject *)meta);
+                ((igObjectList *)_metaObjectListInFile.p)->append((igObject *)meta);
                 if (hasFields) {
-                    igSmartPointer<igShortListData> slots(igShortList_Create(file->_temporaryMemoryPool));
+                    igSmartPointer<igShortListData> slots(igShortList_Create((igMemoryPoolView *)_temporaryMemoryPool.p));
                     MetaTableField *field;
                     int j;
-                    setCapacity(slots.p, record->fieldCount);
-                    ((Gap::Core::igObjectList *)file->_metaFieldPerObjectIndices)->append((Gap::Core::igObject *)slots.p);
+                    ::setCapacity(slots.p, record->fieldCount);
+                    ((igObjectList *)_metaFieldPerObjectIndices.p)->append((igObject *)slots.p);
                     field = (MetaTableField *)(name + record->nameSize);
                     j = 0;
-                    if (file->_endianSwap != 0) {
-                        Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
+                    if (_endianSwap != 0) {
+                        igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
                     }
                     for (; j < record->fieldCount; j++) {
                         /* The class that declares the slot: the nearest ancestor whose own slots reach it. */
@@ -898,10 +814,10 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             } else {
                 return g_resultFailure;
             }
-        } else if (hasFields && g_igIGBFile_blindObjects != 0) {
+        } else if (hasFields && gBlindObjectEnabled != 0) {
             int parentIndex = record->parentIndex;
             MetaTableRecord *parentRecord = (MetaTableRecord *)((int *)records + parentIndex * stride);
-            igMetaObject *parent = ((igMetaObject **)file->_metaObjectListInFile->_data)[parentIndex];
+            igMetaObject *parent = ((igMetaObject **)_metaObjectListInFile->_data)[parentIndex];
             int inherited;
             int target;
             int slot;
@@ -916,31 +832,31 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             blind = (igMetaObject *)igMetaObject_Create((igMemoryPoolView *)Memory_GetDefaultAllocator());
             igMetaObject_SetName(blind, (int)name);
             igMetaObject_InheritFromBase(blind, parent);
-            ((Gap::Core::igObjectList *)file->_metaObjectListInFile)->append((Gap::Core::igObject *)blind);
+            ((igObjectList *)_metaObjectListInFile.p)->append((igObject *)blind);
             field = (MetaTableField *)(name + record->nameSize);
-            if (file->_endianSwap != 0) {
-                Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
+            if (_endianSwap != 0) {
+                igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
             }
             for (j = 0; j < record->fieldCount; j++) {
-                igMetaField *created;
+                ::igMetaField *created;
                 if (field->slot < parentRecord->persistCount) {
                     field = (MetaTableField *)((short *)field + fieldWords);
                     continue;
                 }
                 target = field->slot + (*slotShifts.p)[parentIndex] - inherited;
                 while (slot < target) {
-                    created = (igMetaField *)igCharMetaField_Create((igMemoryPoolView *)file->_temporaryMemoryPool);
+                    created = (::igMetaField *)igCharMetaField_Create((igMemoryPoolView *)_temporaryMemoryPool.p);
                     created->_persistent = 0;
-                    ((Gap::Core::igMetaField *)created)->setBasicProperties("fakeField", 0, -1, blind);
+                    ((igMetaField *)created)->setBasicProperties("fakeField", 0, -1, blind);
                     created->_internalIndex = slot;
                     created->_size = 1;
                     appendAlignedField(blind, created);
                     slot++;
                     blind->_sizeofSize = fieldOffset(created) + fieldSize(created);
                 }
-                created = (igMetaField *)igMetaObject_CreateInstance(
-                    ((igObjectDispatchView **)file->_metaFieldListInFile->_data)[field->typeIndex]->GetMeta(), (igMemoryPoolView *)Memory_GetDefaultAllocator());
-                ((Gap::Core::igMetaField *)created)->setBasicProperties("Generated", 0, -1, blind);
+                created = (::igMetaField *)igMetaObject_CreateInstance(
+                    ((igObjectDispatchView **)_metaFieldListInFile->_data)[field->typeIndex]->GetMeta(), (igMemoryPoolView *)Memory_GetDefaultAllocator());
+                ((igMetaField *)created)->setBasicProperties("Generated", 0, -1, blind);
                 created->_internalIndex = target;
                 created->_size = field->size;
                 appendAlignedField(blind, created);
@@ -954,8 +870,8 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             igObjectSystem_RunRegistrationCallbacks((int *)g_objectSystem, (int)blind);
             field = (MetaTableField *)(name + record->nameSize);
             {
-                igSmartPointer<igShortListData> slots(igShortList_Create(file->_temporaryMemoryPool));
-                ((Gap::Core::igObjectList *)file->_metaFieldPerObjectIndices)->append((Gap::Core::igObject *)slots.p);
+                igSmartPointer<igShortListData> slots(igShortList_Create((igMemoryPoolView *)_temporaryMemoryPool.p));
+                ((igObjectList *)_metaFieldPerObjectIndices.p)->append((igObject *)slots.p);
                 for (j = 0; j < record->fieldCount; j++) {
                     int firstOwnSlot = record->persistCount;
                     int owner = i;
@@ -986,18 +902,19 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
         }
         record = (MetaTableRecord *)((int *)record + stride);
     }
-    file->_metaObjectBuffer = 0;
+    _metaObjectBuffer = 0;
     return g_resultSuccess;
 }
 
-igResult igIGBFile_SetupBasePath(igIGBFileView *self) {
+/* The directory the file is in: its name up to the last path separator, or empty. */
+igResult igIGBFile::setupFilePaths() {
     int n;
     char *p;
     char c;
-    self->_basePath = (char *)self->_temporaryMemoryPool->StrDup(self->_file->_fileName);
-    n = strlen(self->_basePath);
+    _basePath = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->StrDup(_file->_fileName.p);
+    n = strlen(_basePath);
     while (--n >= 0) {
-        p = self->_basePath + n;
+        p = _basePath + n;
         c = *p;
         if (c == 0x2F || c == 0x5C) {
             *p = 0;
@@ -1005,32 +922,35 @@ igResult igIGBFile_SetupBasePath(igIGBFileView *self) {
         }
     }
     if (n < 0) {
-        *self->_basePath = 0;
+        *_basePath = 0;
     }
     return g_resultSuccess;
 }
 
-void igIGBFile_RegisterBlindObjectsConfig(void) {
-    ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, (const char *)"blindObjects", g_igIGBFile_blindObjects, 0, 0);
+void igIGBFile::userRegister() {
+    ((igRegistry *)g_objectSystem->configRegistry)->getValue(2, "blindObjects", gBlindObjectEnabled, 0, 0);
 }
 
-igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {
-    int hi;
-    int a2;
-    hi = (self->_chunkSize - self->_chunkPlace) % self->_chunkSize;
-    if (hi > 0) {
-        memcpy(self->_chunk, self->_chunk + self->_chunkPlace, hi);
+/* Moves the chunk's unread bytes to its start and fills the rest from the file, as far as the section goes. */
+igResult igIGBFile::readNextObjectChunk() {
+    int remaining;
+    int size;
+    remaining = (_chunkSize - _chunkPlace) % _chunkSize;
+    if (remaining > 0) {
+        memcpy(_chunk, _chunk + _chunkPlace, remaining);
     }
-    a2 = self->_chunkSize - hi;
-    if (self->_bufferSize < hi + (self->_bufferPlace + a2)) {
-        a2 = (self->_bufferSize - self->_bufferPlace) - hi;
+    size = _chunkSize - remaining;
+    if (_bufferSize < remaining + (_bufferPlace + size)) {
+        size = (_bufferSize - _bufferPlace) - remaining;
     }
-    if (self->_file->Read(self->_chunk + hi, a2, 1) != 1) {
+    if (_file->fread(_chunk + remaining, size, 1) != 1) {
         return g_resultFailure;
     } else {
-        self->_chunkPlace = 0;
+        _chunkPlace = 0;
         return g_resultSuccess;
     }
+}
+}
 }
 
 static inline igObject *castToKind(igObject *object) {
@@ -1040,306 +960,272 @@ static inline igObject *castToKind(igObject *object) {
     return 0;
 }
 
-SectionObjectRef igIGBFile_ReadObject(igIGBFile *file) {
+namespace Gap {
+namespace Core {
+
+/* Creates the next entry of the object section and reads its fields, reading the next chunk when the record
+ * does not fit the one in memory. */
+igSmartPointer<igDirEntry> igIGBFile::readNextDirEntry() {
     int metaIndex;
     int *record;
-    int end = file->_chunk + file->_chunkPlace;
-    int position = file->_chunkPlace;
+    char *end = _chunk + _chunkPlace;
+    int position = _chunkPlace;
     int needed;
-    if (position > file->_chunkSize - 9 || (needed = file->_version1CruftMultiply * 4 + (file->_chunkPlace + igIGBFile_GetObjectSize(file, end)), file->_chunkSize < needed)) {
-        if (igIGBFile_ReadNextChunk((igIGBFileView *)file) == g_resultFailure) {
-            return SectionObjectRef((igDirEntryView *)0, kRetainReference);
+    if (position > _chunkSize - 9 || (needed = _version1CruftMultiply * 4 + (_chunkPlace + getReadSizeFromMemory(end)), _chunkSize < needed)) {
+        if (readNextObjectChunk() == g_resultFailure) {
+            return igSmartPointer<igDirEntry>((igDirEntry *)0, kRetainReference);
         }
     }
-    record = (int *)(file->_chunk + file->_chunkPlace);
+    record = (int *)(_chunk + _chunkPlace);
     metaIndex = *record;
-    if (file->_endianSwap != 0) {
-        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&metaIndex, 1);
+    if (_endianSwap != 0) {
+        igIntMetaField::getMetaField()->endianSwapMemory(&metaIndex, 1);
     }
-    igSmartPointer<igObject> object(castToKind((igObject *)igMetaObject_CreateInstanceWithPool(((igMetaObject **)((igObjectList *)file->_metaObjectListInFile)->_data)[metaIndex], (igMemoryPoolView *)file->_temporaryMemoryPool)), kRetainReference);
+    igSmartPointer< ::igObject> object(castToKind((::igObject *)igMetaObject_CreateInstanceWithPool(((igMetaObject **)_metaObjectListInFile->_data)[metaIndex], (igMemoryPoolView *)_temporaryMemoryPool.p)), kRetainReference);
     object->release();
     igObject_RegisterInstance((void **)object.p, 0);
     int read;
-    if (file->_magicVersion < 4) {
-        read = igObject_ReadFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, file, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+    if (_magicVersion < 4) {
+        read = igObject_ReadFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, this, (::igTDataList<igMetaObject *> *)_metaObjectListInFile.p, _endianSwap);
     } else {
-        read = igObject_ReadPersistentFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, (Gap::Core::igDirectory *)file, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+        read = igObject_ReadPersistentFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, this, (::igTDataList<igMetaObject *> *)_metaObjectListInFile.p, _endianSwap);
     }
-    file->_chunkPlace = file->_chunkPlace + read;
-    file->_bufferPlace = file->_bufferPlace + read;
-    file->_chunkPlace = file->_chunkPlace + file->_version1CruftMultiply * 4;
-    file->_bufferPlace = file->_bufferPlace + file->_version1CruftMultiply * 4;
+    _chunkPlace = _chunkPlace + read;
+    _bufferPlace = _bufferPlace + read;
+    _chunkPlace = _chunkPlace + _version1CruftMultiply * 4;
+    _bufferPlace = _bufferPlace + _version1CruftMultiply * 4;
     return object;
 }
 
-igResult igIGBFile_ReadObjectSection(igIGBFileView *file) {
-    int pool;
-    igObjectList *list;
+/* Reads the shared entries into a new _uniqueEntryList. */
+igResult igIGBFile::readReadSharedEntries() {
     int i;
-    file->_chunkPlace = file->_chunkSize;
-    file->_bufferPlace = 0;
-    file->_bufferSize = file->_entryBufferSize;
-    list = file->_uniqueEntryList;
-    pool = (int)file->_temporaryMemoryPool;
-    igObject::release(list);
-    file->_uniqueEntryList = (igObjectList *)Gap::Core::igDirectory::_instantiateFromPool((igMemoryPoolView *)pool);
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)file->_uniqueEntryList))->setCount(file->_entryCount);
-    if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
+    _chunkPlace = _chunkSize;
+    _bufferPlace = 0;
+    _bufferSize = _entryBufferSize;
+    {
+        igDirectory *previous = _uniqueEntryList;
+        igMemoryPoolView *pool = (igMemoryPoolView *)_temporaryMemoryPool.p;
+        igObject::release(previous);
+        _uniqueEntryList.p = igDirectory::_instantiateFromPool(pool);
+    }
+    _uniqueEntryList->setCount(_entryCount);
+    if (readNextObjectChunk() == g_resultFailure) {
         return g_resultFailure;
     }
-    for (i = 0; i < file->_entryCount; i++) {
-        SectionObjectRef object = igIGBFile_ReadObject((igIGBFile *)file);
-        if (object.p == 0) {
+    for (i = 0; i < _entryCount; i++) {
+        igSmartPointer<igDirEntry> entry = readNextDirEntry();
+        if (entry == 0) {
             return g_resultFailure;
         }
-        if (file->_useMemoryPoolAssignmentsState != 0 && file->_memoryPoolHandles != 0 && g_useOwnerAllocator == 0) {
-            int index = object->MemoryPoolIndex();
-            if (index > 0) {
-                object->SetMemoryPool(((int *)file->_memoryPoolHandles->_data)[index]);
+        if (_useMemoryPoolAssignmentsState != 0 && _memoryPoolHandles != 0 && g_useOwnerAllocator == 0) {
+            int handle = entry->getMemoryPoolHandle();
+            if (handle > 0) {
+                entry->setMemoryPoolHandle(_memoryPoolHandles->get(handle));
             }
         } else {
-            object->SetMemoryPool(-1);
+            entry->setMemoryPoolHandle(-1);
         }
-        igDirEntryView *entry = object.p;
-        list = file->_uniqueEntryList;
-        if (entry != 0) entry->_refCount = entry->_refCount + 1;
-        igObject *old = ((igObject **)list->_data)[i];
-        igObject::release(old);
-        if (list->_count != 0 && i >= 0 && i < list->_count) {
-            ((igDirEntryView **)list->_data)[i] = entry;
-        }
+        _uniqueEntryList->set(i, entry);
     }
-    if (file->_hasCriticalFailure != 0) {
+    if (_hasCriticalFailure != 0) {
         return g_resultFailure;
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ReadObjectIndex(igIGBFileView *self) {
+/* Reads the entry index table: each entry is the shared entry its index names. */
+igResult igIGBFile::readReadSharedIndexes() {
     int count = 0;
     int pos;
     int chunk;
     int words;
     int i;
     int base;
-    self->_file->Read(&self->_indexBufferSize, 4, 1);
-    self->_file->Read(&count, 4, 1);
-    if (self->_endianSwap != 0) {
-        self->imf->SwapBytes(&self->_indexBufferSize, 1);
-        self->imf->SwapBytes(&count, 1);
+    _file->fread(&_indexBufferSize, 4, 1);
+    _file->fread(&count, 4, 1);
+    if (_endianSwap != 0) {
+        imf->endianSwapMemory(&_indexBufferSize, 1);
+        imf->endianSwapMemory(&count, 1);
     }
-    if (igIGBFile_GetSectionBuffer(self, 0x1000) == g_resultFailure) {
+    if (allocateReadChunkBuffer(0x1000) == g_resultFailure) {
         return g_resultFailure;
     }
     pos = 8;
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self))->setCount(count);
-    for (; pos < self->_indexBufferSize; pos += chunk) {
-        int rest = self->_indexBufferSize - pos;
-        chunk = self->_chunkSize & ~1;
+    setCount(count);
+    for (; pos < _indexBufferSize; pos += chunk) {
+        int rest = _indexBufferSize - pos;
+        chunk = _chunkSize & ~1;
         if (chunk > rest) { chunk = rest; }
         words = chunk >> 1;
-        self->_file->Read(self->_chunk, chunk, 1);
-        if (self->_endianSwap != 0) { self->smf->SwapBytes(self->_chunk, words); }
+        _file->fread(_chunk, chunk, 1);
+        if (_endianSwap != 0) { smf->endianSwapMemory(_chunk, words); }
         base = (unsigned int)(pos - 8) >> 1;
         for (i = 0; i < words; i++) {
-            igDirEntryView *o = (igDirEntryView *)igDirectory_GetEntryAlias((int *)self->_uniqueEntryList, ((short *)self->_chunk)[i]);
-            int index;
-            igDirEntryView *old;
-            int n;
-            if (o != 0) { o->_refCount = o->_refCount + 1; }
-            index = i + base;
-            old = self->_data[index];
-            IG_OBJECT_RELEASE(old);
-            n = self->_count;
-            if (n != 0 && index >= 0 && n > index) { self->_data[index] = o; }
+            set(i + base, (igDirEntry *)igDirectory_GetEntryAlias((int *)_uniqueEntryList.p, ((short *)_chunk)[i]));
         }
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ReadFinished(igIGBFileView *self) {
+igResult igIGBFile::readProcessSharedDirectory() {
     int count;
-    int pool;
     int i;
-    igTDataList<int> *oldRefList;
-    igTDataList<int> *refList;
-    oldRefList = self->_refList;
-    count = self->_count;
-    pool = (int)self->_temporaryMemoryPool;
-    igObject::release(oldRefList);
-    self->_refList = (igTDataList<int> *)igPointerList_Create(pool);
-    refList = self->_refList;
-    if (count >= 0) {
-        if (count <= refList->_capacity) {
-            refList->_count = count;
-        } else {
-            ((Gap::Core::igDataList *)refList)->resizeAndSetCount(count, 4);
-        }
+    {
+        igPointerList *previous = _refList;
+        int pool;
+        count = _count;
+        pool = (int)_temporaryMemoryPool.p;
+        igObject::release(previous);
+        _refList.p = (igPointerList *)igPointerList_Create(pool);
     }
+    _refList->setCount(count);
     for (i = 0; i < count; i++) {
-        ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ReadFinished(self);
+        get(i)->readSetup(this);
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
-    int pool;
+/* Reads the entries in file order; a file with sharing on shares each with the ones before it as it goes. */
+igResult igIGBFile::readProcessDirectory() {
     int i;
-    file->_chunkPlace = file->_chunkSize;
-    file->_bufferPlace = 0;
-    file->_bufferSize = file->_entryBufferSize;
-    if (file->_sharingState != 0) {
-        igTDataList<int> *old = file->_refList;
-        pool = (int)file->_temporaryMemoryPool;
-        igObject::release((igObject *)old);
-        file->_refList = (igTDataList<int> *)igPointerList_Create(pool);
-        int count = file->_entryCount;
-        igTDataList<int> *indices = file->_refList;
-        if (count >= 0) {
-            if (count <= indices->_capacity) {
-                indices->_count = count;
-            } else {
-                ((Gap::Core::igDataList *)indices)->resizeAndSetCount(count, 4);
-            }
+    _chunkPlace = _chunkSize;
+    _bufferPlace = 0;
+    _bufferSize = _entryBufferSize;
+    if (_sharingState != 0) {
+        {
+            igPointerList *previous = _refList;
+            int pool = (int)_temporaryMemoryPool.p;
+            igObject::release(previous);
+            _refList.p = (igPointerList *)igPointerList_Create(pool);
         }
-        igObject *previous = file->_entryPool;
-        pool = (int)file->_temporaryMemoryPool;
-        igObject::release(previous);
-        file->_entryPool = (igObject *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool);
+        _refList->setCount(_entryCount);
+        {
+            igObjectList *previous = _entryPool;
+            igMemoryPoolView *pool = (igMemoryPoolView *)_temporaryMemoryPool.p;
+            igObject::release(previous);
+            _entryPool.p = igObjectList::_instantiateFromPool(pool);
+        }
     }
-    if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
+    if (readNextObjectChunk() == g_resultFailure) {
         return g_resultFailure;
     }
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)file))->setCount(file->_entryCount);
-    for (i = 0; i < file->_entryCount; i++) {
-        SectionObjectRef object = igIGBFile_ReadObject((igIGBFile *)file);
-        if (object.p == 0) {
+    setCount(_entryCount);
+    for (i = 0; i < _entryCount; i++) {
+        igSmartPointer<igDirEntry> entry = readNextDirEntry();
+        if (entry == 0) {
             return g_resultFailure;
         }
-        object->_index = i;
-        file->setEntry(i, object);
-        if (file->_useMemoryPoolAssignmentsState != 0 && file->_memoryPoolHandles != 0 && g_useOwnerAllocator == 0) {
-            int index = object->MemoryPoolIndex();
-            if (index > 0) {
-                object->SetMemoryPool(((int *)file->_memoryPoolHandles->_data)[index]);
+        entry->_index = i;
+        set(i, entry);
+        if (_useMemoryPoolAssignmentsState != 0 && _memoryPoolHandles != 0 && g_useOwnerAllocator == 0) {
+            int handle = entry->getMemoryPoolHandle();
+            if (handle > 0) {
+                entry->setMemoryPoolHandle(_memoryPoolHandles->get(handle));
             }
         } else {
-            object->SetMemoryPool(-1);
+            entry->setMemoryPoolHandle(-1);
         }
-        object->ReadFinished(file);
-        if (file->_sharingState != 0) {
-            int reference = object->_ref;
-            igTDataList<int> *indices = file->_refList;
-            if (indices->_count != 0 && i >= 0 && i < indices->_count) {
-                ((int *)indices->_data)[i] = reference;
-            }
-            object->SetReferenceIndex(object->_ref);
-            object->SetRef(0);
-            object->_index = i;
-            file->setEntryRaw(i, object->Resolve(file));
+        entry->readSetup(this);
+        if (_sharingState != 0) {
+            _refList->set(i, entry->getRef());
+            entry->refEntry(entry->getRef());
+            entry->setRef(0);
+            entry->_index = i;
+            set(i, entry->share(this));
         }
     }
-    if (file->_hasCriticalFailure != 0) {
+    if (_hasCriticalFailure != 0) {
         return g_resultFailure;
     }
     return g_resultSuccess;
 }
 
-int igIGBFile_GetCurrentPosition(igIGBFileView *self) {
-    if (self->_file->_openMode == 4) {
-        return (int)self->_chunk + self->_chunkPlace;
+const char *igIGBFile::getObjectBufferPlace() const
+{
+    if (_file->_openMode == igFile::kReadBinary) {
+        return _chunk + _chunkPlace;
     }
-    return self->_objectBufferPlace;
+    return _objectBufferPlace;
 }
 
-void igIGBFile_SetCurrentPosition(igIGBFileView *self, int at) {
-    if (self->_file->_openMode == 4) {
-        int prev = (int)self->_chunk + self->_chunkPlace;
-        self->_chunkPlace = at - (int)self->_chunk;
-        self->_bufferPlace = self->_bufferPlace + (at - prev);
-        if (self->_bufferPlace != self->_bufferSize) {
-            if (self->_chunkPlace > self->_chunkSize - 9) {
-                igIGBFile_ReadNextChunk(self);
+void igIGBFile::setObjectBufferPlace(char *objectBufferPlaceParam)
+{
+    if (_file->_openMode == igFile::kReadBinary) {
+        char *previous = _chunk + _chunkPlace;
+        _chunkPlace = objectBufferPlaceParam - _chunk;
+        _bufferPlace = _bufferPlace + (objectBufferPlaceParam - previous);
+        if (_bufferPlace != _bufferSize) {
+            if (_chunkPlace > _chunkSize - 9) {
+                readNextObjectChunk();
                 return;
             }
-            if (self->_chunkPlace + (self->_version1CruftMultiply * 4 + igIGBFile_GetObjectSize(self, at)) > self->_chunkSize) {
-                igIGBFile_ReadNextChunk(self);
+            if (_chunkPlace + (_version1CruftMultiply * 4 + getReadSizeFromMemory((void *)objectBufferPlaceParam)) > _chunkSize) {
+                readNextObjectChunk();
             }
         }
     } else {
-        self->_objectBufferPlace = at;
+        _objectBufferPlace = objectBufferPlaceParam;
     }
 }
 
-igResult igIGBFile_FreeBasePath(igIGBFileView *self) {
-    self->_temporaryMemoryPool->Free(self->_basePath);
-    self->_basePath = 0;
+igResult igIGBFile::freeFilePaths() {
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_basePath);
+    _basePath = 0;
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
-    Gap::Core::__internalObjectList *table;
+/* Maps the file's metafield types, by name, to this program's registered ones (0 for a type it lacks). */
+igResult igIGBFile::readMetaFieldList() {
+    __internalObjectList *table;
     int count;
     int *sizes;
     char *name;
     int i;
-    if (igIGBFile_GetSectionBuffer(self, self->_metaFieldBufferSize) == g_resultFailure) {
+    if (allocateReadChunkBuffer(_metaFieldBufferSize) == g_resultFailure) {
         return g_resultFailure;
     }
-    self->_mfBuf = self->_chunk;
-    self->_file->Read(self->_mfBuf, self->_metaFieldBufferSize, 1);
-    table = Gap::Core::igMetaField::getMetaFieldTypes();
+    _mfBuf = _chunk;
+    _file->fread(_mfBuf, _metaFieldBufferSize, 1);
+    table = igMetaField::getMetaFieldTypes();
     count = table->_count;
-    sizes = (int *)self->_mfBuf;
-    name = (char *)sizes + self->_metaFieldCount * 12;
-    if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, self->_metaFieldCount * 3); }
-    {
-        igObjectList *v = ((igObjectList *)igMetaFieldList_Create((int)self->_temporaryMemoryPool));
-        igObjectList *old;
-        igObject::ref(v);
-        old = self->_metaFieldListInFile;
-        IG_OBJECT_RELEASE(old);
-        self->_metaFieldListInFile = v;
-    }
-    {
-        igObjectList *l = self->_metaFieldListInFile;
-        int want = self->_metaFieldCount;
-        if (want >= l->_count) { ((Gap::Core::igDataList *)l)->setCapacity(want, 4); }
-    }
-    for (i = 0; i < self->_metaFieldCount; i++) {
+    sizes = (int *)_mfBuf;
+    name = (char *)sizes + _metaFieldCount * 12;
+    if (_endianSwap != 0) { imf->endianSwapMemory(sizes, _metaFieldCount * 3); }
+    _metaFieldListInFile = (::igMetaFieldList *)igMetaFieldList_Create((int)_temporaryMemoryPool.p);
+    ::setCapacity((::igTDataList< ::igObject *> *)_metaFieldListInFile.p, _metaFieldCount);
+    for (i = 0; i < _metaFieldCount; i++) {
         bool found = false;
-        igObjectDispatchView *t = 0;
+        igObjectDispatchView *type = 0;
         int j;
         for (j = 0; j < count; j++) {
-            t = registeredMetaField(table, j);
-            if (strcmp((const char *)t->GetMeta()->_name, name) == 0) { found = true; break; }
+            type = registeredMetaField(table, j);
+            if (strcmp((const char *)type->GetMeta()->_name, name) == 0) { found = true; break; }
         }
-        if (!found) { t = 0; } else { t->GetMeta(); }
-        ((Gap::Core::igObjectList *)self->_metaFieldListInFile)->append((Gap::Core::igObject *)t);
+        if (!found) { type = 0; } else { type->GetMeta(); }
+        ((igObjectList *)_metaFieldListInFile.p)->append((igObject *)type);
         name += sizes[i * 3];
     }
-    self->_mfBuf = 0;
+    _mfBuf = 0;
     return g_resultSuccess;
+}
+}
 }
 
 static inline void releasePool(igObject *object) {
     igObject::release(object);
 }
 
-void Gap__Core__igIGBFile__resetFields(igIGBFileView *self) {
-    igObject *s0;
-    s0 = ((igObject *)Memory_GetDefaultAllocator());
-    if (s0) s0->_refCount++;
-    releasePool((igObject *)self->_temporaryMemoryPool);
-    self->_temporaryMemoryPool = (igMemoryPoolView *)s0;
-    s0 = ((igObject *)Memory_GetDefaultAllocator());
-    if (s0) s0->_refCount++;
-    releasePool((igObject *)self->_dataMemoryPool);
-    self->_dataMemoryPool = (igMemoryPoolView *)s0;
-    s0 = ((igObject *)Memory_GetDefaultAllocator());
-    if (s0) s0->_refCount++;
-    releasePool((igObject *)self->_objectMemoryPool);
-    self->_objectMemoryPool = (igMemoryPoolView *)s0;
+namespace Gap {
+namespace Core {
+
+void igIGBFile::resetFields(int flag)
+{
+    setTemporaryMemoryPool((::igMemoryPool *)Memory_GetDefaultAllocator());
+    setDataMemoryPool((::igMemoryPool *)Memory_GetDefaultAllocator());
+    setObjectMemoryPool((::igMemoryPool *)Memory_GetDefaultAllocator());
+}
+}
 }
 
 static inline void addType(igTDataList<int> *l, int v) {
@@ -1349,35 +1235,35 @@ static inline void addType(igTDataList<int> *l, int v) {
     l->_data[idx] = v;
 }
 
-igResult igIGBFile_ReadAlignmentTable(igIGBFileView *self) {
-    IgbSectionHeader hdr;
+namespace Gap {
+namespace Core {
+
+/* Maps the file's alignment names to the global resource's alignments (16 for a name it lacks). */
+igResult igIGBFile::readAlignmentList() {
+    IgbSectionHeader header;
     int *sizes;
     char *name;
     int value;
     int nameCount;
     int i;
-    if (self->_file->Read(&hdr, 12, 1) != 1) { return g_resultFailure; }
-    if (self->_endianSwap != 0) { self->imf->SwapBytes(&hdr, 3); }
-    self->_alignmentBufferSize = hdr.size - 12;
-    self->_alignmentCount = hdr.count;
-    if (self->_alignmentCount <= 0) { return g_resultSuccess; }
-    self->_alignmentBuffer = (int *)self->_chunk;
-    if (self->_file->Read(self->_alignmentBuffer, self->_alignmentBufferSize, 1) != 1) { return g_resultFailure; }
-    sizes = self->_alignmentBuffer;
-    if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, self->_alignmentCount); }
-    name = (char *)sizes + self->_alignmentCount * 4;
+    if (_file->fread(&header, 12, 1) != 1) { return g_resultFailure; }
+    if (_endianSwap != 0) { imf->endianSwapMemory(&header, 3); }
+    _alignmentBufferSize = header.size - 12;
+    _alignmentCount = header.count;
+    if (_alignmentCount <= 0) { return g_resultSuccess; }
+    _alignmentBuffer = _chunk;
+    if (_file->fread(_alignmentBuffer, _alignmentBufferSize, 1) != 1) { return g_resultFailure; }
+    sizes = (int *)_alignmentBuffer;
+    if (_endianSwap != 0) { imf->endianSwapMemory(sizes, _alignmentCount); }
+    name = (char *)sizes + _alignmentCount * 4;
     {
-    igSmartPointer<igTDataList<igStringObj *> > names((igTDataList<igStringObj *> *)g_globalContext->_alignmentStrings.p, kRetainReference);
-    igSmartPointer<igTDataList<int> > values((igTDataList<int> *)g_globalContext->_alignmentValues.p, kRetainReference);
+    igSmartPointer< ::igTDataList< ::igStringObj *> > names((::igTDataList< ::igStringObj *> *)g_globalContext->_alignmentStrings.p, kRetainReference);
+    igSmartPointer< ::igTDataList<int> > values((::igTDataList<int> *)g_globalContext->_alignmentValues.p, kRetainReference);
     nameCount = 0;
     if (names.p != 0) { nameCount = names.p->_count; }
-    assignReference(self->_alignmentListInFile, igSmartPointer<igTDataList<int> >((igTDataList<int> *)igIntList_Create((int)self->_temporaryMemoryPool)));
-    {
-        igTDataList<int> *l = (igTDataList<int> *)self->_alignmentListInFile;
-        int want = self->_alignmentCount;
-        if (want >= l->_count) { ((Gap::Core::igDataList *)l)->setCapacity(want, 4); }
-    }
-    for (i = 0; i < self->_alignmentCount; i++) {
+    _alignmentListInFile = igSmartPointer<igIntList>((igIntList *)igIntList_Create((int)_temporaryMemoryPool.p));
+    ::setCapacity((::igTDataList<int> *)_alignmentListInFile.p, _alignmentCount);
+    for (i = 0; i < _alignmentCount; i++) {
         bool found = false;
         value = 16;
         int j;
@@ -1387,137 +1273,128 @@ igResult igIGBFile_ReadAlignmentTable(igIGBFileView *self) {
             if (strcmp(n, name) == 0) { found = true; break; }
         }
         if (found) { value = values.p->_data[j]; }
-        addType((igTDataList<int> *)self->_alignmentListInFile, value);
+        addType((::igTDataList<int> *)_alignmentListInFile.p, value);
         name += sizes[i];
     }
-    self->_alignmentBuffer = 0;
+    _alignmentBuffer = 0;
     return g_resultSuccess;
     }
 }
 
-igResult igIGBFile_ReadObjects(igIGBFileView *self) {
+/* Reads the object section: each object entry creates its object, then reads its fields. */
+igResult igIGBFile::readProcessObjectEntries() {
     int n;
     int i;
 
-    self->_objectBufferPlace = (int)self->_objBuf;
-    self->_chunkPlace = self->_chunkSize;
-    self->_bufferPlace = 0;
-    self->_bufferSize = self->_objectBufferSize;
-    if (igIGBFile_ReadNextChunk(self) == g_resultFailure) {
+    _objectBufferPlace = _objBuf;
+    _chunkPlace = _chunkSize;
+    _bufferPlace = 0;
+    _bufferSize = _objectBufferSize;
+    if (readNextObjectChunk() == g_resultFailure) {
         return g_resultFailure;
     }
-    n = self->_count;
+    n = _count;
     for (i = 0; i < n; i++) {
-        if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
-            ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveEntry(self);
+        if (getNonShared(i)->isOfType(igObjectDirEntry::getClassMeta()) != 0) {
+            get(i)->readPreRead(this);
         }
     }
-    if (self->_magicVersion < 4) {
+    if (_magicVersion < 4) {
         for (i = 0; i < n; i++) {
-            if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
-                ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveRefOld(self);
+            if (getNonShared(i)->isOfType(igObjectDirEntry::getClassMeta()) != 0) {
+                get(i)->readReadVersion3(this);
             }
         }
     } else {
         for (i = 0; i < n; i++) {
-            if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
-                igSmartPointer<igDirEntryView> e((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i), kRetainReference);
-                e.p->ResolveRef(self);
+            if (getNonShared(i)->isOfType(igObjectDirEntry::getClassMeta()) != 0) {
+                igSmartPointer<igDirEntry> entry(get(i), kRetainReference);
+                entry->readRead(this);
             }
         }
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_ReadMemoryRefs(igIGBFileView *self) {
+/* The same passes over the other entries, which read the memory blocks. */
+igResult igIGBFile::readProcessAllOtherEntries() {
     int i;
-    for (i = 0; i < self->_count; i++) {
-        if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
-            ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveEntry(self);
+    for (i = 0; i < _count; i++) {
+        if (((getNonShared(i)->isOfType(igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
+            get(i)->readPreRead(this);
         }
     }
-    if (self->_magicVersion < 4) {
-        for (i = 0; i < self->_count; i++) {
-            if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
-                ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveRefOld(self);
+    if (_magicVersion < 4) {
+        for (i = 0; i < _count; i++) {
+            if (((getNonShared(i)->isOfType(igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
+                get(i)->readReadVersion3(this);
             }
         }
     } else {
-        for (i = 0; i < self->_count; i++) {
-            if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
-                ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveRef(self);
+        for (i = 0; i < _count; i++) {
+            if (((getNonShared(i)->isOfType(igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
+                get(i)->readRead(this);
             }
         }
     }
     return g_resultSuccess;
 }
 
-void igIGBFile_CloseAfterRead(igIGBFileView *self) {
-    if (self->_autoOpened > 0) {
-        igIGBFile_CloseFile(self);
+void igIGBFile::readClose() {
+    if (_autoOpened > 0) {
+        close();
     }
 }
 
-void igIGBFile_CleanUpReadState(igIGBFileView *a) {
-    RELEASE_REF(a->_metaFieldListInFile);
-    RELEASE_REF(a->_metaFieldListInFile);
-    a->_metaFieldListInFile = 0;
-    RELEASE_REF(a->_metaObjectListInFile);
-    a->_metaObjectListInFile = 0;
-    RELEASE_REF(a->_metaFieldPerObjectIndices);
-    a->_metaFieldPerObjectIndices = 0;
-    a->_metaObjectBuffer = 0;
-    a->_dirBuf = 0;
-    a->_mfBuf = 0;
-    a->_objBuf = 0;
-    RELEASE_REF(a->_entryPool);
-    a->_entryPool = 0;
-    a->_indexBuffer = 0;
-    RELEASE_REF(a->_uniqueEntryList);
-    a->_uniqueEntryList = 0;
-    a->_temporaryMemoryPool->Free(a->_chunk);
-    a->_chunk = 0;
-    a->_memoryPoolNameBufferSize = 0;
-    int *t = a->_memoryPoolNameBuffer;
-    if (t != 0) {
-        a->_temporaryMemoryPool->Free(t);
-        a->_memoryPoolNameBuffer = 0;
+void igIGBFile::releaseAllBuffers() {
+    _metaFieldListInFile.release();
+    _metaFieldListInFile = 0;
+    _metaObjectListInFile = 0;
+    _metaFieldPerObjectIndices = 0;
+    _metaObjectBuffer = 0;
+    _dirBuf = 0;
+    _mfBuf = 0;
+    _objBuf = 0;
+    _entryPool = 0;
+    _indexBuffer = 0;
+    _uniqueEntryList = 0;
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_chunk);
+    _chunk = 0;
+    _memoryPoolNameBufferSize = 0;
+    char *poolNames = _memoryPoolNameBuffer;
+    if (poolNames != 0) {
+        ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(poolNames);
+        _memoryPoolNameBuffer = 0;
     }
-    RELEASE_REF(a->_memoryPoolHandles);
-    a->_memoryPoolHandles = 0;
+    _memoryPoolHandles = 0;
 }
 
-void Gap__Core__igIGBFile__destructFields(igIGBFileView *self) {
-    if (self->_refList != 0) {
-        for (int i = 0, count = self->_refList->_count; i < count; i++) {
-            self->_data[i]->ReleaseSharedRef(((int *)self->_refList->_data)[i]);
+void igIGBFile::destructFields()
+{
+    if (_refList != 0) {
+        for (int i = 0, count = _refList->getCount(); i < count; i++) {
+            getNonShared(i)->releaseEntry(_refList->get(i));
         }
-        RELEASE_REF(self->_refList);
-        self->_refList = 0;
+        _refList = 0;
     }
-    RELEASE_REF(self->_refList);
-    self->_refList = 0;
-    Gap__Core__igObject__destructFields((igObject *)self);
+    _refList = 0;
+    igObject::destructFields();
 }
 
-igResult igIGBFile_ReadInfoList(igIGBFileView *self) {
-    igObject *infoList;
-    igObject *t;
-
-    if (self->_hasInfo != 0) {
-        if (self->_file->Read((char *)self + g_igIGBFile_infoListPlaceField->_offset, 4, 1) != 1) {
+/* Reads the info list's entry index and takes the list from that entry. */
+igResult igIGBFile::readInfoIndex() {
+    if (_hasInfo != 0) {
+        if (_file->fread((char *)this + k_infoListPlace->_offset, 4, 1) != 1) {
             return g_resultFailure;
         }
-        if (self->_endianSwap != 0) {
-            self->imf->SwapBytes((char *)self + g_igIGBFile_infoListPlaceField->_offset, 1);
+        if (_endianSwap != 0) {
+            imf->endianSwapMemory((char *)this + k_infoListPlace->_offset, 1);
         }
-        infoList = (igObject *)((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(self->_infoListPlace))->_ref;
-        igObject::ref(infoList);
-        t = (igObject *)self->_infoList;
-        IG_OBJECT_RELEASE(t);
-        self->_infoList = (igTDataList<igInfo *> *)infoList;
+        _infoList = (igInfoList *)get(_infoListPlace)->getRef();
     }
     return g_resultSuccess;
+}
+}
 }
 
 static inline void *stringPool() {
@@ -1541,41 +1418,48 @@ static inline void setPooled(char **dst, char *src) {
     *dst = v;
 }
 
-igResult igIGBFile_ReadExternalDirectories(igIGBFileView *self) {
-    if (self->_hasExternal != 0) {
-        IgbSectionHeader hdr;
+namespace Gap {
+namespace Core {
+
+/* Loads each external directory through the managing resource, with the resource's relative path set to
+ * this file's directory meanwhile. */
+igResult igIGBFile::readAndResolveExternalDirectories() {
+    if (_hasExternal != 0) {
+        IgbSectionHeader header;
         int count;
         int *sizes;
         char *name;
         int i;
-        Gap::Core::igResource *dir;
-        if (self->_file->Read(&hdr, 12, 1) != 1) { return g_resultFailure; }
-        if (self->_endianSwap != 0) { self->imf->SwapBytes(&hdr, 3); }
-        self->_externalDirectoryBufferSize = hdr.size - 12;
-        count = hdr.count;
-        self->_externalDirectoryBuffer = (int *)self->_temporaryMemoryPool->AllocateAligned(self->_externalDirectoryBufferSize, 16);
-        if (self->_file->Read(self->_externalDirectoryBuffer, self->_externalDirectoryBufferSize, 1) != 1) { return g_resultFailure; }
-        sizes = self->_externalDirectoryBuffer;
-        if (self->_endianSwap != 0) { self->imf->SwapBytes(sizes, count); }
+        igResource *resource;
+        if (_file->fread(&header, 12, 1) != 1) { return g_resultFailure; }
+        if (_endianSwap != 0) { imf->endianSwapMemory(&header, 3); }
+        _externalDirectoryBufferSize = header.size - 12;
+        count = header.count;
+        _externalDirectoryBuffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_externalDirectoryBufferSize, 16);
+        if (_file->fread(_externalDirectoryBuffer, _externalDirectoryBufferSize, 1) != 1) { return g_resultFailure; }
+        sizes = (int *)_externalDirectoryBuffer;
+        if (_endianSwap != 0) { imf->endianSwapMemory(sizes, count); }
         name = (char *)sizes + count * 4;
-        if (self->_managingResource == 0) { self->_managingResource = Gap::Core::igResource::getGlobalResource(); }
-        if (self->_managingResource != 0) {
-            setPooled(&self->_previousResourceFilePath, (char *)self->_managingResource->_relativeFilePath.p);
-            { char *n; n = self->_basePath; dir = self->_managingResource; setPooled((char **)&dir->_relativeFilePath, n); }
+        if (_managingResource == 0) { _managingResource = igResource::getGlobalResource(); }
+        if (_managingResource != 0) {
+            _previousResourceFilePath = _managingResource->_relativeFilePath.p;
+            _managingResource->setRelativeFilePath(_basePath);
         }
         for (i = 0; i < count; i++) {
-            ((Gap::Core::igObjectList *)self->_externalDirectoryList)->append((Gap::Core::igObject *)(((int)self->_managingResource->loadSynchronous((char const *)name))));
+            _externalDirectoryList->append(_managingResource->loadSynchronous(name));
             name += sizes[i];
         }
-        self->_temporaryMemoryPool->Free(self->_externalDirectoryBuffer);
-        self->_externalDirectoryBuffer = 0;
-        dir = self->_managingResource;
-        if (dir != 0) {
-            setPooled((char **)&dir->_relativeFilePath, self->_previousResourceFilePath);
-            setPooled(&self->_previousResourceFilePath, 0);
+        ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_externalDirectoryBuffer);
+        _externalDirectoryBuffer = 0;
+        resource = _managingResource;
+        if (resource != 0) {
+            resource->setRelativeFilePath(_previousResourceFilePath.p);
+            _previousResourceFilePath = (const char *)0;
         }
     }
     return g_resultSuccess;
+}
+}
 }
 
 static inline void addName(igTDataList<int> *l, const int &v) {
@@ -1586,227 +1470,252 @@ static inline void addName(igTDataList<int> *l, const int &v) {
 
 int g_igIGBFile_memoryPoolHandleFill = -1;
 
-igResult igIGBFile_ReadMemoryPoolNames(igIGBFileView *self) {
-    NameHeader hdr;
-    char *buf;
+namespace Gap {
+namespace Core {
+
+/* Maps the file's memory pool names to this program's pools; the pools the file does not name keep the
+ * default handle. */
+igResult igIGBFile::readMemoryPoolNames() {
+    NameHeader header;
+    char *buffer;
     char *name;
     int i;
-    if (self->_file->Read(&hdr, 8, 1) != 1) { return g_resultFailure; }
-    if (self->_endianSwap != 0) { self->imf->SwapBytes(&hdr, 2); }
-    buf = (char *)self->_temporaryMemoryPool->Allocate(hdr.size);
-    if (buf == 0) { return g_resultFailure; }
-    if (self->_file->Read(buf, hdr.size - 8, 1) != 1) { self->_temporaryMemoryPool->Free(buf); return g_resultFailure; }
-    if (self->_memoryPoolHandles != 0) {
-        self->_memoryPoolHandles->_count = 0;
+    if (_file->fread(&header, 8, 1) != 1) { return g_resultFailure; }
+    if (_endianSwap != 0) { imf->endianSwapMemory(&header, 2); }
+    buffer = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->Allocate(header.size);
+    if (buffer == 0) { return g_resultFailure; }
+    if (_file->fread(buffer, header.size - 8, 1) != 1) { ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(buffer); return g_resultFailure; }
+    if (_memoryPoolHandles != 0) {
+        _memoryPoolHandles->_count = 0;
     } else {
-        igIntList *old = self->_memoryPoolHandles;
-        igMemoryPoolView *pool = self->_temporaryMemoryPool;
-        IG_OBJECT_RELEASE(old);
-        self->_memoryPoolHandles = (igIntList *)igIntList_Create((int)pool);
+        igIntList *previous = _memoryPoolHandles;
+        igMemoryPoolView *pool = (igMemoryPoolView *)_temporaryMemoryPool.p;
+        igObject::release(previous);
+        _memoryPoolHandles.p = (igIntList *)igIntList_Create((int)pool);
     }
-    name = buf;
+    name = buffer;
     i = 0;
-    while (hdr.count-- > 0) {
-        addName((igTDataList<int> *)self->_memoryPoolHandles, igMemoryPoolContextInfo_GetMemoryPoolHandle((int)name));
-        { int len = strlen(name) + 1; i++; name += len; }
+    while (header.count-- > 0) {
+        addName((::igTDataList<int> *)_memoryPoolHandles.p, igMemoryPoolContextInfo_GetMemoryPoolHandle((int)name));
+        { int length = strlen(name) + 1; i++; name += length; }
     }
     for (; i < 46; i++) {
-        int idx; igTDataList<int> *l; l = (igTDataList<int> *)self->_memoryPoolHandles; idx = l->_count;
-        if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(idx + 1, 4); }
-        l->_data[idx] = g_igIGBFile_memoryPoolHandleFill;
+        /* matching construct: declaration-order search — the count declared before the list keeps retail's registers */
+        int count;
+        ::igTDataList<int> *handles;
+        handles = (::igTDataList<int> *)_memoryPoolHandles.p;
+        count = handles->_count;
+        if (handles->_capacity > count) { handles->_count = handles->getCount() + 1; } else { ((igDataList *)handles)->resizeAndSetCount(count + 1, 4); }
+        handles->_data[count] = g_igIGBFile_memoryPoolHandleFill;
     }
-    self->_temporaryMemoryPool->Free(buf);
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(buffer);
     return g_resultSuccess;
 }
 
-int igIGBFile_AbortRead(igIGBFileView *self) {
-    igIGBFile_CleanUpReadState(self);
-    self->_loadPendingState = 0;
-    self->_validState = 0;
-    igIGBFile_CloseAfterRead(self);
+int igIGBFile::readErrorCleanup() {
+    releaseAllBuffers();
+    _loadPendingState = 0;
+    _validState = 0;
+    readClose();
     return -1;
 }
 
-igResult igIGBFile_MakeConcrete(igIGBFileView *self) {
+/* Registers the entries' objects, making them concrete the first time. */
+igResult igIGBFile::readFinishConstruction() {
     int i;
     int n;
-    int flag;
-    igDirEntryView *e;
+    bool makeConcrete;
     i = 0;
-    n = self->_count;
-    flag = !self->_concreteState;
+    n = _count;
+    makeConcrete = !_concreteState;
     while (i < n) {
-        e = (igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i);
-        e->RegisterRef(flag);
+        get(i)->readFinishConstruction(makeConcrete);
         i += 1;
     }
-    if (flag != 0) {
-        self->_concreteState = 1;
+    if (makeConcrete) {
+        _concreteState = 1;
     }
     return g_resultSuccess;
 }
 
-igResult igIGBFile_PostProcessEntries(igIGBFileView *self) {
+igResult igIGBFile::postReadEntryProcessing() {
     int i;
-    void **entry;
-    for (i = 0; i < self->_count; i++) {
-        entry = (void **)(((Gap::Core::igDirectory *)self)->get(i));
-        ((igDirEntryView *)(entry))->PostProcess(self);
+    for (i = 0; i < _count; i++) {
+        get(i)->readPostRead(this);
     }
     return g_resultSuccess;
+}
+}
 }
 
 unsigned char g_igIGBFile_oldVersionErrorSuppressed;
 unsigned char g_igIGBFile_loadTimeReportSuppressed;
 char g_igIGBFile_readFileLabel[256];
 
-int igIGBFile_ReadFile(igIGBFileView *self, const char *path) {
-  double startTime;
-  sprintf(g_igIGBFile_readFileLabel,"readFile(%s)", path);
-  startTime = g_igIGBFile_loadTimer->GetElapsedSeconds();
-  self->_validState = 0;
-  self->_loadPendingState = 1;
-  self->_concreteState = 0;
-  if (igIGBFile_BeginRead(self, path).failed()) return igIGBFile_AbortRead(self);
-  if (igIGBFile_ReadHeader(self).failed()) return igIGBFile_AbortRead(self);
-  if (self->_magicVersion < 5 && self->_hasExternal) {
-    if (!g_igIGBFile_oldVersionErrorSuppressed) {
-      int answer = igReportError("igIGBFile::readFile(%s) - unable to read this oldversion of igb file format with external references.Run igbUpdate %s on this file (or re-export) to fix.", self->_file->_fileName, self->_file->_fileName);
-      if (answer != 1 && answer == 2) g_igIGBFile_oldVersionErrorSuppressed = 1;
-    }
-    return igIGBFile_AbortRead(self);
-  }
-  if (self->_magicVersion >= 3) {
-    if (igIGBFile_ReadMetaFieldList(self).failed()) return igIGBFile_AbortRead(self);
-    if (igIGBFile_ReadAlignmentTable(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (igIGBFile_ReadMetaObjectBuffer(self).failed()) return igIGBFile_AbortRead(self);
-  if (igIGBFile_ReadMetaObjectList(self).failed()) return igIGBFile_AbortRead(self);
-  if (igIGBFile_SetupBasePath(self).failed()) return igIGBFile_AbortRead(self);
-  if (self->_magicVersion >= 5) {
-    if (igIGBFile_ReadExternalDirectories(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (self->_hasMemoryPoolNames) {
-    if (igIGBFile_ReadMemoryPoolNames(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (self->_sharedEntries) {
-    if (igIGBFile_ReadObjectSection(self).failed()) return igIGBFile_AbortRead(self);
-    if (igIGBFile_ReadObjectIndex(self).failed()) return igIGBFile_AbortRead(self);
-    if (igIGBFile_ReadFinished(self).failed()) return igIGBFile_AbortRead(self);
-  } else {
-    if (igIGBFile_ReadObjectSectionOld(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (self->_magicVersion >= 5) {
-    if (igIGBFile_ReadInfoList(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (igIGBFile_ReadObjects(self).failed()) return igIGBFile_AbortRead(self);
-  if (self->ReadMemoryEntries().failed()) return igIGBFile_AbortRead(self);
-  if (self->_magicVersion < 3) {
-    if (igIGBFile_ReadMetaFieldList(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (self->_magicVersion < 5) {
-    if (igIGBFile_ReadInfoList(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (self->_magicVersion < 5) {
-    if (igIGBFile_ReadExternalDirectories(self).failed()) return igIGBFile_AbortRead(self);
-  }
-  if (igIGBFile_ReadMemoryRefs(self).failed()) return igIGBFile_AbortRead(self);
-  if (igIGBFile_FreeBasePath(self).failed()) return igIGBFile_AbortRead(self);
-  igIGBFile_MakeConcrete(self);
-  if (self->_autoReadFilePostProcessState == 1) {
-    if (self->ReadFilePostProcess().failed()) return igIGBFile_AbortRead(self);
-  }
-  igIGBFile_CloseAfterRead(self);
-  igIGBFile_CleanUpReadState(self);
-  self->_validState = 1;
-  self->_loadPendingState = 0;
-  if (!g_igIGBFile_loadTimeReportSuppressed) {
-    int answer = igReport_Detail("Total Time to load %s - %f seconds", path, g_igIGBFile_loadTimer->GetElapsedSeconds() - startTime);
-    if (answer != 1 && answer == 2) g_igIGBFile_loadTimeReportSuppressed = 1;
-  }
-  return self->_count;
-}
+namespace Gap {
+namespace Core {
 
-void igIGBFile_EnsureConcrete(int *result, void *self) {
-    if (((igIGBFileView *)self)->_concreteState == 0) {
-        ((Gap::Core::igDirectory *)self)->makeAllConcrete();
-    }
-    *result = g_resultSuccess.v;
-}
-
-void igIGBFile_ReadFilePostProcess(int *result, igIGBFileView *self) {
-    if (self->_readFilePostProcessedState == 0) {
-        igResult postProcessed = igIGBFile_PostProcessEntries(self);
-        if (self->_managingResource != 0) {
-            self->_managingResource->makeCompatible((char const *)self->_name);
+/* Reads the file's sections in file order (the version decides which tables come first); a step that fails
+ * ends the read through readErrorCleanup. */
+int igIGBFile::readFile(const char *path) {
+    double startTime;
+    sprintf(g_igIGBFile_readFileLabel, "readFile(%s)", path);
+    startTime = g_igIGBFile_loadTimer->GetElapsedSeconds();
+    _validState = 0;
+    _loadPendingState = 1;
+    _concreteState = 0;
+    if (readOpen(path).failed()) return readErrorCleanup();
+    if (readHeader().failed()) return readErrorCleanup();
+    if (_magicVersion < 5 && _hasExternal) {
+        if (!g_igIGBFile_oldVersionErrorSuppressed) {
+            int answer = igReportError("igIGBFile::readFile(%s) - unable to read this oldversion of igb file format with external references.Run igbUpdate %s on this file (or re-export) to fix.", _file->_fileName.p, _file->_fileName.p);
+            if (answer != 1 && answer == 2) g_igIGBFile_oldVersionErrorSuppressed = 1;
         }
-        self->_readFilePostProcessedState = 1;
-        *result = postProcessed.v;
-    } else {
-        *result = g_resultSuccess.v;
+        return readErrorCleanup();
     }
+    if (_magicVersion >= 3) {
+        if (readMetaFieldList().failed()) return readErrorCleanup();
+        if (readAlignmentList().failed()) return readErrorCleanup();
+    }
+    if (readMetaObjectBuffer().failed()) return readErrorCleanup();
+    if (processMetaObjectList().failed()) return readErrorCleanup();
+    if (setupFilePaths().failed()) return readErrorCleanup();
+    if (_magicVersion >= 5) {
+        if (readAndResolveExternalDirectories().failed()) return readErrorCleanup();
+    }
+    if (_hasMemoryPoolNames) {
+        if (readMemoryPoolNames().failed()) return readErrorCleanup();
+    }
+    if (_sharedEntries) {
+        if (readReadSharedEntries().failed()) return readErrorCleanup();
+        if (readReadSharedIndexes().failed()) return readErrorCleanup();
+        if (readProcessSharedDirectory().failed()) return readErrorCleanup();
+    } else {
+        if (readProcessDirectory().failed()) return readErrorCleanup();
+    }
+    if (_magicVersion >= 5) {
+        if (readInfoIndex().failed()) return readErrorCleanup();
+    }
+    if (readProcessObjectEntries().failed()) return readErrorCleanup();
+    if (readMemoryRefBuffer().failed()) return readErrorCleanup();
+    if (_magicVersion < 3) {
+        if (readMetaFieldList().failed()) return readErrorCleanup();
+    }
+    if (_magicVersion < 5) {
+        if (readInfoIndex().failed()) return readErrorCleanup();
+    }
+    if (_magicVersion < 5) {
+        if (readAndResolveExternalDirectories().failed()) return readErrorCleanup();
+    }
+    if (readProcessAllOtherEntries().failed()) return readErrorCleanup();
+    if (freeFilePaths().failed()) return readErrorCleanup();
+    readFinishConstruction();
+    if (_autoReadFilePostProcessState == 1) {
+        if (readFilePostProcess().failed()) return readErrorCleanup();
+    }
+    readClose();
+    releaseAllBuffers();
+    _validState = 1;
+    _loadPendingState = 0;
+    if (!g_igIGBFile_loadTimeReportSuppressed) {
+        int answer = igReport_Detail("Total Time to load %s - %f seconds", path, g_igIGBFile_loadTimer->GetElapsedSeconds() - startTime);
+        if (answer != 1 && answer == 2) g_igIGBFile_loadTimeReportSuppressed = 1;
+    }
+    return _count;
 }
 
-static inline igIGBFileView *castInfo(igIGBFileView *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) { return o; } return 0; }
+igResult igIGBFile::ensureConcrete()
+{
+    if (_concreteState == 0) {
+        makeAllConcrete();
+    }
+    return g_resultSuccess;
+}
+
+igResult igIGBFile::readFilePostProcess()
+{
+    if (_readFilePostProcessedState == 0) {
+        igResult postProcessed = postReadEntryProcessing();
+        if (_managingResource != 0) {
+            _managingResource->makeCompatible(_name.p);
+        }
+        _readFilePostProcessedState = 1;
+        return postProcessed;
+    }
+    return g_resultSuccess;
+}
+
+/* The external directory as an IGB file, or 0. */
+static inline igIGBFile *asIGBFile(igDirectory *directory)
+{
+    if (directory != 0 && directory->isOfType(igIGBFile::getClassMeta()) != 0) {
+        return (igIGBFile *)directory;
+    }
+    return 0;
+}
 
 /* Checks each external file, then this file's own post-read step. */
-igResult igIGBFile_ReadFilePostProcessAll(igIGBFileView *self) {
+igResult igIGBFile::readFilePostProcessRecursive()
+{
     igResult result = g_resultSuccess;
     int i;
-    for (i = 0; i < self->_externalDirectoryList->_count; i++) {
-        igSmartPointer<igIGBFileView> o(castInfo((igIGBFileView *)self->_externalDirectoryList->_data[i]), kRetainReference);
-        if (o.p != 0) {
-            if (o.p->ReadFilePostProcessAll() == g_resultFailure) {
+    for (i = 0; i < _externalDirectoryList->_count; i++) {
+        igSmartPointer<igIGBFile> file(asIGBFile(_externalDirectoryList->get(i)), kRetainReference);
+        if (file != 0) {
+            if (file->readFilePostProcessRecursive() == g_resultFailure) {
                 result = g_resultFailure;
             }
         }
     }
-    if (self->ReadFilePostProcess() == g_resultFailure) {
+    if (readFilePostProcess() == g_resultFailure) {
         result = g_resultFailure;
     }
     return result;
 }
 
-int igIGBFile_WriteMemoryRefs(igIGBFileView *o) {
+int igIGBFile::writeMemoryRefBuffer()
+{
     int i;
-    o->_chunkSize = o->_forceChunkSize;
-    if (o->_chunkSize < 0) {
-        o->_chunkSize = o->_file->_optimalWriteChunkSize;
+    _chunkSize = _forceChunkSize;
+    if (_chunkSize < 0) {
+        _chunkSize = _file->_optimalWriteChunkSize;
     }
-    if (o->_memoryRefBufferSize < o->_chunkSize) {
-        o->_chunkSize = o->_memoryRefBufferSize;
+    if (_memoryRefBufferSize < _chunkSize) {
+        _chunkSize = _memoryRefBufferSize;
     }
-    o->_chunk = (char *)o->_temporaryMemoryPool->AllocateAligned(o->_chunkSize, o->_file->_pageSize);
-    o->_memoryBufferPlace = 0;
-    o->_memoryBytesCopied = 0;
-    o->_bytesRemainingInChunk = o->_chunkSize;
-    for (i = 0; i < o->_count; i++) {
-        ((igDirEntryView *)((Gap::Core::igDirectory *)o)->get(i))->WriteMemory(o);
+    _chunk = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_chunkSize, _file->_pageSize);
+    _memoryBufferPlace = 0;
+    _memoryBytesCopied = 0;
+    _bytesRemainingInChunk = _chunkSize;
+    for (i = 0; i < _count; i++) {
+        get(i)->writeMemorySpecial(this);
     }
-    o->_temporaryMemoryPool->Free(o->_chunk);
-    o->_chunk = 0;
+    ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(_chunk);
+    _chunk = 0;
     return 1;
 }
 
-igResult igIGBFile_GetSectionBuffer(igIGBFileView *self, int size) {
-    char *a1;
-    a1 = self->_chunk;
-    if (a1 != 0 && self->_chunkSize >= size) {
+/* Makes the chunk buffer hold at least `minChunkBufferSize` bytes: the forced chunk size, else the file's
+ * optimal read size, rounded up to a word. */
+igResult igIGBFile::allocateReadChunkBuffer(int minChunkBufferSize) {
+    char *chunk;
+    chunk = _chunk;
+    if (chunk != 0 && _chunkSize >= minChunkBufferSize) {
         return g_resultSuccess;
     } else {
-        if (a1 != 0) {
-            self->_temporaryMemoryPool->Free(a1);
+        if (chunk != 0) {
+            ((igMemoryPoolView *)_temporaryMemoryPool.p)->Free(chunk);
         }
-        self->_chunkSize = self->_forceChunkSize;
-        if (self->_chunkSize < 0) {
-            self->_chunkSize = self->_file->_optimalReadChunkSize;
+        _chunkSize = _forceChunkSize;
+        if (_chunkSize < 0) {
+            _chunkSize = _file->_optimalReadChunkSize;
         }
-        if (self->_chunkSize < size) {
-            self->_chunkSize = size;
+        if (_chunkSize < minChunkBufferSize) {
+            _chunkSize = minChunkBufferSize;
         }
-        self->_chunkSize = (self->_chunkSize + 3) & ~3;
-        self->_chunk = (char *)self->_temporaryMemoryPool->AllocateAligned(self->_chunkSize, self->_file->_pageSize);
-        if (self->_chunk == 0) {
+        _chunkSize = (_chunkSize + 3) & ~3;
+        _chunk = (char *)((igMemoryPoolView *)_temporaryMemoryPool.p)->AllocateAligned(_chunkSize, _file->_pageSize);
+        if (_chunk == 0) {
             return g_resultFailure;
         } else {
             return g_resultSuccess;
@@ -1814,16 +1723,19 @@ igResult igIGBFile_GetSectionBuffer(igIGBFileView *self, int size) {
     }
 }
 
-void igIGBFile_ReadMemoryEntries(int *result, igIGBFileView *self) {
+igResult igIGBFile::readMemoryRefBuffer()
+{
     int n;
     int i;
-    self->_memoryBufferPlace = 0;
-    self->_memoryBytesCopied = 0;
-    self->_bytesRemainingInChunk = 0;
-    n = self->_count;
+    _memoryBufferPlace = 0;
+    _memoryBytesCopied = 0;
+    _bytesRemainingInChunk = 0;
+    n = _count;
     for (i = 0; i < n; i++) {
-        ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ReadMemory(self);
+        get(i)->readMemorySpecial(this);
     }
-    *result = g_resultSuccess.v;
+    return g_resultSuccess;
+}
+}
 }
 

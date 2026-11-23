@@ -9,7 +9,7 @@ void igTextureUnloadAttr::apply(igVisualContext *vc)
         int texId = texture->_texId;
 
         if (texId != -1)
-            igPsx2VisualContext_UnloadTexture((igPsx2VisualContext *)vc, texId);
+            ((igPsx2VisualContext *)vc)->igPsx2VisualContext::unloadTexture(texId);
     }
 }
 

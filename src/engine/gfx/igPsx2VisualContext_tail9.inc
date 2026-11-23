@@ -1,10 +1,15 @@
-void igPsx2VisualContext_SetBlendingMatrices(igPsx2VisualContext *self, unsigned int count, igMatrix44f *matrices) {
-    struct S_180030 *arg0 = (struct S_180030 *)self;
-    arg0->f72 = count;
-    arg0->f84 = (int)matrices;
+namespace Gap {
+namespace Gfx {
+
+void igPsx2VisualContext::setBlendingMatrices(const unsigned int matrixCount, const igMatrix44f *matrixArray) {
+    struct S_180030 *arg0 = (struct S_180030 *)this;
+    arg0->f72 = matrixCount;
+    arg0->f84 = (int)matrixArray;
     arg0->f1424 = 1;
     arg0->f76 = arg0->f76 + 1;
     p2SetBlendMatrices(arg0->f84, arg0->f72);
+}
+}
 }
 
 void FUN_00180060(O_180060 *arg0) {

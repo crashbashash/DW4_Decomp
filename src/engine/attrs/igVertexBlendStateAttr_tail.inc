@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igVertexBlendStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetVertexBlendingState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setVertexBlendingState(_enabled);
 }
 
 void igVertexBlendStateAttr::synchronizeDefault(igVisualContext *vc)

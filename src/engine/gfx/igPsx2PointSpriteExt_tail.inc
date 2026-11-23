@@ -33,7 +33,7 @@ void igPsx2PointSpriteExt_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2PointSpriteExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2PointSpriteExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2PointSpriteExt_callbackList[] = { Gap::Gfx::igPsx2VisualContext::arkRegister, 0 };
 
 CallbackArray *igPsx2PointSpriteExt_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -78,7 +78,7 @@ void igPsx2PointSpriteExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2PointSpriteExt_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gfx::igPsx2VisualContext::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(meta, g_igPsx2PointSpriteExt_fieldTable, g_igPsx2PointSpriteExt_fieldHandles, g_igPsx2PointSpriteExt_fieldOffsets, fieldStart);
 }

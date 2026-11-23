@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igViewportAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetViewport((igPsx2VisualContext *)vc, _x, _y, _w, _h, _nearZ, _farZ);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setViewport(_x, _y, _w, _h, _nearZ, _farZ);
 }
 
 void igViewportAttr::synchronizeDefault(igVisualContext *vc)

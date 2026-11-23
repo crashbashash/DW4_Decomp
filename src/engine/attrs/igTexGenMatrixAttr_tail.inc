@@ -22,14 +22,14 @@ void igTexGenMatrixAttr::userPostLoad()
 
 void igTexGenMatrixAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetMatrixPsx2((igPsx2VisualContext *)vc, 14, m.m);
+    ((igPsx2VisualContext *)vc)->setMatrixPsx2(14, m.m);
 }
 
 void igTexGenMatrixAttr::synchronizeDefault(igVisualContext *vc)
 {
     igMatrix44f matrix;
 
-    igPsx2VisualContext_GetMatrixPsx2((igPsx2VisualContext *)vc, 14, matrix.m);
+    ((igPsx2VisualContext *)vc)->getMatrixPsx2(14, matrix.m);
     igMatrix44f_Copy(m.m, matrix.m);
 }
 }

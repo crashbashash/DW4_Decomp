@@ -48,7 +48,7 @@ void igPsx2DecalExt_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2DecalExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2DecalExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2DecalExt_callbackList[] = { Gap::Gfx::igPsx2VisualContext::arkRegister, 0 };
 
 CallbackArray *igPsx2DecalExt_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -97,7 +97,7 @@ void igPsx2DecalExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2DecalExt_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gfx::igPsx2VisualContext::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igPsx2DecalExt_fieldTable, g_igPsx2DecalExt_fieldHandles, g_igPsx2DecalExt_fieldOffsets, fieldStart);

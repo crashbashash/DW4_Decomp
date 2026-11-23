@@ -74,8 +74,8 @@ void igAlphaFunctionAttr::arkRegisterInitialize()
 
 void igAlphaFunctionAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetAlphaFunc((igPsx2VisualContext *)vc, getAlphaFunc());
-    igPsx2VisualContext_SetAlphaRefValue((igPsx2VisualContext *)vc, getRefValue());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setAlphaFunc(getAlphaFunc());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setAlphaRefValue(getRefValue());
 }
 
 void igAlphaFunctionAttr::synchronizeDefault(igVisualContext *vc)

@@ -113,10 +113,6 @@ int igLocationTable_GetMeta(void) {
     return (int)g_igLocationTable_metaObject;
 }
 
-int igIGBFile_GetMeta(void) {
-    return (int)g_igIGBFile_metaObject;
-}
-
 int igEventTracker_GetMeta(void) {
     return (int)g_igEventTracker_metaObject;
 }

@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igShadeModelAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetShadingMode((igPsx2VisualContext *)vc, getMode());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setShadingMode(getMode());
 }
 
 void igShadeModelAttr::synchronizeDefault(igVisualContext *vc)

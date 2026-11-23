@@ -15,7 +15,7 @@ void igColorAttr::userPostLoad()
 
 void igColorAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetColorPacked((igPsx2VisualContext *)vc, _colorPacked);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setColor(_colorPacked);
 }
 
 void igColorAttr::synchronizeDefault(igVisualContext *vc)

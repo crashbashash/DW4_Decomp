@@ -4,6 +4,30 @@
 # reference is a pointer to its element type, a string the pool's igStringRef.
 igRenderer	_visualContext	igSmartPointer<igVisualContext>
 igIGBFile	_endianSwap	bool
+igIGBFile	_entryPool	igSmartPointer<igObjectList>
+igIGBFile	_file	igSmartPointer<igFile>
+igIGBFile	_indexBuffer	char *
+igIGBFile	_userLoadFunction	void *
+igIGBFile	_metaObjectBuffer	char *
+igIGBFile	_dirBuf	char *
+igIGBFile	_objBuf	char *
+igIGBFile	_mfBuf	char *
+igIGBFile	_metaFieldListInFile	igSmartPointer< ::igMetaFieldList>
+igIGBFile	_metaObjectListInFile	igSmartPointer< ::igMetaObjectList>
+igIGBFile	_basePath	char *
+igIGBFile	imf	igSmartPointer<igMetaField>
+igIGBFile	smf	igSmartPointer<igMetaField>
+igIGBFile	_externalDirectoryBuffer	char *
+igIGBFile	_previousResourceFilePath	igStringRef
+igIGBFile	_alignmentBuffer	char *
+igIGBFile	_alignmentListInFile	igSmartPointer<igIntList>
+igIGBFile	_objectBufferPlace	char *
+igIGBFile	_chunk	char *
+igIGBFile	_temporaryMemoryPool	igSmartPointer< ::igMemoryPool>
+igIGBFile	_dataMemoryPool	igSmartPointer< ::igMemoryPool>
+igIGBFile	_objectMemoryPool	igSmartPointer< ::igMemoryPool>
+igIGBFile	_memoryPoolNameBuffer	char *
+igIGBFile	_memoryPoolHandles	igSmartPointer<igIntList>
 igViewerRenderer	_lightingState	bool
 igMetaField	_fieldName	igStringRef
 igObjectRefMetaField	_poolName	igStringRef
@@ -190,3 +214,51 @@ igVisualContext	_vertexArray2	igSmartPointer<igVertexArray2>
 igVisualContext	_customStates	igSmartPointer<igCustomStateCollectionList>
 igVisualContext	_customFields	igSmartPointer<igCustomStateFieldList>
 igVisualContext	_ditherState	bool
+igStencilFunctionAttr	_stenFailOp	IG_GFX_STENCIL_OPERATION
+igStencilFunctionAttr	_stenPassZPassOp	IG_GFX_STENCIL_OPERATION
+igStencilFunctionAttr	_stenPassZFailOp	IG_GFX_STENCIL_OPERATION
+igPixelPipelineModeAttr	_pipelineMode	IG_GFX_PIXEL_PIPELINE_MODE
+igPsx2VisualContext	_pTexLoadedList	igSmartPointer<igIntList>
+igPsx2VisualContext	_texGenMat	igMatrix44f
+igPsx2VisualContext	_pVertexArray	igSmartPointer<igVertexArray>
+igPsx2VisualContext	_pIndexArray	igSmartPointer<igIndexArray>
+igPsx2VisualContext	_pStripLengthArray	igSmartPointer<igPrimLengthArray>
+igPsx2VisualContext	_projMat	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_mvMat	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_texMat	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_texgenMat	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_blendMat0	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_blendMat1	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_blendMat2	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_blendMat3	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_invTransBlendMat0	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_invTransBlendMat1	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_invTransBlendMat2	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_invTransBlendMat3	igSmartPointer< ::igMatrixStack>
+igPsx2VisualContext	_videoMode	igVideoFormat
+igPsx2VisualContext	_texEnable	bool
+igPsx2VisualContext	_bVertexBlendingEnabled	bool
+igPsx2VisualContext	_alphaEnable	bool
+igPsx2VisualContext	_bBlendingEnabled	bool
+igPsx2VisualContext	_clippingEnable	bool
+igPsx2VisualContext	_colorMaskR	bool
+igPsx2VisualContext	_colorMaskG	bool
+igPsx2VisualContext	_colorMaskB	bool
+igPsx2VisualContext	_colorMaskA	bool
+igPsx2VisualContext	_cullFaceEnable	bool
+igPsx2VisualContext	_bDepthWrite	bool
+igPsx2VisualContext	_depthTestEnable	bool
+igPsx2VisualContext	_fogEnable	bool
+igPsx2VisualContext	_bLightingEnabled	bool
+igPsx2VisualContext	_bNormalizeNormalsState	bool
+igPsx2VisualContext	_matrixOptimizationEnable	bool
+igPsx2VisualContext	_materialSpecularState	bool
+igPsx2VisualContext	_alphaFunc	IG_GFX_ALPHA_FUNCTION
+igPsx2VisualContext	_blendSrcMode	IG_GFX_BLENDING_FUNCTION
+igPsx2VisualContext	_blendDestMode	IG_GFX_BLENDING_FUNCTION
+igPsx2VisualContext	_shadingMode	IG_GFX_SHADING_MODE
+igPsx2VisualContext	_cullFaceMode	IG_GFX_CULL_FACE_MODE
+igPsx2VisualContext	_stencilFunc	IG_GFX_STENCIL_FUNCTION
+igPsx2VisualContext	_renderMode	IG_GFX_RENDER_MODE
+igPsx2VisualContext	_fogMode	IG_GFX_FOG_MODE
+igPsx2VisualContext	_pixelPipelineMode	IG_GFX_PIXEL_PIPELINE_MODE

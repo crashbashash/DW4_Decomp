@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igLightingStateAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetLightingState((igPsx2VisualContext *)vc, _enabled);
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setLightingState(_enabled);
 }
 
 void igLightingStateAttr::synchronizeDefault(igVisualContext *vc)

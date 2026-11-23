@@ -1,7 +1,3 @@
-igMetaObject *igPsx2VisualContext_GetMeta(void) {
-    return g_igPsx2VisualContext_metaObject;
-}
-
 namespace Gap {
 namespace Gfx {
 

@@ -3,7 +3,7 @@ namespace Attrs {
 
 void igBlendMatrixPaletteAttr::apply(igVisualContext *vc)
 {
-    igPsx2VisualContext_SetBlendingMatrices((igPsx2VisualContext *)vc, _currentMatrixCount, getMatrixArray());
+    ((igPsx2VisualContext *)vc)->igPsx2VisualContext::setBlendingMatrices(_currentMatrixCount, getMatrixArray());
 }
 
 /* Empty override of igAttr slot 26 (+0x68). Other attributes use this slot for a per-attribute
