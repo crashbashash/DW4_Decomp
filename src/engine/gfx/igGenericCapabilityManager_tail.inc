@@ -276,7 +276,7 @@ void igImage::copy(const igImage *src, bool copyImage)
 {
     if (src == this) {
         if (!_localImage && copyImage && _pImage != 0) {
-            void *pixels = poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+            void *pixels = poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
             memcpy(pixels, _pImage, _imageSize);
             _localImage = true;
             _pImage = (unsigned char *)pixels;
@@ -310,7 +310,7 @@ void igImage::copy(const igImage *src, bool copyImage)
     }
     if (copyImage) {
         if (src->_pImage != 0) {
-            _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+            _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
             _localImage = true;
             memcpy(_pImage, src->_pImage, _imageSize);
         }
@@ -357,7 +357,7 @@ void igImage::copySubImage(const igImage *src, int offX, int offY, int width, in
     _imageSize = imageSize;
     _pz = components;
     _bytesPerRow = bytesPerRow;
-    _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
     _localImage = true;
     row = 0;
     dstRow = (char *)_pImage;
@@ -448,11 +448,11 @@ void igImage::scale(int width, int height, igImage *source)
     if (isPacked((IG_GFX_TEXTURE_FORMAT)source->_pfmt)) {
         IG_GFX_TEXTURE_FORMAT plainFormat = estimateUnpackedFmt2((IG_GFX_TEXTURE_FORMAT)format);
         estimateImageSize(plainFormat, sourceWidth, sourceHeight, plainSize, plainComponents, plainRow);
-        sourceRow = (unsigned char *)poolOf(this, kIGMemoryPoolHandleTemporary)->allocateAligned(plainRow, 0x80);
+        sourceRow = (unsigned char *)poolOf(this, kIGMemoryPoolHandleTemporary)->AllocateAligned(plainRow, 0x80);
         toPlain = convert->getPackConversionFn((IG_GFX_IMAGE_ORDER)order, (IG_GFX_TEXTURE_FORMAT)format, true);
         fromPlain = convert->getPackConversionFn((IG_GFX_IMAGE_ORDER)order, (IG_GFX_TEXTURE_FORMAT)format, false);
         estimateImageSize(plainFormat, width, height, scaledSize, plainComponents, scaledRow);
-        destRow = (unsigned char *)poolOf(this, kIGMemoryPoolHandleTemporary)->allocateAligned(scaledRow, 0x80);
+        destRow = (unsigned char *)poolOf(this, kIGMemoryPoolHandleTemporary)->AllocateAligned(scaledRow, 0x80);
     }
     xScale = (float)(unsigned int)sourceWidth / (float)width;
     yScale = (float)(unsigned int)sourceHeight / (float)height;
@@ -462,7 +462,7 @@ void igImage::scale(int width, int height, igImage *source)
     _imageSize = newSize;
     _pz = newComponents;
     _bytesPerRow = newRow;
-    pixels = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    pixels = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
     row = pixels;
     for (y = 0; y < height; y++) {
         int sourceY = FUN_00156ae0(y, sourceHeight, yScale);
@@ -483,8 +483,8 @@ void igImage::scale(int width, int height, igImage *source)
         row += _bytesPerRow;
     }
     if (isPacked((IG_GFX_TEXTURE_FORMAT)source->_pfmt)) {
-        poolOf(this, kIGMemoryPoolHandleTemporary)->free(destRow);
-        poolOf(this, kIGMemoryPoolHandleTemporary)->free(sourceRow);
+        poolOf(this, kIGMemoryPoolHandleTemporary)->Free(destRow);
+        poolOf(this, kIGMemoryPoolHandleTemporary)->Free(sourceRow);
     }
     if (_pImage != 0 && _localImage) {
         Memory_FreeBuffer(_pImage);
@@ -584,7 +584,7 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
     _bitsBlu = bitsBlu;
     _bitsAlpha = bitsAlpha;
     _bitsDepth = bitsDepth;
-    pixels = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    pixels = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
     if (source == this) {
         if (isIndexed((IG_GFX_TEXTURE_FORMAT)source->_pfmt) && isIndexed(format)) {
             clut = _pClut.p;
@@ -622,7 +622,7 @@ unsigned char igImage::convert(IG_GFX_TEXTURE_FORMAT format, const igImage *sour
         unsigned int postComponents;
         unsigned char *post;
         estimateImageSize(format, _px, _py, postSize, postComponents, postBytesPerRow);
-        post = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(postSize, 0x80);
+        post = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(postSize, 0x80);
         FUN_0015a750((::igImage *)this, post);
         Memory_FreeBuffer(_pImage);
         _pImage = post;
@@ -753,7 +753,7 @@ void igImage::allocateImageMemory()
         _pImage = 0;
     }
     autoSetUnfilledParameters();
-    _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
     _localImage = true;
 }
 
@@ -854,7 +854,7 @@ unsigned char igImage::oldLoad(igFile *file)
     file->fread(&_px, 4, 1);
     file->fread(&_py, 4, 1);
     _ps = 1;
-    _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+    _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
     _localImage = true;
     file->fread(_pImage, 1, _imageSize);
     file->fclose();
@@ -923,7 +923,7 @@ unsigned char igImage::newLoad(igFile *file)
         _bitsInt = 0;
         file->fread(&skippedWord, 4, 1);
         file->fread(&skippedWord, 4, 1);
-        _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+        _pImage = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
         _localImage = true;
         file->fread(_pImage, 1, _imageSize);
         file->fclose();
@@ -1490,7 +1490,7 @@ void igImage::fixBytesPerRowAndReallocate()
     }
     autoSetUnfilledParameters();
     if (_pImage != 0 && n != _bytesPerRow) {
-        buf = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->allocateAligned(_imageSize, 0x80);
+        buf = (unsigned char *)poolOf(this, kIGMemoryPoolHandleImage)->AllocateAligned(_imageSize, 0x80);
         src = _pImage;
         dst = buf;
         for (i = 0; i < _py; i++) {
@@ -1788,7 +1788,7 @@ unsigned int igIndexArray::configure(unsigned int num, unsigned int usageFlags, 
     if (_memPool == 0) {
         _memPool = (igMemoryPool *)getMemoryPool();
     }
-    _indexData = (unsigned char *)((igMemoryPoolView *)_memPool.p)->malloc(size);
+    _indexData = (unsigned char *)((igMemoryPoolView *)_memPool.p)->Allocate(size);
     return size;
 }
 

@@ -1,174 +1,123 @@
-/* matching construct: _pBufList is a 4-byte reference field; the cast gives the typed T260 view (no layout effect) */
-void FUN_00169260(igPsx2VisualContext *arg0, int arg1) {
-    int s0, s2, v, old;
-    int *hd;
-    T260 *t;
-    s0 = ((T260 *)arg0->_pBufList)->f0 - 1;
-    for (; s0 > -1; s0--) {
-        if (((T260 *)arg0->_pBufList)->Chk(s0)) {
-            ((T260 *)arg0->_pBufList)->Add(s0);
+void FUN_00169260(Gap::Gfx::igPsx2VisualContext *vc, int keepPool) {
+    int handle;
+    igPsx2RenderDestinationPool *pool;
+    handle = ((igPsx2RenderDestinationPool *)vc->_pBufList)->capacity - 1;
+    for (; handle > -1; handle--) {
+        if (((igPsx2RenderDestinationPool *)vc->_pBufList)->isIndexAllocated(handle)) {
+            ((igPsx2RenderDestinationPool *)vc->_pBufList)->freeElement(handle);
         }
     }
-    if (arg1 == 0) {
-        t = ((T260 *)arg0->_pBufList);
-        if (t != 0) {
-            if (g_stringPool == 0) {
-                v = (int)StringPool_Allocate(16);
-                if (v != 0) {
-                    v = (int)StringPool_Construct((StringPool *)v);
-                }
-                g_stringPool = (StringPool *)v;
-            }
-            s2 = (int)StringPool_Intern(g_stringPool, 0);
-            old = t->f8;
-            if (old != 0) {
-                hd = (int *)(old - 8);
-                v = *(int *)(old - 4) - 1;
-                *(int *)(old - 4) = v;
-                if (v == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                }
-            }
-            t->f8 = s2;
-            Memory_FreeBuffer((void *)t->f16);
-            Memory_FreeBuffer((void *)((int)t->f12));
-            if (&t->f8 != 0) {
-                old = t->f8;
-                if (old != 0) {
-                    hd = (int *)(old - 8);
-                    v = *(int *)(old - 4) - 1;
-                    *(int *)(old - 4) = v;
-                    if (v == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                    }
-                }
-            }
-            Memory_FreeBufferAliasB(t);
-        }
-        arg0->_pBufList = 0;
+    if (keepPool == 0) {
+        pool = (igPsx2RenderDestinationPool *)vc->_pBufList;
+        delete pool;
+        vc->_pBufList = 0;
     }
-    arg0->_currentBuf = -1;
+    vc->_currentBuf = -1;
+}
+
+/* The destination a handle names, addressed in bytes from the pool's element array. */
+static inline igPsx2RenderDestination *destinationAt(igPsx2RenderDestinationPool *pool, int handle) {
+    return (igPsx2RenderDestination *)((int)pool->elements + handle * sizeof(igPsx2RenderDestination));
+}
+
+/* A word of a destination read through the pool as an igDataList: the element array's address plus a byte offset
+ * (the compiler's address arithmetic differs from indexing the typed element array). */
+static inline int *destinationWord(::igDataList *pool, int handle, int field) {
+    return (int *)(pool->_data + handle * (int)sizeof(igPsx2RenderDestination) + field);
 }
 
 namespace Gap {
 namespace Gfx {
 
 int igPsx2VisualContext::createRenderDestination(igRenderDestinationFormat *pFormat) {
-    Pool46 *p;
-    Ent46 *e;
-    int s0;
-    int i;
-    p = (Pool46 *)_pBufList;
-    if (p->f4 <= 0) {
-        p->f16 = (Ent46 *)Memory_ReallocateAlignedAlias(p->f16, (p->f0 + 4) * 48, 16);
-        memset(p->f16 + p->f0, 0, 192);
-        if (p->f2 < 4) {
-            Buf46 *b = (Buf46 *)Memory_FindBufferOwner(p);
-            p->f12 = b->vB(p->f12, 8);
-            p->f2 = 4;
-        }
-        i = 0;
-        do {
-            p->f12[i] = p->f0 + i;
-            i++;
-        } while (i < 4);
-        p->f4 = 4;
-        p->f0 = p->f0 + 4;
-    }
-    s0 = p->f12[p->f4 - 1];
-    p->f4 = p->f4 - 1;
-    e = ((Pool46 *)_pBufList)->f16 + s0;
-    e->f28 = pFormat->_iType;
-    e->f0 = pFormat->_iWidth;
-    e->f4 = pFormat->_iHeight;
-    e->f8 = pFormat->_iColorBitsPerPixel;
-    e->f16 = pFormat->_iAlphaBitsPerPixel;
-    e->f12 = pFormat->_iDepthBitsPerPixel;
-    e->f20 = pFormat->_iStencilBitsPerPixel;
-    e->f24 = pFormat->_fPixelAspectRatio;
-    e->f40 = 0;
-    e->f44 = 0;
-    e->f36 = -1;
-    _currentBuf = s0;
-    return s0;
+    igPsx2RenderDestination *destination;
+    int handle;
+    handle = ((igPsx2RenderDestinationPool *)_pBufList)->getFreeElement();
+    destination = ((igPsx2RenderDestinationPool *)_pBufList)->elements + handle;
+    destination->type = pFormat->_iType;
+    destination->width = pFormat->_iWidth;
+    destination->height = pFormat->_iHeight;
+    destination->colorBitsPerPixel = pFormat->_iColorBitsPerPixel;
+    destination->alphaBitsPerPixel = pFormat->_iAlphaBitsPerPixel;
+    destination->depthBitsPerPixel = pFormat->_iDepthBitsPerPixel;
+    destination->stencilBitsPerPixel = pFormat->_iStencilBitsPerPixel;
+    destination->pixelAspectRatio = pFormat->_fPixelAspectRatio;
+    destination->colorTarget = 0;
+    destination->depthTarget = 0;
+    destination->textureHandle = -1;
+    _currentBuf = handle;
+    return handle;
 }
 
 void igPsx2VisualContext::deleteRenderDestination(int handle) {
-    int temp_a1;
-    Ar *temp_s0;
-    Ar *temp_a2;
-    DW4VC_232 *temp_v0;
+    int textureHandle;
+    igPsx2RenderDestinationPool *pool;
+    igPsx2RenderDestinationPool *current;
 
-    temp_a2 = (Ar *)_pBufList;
-    temp_a1 = *(int *)((char *)temp_a2->f16 + handle * 0x30 + 36);
-    if (-1 < temp_a1) {
-        ((DW4VC_524 *)this)->vX(temp_a1, temp_a2);
+    pool = (igPsx2RenderDestinationPool *)_pBufList;
+    /* matching construct: the record's address in bytes from the element array, as the getters read it */
+    textureHandle = *destinationWord((::igDataList *)pool, handle, offsetof(igPsx2RenderDestination, textureHandle));
+    if (-1 < textureHandle) {
+        /* matching construct: the call to deleteTexture leaves the pool in its second argument register */
+        ((DW4VC_524 *)this)->vX(textureHandle, pool);
     }
-    temp_s0 = (Ar *)_pBufList;
-    if ((handle < temp_s0->n) && (handle >= 0)) {
-        if (temp_s0->cnt >= temp_s0->cap) {
-            temp_v0 = (DW4VC_232 *)Memory_FindBufferOwner(temp_s0);
-            temp_s0->cap = temp_s0->cap + 8;
-            temp_s0->f12 = temp_v0->vX(temp_s0->f12, temp_s0->cap * 2);
-        }
-        ((short *)temp_s0->f12)[temp_s0->cnt] = handle;
-        temp_s0->cnt = temp_s0->cnt + 1;
-    }
+    current = (igPsx2RenderDestinationPool *)_pBufList;
+    current->freeElement(handle);
 }
 
 void igPsx2VisualContext::setRenderDestination(int iHandle, int unused) {
-    I *base;
-    I *s0;
-    I *cur;
-    int t;
-    base = ((L48 *)_pBufList)->f16;
-    s0 = base + iHandle;
-    cur = base + _currentBuf;
-    t = s0->f28;
-    if (t != 2 && cur->f28 == 2) {
+    igPsx2RenderDestination *destinations;
+    igPsx2RenderDestination *destination;
+    igPsx2RenderDestination *current;
+    int type;
+    destinations = ((igPsx2RenderDestinationPool *)_pBufList)->elements;
+    destination = destinations + iHandle;
+    current = destinations + _currentBuf;
+    type = destination->type;
+    if (type != 2 && current->type == 2) {
         p2RestoreRenderTarget();
         p2SetViewport(_iViewportX, _iViewportY, _iViewportW, _iViewportH, 1.0f - _viewportNear, 1.0f - _viewportFar);
-    } else if (t == 2) {
-        p2SetRenderTarget((P2Texture *)s0->f40, (P2Texture *)s0->f44);
-        p2SetViewport(0, 0, s0->w, s0->h, 1.0f - _viewportNear, 1.0f - _viewportFar);
+    } else if (type == 2) {
+        p2SetRenderTarget((P2Texture *)destination->colorTarget, (P2Texture *)destination->depthTarget);
+        p2SetViewport(0, 0, destination->width, destination->height, 1.0f - _viewportNear, 1.0f - _viewportFar);
     }
     _currentBuf = iHandle;
-    FUN_0016a520((O520 *)this);
-    if (s0->f12 <= 0) {
-        ((V_1690d0 *)this)->vX(0);
+    FUN_0016a520(this);
+    if (destination->depthBitsPerPixel <= 0) {
+        setDepthTestState(false);
         return;
     }
-    ((V_1690d0 *)this)->vX(1);
+    setDepthTestState(true);
 }
 
 void igPsx2VisualContext::setRenderDestination(int iHandle, int *piTex, int unused) {
     int index;
     int format;
     bool create;
-    Tex49 *tex;
+    TexEntry *tex;
     int colorFormat;
-    Buf49 *buf;
-    buf = &((VC49 *)this)->bufList->records[iHandle];
+    igPsx2RenderDestination *buf;
+    buf = &((igPsx2RenderDestinationPool *)_pBufList)->elements[iHandle];
     tex = 0;
     index = *piTex;
     create = false;
     if (index == -1) {
         create = true;
     } else {
-        tex = &((VC49 *)this)->texList->records[index];
-        if (*tex->handle == 0) {
+        tex = &((TexList *)_pTexList)->data[index];
+        if (*tex->buffers == 0) {
             create = true;
         }
     }
     if (create) {
-        switch (buf->format) {
+        switch (buf->colorBitsPerPixel) {
         case 16:
         case 15:
             colorFormat = 3;
             format = 8;
             break;
         case 24:
-            if (buf->f16 == 0) {
+            if (buf->alphaBitsPerPixel == 0) {
                 colorFormat = 1;
                 format = 5;
             } else {
@@ -184,16 +133,16 @@ void igPsx2VisualContext::setRenderDestination(int iHandle, int *piTex, int unus
             break;
         }
         if (index == -1) {
-            *piTex = igPsx2VisualContext_CreateTexture((TexContext *)((VC49 *)this), buf->width, buf->height, format, 3, 0, 1);
-            buf->texIndex = *piTex;
-            tex = &((VC49 *)this)->texList->records[*piTex];
+            *piTex = allocateTexture(buf->width, buf->height, format, 3, 0, 1);
+            buf->textureHandle = *piTex;
+            tex = &((TexList *)_pTexList)->data[*piTex];
         }
-        if (buf->colorTex != 0) {
-            ((VC49 *)this)->releaseTexture(buf->texIndex);
+        if (buf->colorTarget != 0) {
+            unloadTexture(buf->textureHandle);
         }
-        if (buf->depthFormat > 0) {
+        if (buf->depthBitsPerPixel > 0) {
             int depthFormat;
-            switch (buf->depthFormat) {
+            switch (buf->depthBitsPerPixel) {
             case 16:
             default:
                 depthFormat = 12;
@@ -205,68 +154,53 @@ void igPsx2VisualContext::setRenderDestination(int iHandle, int *piTex, int unus
                 depthFormat = 9;
                 break;
             }
-            buf->depthTex = (int)p2LoadTexture(0, buf->width, buf->height, depthFormat, 0);
+            buf->depthTarget = (int)p2LoadTexture(0, buf->width, buf->height, depthFormat, 0);
         }
-        buf->colorTex = (int)p2LoadTexture(0, buf->width, buf->height, colorFormat, 0);
-        if (buf->colorTex != 0) {
-            *tex->handle = buf->colorTex;
-            tex->depthHandle = buf->depthTex;
+        buf->colorTarget = (int)p2LoadTexture(0, buf->width, buf->height, colorFormat, 0);
+        if (buf->colorTarget != 0) {
+            *tex->buffers = buf->colorTarget;
+            tex->buffer = buf->depthTarget;
             tex->state = 2;
         } else {
-            ((VC49 *)this)->freeTexture(*piTex);
+            deleteTexture(*piTex);
             *piTex = -1;
             return;
         }
     }
-    p2SetRenderTarget((P2Texture *)buf->colorTex, (P2Texture *)buf->depthTex);
-    ((VC49 *)this)->currentBuf = iHandle;
-    p2SetViewport(0, 0, buf->width, buf->height, 1.0f - ((VC49 *)this)->near, 1.0f - ((VC49 *)this)->far);
-    FUN_0016a520((O520 *)((VC49 *)this));
-    if (buf->depthFormat <= 0) {
-        ((VC49 *)this)->setDepth(0);
+    p2SetRenderTarget((P2Texture *)buf->colorTarget, (P2Texture *)buf->depthTarget);
+    _currentBuf = iHandle;
+    p2SetViewport(0, 0, buf->width, buf->height, 1.0f - _viewportNear, 1.0f - _viewportFar);
+    FUN_0016a520(this);
+    if (buf->depthBitsPerPixel <= 0) {
+        setDepthTestState(false);
         return;
     }
-    ((VC49 *)this)->setDepth(1);
+    setDepthTestState(true);
 }
 
-/* Read the first two fields of VRAM buffer record `bufferIndex` (0x30-byte records at _pBufList +
- * 0x10) into *word0 and *word1; vfunc_52 is the matching setter. */
 void igPsx2VisualContext::getRenderDestinationSize(int iHandle, int &piWidth, int &piHeight) const {
-    int recordOffset;
-
-    recordOffset = iHandle * 0x30;
-    piWidth = *(int *)(*(int *)((char *)(_pBufList) + 16) + recordOffset);
-    piHeight = *(int *)((char *)((*(int *)((char *)(_pBufList) + 16) + recordOffset)) + 4);
+    piWidth = destinationAt((igPsx2RenderDestinationPool *)_pBufList, iHandle)->width;
+    piHeight = destinationAt((igPsx2RenderDestinationPool *)_pBufList, iHandle)->height;
 }
 
-/* Store two words into the first two fields of VRAM buffer record `bufferIndex`. _pBufList
- * (+0x364) holds the 0x30-byte VRAM buffer records at +0x10; vfunc_53 is the matching getter. */
 bool igPsx2VisualContext::setRenderDestinationSize(int iHandle, int iWidth, int iHeight) {
-    int recordOffset;
-
-    recordOffset = iHandle * 0x30;
-    *(int *)(*(int *)((char *)(_pBufList) + 16) + recordOffset) = iWidth;
-    *(int *)((char *)((*(int *)((char *)(_pBufList) + 16) + recordOffset)) + 4) = iHeight;
+    destinationAt((igPsx2RenderDestinationPool *)_pBufList, iHandle)->width = iWidth;
+    destinationAt((igPsx2RenderDestinationPool *)_pBufList, iHandle)->height = iHeight;
     return 1;
 }
 
 int igPsx2VisualContext::getCurrentRenderDestination() const {
-    int *p = (int *)this;
-    return *(int *)((char *)p + 872);
+    return _currentBuf;
 }
-
-/* Getter for the record field at +0x1c of buffer `bufferIndex`. `_pBufList` (+0x364) is an
- * igDataList whose data pointer (+0x10) addresses 0x30-byte VRAM buffer records. */
 
 IG_GFX_RENDERDESTINATION_TYPE igPsx2VisualContext::getRenderDestinationType(int iHandle) const {
-    ::igDataList *bufList = (::igDataList *)_pBufList;
-    return (IG_GFX_RENDERDESTINATION_TYPE)*(int *)(bufList->_data + iHandle * BUFFER_RECORD_SIZE + 28);
+    return (IG_GFX_RENDERDESTINATION_TYPE)*destinationWord((::igDataList *)_pBufList, iHandle, offsetof(igPsx2RenderDestination, type));
 }
 }
 }
 
-void FUN_00169be0(void *d0, int arg1) {
-    if (arg1 == 1) {
+void FUN_00169be0(Gap::Gfx::igPsx2VisualContext *vc, int mode) {
+    if (mode == 1) {
         p2SetClearWidth(0x40);
         return;
     }
@@ -277,49 +211,44 @@ namespace Gap {
 namespace Gfx {
 
 void igPsx2VisualContext::clearRenderDestination(unsigned int which) {
-    int var_a0;
+    int buffers;
 
-    var_a0 = 0;
+    buffers = 0;
     if (which & 1) {
-        var_a0 |= 1;
+        buffers |= 1;
     }
     if (which & 2) {
-        var_a0 |= 2;
+        buffers |= 2;
     }
-    p2Clear(var_a0, *(int *)((char *)((::igPsx2VisualContext *)this) + 896), *(int *)((char *)((::igPsx2VisualContext *)this) + 900));
+    /* matching construct: retail loads the clear depth before the clear colour; the fields read as raw words do that */
+    p2Clear(buffers, *(int *)&_uiClearColor, *(int *)&_uiClearDepth);
 }
 
 bool igPsx2VisualContext::copyRenderDestinationToTexture(int srcHandle, int hTexture, int srcX, int srcY, int width, int height, int destX, int destY) {
-    int temp_a1;
-    int temp_a2;
-    int temp_v1;
-    char *temp_a3;
-    char *temp_s0;
-    char *temp_s7;
+    igPsx2RenderDestination *source;
+    TexEntry *texture;
+    int filter;
 
-    temp_a2 = (srcHandle * 3) << 4;
-    temp_a3 = (char *)_pBufList;
-    temp_a1 = *(int *)(temp_a3 + 16);
-    temp_s7 = (char *)(temp_a1 + temp_a2);
-    temp_s0 = (char *)(*(int *)((char *)_pTexList + 16) + (hTexture * 0x88));
-    if (**(int **)(temp_s0 + 72) == 0) {
-        **(int **)(temp_s0 + 72) = (int)p2LoadTexture(0, *(int *)(temp_s0 + 32), *(int *)(temp_s0 + 36), FUN_0017a2b0(*(int *)(temp_s0 + 0)), 0);
+    source = &((igPsx2RenderDestinationPool *)_pBufList)->elements[srcHandle];
+    texture = &((TexList *)_pTexList)->data[hTexture];
+    if (*texture->buffers == 0) {
+        *texture->buffers = (int)p2LoadTexture(0, texture->width, texture->height, FUN_0017a2b0(texture->format), 0);
     }
     if ((destX == -1) || (destY == -1)) {
         if (_textureStateFilter != 0) {
-            temp_v1 = (_textureMagFilter << 0x10) | _textureMinFilter;
-            if (_currentTextureFilter[0] != temp_v1) {
-                _currentTextureFilter[0] = temp_v1;
+            filter = (_textureMagFilter << 0x10) | _textureMinFilter;
+            if (_currentTextureFilter[0] != filter) {
+                _currentTextureFilter[0] = filter;
                 p2SetTextureFilter(DAT_0048acd0[_textureMagFilter], DAT_0048acd0[_textureMinFilter]);
             }
         }
-        FUN_00209cf0(*(int *)(temp_s7 + 40), **(int **)(temp_s0 + 72), srcX, srcY, width, height, 0);
-    } else if (*(int *)(temp_s7 + 28) == 2) {
-        p2CopyTexture((void *)*(int *)(temp_s7 + 40), srcX, srcY, (void *)**(int **)(temp_s0 + 72), destX, destY, width, height);
+        FUN_00209cf0(source->colorTarget, *texture->buffers, srcX, srcY, width, height, 0);
+    } else if (source->type == 2) {
+        p2CopyTexture((void *)source->colorTarget, srcX, srcY, (void *)*texture->buffers, destX, destY, width, height);
     } else {
-        p2CopyFramebufferToTexture((P2Texture *)**(int **)(temp_s0 + 72), srcX, srcY, destX, destY, width, height, 0);
+        p2CopyFramebufferToTexture((P2Texture *)*texture->buffers, srcX, srcY, destX, destY, width, height, 0);
     }
-    *(int *)(temp_s0 + 132) = 3;
+    texture->state = 3;
     return 1;
 }
 
@@ -380,7 +309,7 @@ void igPsx2VisualContext::setViewport(int x, int y, int w, int h, float nearZ, f
     _viewportNear = nearZ;
     _viewportFar = farZ;
     if (_scissorType == 0) {
-        FUN_0016a520((O520 *)this);
+        FUN_0016a520(this);
     }
     p2SetViewport(x, y, w, h, 1.0f - _viewportNear, 1.0f - _viewportFar);
 }
@@ -409,17 +338,16 @@ void igPsx2VisualContext::setClearColor(const igVec4f &rgba) {
 }
 
 void igPsx2VisualContext::setClearColor(unsigned int color) {
-    int *a = (int *)this;
-    a[224] = (color & 0xffffff) | (((color >> 1) & 0x7f000000) + (color & 0x01000000));
+    _uiClearColor = (color & 0xffffff) | (((color >> 1) & 0x7f000000) + (color & 0x01000000));
 }
 
 unsigned igPsx2VisualContext::getClearColor() const {
-    int temp_a1;
-    unsigned int temp_a0;
+    int color;
+    unsigned int alphaHigh;
 
-    temp_a1 = _uiClearColor;
-    temp_a0 = (unsigned int)(temp_a1 & 0x80000000) >> 7;
-    return (temp_a1 & 0xFFFFFF) | (temp_a0 + (((temp_a1 & 0xFF000000) - temp_a0) * 2));
+    color = _uiClearColor;
+    alphaHigh = (unsigned int)(color & 0x80000000) >> 7;
+    return (color & 0xFFFFFF) | (alphaHigh + (((color & 0xFF000000) - alphaHigh) * 2));
 }
 
 void igPsx2VisualContext::getClearColor(igVec4f &abgr) const {
@@ -427,13 +355,12 @@ void igPsx2VisualContext::getClearColor(igVec4f &abgr) const {
 }
 
 void igPsx2VisualContext::setClearDepth(float val) {
-    S181 *arg0 = (S181 *)this;
-    arg0->f892 = val;
-    if (arg0->f1280 & 4) {
-        arg0->f900 = (unsigned)(2.1474836e9f * arg0->f892);
+    _clearDepth = val;
+    if (_depthTestFunc & 4) {
+        _uiClearDepth = (unsigned)(2.1474836e9f * _clearDepth);
         return;
     }
-    arg0->f900 = (unsigned)(2.1474836e9f * (1.0f - arg0->f892));
+    _uiClearDepth = (unsigned)(2.1474836e9f * (1.0f - _clearDepth));
 }
 
 float igPsx2VisualContext::getClearDepth() const {
@@ -448,65 +375,61 @@ unsigned igPsx2VisualContext::getClearStencil() const {
     return _clearStencil;
 }
 
-/* Getter for the record field at +0x8 of buffer `bufferIndex`: the buffer format
- * (8/7/0x18/0xf/0x10). `_pBufList` (+0x364) is an igDataList whose data pointer
- * (+0x10) addresses 0x30-byte VRAM buffer records. */
 int igPsx2VisualContext::getColorBitsPerPixel(int iHandle) const {
-    ::igDataList *bufList = (::igDataList *)_pBufList;
-    return *(int *)(bufList->_data + iHandle * BUFFER_RECORD_SIZE + 8);
+    return *destinationWord((::igDataList *)_pBufList, iHandle, offsetof(igPsx2RenderDestination, colorBitsPerPixel));
 }
 
-/* Getter for the record field at +0x10 of buffer `bufferIndex`. `_pBufList` (+0x364) is an
- * igDataList whose data pointer (+0x10) addresses 0x30-byte VRAM buffer records. */
 int igPsx2VisualContext::getAlphaBitsPerPixel(int iHandle) const {
-    ::igDataList *bufList = (::igDataList *)_pBufList;
-    return *(int *)(bufList->_data + iHandle * BUFFER_RECORD_SIZE + 16);
+    return *destinationWord((::igDataList *)_pBufList, iHandle, offsetof(igPsx2RenderDestination, alphaBitsPerPixel));
 }
 
-/* Getter for the record field at +0xc of buffer `bufferIndex`: the secondary format (0x20/0x18 in
- *. `_pBufList` (+0x364) is an igDataList whose data pointer (+0x10) addresses
- * 0x30-byte VRAM buffer records. */
 int igPsx2VisualContext::getDepthBitsPerPixel(int iHandle) const {
-    ::igDataList *bufList = (::igDataList *)_pBufList;
-    return *(int *)(bufList->_data + iHandle * BUFFER_RECORD_SIZE + 12);
+    return *destinationWord((::igDataList *)_pBufList, iHandle, offsetof(igPsx2RenderDestination, depthBitsPerPixel));
 }
-
-/* igPsx2VisualContext vtable slot 57: reads the word at +20 of one VRAM buffer record. _pBufList
- * is the context's table of 0x30-byte buffer records whose element array is at +16 (texture
- * capture). */
 
 int igPsx2VisualContext::getStencilBitsPerPixel(int iHandle) const {
-    return *(int *)((char *)((*(int *)((char *)(_pBufList) + 16) + (iHandle * VRAM_BUFFER_RECORD_SIZE))) + 20);
+    return *destinationWord((::igDataList *)_pBufList, iHandle, offsetof(igPsx2RenderDestination, stencilBitsPerPixel));
 }
 
-/* igPsx2VisualContext vtable slot 58: reads the float at +24 of one VRAM buffer record (companion
- * of slot 57, which reads the word at +20). _pBufList is the context's table of 0x30-byte buffer
- * records whose element array is at +16 (texture capture). */
 float igPsx2VisualContext::getPixelAspectRatio(int iHandle) const {
-    return *(float *)((char *)((*(int *)((char *)(_pBufList) + 16) + (iHandle * VRAM_BUFFER_RECORD_SIZE))) + 24);
+    return *(float *)destinationWord((::igDataList *)_pBufList, iHandle, offsetof(igPsx2RenderDestination, pixelAspectRatio));
 }
 }
 }
 
-void FUN_0016a520(O520 *o) {
-    R520 *r = (R520 *)((char *)o->l364->rects + o->idx * 0x30);
-    if (r != 0) {
-        if (o->f68 == 0) {
-            int a = o->e398; int hi_y = r->y; int c = o->e3a0;
-            c = H_1690d0::clampLen(c, hi_y - a);
-            { int lo_x = o->e394; int hi_x = r->x; int w = o->e39c;
-              w = H_1690d0::clampLen(w, hi_x - lo_x);
-              a = H_1690d0::clampLow(a, hi_y);
-              lo_x = H_1690d0::clampLow(lo_x, hi_x);
-              p2SetScissor(lo_x, a, w, c); }
+/* A rectangle side limited to what remains of the destination, at least one pixel. */
+static inline int clampExtent(int limit, int remaining) {
+    if (MIN(limit, remaining) > 1) return MIN(limit, remaining);
+    return 1;
+}
+
+/* A rectangle origin limited to the destination's size. */
+static inline int clampOrigin(int limit, int size) {
+    if (MIN(limit, size) > 0) return MIN(limit, size);
+    return 0;
+}
+
+/* Sets the GS scissor to the viewport (scissor type 0) or the scissor rectangle, clipped to the current
+ * render destination. */
+void FUN_0016a520(Gap::Gfx::igPsx2VisualContext *vc) {
+    igPsx2RenderDestination *destination = ((igPsx2RenderDestinationPool *)vc->_pBufList)->elements + vc->_currentBuf;
+    if (destination != 0) {
+        if (vc->_scissorType == 0) {
+            int y = vc->_iViewportY; int height = destination->height; int h = vc->_iViewportH;
+            h = clampExtent(h, height - y);
+            { int x = vc->_iViewportX; int width = destination->width; int w = vc->_iViewportW;
+              w = clampExtent(w, width - x);
+              y = clampOrigin(y, height);
+              x = clampOrigin(x, width);
+              p2SetScissor(x, y, w, h); }
         } else {
-            int a = o->e4d8; int hi_y = r->y; int c = o->e4e0;
-            c = H_1690d0::clampLen(c, hi_y - a);
-            { int lo_x = o->e4d4; int hi_x = r->x; int w = o->e4dc;
-              w = H_1690d0::clampLen(w, hi_x - lo_x);
-              a = H_1690d0::clampLow(a, hi_y);
-              lo_x = H_1690d0::clampLow(lo_x, hi_x);
-              p2SetScissor(lo_x, a, w, c); }
+            int y = vc->_scissorY; int height = destination->height; int h = vc->_scissorH;
+            h = clampExtent(h, height - y);
+            { int x = vc->_scissorX; int width = destination->width; int w = vc->_scissorW;
+              w = clampExtent(w, width - x);
+              y = clampOrigin(y, height);
+              x = clampOrigin(x, width);
+              p2SetScissor(x, y, w, h); }
         }
     }
 }
@@ -515,15 +438,12 @@ namespace Gap {
 namespace Gfx {
 
 void igPsx2VisualContext::setScissor(int x, int y, int w, int h) {
-    int temp_a1;
-
     _scissorX = x;
     _scissorY = y;
     _scissorW = w;
     _scissorH = h;
-    temp_a1 = _scissorType;
-    if (temp_a1 == 1) {
-        FUN_0016a520((O520 *)this);
+    if (_scissorType == 1) {
+        FUN_0016a520(this);
     }
 }
 
@@ -535,308 +455,210 @@ void igPsx2VisualContext::getScissor(int &x, int &y, int &w, int &h) const {
 }
 
 void igPsx2VisualContext::setScissorType(IG_GFX_SCISSOR_TYPE type) {
-    int a0 = (int)(::igPsx2VisualContext *)this;
-    *(int *)((char *)a0 + 104) = (int)type;
-    FUN_0016a520((O520 *)a0);
+    _scissorType = type;
+    FUN_0016a520(this);
 }
 }
 }
 
-void FUN_0016a800(S0_1690d0 *arg0) {
-    S_temp_a0 *temp_a0;
-    temp_a0 = (S_temp_a0 *)(arg0->f4);
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
+/* Forgets a colour table's igClut and its uploaded image state. */
+void FUN_0016a800(igPsx2ClutRecord *record) {
+    Gap::Gfx::igClut *clut;
+    clut = record->clut;
+    if (clut != 0) {
+        ((::igObject *)clut)->_refCount = (int)((int)(((::igObject *)clut)->_refCount - 1));
+        if (((unsigned long long)((long long)(int)((::igObject *)clut)->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy((igObject *)clut);
         }
     }
-    arg0->f4 = 0;
-    arg0->f8 = 0;
-    arg0->f14 = 0;
+    record->clut = 0;
+    record->image = 0;
+    record->state = 0;
 }
 
-void FUN_0016a860(Arg *arg0) {
-    int sp5C;
-    int i;
-    P_1690d0 *p;
-    int n;
-    int v;
-    int *old;
-    int *s3;
-    Buf860 *b;
-    sp5C = 64;
-    igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &sp5C, 64, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)arg0)->getListMemoryPool());
-    if (p != 0) {
-        n = sp5C;
-        p->f8 = 0;
-        if (g_stringPool == 0) {
-            v = (int)StringPool_Allocate(16);
-            if (v != 0) {
-                v = (int)StringPool_Construct((StringPool *)v);
-            }
-            g_stringPool = (StringPool *)v;
-        }
-        s3 = (int *)StringPool_Intern(g_stringPool, "IG_GFX_VC_CLUT_ARRAY_SIZE");
-        old = p->f8;
-        if (old != 0) {
-            int *a1 = old - 2;
-            int v0 = old[-1] - 1;
-            old[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
-            }
-        }
-        p->f8 = s3;
-        if (n == 0) {
-            n = 1;
-        }
-        b = (Buf860 *)Memory_FindBufferOwner(p);
-        p->f16 = b->vA(n, 24, 16);
-        p->f12 = b->vB(n, 2);
-        i = 0;
-        p->f2 = n;
-        p->f0 = n;
-        p->f4 = n;
-        while (i < n) {
-            p->f12[i] = i;
-            i = i + 1;
-        }
-    }
-    arg0->f328 = p;
-    arg0->f344 = -1;
+void FUN_0016a860(Gap::Gfx::igPsx2VisualContext *vc) {
+    int clutCount;
+    igPsx2ClutPool *pool;
+    clutCount = 64;
+    igGetRegistryValue_Int(g_objectSystem->configRegistry, 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &clutCount, 64, 0);
+    pool = new ((igMemoryPoolView *)vc->getListMemoryPool()) igPsx2ClutPool(clutCount, "IG_GFX_VC_CLUT_ARRAY_SIZE");
+    vc->_pClutList = (int)pool;
+    vc->_currentCLUT = -1;
 }
 
-void FUN_0016a9f0(igPsx2VisualContext *arg0, int arg1) {
-    int s0, s2, v, old;
-    int *hd;
-    T9f0 *t;
-    s0 = ((T9f0 *)arg0->_pClutList)->f0 - 1;
-    for (; s0 > -1; s0--) {
-        if (((T9f0 *)arg0->_pClutList)->Chk(s0)) {
-            FUN_0016ab80((Oab80 *)arg0, s0);
+void FUN_0016a9f0(Gap::Gfx::igPsx2VisualContext *vc, int keepPool) {
+    int handle;
+    igPsx2ClutPool *pool;
+    handle = ((igPsx2ClutPool *)vc->_pClutList)->capacity - 1;
+    for (; handle > -1; handle--) {
+        if (((igPsx2ClutPool *)vc->_pClutList)->isIndexAllocated(handle)) {
+            FUN_0016ab80(vc, handle);
         }
     }
-    if (arg1 == 0) {
-        t = (T9f0 *)arg0->_pClutList;
-        if (t != 0) {
-            if (g_stringPool == 0) {
-                v = (int)StringPool_Allocate(16);
-                if (v != 0) {
-                    v = (int)StringPool_Construct((StringPool *)v);
-                }
-                g_stringPool = (StringPool *)v;
-            }
-            s2 = (int)StringPool_Intern(g_stringPool, 0);
-            old = t->f8;
-            if (old != 0) {
-                hd = (int *)(old - 8);
-                v = *(int *)(old - 4) - 1;
-                *(int *)(old - 4) = v;
-                if (v == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                }
-            }
-            t->f8 = s2;
-            Memory_FreeBuffer((void *)t->f16);
-            Memory_FreeBuffer((void *)((int)t->f12));
-            if (&t->f8 != 0) {
-                old = t->f8;
-                if (old != 0) {
-                    hd = (int *)(old - 8);
-                    v = *(int *)(old - 4) - 1;
-                    *(int *)(old - 4) = v;
-                    if (v == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                    }
-                }
-            }
-            Memory_FreeBufferAliasB(t);
-        }
-        arg0->_pClutList = 0;
+    if (keepPool == 0) {
+        pool = (igPsx2ClutPool *)vc->_pClutList;
+        delete pool;
+        vc->_pClutList = 0;
     }
 }
 
-void FUN_0016ab80(Oab80 *arg0, int arg1) {
-    Tab80 *t;
-    E_1690d0 *e;
-    RC_1690d0 *r;
-    t = arg0->f328;
-    if (t->Chk(arg1)) {
-        e = (E_1690d0 *)((char *)t->f16 + arg1 * 24);
-        if (e->f8 != 0) {
-            FUN_0016b1d0((OB1d0 *)arg0, arg1);
+void FUN_0016ab80(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+    igPsx2ClutPool *pool;
+    igPsx2ClutRecord *record;
+    Gap::Gfx::igClut *clut;
+    pool = (igPsx2ClutPool *)vc->_pClutList;
+    if (pool->isIndexAllocated(handle)) {
+        record = pool->elements + handle;
+        if (record->image != 0) {
+            FUN_0016b1d0(vc, handle);
         }
-        r = e->f4;
-        if (r != 0) {
-            --r->refs;
-            if (!(r->refs & 0x7fffff)) igObject_Destroy((igObject *)r);
+        clut = record->clut;
+        if (clut != 0) {
+            --((::igObject *)clut)->_refCount;
+            if (!(((::igObject *)clut)->_refCount & 0x7fffff)) igObject_Destroy((igObject *)clut);
         }
-        e->f4 = 0;
-        if (e->f16 != 0) {
-            Memory_FreeBuffer((void *)e->f16);
+        record->clut = 0;
+        if (record->palette != 0) {
+            Memory_FreeBuffer(record->palette);
         }
-        t = arg0->f328;
-        if (arg1 < t->f0 && arg1 >= 0) {
-            if (t->f4 >= t->f2) {
-                VO *ow = (VO *)Memory_FindBufferOwner(t);
-                t->f2 = t->f2 + 8;
-                t->f12 = (unsigned short *)ow->v58(t->f12, t->f2 * 2);
-            }
-            t->f12[t->f4] = arg1;
-            t->f4 = t->f4 + 1;
-        }
+        pool = (igPsx2ClutPool *)vc->_pClutList;
+        pool->freeElement(handle);
     }
 }
 
-int FUN_0016ad20(ObjAd20 *arg0, int arg1, int arg2) {
-    PoolAd20 *p;
-    EntAd20 *e;
-    int s0;
-    int i;
-    if (arg1 > 256) {
+/* Makes a colour table of `entryCount` colours (at most 256) in `layout` and returns its handle, or -1. */
+int FUN_0016ad20(Gap::Gfx::igPsx2VisualContext *vc, int entryCount, int layout) {
+    igPsx2ClutPool *pool;
+    igPsx2ClutRecord *record;
+    int handle;
+    if (entryCount > 256) {
         return -1;
     }
-    p = arg0->f328;
-    if (p->f4 <= 0) {
-        p->f16 = (EntAd20 *)Memory_ReallocateAlignedAlias(p->f16, (p->f0 + 4) * 24, 16);
-        memset(p->f16 + p->f0, 0, 96);
-        if (p->f2 < 4) {
-            Buf46 *b = (Buf46 *)Memory_FindBufferOwner(p);
-            p->f12 = b->vB(p->f12, 8);
-            p->f2 = 4;
-        }
-        i = 0;
-        do {
-            p->f12[i] = p->f0 + i;
-            i++;
-        } while (i < 4);
-        p->f4 = 4;
-        p->f0 = p->f0 + 4;
-    }
-    s0 = p->f12[p->f4 - 1];
-    p->f4 = p->f4 - 1;
-    e = arg0->f328->f16 + s0;
-    FUN_0016a800((S0_1690d0 *)e);
-    e->f20 = 0;
-    e->f12 = arg2;
-    e->f0 = arg1;
-    e->f16 = 0;
-    return s0;
+    pool = (igPsx2ClutPool *)vc->_pClutList;
+    handle = pool->getFreeElement();
+    record = ((igPsx2ClutPool *)vc->_pClutList)->elements + handle;
+    FUN_0016a800(record);
+    record->state = 0;
+    record->layout = layout;
+    record->entryCount = entryCount;
+    record->palette = 0;
+    return handle;
 }
 
-void FUN_0016aea0(int arg0, int arg1, int *arg2, int *arg3) {
-    int *var_a2;
-    int *var_a3;
-    int temp_v1;
-    int var_a1;
-    int var_a1_2;
+/* Copies colours into a GS palette: 16 colours as they are (layout 0), or 256 with bits 3 and 4 of the index
+ * exchanged (layout 1). */
+void FUN_0016aea0(Gap::Gfx::igPsx2VisualContext *vc, int layout, int *palette, int *colors) {
+    int *destination;
+    int *source;
+    int swizzled;
+    int index;
+    int index2;
 
-    var_a2 = arg2;
-    var_a3 = arg3;
-    switch (arg1) {
+    destination = palette;
+    source = colors;
+    switch (layout) {
     case 0:
-        var_a1 = 0;
+        index = 0;
         do {
-            var_a1 += 1;
-            *var_a2 = *var_a3;
-            var_a3 += 1;
-            var_a2 += 1;
-        } while (var_a1 < 0x10);
+            index += 1;
+            *destination = *source;
+            source += 1;
+            destination += 1;
+        } while (index < 0x10);
         return;
     case 1:
-        var_a1_2 = 0;
+        index2 = 0;
         do {
-            temp_v1 = (var_a1_2 & 0xE7) | (((var_a1_2 >> 1) & 8) | ((var_a1_2 & 8) * 2));
-            var_a1_2 += 1;
-            *var_a2 = *(var_a3 + temp_v1);
-            var_a2 += 1;
-        } while (var_a1_2 < 0x100);
+            swizzled = (index2 & 0xE7) | (((index2 >> 1) & 8) | ((index2 & 8) * 2));
+            index2 += 1;
+            *destination = *(source + swizzled);
+            destination += 1;
+        } while (index2 < 0x100);
         return;
     }
 }
 
-void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
-    EntAf30 *e;
-    int n;
-    RAf30 *t;
-    void **o;
-    e = &arg0->f148->f10[arg1];
-    if (arg2 != 0) {
-        arg2->f4 = arg2->f4 + 1;
+/* Gives colour table `handle` the colours of `clut` and refreshes its GS palette. */
+void FUN_0016af30(Gap::Gfx::igPsx2VisualContext *vc, int handle, Gap::Gfx::igClut *clut) {
+    igPsx2ClutRecord *record;
+    int paletteSize;
+    Gap::Gfx::igClut *old;
+    record = &((igPsx2ClutPool *)vc->_pClutList)->elements[handle];
+    if (clut != 0) {
+        ((::igObject *)clut)->_refCount = ((::igObject *)clut)->_refCount + 1;
     }
-    t = e->f4;
-    if (t != 0) {
-        t->f4 = t->f4 - 1;
-        if (((unsigned long long)((long long)t->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)t);
+    old = record->clut;
+    if (old != 0) {
+        ((::igObject *)old)->_refCount = ((::igObject *)old)->_refCount - 1;
+        if (((unsigned long long)((long long)(int)((::igObject *)old)->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy((igObject *)old);
         }
     }
-    e->f4 = arg2;
-    e->f14 = 0;
-    n = 256;
-    if (arg0->f5bc != 0 && e->f0 < 17) {
-        e->fc = 0;
-        n = 16;
+    record->clut = clut;
+    record->state = 0;
+    paletteSize = 256;
+    if (vc->_clutOptimization != 0 && record->entryCount < 17) {
+        record->layout = 0;
+        paletteSize = 16;
     }
-    if (e->f10 != 0 && e->f8 != 0) {
-        p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)p2GetImageTexture((p2Image *)e->f8)));
-    } else if (e->f10 == 0) {
-        o = (void **)((Gap::Gfx::igVisualContext *)arg0)->getImageMemoryPool();
-        e->f10 = ((VC_220 *)o)->vX(n * 4, 128);
+    if (record->palette != 0 && record->image != 0) {
+        p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)p2GetImageTexture((p2Image *)record->image)));
+    } else if (record->palette == 0) {
+        record->palette = ((igMemoryPoolView *)vc->getImageMemoryPool())->AllocateAligned(paletteSize * 4, 128);
     }
-    if (e->f10 != 0) {
-        arg2->f1c = 1;
-        FUN_0016aea0((int)arg0, e->fc, (int *)e->f10, (int *)arg2->f14);
+    if (record->palette != 0) {
+        clut->_clutDirty = 1;
+        FUN_0016aea0(vc, record->layout, (int *)record->palette, (int *)clut->_pData);
     }
 }
 
-bool FUN_0016b090(Ob *arg0, int arg1) {
-    int sp5C;
-    bool v;
-    int h;
-    int r;
-    RB090 *s;
-    Q_1690d0 *q;
-    s = arg0->f328->f16 + arg1;
-    v = true;
-    if (s->f8 == 0 || s->f4->f28 != 0) {
-        if (s->f8 != 0) {
-            h = (int)p2GetImageTexture((p2Image *)s->f8);
-            p2InvalidateTexture((P2Texture *)h);
-            p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)h));
-            q = s->f4;
-            q->f28 = 1;
-            FUN_0016aea0((int)arg0, s->f12, (int *)s->f16, (int *)q->f20);
+/* Uploads colour table `handle`'s palette to the GS when it changed, and makes sure its texture is resident. */
+bool FUN_0016b090(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+    int resident;
+    bool uploaded;
+    int texture;
+    int ignored;
+    igPsx2ClutRecord *record;
+    Gap::Gfx::igClut *clut;
+    record = &((igPsx2ClutPool *)vc->_pClutList)->elements[handle];
+    uploaded = true;
+    if (record->image == 0 || record->clut->_clutDirty != 0) {
+        if (record->image != 0) {
+            texture = (int)p2GetImageTexture((p2Image *)record->image);
+            p2InvalidateTexture((P2Texture *)texture);
+            p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)texture));
+            clut = record->clut;
+            clut->_clutDirty = 1;
+            FUN_0016aea0(vc, record->layout, (int *)record->palette, (int *)clut->_pData);
         } else {
-            s->f8 = (int)p2CreateImage(DAT_0048a4e0[s->f12], 0, DAT_0048a4ec[0], (void *)s->f16);
+            record->image = (int)p2CreateImage(DAT_0048a4e0[record->layout], 0, DAT_0048a4ec[0], record->palette);
         }
-        s->f4->f28 = 0;
+        record->clut->_clutDirty = 0;
     }
-    if (s->f20 != 5) {
-        sp5C = (int)p2GetImageTexture((p2Image *)s->f8);
-        v = FUN_0020bb20((P2Texture **)&sp5C, 0, 0) != 0;
+    if (record->state != 5) {
+        resident = (int)p2GetImageTexture((p2Image *)record->image);
+        uploaded = FUN_0020bb20((P2Texture **)&resident, 0, 0) != 0;
     }
-    s->f20 = 4;
-    return v;
+    record->state = 4;
+    return uploaded;
 }
 
-void FUN_0016b1d0(OB1d0 *arg0, int arg1) {
-    TB1d0 *t;
-    int h;
-    E8 *e;
-    t = arg0->f328;
-    if (t->Chk(arg1)) {
-        e = t->f16 + arg1;
-        if (e->w8 != 0) {
-            h = (int)p2GetImageTexture((p2Image *)e->w8);
-            p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)h));
-            p2FreeTexture((P2Texture *)h);
-            p2FreeImage((p2Image *)e->w8);
+/* Frees colour table `handle`'s GS image and palette texture. */
+void FUN_0016b1d0(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+    igPsx2ClutPool *pool;
+    int texture;
+    igPsx2ClutRecord *record;
+    pool = (igPsx2ClutPool *)vc->_pClutList;
+    if (pool->isIndexAllocated(handle)) {
+        record = pool->elements + handle;
+        if (record->image != 0) {
+            texture = (int)p2GetImageTexture((p2Image *)record->image);
+            p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)texture));
+            p2FreeTexture((P2Texture *)texture);
+            p2FreeImage((p2Image *)record->image);
         }
-        e->w8 = 0;
-        arg0->f344 = -1;
+        record->image = 0;
+        vc->_currentCLUT = -1;
     }
 }
 
@@ -855,11 +677,11 @@ void igPsx2VisualContext::userDestruct() {
         Memory_FreeBuffer(_inverseTranspose);
         _inverseTranspose = 0;
     }
-    FUN_00169260((::igPsx2VisualContext *)this, 0);
-    FUN_0017a540((::igPsx2VisualContext *)this, 0);
-    FUN_0016a9f0((::igPsx2VisualContext *)this, 0);
-    FUN_00170510((Obj_170510 *)this, 0);
-    FUN_0016c650((::igPsx2VisualContext *)this, 0);
+    FUN_00169260(this, 0);
+    FUN_0017a540(this, 0);
+    FUN_0016a9f0(this, 0);
+    igPsx2VisualContext_UninitializeLighting(this, 0);
+    FUN_0016c650(this, 0);
     FUN_001788e0((StatContext88 *)this, 0);
     if (_iContextOpen != 0) {
         p2CloseDisplay();
@@ -869,59 +691,13 @@ void igPsx2VisualContext::userDestruct() {
 }
 }
 
-/* The buffer-format record _pBufList holds per buffer (BUFFER_RECORD_SIZE bytes). */
-struct BufferRecord {
-    int width;
-    int height;
-    int colorBits;
-    int depthBits;
-    int stencilBits;
-    int f20;
-    int f24;
-    int kind;
-    char pad32[16];
-};
-struct BufferRecordList {
-    unsigned short count;
-    unsigned short f2;
-    unsigned short reserved;
-    unsigned short f6;
-    char pad8[8];
-    BufferRecord *data;
-};
-/* _videoMode: display timing the context opens with. */
-struct OpenVideoMode {
-    unsigned char f0;
-    unsigned char custom;
-    short pad2;
-    int frameCount;
-    int frameMode;
-    float refreshRate;
-    int f16;
-    int standard;
-};
-/* igPsx2VisualContext as its open slot sees it. */
-class OpenContext {
-public:
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void openBase(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
-    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
-    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual int getColorBits(int buffer); virtual int getStencilBits(int buffer); virtual int getDepthBits(int buffer);
-    char pad4[318];
-    unsigned char _iContextOpen;       /* +322 */
-    char pad323[545];
-    BufferRecordList *_pBufList;       /* +868 */
-    int _currentBuf;                   /* +872 */
-    char pad876[32];
-    int _iDisplayWidth;                /* +908 */
-    int _iDisplayHeight;               /* +912 */
-    char pad916[432];
-    OpenVideoMode _videoMode;          /* +1348 */
-    char pad1372[100];
-    int _maxStageNum;                  /* +1472 */
-    BufferRecord *bufferRecord(int i) { return &_pBufList->data[i]; }
-};
+/* The context's render-destination pool, and the destination a handle names. */
+static inline igPsx2RenderDestinationPool *destinationPool(Gap::Gfx::igPsx2VisualContext *vc) {
+    return (igPsx2RenderDestinationPool *)vc->_pBufList;
+}
+static inline igPsx2RenderDestination *renderDestination(Gap::Gfx::igPsx2VisualContext *vc, int handle) {
+    return &destinationPool(vc)->elements[handle];
+}
 struct ContextText : public igObject {
     const char *_text;
     int _length;
@@ -939,29 +715,28 @@ namespace Gap {
 namespace Gfx {
 
 igResult igPsx2VisualContext::open() {
-    OpenContext *view = (OpenContext *)this;
-    BufferRecord *record;
+    igPsx2RenderDestination *record;
     ::igRegistry *registry;
     int colorBits;
-    int stencilBits;
+    int alphaBits;
     int depthBits;
     bool useWatchdog;
     int width;
     int height;
 
-    view->openBase();
-    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)view)->getInternalMemoryPool()));
-    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create((int)((Gap::Gfx::igVisualContext *)view)->getInternalMemoryPool()));
+    loadDefaultDriverDatabase();
+    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create((int)getInternalMemoryPool()));
+    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create((int)getInternalMemoryPool()));
     int size;
     int syncMode;
-    record = view->bufferRecord(view->_currentBuf);
-    if (record->kind != 0 && record->kind != 1 && record->kind != 2) {
-        BufferRecordList *list = view->_pBufList;
+    record = renderDestination(this, _currentBuf);
+    if (record->type != 0 && record->type != 1 && record->type != 2) {
+        igPsx2RenderDestinationPool *pool = destinationPool(this);
         record = 0;
-        for (int i = 0; i < list->count - list->reserved; i++) {
-            record = view->bufferRecord(i);
-            if (record->kind == 0 || record->kind == 1 || record->kind == 2) {
-                view->_currentBuf = i;
+        for (int i = 0; i < pool->capacity - pool->freeCount; i++) {
+            record = renderDestination(this, i);
+            if (record->type == 0 || record->type == 1 || record->type == 2) {
+                _currentBuf = i;
                 break;
             }
         }
@@ -969,23 +744,23 @@ igResult igPsx2VisualContext::open() {
     if (record == 0) {
         return g_resultFailure;
     }
-    if (view->_videoMode.custom == 1) {
-        if (view->_videoMode.frameMode == 0) {
+    if (_videoMode._bInterlaced == 1) {
+        if (_videoMode._iFieldSize == 0) {
             p2SetFrameMode(0);
-        } else if (view->_videoMode.frameMode == 1) {
+        } else if (_videoMode._iFieldSize == 1) {
             p2SetFrameMode(1);
         }
-        p2SetDisplayFrameCount(view->_videoMode.frameCount);
+        p2SetDisplayFrameCount(_videoMode._iFieldCount);
     } else {
         p2SetFrameMode(0);
         p2SetDisplayFrameCount(2);
     }
-    if (view->_videoMode.refreshRate < 40.0f) {
+    if (_videoMode._fRefreshRate < 40.0f) {
         p2SetSwapInterval(1);
     }
-    colorBits = view->getColorBits(view->_currentBuf);
-    stencilBits = view->getStencilBits(view->_currentBuf);
-    depthBits = view->getDepthBits(view->_currentBuf);
+    colorBits = getColorBitsPerPixel(_currentBuf);
+    alphaBits = getAlphaBitsPerPixel(_currentBuf);
+    depthBits = getDepthBitsPerPixel(_currentBuf);
     if (colorBits >= 32 || colorBits <= 0) {
         colorBits = 32;
     } else if (colorBits >= 24) {
@@ -993,14 +768,14 @@ igResult igPsx2VisualContext::open() {
     } else {
         colorBits = 16;
     }
-    if (stencilBits >= 8) {
-        stencilBits = 8;
-    } else if (stencilBits >= 6) {
-        stencilBits = 6;
-    } else if (stencilBits >= 4) {
-        stencilBits = 4;
+    if (alphaBits >= 8) {
+        alphaBits = 8;
+    } else if (alphaBits >= 6) {
+        alphaBits = 6;
+    } else if (alphaBits >= 4) {
+        alphaBits = 4;
     } else {
-        stencilBits = 0;
+        alphaBits = 0;
     }
     if (depthBits >= 32) {
         depthBits = 32;
@@ -1009,11 +784,11 @@ igResult igPsx2VisualContext::open() {
     } else {
         depthBits = 16;
     }
-    record->colorBits = colorBits;
-    record->stencilBits = stencilBits;
-    record->depthBits = depthBits;
-    record->f20 = 0;
-    registry = (::igRegistry *)((G_1778e0 *)g_objectSystem)->f56;
+    record->colorBitsPerPixel = colorBits;
+    record->alphaBitsPerPixel = alphaBits;
+    record->depthBitsPerPixel = depthBits;
+    record->stencilBitsPerPixel = 0;
+    registry = (::igRegistry *)g_objectSystem->configRegistry;
     igGetRegistryValue_StringObj(registry, 4, "ucodeConfig", (igStringObj **)&ucodeConfig, "", 0);
     igGetRegistryValue_StringObj(registry, 4, "ucodeSym", (igStringObj **)&ucodeSym, "", 0);
     igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_CLUT_PSX2", &size, -1, 0);
@@ -1044,20 +819,20 @@ igResult igPsx2VisualContext::open() {
     if (size > 0) p2SetPoolSize(12, size);
     igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_RENDERLIST_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(13, size);
-    ((Gap::Core::igRegistry *)registry)->getValue(4, "IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES", *(int *)(&view->_maxStageNum), 1, 0);
-    view->_maxStageNum = view->_maxStageNum < 16 ? view->_maxStageNum : 16;
-    view->_maxStageNum = view->_maxStageNum > 1 ? view->_maxStageNum : 1;
+    ((Gap::Core::igRegistry *)registry)->getValue(4, "IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES", _maxStageNum, 1, 0);
+    _maxStageNum = _maxStageNum < 16 ? _maxStageNum : 16;
+    _maxStageNum = _maxStageNum > 1 ? _maxStageNum : 1;
     syncMode = 0;
     ((Gap::Core::igRegistry *)registry)->getValue(4, "IG_GFX_TEXTURE_SYNC_MODE_PSX2", syncMode, 1, 0);
     p2SetTextureWaitMode(syncMode);
     useWatchdog = true;
     ((Gap::Core::igRegistry *)registry)->getValue(4, "useWatchdog", *(unsigned char *)&useWatchdog, 1, 0);
     p2EnableWatchdog(useWatchdog);
-    FUN_00179e00((StatContext *)view);
+    FUN_00179e00((StatContext *)this);
     {
-        int bits = colorBits + stencilBits;
+        int bits = colorBits + alphaBits;
         bits = bits < 32 ? bits : 32;
-        int standard = view->_videoMode.standard;
+        int standard = _videoMode._iVideoType;
         if (standard != 2 && standard != 3) {
             if (standard == 0) {
                 int mode;
@@ -1075,7 +850,7 @@ igResult igPsx2VisualContext::open() {
                 const char *config = ucodeConfig->text();
                 const char *symbols = ucodeSym->text();
                 p2OpenDisplay(mode, bits, depthBits, config, symbols, record->width, record->height);
-            } else if (view->_videoMode.standard == 1) {
+            } else if (_videoMode._iVideoType == 1) {
                 int mode;
                 switch (record->width) {
                 case 256: mode = 5; break;
@@ -1095,8 +870,8 @@ igResult igPsx2VisualContext::open() {
         }
     }
     p2GetDisplaySize(&width, &height, 0, 0);
-    view->_iDisplayWidth = width;
-    view->_iDisplayHeight = height;
+    _iDisplayWidth = width;
+    _iDisplayHeight = height;
     {
         bool slowSpotLight;
         if (igGetRegistryValue_Bool(registry, 4, "useSlowSpotLight", (unsigned char *)&slowSpotLight, 0, 0) != 0 && slowSpotLight) {
@@ -1127,18 +902,17 @@ igResult igPsx2VisualContext::open() {
         igGetRegistryValue_Bool(registry, 4, "showGuardBand", (unsigned char *)&showGuardBand, 0, 0);
         if (showGuardBand) p2SetClearPasses(1);
     }
-    FUN_00174090(view);
-    view->_iContextOpen = 1;
-    FUN_0017a7e0((S0_17a070 *)view);
+    FUN_00174090(this);
+    _iContextOpen = 1;
+    FUN_0017a7e0(this);
     return g_resultSuccess;
 }
 
 void igPsx2VisualContext::reset() {
-    Obj35 *arg0 = (Obj35 *)this;
-    igVisualContext_Reset(arg0);
-    arg0->rel(arg0->m940);
-    arg0->rel(arg0->m944);
-    arg0->rel(arg0->m948);
+    igVisualContext::reset();
+    _pVertexArray = 0;
+    _pIndexArray = 0;
+    _pStripLengthArray = 0;
 }
 
 int igPsx2VisualContext::getCapability(IG_GFX_CAPABILITY which) const {
@@ -1193,52 +967,18 @@ int igPsx2VisualContext::getCapability(IG_GFX_CAPABILITY which) const {
 }
 }
 
-/* matching construct: dummy-virtual view so ->v772() dispatches through vtable slot 193 of the context */
-void FUN_0016c650(igPsx2VisualContext *arg0, int arg1) {
-    int s0, s2, v, old;
-    int *hd;
-    T650 *t;
-    s0 = ((T650 *)arg0->_pDLists)->f0 - 1;
-    for (; s0 > -1; s0--) {
-        ((VO650 *)arg0)->v772(s0);
+/* Deletes every render list and, unless the pool is kept, the pool itself. */
+void FUN_0016c650(Gap::Gfx::igPsx2VisualContext *vc, int keepPool) {
+    int handle;
+    igPsx2RenderListPool *pool;
+    handle = ((igPsx2RenderListPool *)vc->_pDLists)->capacity - 1;
+    for (; handle > -1; handle--) {
+        vc->deleteRenderList(handle);
     }
-    if (arg1 == 0) {
-        t = (T650 *)arg0->_pDLists;
-        if (t != 0) {
-            if (g_stringPool == 0) {
-                v = (int)StringPool_Allocate(16);
-                if (v != 0) {
-                    v = (int)StringPool_Construct((StringPool *)v);
-                }
-                g_stringPool = (StringPool *)v;
-            }
-            s2 = (int)StringPool_Intern(g_stringPool, 0);
-            old = t->f8;
-            if (old != 0) {
-                hd = (int *)(old - 8);
-                v = *(int *)(old - 4) - 1;
-                *(int *)(old - 4) = v;
-                if (v == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                }
-            }
-            t->f8 = s2;
-            Memory_FreeBuffer((void *)t->f16);
-            Memory_FreeBuffer((void *)t->f12);
-            if (&t->f8 != 0) {
-                old = t->f8;
-                if (old != 0) {
-                    hd = (int *)(old - 8);
-                    v = *(int *)(old - 4) - 1;
-                    *(int *)(old - 4) = v;
-                    if (v == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                    }
-                }
-            }
-            Memory_FreeBufferAliasB(t);
-        }
-        arg0->_pDLists = 0;
+    if (keepPool == 0) {
+        pool = (igPsx2RenderListPool *)vc->_pDLists;
+        delete pool;
+        vc->_pDLists = 0;
     }
 }
 
@@ -1246,117 +986,75 @@ namespace Gap {
 namespace Gfx {
 
 int igPsx2VisualContext::createRenderList() {
-    O192 *arg0 = (O192 *)this;
-    int a1;
-    T192 *s1 = arg0->f960;
-    int s0;
-    if (s1->f4 <= 0) {
-        s1->f16 = (Ent192 **)Memory_ReallocateAlignedAlias(s1->f16, (s1->f0 + 4) * 4, 16);
-        memset(s1->f0 + s1->f16, 0, 16);
-        if (s1->f2 < 4) {
-            VM *o = (VM *)Memory_FindBufferOwner(s1);
-            s1->f12 = (unsigned short *)o->v232(s1->f12, 8);
-            s1->f2 = 4;
-        }
-        a1 = 0;
-        do {
-            int t = s1->f0; t = t + a1; s1->f12[a1] = t;
-            a1++;
-        } while (a1 < 4);
-        s1->f4 = 4;
-        s1->f0 = s1->f0 + 4;
-    }
-    s0 = s1->f12[s1->f4 - 1];
-    s1->f4 = s1->f4 - 1;
+    int handle;
+    handle = ((igPsx2RenderListPool *)_pDLists)->getFreeElement();
     {
-        Nd192 *n = new ((int)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool()) Nd192;
-        int v = (int)(igIntList_Create((int)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool()));
-        arg0->f960->f16[s0] = (Ent192 *)n;
-        n->a = v;
+        igPsx2RenderList *list = new ((igMemoryPoolView *)getDriverDataMemoryPool()) igPsx2RenderList;
+        Gap::Core::igIntList *displayLists = (Gap::Core::igIntList *)igIntList_Create((int)getDriverDataMemoryPool());
+        ((igPsx2RenderListPool *)_pDLists)->elements[handle] = list;
+        list->displayLists = displayLists;
     }
-    arg0->f968 = 0;
-    return s0;
+    _dlistErrors = 0;
+    return handle;
 }
 
 void igPsx2VisualContext::deleteRenderList(int dlistHandle) {
-    T193 *a3;
-    int s0;
-    Rc193 *s2;
-    int s1;
-    bool ok;
-    int a2, a1;
-    a3 = ((T193 *)_pDLists);
-    if (dlistHandle < a3->f0) {
-        ok = false;
-        if (dlistHandle >= 0) {
-            a1 = a3->f4;
-            for (a2 = 0; a2 < a1; a2++) {
-                if (dlistHandle == a3->f12[a2]) {
-                    ok = false;
-                    goto done;
-                }
-            }
-            ok = true;
+    igPsx2RenderListPool *pool;
+    Gap::Core::igIntList *displayLists;
+    int i;
+    pool = (igPsx2RenderListPool *)_pDLists;
+    /* matching construct: retail masks the inlined allocation test to a byte before it branches */
+    if (pool->isIndexAllocated(dlistHandle) & 0xFF) {
+        displayLists = pool->elements[dlistHandle]->displayLists;
+        for (i = 0; i < displayLists->_count; i++) {
+            p2ReleaseDisplayList((p2DisplayList *)displayLists->get(i));
         }
-    } else {
-        ok = false;
-    }
-done:
-    if (ok & 0xFF) {
-        s0 = dlistHandle * 4;
-        s2 = a3->f16[dlistHandle]->list;
-        for (s1 = 0; s1 < s2->count; s1++) {
-            p2ReleaseDisplayList((p2DisplayList *)s2->data[s1]);
-        }
-        --s2->refs;
-        if ((s2->refs & 0x7fffff) == 0) {
-            igObject_Destroy((::igObject *)s2);
-        }
-        Memory_FreeBufferAliasB(((T193 *)_pDLists)->f16[dlistHandle]);
-        ((T193 *)_pDLists)->Add(dlistHandle);
+        displayLists->release();
+        Memory_FreeBufferAliasB(((igPsx2RenderListPool *)_pDLists)->elements[dlistHandle]);
+        ((igPsx2RenderListPool *)_pDLists)->freeElement(dlistHandle);
     }
 }
 
 void igPsx2VisualContext::beginRenderListDraw(int dlistHandle) {
-    *(int *)((char *)((::igPsx2VisualContext *)this) + 964) = dlistHandle;
-    if (*(int *)((char *)((::igPsx2VisualContext *)this) + 72) < 0x10) {
+    _currentDListHandle = dlistHandle;
+    if (_blendMatricesCount < 0x10) {
         p2SetBlendMatrices(0, 0x10);
     }
 }
 
 bool igPsx2VisualContext::endRenderListDraw() {
-    int temp_a1;
-    temp_a1 = *(int *)((char *)((::igPsx2VisualContext *)this) + 72);
-    if (temp_a1 > 0) {
-        p2SetBlendMatrices(*(int *)((char *)((::igPsx2VisualContext *)this) + 84), temp_a1);
+    int count;
+    count = _blendMatricesCount;
+    if (count > 0) {
+        p2SetBlendMatrices((int)_blendMatrices, count);
     }
-    *(int *)((char *)((::igPsx2VisualContext *)this) + 964) = -1;
-    return *(unsigned char *)((char *)((::igPsx2VisualContext *)this) + 968) == 0;
+    _currentDListHandle = -1;
+    return _dlistErrors == 0;
 }
 
 bool igPsx2VisualContext::executeRenderList(int dlistHandle) {
-    struct L196 *temp_s4;
-    int temp_v0;
-    int var_s2;
-    int var_s1;
-    int temp_v0_2;
+    Gap::Core::igIntList *displayLists;
+    int state;
+    int weightCount;
+    int i;
+    int listWeights;
 
-    temp_s4 = *((struct T196 *)_pDLists)->tab[dlistHandle];
-    if (temp_s4->n > 0) {
-        temp_v0 = FUN_00177010((::igPsx2VisualContext *)this, 0, 0, temp_s4->a[0], dlistHandle);
-        if ((temp_v0 == 1) || (temp_v0 == 3)) {
+    displayLists = ((igPsx2RenderListPool *)_pDLists)->elements[dlistHandle]->displayLists;
+    if (displayLists->_count > 0) {
+        state = FUN_00177010((::igPsx2VisualContext *)this, 0, 0, displayLists->get(0), dlistHandle);
+        if ((state == 1) || (state == 3)) {
             return false;
         }
-        var_s2 = 0;
-        if (temp_v0 == 2) {
-            var_s2 = p2GetDisplayListBlendWeightCount((p2DisplayList *)temp_s4->a[0]);
+        weightCount = 0;
+        if (state == 2) {
+            weightCount = p2GetDisplayListBlendWeightCount((p2DisplayList *)displayLists->get(0));
         }
-        for (var_s1 = 0; var_s1 < temp_s4->n; var_s1 += 1) {
-            temp_v0_2 = p2GetDisplayListBlendWeightCount((p2DisplayList *)temp_s4->a[var_s1]);
-            if ((temp_v0 == 2) && (var_s2 != temp_v0_2)) {
-                p2SetBlendWeightCount(temp_v0_2, temp_v0_2);
+        for (i = 0; i < displayLists->_count; i += 1) {
+            listWeights = p2GetDisplayListBlendWeightCount((p2DisplayList *)displayLists->get(i));
+            if ((state == 2) && (weightCount != listWeights)) {
+                p2SetBlendWeightCount(listWeights, listWeights);
             }
-            p2CallDisplayList((p2DisplayList *)temp_s4->a[var_s1]);
+            p2CallDisplayList((p2DisplayList *)displayLists->get(i));
         }
     }
     return true;
@@ -1364,34 +1062,25 @@ bool igPsx2VisualContext::executeRenderList(int dlistHandle) {
 }
 }
 
-void FUN_0016cc50(int a0, int a1)
-{
-    *(int *)((char *)a0 + 1400) = a1;
+void FUN_0016cc50(Gap::Gfx::igPsx2VisualContext *vc, int mode) {
+    vc->_renderlistMode = mode;
 }
 
-static inline int count_of(const IntList *list) { return list->_count; }
-
-void FUN_0016cc60(char *arg0) {
-    int idx;
-    IntList *list;
-    int top;
-    int value;
-    idx = *(int *)(arg0 + 964);
-    if (idx >= 0) {
-        list = **(IntList ***)(*(int *)(*(int *)(arg0 + 960) + 16) + idx * 4);
-        value = (int)(p2BeginDisplayList(*(int *)((char *)DAT_0048a4f0 + *(int *)(arg0 + 1400) * 4)));
-        top = count_of(list);
-        if (top < list->_capacity) {
-            list->_count = list->_count + 1;
-        } else {
-            ((Gap::Core::igDataList *)list)->resizeAndSetCount(top + 1, 4);
-        }
-        list->_data[top] = value;
+/* Starts recording a p2 display list into the current render list, in the render-list mode's p2 mode. */
+void FUN_0016cc60(Gap::Gfx::igPsx2VisualContext *vc) {
+    int handle;
+    Gap::Core::igIntList *displayLists;
+    int list;
+    handle = vc->_currentDListHandle;
+    if (handle >= 0) {
+        displayLists = ((igPsx2RenderListPool *)vc->_pDLists)->elements[handle]->displayLists;
+        list = (int)p2BeginDisplayList(DAT_0048a4f0[vc->_renderlistMode]);
+        displayLists->append(list);
     }
 }
 
-void FUN_0016cd10(void *arg0) {
-    if (*(int *)((char *)arg0 + 964) >= 0) {
+void FUN_0016cd10(Gap::Gfx::igPsx2VisualContext *vc) {
+    if (vc->_currentDListHandle >= 0) {
         p2EndDisplayList();
     }
 }
@@ -1399,12 +1088,12 @@ void FUN_0016cd10(void *arg0) {
 namespace Gap {
 namespace Gfx {
 
-void igPsx2VisualContext::detectDriverDatabaseProperties(igDriverDatabase *arg1) {
-    igDriverDatabase_SetCurrentProperty((void *)arg1, 1, "psx2");
-    igDriverDatabase_SetCurrentProperty((void *)arg1, 2, "1.0");
-    igDriverDatabase_SetCurrentProperty((void *)arg1, 3, "sony");
-    igDriverDatabase_SetCurrentProperty((void *)arg1, 4, "psx2");
-    igDriverDatabase_SetCurrentProperty((void *)arg1, 5, "1.0");
+void igPsx2VisualContext::detectDriverDatabaseProperties(igDriverDatabase *database) {
+    igDriverDatabase_SetCurrentProperty((void *)database, 1, "psx2");
+    igDriverDatabase_SetCurrentProperty((void *)database, 2, "1.0");
+    igDriverDatabase_SetCurrentProperty((void *)database, 3, "sony");
+    igDriverDatabase_SetCurrentProperty((void *)database, 4, "psx2");
+    igDriverDatabase_SetCurrentProperty((void *)database, 5, "1.0");
 }
 
 void igPsx2VisualContext::callDmaChain(void *packet, int size, int flush) {

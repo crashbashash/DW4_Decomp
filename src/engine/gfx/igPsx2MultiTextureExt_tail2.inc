@@ -4,9 +4,9 @@ void Gap__Gfx__igPsx2MultiTextureExt__vfunc_29(igPsx2MultiTextureExt *self, int 
     self->_context = context;
 }
 
-void Gap__Gfx__igPsx2MultiTextureExt__vfunc_30(igPsx2MultiTextureExtView *self, int unit, int, int mode)
+void Gap__Gfx__igPsx2MultiTextureExt__vfunc_30(igPsx2MultiTextureExt *self, int unit, int, int mode)
 {
-    self->_context->vfunc_146(unit, DAT_004df5e0[mode]);
+    ((Gap::Gfx::igVisualContext *)self->_context)->setTextureStageFunc(unit, DAT_004df5e0[mode]);
 }
 
 void Gap__Gfx__igPsx2MultiTextureExt__vfunc_31(int a0, int a1, int a2, int a3) {

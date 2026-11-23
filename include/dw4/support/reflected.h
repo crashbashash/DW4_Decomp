@@ -26228,6 +26228,7 @@ public:
     bool getMatrixOptimizationState();
     void setTextureMatrixProjectiveState(int stage, unsigned char enable);
     unsigned char getTextureMatrixProjectiveState(int stage);
+    int allocateTexture(int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount);
 };
 }
 }

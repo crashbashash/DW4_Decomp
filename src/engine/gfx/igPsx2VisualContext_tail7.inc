@@ -2,26 +2,9 @@ namespace Gap {
 namespace Gfx {
 
 void igPsx2VisualContext::setVertexArray(igVertexArray2 *va, unsigned int stream) {
-    int *old;
-    int *slot;
-    int idx;
-
+    _vertexArray2[stream] = va;
     if (va != 0) {
-        ((int *)va)[1] = ((int *)va)[1] + 1;
-    }
-    idx = stream * 4;
-    idx = idx + (int)(::igPsx2VisualContext *)this;
-    slot = (int *)(idx + 240);
-    old = (int *)*slot;
-    if (old != 0) {
-        old[1] = old[1] - 1;
-        if ((old[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy((::igObject *)old);
-        }
-    }
-    *slot = (int)va;
-    if (va != 0) {
-        ((Obj_17dea0 *)this)->vX(0);
+        setVertexArray((igVertexArray *)0);
     }
 }
 }
@@ -32,115 +15,113 @@ void igPsx2VisualContext::setVertexArray(igVertexArray2 *va, unsigned int stream
  * Float streams (igVec3fList / igVec2fList) bind as they are; char/short streams set a fixed-point
  * component layout from the entry's shift, which the return value reports. Without an index
  * array the streams are advanced to `firstVertex`. */
-static inline bool isListOf(VC_17e590 *list, igMetaObject *meta) { return (int)meta == list->vX(); }
 
-bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *positions, int *normals, int *colors, int *texCoords) {
-    igPsx2VisualContext *vc = (igPsx2VisualContext *)context;
+bool FUN_0017df40(igPsx2VisualContext *vc, igVertexDataList *vertexData, int firstVertex, int *positions, int *normals, int *colors, int *texCoords) {
     bool integerFormat = false;
-    Node *entry;
-    VC_17e590 *source;
-    VC_17e590 *list;
-    VC_17e590 *floatList;
-    VC_17e590 *other;
+    igVertexData *entry;
+    Gap::Core::igObject *source;
+    Gap::Core::igObject *list;
+    Gap::Core::igObject *floatList;
+    Gap::Core::igObject *other;
 
-    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 1, 0);
-    source = (VC_17e590 *)dw4_cast_or_null((char *)entry->obj, &g_igVec3fList_metaObject);
+    entry = FUN_0015f4a0(vertexData, 1, 0);
+    source = (Gap::Core::igObject *)dw4_cast_or_null((char *)componentList(entry), &g_igVec3fList_metaObject);
     if (source != 0) {
-        *positions = source->f16;
+        *positions = listData(source);
         p2SetComponentLayout(0, 0, 0, 0);
     } else {
-        source = entry->obj;
+        source = componentList(entry);
         if (isListOf(source, Gap::Core::igCharList::getClassMeta())) {
-            p2SetComponentLayout(0, 1, 7 - entry->f32, entry->f32);
+            p2SetComponentLayout(0, 1, 7 - entry->_componentFraction, entry->_componentFraction);
             integerFormat = true;
-            *positions = source->f16;
+            *positions = listData(source);
         } else if (isListOf(source, Gap::Core::igUnsignedCharList::getClassMeta())) {
-            p2SetComponentLayout(0, 0, 8 - entry->f32, entry->f32);
+            p2SetComponentLayout(0, 0, 8 - entry->_componentFraction, entry->_componentFraction);
             integerFormat = true;
-            *positions = source->f16;
+            *positions = listData(source);
         } else if (isListOf(source, Gap::Core::igShortList::getClassMeta())) {
-            p2SetComponentLayout(0, 1, 15 - entry->f32, entry->f32);
+            p2SetComponentLayout(0, 1, 15 - entry->_componentFraction, entry->_componentFraction);
             integerFormat = true;
-            *positions = source->f16;
+            *positions = listData(source);
         } else if (isListOf(source, Gap::Core::igUnsignedShortList::getClassMeta())) {
-            p2SetComponentLayout(0, 0, 16 - entry->f32, entry->f32);
+            p2SetComponentLayout(0, 0, 16 - entry->_componentFraction, entry->_componentFraction);
             integerFormat = true;
-            *positions = source->f16;
+            *positions = listData(source);
         }
     }
-    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 3, 0);
+    entry = FUN_0015f4a0(vertexData, 3, 0);
     if (entry != 0) {
-        list = entry->obj;
-        if (list != 0 && ((Gap::Core::igObject *)list)->isOfType(g_igVec3fList_metaObject) != 0) {
+        list = componentList(entry);
+        if (list != 0 && list->isOfType(g_igVec3fList_metaObject) != 0) {
             floatList = list;
         } else {
             floatList = 0;
         }
         if (floatList != 0) {
-            *normals = floatList->f16;
+            *normals = listData(floatList);
             p2SetComponentLayout(1, 0, 0, 0);
         } else {
-            other = entry->obj;
+            other = componentList(entry);
             if (isListOf(other, Gap::Core::igCharList::getClassMeta())) {
-                p2SetComponentLayout(1, 1, 7 - entry->f32, entry->f32);
+                p2SetComponentLayout(1, 1, 7 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *normals = other->f16;
+                *normals = listData(other);
             } else if (isListOf(other, Gap::Core::igUnsignedCharList::getClassMeta())) {
-                p2SetComponentLayout(1, 0, 8 - entry->f32, entry->f32);
+                p2SetComponentLayout(1, 0, 8 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *normals = other->f16;
+                *normals = listData(other);
             } else if (isListOf(other, Gap::Core::igShortList::getClassMeta())) {
-                p2SetComponentLayout(1, 1, 15 - entry->f32, entry->f32);
+                p2SetComponentLayout(1, 1, 15 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *normals = other->f16;
+                *normals = listData(other);
             } else if (isListOf(other, Gap::Core::igUnsignedShortList::getClassMeta())) {
-                p2SetComponentLayout(1, 0, 16 - entry->f32, entry->f32);
+                p2SetComponentLayout(1, 0, 16 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *normals = other->f16;
+                *normals = listData(other);
             }
         }
     } else {
         *normals = 0;
     }
-    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 2, 0);
+    entry = FUN_0015f4a0(vertexData, 2, 0);
     if (entry != 0) {
-        if (isListOf(entry->obj, Gap::Core::igUnsignedIntList::getClassMeta())) {
-            *colors = entry->obj->f16;
-        } else if (isListOf(entry->obj, g_igVec4ucList_metaObject)) {
-            *colors = entry->obj->f16;
+        if (isListOf(componentList(entry), Gap::Core::igUnsignedIntList::getClassMeta())) {
+            *colors = listData(componentList(entry));
+        } else if (isListOf(componentList(entry), g_igVec4ucList_metaObject)) {
+            *colors = listData(componentList(entry));
         }
     } else {
         *colors = 0;
     }
-    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 4, vc->_texCoordIndex[0]);
+    entry = FUN_0015f4a0(vertexData, 4, vc->_texCoordIndex[0]);
     if (entry != 0) {
-        list = entry->obj;
-        if (list != 0 && ((Gap::Core::igObject *)list)->isOfType(g_igVec2fList_metaObject) != 0) {
+        list = componentList(entry);
+        if (list != 0 && list->isOfType(g_igVec2fList_metaObject) != 0) {
             floatList = list;
         } else {
             floatList = 0;
         }
         if (floatList != 0) {
-            *texCoords = floatList->f16;
+            *texCoords = listData(floatList);
             p2SetComponentLayout(2, 0, 0, 0);
         } else {
-            source = entry->obj;
+            source = componentList(entry);
             if (isListOf(source, Gap::Core::igCharList::getClassMeta())) {
-                p2SetComponentLayout(2, 1, 7 - entry->f32, entry->f32);
+                p2SetComponentLayout(2, 1, 7 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *texCoords = source->f16;
+                *texCoords = listData(source);
             } else if (isListOf(source, Gap::Core::igUnsignedCharList::getClassMeta())) {
-                p2SetComponentLayout(2, 0, 8 - entry->f32, entry->f32);
+                p2SetComponentLayout(2, 0, 8 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *texCoords = source->f16;
+                *texCoords = listData(source);
             } else if (isListOf(source, Gap::Core::igShortList::getClassMeta())) {
-                p2SetComponentLayout(2, 1, 15 - entry->f32, entry->f32);
+                p2SetComponentLayout(2, 1, 15 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *texCoords = source->f16;
+                *texCoords = listData(source);
             } else if (isListOf(source, Gap::Core::igUnsignedShortList::getClassMeta())) {
-                p2SetComponentLayout(2, 0, 16 - entry->f32, entry->f32);
+                p2SetComponentLayout(2, 0, 16 - entry->_componentFraction, entry->_componentFraction);
                 integerFormat = true;
-                *texCoords = source->f16;
+                *texCoords = listData(source);
             }
         }
     } else {
@@ -156,119 +137,119 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
 }
 
 
-bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
-    Node *n2; VC_17e590 *s; VC_17e590 *r; VC_17e590 *o2;
-    bool var_s2 = false;
-    Node *n = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 9, 0);
+bool FUN_0017e590(igPsx2VisualContext *vc, igVertexDataList *vertexData, int firstVertex, int *spriteSizes, int *texCoords) {
+    igVertexData *n2; Gap::Core::igObject *s; Gap::Core::igObject *r; Gap::Core::igObject *o2;
+    bool integerFormat = false;
+    igVertexData *n = FUN_0015f4a0(vertexData, 9, 0);
     if (n != 0) {
-        if ((int)Gap::Core::igFloatList::getClassMeta() == n->obj->vX()) {
-            *arg3 = n->obj->f16;
+        if ((int)Gap::Core::igFloatList::getClassMeta() == (int)componentList(n)->getMeta()) {
+            *spriteSizes = listData(componentList(n));
             p2SetComponentLayout(4, 0, 0, 0);
-        } else if (n->obj->vX() == (int)g_igVec2fList_metaObject) {
-            *arg3 = n->obj->f16;
+        } else if ((int)componentList(n)->getMeta() == (int)g_igVec2fList_metaObject) {
+            *spriteSizes = listData(componentList(n));
             p2SetComponentLayout(4, 0, 0, 0);
         } else {
-            VC_17e590 *o = n->obj;
-            if ((int)Gap::Core::igCharList::getClassMeta() == o->vX()) {
-                int a = n->f32;
+            Gap::Core::igObject *o = componentList(n);
+            if (Gap::Core::igCharList::getClassMeta() == o->getMeta()) {
+                int a = n->_componentFraction;
                 p2SetComponentLayout(4, 1, 7 - a, a);
-                var_s2 = true;
-                *arg3 = o->f16;
-            } else if ((int)Gap::Core::igUnsignedCharList::getClassMeta() == o->vX()) {
-                int a = n->f32;
+                integerFormat = true;
+                *spriteSizes = listData(o);
+            } else if (Gap::Core::igUnsignedCharList::getClassMeta() == o->getMeta()) {
+                int a = n->_componentFraction;
                 p2SetComponentLayout(4, 0, 8 - a, a);
-                *arg3 = o->f16;
-            } else if ((int)Gap::Core::igShortList::getClassMeta() == o->vX()) {
-                int a = n->f32;
+                *spriteSizes = listData(o);
+            } else if (Gap::Core::igShortList::getClassMeta() == o->getMeta()) {
+                int a = n->_componentFraction;
                 p2SetComponentLayout(4, 1, 0xF - a, a);
-                *arg3 = o->f16;
-            } else if ((int)Gap::Core::igUnsignedShortList::getClassMeta() == o->vX()) {
-                int a = n->f32;
+                *spriteSizes = listData(o);
+            } else if (Gap::Core::igUnsignedShortList::getClassMeta() == o->getMeta()) {
+                int a = n->_componentFraction;
                 p2SetComponentLayout(4, 0, 0x10 - a, a);
-                *arg3 = o->f16;
+                *spriteSizes = listData(o);
             }
         }
     } else {
-        *arg3 = 0;
+        *spriteSizes = 0;
     }
-    n2 = (Node *)FUN_0015f4a0((S_15f430 *)arg1, 4, 1);
+    n2 = FUN_0015f4a0(vertexData, 4, 1);
     if (n2 != 0) {
-        s = n2->obj;
-        if (s != 0 && ((Gap::Core::igObject *)s)->isOfType(g_igVec2fList_metaObject) != 0) {
+        s = componentList(n2);
+        if (s != 0 && s->isOfType(g_igVec2fList_metaObject) != 0) {
             r = s;
         } else {
             r = 0;
         }
         if (r != 0) {
-            *arg4 = r->f16;
+            *texCoords = listData(r);
         } else {
-            o2 = n2->obj;
-            if ((int)Gap::Core::igCharList::getClassMeta() == o2->vX()) {
-                int a = n2->f32;
+            o2 = componentList(n2);
+            if (Gap::Core::igCharList::getClassMeta() == o2->getMeta()) {
+                int a = n2->_componentFraction;
                 p2SetComponentLayout(2, 1, 7 - a, a);
-                *arg4 = o2->f16;
-            } else if ((int)Gap::Core::igUnsignedCharList::getClassMeta() == o2->vX()) {
-                int a = n2->f32;
+                *texCoords = listData(o2);
+            } else if (Gap::Core::igUnsignedCharList::getClassMeta() == o2->getMeta()) {
+                int a = n2->_componentFraction;
                 p2SetComponentLayout(2, 0, 8 - a, a);
-                *arg4 = o2->f16;
-            } else if ((int)Gap::Core::igShortList::getClassMeta() == o2->vX()) {
-                int a = n2->f32;
+                *texCoords = listData(o2);
+            } else if (Gap::Core::igShortList::getClassMeta() == o2->getMeta()) {
+                int a = n2->_componentFraction;
                 p2SetComponentLayout(2, 1, 0xF - a, a);
-                *arg4 = o2->f16;
-            } else if ((int)Gap::Core::igUnsignedShortList::getClassMeta() == o2->vX()) {
-                int a = n2->f32;
+                *texCoords = listData(o2);
+            } else if (Gap::Core::igUnsignedShortList::getClassMeta() == o2->getMeta()) {
+                int a = n2->_componentFraction;
                 p2SetComponentLayout(2, 0, 0x10 - a, a);
-                *arg4 = o2->f16;
+                *texCoords = listData(o2);
             }
         }
     } else {
-        *arg4 = 0;
+        *texCoords = 0;
     }
-    if (arg0->f944 == 0) {
-        if (*arg3 != 0) *arg3 = *arg3 + arg2 * 4;
-        if (*arg4 != 0) *arg4 = *arg4 + arg2 * 8;
+    if (vc->_pIndexArray == 0) {
+        if (*spriteSizes != 0) *spriteSizes = *spriteSizes + firstVertex * 4;
+        if (*texCoords != 0) *texCoords = *texCoords + firstVertex * 8;
     }
-    return var_s2;
+    return integerFormat;
 }
 
-void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
+void FUN_0017e980(igPsx2VisualContext *h, igVertexDataList *vertexData, int firstVertex)
 {
     int i;
-    E_17e980 *e;
+    igVertexData *e;
     int v;
-    Obj_17e980 *o;
+    Gap::Core::igObject *o;
 
     if (h->_bMultiPassNum > 1 && h->_pixelPipelineMode == 3) {
         for (i = 1; i < h->_bMultiPassNum; i++) {
-            e = (E_17e980 *)FUN_0015f4a0((S_15f430 *)arg1, 4, h->_texCoordIndex[i]);
+            e = FUN_0015f4a0(vertexData, 4, h->_texCoordIndex[i]);
             v = 0;
             if (e != 0) {
-                o = e->obj;
-                if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igVec2fList_metaObject) != 0) {
-                    o = (Obj_17e980 *)o;
+                o = componentList(e);
+                if (o != 0 && o->isOfType(g_igVec2fList_metaObject) != 0) {
+                    o = (Gap::Core::igObject *)o;
                 } else {
                     o = 0;
                 }
                 if (o != 0) {
-                    v = ((int *)o)[4];
+                    v = listData(o);
                 } else {
-                    o = e->obj;
-                    if ((int)g_igCharList_metaObject == o->meta()) {
-                        p2SetComponentLayout(2, 1, 7 - e->f32, e->f32);
-                        v = ((int *)o)[4];
-                    } else if ((int)g_igUnsignedCharList_metaObject == o->meta()) {
-                        p2SetComponentLayout(2, 0, 8 - e->f32, e->f32);
-                        v = ((int *)o)[4];
-                    } else if ((int)g_igShortList_metaObject == o->meta()) {
-                        p2SetComponentLayout(2, 1, 15 - e->f32, e->f32);
-                        v = ((int *)o)[4];
-                    } else if ((int)g_igUnsignedShortList_metaObject == o->meta()) {
-                        p2SetComponentLayout(2, 0, 16 - e->f32, e->f32);
-                        v = ((int *)o)[4];
+                    o = componentList(e);
+                    if (g_igCharList_metaObject == o->getMeta()) {
+                        p2SetComponentLayout(2, 1, 7 - e->_componentFraction, e->_componentFraction);
+                        v = listData(o);
+                    } else if (g_igUnsignedCharList_metaObject == o->getMeta()) {
+                        p2SetComponentLayout(2, 0, 8 - e->_componentFraction, e->_componentFraction);
+                        v = listData(o);
+                    } else if (g_igShortList_metaObject == o->getMeta()) {
+                        p2SetComponentLayout(2, 1, 15 - e->_componentFraction, e->_componentFraction);
+                        v = listData(o);
+                    } else if (g_igUnsignedShortList_metaObject == o->getMeta()) {
+                        p2SetComponentLayout(2, 0, 16 - e->_componentFraction, e->_componentFraction);
+                        v = listData(o);
                     }
                 }
                 if (h->_pIndexArray == 0) {
-                    v += arg2 * 8;
+                    v += firstVertex * 8;
                 }
             }
             p2SetTexCoordArray(i, (float *)v);
@@ -276,123 +257,124 @@ void FUN_0017e980(igPsx2VisualContext *h, int arg1, int arg2)
     }
 }
 
-void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, bool useTexture) {
-    int spBC;
-    int spB8;
-    int spB4;
-    int spB0;
-    int spAC;
-    int spA8;
-    int *var_s3;
-    int var_s0;
-    int var_s0_2;
-    int var_s1;
-    int var_s6;
-    int temp_s7;
-    struct C_17eb90 *c;
+/* Draws `count` primitives (or, for the 0x2000 strip kinds, `count` strips) of the vertex data list straight
+ * from its components, advancing to each strip's first vertex in turn; the sprite kind (0x1000) draws with the
+ * size stream as normals and the second texture-coordinate stream. */
+void FUN_0017eb90(igPsx2VisualContext *vc, igVertexDataList *vertexData, int primitive, int count, int firstVertex, int stripOffset, bool useTexture) {
+    int positions;
+    int normals;
+    int texCoords;
+    int spriteTexCoords;
+    int colors;
+    int spriteSizes;
+    int *stripLengths;
+    int strip;
+    int strip2;
+    int indices;
+    int integerFormat;
+    igPsx2IndexArray *indexArray;
 
-    c = arg0->f944;
-    var_s1 = arg4;
-    if (c != 0) {
-        var_s0 = c->f12;
+    indexArray = (igPsx2IndexArray *)vc->_pIndexArray;
+    if (indexArray != 0) {
+        indices = indexArray->_indexData;
     } else {
-        var_s0 = 0;
+        indices = 0;
     }
-    temp_s7 = FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4) & 0xFF;
-    FUN_0017e980((igPsx2VisualContext *)arg0, arg1, var_s1);
-    if ((temp_s7 != 0) || useTexture) {
+    integerFormat = FUN_0017df40(vc, vertexData, firstVertex, &positions, &normals, &colors, &texCoords) & 0xFF;
+    FUN_0017e980(vc, vertexData, firstVertex);
+    if ((integerFormat != 0) || useTexture) {
         p2EnableCapability(0x1B);
     } else if (p2IsCapabilityEnabled(0x1B) != 0) {
         p2DisableCapability(0x1B);
     }
-    switch (arg2) {
+    switch (primitive) {
     case 0x0:
-        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-        p2DrawPoints(arg3);
+        p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+        p2DrawPoints(count);
         break;
     case 0x1:
-        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-        p2DrawLines(arg3);
+        p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+        p2DrawLines(count);
         break;
     case 0x2:
-        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-        p2DrawLineStrip(arg3);
+        p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+        p2DrawLineStrip(count);
         break;
     case 0x3:
-        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-        if (var_s0 == 0) {
-            p2DrawTriangles(arg3);
+        p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+        if (indices == 0) {
+            p2DrawTriangles(count);
         } else {
-            p2DrawIndexedTriangles(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
+            p2DrawIndexedTriangles(count, (unsigned short *)(indices + (firstVertex * 2)));
         }
         break;
     case 0x4:
-        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-        if (var_s0 == 0) {
-            p2DrawTriangleStrip(arg3);
+        p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+        if (indices == 0) {
+            p2DrawTriangleStrip(count);
         } else {
-            p2DrawIndexedTriangleStrip(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
+            p2DrawIndexedTriangleStrip(count, (unsigned short *)(indices + (firstVertex * 2)));
         }
         break;
     case 0x5:
-        p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-        if (var_s0 == 0) {
-            p2DrawTriangleFan(arg3);
+        p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+        if (indices == 0) {
+            p2DrawTriangleFan(count);
         } else {
-            p2DrawIndexedTriangleFan(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
+            p2DrawIndexedTriangleFan(count, (unsigned short *)(indices + (firstVertex * 2)));
         }
         break;
     case 0x1000:
-        if (FUN_0017e590((Self_17e590 *)arg0, arg1, var_s1, &spA8, &spB0) && (temp_s7 == 0)) {
+        if (FUN_0017e590(vc, vertexData, firstVertex, &spriteSizes, &spriteTexCoords) && (integerFormat == 0)) {
             p2EnableCapability(0x1B);
         }
-        p2SetTexCoordArray(1, (float *)spB0);
-        p2SetVertexArrays((float *)spBC, (float *)spA8, (unsigned int *)spAC, (float *)spB4);
-        if (var_s0 == 0) {
-            p2DrawSprites(arg3);
+        p2SetTexCoordArray(1, (float *)spriteTexCoords);
+        p2SetVertexArrays((float *)positions, (float *)spriteSizes, (unsigned int *)colors, (float *)texCoords);
+        if (indices == 0) {
+            p2DrawSprites(count);
         } else {
-            p2DrawIndexedSprites(arg3, (unsigned short *)(var_s0 + (var_s1 * 2)));
+            p2DrawIndexedSprites(count, (unsigned short *)(indices + (firstVertex * 2)));
         }
         break;
     case 0x2000:
-        var_s3 = arg0->f948->f8 + arg5;
-        for (var_s0_2 = 0; var_s0_2 < arg3; var_s0_2++) {
-            p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-            p2DrawLineStrip(*var_s3);
-            var_s1 += *var_s3;
-            var_s3 += 1;
-            FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4);
-            FUN_0017e980((igPsx2VisualContext *)arg0, arg1, var_s1);
+        stripLengths = (int *)((igPrimLengthArray *)vc->_pStripLengthArray)->_lengthData + stripOffset;
+        for (strip = 0; strip < count; strip++) {
+            p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+            p2DrawLineStrip(*stripLengths);
+            firstVertex += *stripLengths;
+            stripLengths += 1;
+            FUN_0017df40(vc, vertexData, firstVertex, &positions, &normals, &colors, &texCoords);
+            FUN_0017e980(vc, vertexData, firstVertex);
         }
         break;
     case 0x2002:
-        var_s3 = arg0->f948->f8 + arg5;
-        for (var_s6 = 0; var_s6 < arg3; var_s6++) {
-            p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-            if (var_s0 == 0) {
-                p2DrawTriangleFan(*var_s3);
+        stripLengths = (int *)((igPrimLengthArray *)vc->_pStripLengthArray)->_lengthData + stripOffset;
+        for (strip2 = 0; strip2 < count; strip2++) {
+            p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+            if (indices == 0) {
+                p2DrawTriangleFan(*stripLengths);
             } else {
-                p2DrawIndexedTriangleFan(*var_s3, (unsigned short *)(var_s0 + (var_s1 * 2)));
+                p2DrawIndexedTriangleFan(*stripLengths, (unsigned short *)(indices + (firstVertex * 2)));
             }
-            var_s1 += *var_s3;
-            var_s3 += 1;
-            FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4);
-            FUN_0017e980((igPsx2VisualContext *)arg0, arg1, var_s1);
+            firstVertex += *stripLengths;
+            stripLengths += 1;
+            FUN_0017df40(vc, vertexData, firstVertex, &positions, &normals, &colors, &texCoords);
+            FUN_0017e980(vc, vertexData, firstVertex);
         }
         break;
     case 0x2001:
-        var_s3 = arg0->f948->f8 + arg5;
-        if (var_s0 == 0) {
-            p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-            p2DrawTriangleStrips(arg3, var_s3);
+        stripLengths = (int *)((igPrimLengthArray *)vc->_pStripLengthArray)->_lengthData + stripOffset;
+        if (indices == 0) {
+            p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+            p2DrawTriangleStrips(count, stripLengths);
         } else {
-            for (var_s6 = 0; var_s6 < arg3; var_s6++) {
-                p2SetVertexArrays((float *)spBC, (float *)spB8, (unsigned int *)spAC, (float *)spB4);
-                p2DrawIndexedTriangleStrip(*var_s3, (unsigned short *)(var_s0 + (var_s1 * 2)));
-                var_s1 += *var_s3;
-                var_s3 += 1;
-                FUN_0017df40(arg0, arg1, var_s1, &spBC, &spB8, &spAC, &spB4);
-                FUN_0017e980((igPsx2VisualContext *)arg0, arg1, var_s1);
+            for (strip2 = 0; strip2 < count; strip2++) {
+                p2SetVertexArrays((float *)positions, (float *)normals, (unsigned int *)colors, (float *)texCoords);
+                p2DrawIndexedTriangleStrip(*stripLengths, (unsigned short *)(indices + (firstVertex * 2)));
+                firstVertex += *stripLengths;
+                stripLengths += 1;
+                FUN_0017df40(vc, vertexData, firstVertex, &positions, &normals, &colors, &texCoords);
+                FUN_0017e980(vc, vertexData, firstVertex);
             }
         }
         break;
@@ -442,14 +424,14 @@ void FUN_0017f080(igPsx2VisualContext *vc, int primitive, unsigned int count, in
     stream = (Gap::Gfx::igPsx2VertexStream *)array->_vertexStream.p;
     useRenderList = stream->_renderListHandle != 0;
     useTexture = false;
-    blendState = FUN_001774c0(vc, (Geometry1774 *)stream, &useTexture);
+    blendState = FUN_001774c0(vc, stream, &useTexture);
     count = PrimitiveVertexCount(primitive, count);
     sync = stream->getAccessMode() == Gap::Gfx::igVertexStream::IG_VERTEX_ACCESS_READ_WRITE
         || stream->getAccessMode() == Gap::Gfx::igVertexStream::IG_VERTEX_ACCESS_READ;
     if (blendState == 3 || blendState == 1
         || (useRenderList && (vertexOffset != 0 || primitiveOffset != 0 || count != stream->_vertexCountCompiled))) {
         if (blendState == 1) {
-            FUN_001805a0((ResourceBuilder *)vc, (ResourceSource *)stream, count);
+            FUN_001805a0(vc, stream, count);
             sync = true;
         }
         useRenderList = false;
@@ -457,7 +439,7 @@ void FUN_0017f080(igPsx2VisualContext *vc, int primitive, unsigned int count, in
     if (useRenderList) {
         p2CallDisplayList((p2DisplayList *)stream->_renderListHandle);
     } else {
-        FUN_0017eb90((B_17eb90 *)vc, (int)stream->_vertexDataList.p, primitive, count, vertexOffset, primitiveOffset, useTexture);
+        FUN_0017eb90(vc, (igVertexDataList *)stream->_vertexDataList.p, primitive, count, vertexOffset, primitiveOffset, useTexture);
     }
     if (sync) {
         stream->_syncSequence = p2GetVif1WaitSequence();

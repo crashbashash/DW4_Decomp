@@ -941,7 +941,7 @@
 00130020 000034 igVisualContextAttrDefaultManager_Create Gap::Attrs::igVisualContextAttrDefaultManager::_instantiateFromPool
 00130060 000048 igVisualContextAttrDefaultManager_GetMetaObject Gap::Attrs::igVisualContextAttrDefaultManager::getClassTypeSafe
 001300b0 00008c igVisualContextAttrDefaultManager_GetVTable Gap::Attrs::igVisualContextAttrDefaultManager::retrieveVTablePointer
-00130140 000080 igSmartPointer_igVisualContext_Destruct igSmartPointer<igVisualContext>::~igSmartPointer
+00130140 000080 igSmartPointer_igVisualContext_Destruct igSmartPointer<Gap::Gfx::igVisualContext>::~igSmartPointer
 001301c0 00000c igVisualContextAttrDefaultManager_EnsureRegistered Gap::Attrs::igVisualContextAttrDefaultManager::arkRegister
 001301d0 000074 igVisualContextAttrDefaultManager_Register Gap::Attrs::igVisualContextAttrDefaultManager::arkRegisterInternal
 00130250 000008 igVisualContextAttrDefaultManager_GetMetaObjectFunction Gap::Attrs::igVisualContextAttrDefaultManager::getClassMetaSafe
@@ -1265,18 +1265,18 @@
 00137150 00006c igGeometryMaskAttr_Register Gap::Attrs::igGeometryMaskAttr::arkRegisterInternal
 001371c0 000008 igGeometryMaskAttr_GetMetaObjectFunction Gap::Attrs::igGeometryMaskAttr::getClassMetaSafe
 001371d0 000088 igGeometryMaskAttr_InitFields Gap::Attrs::igGeometryMaskAttr::arkRegisterInitialize
-00137260 000080 FUN_00137260
-001372e0 000080 FUN_001372e0
-00137360 000080 FUN_00137360
-001373e0 000048 igGeometryAttr1_5_GetMetaObject
-00137430 00007c igGeometryAttr1_5_GetVTable
+00137260 000080 FUN_00137260 igSmartPointer<Gap::Gfx::igPrimLengthArray>::~igSmartPointer
+001372e0 000080 FUN_001372e0 igSmartPointer<Gap::Gfx::igIndexArray>::~igSmartPointer
+00137360 000080 FUN_00137360 igSmartPointer<Gap::Gfx::igVertexArray2>::~igSmartPointer
+001373e0 000048 igGeometryAttr1_5_GetMetaObject Gap::Attrs::igGeometryAttr1_5::getClassTypeSafe
+00137430 00007c igGeometryAttr1_5_GetVTable Gap::Attrs::igGeometryAttr1_5::retrieveVTablePointer
 001374b0 000080 igSmartPointer_igVec3fList_Destruct
-00137530 000194 FUN_00137530
-001376d0 00000c igGeometryAttr1_5_EnsureRegistered
-001376e0 000074 igGeometryAttr1_5_Register
-00137760 000008 igGeometryAttr1_5_GetMetaObjectFunction
+00137530 000194 FUN_00137530 Gap::Attrs::igGeometryAttr::~igGeometryAttr
+001376d0 00000c igGeometryAttr1_5_EnsureRegistered Gap::Attrs::igGeometryAttr1_5::arkRegister
+001376e0 000074 igGeometryAttr1_5_Register Gap::Attrs::igGeometryAttr1_5::arkRegisterInternal
+00137760 000008 igGeometryAttr1_5_GetMetaObjectFunction Gap::Attrs::igGeometryAttr1_5::getClassMetaSafe
 00137770 00000c FUN_00137770 Gap::Attrs::igGeometryAttr::getClassMeta
-00137780 000090 igGeometryAttr1_5_InitFields
+00137780 000090 igGeometryAttr1_5_InitFields Gap::Attrs::igGeometryAttr1_5::arkRegisterInitialize
 00137810 000034 igGeometryAttr_Create
 00137850 000048 igGeometryAttr_GetOrCreateMetaObject Gap::Attrs::igGeometryAttr::getClassTypeLazy
 001378a0 000048 igGeometryAttr_GetMetaObject Gap::Attrs::igGeometryAttr::getClassTypeSafe
@@ -1425,7 +1425,7 @@
 0013a680 000048 igAttrPool_GetMetaObject Gap::Attrs::igAttrPool::getClassTypeSafe
 0013a6d0 000124 igAttrPool_GetVTable Gap::Attrs::igAttrPool::retrieveVTablePointer
 0013a800 000080 FUN_0013a800
-0013a880 000080 igSmartPointer_igMetaObjectList_Destruct
+0013a880 000080 igSmartPointer_igMetaObjectList_Destruct igSmartPointer<igMetaObjectList>::~igSmartPointer
 0013a900 00000c igAttrPool_EnsureRegistered Gap::Attrs::igAttrPool::arkRegister
 0013a910 00007c igAttrPool_Register Gap::Attrs::igAttrPool::arkRegisterInternal
 0013a990 000008 igAttrPool_GetMetaObjectFunction Gap::Attrs::igAttrPool::getClassMetaSafe
@@ -1554,25 +1554,25 @@
 0013ce60 000044 igFogStateAttr_SynchronizeDefault Gap::Attrs::igFogStateAttr::synchronizeDefault
 0013ceb0 000008 igFogStateAttr_SetState Gap::Attrs::igFogStateAttr::setState
 0013cec0 0000a4 igGenericAttrDefaultManager_createDefault Gap::Attrs::igGenericAttrDefaultManager::createDefaultAttr
-0013cf70 000008 FUN_0013cf70
-0013cf80 00003c FUN_0013cf80
-0013cfc0 000058 igGeometryAttr1_5_Reset
+0013cf70 000008 FUN_0013cf70 Gap::Attrs::igGeometryAttr::synchronizeDefault
+0013cf80 00003c FUN_0013cf80 Gap::Attrs::igGeometryAttr::intersectRay
+0013cfc0 000058 igGeometryAttr1_5_Reset Gap::Attrs::igGeometryAttr::reset
 0013d020 000008 FUN_0013d020 Gap::Gfx::igIndexArray::reset
-0013d030 00002c igGeometryAttr_GetPrimLength
-0013d060 000008 igGeometryAttr1_5_SynchronizeDefault
-0013d070 00010c Gap__Attrs__igGeometryAttr1_5__vfunc_32 Gap::Attrs::igGeometryAttr1_5::vfunc_32
-0013d180 000168 igGeometryAttr1_5_UserMakeConcrete
-0013d2f0 00016c igGeometryAttr1_5_apply
-0013d460 000134 Gap__Attrs__igGeometryAttr1_5__vfunc_39 Gap::Attrs::igGeometryAttr1_5::vfunc_39
-0013d5a0 000608 Gap__Attrs__igGeometryAttr1_5__vfunc_36 Gap::Attrs::igGeometryAttr1_5::vfunc_36
-0013dbb0 000120 FUN_0013dbb0
-0013dcd0 0001ac Gap__Attrs__igGeometryAttr1_5__vfunc_33 Gap::Attrs::igGeometryAttr1_5::vfunc_33
-0013de80 000128 Gap__Attrs__igGeometryAttr1_5__vfunc_40 Gap::Attrs::igGeometryAttr1_5::vfunc_40
-0013dfb0 0000f0 Gap__Attrs__igGeometryAttr1_5__vfunc_42 Gap::Attrs::igGeometryAttr1_5::vfunc_42
-0013e0a0 000190 Gap__Attrs__igGeometryAttr1_5__vfunc_34 Gap::Attrs::igGeometryAttr1_5::vfunc_34
-0013e230 000204 igGeometryAttr1_5_UserPostLoad
-0013e440 000110 Gap__Attrs__igGeometryAttr1_5__vfunc_37 Gap::Attrs::igGeometryAttr1_5::vfunc_37
-0013e550 000110 Gap__Attrs__igGeometryAttr1_5__vfunc_38 Gap::Attrs::igGeometryAttr1_5::vfunc_38
+0013d030 00002c igGeometryAttr_GetPrimLength Gap::Attrs::igGeometryAttr::getPrimitiveLength
+0013d060 000008 igGeometryAttr1_5_SynchronizeDefault Gap::Attrs::igGeometryAttr1_5::synchronizeDefault
+0013d070 00010c Gap__Attrs__igGeometryAttr1_5__vfunc_32 Gap::Attrs::igGeometryAttr1_5::configureVertexArray
+0013d180 000168 igGeometryAttr1_5_UserMakeConcrete Gap::Attrs::igGeometryAttr1_5::userMakeConcrete
+0013d2f0 00016c igGeometryAttr1_5_apply Gap::Attrs::igGeometryAttr1_5::apply
+0013d460 000134 Gap__Attrs__igGeometryAttr1_5__vfunc_39 Gap::Attrs::igGeometryAttr1_5::configurePrimitive
+0013d5a0 000608 Gap__Attrs__igGeometryAttr1_5__vfunc_36 Gap::Attrs::igGeometryAttr1_5::intersectRay
+0013dbb0 000120 FUN_0013dbb0 Gap::Attrs::igGeometryAttr1_5::transformVectors
+0013dcd0 0001ac Gap__Attrs__igGeometryAttr1_5__vfunc_33 Gap::Attrs::igGeometryAttr1_5::transform
+0013de80 000128 Gap__Attrs__igGeometryAttr1_5__vfunc_40 Gap::Attrs::igGeometryAttr1_5::setPrimitiveLength
+0013dfb0 0000f0 Gap__Attrs__igGeometryAttr1_5__vfunc_42 Gap::Attrs::igGeometryAttr1_5::getNumVerts
+0013e0a0 000190 Gap__Attrs__igGeometryAttr1_5__vfunc_34 Gap::Attrs::igGeometryAttr1_5::computeBound
+0013e230 000204 igGeometryAttr1_5_UserPostLoad Gap::Attrs::igGeometryAttr1_5::userPostLoad
+0013e440 000110 Gap__Attrs__igGeometryAttr1_5__vfunc_37 Gap::Attrs::igGeometryAttr1_5::setTangents
+0013e550 000110 Gap__Attrs__igGeometryAttr1_5__vfunc_38 Gap::Attrs::igGeometryAttr1_5::setBinormals
 0013e660 000008 Gap__Gfx__igVertexArray2__vfunc_24 Gap::Gfx::igVertexArray2::reset
 0013e670 000028 igGeometryMaskAttr_apply Gap::Attrs::igGeometryMaskAttr::apply
 0013e6a0 000038 igGeometryMaskAttr_SynchronizeDefault Gap::Attrs::igGeometryMaskAttr::synchronizeDefault
@@ -1643,12 +1643,12 @@
 0013fd70 0000ec igRenderDestinationAttr_SynchronizeDefault Gap::Attrs::igRenderDestinationAttr::synchronizeDefault
 0013fe60 000034 igRenderDestinationAttr_ReleaseDefaults Gap::Attrs::igRenderDestinationAttr::releaseDefaults
 0013fea0 000098 igRenderDestinationAttr_Reset Gap::Attrs::igRenderDestinationAttr::reset
-0013ff40 000008 Gap__Gfx__igVisualContext__destroyRenderDestination Gap::Gfx::igVisualContext::destroyRenderDestination
+0013ff40 000008 Gap__Gfx__igVisualContext__destroyRenderDestination Gap::Gfx::igVisualContext::deleteRenderDestination
 0013ff50 00002c igRenderListAttr_apply Gap::Attrs::igRenderListAttr::apply
 0013ff80 000008 igRenderListAttr_SynchronizeDefault Gap::Attrs::igRenderListAttr::synchronizeDefault
 0013ff90 000034 igRenderListAttr_ReleaseDefaults Gap::Attrs::igRenderListAttr::releaseDefaults
 0013ffd0 000080 igRenderListAttr_Reset Gap::Attrs::igRenderListAttr::reset
-00140050 000008 igVisualContext_GetScissorType
+00140050 000008 igVisualContext_GetScissorType Gap::Gfx::igVisualContext::getScissorType
 00140060 000128 igSetRenderDestinationAttr_apply Gap::Attrs::igSetRenderDestinationAttr::apply
 00140190 0000ec igSetRenderDestinationAttr_SynchronizeDefault Gap::Attrs::igSetRenderDestinationAttr::synchronizeDefault
 00140280 000034 igSetRenderDestinationAttr_ReleaseDefaults Gap::Attrs::igSetRenderDestinationAttr::releaseDefaults
@@ -1819,10 +1819,10 @@
 001427a0 000074 igLightAttr_SetVisualContext Gap::Attrs::igLightAttr::setVisualContext
 00142820 00000c igGeometrySetAttr_GetMeta Gap::Attrs::igGeometrySetAttr::getMeta
 00142830 00000c igGeometryMaskAttr_GetMeta Gap::Attrs::igGeometryMaskAttr::getMeta
-00142840 00000c igGeometryAttr1_5_GetMeta
-00142850 000028 Gap__Attrs__igGeometryAttr1_5__vfunc_43 Gap::Attrs::igGeometryAttr1_5::vfunc_43
-00142880 000014 Gap__Attrs__igGeometryAttr1_5__vfunc_41 Gap::Attrs::igGeometryAttr1_5::vfunc_41
-001428a0 00000c FUN_001428a0
+00142840 00000c igGeometryAttr1_5_GetMeta Gap::Attrs::igGeometryAttr1_5::getMeta
+00142850 000028 Gap__Attrs__igGeometryAttr1_5__vfunc_43 Gap::Attrs::igGeometryAttr1_5::getPrimLengthArray
+00142880 000014 Gap__Attrs__igGeometryAttr1_5__vfunc_41 Gap::Attrs::igGeometryAttr1_5::getPrimitiveLength
+001428a0 00000c FUN_001428a0 Gap::Attrs::igGeometryAttr::getMeta
 001428b0 00000c igGenericAttrDefaultManager_GetMeta Gap::Attrs::igGenericAttrDefaultManager::getMeta
 001428c0 00000c igFogStateAttr_GetMeta Gap::Attrs::igFogStateAttr::getMeta
 001428d0 00000c igFogAttr_GetMeta Gap::Attrs::igFogAttr::getMeta
@@ -1894,7 +1894,7 @@
 00143150 000048 igPsx2AudioContext_GetMetaObject
 001431a0 0000b0 igPsx2AudioContext_GetVTable
 00143250 000080 FUN_00143250
-001432d0 000080 igSmartPointer_igThread_Destruct
+001432d0 000080 igSmartPointer_igThread_Destruct igSmartPointer<igThread>::~igSmartPointer
 00143350 000080 igSmartPointer_igWindow_Destruct igSmartPointer<igWindow>::~igSmartPointer
 001433d0 00000c igPsx2AudioContext_EnsureRegistered
 001433e0 000074 igPsx2AudioContext_Register
@@ -2152,15 +2152,15 @@
 00149f70 00000c igVisualContextList_EnsureRegistered
 00149f80 00006c igVisualContextList_Register
 00149ff0 000008 igVisualContextList_GetMetaObjectFunction
-0014a000 000034 igVisualContext_CreateInstance
-0014a040 000048 igVisualContext_GetOrCreateMetaObject
-0014a090 000048 igVisualContext_GetMetaObject
-0014a0e0 00000c igVisualContext_EnsureRegistered
-0014a0f0 000070 igVisualContext_Register
-0014a160 000008 igVisualContext_GetMetaObjectFunction
-0014a170 00000c FUN_0014a170
-0014a180 000338 igVisualContext_InitFields
-0014a4c0 000008 igPsx2VisualContext_GetMetaObjectFunction
+0014a000 000034 igVisualContext_CreateInstance Gap::Gfx::igVisualContext::_instantiateFromPool
+0014a040 000048 igVisualContext_GetOrCreateMetaObject Gap::Gfx::igVisualContext::getClassTypeLazy
+0014a090 000048 igVisualContext_GetMetaObject Gap::Gfx::igVisualContext::getClassTypeSafe
+0014a0e0 00000c igVisualContext_EnsureRegistered Gap::Gfx::igVisualContext::arkRegister
+0014a0f0 000070 igVisualContext_Register Gap::Gfx::igVisualContext::arkRegisterInternal
+0014a160 000008 igVisualContext_GetMetaObjectFunction Gap::Gfx::igVisualContext::getClassMetaSafe
+0014a170 00000c FUN_0014a170 Gap::Core::igContext::getClassMeta
+0014a180 000338 igVisualContext_InitFields Gap::Gfx::igVisualContext::arkRegisterInitialize
+0014a4c0 000008 igPsx2VisualContext_GetMetaObjectFunction Gap::Gfx::igPsx2VisualContext::getClassMetaSafe
 0014a4d0 000034 igVertexArray2Helper_Create Gap::Gfx::igVertexArray2Helper::_instantiateFromPool
 0014a510 000048 igVertexArray2Helper_GetMetaObject Gap::Gfx::igVertexArray2Helper::getClassTypeSafe
 0014a560 0000d4 igVertexArray2Helper_GetVTable Gap::Gfx::igVertexArray2Helper::retrieveVTablePointer
@@ -2237,20 +2237,20 @@
 0014bda0 000008 igScissorExt_GetMetaObjectFunction
 0014bdb0 000018 FUN_0014bdb0
 0014bdd0 000008 igPsx2ScissorExt_GetMetaObjectFunction
-0014bde0 000048 igPrimLengthArray1_1_GetMetaObject
-0014be30 00003c igPrimLengthArray1_1_GetVTable
-0014be70 00000c igPrimLengthArray1_1_EnsureRegistered
-0014be80 00006c igPrimLengthArray1_1_Register
-0014bef0 000008 igPrimLengthArray1_1_GetMetaObjectFunction
-0014bf00 00000c igPrimLengthArray_GetPublishedMetaObject
-0014bf10 0000dc igPrimLengthArray1_1_InitFields
-0014bff0 000034 igPrimLengthArray_Create
-0014c030 000048 igPrimLengthArray_GetOrCreateMetaObject
-0014c080 000048 igPrimLengthArray_GetMetaObject
-0014c0d0 00000c igPrimLengthArray_EnsureRegistered
-0014c0e0 000068 igPrimLengthArray_Register
-0014c150 000008 igPrimLengthArray_GetMetaObjectFunction
-0014c160 0000cc igPrimLengthArray_InitFields
+0014bde0 000048 igPrimLengthArray1_1_GetMetaObject Gap::Gfx::igPrimLengthArray1_1::getClassTypeSafe
+0014be30 00003c igPrimLengthArray1_1_GetVTable Gap::Gfx::igPrimLengthArray1_1::retrieveVTablePointer
+0014be70 00000c igPrimLengthArray1_1_EnsureRegistered Gap::Gfx::igPrimLengthArray1_1::arkRegister
+0014be80 00006c igPrimLengthArray1_1_Register Gap::Gfx::igPrimLengthArray1_1::arkRegisterInternal
+0014bef0 000008 igPrimLengthArray1_1_GetMetaObjectFunction Gap::Gfx::igPrimLengthArray1_1::getClassMetaSafe
+0014bf00 00000c igPrimLengthArray_GetPublishedMetaObject Gap::Gfx::igPrimLengthArray::getClassMeta
+0014bf10 0000dc igPrimLengthArray1_1_InitFields Gap::Gfx::igPrimLengthArray1_1::arkRegisterInitialize
+0014bff0 000034 igPrimLengthArray_Create Gap::Gfx::igPrimLengthArray::_instantiateFromPool
+0014c030 000048 igPrimLengthArray_GetOrCreateMetaObject Gap::Gfx::igPrimLengthArray::getClassTypeLazy
+0014c080 000048 igPrimLengthArray_GetMetaObject Gap::Gfx::igPrimLengthArray::getClassTypeSafe
+0014c0d0 00000c igPrimLengthArray_EnsureRegistered Gap::Gfx::igPrimLengthArray::arkRegister
+0014c0e0 000068 igPrimLengthArray_Register Gap::Gfx::igPrimLengthArray::arkRegisterInternal
+0014c150 000008 igPrimLengthArray_GetMetaObjectFunction Gap::Gfx::igPrimLengthArray::getClassMetaSafe
+0014c160 0000cc igPrimLengthArray_InitFields Gap::Gfx::igPrimLengthArray::arkRegisterInitialize
 0014c230 000054 IG_GFX_SPRITE_TYPE_GetMetaEnum
 0014c290 000054 IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum
 0014c2f0 000048 igPointSpriteExt_GetOrCreateMetaObject
@@ -2305,32 +2305,32 @@
 0014d910 000008 igIndexArray_GetMetaObjectFunction Gap::Gfx::igIndexArray::getClassMetaSafe
 0014d920 000110 igIndexArray_InitFields Gap::Gfx::igIndexArray::arkRegisterInitialize
 0014da30 000008 igPsx2IndexArray_GetMetaObjectFunction Gap::Gfx::igPsx2IndexArray::getClassMetaSafe
-0014da40 000048 igImageLoader_GetMetaObject
-0014da90 00000c igImageLoader_EnsureRegistered
-0014daa0 000060 igImageLoader_Register
-0014db00 000008 igImageLoader_GetMetaObjectFunction
-0014db10 00000c igImageUtils_GetPublishedMetaObject
-0014db20 000034 igImageConvert_Create
-0014db60 000048 igImageConvert_GetMetaObject
-0014dbb0 00000c igImageConvert_EnsureRegistered
-0014dbc0 000068 igImageConvert_Register
-0014dc30 000008 igImageConvert_GetMetaObjectFunction
-0014dc40 000018 FUN_0014dc40
-0014dc60 000008 igPsx2ImageConvert_GetMetaObjectFunction
-0014dc70 000048 igImageUtils_GetMetaObject
-0014dcc0 00000c igImageUtils_EnsureRegistered
-0014dcd0 000060 igImageUtils_Register
-0014dd30 000008 igImageUtils_GetMetaObjectFunction
+0014da40 000048 igImageLoader_GetMetaObject Gap::Gfx::igImageLoader::getClassTypeSafe
+0014da90 00000c igImageLoader_EnsureRegistered Gap::Gfx::igImageLoader::arkRegister
+0014daa0 000060 igImageLoader_Register Gap::Gfx::igImageLoader::arkRegisterInternal
+0014db00 000008 igImageLoader_GetMetaObjectFunction Gap::Gfx::igImageLoader::getClassMetaSafe
+0014db10 00000c igImageUtils_GetPublishedMetaObject Gap::Gfx::igImageUtils::getClassMeta
+0014db20 000034 igImageConvert_Create Gap::Gfx::igImageConvert::_instantiateFromPool
+0014db60 000048 igImageConvert_GetMetaObject Gap::Gfx::igImageConvert::getClassTypeSafe
+0014dbb0 00000c igImageConvert_EnsureRegistered Gap::Gfx::igImageConvert::arkRegister
+0014dbc0 000068 igImageConvert_Register Gap::Gfx::igImageConvert::arkRegisterInternal
+0014dc30 000008 igImageConvert_GetMetaObjectFunction Gap::Gfx::igImageConvert::getClassMetaSafe
+0014dc40 000018 FUN_0014dc40 Gap::Gfx::igImageConvert::arkRegisterInitialize
+0014dc60 000008 igPsx2ImageConvert_GetMetaObjectFunction Gap::Gfx::igPsx2ImageConvert::getClassMetaSafe
+0014dc70 000048 igImageUtils_GetMetaObject Gap::Gfx::igImageUtils::getClassTypeSafe
+0014dcc0 00000c igImageUtils_EnsureRegistered Gap::Gfx::igImageUtils::arkRegister
+0014dcd0 000060 igImageUtils_Register Gap::Gfx::igImageUtils::arkRegisterInternal
+0014dd30 000008 igImageUtils_GetMetaObjectFunction Gap::Gfx::igImageUtils::getClassMetaSafe
 0014dd40 000080 FUN_0014dd40
 0014ddc0 000048 igMemoryImage_GetMetaObject Gap::Gfx::igMemoryImage::getClassTypeSafe
 0014de10 00000c igMemoryImage_EnsureRegistered Gap::Gfx::igMemoryImage::arkRegister
 0014de20 000060 igMemoryImage_Register Gap::Gfx::igMemoryImage::arkRegisterInternal
 0014de80 000008 igMemoryImage_GetMetaObjectFunction Gap::Gfx::igMemoryImage::getClassMetaSafe
 0014de90 00000c FUN_0014de90 Gap::Gfx::igImage::getClassMeta
-0014dea0 000048 igFileImage_GetMetaObject
-0014def0 00000c igFileImage_EnsureRegistered
-0014df00 000060 igFileImage_Register
-0014df60 000008 igFileImage_GetMetaObjectFunction
+0014dea0 000048 igFileImage_GetMetaObject Gap::Gfx::igFileImage::getClassTypeSafe
+0014def0 00000c igFileImage_EnsureRegistered Gap::Gfx::igFileImage::arkRegister
+0014df00 000060 igFileImage_Register Gap::Gfx::igFileImage::arkRegisterInternal
+0014df60 000008 igFileImage_GetMetaObjectFunction Gap::Gfx::igFileImage::getClassMetaSafe
 0014df70 000034 igImage_CreateInstance Gap::Gfx::igImage::_instantiateFromPool
 0014dfb0 000048 igImage_GetOrCreateMetaObject Gap::Gfx::igImage::getClassTypeLazy
 0014e000 000048 igImage_GetMetaObject Gap::Gfx::igImage::getClassTypeSafe
@@ -2343,7 +2343,7 @@
 0014e2a0 000054 CONTEXT_TRACKABLE_GetMetaEnum
 0014e300 000048 igTrackedElementMetaField_GetMetaObject
 0014e350 0000d0 igTrackedElementMetaField_GetVTable
-0014e420 000080 igSmartPointer_igMetaFieldList_Destruct
+0014e420 000080 igSmartPointer_igMetaFieldList_Destruct igSmartPointer<igMetaFieldList>::~igSmartPointer
 0014e4a0 00000c igTrackedElementMetaField_EnsureRegistered
 0014e4b0 00006c igTrackedElementMetaField_Register
 0014e520 000008 igTrackedElementMetaField_GetMetaObjectFunction
@@ -2391,14 +2391,14 @@
 0014f390 00000c igGenericCapabilityManager_EnsureRegistered
 0014f3a0 000064 igGenericCapabilityManager_Register
 0014f410 000008 igGenericCapabilityManager_GetMetaObjectFunction
-0014f420 000048 igExternalImageEntry_GetMetaObject
-0014f470 000068 igExternalImageEntry_GetVTable
+0014f420 000048 igExternalImageEntry_GetMetaObject Gap::Gfx::igExternalImageEntry::getClassTypeSafe
+0014f470 000068 igExternalImageEntry_GetVTable Gap::Gfx::igExternalImageEntry::retrieveVTablePointer
 0014f4e0 000098 igDirEntry_Destroy Gap::Core::igDirEntry::~igDirEntry
-0014f580 000144 FUN_0014f580
-0014f6d0 00000c igExternalImageEntry_EnsureRegistered
-0014f6e0 000064 igExternalImageEntry_Register
-0014f750 000008 igExternalImageEntry_GetMetaObjectFunction
-0014f760 00000c FUN_0014f760
+0014f580 000144 FUN_0014f580 Gap::Core::igExternalDirEntry::~igExternalDirEntry
+0014f6d0 00000c igExternalImageEntry_EnsureRegistered Gap::Gfx::igExternalImageEntry::arkRegister
+0014f6e0 000064 igExternalImageEntry_Register Gap::Gfx::igExternalImageEntry::arkRegisterInternal
+0014f750 000008 igExternalImageEntry_GetMetaObjectFunction Gap::Gfx::igExternalImageEntry::getClassMetaSafe
+0014f760 00000c FUN_0014f760 Gap::Core::igExternalDirEntry::getClassMeta
 0014f770 000048 igDisableExt_GetOrCreateMetaObject
 0014f7c0 000048 igDisableExt_GetMetaObject
 0014f810 00000c igDisableExt_EnsureRegistered
@@ -2433,49 +2433,49 @@
 0014ff80 000008 igBlendEquationExt_GetMetaObjectFunction
 0014ff90 0000b8 igBlendEquationExt_InitFields
 00150050 000008 igPsx2BlendEquationExt_GetMetaObjectFunction
-00150060 000034 igTgaLoader_Create
-001500a0 000048 igTgaLoader_GetMetaObject
-001500f0 00008c igTgaLoader_GetVTable
-00150180 000080 igSmartPointer_igFile_Destruct igSmartPointer<igFileDispatchView>::~igSmartPointer
-00150200 00000c igTgaLoader_EnsureRegistered
-00150210 000074 igTgaLoader_Register
-00150290 000008 igTgaLoader_GetMetaObjectFunction
-001502a0 00000c igImageLoader_GetPublishedMetaObject
-001502b0 0000d8 igTgaLoader_InitFields
-00150390 000034 igFileImagePng_Create
-001503d0 000048 igFileImagePng_GetMetaObject
-00150420 000070 igFileImagePng_GetVTable
-00150490 0000d8 FUN_00150490
-00150570 00000c igFileImagePng_EnsureRegistered
-00150580 000074 igFileImagePng_Register
-00150600 000008 igFileImagePng_GetMetaObjectFunction
-00150610 00000c igFileImage_GetPublishedMetaObject
-00150620 000090 igFileImagePng_InitFields
+00150060 000034 igTgaLoader_Create Gap::Gfx::igTgaLoader::_instantiateFromPool
+001500a0 000048 igTgaLoader_GetMetaObject Gap::Gfx::igTgaLoader::getClassTypeSafe
+001500f0 00008c igTgaLoader_GetVTable Gap::Gfx::igTgaLoader::retrieveVTablePointer
+00150180 000080 igSmartPointer_igFile_Destruct igSmartPointer<Gap::Core::igFile>::~igSmartPointer
+00150200 00000c igTgaLoader_EnsureRegistered Gap::Gfx::igTgaLoader::arkRegister
+00150210 000074 igTgaLoader_Register Gap::Gfx::igTgaLoader::arkRegisterInternal
+00150290 000008 igTgaLoader_GetMetaObjectFunction Gap::Gfx::igTgaLoader::getClassMetaSafe
+001502a0 00000c igImageLoader_GetPublishedMetaObject Gap::Gfx::igImageLoader::getClassMeta
+001502b0 0000d8 igTgaLoader_InitFields Gap::Gfx::igTgaLoader::arkRegisterInitialize
+00150390 000034 igFileImagePng_Create Gap::Gfx::igFileImagePng::_instantiateFromPool
+001503d0 000048 igFileImagePng_GetMetaObject Gap::Gfx::igFileImagePng::getClassTypeSafe
+00150420 000070 igFileImagePng_GetVTable Gap::Gfx::igFileImagePng::retrieveVTablePointer
+00150490 0000d8 FUN_00150490 Gap::Gfx::igFileImage::~igFileImage
+00150570 00000c igFileImagePng_EnsureRegistered Gap::Gfx::igFileImagePng::arkRegister
+00150580 000074 igFileImagePng_Register Gap::Gfx::igFileImagePng::arkRegisterInternal
+00150600 000008 igFileImagePng_GetMetaObjectFunction Gap::Gfx::igFileImagePng::getClassMetaSafe
+00150610 00000c igFileImage_GetPublishedMetaObject Gap::Gfx::igFileImage::getClassMeta
+00150620 000090 igFileImagePng_InitFields Gap::Gfx::igFileImagePng::arkRegisterInitialize
 001506b0 000054 IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2_GetMetaEnum
 00150710 000054 IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum
-00150770 000048 igPsx2VisualContext_GetOrCreateMetaObject
-001507c0 000048 igPsx2VisualContext_GetMetaObject
-00150810 0001d8 igPsx2VisualContext_GetVTable
-001509f0 000080 igSmartPointer_igMemoryPool_Destruct
+00150770 000048 igPsx2VisualContext_GetOrCreateMetaObject Gap::Gfx::igPsx2VisualContext::getClassTypeLazy
+001507c0 000048 igPsx2VisualContext_GetMetaObject Gap::Gfx::igPsx2VisualContext::getClassTypeSafe
+00150810 0001d8 igPsx2VisualContext_GetVTable Gap::Gfx::igPsx2VisualContext::retrieveVTablePointer
+001509f0 000080 igSmartPointer_igMemoryPool_Destruct igSmartPointer<igMemoryPool>::~igSmartPointer
 00150a70 000080 igSmartPointer_igTimer_Destruct igSmartPointer<igTimerDispatchView>::~igSmartPointer
-00150af0 0003bc FUN_00150af0
+00150af0 0003bc FUN_00150af0 Gap::Gfx::igVisualContext::~igVisualContext
 00150eb0 000080 igSmartPointer_igIntList_Destruct NearbyListRef::~NearbyListRef
-00150f30 000080 FUN_00150f30
-00150fb0 000080 FUN_00150fb0
-00151030 00001c FUN_00151030
-00151050 00000c FUN_00151050
-00151060 00000c FUN_00151060
-00151070 00000c FUN_00151070
-00151080 00000c FUN_00151080
+00150f30 000080 FUN_00150f30 igSmartPointer<Gap::Gfx::igVertexArray>::~igSmartPointer
+00150fb0 000080 FUN_00150fb0 igSmartPointer<igMatrixStack>::~igSmartPointer
+00151030 00001c FUN_00151030 igVideoFormat::igVideoFormat
+00151050 00000c FUN_00151050 igSmartPointer<igMatrixStack>::igSmartPointer
+00151060 00000c FUN_00151060 igSmartPointer<Gap::Gfx::igPrimLengthArray>::igSmartPointer
+00151070 00000c FUN_00151070 igSmartPointer<Gap::Gfx::igIndexArray>::igSmartPointer
+00151080 00000c FUN_00151080 igSmartPointer<Gap::Gfx::igVertexArray>::igSmartPointer
 00151090 000008 FUN_00151090 igVec4f::igVec4f
-001510a0 000028 FUN_001510a0
+001510a0 000028 FUN_001510a0 igMatrix44f::igMatrix44f
 001510d0 00000c igSmartPointer_igIntList_Construct ObjectRefField::ObjectRefField
-001510e0 0000a4 FUN_001510e0
-00151190 00000c FUN_00151190
-001511a0 00000c igPsx2VisualContext_EnsureRegistered
-001511b0 000074 igPsx2VisualContext_Register
-00151230 00000c igVisualContext_GetPublishedMetaObject
-00151240 000cd4 igPsx2VisualContext_InitFields
+001510e0 0000a4 FUN_001510e0 Gap::Gfx::igVisualContext::igVisualContext
+00151190 00000c FUN_00151190 igSmartPointer<Gap::Gfx::igVertexArray2>::igSmartPointer
+001511a0 00000c igPsx2VisualContext_EnsureRegistered Gap::Gfx::igPsx2VisualContext::arkRegister
+001511b0 000074 igPsx2VisualContext_Register Gap::Gfx::igPsx2VisualContext::arkRegisterInternal
+00151230 00000c igVisualContext_GetPublishedMetaObject Gap::Gfx::igVisualContext::getClassMeta
+00151240 000cd4 igPsx2VisualContext_InitFields Gap::Gfx::igPsx2VisualContext::arkRegisterInitialize
 00151f20 000048 igPsx2VertexStream_GetMetaObject Gap::Gfx::igPsx2VertexStream::getClassTypeSafe
 00151f70 0000dc igPsx2VertexStream_GetVTable Gap::Gfx::igPsx2VertexStream::retrieveVTablePointer
 00152050 00000c igPsx2VertexStream_EnsureRegistered Gap::Gfx::igPsx2VertexStream::arkRegister
@@ -2549,12 +2549,12 @@
 00153b50 00006c igPsx2IndexArray_Register Gap::Gfx::igPsx2IndexArray::arkRegisterInternal
 00153bc0 00000c FUN_00153bc0 Gap::Gfx::igIndexArray::getClassMeta
 00153bd0 000018 FUN_00153bd0 Gap::Gfx::igPsx2IndexArray::arkRegisterInitialize
-00153bf0 000048 igPsx2ImageConvert_GetMetaObject
-00153c40 00003c igPsx2ImageConvert_GetVTable
-00153c80 00000c igPsx2ImageConvert_EnsureRegistered
-00153c90 00006c igPsx2ImageConvert_Register
-00153d00 00000c FUN_00153d00
-00153d10 000018 FUN_00153d10
+00153bf0 000048 igPsx2ImageConvert_GetMetaObject Gap::Gfx::igPsx2ImageConvert::getClassTypeSafe
+00153c40 00003c igPsx2ImageConvert_GetVTable Gap::Gfx::igPsx2ImageConvert::retrieveVTablePointer
+00153c80 00000c igPsx2ImageConvert_EnsureRegistered Gap::Gfx::igPsx2ImageConvert::arkRegister
+00153c90 00006c igPsx2ImageConvert_Register Gap::Gfx::igPsx2ImageConvert::arkRegisterInternal
+00153d00 00000c FUN_00153d00 Gap::Gfx::igImageConvert::getClassMeta
+00153d10 000018 FUN_00153d10 Gap::Gfx::igPsx2ImageConvert::arkRegisterInitialize
 00153d30 000048 igPsx2Image_GetMetaObject Gap::Gfx::igPsx2Image::getClassTypeSafe
 00153d80 0000d4 igPsx2Image_GetVTable Gap::Gfx::igPsx2Image::retrieveVTablePointer
 00153e60 00000c igPsx2Image_EnsureRegistered Gap::Gfx::igPsx2Image::arkRegister
@@ -2598,23 +2598,23 @@
 00154e40 00005c FUN_00154e40 Gap::Gfx::igClut::resize
 00154ea0 00008c Gap__Gfx__igClut__vfunc_23 Gap::Gfx::igClut::load
 00154f30 000200 FUN_00154f30 Gap::Gfx::igClut::loadAct
-00155130 0000c0 igExternalImageEntry_LoadExternalFile
-001551f0 0000f8 FUN_001551f0
-001552f0 000034 igExternalImageEntry_InitDefaults
+00155130 0000c0 igExternalImageEntry_LoadExternalFile Gap::Gfx::igExternalImageEntry::load
+001551f0 0000f8 FUN_001551f0 Gap::Gfx::igExternalImageEntry::loadWork
+001552f0 000034 igExternalImageEntry_InitDefaults Gap::Gfx::igExternalImageEntry::initDefaults
 00155330 000008 Gap__Gfx__igGenericCapabilityManager__vfunc_23 Gap::Gfx::igGenericCapabilityManager::vfunc_23
-00155340 00014c FUN_00155340
+00155340 00014c FUN_00155340 Gap::Gfx::igVisualContext::getShaderConstantMeta
 00155490 00000c FUN_00155490 Gap::Core::igMetaField::getMeta
 001554a0 000134 FUN_001554a0
-001555e0 0005a0 FUN_001555e0
+001555e0 0005a0 FUN_001555e0 Gap::Gfx::igVisualContext::createCustomStateCollection
 00155b80 00000c igObject_GetMetaObject_Virtual Gap::Core::igObject::getMeta
-00155b90 00006c FUN_00155b90
-00155c00 0001a4 FUN_00155c00
-00155db0 000158 FUN_00155db0
-00155f10 0001a0 FUN_00155f10
-001560b0 0001f8 igVisualContext_GetStateFieldHandle
-001562b0 000008 FUN_001562b0
-001562c0 000008 FUN_001562c0
-001562d0 00002c FUN_001562d0
+00155b90 00006c FUN_00155b90 Gap::Gfx::igVisualContext::getCustomState
+00155c00 0001a4 FUN_00155c00 Gap::Gfx::igVisualContext::deleteCustomStateCollection
+00155db0 000158 FUN_00155db0 Gap::Gfx::igVisualContext::clearCustomStates
+00155f10 0001a0 FUN_00155f10 Gap::Gfx::igVisualContext::findCustomStateCollection
+001560b0 0001f8 igVisualContext_GetStateFieldHandle Gap::Gfx::igVisualContext::getShaderConstantIndex
+001562b0 000008 FUN_001562b0 Gap::Gfx::igVisualContext::vfunc_262
+001562c0 000008 FUN_001562c0 Gap::Gfx::igVisualContext::vfunc_263
+001562d0 00002c FUN_001562d0 Gap::Gfx::igVisualContext::getShaderConstantCollection
 00156300 000040 FUN_00156300 Gap::Gfx::igImage::userRegister
 00156340 000070 FUN_00156340 Gap::Gfx::igImage::setName
 001563b0 000310 FUN_001563b0 Gap::Gfx::igImage::copy
@@ -2664,14 +2664,14 @@
 0015a600 000098 FUN_0015a600 Gap::Gfx::igImage::scaleAlpha
 0015a6a0 0000a8 FUN_0015a6a0
 0015a750 000394 FUN_0015a750
-0015aaf0 00005c FUN_0015aaf0
-0015ab50 000020 FUN_0015ab50
-0015ab70 000020 FUN_0015ab70
-0015ab90 00007c FUN_0015ab90
+0015aaf0 00005c FUN_0015aaf0 Gap::Gfx::igImageConvert::pal_8_To_pal_4
+0015ab50 000020 FUN_0015ab50 Gap::Gfx::igImageConvert::alpha_8_To_luminance_8
+0015ab70 000020 FUN_0015ab70 Gap::Gfx::igImageConvert::luminance_8_To_alpha_8
+0015ab90 00007c FUN_0015ab90 Gap::Gfx::igImageConvert::pal_4_To_pal_8
 0015ac10 000104 FUN_0015ac10 Gap::Gfx::igImage::estimateUnpackedFmt2
 0015ad20 000008 FUN_0015ad20
 0015ad30 000020 FUN_0015ad30
-0015ad50 000054 FUN_0015ad50
+0015ad50 000054 FUN_0015ad50 Gap::Gfx::igImageUtils::getExt
 0015adb0 0000e4 FUN_0015adb0 Gap::Gfx::igIndexArray::configure
 0015aea0 0001b0 FUN_0015aea0 Gap::Gfx::igIndexArray::reconfigure
 0015b050 000008 FUN_0015b050 Gap::Gfx::igIndexArray::cache
@@ -2729,7 +2729,7 @@
 0015db00 000038 igPointSpriteExt_SetSize
 0015db40 000014 igPointSpriteExt_SetRadian
 0015db60 000014 igPointSpriteExt_GetRadian
-0015db80 000008 igPrimLengthArray1_1_UserMakeConcrete
+0015db80 000008 igPrimLengthArray1_1_UserMakeConcrete Gap::Gfx::igPrimLengthArray1_1::userMakeConcrete
 0015db90 000024 igVertexArrayLock_Init
 0015dbc0 0003c0 FUN_0015dbc0
 0015df80 000084 igPsx2VertexArray1_1_resetFields Gap::Gfx::igVertexArray1_1::resetFields
@@ -2815,7 +2815,7 @@
 00163260 00050c Gap__Gfx__igVertexArray2Helper__vfunc_60 Gap::Gfx::igVertexArray2Helper::getMaxValue
 00163770 000090 igVertexArray2Helper_FloatToFixedPoint
 00163800 000010 igVertexArray2Helper_FixedPointToFloat
-00163810 001060 Gap__Gfx__igVertexArray2Helper__vfunc_61 Gap::Gfx::igVertexArray2Helper::vfunc_61
+00163810 001060 Gap__Gfx__igVertexArray2Helper__vfunc_61 Gap::Gfx::igVertexArray2Helper::compressVertexData
 00164870 000080 FUN_00164870
 001648f0 000080 igSmartPointer_igShortList_Destruct
 00164970 000080 igSmartPointer_igCharList_Destruct
@@ -2831,102 +2831,102 @@
 00164d50 00000c FUN_00164d50
 00164d60 000130 FUN_00164d60 Gap::Gfx::igVertexArray2::isVertexDataSupported
 00164e90 0000c0 FUN_00164e90 igVertexFormat::operator&
-00164f50 000b28 igVisualContext_constructFields
-00165a80 000124 FUN_00165a80
-00165bb0 0000f8 FUN_00165bb0
-00165cb0 000008 igVisualContext_Reset
-00165cc0 000008 igVisualContext_GetDriverDataMemoryPool
-00165cd0 000008 igVisualContext_GetVertexMemoryPool
-00165ce0 000008 igVisualContext_GetInternalMemoryPool
-00165cf0 000008 igVisualContext_GetImageMemoryPool
-00165d00 000008 igVisualContext_GetStatisticsMemoryPool
-00165d10 000008 igVisualContext_GetListMemoryPool
-00165d20 00000c igVisualContext_SetImageMemoryPool
-00165d30 000108 igVisualContext_SetBlendingMatrices
-00165e40 000008 igVisualContext_GetBlendingMatricesCount
-00165e50 0005b0 FUN_00165e50
-00166400 000660 igVisualContext_ResetToDefault
-00166a60 000008 FUN_00166a60
-00166a70 0001f8 igVisualContext_UpdateFrameRateDisplay
-00166c70 000008 igVisualContext_OutputText
-00166c80 000008 igVisualContext_UpdatePrimitiveCountDisplay
-00166c90 0000b0 igVisualContext_DrawNonIndexed
+00164f50 000b28 igVisualContext_constructFields Gap::Gfx::igVisualContext::constructFields
+00165a80 000124 FUN_00165a80 Gap::Gfx::igVisualContext::userConstruct
+00165bb0 0000f8 FUN_00165bb0 Gap::Gfx::igVisualContext::userDestruct
+00165cb0 000008 igVisualContext_Reset Gap::Gfx::igVisualContext::reset
+00165cc0 000008 igVisualContext_GetDriverDataMemoryPool Gap::Gfx::igVisualContext::getDriverDataMemoryPool
+00165cd0 000008 igVisualContext_GetVertexMemoryPool Gap::Gfx::igVisualContext::getVertexMemoryPool
+00165ce0 000008 igVisualContext_GetInternalMemoryPool Gap::Gfx::igVisualContext::getInternalMemoryPool
+00165cf0 000008 igVisualContext_GetImageMemoryPool Gap::Gfx::igVisualContext::getImageMemoryPool
+00165d00 000008 igVisualContext_GetStatisticsMemoryPool Gap::Gfx::igVisualContext::getStatisticsMemoryPool
+00165d10 000008 igVisualContext_GetListMemoryPool Gap::Gfx::igVisualContext::getListMemoryPool
+00165d20 00000c igVisualContext_SetImageMemoryPool Gap::Gfx::igVisualContext::setImageMemoryPool
+00165d30 000108 igVisualContext_SetBlendingMatrices Gap::Gfx::igVisualContext::setBlendingMatrices
+00165e40 000008 igVisualContext_GetBlendingMatricesCount Gap::Gfx::igVisualContext::getBlendingMatricesCount
+00165e50 0005b0 FUN_00165e50 Gap::Gfx::igVisualContext::softwareBlendVertex
+00166400 000660 igVisualContext_ResetToDefault Gap::Gfx::igVisualContext::resetToDefault
+00166a60 000008 FUN_00166a60 Gap::Gfx::igVisualContext::setDitherState
+00166a70 0001f8 igVisualContext_UpdateFrameRateDisplay Gap::Gfx::igVisualContext::updateFrameRateDisplay
+00166c70 000008 igVisualContext_OutputText Gap::Gfx::igVisualContext::outputText
+00166c80 000008 igVisualContext_UpdatePrimitiveCountDisplay Gap::Gfx::igVisualContext::updatePrimitiveCountDisplay
+00166c90 0000b0 igVisualContext_DrawNonIndexed Gap::Gfx::igVisualContext::drawNonIndexed
 00166d40 00009c igVisualContext_FindFirst
-00166de0 0001a8 igVisualContext_LoadDefaultDriverDatabase
-00166f90 000008 igVisualContext_SetVertexPipelineMode
-00166fa0 000008 igVisualContext_GetVertexPipelineMode
-00166fb0 000008 FUN_00166fb0
-00166fc0 000008 FUN_00166fc0
-00166fd0 000008 igVisualContext_GetLastError
-00166fe0 00014c FUN_00166fe0
+00166de0 0001a8 igVisualContext_LoadDefaultDriverDatabase Gap::Gfx::igVisualContext::loadDefaultDriverDatabase
+00166f90 000008 igVisualContext_SetVertexPipelineMode Gap::Gfx::igVisualContext::setVertexPipelineMode
+00166fa0 000008 igVisualContext_GetVertexPipelineMode Gap::Gfx::igVisualContext::getVertexPipelineMode
+00166fb0 000008 FUN_00166fb0 Gap::Gfx::igVisualContext::setPixelPipelineMode
+00166fc0 000008 FUN_00166fc0 Gap::Gfx::igVisualContext::getPixelPipelineMode
+00166fd0 000008 igVisualContext_GetLastError Gap::Gfx::igVisualContext::getLastError
+00166fe0 00014c FUN_00166fe0 Gap::Gfx::igVisualContext::setVertexArray
 00167130 000028 FUN_00167130
-00167160 000010 igVisualContext_GetVertexArray2
-00167170 000030 igVisualContext_SetViewMatrixHint
-001671a0 000010 igVisualContext_GetViewMatrixHint
-001671b0 000054 igVisualContext_GetViewMatrixInverse
+00167160 000010 igVisualContext_GetVertexArray2 Gap::Gfx::igVisualContext::getVertexArray
+00167170 000030 igVisualContext_SetViewMatrixHint Gap::Gfx::igVisualContext::setViewMatrixHint
+001671a0 000010 igVisualContext_GetViewMatrixHint Gap::Gfx::igVisualContext::getViewMatrixHint
+001671b0 000054 igVisualContext_GetViewMatrixInverse Gap::Gfx::igVisualContext::getViewMatrixInverse
 00167210 000030 Gap__Gfx__igVisualContextCapabilityManager__vfunc_23 Gap::Gfx::igVisualContextCapabilityManager::vfunc_23
-00167240 00006c Gap__Gfx__igPrimLengthArray1_1__vfunc_23 Gap::Gfx::igPrimLengthArray1_1::vfunc_23
-001672b0 000014 Gap__Gfx__igPrimLengthArray1_1__vfunc_26 Gap::Gfx::igPrimLengthArray1_1::vfunc_26
-001672d0 000014 Gap__Gfx__igPrimLengthArray1_1__vfunc_27 Gap::Gfx::igPrimLengthArray1_1::vfunc_27
-001672f0 000010 Gap__Gfx__igPrimLengthArray1_1__vfunc_24 Gap::Gfx::igPrimLengthArray1_1::vfunc_24
-00167300 000008 Gap__Gfx__igPrimLengthArray1_1__vfunc_25 Gap::Gfx::igPrimLengthArray1_1::vfunc_25
+00167240 00006c Gap__Gfx__igPrimLengthArray1_1__vfunc_23 Gap::Gfx::igPrimLengthArray1_1::configure
+001672b0 000014 Gap__Gfx__igPrimLengthArray1_1__vfunc_26 Gap::Gfx::igPrimLengthArray1_1::setPrimLength
+001672d0 000014 Gap__Gfx__igPrimLengthArray1_1__vfunc_27 Gap::Gfx::igPrimLengthArray1_1::getPrimLength
+001672f0 000010 Gap__Gfx__igPrimLengthArray1_1__vfunc_24 Gap::Gfx::igPrimLengthArray1_1::getEditablePrimLength
+00167300 000008 Gap__Gfx__igPrimLengthArray1_1__vfunc_25 Gap::Gfx::igPrimLengthArray1_1::commitPrimLengthEdits
 00167310 00000c FUN_00167310
 00167320 00000c FUN_00167320
 00167330 00004c FUN_00167330
 00167380 000008 FUN_00167380
 00167390 000008 FUN_00167390
 001673a0 000010 FUN_001673a0
-001673b0 000008 thunk_FUN_001592c0
-001673c0 000034 Gap__Gfx__igFileImagePng__vfunc_23 Gap::Gfx::igFileImagePng::vfunc_23
+001673b0 000008 thunk_FUN_001592c0 Gap::Gfx::igFileImagePng::releaseDefaults
+001673c0 000034 Gap__Gfx__igFileImagePng__vfunc_23 Gap::Gfx::igFileImagePng::copy
 00167400 00000c FUN_00167400 Gap::Gfx::igImage::getMeta
-00167410 000130 FUN_00167410
-00167540 000314 FUN_00167540
-00167860 00095c Gap__Gfx__igFileImagePng__vfunc_33 Gap::Gfx::igFileImagePng::vfunc_33
-001681c0 0000fc FUN_001681c0
-001682c0 000008 Gap__Gfx__igFileImagePng__vfunc_45 Gap::Gfx::igFileImagePng::vfunc_45
-001682d0 000008 igTgaLoader_ReleaseDefaults
-001682e0 0000b8 FUN_001682e0
-001683a0 000058 FUN_001683a0
-00168400 000014 FUN_00168400
-00168420 00005c FUN_00168420
-00168480 0000f0 FUN_00168480
-00168570 000168 FUN_00168570
-001686e0 0009e4 Gap__Gfx__igTgaLoader__vfunc_23 Gap::Gfx::igTgaLoader::vfunc_23
+00167410 000130 FUN_00167410 Gap::Gfx::igFileImagePng::cleanup
+00167540 000314 FUN_00167540 Gap::Gfx::igFileImagePng::estimatePixelFormat
+00167860 00095c Gap__Gfx__igFileImagePng__vfunc_33 Gap::Gfx::igFileImagePng::load
+001681c0 0000fc FUN_001681c0 Gap::Gfx::igFileImagePng::setReadTransforms
+001682c0 000008 Gap__Gfx__igFileImagePng__vfunc_45 Gap::Gfx::igFileImagePng::toggleComponentOrder
+001682d0 000008 igTgaLoader_ReleaseDefaults Gap::Gfx::igTgaLoader::releaseDefaults
+001682e0 0000b8 FUN_001682e0 Gap::Gfx::igTgaLoader::cleanup
+001683a0 000058 FUN_001683a0 Gap::Gfx::igTgaLoader::fillBuffer
+00168400 000014 FUN_00168400 Gap::Gfx::igTgaLoader::isBufEmpty
+00168420 00005c FUN_00168420 Gap::Gfx::igTgaLoader::getNextChar
+00168480 0000f0 FUN_00168480 Gap::Gfx::igTgaLoader::cGetPixel
+00168570 000168 FUN_00168570 Gap::Gfx::igTgaLoader::estimateImageFormat
+001686e0 0009e4 Gap__Gfx__igTgaLoader__vfunc_23 Gap::Gfx::igTgaLoader::load
 001690d0 00018c FUN_001690d0
 00169260 000214 FUN_00169260
-00169480 000188 igPsx2VisualContext_CreateRenderDestination
-00169610 0000e4 igPsx2VisualContext_DeleteRenderDestination
-00169700 000140 igPsx2VisualContext_SetRenderDestination
-00169840 0002e4 igPsx2VisualContext_SetRenderDestinationWithTexture
-00169b30 000038 igPsx2VisualContext_GetRenderDestinationSize
-00169b70 000034 igPsx2VisualContext_SetRenderDestinationSize
-00169bb0 000008 igPsx2VisualContext_GetCurrentRenderDestination
-00169bc0 000020 igPsx2VisualContext_GetRenderDestinationType
+00169480 000188 igPsx2VisualContext_CreateRenderDestination Gap::Gfx::igPsx2VisualContext::createRenderDestination
+00169610 0000e4 igPsx2VisualContext_DeleteRenderDestination Gap::Gfx::igPsx2VisualContext::deleteRenderDestination
+00169700 000140 igPsx2VisualContext_SetRenderDestination Gap::Gfx::igPsx2VisualContext::setRenderDestination
+00169840 0002e4 igPsx2VisualContext_SetRenderDestinationWithTexture Gap::Gfx::igPsx2VisualContext::setRenderDestination
+00169b30 000038 igPsx2VisualContext_GetRenderDestinationSize Gap::Gfx::igPsx2VisualContext::getRenderDestinationSize
+00169b70 000034 igPsx2VisualContext_SetRenderDestinationSize Gap::Gfx::igPsx2VisualContext::setRenderDestinationSize
+00169bb0 000008 igPsx2VisualContext_GetCurrentRenderDestination Gap::Gfx::igPsx2VisualContext::getCurrentRenderDestination
+00169bc0 000020 igPsx2VisualContext_GetRenderDestinationType Gap::Gfx::igPsx2VisualContext::getRenderDestinationType
 00169be0 000034 FUN_00169be0
-00169c20 000030 igPsx2VisualContext_ClearRenderDestination
-00169c50 0001dc igPsx2VisualContext_CopyRenderDestinationToTexture
-00169e30 000008 igPsx2VisualContext_CopyRenderDestinationToMemory
+00169c20 000030 igPsx2VisualContext_ClearRenderDestination Gap::Gfx::igPsx2VisualContext::clearRenderDestination
+00169c50 0001dc igPsx2VisualContext_CopyRenderDestinationToTexture Gap::Gfx::igPsx2VisualContext::copyRenderDestinationToTexture
+00169e30 000008 igPsx2VisualContext_CopyRenderDestinationToMemory Gap::Gfx::igPsx2VisualContext::copyRenderDestinationToMemory
 00169e40 000208 FUN_00169e40
-0016a050 0000a4 igPsx2VisualContext_SetViewport
-0016a100 000024 igPsx2VisualContext_GetViewport
-0016a130 000034 igPsx2VisualContext_GetViewportWithDepth
-0016a170 00018c igPsx2VisualContext_SetClearColor
-0016a300 00002c igPsx2VisualContext_SetClearColorPacked
-0016a330 000034 igPsx2VisualContext_GetClearColorPacked
-0016a370 000010 igPsx2VisualContext_GetClearColor
-0016a380 0000c8 igPsx2VisualContext_SetClearDepth
-0016a450 000008 igPsx2VisualContext_GetClearDepth
-0016a460 000008 igPsx2VisualContext_SetClearStencil
-0016a470 000008 igPsx2VisualContext_GetClearStencil
-0016a480 000020 igPsx2VisualContext_GetColorBitsPerPixel
-0016a4a0 000020 igPsx2VisualContext_GetAlphaBitsPerPixel
-0016a4c0 000020 igPsx2VisualContext_GetDepthBitsPerPixel
-0016a4e0 000020 igPsx2VisualContext_GetStencilBitsPerPixel
-0016a500 000020 igPsx2VisualContext_GetPixelAspectRatio
+0016a050 0000a4 igPsx2VisualContext_SetViewport Gap::Gfx::igPsx2VisualContext::setViewport
+0016a100 000024 igPsx2VisualContext_GetViewport Gap::Gfx::igPsx2VisualContext::getViewport
+0016a130 000034 igPsx2VisualContext_GetViewportWithDepth Gap::Gfx::igPsx2VisualContext::getViewport
+0016a170 00018c igPsx2VisualContext_SetClearColor Gap::Gfx::igPsx2VisualContext::setClearColor
+0016a300 00002c igPsx2VisualContext_SetClearColorPacked Gap::Gfx::igPsx2VisualContext::setClearColor
+0016a330 000034 igPsx2VisualContext_GetClearColorPacked Gap::Gfx::igPsx2VisualContext::getClearColor
+0016a370 000010 igPsx2VisualContext_GetClearColor Gap::Gfx::igPsx2VisualContext::getClearColor
+0016a380 0000c8 igPsx2VisualContext_SetClearDepth Gap::Gfx::igPsx2VisualContext::setClearDepth
+0016a450 000008 igPsx2VisualContext_GetClearDepth Gap::Gfx::igPsx2VisualContext::getClearDepth
+0016a460 000008 igPsx2VisualContext_SetClearStencil Gap::Gfx::igPsx2VisualContext::setClearStencil
+0016a470 000008 igPsx2VisualContext_GetClearStencil Gap::Gfx::igPsx2VisualContext::getClearStencil
+0016a480 000020 igPsx2VisualContext_GetColorBitsPerPixel Gap::Gfx::igPsx2VisualContext::getColorBitsPerPixel
+0016a4a0 000020 igPsx2VisualContext_GetAlphaBitsPerPixel Gap::Gfx::igPsx2VisualContext::getAlphaBitsPerPixel
+0016a4c0 000020 igPsx2VisualContext_GetDepthBitsPerPixel Gap::Gfx::igPsx2VisualContext::getDepthBitsPerPixel
+0016a4e0 000020 igPsx2VisualContext_GetStencilBitsPerPixel Gap::Gfx::igPsx2VisualContext::getStencilBitsPerPixel
+0016a500 000020 igPsx2VisualContext_GetPixelAspectRatio Gap::Gfx::igPsx2VisualContext::getPixelAspectRatio
 0016a520 000254 FUN_0016a520
-0016a780 00003c igPsx2VisualContext_SetScissor
-0016a7c0 000024 igPsx2VisualContext_GetScissor
-0016a7f0 000008 igPsx2VisualContext_SetScissorType
+0016a780 00003c igPsx2VisualContext_SetScissor Gap::Gfx::igPsx2VisualContext::setScissor
+0016a7c0 000024 igPsx2VisualContext_GetScissor Gap::Gfx::igPsx2VisualContext::getScissor
+0016a7f0 000008 igPsx2VisualContext_SetScissorType Gap::Gfx::igPsx2VisualContext::setScissorType
 0016a800 000060 FUN_0016a800
 0016a860 00018c FUN_0016a860
 0016a9f0 00018c FUN_0016a9f0
@@ -2936,47 +2936,47 @@
 0016af30 000154 FUN_0016af30
 0016b090 000138 FUN_0016b090
 0016b1d0 0000f4 FUN_0016b1d0
-0016b2d0 000008 igPsx2VisualContext_constructFields
-0016b2e0 000604 igPsx2VisualContext_userConstruct
-0016b8f0 0000a0 igPsx2VisualContext_userDestruct
-0016b990 000b10 igPsx2VisualContext_Open
-0016c4a0 0000cc igPsx2VisualContext_Reset
-0016c570 0000dc igPsx2VisualContext_GetCapability
+0016b2d0 000008 igPsx2VisualContext_constructFields Gap::Gfx::igPsx2VisualContext::constructFields
+0016b2e0 000604 igPsx2VisualContext_userConstruct Gap::Gfx::igPsx2VisualContext::userConstruct
+0016b8f0 0000a0 igPsx2VisualContext_userDestruct Gap::Gfx::igPsx2VisualContext::userDestruct
+0016b990 000b10 igPsx2VisualContext_Open Gap::Gfx::igPsx2VisualContext::open
+0016c4a0 0000cc igPsx2VisualContext_Reset Gap::Gfx::igPsx2VisualContext::reset
+0016c570 0000dc igPsx2VisualContext_GetCapability Gap::Gfx::igPsx2VisualContext::getCapability
 0016c650 000138 FUN_0016c650
-0016c790 00015c igPsx2VisualContext_CreateRenderList
-0016c8f0 0001b4 igPsx2VisualContext_DeleteRenderList
-0016cab0 000034 igPsx2VisualContext_BeginRenderListDraw
-0016caf0 000044 igPsx2VisualContext_EndRenderListDraw
-0016cb40 000110 igPsx2VisualContext_ExecuteRenderList
+0016c790 00015c igPsx2VisualContext_CreateRenderList Gap::Gfx::igPsx2VisualContext::createRenderList
+0016c8f0 0001b4 igPsx2VisualContext_DeleteRenderList Gap::Gfx::igPsx2VisualContext::deleteRenderList
+0016cab0 000034 igPsx2VisualContext_BeginRenderListDraw Gap::Gfx::igPsx2VisualContext::beginRenderListDraw
+0016caf0 000044 igPsx2VisualContext_EndRenderListDraw Gap::Gfx::igPsx2VisualContext::endRenderListDraw
+0016cb40 000110 igPsx2VisualContext_ExecuteRenderList Gap::Gfx::igPsx2VisualContext::executeRenderList
 0016cc50 000008 FUN_0016cc50
 0016cc60 0000ac FUN_0016cc60
 0016cd10 000028 FUN_0016cd10
-0016cd40 000084 igPsx2VisualContext_DetectDriverDatabaseProperties
-0016cdd0 000010 igPsx2VisualContext_CallDmaChain
-0016cde0 000008 igPsx2VisualContext_IsDisplayingFirstBuffer
+0016cd40 000084 igPsx2VisualContext_DetectDriverDatabaseProperties Gap::Gfx::igPsx2VisualContext::detectDriverDatabaseProperties
+0016cdd0 000010 igPsx2VisualContext_CallDmaChain Gap::Gfx::igPsx2VisualContext::callDmaChain
+0016cde0 000008 igPsx2VisualContext_IsDisplayingFirstBuffer Gap::Gfx::igPsx2VisualContext::isDisplayingFirstBuffer
 0016cdf0 000008 Gap__Gfx__igPsx2DisableExt__vfunc_29 Gap::Gfx::igPsx2DisableExt::vfunc_29
 0016ce00 00008c Gap__Gfx__igPsx2DisableExt__vfunc_30 Gap::Gfx::igPsx2DisableExt::vfunc_30
 0016ce90 000088 Gap__Gfx__igPsx2DisableExt__vfunc_31 Gap::Gfx::igPsx2DisableExt::vfunc_31
-0016cf20 000084 igPsx2VisualContext_SetColor
-0016cfb0 00005c igPsx2VisualContext_SetColorPacked
-0016d010 000118 igPsx2VisualContext_GetColor
-0016d130 000034 igPsx2VisualContext_GetColorPacked
-0016d170 00000c igPsx2VisualContext_SetVertexMask
-0016d180 000010 igPsx2VisualContext_GetVertexMask
-0016d190 0000b0 igPsx2VisualContext_SetVertexArray
-0016d240 000008 igPsx2VisualContext_GetVertexArray
-0016d250 000094 igPsx2VisualContext_SetPrimLengthArray
-0016d2f0 000008 igPsx2VisualContext_GetPrimLengthArray
-0016d300 000094 igPsx2VisualContext_SetIndexArray
-0016d3a0 000008 igPsx2VisualContext_GetIndexArray
-0016d3b0 0002b0 igPsx2VisualContext_Draw
-0016d660 0002a4 igPsx2VisualContext_DrawMultiple
+0016cf20 000084 igPsx2VisualContext_SetColor Gap::Gfx::igPsx2VisualContext::setColor
+0016cfb0 00005c igPsx2VisualContext_SetColorPacked Gap::Gfx::igPsx2VisualContext::setColor
+0016d010 000118 igPsx2VisualContext_GetColor Gap::Gfx::igPsx2VisualContext::getColor
+0016d130 000034 igPsx2VisualContext_GetColorPacked Gap::Gfx::igPsx2VisualContext::getColor
+0016d170 00000c igPsx2VisualContext_SetVertexMask Gap::Gfx::igPsx2VisualContext::setVertexMask
+0016d180 000010 igPsx2VisualContext_GetVertexMask Gap::Gfx::igPsx2VisualContext::getVertexMask
+0016d190 0000b0 igPsx2VisualContext_SetVertexArray Gap::Gfx::igPsx2VisualContext::setVertexArray
+0016d240 000008 igPsx2VisualContext_GetVertexArray Gap::Gfx::igPsx2VisualContext::getVertexArray
+0016d250 000094 igPsx2VisualContext_SetPrimLengthArray Gap::Gfx::igPsx2VisualContext::setPrimLengthArray
+0016d2f0 000008 igPsx2VisualContext_GetPrimLengthArray Gap::Gfx::igPsx2VisualContext::getPrimLengthArray
+0016d300 000094 igPsx2VisualContext_SetIndexArray Gap::Gfx::igPsx2VisualContext::setIndexArray
+0016d3a0 000008 igPsx2VisualContext_GetIndexArray Gap::Gfx::igPsx2VisualContext::getIndexArray
+0016d3b0 0002b0 igPsx2VisualContext_Draw Gap::Gfx::igPsx2VisualContext::draw
+0016d660 0002a4 igPsx2VisualContext_DrawMultiple Gap::Gfx::igPsx2VisualContext::drawMultiple
 0016d910 000208 FUN_0016d910
 0016db20 0000bc FUN_0016db20
-0016dbe0 0000b8 igPsx2VisualContext_BeginDraw
-0016dca0 00012c igPsx2VisualContext_EndDraw
-0016ddd0 00002c igPsx2VisualContext_FlushDraw
-0016de00 000340 igPsx2VisualContext_SoftwareBlendVertex
+0016dbe0 0000b8 igPsx2VisualContext_BeginDraw Gap::Gfx::igPsx2VisualContext::beginDraw
+0016dca0 00012c igPsx2VisualContext_EndDraw Gap::Gfx::igPsx2VisualContext::endDraw
+0016ddd0 00002c igPsx2VisualContext_FlushDraw Gap::Gfx::igPsx2VisualContext::flushDraw
+0016de00 000340 igPsx2VisualContext_SoftwareBlendVertex Gap::Gfx::igPsx2VisualContext::softwareBlendVertex
 0016e140 000040 FUN_0016e140
 0016e180 000020 Gap__Gfx__igPsx2BlendEquationExt__vfunc_29 Gap::Gfx::igPsx2BlendEquationExt::vfunc_29
 0016e1a0 0000e8 Gap__Gfx__igPsx2BlendEquationExt__vfunc_30 Gap::Gfx::igPsx2BlendEquationExt::vfunc_30
@@ -2994,37 +2994,37 @@
 0016eab0 000224 Gap__Gfx__igPsx2Image__vfunc_41 Gap::Gfx::igPsx2Image::platformSave
 0016ece0 0001c0 Gap__Gfx__igPsx2Image__vfunc_44 Gap::Gfx::igPsx2Image::oldLoad
 0016eea0 0000bc Gap__Gfx__igPsx2Image__vfunc_37 Gap::Gfx::igPsx2Image::load
-0016ef60 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_25 Gap::Gfx::igPsx2ImageConvert::vfunc_25
-0016ef70 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_26 Gap::Gfx::igPsx2ImageConvert::vfunc_26
-0016ef80 0000f4 Gap__Gfx__igPsx2ImageConvert__vfunc_27 Gap::Gfx::igPsx2ImageConvert::vfunc_27
-0016f080 0000f0 Gap__Gfx__igPsx2ImageConvert__vfunc_28 Gap::Gfx::igPsx2ImageConvert::vfunc_28
-0016f170 000060 Gap__Gfx__igPsx2ImageConvert__vfunc_29 Gap::Gfx::igPsx2ImageConvert::vfunc_29
-0016f1d0 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_30 Gap::Gfx::igPsx2ImageConvert::vfunc_30
-0016f1e0 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_31 Gap::Gfx::igPsx2ImageConvert::vfunc_31
-0016f1f0 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_32 Gap::Gfx::igPsx2ImageConvert::vfunc_32
-0016f200 000040 Gap__Gfx__igPsx2ImageConvert__vfunc_33 Gap::Gfx::igPsx2ImageConvert::vfunc_33
-0016f240 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_34 Gap::Gfx::igPsx2ImageConvert::vfunc_34
+0016ef60 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_25 Gap::Gfx::igPsx2ImageConvert::swapRGBA8888
+0016ef70 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_26 Gap::Gfx::igPsx2ImageConvert::swapRGB888
+0016ef80 0000f4 Gap__Gfx__igPsx2ImageConvert__vfunc_27 Gap::Gfx::igPsx2ImageConvert::swapRGBA5551
+0016f080 0000f0 Gap__Gfx__igPsx2ImageConvert__vfunc_28 Gap::Gfx::igPsx2ImageConvert::swapRGBA4444
+0016f170 000060 Gap__Gfx__igPsx2ImageConvert__vfunc_29 Gap::Gfx::igPsx2ImageConvert::swapRGB565
+0016f1d0 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_30 Gap::Gfx::igPsx2ImageConvert::swapRGB332
+0016f1e0 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_31 Gap::Gfx::igPsx2ImageConvert::swapLA88
+0016f1f0 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_32 Gap::Gfx::igPsx2ImageConvert::swapRGBA2222
+0016f200 000040 Gap__Gfx__igPsx2ImageConvert__vfunc_33 Gap::Gfx::igPsx2ImageConvert::swapLA44
+0016f240 000008 Gap__Gfx__igPsx2ImageConvert__vfunc_34 Gap::Gfx::igPsx2ImageConvert::swapRGBA3328
 0016f250 00003c Gap__Gfx__igPsx2Image__vfunc_45 Gap::Gfx::igPsx2Image::toggleComponentOrder
-0016f290 000318 Gap__Gfx__igPsx2ImageConvert__vfunc_24 Gap::Gfx::igPsx2ImageConvert::vfunc_24
-0016f5b0 0000e0 Gap__Gfx__igPsx2ImageConvert__vfunc_23 Gap::Gfx::igPsx2ImageConvert::vfunc_23
-0016f690 000070 FUN_0016f690
-0016f700 000078 FUN_0016f700
-0016f780 000068 FUN_0016f780
-0016f7f0 0000a4 FUN_0016f7f0
-0016f8a0 000084 FUN_0016f8a0
-0016f930 000074 FUN_0016f930
-0016f9b0 000058 FUN_0016f9b0
-0016fa10 00004c FUN_0016fa10
-0016fa60 00007c FUN_0016fa60
-0016fae0 00007c FUN_0016fae0
-0016fb60 000064 FUN_0016fb60
-0016fbd0 000044 FUN_0016fbd0
-0016fc20 000060 FUN_0016fc20
-0016fc80 000044 FUN_0016fc80
-0016fcd0 000064 FUN_0016fcd0
+0016f290 000318 Gap__Gfx__igPsx2ImageConvert__vfunc_24 Gap::Gfx::igPsx2ImageConvert::getConversionFn
+0016f5b0 0000e0 Gap__Gfx__igPsx2ImageConvert__vfunc_23 Gap::Gfx::igPsx2ImageConvert::getPackConversionFn
+0016f690 000070 FUN_0016f690 Gap::Gfx::igPsx2ImageConvert::pal_8_To_rgba_8888
+0016f700 000078 FUN_0016f700 Gap::Gfx::igPsx2ImageConvert::rgba_5551_To_rgba_8888
+0016f780 000068 FUN_0016f780 Gap::Gfx::igPsx2ImageConvert::rgb_565_To_rgb_888
+0016f7f0 0000a4 FUN_0016f7f0 Gap::Gfx::igPsx2ImageConvert::rgba_4444_To_rgba_8888
+0016f8a0 000084 FUN_0016f8a0 Gap::Gfx::igPsx2ImageConvert::rgb_888_To_rgba_8888
+0016f930 000074 FUN_0016f930 Gap::Gfx::igPsx2ImageConvert::rgb_888_To_rgba_5551
+0016f9b0 000058 FUN_0016f9b0 Gap::Gfx::igPsx2ImageConvert::rgb_888_To_rgb_565
+0016fa10 00004c FUN_0016fa10 Gap::Gfx::igPsx2ImageConvert::rgba_8888_To_rgb_888
+0016fa60 00007c FUN_0016fa60 Gap::Gfx::igPsx2ImageConvert::rgba_8888_To_rgba_5551
+0016fae0 00007c FUN_0016fae0 Gap::Gfx::igPsx2ImageConvert::rgba_8888_To_rgba_4444
+0016fb60 000064 FUN_0016fb60 Gap::Gfx::igPsx2ImageConvert::la_44_To_la_88
+0016fbd0 000044 FUN_0016fbd0 Gap::Gfx::igPsx2ImageConvert::la_88_To_la_44
+0016fc20 000060 FUN_0016fc20 Gap::Gfx::igPsx2ImageConvert::la_88_To_rgba_8888
+0016fc80 000044 FUN_0016fc80 Gap::Gfx::igPsx2ImageConvert::la_88_To_pal_8
+0016fcd0 000064 FUN_0016fcd0 Gap::Gfx::igPsx2ImageConvert::la_88_To_pal_4
 0016fd40 000008 thunk_memcpy
-0016fd50 00005c FUN_0016fd50
-0016fdb0 000044 FUN_0016fdb0
+0016fd50 00005c FUN_0016fd50 Gap::Gfx::igPsx2ImageConvert::la_44_To_pal_4
+0016fdb0 000044 FUN_0016fdb0 Gap::Gfx::igPsx2ImageConvert::alpha_8_To_pal_4
 0016fe00 000020 FUN_0016fe00
 0016fe20 000020 FUN_0016fe20
 0016fe40 000008 Gap__Gfx__igPsx2MultiTextureExt__vfunc_29 Gap::Gfx::igPsx2MultiTextureExt::vfunc_29
@@ -3037,144 +3037,144 @@
 001701a0 000008 Gap__Gfx__igPsx2ScissorExt__vfunc_31 Gap::Gfx::igPsx2ScissorExt::vfunc_31
 001701b0 000024 Gap__Gfx__igPsx2ScissorExt__vfunc_32 Gap::Gfx::igPsx2ScissorExt::vfunc_32
 001701e0 000024 Gap__Gfx__igPsx2ScissorExt__vfunc_33 Gap::Gfx::igPsx2ScissorExt::vfunc_33
-00170210 0000a8 FUN_00170210
-001702c0 000244 FUN_001702c0
-00170510 0001b8 FUN_00170510
-001706d0 000070 igPsx2VisualContext_SetLightingState
-00170740 000008 igPsx2VisualContext_GetLightingState
-00170750 000184 igPsx2VisualContext_CreateLight
-001708e0 0000f0 igPsx2VisualContext_DeleteLight
-001709d0 000124 igPsx2VisualContext_SetLightState
-00170b00 000020 igPsx2VisualContext_GetLightState
-00170b20 000020 igPsx2VisualContext_GetLightType
-00170b40 0000e8 igPsx2VisualContext_SetLightDiffuse
-00170c30 000150 igPsx2VisualContext_SetLightSpecular
-00170d80 000150 igPsx2VisualContext_SetLightAmbient
-00170ed0 00022c igPsx2VisualContext_SetLightDirection
-00171100 00011c igPsx2VisualContext_SetLightPosition
-00171220 0000bc igPsx2VisualContext_SetLightCutoffAngle
-001712e0 000068 igPsx2VisualContext_SetLightFalloffRate
-00171350 000184 igPsx2VisualContext_SetLightAttenuation
-001714e0 00003c igPsx2VisualContext_GetLightDiffuse
-00171520 00003c igPsx2VisualContext_GetLightAmbient
-00171560 00003c igPsx2VisualContext_GetLightSpecular
-001715a0 000034 igPsx2VisualContext_GetLightPosition
-001715e0 000034 igPsx2VisualContext_GetLightDirection
-00171620 00000c igPsx2VisualContext_GetLightFalloffRate
-00171630 000034 igPsx2VisualContext_GetLightAttenuation
-00171670 000020 igPsx2VisualContext_GetLightCutoffAngle
-00171690 000028 FUN_00171690
-001716c0 0000d8 FUN_001716c0
-001717a0 0000c4 igPsx2VisualContext_SetMaterialDiffuse
-00171870 000028 igPsx2VisualContext_GetMaterialDiffuse
-001718a0 000134 igPsx2VisualContext_SetMaterialAmbient
-001719e0 000028 igPsx2VisualContext_GetMaterialAmbient
-00171a10 0000c4 igPsx2VisualContext_SetMaterialEmissive
-00171ae0 000028 igPsx2VisualContext_GetMaterialEmissive
-00171b10 000138 igPsx2VisualContext_SetMaterialSpecular
-00171c50 000028 igPsx2VisualContext_GetMaterialSpecular
-00171c80 000034 igPsx2VisualContext_SetMaterialShininess
-00171cc0 00000c igPsx2VisualContext_GetMaterialShininess
-00171cd0 0003f4 igPsx2VisualContext_SetMaterial
-001720d0 00002c FUN_001720d0
-00172100 00002c igPsx2VisualContext_SetMaterialSpecularState
-00172130 0000e8 igPsx2VisualContext_SetMaterialColorMode
-00172220 00000c igPsx2VisualContext_GetMaterialColorMode
-00172230 0000c4 igPsx2VisualContext_SetSceneAmbient
-00172300 000028 igPsx2VisualContext_GetSceneAmbient
-00172330 000034 FUN_00172330
-00172370 0001dc igPsx2VisualContext_SetStackSize
-00172550 0000a4 igPsx2VisualContext_GetStackSize
-00172600 000308 igPsx2VisualContext_PushMatrix
-00172910 0001e4 igPsx2VisualContext_PopMatrix
-00172b00 000698 igPsx2VisualContext_SetMatrix
-001731a0 0003b0 igPsx2VisualContext_PushPreMultiply
-00173550 0003b0 igPsx2VisualContext_PushPostMultiply
-00173900 000230 igPsx2VisualContext_PreMultiply
-00173b30 000230 igPsx2VisualContext_PostMultiply
-00173d60 000170 igPsx2VisualContext_GetMatrix
-00173ed0 0000f4 igPsx2VisualContext_SetMatrixPsx2
-00173fd0 000058 igPsx2VisualContext_GetMatrixPsx2
-00174030 000054 igPsx2VisualContext_SetTextureMatrixState
+00170210 0000a8 igPsx2VisualContext_ResetLight
+001702c0 000244 igPsx2VisualContext_InitializeLighting
+00170510 0001b8 igPsx2VisualContext_UninitializeLighting
+001706d0 000070 igPsx2VisualContext_SetLightingState Gap::Gfx::igPsx2VisualContext::setLightingState
+00170740 000008 igPsx2VisualContext_GetLightingState Gap::Gfx::igPsx2VisualContext::getLightingState
+00170750 000184 igPsx2VisualContext_CreateLight Gap::Gfx::igPsx2VisualContext::createLight
+001708e0 0000f0 igPsx2VisualContext_DeleteLight Gap::Gfx::igPsx2VisualContext::deleteLight
+001709d0 000124 igPsx2VisualContext_SetLightState Gap::Gfx::igPsx2VisualContext::setLightState
+00170b00 000020 igPsx2VisualContext_GetLightState Gap::Gfx::igPsx2VisualContext::getLightState
+00170b20 000020 igPsx2VisualContext_GetLightType Gap::Gfx::igPsx2VisualContext::getLightType
+00170b40 0000e8 igPsx2VisualContext_SetLightDiffuse Gap::Gfx::igPsx2VisualContext::setLightDiffuse
+00170c30 000150 igPsx2VisualContext_SetLightSpecular Gap::Gfx::igPsx2VisualContext::setLightSpecular
+00170d80 000150 igPsx2VisualContext_SetLightAmbient Gap::Gfx::igPsx2VisualContext::setLightAmbient
+00170ed0 00022c igPsx2VisualContext_SetLightDirection Gap::Gfx::igPsx2VisualContext::setLightDirection
+00171100 00011c igPsx2VisualContext_SetLightPosition Gap::Gfx::igPsx2VisualContext::setLightPosition
+00171220 0000bc igPsx2VisualContext_SetLightCutoffAngle Gap::Gfx::igPsx2VisualContext::setLightCutoffAngle
+001712e0 000068 igPsx2VisualContext_SetLightFalloffRate Gap::Gfx::igPsx2VisualContext::setLightFalloffRate
+00171350 000184 igPsx2VisualContext_SetLightAttenuation Gap::Gfx::igPsx2VisualContext::setLightAttenuation
+001714e0 00003c igPsx2VisualContext_GetLightDiffuse Gap::Gfx::igPsx2VisualContext::getLightDiffuse
+00171520 00003c igPsx2VisualContext_GetLightAmbient Gap::Gfx::igPsx2VisualContext::getLightAmbient
+00171560 00003c igPsx2VisualContext_GetLightSpecular Gap::Gfx::igPsx2VisualContext::getLightSpecular
+001715a0 000034 igPsx2VisualContext_GetLightPosition Gap::Gfx::igPsx2VisualContext::getLightPosition
+001715e0 000034 igPsx2VisualContext_GetLightDirection Gap::Gfx::igPsx2VisualContext::getLightDirection
+00171620 00000c igPsx2VisualContext_GetLightFalloffRate Gap::Gfx::igPsx2VisualContext::getLightFalloffRate
+00171630 000034 igPsx2VisualContext_GetLightAttenuation Gap::Gfx::igPsx2VisualContext::getLightAttenuation
+00171670 000020 igPsx2VisualContext_GetLightCutoffAngle Gap::Gfx::igPsx2VisualContext::getLightCutoffAngle
+00171690 000028 igPsx2VisualContext_CommitLight
+001716c0 0000d8 igPsx2VisualContext_ResetMaterial
+001717a0 0000c4 igPsx2VisualContext_SetMaterialDiffuse Gap::Gfx::igPsx2VisualContext::setMaterialDiffuse
+00171870 000028 igPsx2VisualContext_GetMaterialDiffuse Gap::Gfx::igPsx2VisualContext::getMaterialDiffuse
+001718a0 000134 igPsx2VisualContext_SetMaterialAmbient Gap::Gfx::igPsx2VisualContext::setMaterialAmbient
+001719e0 000028 igPsx2VisualContext_GetMaterialAmbient Gap::Gfx::igPsx2VisualContext::getMaterialAmbient
+00171a10 0000c4 igPsx2VisualContext_SetMaterialEmissive Gap::Gfx::igPsx2VisualContext::setMaterialEmissive
+00171ae0 000028 igPsx2VisualContext_GetMaterialEmissive Gap::Gfx::igPsx2VisualContext::getMaterialEmissive
+00171b10 000138 igPsx2VisualContext_SetMaterialSpecular Gap::Gfx::igPsx2VisualContext::setMaterialSpecular
+00171c50 000028 igPsx2VisualContext_GetMaterialSpecular Gap::Gfx::igPsx2VisualContext::getMaterialSpecular
+00171c80 000034 igPsx2VisualContext_SetMaterialShininess Gap::Gfx::igPsx2VisualContext::setMaterialShininess
+00171cc0 00000c igPsx2VisualContext_GetMaterialShininess Gap::Gfx::igPsx2VisualContext::getMaterialShininess
+00171cd0 0003f4 igPsx2VisualContext_SetMaterial Gap::Gfx::igPsx2VisualContext::setMaterial
+001720d0 00002c igPsx2VisualContext_SetMaterialSlot
+00172100 00002c igPsx2VisualContext_SetMaterialSpecularState Gap::Gfx::igPsx2VisualContext::setMaterialSpecularState
+00172130 0000e8 igPsx2VisualContext_SetMaterialColorMode Gap::Gfx::igPsx2VisualContext::setMaterialColorMode
+00172220 00000c igPsx2VisualContext_GetMaterialColorMode Gap::Gfx::igPsx2VisualContext::getMaterialColorMode
+00172230 0000c4 igPsx2VisualContext_SetSceneAmbient Gap::Gfx::igPsx2VisualContext::setSceneAmbient
+00172300 000028 igPsx2VisualContext_GetSceneAmbient Gap::Gfx::igPsx2VisualContext::getSceneAmbient
+00172330 000034 igPsx2VisualContext_CommitMaterial
+00172370 0001dc igPsx2VisualContext_SetStackSize Gap::Gfx::igPsx2VisualContext::setStackSize
+00172550 0000a4 igPsx2VisualContext_GetStackSize Gap::Gfx::igPsx2VisualContext::getStackSize
+00172600 000308 igPsx2VisualContext_PushMatrix Gap::Gfx::igPsx2VisualContext::pushMatrix
+00172910 0001e4 igPsx2VisualContext_PopMatrix Gap::Gfx::igPsx2VisualContext::popMatrix
+00172b00 000698 igPsx2VisualContext_SetMatrix Gap::Gfx::igPsx2VisualContext::setMatrix
+001731a0 0003b0 igPsx2VisualContext_PushPreMultiply Gap::Gfx::igPsx2VisualContext::pushPreMultiply
+00173550 0003b0 igPsx2VisualContext_PushPostMultiply Gap::Gfx::igPsx2VisualContext::pushPostMultiply
+00173900 000230 igPsx2VisualContext_PreMultiply Gap::Gfx::igPsx2VisualContext::preMultiply
+00173b30 000230 igPsx2VisualContext_PostMultiply Gap::Gfx::igPsx2VisualContext::postMultiply
+00173d60 000170 igPsx2VisualContext_GetMatrix Gap::Gfx::igPsx2VisualContext::getMatrix
+00173ed0 0000f4 igPsx2VisualContext_SetMatrixPsx2 Gap::Gfx::igPsx2VisualContext::setMatrixPsx2
+00173fd0 000058 igPsx2VisualContext_GetMatrixPsx2 Gap::Gfx::igPsx2VisualContext::getMatrixPsx2
+00174030 000054 igPsx2VisualContext_SetTextureMatrixState Gap::Gfx::igPsx2VisualContext::setTextureMatrixState
 00174090 0000b0 FUN_00174090
-00174140 0001c0 igPsx2VisualContext_ResetToDefault
-00174300 00005c igPsx2VisualContext_SetNormalizeNormalsState
-00174360 000008 igPsx2VisualContext_GetNormalizeNormalsState
-00174370 000038 igPsx2VisualContext_SetVertexBlendingState
-001743b0 000008 igPsx2VisualContext_GetVertexBlendingState
-001743c0 00006c igPsx2VisualContext_SetBlendingState
-00174430 000008 igPsx2VisualContext_GetBlendingState
-00174440 000028 igPsx2VisualContext_SetBlendingSource
-00174470 000028 igPsx2VisualContext_SetBlendingDestination
-001744a0 000008 igPsx2VisualContext_GetBlendingSource
-001744b0 000008 igPsx2VisualContext_GetBlendingDestination
-001744c0 000048 igPsx2VisualContext_SetBlendingSourceDestination
+00174140 0001c0 igPsx2VisualContext_ResetToDefault Gap::Gfx::igPsx2VisualContext::resetToDefault
+00174300 00005c igPsx2VisualContext_SetNormalizeNormalsState Gap::Gfx::igPsx2VisualContext::setNormalizeNormalsState
+00174360 000008 igPsx2VisualContext_GetNormalizeNormalsState Gap::Gfx::igPsx2VisualContext::getNormalizeNormalsState
+00174370 000038 igPsx2VisualContext_SetVertexBlendingState Gap::Gfx::igPsx2VisualContext::setVertexBlendingState
+001743b0 000008 igPsx2VisualContext_GetVertexBlendingState Gap::Gfx::igPsx2VisualContext::getVertexBlendingState
+001743c0 00006c igPsx2VisualContext_SetBlendingState Gap::Gfx::igPsx2VisualContext::setBlendingState
+00174430 000008 igPsx2VisualContext_GetBlendingState Gap::Gfx::igPsx2VisualContext::getBlendingState
+00174440 000028 igPsx2VisualContext_SetBlendingSource Gap::Gfx::igPsx2VisualContext::setBlendingSource
+00174470 000028 igPsx2VisualContext_SetBlendingDestination Gap::Gfx::igPsx2VisualContext::setBlendingDestination
+001744a0 000008 igPsx2VisualContext_GetBlendingSource Gap::Gfx::igPsx2VisualContext::getBlendingSource
+001744b0 000008 igPsx2VisualContext_GetBlendingDestination Gap::Gfx::igPsx2VisualContext::getBlendingDestination
+001744c0 000048 igPsx2VisualContext_SetBlendingSourceDestination Gap::Gfx::igPsx2VisualContext::setBlendingSourceDestination
 00174510 000124 FUN_00174510
-00174640 000094 FUN_00174640
-001746e0 000074 igPsx2VisualContext_SetAlphaTestState
-00174760 000008 igPsx2VisualContext_GetAlphaTestState
-00174770 000024 igPsx2VisualContext_SetAlphaFunc
-001747a0 000008 igPsx2VisualContext_GetAlphaFunc
-001747b0 000028 igPsx2VisualContext_SetAlphaRefValue
-001747e0 000008 igPsx2VisualContext_GetAlphaRefValue
+00174640 000094 igPsx2VisualContext_ApplyBlendEquation
+001746e0 000074 igPsx2VisualContext_SetAlphaTestState Gap::Gfx::igPsx2VisualContext::setAlphaTestState
+00174760 000008 igPsx2VisualContext_GetAlphaTestState Gap::Gfx::igPsx2VisualContext::getAlphaTestState
+00174770 000024 igPsx2VisualContext_SetAlphaFunc Gap::Gfx::igPsx2VisualContext::setAlphaFunc
+001747a0 000008 igPsx2VisualContext_GetAlphaFunc Gap::Gfx::igPsx2VisualContext::getAlphaFunc
+001747b0 000028 igPsx2VisualContext_SetAlphaRefValue Gap::Gfx::igPsx2VisualContext::setAlphaRefValue
+001747e0 000008 igPsx2VisualContext_GetAlphaRefValue Gap::Gfx::igPsx2VisualContext::getAlphaRefValue
 001747f0 00005c FUN_001747f0
-00174850 00006c igPsx2VisualContext_SetMatrixOptimizationState
-001748c0 000008 igPsx2VisualContext_GetMatrixOptimizationState
-001748d0 00006c igPsx2VisualContext_SetViewportClippingState
-00174940 000008 igPsx2VisualContext_GetViewportClippingState
+00174850 00006c igPsx2VisualContext_SetMatrixOptimizationState Gap::Gfx::igPsx2VisualContext::setMatrixOptimizationState
+001748c0 000008 igPsx2VisualContext_GetMatrixOptimizationState Gap::Gfx::igPsx2VisualContext::getMatrixOptimizationState
+001748d0 00006c igPsx2VisualContext_SetViewportClippingState Gap::Gfx::igPsx2VisualContext::setViewportClippingState
+00174940 000008 igPsx2VisualContext_GetViewportClippingState Gap::Gfx::igPsx2VisualContext::getViewportClippingState
 00174950 000034 FUN_00174950
-00174990 000024 igPsx2VisualContext_SetColorMask
-001749c0 000024 igPsx2VisualContext_GetColorMask
-001749f0 00006c igPsx2VisualContext_SetShadingMode
-00174a60 000008 igPsx2VisualContext_GetShadingMode
-00174a70 00008c igPsx2VisualContext_SetCullFaceState
-00174b00 000008 igPsx2VisualContext_GetCullFaceState
-00174b10 000094 igPsx2VisualContext_SetCullFaceMode
-00174bb0 000008 igPsx2VisualContext_GetCullFaceMode
-00174bc0 000080 igPsx2VisualContext_SetDepthTestState
-00174c40 000008 igPsx2VisualContext_GetDepthTestState
-00174c50 000104 igPsx2VisualContext_SetDepthTestFunction
-00174d60 000008 igPsx2VisualContext_GetDepthTestFunction
-00174d70 000028 igPsx2VisualContext_SetDepthWriteState
-00174da0 000008 igPsx2VisualContext_GetDepthWriteState
+00174990 000024 igPsx2VisualContext_SetColorMask Gap::Gfx::igPsx2VisualContext::setColorMask
+001749c0 000024 igPsx2VisualContext_GetColorMask Gap::Gfx::igPsx2VisualContext::getColorMask
+001749f0 00006c igPsx2VisualContext_SetShadingMode Gap::Gfx::igPsx2VisualContext::setShadingMode
+00174a60 000008 igPsx2VisualContext_GetShadingMode Gap::Gfx::igPsx2VisualContext::getShadingMode
+00174a70 00008c igPsx2VisualContext_SetCullFaceState Gap::Gfx::igPsx2VisualContext::setCullFaceState
+00174b00 000008 igPsx2VisualContext_GetCullFaceState Gap::Gfx::igPsx2VisualContext::getCullFaceState
+00174b10 000094 igPsx2VisualContext_SetCullFaceMode Gap::Gfx::igPsx2VisualContext::setCullFaceMode
+00174bb0 000008 igPsx2VisualContext_GetCullFaceMode Gap::Gfx::igPsx2VisualContext::getCullFaceMode
+00174bc0 000080 igPsx2VisualContext_SetDepthTestState Gap::Gfx::igPsx2VisualContext::setDepthTestState
+00174c40 000008 igPsx2VisualContext_GetDepthTestState Gap::Gfx::igPsx2VisualContext::getDepthTestState
+00174c50 000104 igPsx2VisualContext_SetDepthTestFunction Gap::Gfx::igPsx2VisualContext::setDepthTestFunction
+00174d60 000008 igPsx2VisualContext_GetDepthTestFunction Gap::Gfx::igPsx2VisualContext::getDepthTestFunction
+00174d70 000028 igPsx2VisualContext_SetDepthWriteState Gap::Gfx::igPsx2VisualContext::setDepthWriteState
+00174da0 000008 igPsx2VisualContext_GetDepthWriteState Gap::Gfx::igPsx2VisualContext::getDepthWriteState
 00174db0 000068 FUN_00174db0
-00174e20 00006c igPsx2VisualContext_SetStencilState
-00174e90 00000c igPsx2VisualContext_GetStencilState
-00174ea0 00002c igPsx2VisualContext_SetStencilRefVal
-00174ed0 000008 igPsx2VisualContext_GetStencilRefVal
-00174ee0 0000a4 igPsx2VisualContext_SetStencilFunc
-00174f90 000008 igPsx2VisualContext_GetStencilFunc
-00174fa0 000008 igPsx2VisualContext_SetStencilOps
-00174fb0 000008 igPsx2VisualContext_GetStencilOps
-00174fc0 000008 igPsx2VisualContext_SetStencilReadMask
-00174fd0 000008 igPsx2VisualContext_GetStencilReadMask
-00174fe0 000008 igPsx2VisualContext_SetStencilWriteMask
-00174ff0 000008 igPsx2VisualContext_GetStencilWriteMask
-00175000 000074 igPsx2VisualContext_SetRenderMode
-00175080 000008 igPsx2VisualContext_GetRenderMode
-00175090 000024 FUN_00175090
-001750c0 000064 igPsx2VisualContext_SetFogState
-00175130 000008 igPsx2VisualContext_GetFogState
-00175140 00005c igPsx2VisualContext_SetFogDensity
-001751a0 000008 igPsx2VisualContext_GetFogDensity
-001751b0 000058 igPsx2VisualContext_SetFogMode
-00175210 000008 igPsx2VisualContext_GetFogMode
-00175220 0000c0 igPsx2VisualContext_SetFogColor
-001752e0 000024 igPsx2VisualContext_GetFogColor
-00175310 00005c igPsx2VisualContext_SetFogNear
-00175370 000008 igPsx2VisualContext_GetFogNear
-00175380 00005c igPsx2VisualContext_SetFogFar
-001753e0 000008 igPsx2VisualContext_GetFogFar
-001753f0 00007c igPsx2VisualContext_SetVideoMode
-00175470 00003c igPsx2VisualContext_GetVideoMode
-001754b0 000058 FUN_001754b0
-00175510 0000d0 FUN_00175510
-001755e0 000054 FUN_001755e0
-00175640 00002c FUN_00175640
-00175670 00002c FUN_00175670
-001756a0 00008c igPsx2VisualContext_SetPixelPipelineMode
-00175730 000054 igPsx2VisualContext_SetDitherState
-00175790 000028 FUN_00175790
+00174e20 00006c igPsx2VisualContext_SetStencilState Gap::Gfx::igPsx2VisualContext::setStencilState
+00174e90 00000c igPsx2VisualContext_GetStencilState Gap::Gfx::igPsx2VisualContext::getStencilState
+00174ea0 00002c igPsx2VisualContext_SetStencilRefVal Gap::Gfx::igPsx2VisualContext::setStencilRefVal
+00174ed0 000008 igPsx2VisualContext_GetStencilRefVal Gap::Gfx::igPsx2VisualContext::getStencilRefVal
+00174ee0 0000a4 igPsx2VisualContext_SetStencilFunc Gap::Gfx::igPsx2VisualContext::setStencilFunc
+00174f90 000008 igPsx2VisualContext_GetStencilFunc Gap::Gfx::igPsx2VisualContext::getStencilFunc
+00174fa0 000008 igPsx2VisualContext_SetStencilOps Gap::Gfx::igPsx2VisualContext::setStencilOps
+00174fb0 000008 igPsx2VisualContext_GetStencilOps Gap::Gfx::igPsx2VisualContext::getStencilOps
+00174fc0 000008 igPsx2VisualContext_SetStencilReadMask Gap::Gfx::igPsx2VisualContext::setStencilReadMask
+00174fd0 000008 igPsx2VisualContext_GetStencilReadMask Gap::Gfx::igPsx2VisualContext::getStencilReadMask
+00174fe0 000008 igPsx2VisualContext_SetStencilWriteMask Gap::Gfx::igPsx2VisualContext::setStencilWriteMask
+00174ff0 000008 igPsx2VisualContext_GetStencilWriteMask Gap::Gfx::igPsx2VisualContext::getStencilWriteMask
+00175000 000074 igPsx2VisualContext_SetRenderMode Gap::Gfx::igPsx2VisualContext::setRenderMode
+00175080 000008 igPsx2VisualContext_GetRenderMode Gap::Gfx::igPsx2VisualContext::getRenderMode
+00175090 000024 igPsx2VisualContext_SetRenderSides
+001750c0 000064 igPsx2VisualContext_SetFogState Gap::Gfx::igPsx2VisualContext::setFogState
+00175130 000008 igPsx2VisualContext_GetFogState Gap::Gfx::igPsx2VisualContext::getFogState
+00175140 00005c igPsx2VisualContext_SetFogDensity Gap::Gfx::igPsx2VisualContext::setFogDensity
+001751a0 000008 igPsx2VisualContext_GetFogDensity Gap::Gfx::igPsx2VisualContext::getFogDensity
+001751b0 000058 igPsx2VisualContext_SetFogMode Gap::Gfx::igPsx2VisualContext::setFogMode
+00175210 000008 igPsx2VisualContext_GetFogMode Gap::Gfx::igPsx2VisualContext::getFogMode
+00175220 0000c0 igPsx2VisualContext_SetFogColor Gap::Gfx::igPsx2VisualContext::setFogColor
+001752e0 000024 igPsx2VisualContext_GetFogColor Gap::Gfx::igPsx2VisualContext::getFogColor
+00175310 00005c igPsx2VisualContext_SetFogNear Gap::Gfx::igPsx2VisualContext::setFogNear
+00175370 000008 igPsx2VisualContext_GetFogNear Gap::Gfx::igPsx2VisualContext::getFogNear
+00175380 00005c igPsx2VisualContext_SetFogFar Gap::Gfx::igPsx2VisualContext::setFogFar
+001753e0 000008 igPsx2VisualContext_GetFogFar Gap::Gfx::igPsx2VisualContext::getFogFar
+001753f0 00007c igPsx2VisualContext_SetVideoMode Gap::Gfx::igPsx2VisualContext::setVideoMode
+00175470 00003c igPsx2VisualContext_GetVideoMode Gap::Gfx::igPsx2VisualContext::getVideoMode
+001754b0 000058 igPsx2VisualContext_SetColorScalerState
+00175510 0000d0 igPsx2VisualContext_SetColorScalerValue
+001755e0 000054 igPsx2VisualContext_SetColorClampState
+00175640 00002c igPsx2VisualContext_SetAlphaBlendingControl
+00175670 00002c igPsx2VisualContext_SetAlphaBlendingCorrection
+001756a0 00008c igPsx2VisualContext_SetPixelPipelineMode Gap::Gfx::igPsx2VisualContext::setPixelPipelineMode
+00175730 000054 igPsx2VisualContext_SetDitherState Gap::Gfx::igPsx2VisualContext::setDitherState
+00175790 000028 igPsx2VisualContext_SetDitherMatrix
 001757c0 0000a0 FUN_001757c0
 00175860 000204 Gap__Gfx__igPsx2ParticleArray__vfunc_23 Gap::Gfx::igPsx2ParticleArray::vfunc_23
 00175a70 000124 igPsx2ParticleArray_Update
@@ -3212,11 +3212,11 @@
 00176fc0 000048 igPsx2PointSpriteExt_GetRadian
 00177010 0004ac FUN_00177010
 001774c0 000420 FUN_001774c0
-001778e0 000010 igPsx2VisualContext_GetStatistic
-001778f0 000034 igPsx2VisualContext_GetStatisticCapability
-00177930 0000b0 igPsx2VisualContext_SetStatistic
-001779e0 0003f4 igPsx2VisualContext_GetStatistics
-00177de0 000ab8 igPsx2VisualContext_GetStatisticValue
+001778e0 000010 igPsx2VisualContext_GetStatistic Gap::Gfx::igPsx2VisualContext::getStatistic
+001778f0 000034 igPsx2VisualContext_GetStatisticCapability Gap::Gfx::igPsx2VisualContext::getStatisticCapability
+00177930 0000b0 igPsx2VisualContext_SetStatistic Gap::Gfx::igPsx2VisualContext::setStatistic
+001779e0 0003f4 igPsx2VisualContext_GetStatistics Gap::Gfx::igPsx2VisualContext::getStatistic
+00177de0 000ab8 igPsx2VisualContext_GetStatisticValue Gap::Gfx::igPsx2VisualContext::getStatisticValue
 001788a0 000034 FUN_001788a0
 001788e0 000090 FUN_001788e0
 00178970 001488 FUN_00178970
@@ -3228,48 +3228,48 @@
 0017a540 0002a0 FUN_0017a540
 0017a7e0 000090 FUN_0017a7e0
 0017a870 00006c FUN_0017a870
-0017a8e0 000008 igPsx2VisualContext_GetAvailableTextureMemory
-0017a8f0 0000d8 igPsx2VisualContext_SetTextureStageState
-0017a9d0 000024 igPsx2VisualContext_GetTextureStageState
-0017aa00 000008 igPsx2VisualContext_CreateTextureOneImage
+0017a8e0 000008 igPsx2VisualContext_GetAvailableTextureMemory Gap::Gfx::igPsx2VisualContext::getAvailableTextureMemory
+0017a8f0 0000d8 igPsx2VisualContext_SetTextureStageState Gap::Gfx::igPsx2VisualContext::setTextureStageState
+0017a9d0 000024 igPsx2VisualContext_GetTextureStageState Gap::Gfx::igPsx2VisualContext::getTextureStageState
+0017aa00 000008 igPsx2VisualContext_CreateTextureOneImage Gap::Gfx::igPsx2VisualContext::createTexture
 0017aa10 000008 Gap__Gfx__igPsx2VisualContext__createTexture Gap::Gfx::igPsx2VisualContext::createTexture
-0017aa20 000514 igPsx2VisualContext_CreateTexture
-0017af40 000008 igPsx2VisualContext_SetTextureComponentSizeIntensityAlpha
-0017af50 000224 igPsx2VisualContext_SetTextureComponentSize
-0017b180 000008 igPsx2VisualContext_GetTextureComponentSizeIntensityAlpha
-0017b190 000040 igPsx2VisualContext_GetTextureComponentSize
-0017b1d0 000014 igPsx2VisualContext_LoadTexture
-0017b1f0 00020c igPsx2VisualContext_SetTexture
+0017aa20 000514 igPsx2VisualContext_AllocateTexture Gap::Gfx::igPsx2VisualContext::allocateTexture
+0017af40 000008 igPsx2VisualContext_SetTextureComponentSizeIntensityAlpha Gap::Gfx::igPsx2VisualContext::setTextureComponentSizeIntensityAlpha
+0017af50 000224 igPsx2VisualContext_SetTextureComponentSize Gap::Gfx::igPsx2VisualContext::setTextureComponentSize
+0017b180 000008 igPsx2VisualContext_GetTextureComponentSizeIntensityAlpha Gap::Gfx::igPsx2VisualContext::getTextureComponentSizeIntensityAlpha
+0017b190 000040 igPsx2VisualContext_GetTextureComponentSize Gap::Gfx::igPsx2VisualContext::getTextureComponentSize
+0017b1d0 000014 igPsx2VisualContext_LoadTexture Gap::Gfx::igPsx2VisualContext::loadTexture
+0017b1f0 00020c igPsx2VisualContext_SetTexture Gap::Gfx::igPsx2VisualContext::setTexture
 0017b400 0001f0 FUN_0017b400
 0017b5f0 0003f4 FUN_0017b5f0
-0017b9f0 000008 igPsx2VisualContext_GetCurrentTexture
-0017ba00 000158 igPsx2VisualContext_UnloadTexture
-0017bb60 000214 igPsx2VisualContext_DeleteTexture
-0017bd80 000014 igPsx2VisualContext_SetTextureSource
-0017bda0 0000e0 igPsx2VisualContext_SetTextureSourceFromBuffer
-0017be80 000648 igPsx2VisualContext_SetTextureSourceLevel
-0017c4d0 000020 igPsx2VisualContext_GetTextureImage
-0017c4f0 000008 igPsx2VisualContext_SetTextureSourceFromTexture
-0017c500 00005c igPsx2VisualContext_SetTextureMinificationFilter
-0017c560 00005c igPsx2VisualContext_SetTextureMagnificationFilter
-0017c5c0 000020 igPsx2VisualContext_GetTextureMinificationFilter
-0017c5e0 000020 igPsx2VisualContext_GetTextureMagnificationFilter
-0017c600 000094 igPsx2VisualContext_SetTextureAddressingMode
-0017c6a0 000038 igPsx2VisualContext_GetTextureAddressingMode
+0017b9f0 000008 igPsx2VisualContext_GetCurrentTexture Gap::Gfx::igPsx2VisualContext::getCurrentTexture
+0017ba00 000158 igPsx2VisualContext_UnloadTexture Gap::Gfx::igPsx2VisualContext::unloadTexture
+0017bb60 000214 igPsx2VisualContext_DeleteTexture Gap::Gfx::igPsx2VisualContext::deleteTexture
+0017bd80 000014 igPsx2VisualContext_SetTextureSource Gap::Gfx::igPsx2VisualContext::setTextureSource
+0017bda0 0000e0 igPsx2VisualContext_SetTextureSourceFromBuffer Gap::Gfx::igPsx2VisualContext::setTextureSource
+0017be80 000648 igPsx2VisualContext_SetTextureSourceLevel Gap::Gfx::igPsx2VisualContext::setTextureSource
+0017c4d0 000020 igPsx2VisualContext_GetTextureImage Gap::Gfx::igPsx2VisualContext::getTextureImage
+0017c4f0 000008 igPsx2VisualContext_SetTextureSourceFromTexture Gap::Gfx::igPsx2VisualContext::setTextureSource
+0017c500 00005c igPsx2VisualContext_SetTextureMinificationFilter Gap::Gfx::igPsx2VisualContext::setTextureMinificationFilter
+0017c560 00005c igPsx2VisualContext_SetTextureMagnificationFilter Gap::Gfx::igPsx2VisualContext::setTextureMagnificationFilter
+0017c5c0 000020 igPsx2VisualContext_GetTextureMinificationFilter Gap::Gfx::igPsx2VisualContext::getTextureMinificationFilter
+0017c5e0 000020 igPsx2VisualContext_GetTextureMagnificationFilter Gap::Gfx::igPsx2VisualContext::getTextureMagnificationFilter
+0017c600 000094 igPsx2VisualContext_SetTextureAddressingMode Gap::Gfx::igPsx2VisualContext::setTextureAddressingMode
+0017c6a0 000038 igPsx2VisualContext_GetTextureAddressingMode Gap::Gfx::igPsx2VisualContext::getTextureAddressingMode
 0017c6e0 00002c FUN_0017c6e0
-0017c710 000078 igPsx2VisualContext_SetTextureMatrixProjectiveState
-0017c790 00000c igPsx2VisualContext_GetTextureMatrixProjectiveState
-0017c7a0 0000d4 igPsx2VisualContext_SetTextureStageFunc
+0017c710 000078 igPsx2VisualContext_SetTextureMatrixProjectiveState Gap::Gfx::igPsx2VisualContext::setTextureMatrixProjectiveState
+0017c790 00000c igPsx2VisualContext_GetTextureMatrixProjectiveState Gap::Gfx::igPsx2VisualContext::getTextureMatrixProjectiveState
+0017c7a0 0000d4 igPsx2VisualContext_SetTextureStageFunc Gap::Gfx::igPsx2VisualContext::setTextureStageFunc
 0017c880 000014 FUN_0017c880
 0017c8a0 0000dc FUN_0017c8a0
-0017c980 000028 igPsx2VisualContext_GetTextureStageFunc
-0017c9b0 00018c igPsx2VisualContext_SetTextureStageCoordSource
-0017cb40 000034 igPsx2VisualContext_GetTextureStageCoordSource
+0017c980 000028 igPsx2VisualContext_GetTextureStageFunc Gap::Gfx::igPsx2VisualContext::getTextureStageFunc
+0017c9b0 00018c igPsx2VisualContext_SetTextureStageCoordSource Gap::Gfx::igPsx2VisualContext::setTextureStageCoordSource
+0017cb40 000034 igPsx2VisualContext_GetTextureStageCoordSource Gap::Gfx::igPsx2VisualContext::getTextureStageCoordSource
 0017cb80 000130 FUN_0017cb80
 0017ccb0 00022c FUN_0017ccb0
-0017cee0 000008 igPsx2VisualContext_SetTextureRegion
+0017cee0 000008 igPsx2VisualContext_SetTextureRegion Gap::Gfx::igPsx2VisualContext::setTextureRegion
 0017cef0 000114 Gap__Gfx__igPsx2UserUCodeExt__vfunc_29 Gap::Gfx::igPsx2UserUCodeExt::vfunc_29
-0017d010 00000c igPsx2VisualContext_GetMeta
+0017d010 00000c igPsx2VisualContext_GetMeta Gap::Gfx::igPsx2VisualContext::getMeta
 0017d020 000008 thunk_igObject_InitDefaults Gap::Gfx::igPsx2VertexArray1_1::initDefaults
 0017d030 000074 igPsx2VertexArray1_1_ReleaseDefaults Gap::Gfx::igPsx2VertexArray1_1::releaseDefaults
 0017d0b0 000008 igPsx2VertexArray1_1_Reset Gap::Gfx::igPsx2VertexArray1_1::reset
@@ -3295,7 +3295,7 @@
 0017dd20 000008 igPsx2VertexArray1_1_CommitComponentEdits Gap::Gfx::igPsx2VertexArray1_1::commitComponentEdits
 0017dd30 0000ac igPsx2VertexArray1_1_UserApplyWriteProxy Gap::Gfx::igPsx2VertexArray1_1::userApplyWriteProxy
 0017dde0 0000bc igPsx2VertexArray1_1_UserMakeConcrete Gap::Gfx::igPsx2VertexArray1_1::userMakeConcrete
-0017dea0 00009c igPsx2VisualContext_SetVertexArray2
+0017dea0 00009c igPsx2VisualContext_SetVertexArray2 Gap::Gfx::igPsx2VisualContext::setVertexArray
 0017df40 00064c FUN_0017df40
 0017e590 0003e8 FUN_0017e590
 0017e980 000210 FUN_0017e980
@@ -3308,13 +3308,13 @@
 0017f630 00008c igPsx2VertexStream_UserWriteFilePreProcess Gap::Gfx::igPsx2VertexStream::userWriteFilePreProcess
 0017f6c0 000060 igPsx2VertexStream_UserPostLoad Gap::Gfx::igPsx2VertexStream::userPostLoad
 0017f720 000650 Gap__Gfx__igPsx2VertexStream__vfunc_26 Gap::Gfx::igPsx2VertexStream::configure
-0017fd70 000008 igPsx2VisualContext_GetPixelPipelineMode
+0017fd70 000008 igPsx2VisualContext_GetPixelPipelineMode Gap::Gfx::igPsx2VisualContext::getPixelPipelineMode
 0017fd80 0000c8 FUN_0017fd80
 0017fe50 00010c Gap__Gfx__igPsx2VertexStream__vfunc_24 Gap::Gfx::igPsx2VertexStream::getEditableComponent
 0017ff60 0000a4 Gap__Gfx__igPsx2VertexStream__vfunc_27 Gap::Gfx::igPsx2VertexStream::reset
 00180010 000008 Gap__Gfx__igVertexStream__vfunc_23 Gap::Gfx::igVertexStream::getRawVertexStream
 00180020 00000c FUN_00180020 Gap::Gfx::igPsx2VertexStream::waitForSync
-00180030 000028 igPsx2VisualContext_SetBlendingMatrices
+00180030 000028 igPsx2VisualContext_SetBlendingMatrices Gap::Gfx::igPsx2VisualContext::setBlendingMatrices
 00180060 00010c FUN_00180060
 00180170 000424 FUN_00180170
 001805a0 000510 FUN_001805a0
@@ -3325,48 +3325,48 @@
 00180be0 00000c igPsx2VertexArray1_1_GetMeta Gap::Gfx::igPsx2VertexArray1_1::getMeta
 00180bf0 00000c igPsx2UserUCodeExt_GetMeta
 00180c00 000008 igContextExt_UpdateFrameRateDisplay
-00180c10 000008 igContext_DetectDriverDatabaseProperties
+00180c10 000008 igContext_DetectDriverDatabaseProperties Gap::Core::igContext::detectDriverDatabaseProperties
 00180c20 00000c igPsx2PointSpriteExt_GetMeta
 00180c30 00000c igPsx2ParticleArray_GetMeta
 00180c40 000008 Gap__Bec__ParticleArray__vfunc_31 Gap::Bec::ParticleArray::vfunc_31
 00180c50 000008 Gap__Bec__ParticleArray__vfunc_34 Gap::Bec::ParticleArray::vfunc_34
 00180c60 00000c igPsx2ScissorExt_GetMeta
 00180c70 00000c igPsx2MultiTextureExt_GetMeta
-00180c80 00000c igPsx2ImageConvert_GetMeta
+00180c80 00000c igPsx2ImageConvert_GetMeta Gap::Gfx::igPsx2ImageConvert::getMeta
 00180c90 00000c igPsx2Image_GetMeta Gap::Gfx::igPsx2Image::getMeta
 00180ca0 00000c FUN_00180ca0 Gap::Gfx::igImage::setNumComponents
 00180cb0 00000c igPsx2DecalExt_GetMeta
 00180cc0 00000c igPsx2BlendEquationExt_GetMeta
 00180cd0 00000c igPsx2DisableExt_GetMeta
-00180ce0 000008 igPsx2VisualContext_SetNativeWindowHandle
-00180cf0 000008 igPsx2VisualContext_GetNativeWindowHandle
-00180d00 000008 igPsx2VisualContext_SetNativeDeviceHandle
-00180d10 000008 igPsx2VisualContext_GetNativeDeviceHandle
-00180d20 000008 igPsx2VisualContext_SetNativeRenderContextHandle
-00180d30 000008 igPsx2VisualContext_GetNativeRenderContextHandle
-00180d40 000008 igPsx2VisualContext_SetNativeVisualInfo
-00180d50 000008 igPsx2VisualContext_GetNativeVisualInfo
-00180d60 000008 igPsx2VisualContext_GetMaterialSpecularState
-00180d70 000008 igPsx2VisualContext_GetTextureInfo
-00180d80 00000c igPsx2VisualContext_GetTextureMatrixState
-00180d90 000008 igVisualContext_MakeCurrent
-00180da0 000008 igVisualContext_IsCurrent
-00180db0 000008 igVisualContext_Activate
-00180dc0 000008 igVisualContext_Deactivate
-00180dd0 000010 igVisualContext_DrawIndexed
-00180de0 00000c igTgaLoader_GetMeta
-00180df0 00000c igFileImagePng_GetMeta
+00180ce0 000008 igPsx2VisualContext_SetNativeWindowHandle Gap::Gfx::igPsx2VisualContext::setNativeWindowHandle
+00180cf0 000008 igPsx2VisualContext_GetNativeWindowHandle Gap::Gfx::igPsx2VisualContext::getNativeWindowHandle
+00180d00 000008 igPsx2VisualContext_SetNativeDeviceHandle Gap::Gfx::igPsx2VisualContext::setNativeDeviceHandle
+00180d10 000008 igPsx2VisualContext_GetNativeDeviceHandle Gap::Gfx::igPsx2VisualContext::getNativeDeviceHandle
+00180d20 000008 igPsx2VisualContext_SetNativeRenderContextHandle Gap::Gfx::igPsx2VisualContext::setNativeRenderContextHandle
+00180d30 000008 igPsx2VisualContext_GetNativeRenderContextHandle Gap::Gfx::igPsx2VisualContext::getNativeRenderContextHandle
+00180d40 000008 igPsx2VisualContext_SetNativeVisualInfo Gap::Gfx::igPsx2VisualContext::setNativeVisualInfo
+00180d50 000008 igPsx2VisualContext_GetNativeVisualInfo Gap::Gfx::igPsx2VisualContext::getNativeVisualInfo
+00180d60 000008 igPsx2VisualContext_GetMaterialSpecularState Gap::Gfx::igPsx2VisualContext::getMaterialSpecularState
+00180d70 000008 igPsx2VisualContext_GetTextureInfo Gap::Gfx::igPsx2VisualContext::getTextureInfo
+00180d80 00000c igPsx2VisualContext_GetTextureMatrixState Gap::Gfx::igPsx2VisualContext::getTextureMatrixState
+00180d90 000008 igVisualContext_MakeCurrent Gap::Gfx::igVisualContext::makeCurrent
+00180da0 000008 igVisualContext_IsCurrent Gap::Gfx::igVisualContext::isCurrent
+00180db0 000008 igVisualContext_Activate Gap::Gfx::igVisualContext::activate
+00180dc0 000008 igVisualContext_Deactivate Gap::Gfx::igVisualContext::deactivate
+00180dd0 000010 igVisualContext_DrawIndexed Gap::Gfx::igVisualContext::drawIndexed
+00180de0 00000c igTgaLoader_GetMeta Gap::Gfx::igTgaLoader::getMeta
+00180df0 00000c igFileImagePng_GetMeta Gap::Gfx::igFileImagePng::getMeta
 00180e00 00000c igVisualContextCapabilityManager_GetMeta
-00180e10 00000c FUN_00180e10
-00180e20 000008 FUN_00180e20
+00180e10 00000c FUN_00180e10 Gap::Gfx::igVisualContext::getMeta
+00180e20 000008 FUN_00180e20 Gap::Gfx::igVisualContext::setTextureSource
 00180e30 00000c igVertexArray2Helper_GetMeta Gap::Gfx::igVertexArray2Helper::getMeta
-00180e40 000058 Gap__Gfx__igVertexArray2Helper__vfunc_55 Gap::Gfx::igVertexArray2Helper::vfunc_55
+00180e40 000058 Gap__Gfx__igVertexArray2Helper__vfunc_55 Gap::Gfx::igVertexArray2Helper::reset
 00180ea0 00000c igVertexStream_GetMeta Gap::Gfx::igVertexStream::getMeta
 00180eb0 000008 Gap__Gfx__igVertexStream__vfunc_24 Gap::Gfx::igVertexStream::getEditableComponent
 00180ec0 000008 Gap__Gfx__igVertexStream__vfunc_26 Gap::Gfx::igVertexStream::configure
 00180ed0 00000c igVertexArray2_GetMeta Gap::Gfx::igVertexArray2::getMeta
 00180ee0 00000c FUN_00180ee0 Gap::Gfx::igVertexArray1_1::getMeta
-00180ef0 00000c igPrimLengthArray1_1_GetMeta
+00180ef0 00000c igPrimLengthArray1_1_GetMeta Gap::Gfx::igPrimLengthArray1_1::getMeta
 00180f00 00000c igPointSpriteExt_GetMeta
 00180f10 000008 FUN_00180f10
 00180f20 00000c igParticleArray_GetMeta
@@ -3375,14 +3375,14 @@
 00180f50 000008 Gap__Bec__ParticleArray__vfunc_37 Gap::Bec::ParticleArray::vfunc_37
 00180f60 00000c FUN_00180f60 Gap::Gfx::igIndexArray::getMeta
 00180f70 00000c igGenericCapabilityManager_GetMeta
-00180f80 00000c igExternalImageEntry_GetMeta
+00180f80 00000c igExternalImageEntry_GetMeta Gap::Gfx::igExternalImageEntry::getMeta
 00180f90 00000c igClut_GetMeta Gap::Gfx::igClut::getMeta
 00180fa0 000008 FUN_00180fa0
 00180fb0 00000c igPsx2Clut_GetMeta Gap::Gfx::igPsx2Clut::getMeta
 00180fc0 00000c igPsx2IndexArray_GetMeta Gap::Gfx::igPsx2IndexArray::getMeta
 00180fd0 00000c FUN_00180fd0
 00180fe0 00000c igPsx2LongList_GetMeta
-00180ff0 00000c FUN_00180ff0
+00180ff0 00000c FUN_00180ff0 Gap::Gfx::igFileImage::getMeta
 00181000 00000c igCustomStateCollection_GetMeta
 00181010 00000c igCustomStateCollectionList_GetMeta
 00181020 00000c igCustomStateField_GetMeta
@@ -4473,7 +4473,7 @@
 001a0610 000080 igSmartPointer_igLongStack_Destruct
 001a0690 000080 igSmartPointer_igNonRefCountedMatrixObjectList_Destruct
 001a0710 000080 igSmartPointer_igNonRefCountedTransformList_Destruct
-001a0790 000080 igSmartPointer_igStringObjList_Destruct
+001a0790 000080 igSmartPointer_igStringObjList_Destruct igSmartPointer<igStringObjList>::~igSmartPointer
 001a0810 000080 igSmartPointer_igBlendMatricesAttrPool_Destruct
 001a0890 000080 igSmartPointer_igTimeAttr_Destruct
 001a0910 0006e4 FUN_001a0910
@@ -4613,7 +4613,7 @@
 001a3e70 000658 igCommonTraversal_InitFields
 001a44d0 000028 FUN_001a44d0
 001a4500 000008 thunk_igCommonTraversal_UserUnregister
-001a4510 00000c igSmartPointer_igMetaObjectList_Construct
+001a4510 00000c igSmartPointer_igMetaObjectList_Construct igSmartPointer<igMetaObjectList>::igSmartPointer
 001a4520 000034 igCamera_CreateInstance
 001a4560 000048 igCamera_GetOrCreateMetaObject
 001a45b0 000048 igCamera_GetMetaObject
@@ -5347,7 +5347,7 @@
 001d3410 00013c igNode_InsertGroupAbove
 001d3550 00003c Gap__Sg__igNode__resetFields
 001d3590 00003c igNode_UserPostLoad
-001d35d0 000080 igSmartPointer_igInfoList_Destruct igSmartPointer<igInfoList>::~igSmartPointer
+001d35d0 000080 igSmartPointer_igInfoList_Destruct igSmartPointer<Gap::Core::igInfoList>::~igSmartPointer
 001d3650 000080 igSmartPointer_igSceneInfo_Destruct igSmartPointer<igSceneInfo>::~igSmartPointer
 001d36d0 000080 igSmartPointer_igDirectory_Destruct igSmartPointer<Gap::Core::igDirectory>::~igSmartPointer
 001d3750 000248 igPlanarShadowShader_userConstruct
@@ -6610,7 +6610,7 @@
 0022b1a0 00022c Gap__igLockInterface__vfunc_27 Gap::igLockInterface::vfunc_27
 0022b3d0 000024 Gap__igLogInterface__vfunc_24 Gap::igLogInterface::vfunc_24
 0022b400 00002c Gap__igLogInterface__vfunc_27 Gap::igLogInterface::vfunc_27
-0022b430 00000c igInfo_GetMeta
+0022b430 00000c igInfo_GetMeta Gap::Core::igInfo::getMeta
 0022b440 000028 igMessageInterface_resetFields
 0022b470 000010 FUN_0022b470
 0022b480 000184 igOptimizer_CheckGraph
@@ -10958,28 +10958,28 @@
 002ba4e0 00000c igShortMetaField_GetPublishedMetaObject Gap::Core::igShortMetaField::getClassMeta
 002ba4f0 000088 igShortArrayMetaField_InitFields Gap::Core::igShortArrayMetaField::arkRegisterInitialize
 002ba580 0000c8 igShortArrayMetaField_CreateDefaultDescriptor Gap::Core::igShortArrayMetaField::arkRegisterMetaValidate
-002ba650 000034 igSemaphore_Create
-002ba690 000048 igSemaphore_GetOrCreateMetaObject
-002ba6e0 000048 igSemaphore_GetMetaObject
-002ba730 00000c igSemaphore_EnsureRegistered
-002ba740 000068 igSemaphore_Register
-002ba7b0 000008 igSemaphore_GetMetaObjectFunction
-002ba7c0 000018 igSemaphore_SetAbstractProxy
+002ba650 000034 igSemaphore_Create Gap::Core::igSemaphore::_instantiateFromPool
+002ba690 000048 igSemaphore_GetOrCreateMetaObject Gap::Core::igSemaphore::getClassTypeLazy
+002ba6e0 000048 igSemaphore_GetMetaObject Gap::Core::igSemaphore::getClassTypeSafe
+002ba730 00000c igSemaphore_EnsureRegistered Gap::Core::igSemaphore::arkRegister
+002ba740 000068 igSemaphore_Register Gap::Core::igSemaphore::arkRegisterInternal
+002ba7b0 000008 igSemaphore_GetMetaObjectFunction Gap::Core::igSemaphore::getClassMetaSafe
+002ba7c0 000018 igSemaphore_SetAbstractProxy Gap::Core::igSemaphore::arkRegisterInitialize
 002ba7e0 000008 igPsx2Semaphore_GetMetaObjectFunction
 002ba7f0 000080 igSmartPointer_igCallStackTracer_Destruct
 002ba870 000080 igSmartPointer_igLocationTable_Destruct
 002ba8f0 000080 igSmartPointer_igCallStackTable_Destruct
-002ba970 000080 igSmartPointer_igSemaphore_Destruct igSmartPointer<igSemaphore>::~igSmartPointer
-002ba9f0 000034 igResource_Create
-002baa30 000048 igResource_GetOrCreateMetaObject
-002baa80 000048 igResource_GetMetaObject
-002baad0 000164 igResource_GetVTable
+002ba970 000080 igSmartPointer_igSemaphore_Destruct igSmartPointer<Gap::Core::igSemaphore>::~igSmartPointer
+002ba9f0 000034 igResource_Create Gap::Core::igResource::_instantiateFromPool
+002baa30 000048 igResource_GetOrCreateMetaObject Gap::Core::igResource::getClassTypeLazy
+002baa80 000048 igResource_GetMetaObject Gap::Core::igResource::getClassTypeSafe
+002baad0 000164 igResource_GetVTable Gap::Core::igResource::retrieveVTablePointer
 002bac40 000080 igSmartPointer_igDirectoryList_Destruct igSmartPointer<Gap::Core::igDirectoryList>::~igSmartPointer
-002bacc0 000080 igSmartPointer_igQueue_Destruct
-002bad40 00000c igResource_EnsureRegistered
-002bad50 000074 igResource_Register
-002badd0 000008 igResource_GetMetaObjectFunction
-002bade0 00020c igResource_InitFields
+002bacc0 000080 igSmartPointer_igQueue_Destruct igSmartPointer<igQueue>::~igSmartPointer
+002bad40 00000c igResource_EnsureRegistered Gap::Core::igResource::arkRegister
+002bad50 000074 igResource_Register Gap::Core::igResource::arkRegisterInternal
+002badd0 000008 igResource_GetMetaObjectFunction Gap::Core::igResource::getClassMetaSafe
+002bade0 00020c igResource_InitFields Gap::Core::igResource::arkRegisterInitialize
 002baff0 000034 igRegistry_Create Gap::Core::igRegistry::_instantiateFromPool
 002bb030 000048 igRegistry_GetOrCreateMetaObject Gap::Core::igRegistry::getClassTypeLazy
 002bb080 000048 igRegistry_GetMetaObject Gap::Core::igRegistry::getClassTypeSafe
@@ -11213,19 +11213,19 @@
 002c09d0 000008 igFile_GetMetaObjectFunction Gap::Core::igFile::getClassMetaSafe
 002c09e0 000008 igMemoryFile_StaticInitCallback Gap::Core::igMemoryFile::arkRegisterUser
 002c09f0 000008 igMemoryFile_ExitCallback Gap::Core::igMemoryFile::_classDestructor
-002c0a00 000034 igMemoryFileEntryList_Create
-002c0a40 000048 igMemoryFileEntryList_GetMetaObject
-002c0a90 00003c igMemoryFileEntryList_GetVTable
-002c0ad0 00000c igMemoryFileEntryList_EnsureRegistered
-002c0ae0 00006c igMemoryFileEntryList_Register
-002c0b50 000008 igMemoryFileEntryList_GetMetaObjectFunction
-002c0b60 000034 igMemoryFileEntry_Create
-002c0ba0 000048 igMemoryFileEntry_GetMetaObject
-002c0bf0 000088 igMemoryFileEntry_GetVTable
-002c0c80 00000c igMemoryFileEntry_EnsureRegistered
-002c0c90 00006c igMemoryFileEntry_Register
-002c0d00 000008 igMemoryFileEntry_GetMetaObjectFunction
-002c0d10 000070 igMemoryFileEntry_InitFields
+002c0a00 000034 igMemoryFileEntryList_Create Gap::Core::igMemoryFileEntryList::_instantiateFromPool
+002c0a40 000048 igMemoryFileEntryList_GetMetaObject Gap::Core::igMemoryFileEntryList::getClassTypeSafe
+002c0a90 00003c igMemoryFileEntryList_GetVTable Gap::Core::igMemoryFileEntryList::retrieveVTablePointer
+002c0ad0 00000c igMemoryFileEntryList_EnsureRegistered Gap::Core::igMemoryFileEntryList::arkRegister
+002c0ae0 00006c igMemoryFileEntryList_Register Gap::Core::igMemoryFileEntryList::arkRegisterInternal
+002c0b50 000008 igMemoryFileEntryList_GetMetaObjectFunction Gap::Core::igMemoryFileEntryList::getClassMetaSafe
+002c0b60 000034 igMemoryFileEntry_Create Gap::Core::igMemoryFileEntry::_instantiateFromPool
+002c0ba0 000048 igMemoryFileEntry_GetMetaObject Gap::Core::igMemoryFileEntry::getClassTypeSafe
+002c0bf0 000088 igMemoryFileEntry_GetVTable Gap::Core::igMemoryFileEntry::retrieveVTablePointer
+002c0c80 00000c igMemoryFileEntry_EnsureRegistered Gap::Core::igMemoryFileEntry::arkRegister
+002c0c90 00006c igMemoryFileEntry_Register Gap::Core::igMemoryFileEntry::arkRegisterInternal
+002c0d00 000008 igMemoryFileEntry_GetMetaObjectFunction Gap::Core::igMemoryFileEntry::getClassMetaSafe
+002c0d10 000070 igMemoryFileEntry_InitFields Gap::Core::igMemoryFileEntry::arkRegisterInitialize
 002c0d80 000034 igMemoryDirEntry_Create Gap::Core::igMemoryDirEntry::_instantiateFromPool
 002c0dc0 000048 igMemoryDirEntry_GetMetaObject Gap::Core::igMemoryDirEntry::getClassTypeSafe
 002c0e10 000088 igMemoryDirEntry_GetVTable Gap::Core::igMemoryDirEntry::retrieveVTablePointer
@@ -11345,37 +11345,37 @@
 002c3290 00000c igIntMetaField_GetPublishedMetaObject Gap::Core::igIntMetaField::getClassMeta
 002c32a0 000088 igIntArrayMetaField_InitFields Gap::Core::igIntArrayMetaField::arkRegisterInitialize
 002c3330 0000c8 igIntArrayMetaField_CreateDefaultDescriptor Gap::Core::igIntArrayMetaField::arkRegisterMetaValidate
-002c3400 000034 igInfoList_Create
-002c3440 000048 igInfoList_GetOrCreateMetaObject
-002c3490 000048 igInfoList_GetMetaObject
-002c34e0 00003c igInfoList_GetVTable
-002c3520 00000c igInfoList_EnsureRegistered
-002c3530 00006c igInfoList_Register
-002c35a0 000008 igInfoList_GetMetaObjectFunction
-002c35b0 000048 igInfo_GetMetaObject
-002c3600 000088 igInfo_GetVTable
-002c3690 00000c igInfo_EnsureRegistered
-002c36a0 000074 igInfo_Register
-002c3720 000008 igInfo_GetMetaObjectFunction
-002c3730 0000b0 igInfo_InitFields
-002c37e0 000034 igIGBFile_Create
-002c3820 000048 igIGBFile_GetOrCreateMetaObject
-002c3870 000048 igIGBFile_GetMetaObject
-002c38c0 0001b4 igIGBFile_GetVTable
+002c3400 000034 igInfoList_Create Gap::Core::igInfoList::_instantiateFromPool
+002c3440 000048 igInfoList_GetOrCreateMetaObject Gap::Core::igInfoList::getClassTypeLazy
+002c3490 000048 igInfoList_GetMetaObject Gap::Core::igInfoList::getClassTypeSafe
+002c34e0 00003c igInfoList_GetVTable Gap::Core::igInfoList::retrieveVTablePointer
+002c3520 00000c igInfoList_EnsureRegistered Gap::Core::igInfoList::arkRegister
+002c3530 00006c igInfoList_Register Gap::Core::igInfoList::arkRegisterInternal
+002c35a0 000008 igInfoList_GetMetaObjectFunction Gap::Core::igInfoList::getClassMetaSafe
+002c35b0 000048 igInfo_GetMetaObject Gap::Core::igInfo::getClassTypeSafe
+002c3600 000088 igInfo_GetVTable Gap::Core::igInfo::retrieveVTablePointer
+002c3690 00000c igInfo_EnsureRegistered Gap::Core::igInfo::arkRegister
+002c36a0 000074 igInfo_Register Gap::Core::igInfo::arkRegisterInternal
+002c3720 000008 igInfo_GetMetaObjectFunction Gap::Core::igInfo::getClassMetaSafe
+002c3730 0000b0 igInfo_InitFields Gap::Core::igInfo::arkRegisterInitialize
+002c37e0 000034 igIGBFile_Create Gap::Core::igIGBFile::_instantiateFromPool
+002c3820 000048 igIGBFile_GetOrCreateMetaObject Gap::Core::igIGBFile::getClassTypeLazy
+002c3870 000048 igIGBFile_GetMetaObject Gap::Core::igIGBFile::getClassTypeSafe
+002c38c0 0001b4 igIGBFile_GetVTable Gap::Core::igIGBFile::retrieveVTablePointer
 002c3a80 000080 igSmartPointer_igShortListList_Destruct igSmartPointer<igShortListList>::~igSmartPointer
-002c3b00 000208 igDirectory_Destroy
-002c3d10 00000c igSmartPointer_igMemoryPool_Construct
-002c3d20 00000c igSmartPointer_igMetaField_Construct
-002c3d30 00000c igSmartPointer_igMetaFieldList_Construct
-002c3d40 00000c igSmartPointer_igFile_Construct
-002c3d50 00000c igSmartPointer_igObjectList_Construct
-002c3d60 000080 igDirectory_Construct
-002c3de0 00000c igIGBFile_EnsureRegistered
-002c3df0 00007c igIGBFile_Register
-002c3e70 000008 igIGBFile_GetMetaObjectFunction
+002c3b00 000208 igDirectory_Destroy Gap::Core::igDirectory::~igDirectory
+002c3d10 00000c igSmartPointer_igMemoryPool_Construct igSmartPointer<igMemoryPool>::igSmartPointer
+002c3d20 00000c igSmartPointer_igMetaField_Construct igSmartPointer<Gap::Core::igMetaField>::igSmartPointer
+002c3d30 00000c igSmartPointer_igMetaFieldList_Construct igSmartPointer<igMetaFieldList>::igSmartPointer
+002c3d40 00000c igSmartPointer_igFile_Construct igSmartPointer<Gap::Core::igFile>::igSmartPointer
+002c3d50 00000c igSmartPointer_igObjectList_Construct igSmartPointer<Gap::Core::igObjectList>::igSmartPointer
+002c3d60 000080 igDirectory_Construct Gap::Core::igDirectory::igDirectory
+002c3de0 00000c igIGBFile_EnsureRegistered Gap::Core::igIGBFile::arkRegister
+002c3df0 00007c igIGBFile_Register Gap::Core::igIGBFile::arkRegisterInternal
+002c3e70 000008 igIGBFile_GetMetaObjectFunction Gap::Core::igIGBFile::getClassMetaSafe
 002c3e80 00000c igDirectory_GetPublishedMetaObject Gap::Core::igDirectory::getClassMeta
-002c3e90 000508 igIGBFile_InitFields
-002c43a0 000008 igIGBFile_StaticInitCallback
+002c3e90 000508 igIGBFile_InitFields Gap::Core::igIGBFile::arkRegisterInitialize
+002c43a0 000008 igIGBFile_StaticInitCallback Gap::Core::igIGBFile::arkRegisterUser
 002c43b0 000034 igFolder_Create Gap::Core::igFolder::_instantiateFromPool
 002c43f0 000048 igFolder_GetMetaObject Gap::Core::igFolder::getClassTypeSafe
 002c4440 000080 igFolder_GetVTable Gap::Core::igFolder::retrieveVTablePointer
@@ -11383,7 +11383,7 @@
 002c44d0 00006c igFolder_Register Gap::Core::igFolder::arkRegisterInternal
 002c4540 000008 igFolder_GetMetaObjectFunction Gap::Core::igFolder::getClassMetaSafe
 002c4550 000084 igFolder_InitFields Gap::Core::igFolder::arkRegisterInitialize
-002c45e0 000008 igPsx2Folder_GetMetaObjectFunction
+002c45e0 000008 igPsx2Folder_GetMetaObjectFunction Gap::Core::igPsx2Folder::getClassMetaSafe
 002c45f0 000034 igFloatMetaField_Create Gap::Core::igFloatMetaField::_instantiateFromPool
 002c4630 000048 igFloatMetaField_GetMetaObject Gap::Core::igFloatMetaField::getClassTypeSafe
 002c4680 000084 igFloatMetaField_GetVTable Gap::Core::igFloatMetaField::retrieveVTablePointer
@@ -11409,7 +11409,7 @@
 002c4d80 00000c igFile_EnsureRegistered Gap::Core::igFile::arkRegister
 002c4d90 000068 igFile_Register Gap::Core::igFile::arkRegisterInternal
 002c4e00 000168 igFile_InitFields Gap::Core::igFile::arkRegisterInitialize
-002c4f70 000008 igPsx2File_GetMetaObjectFunction
+002c4f70 000008 igPsx2File_GetMetaObjectFunction Gap::Core::igPsx2File::getClassMetaSafe
 002c4f80 000034 igExternalInfoEntry_Create Gap::Core::igExternalInfoEntry::_instantiateFromPool
 002c4fc0 000048 igExternalInfoEntry_GetMetaObject Gap::Core::igExternalInfoEntry::getClassTypeSafe
 002c5010 000088 igExternalInfoEntry_GetVTable Gap::Core::igExternalInfoEntry::retrieveVTablePointer
@@ -11456,7 +11456,7 @@
 002c6230 000080 igEnumMetaField_InitFields Gap::Core::igEnumMetaField::arkRegisterInitialize
 002c62b0 0000c8 igEnumMetaField_CreateDefaultDescriptor Gap::Core::igEnumMetaField::arkRegisterMetaValidate
 002c6380 000034 igEnumMetaField_GetDefaultDescriptor Gap::Core::igEnumMetaField::getMetaField
-002c63c0 000034 igEnumArrayMetaField_Create
+002c63c0 000034 igEnumArrayMetaField_Create Gap::Core::igEnumArrayMetaField::_instantiateFromPool
 002c6400 000048 igEnumArrayMetaField_GetMetaObject Gap::Core::igEnumArrayMetaField::getClassTypeSafe
 002c6450 000084 igEnumArrayMetaField_GetVTable Gap::Core::igEnumArrayMetaField::retrieveVTablePointer
 002c64e0 00000c igEnumArrayMetaField_EnsureRegistered Gap::Core::igEnumArrayMetaField::arkRegister
@@ -11609,7 +11609,7 @@
 002c96b0 00000c igFloatListList_EnsureRegistered
 002c96c0 00006c igFloatListList_Register
 002c9730 000008 igFloatListList_GetMetaObjectFunction
-002c9740 000034 igFloatList_Create
+002c9740 000034 igFloatList_Create Gap::Core::igFloatList::_instantiateFromPool
 002c9780 000048 igFloatList_GetOrCreateMetaObject Gap::Core::igFloatList::getClassTypeLazy
 002c97d0 000048 igFloatList_GetMetaObject Gap::Core::igFloatList::getClassTypeSafe
 002c9820 00003c igFloatList_GetVTable Gap::Core::igFloatList::retrieveVTablePointer
@@ -11617,7 +11617,7 @@
 002c9870 00006c igFloatList_Register Gap::Core::igFloatList::arkRegisterInternal
 002c98e0 000008 igFloatList_GetMetaObjectFunction Gap::Core::igFloatList::getClassMetaSafe
 002c98f0 0000c0 igFloatList_InitFields Gap::Core::igFloatList::arkRegisterInitialize
-002c99b0 000034 igUnsignedCharList_Create
+002c99b0 000034 igUnsignedCharList_Create Gap::Core::igUnsignedCharList::_instantiateFromPool
 002c99f0 000048 igUnsignedCharList_GetMetaObject Gap::Core::igUnsignedCharList::getClassTypeSafe
 002c9a40 00003c igUnsignedCharList_GetVTable Gap::Core::igUnsignedCharList::retrieveVTablePointer
 002c9a80 00000c igUnsignedCharList_EnsureRegistered Gap::Core::igUnsignedCharList::arkRegister
@@ -11795,7 +11795,7 @@
 002ccd20 000008 igBoolMetaField_GetMetaObjectFunction Gap::Core::igBoolMetaField::getClassMetaSafe
 002ccd30 0000c8 igBoolMetaField_CreateDefaultDescriptor Gap::Core::igBoolMetaField::arkRegisterMetaValidate
 002cce00 000034 igBoolMetaField_GetDefaultDescriptor Gap::Core::igBoolMetaField::getMetaField
-002cce40 000034 igBoolArrayMetaField_Create
+002cce40 000034 igBoolArrayMetaField_Create Gap::Core::igBoolArrayMetaField::_instantiateFromPool
 002cce80 000048 igBoolArrayMetaField_GetMetaObject Gap::Core::igBoolArrayMetaField::getClassTypeSafe
 002cced0 000084 igBoolArrayMetaField_GetVTable Gap::Core::igBoolArrayMetaField::retrieveVTablePointer
 002ccf60 00000c igBoolArrayMetaField_EnsureRegistered Gap::Core::igBoolArrayMetaField::arkRegister
@@ -11893,7 +11893,7 @@
 002cf710 000088 igPsx2Semaphore_GetVTable
 002cf7a0 00000c igPsx2Semaphore_EnsureRegistered
 002cf7b0 00006c igPsx2Semaphore_Register
-002cf820 00000c igSemaphore_GetPublishedMetaObject
+002cf820 00000c igSemaphore_GetPublishedMetaObject Gap::Core::igSemaphore::getClassMeta
 002cf830 0000cc igPsx2Semaphore_InitFields
 002cf900 000034 igPsx2Media_Create
 002cf940 000048 igPsx2Media_GetMetaObject
@@ -11916,18 +11916,18 @@
 002cff40 00006c igPsx2IopRpcConnection_Register
 002cffb0 000008 igPsx2IopRpcConnection_GetMetaObjectFunction
 002cffc0 000070 igPsx2IopRpcConnection_InitFields
-002d0030 000048 igPsx2Folder_GetMetaObject
-002d0080 000088 igPsx2Folder_GetVTable
-002d0110 00000c igPsx2Folder_EnsureRegistered
-002d0120 000064 igPsx2Folder_Register
+002d0030 000048 igPsx2Folder_GetMetaObject Gap::Core::igPsx2Folder::getClassTypeSafe
+002d0080 000088 igPsx2Folder_GetVTable Gap::Core::igPsx2Folder::retrieveVTablePointer
+002d0110 00000c igPsx2Folder_EnsureRegistered Gap::Core::igPsx2Folder::arkRegister
+002d0120 000064 igPsx2Folder_Register Gap::Core::igPsx2Folder::arkRegisterInternal
 002d0190 00000c igFolder_GetPublishedMetaObject Gap::Core::igFolder::getClassMeta
-002d01a0 000034 igPsx2File_Create
-002d01e0 000048 igPsx2File_GetMetaObject
-002d0230 000074 igPsx2File_GetVTable
-002d02b0 00000c igPsx2File_EnsureRegistered
-002d02c0 000074 igPsx2File_Register
-002d0340 0000b8 igPsx2File_InitFields
-002d0400 000008 igPsx2File_StaticInitCallback
+002d01a0 000034 igPsx2File_Create Gap::Core::igPsx2File::_instantiateFromPool
+002d01e0 000048 igPsx2File_GetMetaObject Gap::Core::igPsx2File::getClassTypeSafe
+002d0230 000074 igPsx2File_GetVTable Gap::Core::igPsx2File::retrieveVTablePointer
+002d02b0 00000c igPsx2File_EnsureRegistered Gap::Core::igPsx2File::arkRegister
+002d02c0 000074 igPsx2File_Register Gap::Core::igPsx2File::arkRegisterInternal
+002d0340 0000b8 igPsx2File_InitFields Gap::Core::igPsx2File::arkRegisterInitialize
+002d0400 000008 igPsx2File_StaticInitCallback Gap::Core::igPsx2File::arkRegisterUser
 002d0410 000048 igPsx2CallStackTracer_GetMetaObject
 002d0460 00003c igPsx2CallStackTracer_GetVTable
 002d04a0 00000c igPsx2CallStackTracer_EnsureRegistered
@@ -12333,70 +12333,70 @@
 002e3800 000008 igFloatMetaField_GetSize Gap::Core::igFloatMetaField::computeSize
 002e3810 000028 igFloatMetaField_SetDefault Gap::Core::igFloatMetaField::setDefault
 002e3840 000008 igFloatMetaField_GetAlignment Gap::Core::igFloatMetaField::computeRequiredAlignment
-002e3850 0000f8 igFolder_SetFolderName
+002e3850 0000f8 igFolder_SetFolderName Gap::Core::igFolder::appendRelativePath
 002e3950 0000bc igFolder_GetFullPath Gap::Core::igFolder::getPathToFile
-002e3a10 00004c igIGBFile_GetObjectSize
-002e3a60 00024c igIGBFile_OpenFile
-002e3cb0 000074 igIGBFile_CloseFile
-002e3d30 0000fc igIGBFile_SetDefaultName
-002e3e30 000114 igIGBFile_OpenForWrite
-002e3f50 000134 igIGBFile_BuildMetaObjectList
-002e4090 000088 igIGBFile_PrepareEntriesForWrite
-002e4120 000118 igIGBFile_BuildMemoryPoolNameBuffer
-002e4240 000088 igIGBFile_ComputeBufferSizes
-002e42d0 000520 igIGBFile_BuildMetaObjectBuffer
-002e47f0 000244 igIGBFile_BuildMetaFieldBuffer
-002e4a40 000244 igIGBFile_BuildAlignmentBuffer
-002e4c90 0001d0 igIGBFile_BuildExternalDirectoryBuffer
-002e4e60 0000f4 igIGBFile_BuildDirectoryBuffer
-002e4f60 0001a8 igIGBFile_BuildIndexBuffer
-002e5110 0002d4 igIGBFile_ShareEntries
-002e53f0 0000f0 igIGBFile_WriteEntryBuffer
-002e54e0 0000a4 igIGBFile_AllocateObjectBuffer
-002e5590 000160 igIGBFile_WriteHeader
-002e56f0 000260 igIGBFile_WriteBuffers
-002e5950 00003c igIGBFile_CloseAfterWrite
-002e5990 000130 igIGBFile_FreeReadBuffers
-002e5ac0 000060 igIGBFile_AddInfoListEntry
-002e5b20 00044c igIGBFile_WriteFile
-002e5f70 000114 igIGBFile_BeginRead
-002e6090 000294 igIGBFile_ReadHeader
-002e6330 0000ac igIGBFile_ReadMetaObjectBuffer
-002e63e0 000b70 igIGBFile_ReadMetaObjectList
-002e6f50 0000a8 igIGBFile_SetupBasePath
-002e7000 000028 igIGBFile_RegisterBlindObjectsConfig
-002e7030 0000d0 igIGBFile_ReadNextChunk
-002e7100 000290 igIGBFile_ReadObject
-002e7390 0002a8 igIGBFile_ReadObjectSection
-002e7640 000270 igIGBFile_ReadObjectIndex
-002e78b0 0000e8 igIGBFile_ReadFinished
-002e79a0 000430 igIGBFile_ReadObjectSectionOld
-002e7dd0 000030 igIGBFile_GetCurrentPosition
-002e7e00 0000d0 igIGBFile_SetCurrentPosition
-002e7ed0 000050 igIGBFile_FreeBasePath
-002e7f20 00024c igIGBFile_ReadMetaFieldList
-002e8170 000124 Gap__Core__igIGBFile__resetFields
-002e82a0 0003c8 igIGBFile_ReadAlignmentTable
-002e8670 000208 igIGBFile_ReadObjects
-002e8880 000184 igIGBFile_ReadMemoryRefs
-002e8a10 000028 igIGBFile_CloseAfterRead
-002e8a40 0001f8 igIGBFile_CleanUpReadState
-002e8c40 0000f8 Gap__Core__igIGBFile__destructFields
-002e8d40 000110 igIGBFile_ReadInfoList
-002e8e50 00038c igIGBFile_ReadExternalDirectories
-002e91e0 000284 igIGBFile_ReadMemoryPoolNames
-002e9470 000038 igIGBFile_AbortRead
-002e94b0 0000a4 igIGBFile_MakeConcrete
-002e9560 000078 igIGBFile_PostProcessEntries
-002e95e0 000648 igIGBFile_ReadFile
-002e9c30 00003c igIGBFile_EnsureConcrete
-002e9c70 000070 igIGBFile_ReadFilePostProcess
-002e9ce0 000170 igIGBFile_ReadFilePostProcessAll
-002e9e50 0000e0 igIGBFile_WriteMemoryRefs
-002e9f30 000104 igIGBFile_GetSectionBuffer
-002ea040 00008c igIGBFile_ReadMemoryEntries
-002ea0d0 0000d8 igInfo_FindObjectReference
-002ea1b0 000070 igObject_GetFieldValueByName
+002e3a10 00004c igIGBFile_GetObjectSize Gap::Core::igIGBFile::getReadSizeFromMemory
+002e3a60 00024c igIGBFile_OpenFile Gap::Core::igIGBFile::open
+002e3cb0 000074 igIGBFile_CloseFile Gap::Core::igIGBFile::close
+002e3d30 0000fc igIGBFile_SetDefaultName Gap::Core::igIGBFile::setDirectoryNameBasedOnFileName
+002e3e30 000114 igIGBFile_OpenForWrite Gap::Core::igIGBFile::writeOpen
+002e3f50 000134 igIGBFile_BuildMetaObjectList Gap::Core::igIGBFile::writeCreateMetaObjectList
+002e4090 000088 igIGBFile_PrepareEntriesForWrite Gap::Core::igIGBFile::writeMakeProxies
+002e4120 000118 igIGBFile_BuildMemoryPoolNameBuffer Gap::Core::igIGBFile::writeCreateMemoryPoolReferences
+002e4240 000088 igIGBFile_ComputeBufferSizes Gap::Core::igIGBFile::writeComputeBufferSizes
+002e42d0 000520 igIGBFile_BuildMetaObjectBuffer Gap::Core::igIGBFile::writeCreateMetaObjectBuffer
+002e47f0 000244 igIGBFile_BuildMetaFieldBuffer Gap::Core::igIGBFile::writeCreateMetaFieldBuffer
+002e4a40 000244 igIGBFile_BuildAlignmentBuffer Gap::Core::igIGBFile::writeCreateMemoryAlignmentBuffer
+002e4c90 0001d0 igIGBFile_BuildExternalDirectoryBuffer Gap::Core::igIGBFile::writeCreateExternalDirectoryBuffer
+002e4e60 0000f4 igIGBFile_BuildDirectoryBuffer Gap::Core::igIGBFile::writeCreateAndFillSharedEntryBuffer
+002e4f60 0001a8 igIGBFile_BuildIndexBuffer Gap::Core::igIGBFile::writeCreateAndFillEntryIndexBuffer
+002e5110 0002d4 igIGBFile_ShareEntries Gap::Core::igIGBFile::writeShareEntries
+002e53f0 0000f0 igIGBFile_WriteEntryBuffer Gap::Core::igIGBFile::writeCreateAndFillEntryBuffer
+002e54e0 0000a4 igIGBFile_AllocateObjectBuffer Gap::Core::igIGBFile::writeCreateAndFillObjectBuffer
+002e5590 000160 igIGBFile_WriteHeader Gap::Core::igIGBFile::writeCreateAndWriteHeader
+002e56f0 000260 igIGBFile_WriteBuffers Gap::Core::igIGBFile::writeWriteAllBuffers
+002e5950 00003c igIGBFile_CloseAfterWrite Gap::Core::igIGBFile::writeClose
+002e5990 000130 igIGBFile_FreeReadBuffers Gap::Core::igIGBFile::writeReleaseAllBuffers
+002e5ac0 000060 igIGBFile_AddInfoListEntry Gap::Core::igIGBFile::writeProcessInfoList
+002e5b20 00044c igIGBFile_WriteFile Gap::Core::igIGBFile::writeFile
+002e5f70 000114 igIGBFile_BeginRead Gap::Core::igIGBFile::readOpen
+002e6090 000294 igIGBFile_ReadHeader Gap::Core::igIGBFile::readHeader
+002e6330 0000ac igIGBFile_ReadMetaObjectBuffer Gap::Core::igIGBFile::readMetaObjectBuffer
+002e63e0 000b70 igIGBFile_ReadMetaObjectList Gap::Core::igIGBFile::processMetaObjectList
+002e6f50 0000a8 igIGBFile_SetupBasePath Gap::Core::igIGBFile::setupFilePaths
+002e7000 000028 igIGBFile_RegisterBlindObjectsConfig Gap::Core::igIGBFile::userRegister
+002e7030 0000d0 igIGBFile_ReadNextChunk Gap::Core::igIGBFile::readNextObjectChunk
+002e7100 000290 igIGBFile_ReadObject Gap::Core::igIGBFile::readNextDirEntry
+002e7390 0002a8 igIGBFile_ReadObjectSection Gap::Core::igIGBFile::readReadSharedEntries
+002e7640 000270 igIGBFile_ReadObjectIndex Gap::Core::igIGBFile::readReadSharedIndexes
+002e78b0 0000e8 igIGBFile_ReadFinished Gap::Core::igIGBFile::readProcessSharedDirectory
+002e79a0 000430 igIGBFile_ReadObjectSectionOld Gap::Core::igIGBFile::readProcessDirectory
+002e7dd0 000030 igIGBFile_GetCurrentPosition Gap::Core::igIGBFile::getObjectBufferPlace
+002e7e00 0000d0 igIGBFile_SetCurrentPosition Gap::Core::igIGBFile::setObjectBufferPlace
+002e7ed0 000050 igIGBFile_FreeBasePath Gap::Core::igIGBFile::freeFilePaths
+002e7f20 00024c igIGBFile_ReadMetaFieldList Gap::Core::igIGBFile::readMetaFieldList
+002e8170 000124 Gap__Core__igIGBFile__resetFields Gap::Core::igIGBFile::resetFields
+002e82a0 0003c8 igIGBFile_ReadAlignmentTable Gap::Core::igIGBFile::readAlignmentList
+002e8670 000208 igIGBFile_ReadObjects Gap::Core::igIGBFile::readProcessObjectEntries
+002e8880 000184 igIGBFile_ReadMemoryRefs Gap::Core::igIGBFile::readProcessAllOtherEntries
+002e8a10 000028 igIGBFile_CloseAfterRead Gap::Core::igIGBFile::readClose
+002e8a40 0001f8 igIGBFile_CleanUpReadState Gap::Core::igIGBFile::releaseAllBuffers
+002e8c40 0000f8 Gap__Core__igIGBFile__destructFields Gap::Core::igIGBFile::destructFields
+002e8d40 000110 igIGBFile_ReadInfoList Gap::Core::igIGBFile::readInfoIndex
+002e8e50 00038c igIGBFile_ReadExternalDirectories Gap::Core::igIGBFile::readAndResolveExternalDirectories
+002e91e0 000284 igIGBFile_ReadMemoryPoolNames Gap::Core::igIGBFile::readMemoryPoolNames
+002e9470 000038 igIGBFile_AbortRead Gap::Core::igIGBFile::readErrorCleanup
+002e94b0 0000a4 igIGBFile_MakeConcrete Gap::Core::igIGBFile::readFinishConstruction
+002e9560 000078 igIGBFile_PostProcessEntries Gap::Core::igIGBFile::postReadEntryProcessing
+002e95e0 000648 igIGBFile_ReadFile Gap::Core::igIGBFile::readFile
+002e9c30 00003c igIGBFile_EnsureConcrete Gap::Core::igIGBFile::ensureConcrete
+002e9c70 000070 igIGBFile_ReadFilePostProcess Gap::Core::igIGBFile::readFilePostProcess
+002e9ce0 000170 igIGBFile_ReadFilePostProcessAll Gap::Core::igIGBFile::readFilePostProcessRecursive
+002e9e50 0000e0 igIGBFile_WriteMemoryRefs Gap::Core::igIGBFile::writeMemoryRefBuffer
+002e9f30 000104 igIGBFile_GetSectionBuffer Gap::Core::igIGBFile::allocateReadChunkBuffer
+002ea040 00008c igIGBFile_ReadMemoryEntries Gap::Core::igIGBFile::readMemoryRefBuffer
+002ea0d0 0000d8 igInfo_FindObjectReference Gap::Core::igInfo::attemptResolve
+002ea1b0 000070 igObject_GetFieldValueByName Gap::Core::igInfo::resolve
 002ea220 000058 igIntArrayMetaField_SwapBytes Gap::Core::igIntArrayMetaField::endianSwapMemory
 002ea280 000010 igIntArrayMetaField_GetSize Gap::Core::igIntArrayMetaField::computeSize
 002ea290 000064 igIntArrayMetaField_SetDefaultValue Gap::Core::igIntArrayMetaField::setDefault
@@ -12878,8 +12878,8 @@
 002ff4f0 000064 igObject_Register Gap::Core::igObject::arkRegisterInternal
 002ff560 00000c igObject_GetMetaObject Gap::Core::igObject::getClassMetaSafe
 002ff570 00021c igObject_InitFields Gap::Core::igObject::arkRegisterInitialize
-002ff790 000070 igObject_AllocateRawStorage
-002ff800 000008 igObject_AllocateRawStorageDefault
+002ff790 000070 igObject_AllocateRawStorage Gap::Core::igObject::operator new
+002ff800 000008 igObject_AllocateRawStorageDefault Gap::Core::igObject::operator new
 002ff810 000008 Memory_FreeBufferAliasC
 002ff820 00010c igObject_Destroy Gap::Core::igObject::internalRelease
 002ff930 0000c8 igObject_ZeroFields Gap::Core::igObject::commission
@@ -13082,26 +13082,26 @@
 00308540 000074 igReport_VReport
 003085c0 0001a8 igReport_ReadSettings
 00308770 000024 igReport_RestoreDefaults
-003087a0 0000ac igResource_GetDirectory
-00308850 000008 igResource_AddDirectory igResourceView::addDirectory
-00308860 00022c igResource_AddAlignment
-00308a90 00016c igResource_GetImageDirectory
+003087a0 0000ac igResource_GetDirectory Gap::Core::igResource::getDirectory
+00308850 000008 igResource_AddDirectory Gap::Core::igResource::appendDirectory
+00308860 00022c igResource_AddAlignment Gap::Core::igResource::addAlignmentPair
+00308a90 00016c igResource_GetImageDirectory Gap::Core::igResource::getImageDirectory
 00308c00 000078 igResource_AsyncLoadThreadProc
-00308c80 000180 igResource_StartAsyncLoading
-00308e00 0000f8 igResource_StopAsyncLoading
-00308f00 0000ac igResource_ReleaseDefaults
-00308fb0 000338 igResource_GetOrLoadDirectory
-003092f0 00034c igResource_LoadDirectory
-00309640 000100 igResource_ReadFileWithSearchPaths
-00309740 000010 igResource_IsDirectoryLoaded
-00309750 000120 igResource_UnloadDirectory
-00309870 000100 igResource_ClearDirectories
-00309970 0000dc igResource_RemoveIGBFiles
-00309a50 000010 igResource_GetDefaultResource
-00309a60 000230 igDirectory_GetNthObjectOfType
+00308c80 000180 igResource_StartAsyncLoading Gap::Core::igResource::enableAsynchronousLoading
+00308e00 0000f8 igResource_StopAsyncLoading Gap::Core::igResource::disableAsynchronousLoading
+00308f00 0000ac igResource_ReleaseDefaults Gap::Core::igResource::releaseDefaults
+00308fb0 000338 igResource_GetOrLoadDirectory Gap::Core::igResource::loadSynchronous
+003092f0 00034c igResource_LoadDirectory Gap::Core::igResource::load
+00309640 000100 igResource_ReadFileWithSearchPaths Gap::Core::igResource::doLoad
+00309740 000010 igResource_IsDirectoryLoaded Gap::Core::igResource::isLoadFinished
+00309750 000120 igResource_UnloadDirectory Gap::Core::igResource::unload
+00309870 000100 igResource_ClearDirectories Gap::Core::igResource::unloadAll
+00309970 0000dc igResource_RemoveIGBFiles Gap::Core::igResource::unloadAllIGBs
+00309a50 000010 igResource_GetDefaultResource Gap::Core::igResource::getGlobalResource
+00309a60 000230 igDirectory_GetNthObjectOfType Gap::Core::igResource::getInfoByType
 00309c90 000350 igDirectory_ConvertObjectsOfType
 00309fe0 000278 igResource_WrapRootInSceneInfo
-0030a260 000098 igResource_FinishAsyncLoad
+0030a260 000098 igResource_FinishAsyncLoad Gap::Core::igResource::makeCompatible
 0030a300 000058 igShortArrayMetaField_SwapBytes Gap::Core::igShortArrayMetaField::endianSwapMemory
 0030a360 000010 igShortArrayMetaField_GetSize Gap::Core::igShortArrayMetaField::computeSize
 0030a370 000034 igShortMetaField_ValueFromString Gap::Core::igShortMetaField::setMemoryByString
@@ -13644,31 +13644,31 @@
 0032aed0 000070 igPsx2CallStackTracer_CaptureCallStack
 0032af40 000008 igPsx2CallStackTracer_HasSymbols
 0032af50 000070 Gap__Core__igPsx2CallStackTracer__vfunc_31 Gap::Core::igPsx2CallStackTracer::vfunc_31
-0032afc0 000314 igPsx2File_OpenWithMode
-0032b2e0 00006c igPsx2File_Close
-0032b350 000244 igPsx2File_OpenFile
-0032b5a0 000010 igPsx2File_CloseFile
-0032b5b0 000090 igPsx2File_GrowBuffer
-0032b640 000118 igPsx2File_Read
-0032b760 000108 igPsx2File_Write
-0032b870 000054 igPsx2File_Flush
-0032b8d0 0002c8 igPsx2File_Scanf
-0032bba0 0000d4 igPsx2File_Printf
-0032bc80 000068 igPsx2File_GetChar
-0032bcf0 00005c igPsx2File_UngetChar
-0032bd50 00007c igPsx2File_PutChar
-0032bdd0 0000ac igPsx2File_GetString
-0032be80 0000a8 igPsx2File_PutString
-0032bf30 00014c igPsx2File_Seek
-0032c080 00003c igPsx2File_Tell
-0032c0c0 000044 igPsx2File_InitDefaultPrefix
-0032c110 000074 igPsx2File_MakeCompletePath
-0032c190 0000a4 igPsx2File_MakeCompleteFilename
-0032c240 000290 igPsx2File_JoinPrefix
-0032c4d0 00022c igPsx2Folder_ListFiles
-0032c700 00022c igPsx2Folder_ListDirectories
-0032c930 000188 igPsx2Folder_ListEntries
-0032cac0 000088 igPsx2Folder_TrimPath
+0032afc0 000314 igPsx2File_OpenWithMode Gap::Core::igPsx2File::open
+0032b2e0 00006c igPsx2File_Close Gap::Core::igPsx2File::close
+0032b350 000244 igPsx2File_OpenFile Gap::Core::igPsx2File::fopen
+0032b5a0 000010 igPsx2File_CloseFile Gap::Core::igPsx2File::fclose
+0032b5b0 000090 igPsx2File_GrowBuffer Gap::Core::igPsx2File::growBuffer
+0032b640 000118 igPsx2File_Read Gap::Core::igPsx2File::fread
+0032b760 000108 igPsx2File_Write Gap::Core::igPsx2File::fwrite
+0032b870 000054 igPsx2File_Flush Gap::Core::igPsx2File::fflush
+0032b8d0 0002c8 igPsx2File_Scanf Gap::Core::igPsx2File::fscanf
+0032bba0 0000d4 igPsx2File_Printf Gap::Core::igPsx2File::fprintf
+0032bc80 000068 igPsx2File_GetChar Gap::Core::igPsx2File::fgetc
+0032bcf0 00005c igPsx2File_UngetChar Gap::Core::igPsx2File::ungetc
+0032bd50 00007c igPsx2File_PutChar Gap::Core::igPsx2File::fputc
+0032bdd0 0000ac igPsx2File_GetString Gap::Core::igPsx2File::fgets
+0032be80 0000a8 igPsx2File_PutString Gap::Core::igPsx2File::fputs
+0032bf30 00014c igPsx2File_Seek Gap::Core::igPsx2File::fseek
+0032c080 00003c igPsx2File_Tell Gap::Core::igPsx2File::ftell
+0032c0c0 000044 igPsx2File_InitDefaultPrefix Gap::Core::igPsx2File::userRegister
+0032c110 000074 igPsx2File_MakeCompletePath Gap::Core::igPsx2File::makeCompletePath
+0032c190 0000a4 igPsx2File_MakeCompleteFilename Gap::Core::igPsx2File::generateFilename
+0032c240 000290 igPsx2File_JoinPrefix Gap::Core::igPsx2File::joinPrefix
+0032c4d0 00022c igPsx2Folder_ListFiles Gap::Core::igPsx2Folder::getFiles
+0032c700 00022c igPsx2Folder_ListDirectories Gap::Core::igPsx2Folder::getSubFolders
+0032c930 000188 igPsx2Folder_ListEntries Gap::Core::igPsx2Folder::getFilesAndSubFolders
+0032cac0 000088 igPsx2Folder_TrimPath Gap::Core::igPsx2Folder::trimPath
 0032cb50 000400 igPsx2_ResolveModulePath
 0032cf50 00001c igPsx2_LoadIopModule
 0032cf70 000100 igPsx2_LoadIopModuleEx
@@ -13794,9 +13794,9 @@
 00330db0 000094 igPsx2LongTimer_GetResetTimeSeconds
 00330e50 000008 igPsx2LongTimer_IsStopped
 00330e60 00000c igPsx2IopRpcConnection_GetMeta
-00330e70 00000c igPsx2Folder_GetMeta
-00330e80 00000c igPsx2File_GetMeta
-00330e90 000098 igPsx2File_InitDefaults
+00330e70 00000c igPsx2Folder_GetMeta Gap::Core::igPsx2Folder::getMeta
+00330e80 00000c igPsx2File_GetMeta Gap::Core::igPsx2File::getMeta
+00330e90 000098 igPsx2File_InitDefaults Gap::Core::igPsx2File::initDefaults
 00330f30 00000c igPsx2CallStackTracer_GetMeta
 00330f40 000008 igUnsignedIntListNoClean_TrimCapacity Gap::Core::igUnsignedIntListNoClean::trimCapacity
 00330f50 00000c igStandardQueue_GetMeta
@@ -13830,7 +13830,7 @@
 00331130 00000c igStringArrayMetaField_GetDescriptor Gap::Core::igStringArrayMetaField::getGenericMetaField
 00331140 00000c igShortArrayMetaField_GetMeta Gap::Core::igShortArrayMetaField::getMeta
 00331150 00000c igShortArrayMetaField_GetDescriptor Gap::Core::igShortArrayMetaField::getGenericMetaField
-00331160 00000c igResource_GetMeta
+00331160 00000c igResource_GetMeta Gap::Core::igResource::getMeta
 00331170 00000c igRegistry_GetMeta Gap::Core::igRegistry::getMeta
 00331180 00000c igRefMetaField_GetDescriptor Gap::Core::igRefMetaField::getGenericMetaField
 00331190 00000c igRawRefArrayMetaField_GetMeta Gap::Core::igRawRefArrayMetaField::getMeta
@@ -13856,7 +13856,7 @@
 003312d0 00000c igLocationTable_GetMeta
 003312e0 00000c igIntArrayMetaField_GetMeta Gap::Core::igIntArrayMetaField::getMeta
 003312f0 00000c igIntArrayMetaField_GetDescriptor Gap::Core::igIntArrayMetaField::getGenericMetaField
-00331300 00000c igIGBFile_GetMeta
+00331300 00000c igIGBFile_GetMeta Gap::Core::igIGBFile::getMeta
 00331310 00000c igFolder_GetMeta Gap::Core::igFolder::getMeta
 00331320 00000c igFloatMetaField_GetMeta Gap::Core::igFloatMetaField::getMeta
 00331330 00000c igFloatMetaField_GetDescriptor Gap::Core::igFloatMetaField::getGenericMetaField
@@ -13934,15 +13934,15 @@
 003317b0 00000c igEnumMetaField_GetMeta Gap::Core::igEnumMetaField::getMeta
 003317c0 00000c igEnumMetaField_GetDescriptor Gap::Core::igEnumMetaField::getGenericMetaField
 003317d0 00000c igErrorHandler_GetMeta
-003317e0 00000c igInfoList_GetMeta
+003317e0 00000c igInfoList_GetMeta Gap::Core::igInfoList::getMeta
 003317f0 00000c igIntMetaField_GetMeta Gap::Core::igIntMetaField::getMeta
 00331800 00000c igIntMetaField_GetDescriptor Gap::Core::igIntMetaField::getGenericMetaField
 00331810 00000c __internalNonRefCountedObjectList_GetMeta Gap::Core::__internalNonRefCountedObjectList::getMeta
 00331820 00000c __internalObjectList_GetMeta Gap::Core::__internalObjectList::getMeta
 00331830 00000c igLibraryList_GetMeta
 00331840 00000c igMediaList_GetMeta Gap::Core::igMediaList::getMeta
-00331850 00000c igMemoryFileEntry_GetMeta
-00331860 00000c igMemoryFileEntryList_GetMeta
+00331850 00000c igMemoryFileEntry_GetMeta Gap::Core::igMemoryFileEntry::getMeta
+00331860 00000c igMemoryFileEntryList_GetMeta Gap::Core::igMemoryFileEntryList::getMeta
 00331870 00000c igMemoryPoolInfoList_GetMeta
 00331880 00000c igMemoryRefMetaField_GetMeta Gap::Core::igMemoryRefMetaField::getMeta
 00331890 00000c igMemoryRefMetaField_GetDescriptor Gap::Core::igMemoryRefMetaField::getGenericMetaField
@@ -13987,9 +13987,9 @@
 00331b90 00000c igContextExtList_GetElementMeta
 00331ba0 00000c igContextExtInfoList_GetElementMeta
 00331bb0 00000c igMediaList_GetElementMeta Gap::Core::igTObjectList<Gap::Core::igMedia>::getElementMeta
-00331bc0 00000c igMemoryFileEntryList_GetElementMeta
+00331bc0 00000c igMemoryFileEntryList_GetElementMeta Gap::Core::igTObjectList<Gap::Core::igMemoryFileEntry>::getElementMeta
 00331bd0 00000c igMemoryPoolInfoList_GetElementMeta
-00331be0 00000c igInfoList_GetElementMeta
+00331be0 00000c igInfoList_GetElementMeta Gap::Core::igTObjectList<Gap::Core::igInfo>::getElementMeta
 00331bf0 00000c igPluginRepositoryList_GetElementMeta
 00331c00 00000c igRegistryValueList_GetElementMeta Gap::Core::igTObjectList<Gap::Core::igRegistryValue>::getElementMeta
 00331c10 00000c igDirectoryList_GetElementMeta Gap::Core::igTObjectList<Gap::Core::igDirectory>::getElementMeta

@@ -32,7 +32,7 @@ unsigned int igPsx2VertexArray1_1::configure(const igVertexFormat &vertexFormat,
     _vertexFormat = vertexFormat;
     _vtype = 0;
     _usageFlags = usageFlags;
-    _vdata = (void **)getMemoryPool()->calloc(20, sizeof(void *));
+    _vdata = (void **)getMemoryPool()->Callocate(20, sizeof(void *));
     total += 20 * sizeof(void *);
     total += allocateAbstractVertexArrayMemory();
     if (vertexFormat.getBlendWeightCount() > 0) {

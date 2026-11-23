@@ -4,7 +4,7 @@
 #include "dw4/core/igTDataList.h"
 struct ConfigNode;
 struct igDriverDatabase;
-struct igVisualContextView;
+namespace Gap { namespace Gfx { class igVisualContext; } }
 
 extern "C" {
 void igDriverDatabase_SetSubPropertyValue(struct igDriverDatabase *self, int section, const char *key, char *value);
@@ -17,7 +17,7 @@ igTDataList<struct ConfigNode *> *igDriverDatabase_ParseDatabase(struct igDriver
 void igDriverDatabase_DeleteConfigNodeList(void *self, igTDataList<struct ConfigNode *> *list);
 int igDriverDatabase_Load(struct igDriverDatabase *self, const char *fileName, const char *rootPath);
 void igDriverDatabase_SetCurrentProperty(void *self, int property, const char *value);
-void igDriverDatabase_GatherProperties(void *self, igTDataList<struct igVisualContextView *> *list);
+void igDriverDatabase_GatherProperties(void *self, igTDataList<Gap::Gfx::igVisualContext *> *list);
 }
 
 #endif

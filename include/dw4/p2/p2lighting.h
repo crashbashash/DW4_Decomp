@@ -29,21 +29,39 @@ enum {
 /* p2Material.flags */
 enum {
     P2_MATERIAL_SPECULAR = 0x01,        /* a specular colour */
-    P2_MATERIAL_CHANGED = 0x02
+    P2_MATERIAL_CHANGED = 0x02,
+    P2_MATERIAL_AMBIENT = 0x04          /* an ambient colour */
 };
 
-/* A light as the visual context keeps it: one 160-byte entry of its light array. */
+/* A light as the visual context keeps it: one 160-byte entry of its light array. The context fills the
+ * colours, position, direction, falloff, attenuation and cutoff from its light setters and the p2 renderer
+ * reads the eye-space copies and the flags. */
 typedef struct p2Light {
-    char f0[96];
+    float position[4];       /* w is 1 */
+    float ambient[4];
+    float diffuse[4];
+    float specular[4];
+    float localDirection[3]; /* as the caller set it; (0, 0, 1) by default */
+    float falloff;           /* the falloff rate times 128 */
+    float attenuation[3];    /* constant, linear, quadratic; (1, 0, 0) by default */
+    float cutoffAngle;       /* degrees; 180 by default */
     float direction[3];      /* eye-space, normalised */
     unsigned int flags;
-    char f112[12];
+    float eyePosition[3];    /* position transformed by the model-view matrix, kept for point and spot lights */
     int type;                /* enum p2LightType */
     int active;              /* counted in p2ActiveLightCount */
-    char f132[28];
+    char f132[12];
+    int slot;                /* the p2 light slot while the light is enabled in the context */
+#ifdef __cplusplus
+    bool enabled;            /* the context's per-light state (setLightState) */
+#else
+    unsigned char enabled;
+#endif
+    int lightType;           /* IG_GFX_LIGHT_TYPE the light was created with */
+    char f156[4];
 } p2Light;
 
-/* The visual context's current material. */
+/* The visual context's current material: one 112-byte record. */
 typedef struct p2Material {
     float ambient[4];
     float diffuse[4];
@@ -53,8 +71,9 @@ typedef struct p2Material {
     unsigned int flags;
     char f72[8];
     int slot;
-    char f84[4];
-    float color[4];
+    int colorMode;           /* the mode setMaterialColorMode set (IG color material mode) */
+    float color[4];          /* the scene ambient, handed to p2SetLightingColor */
+    char f104[8];
 } p2Material;
 
 #ifdef __cplusplus

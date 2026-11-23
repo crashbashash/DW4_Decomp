@@ -1,13 +1,18 @@
+/* The list a vertex data component holds, and the address of that list's elements. */
+static inline Gap::Core::igObject *componentList(igVertexData *data) { return (Gap::Core::igObject *)data->_data; }
+static inline int listData(Gap::Core::igObject *list) { return (int)((Gap::Core::igDataList *)list)->_data; }
+static inline bool isListOf(Gap::Core::igObject *list, igMetaObject *meta) { return meta == list->getMeta(); }
+
 int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int arg4) {
     int i;
-    VertexArray177 *prev;
+    Gap::Gfx::igPsx2VertexArray1_1 *prev;
     int j; /* matching construct: declaration-order sweep — second loop counter gets a1, count a0 */
     int limit;
     int count;
     bool enabled = false;
     int result = 0;
     int levels = 0;
-    VertexArray177 *va;
+    Gap::Gfx::igPsx2VertexArray1_1 *va;
 
     if (vc->_bVertexBlendingEnabled) {
         if (arg3 > -1) {
@@ -23,14 +28,14 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
                 }
             }
         } else {
-            va = (VertexArray177 *)vc->_pVertexArray;
-            levels = (unsigned char)(((unsigned int)*((VertexFormat177 *)va)->format() & 0xf0) >> 4);
+            va = (Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray;
+            levels = va->getVertexFormat().getBlendWeightCount();
             if (levels > 0) {
                 enabled = true;
                 if (levels > 0 && levels < 5 && vc->_blendMatricesCount < 121 && !g_igPsx2DisableExt_ext10Enabled) {
                     result = 2;
-                    p2SetBlendIndexArray((void *)va->f36);
-                    p2SetBlendWeightArray((void *)va->f32);
+                    p2SetBlendIndexArray((void *)va->_blendIndices);
+                    p2SetBlendWeightArray((void *)va->_blendWeights);
                 } else {
                     result = 1;
                     if (vc->_currentDListHandle >= 0) {
@@ -40,39 +45,39 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
             }
         }
     }
-    if ((VertexArray177 *)vc->_pVertexArray != 0 && vc->_currentDListHandle != -1) {
-        ((VertexArray177 *)vc->_pVertexArray)->f72[0] = vc->_texCoordIndex[0];
+    if ((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray != 0 && vc->_currentDListHandle != -1) {
+        ((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_textureCoordCompiled[0] = vc->_texCoordIndex[0];
         if (vc->_pixelPipelineMode == 3) {
             for (i = 1; i < vc->_bMultiPassNum; i++) {
-                ((VertexArray177 *)vc->_pVertexArray)->f72[i] = vc->_texCoordIndex[i];
+                ((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_textureCoordCompiled[i] = vc->_texCoordIndex[i];
             }
-            ((VertexArray177 *)vc->_pVertexArray)->f136 = vc->_bMultiPassNum;
+            ((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_multipassCompiled = vc->_bMultiPassNum;
         } else {
-            ((VertexArray177 *)vc->_pVertexArray)->f136 = 0;
+            ((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_multipassCompiled = 0;
         }
-        ((DLists177 *)vc->_pDLists)->entries[vc->_currentDListHandle]->va = (VertexArray177 *)vc->_pVertexArray;
+        ((igPsx2RenderListPool *)vc->_pDLists)->elements[vc->_currentDListHandle]->vertexArray = (Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray;
     }
     if (arg4 == -1) {
-        *arg1 = ((VertexArray177 *)vc->_pVertexArray)->f8[0] ? ((VertexArray177 *)vc->_pVertexArray)->f8[0] : 0;
-        *arg2 = ((VertexArray177 *)vc->_pVertexArray)->f8[1] ? ((VertexArray177 *)vc->_pVertexArray)->f8[1] : 0;
+        *arg1 = (int)((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_vdata[0] ? (int)((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_vdata[0] : 0;
+        *arg2 = (int)((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_vdata[1] ? (int)((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_vdata[1] : 0;
     } else {
-        prev = ((DLists177 *)vc->_pDLists)->entries[arg4]->va;
+        prev = ((igPsx2RenderListPool *)vc->_pDLists)->elements[arg4]->vertexArray;
         if (prev != 0) {
-            if (vc->_texEnable[0] && vc->_texCoordIndex[0] != prev->f72[0]) {
+            if (vc->_texEnable[0] && vc->_texCoordIndex[0] != prev->_textureCoordCompiled[0]) {
                 result = 3;
             }
             if (vc->_pixelPipelineMode == 3) {
                 count = vc->_bMultiPassNum;
-                if (count != prev->f136) {
+                if (count != prev->_multipassCompiled) {
                     result = 3;
                 } else {
                     for (j = 1; j < count; j++) {
-                        if (vc->_texEnable[j] && vc->_texCoordIndex[j] != prev->f72[j]) {
+                        if (vc->_texEnable[j] && vc->_texCoordIndex[j] != prev->_textureCoordCompiled[j]) {
                             result = 3;
                         }
                     }
                 }
-            } else if (prev->f136 != 0) {
+            } else if (prev->_multipassCompiled != 0) {
                 result = 3;
             }
         }
@@ -89,7 +94,7 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
             }
             if (vc->_bLightingEnabled || vc->_texCoordSource[0] == 2) {
                 if (vc->_inverseTransposeNeedValidation) {
-                    FUN_00180060((O_180060 *)vc);
+                    FUN_00180060(vc);
                 }
                 FUN_00180170(vc->_pVertexArray, vc->_blendIndex, vc->_blendMatrices, vc->_inverseTranspose, arg1, arg2, vc->_blendMatricesCount);
             } else {
@@ -110,71 +115,71 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
     return result;
 }
 
-int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, bool *useTexture) {
+int FUN_001774c0(igPsx2VisualContext *vc, Gap::Gfx::igPsx2VertexStream *stream, bool *useTexture) {
     int j;
     int limit;
-    AttrNode1774 *node;
-    AttrValue1774 *value;
-    int attrs;
+    igVertexData *node;
+    Gap::Core::igObject *value;
+    igVertexDataList *vertexData;
     int levels = 0; /* matching construct: declaration-order sweep — levels in s4, texture in s3 */
     int matrices;
     int texture;
     int prebuilt;
     int result = 0;
 
-    prebuilt = geom->f128;
+    prebuilt = stream->_renderListHandle;
     *useTexture = false;
     if (vc->_bVertexBlendingEnabled) {
         matrices = 0;
         texture = 0;
         if (prebuilt) {
-            levels = geom->f120;
-            limit = geom->f116;
+            levels = stream->_blendIndexCount;
+            limit = stream->_blendMatrixCount;
         } else {
-            attrs = geom->attrs;
-            node = (AttrNode1774 *)FUN_0015f4a0((S_15f430 *)attrs, 6, 0);
+            vertexData = (igVertexDataList *)stream->_vertexDataList.p;
+            node = FUN_0015f4a0(vertexData, 6, 0);
             int m1 = (int)Gap::Core::igUnsignedCharList::getClassMeta(); /* matching construct: spelling sweep — the compared metas are locals, spilled with sw */
-            if (m1 == node->obj->meta()) {
-                matrices = node->obj->f16;
-                levels = node->f24;
+            if (m1 == (int)componentList(node)->getMeta()) {
+                matrices = listData(componentList(node));
+                levels = node->_componentSize;
             } else {
                 int m2 = (int)g_igVec3ucList_metaObject;
-                if (m2 == node->obj->meta()) {
-                    matrices = node->obj->f16;
+                if (m2 == (int)componentList(node)->getMeta()) {
+                    matrices = listData(componentList(node));
                     levels = 3;
                 } else {
                     int m3 = (int)g_igVec4ucList_metaObject;
-                    if (m3 == node->obj->meta()) {
+                    if (m3 == (int)componentList(node)->getMeta()) {
                         levels = 3;
-                        matrices = node->obj->f16;
+                        matrices = listData(componentList(node));
                     }
                 }
             }
-            node = (AttrNode1774 *)FUN_0015f4a0((S_15f430 *)attrs, 5, 0);
+            node = FUN_0015f4a0(vertexData, 5, 0);
             if (node != 0) {
-                value = node->obj;
-                if ((int)Gap::Core::igCharList::getClassMeta() == value->meta()) {
-                    int a = node->f32;
+                value = componentList(node);
+                if (Gap::Core::igCharList::getClassMeta() == value->getMeta()) {
+                    int a = node->_componentFraction;
                     p2SetComponentLayout(3, 1, 7 - a, a);
-                    texture = value->f16;
+                    texture = listData(value);
                     *useTexture = true;
-                } else if ((int)Gap::Core::igUnsignedCharList::getClassMeta() == node->obj->meta()) {
-                    int a = node->f32;
+                } else if (Gap::Core::igUnsignedCharList::getClassMeta() == componentList(node)->getMeta()) {
+                    int a = node->_componentFraction;
                     p2SetComponentLayout(3, 0, 8 - a, a);
-                    texture = value->f16;
+                    texture = listData(value);
                     *useTexture = true;
-                } else if ((int)Gap::Core::igShortList::getClassMeta() == node->obj->meta()) {
-                    int a = node->f32;
+                } else if (Gap::Core::igShortList::getClassMeta() == componentList(node)->getMeta()) {
+                    int a = node->_componentFraction;
                     p2SetComponentLayout(3, 1, 0xF - a, a);
-                    texture = value->f16;
+                    texture = listData(value);
                     *useTexture = true;
-                } else if ((int)Gap::Core::igUnsignedShortList::getClassMeta() == node->obj->meta()) {
-                    int a = node->f32;
+                } else if (Gap::Core::igUnsignedShortList::getClassMeta() == componentList(node)->getMeta()) {
+                    int a = node->_componentFraction;
                     p2SetComponentLayout(3, 0, 0x10 - a, a);
-                    texture = value->f16;
+                    texture = listData(value);
                     *useTexture = true;
                 } else {
-                    texture = node->obj->f16;
+                    texture = listData(componentList(node));
                 }
             }
             limit = vc->_blendMatricesCount;
@@ -202,20 +207,20 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, bool *useTexture) 
         p2DisableCapability(9);
     }
     if (prebuilt) {
-        if (vc->_texEnable[0] && vc->_texCoordIndex[0] != geom->f48[0]) {
+        if (vc->_texEnable[0] && vc->_texCoordIndex[0] != stream->_textureCoordCompiled[0]) {
             result = 3;
         }
         if (vc->_pixelPipelineMode == 3) {
-            if (vc->_bMultiPassNum != geom->f112) {
+            if (vc->_bMultiPassNum != stream->_multipassCompiled) {
                 result = 3;
             } else {
                 for (j = 1; j < vc->_bMultiPassNum; j++) {
-                    if (vc->_texEnable[j] && vc->_texCoordIndex[j] != geom->f48[j]) {
+                    if (vc->_texEnable[j] && vc->_texCoordIndex[j] != stream->_textureCoordCompiled[j]) {
                         result = 3;
                     }
                 }
             }
-        } else if (geom->f112 != 0) {
+        } else if (stream->_multipassCompiled != 0) {
             result = 3;
         }
     }
@@ -1042,66 +1047,29 @@ void FUN_0017a300(Self_17a070 *self) {
     }
 }
 
-void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
-    int index, s3, v, old;
-    int *hd;
-    T9f0 *t;
-    index = ((T9f0 *)vc->_pTexList)->f0 - 1;
+void FUN_0017a540(Gap::Gfx::igPsx2VisualContext *vc, int keepLists) {
+    int index;
+    igPsx2TexturePool *pool;
+    index = ((igPsx2TexturePool *)vc->_pTexList)->capacity - 1;
     for (; index > -1; index--) {
-        if (((T9f0 *)vc->_pTexList)->Chk(index)) {
-            ((TexContext *)vc)->vfunc_131(index);
+        if (((igPsx2TexturePool *)vc->_pTexList)->isIndexAllocated(index)) {
+            vc->deleteTexture(index);
         }
     }
     if (keepLists != 0) {
-        igDataList *loaded = (igDataList *)vc->_pTexLoadedList;
-        loaded->_count = 0;
-        loaded = (igDataList *)vc->_pTexLoadedList;
-        if ((loaded->_count > 0) == false) {
-            ((Gap::Core::igDataList *)loaded)->setCapacity(0, 4);
+        vc->_pTexLoadedList->_count = 0;
+        if ((vc->_pTexLoadedList->_count > 0) == false) {
+            ((Gap::Core::igDataList *)vc->_pTexLoadedList.p)->setCapacity(0, 4);
         }
     } else {
-        t = (T9f0 *)vc->_pTexList;
-        if (t != 0) {
-            if (g_stringPool == 0) {
-                v = (int)StringPool_Allocate(16);
-                if (v != 0) {
-                    v = (int)StringPool_Construct((StringPool *)v);
-                }
-                g_stringPool = (StringPool *)v;
-            }
-            s3 = (int)StringPool_Intern(g_stringPool, 0);
-            old = t->f8;
-            if (old != 0) {
-                hd = (int *)(old - 8);
-                v = *(int *)(old - 4) - 1;
-                *(int *)(old - 4) = v;
-                if (v == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                }
-            }
-            t->f8 = s3;
-            Memory_FreeBuffer((void *)t->f16);
-            Memory_FreeBuffer((void *)t->f12);
-            if (&t->f8 != 0) {
-                old = t->f8;
-                if (old != 0) {
-                    hd = (int *)(old - 8);
-                    v = *(int *)(old - 4) - 1;
-                    *(int *)(old - 4) = v;
-                    if (v == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                    }
-                }
-            }
-            Memory_FreeBufferAliasB(t);
-        }
+        pool = (igPsx2TexturePool *)vc->_pTexList;
+        delete pool;
         vc->_pTexList = 0;
-        igObject::release((igObject *)vc->_pTexLoadedList);
         vc->_pTexLoadedList = 0;
     }
-    if (vc->_iCLUT_A8 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_A8);
-    if (vc->_iCLUT_I8 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_I8);
-    if (vc->_iCLUT_IA16 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_IA16);
+    if (vc->_iCLUT_A8 != -1) FUN_0016ab80(vc, vc->_iCLUT_A8);
+    if (vc->_iCLUT_I8 != -1) FUN_0016ab80(vc, vc->_iCLUT_I8);
+    if (vc->_iCLUT_IA16 != -1) FUN_0016ab80(vc, vc->_iCLUT_IA16);
     if (vc->_pCLUT_I8 != 0) {
         Memory_FreeBuffer((void *)vc->_pCLUT_I8);
         vc->_pCLUT_I8 = 0;
@@ -1114,43 +1082,43 @@ void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
         Memory_FreeBuffer((void *)vc->_pCLUT_IA16);
         vc->_pCLUT_IA16 = 0;
     }
-    FUN_0017a870((S0_17a070 *)vc, keepLists);
+    FUN_0017a870(vc, keepLists);
 }
 
-void FUN_0017a7e0(S0_17a070 *arg0) {
+void FUN_0017a7e0(Gap::Gfx::igPsx2VisualContext *vc) {
     /* matching construct: variant search — decl order [3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
     int displayWidth;
     int displayHeight;
     int colorFormat;
     int depthFormat;
 
-    FUN_0017a870(arg0, 0);
+    FUN_0017a870(vc, 0);
     p2GetDisplaySize(&displayWidth, &displayHeight, &colorFormat, &depthFormat);
-    *(int *)((char *)(arg0) + 1524) = (int)p2LoadTexture(0, displayWidth, displayHeight, colorFormat, 1);
-    *(int *)((char *)(arg0) + 1528) = (int)p2LoadTexture(0, displayWidth, displayHeight, colorFormat, 2);
-    *(int *)((char *)(arg0) + 1532) = (int)p2LoadTexture(0, displayWidth, displayHeight, depthFormat, 3);
+    vc->_frameBufferTexture[0] = (int)p2LoadTexture(0, displayWidth, displayHeight, colorFormat, 1);
+    vc->_frameBufferTexture[1] = (int)p2LoadTexture(0, displayWidth, displayHeight, colorFormat, 2);
+    vc->_frameBufferTexture[2] = (int)p2LoadTexture(0, displayWidth, displayHeight, depthFormat, 3);
 }
 
-void FUN_0017a870(S0_17a070 *arg0, int arg1) {
-    int temp_a0;
-    int temp_a0_2;
-    int temp_a0_3;
+void FUN_0017a870(Gap::Gfx::igPsx2VisualContext *vc, int keepTextures) {
+    int texture;
+    int texture2;
+    int texture3;
 
-    if (arg1 == 0) {
-        temp_a0 = arg0->f5F4;
-        if (temp_a0 != 0) {
-            p2FreeTexture((P2Texture *)temp_a0);
-            arg0->f5F4 = 0;
+    if (keepTextures == 0) {
+        texture = vc->_frameBufferTexture[0];
+        if (texture != 0) {
+            p2FreeTexture((P2Texture *)texture);
+            vc->_frameBufferTexture[0] = 0;
         }
-        temp_a0_2 = arg0->f5F8;
-        if (temp_a0_2 != 0) {
-            p2FreeTexture((P2Texture *)temp_a0_2);
-            arg0->f5F8 = 0;
+        texture2 = vc->_frameBufferTexture[1];
+        if (texture2 != 0) {
+            p2FreeTexture((P2Texture *)texture2);
+            vc->_frameBufferTexture[1] = 0;
         }
-        temp_a0_3 = arg0->f5FC;
-        if (temp_a0_3 != 0) {
-            p2FreeTexture((P2Texture *)temp_a0_3);
-            arg0->f5FC = 0;
+        texture3 = vc->_frameBufferTexture[2];
+        if (texture3 != 0) {
+            p2FreeTexture((P2Texture *)texture3);
+            vc->_frameBufferTexture[2] = 0;
         }
     }
 }
@@ -1198,12 +1166,12 @@ bool igPsx2VisualContext::getTextureStageState(int stage) const {
 }
 
 int igPsx2VisualContext::createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode) {
-    return igPsx2VisualContext_CreateTexture((TexContext *)this, width, height, format, source, textureMode, 1);
+    return allocateTexture(width, height, format, source, textureMode, 1);
 }
 
 int igPsx2VisualContext::createTexture(int width, int height, IG_GFX_TEXTURE_FORMAT format, IG_GFX_TEXTURE_SOURCE source, unsigned int textureMode, unsigned int imageCount)
 {
-    return igPsx2VisualContext_CreateTexture((TexContext *)this, width, height, format, source, textureMode, imageCount);
+    return allocateTexture(width, height, format, source, textureMode, imageCount);
 }
 }
 }
@@ -1214,10 +1182,12 @@ inline void adoptNewImage(MipImage *&image, AdoptReference)
     image = (MipImage *)Gap::Gfx::igImage::_instantiateFromPool(0);
 }
 
-int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height, int format, int kind, unsigned int flags,
-                                       unsigned int levels)
+namespace Gap {
+namespace Gfx {
+
+int igPsx2VisualContext::allocateTexture(int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount)
 {
-    TexList *list = context->texList;
+    TexList *list = ((TexList *)_pTexList);
     int index;
     unsigned int mipLevels;
     TexEntry *entry;
@@ -1238,25 +1208,25 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     }
     index = list->freeIndices[list->freeCount - 1];
     list->freeCount--;
-    if (levels == 0) {
-        levels = 1;
+    if (imageCount == 0) {
+        imageCount = 1;
     }
-    entry = &context->texList->data[index];
-    mipLevels = levels - 1;
+    entry = &((TexList *)_pTexList)->data[index];
+    mipLevels = imageCount - 1;
     FUN_0017a070((int *)entry);
     entry->width = width;
     entry->height = height;
     entry->format = format;
-    entry->kind = kind;
-    entry->flags = flags;
-    igObject::release(entry->palette);
+    entry->kind = source;
+    entry->flags = textureMode;
+    ::igObject::release(entry->palette);
     entry->palette = 0;
-    igVirtualObject::release(entry->image);
+    ::igVirtualObject::release(entry->image);
     entry->image = 0;
     entry->depth = -1;
     entry->mipCount = mipLevels > 6 ? 6 : mipLevels;
     entry->mipImages = 0;
-    entry->buffers = ((TexMemoryPool *)((Gap::Gfx::igVisualContext *)context)->getInternalMemoryPool())->allocate(32);
+    entry->buffers = ((TexMemoryPool *)((Gap::Gfx::igVisualContext *)this)->getInternalMemoryPool())->allocate(32);
     for (i = 0; i < 8; i++) {
         entry->buffers[i] = 0;
     }
@@ -1273,7 +1243,7 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
         entry->image->setFormat(entry->format);
         entry->image->allocate(0, 0);
     }
-    if (flags == 1 && mipLevels == 0) {
+    if (textureMode == 1 && mipLevels == 0) {
         int size = width < height ? width : height;
         int count = 0;
 
@@ -1285,12 +1255,12 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     if (entry->mipCount != 0) {
         unsigned int mip;
 
-        entry->mipImages = ((TexMemoryPool *)((Gap::Gfx::igVisualContext *)context)->getInternalMemoryPool())->allocateArray(4, 6);
+        entry->mipImages = ((TexMemoryPool *)((Gap::Gfx::igVisualContext *)this)->getInternalMemoryPool())->allocateArray(4, 6);
         for (mip = 0; mip < 6; mip++) {
             entry->mipImages[mip].clear();
         }
     }
-    entry->altClut = FUN_0017cb80((ClutContextCB80 *)context, format, (int *)entry);
+    entry->altClut = FUN_0017cb80((ClutContextCB80 *)this, format, (int *)entry);
     if (entry->width < 128 && entry->width < entry->height) {
         if ((unsigned int)entry->format <= 2 || entry->format == 4 || entry->format == 6 || entry->format == 0x10000 ||
             entry->format == 0x10001) {
@@ -1299,9 +1269,6 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     }
     return index;
 }
-
-namespace Gap {
-namespace Gfx {
 
 bool igPsx2VisualContext::setTextureComponentSizeIntensityAlpha(int handle, int intensityBits, int alphaBits) {
     return 0;
@@ -1556,33 +1523,32 @@ int igPsx2VisualContext::getCurrentTexture(int stage) const {
 }
 
 void igPsx2VisualContext::unloadTexture(int texHandle) {
-    UCodeContextView *context = (UCodeContextView *)this;
-    UCodeSlot *slot = &context->slots->_data[texHandle];
+    TexEntry *entry = &((TexList *)_pTexList)->data[texHandle];
     int i;
 
-    context->current = -1;
-    if (slot->handle >= 0) {
-        if (slot->program->resident != 0) {
-            FUN_0016b1d0((OB1d0 *)context, slot->handle);
+    _currentTex = -1;
+    if (entry->clut >= 0) {
+        if (entry->image->clut != 0) {
+            FUN_0016b1d0(this, entry->clut);
         }
-        slot->buffers[slot->bufferIndex] = 0;
-    } else if (slot->altHandle >= 0) {
-        FUN_0016b1d0((OB1d0 *)context, slot->altHandle);
-        slot->buffers[slot->bufferIndex] = 0;
+        entry->buffers[entry->bufferIndex] = 0;
+    } else if (entry->altClut >= 0) {
+        FUN_0016b1d0(this, entry->altClut);
+        entry->buffers[entry->bufferIndex] = 0;
     }
-    if (slot->kind == 3) {
-        if (slot->buffers[0] != 0) {
-            p2FenceUsedTexture((P2Texture *)slot->buffers[0]);
-            if (slot->buffer != 0) {
-                p2FenceUsedTexture((P2Texture *)slot->buffer);
+    if (entry->kind == 3) {
+        if (entry->buffers[0] != 0) {
+            p2FenceUsedTexture((P2Texture *)entry->buffers[0]);
+            if (entry->buffer != 0) {
+                p2FenceUsedTexture((P2Texture *)entry->buffer);
             }
         }
-    } else if (slot->buffers != 0) {
+    } else if (entry->buffers != 0) {
         for (i = 0; i < 8; i++) {
-            if (slot->buffers[i] != 0) {
-                p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)slot->buffers[i]));
-                p2FreeTexture((P2Texture *)slot->buffers[i]);
-                slot->buffers[i] = 0;
+            if (entry->buffers[i] != 0) {
+                p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)entry->buffers[i]));
+                p2FreeTexture((P2Texture *)entry->buffers[i]);
+                entry->buffers[i] = 0;
             }
         }
     }
@@ -1597,7 +1563,7 @@ void igPsx2VisualContext::deleteTexture(int texHandle)
     if (entry->clut >= 0) {
         ClutObject *clut = entry->image->clut;
         if (clut != 0 && clut->locked == 0) {
-            FUN_0016ab80((Oab80 *)this, entry->clut);
+            FUN_0016ab80(this, entry->clut);
             clut->handle = -1;
         }
     }

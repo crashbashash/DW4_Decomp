@@ -604,11 +604,22 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `setTextureMatrixProjectiveState`/`getTextureMatrixProjectiveState`. Attrs and the movie codec call the class's
    slots directly, never through the vtable (retail's `jal` to the PS2 implementation), so they spell the call
    qualified: `((igPsx2VisualContext *)vc)->igPsx2VisualContext::setAlphaFunc(...)`. The two unnamed gfx helpers attrs
-   calls (the blend-function and multipass setters) still take the flat struct. Still to do for readability: many
-   override bodies read through stand-in views (`Obj_*`, `S_*`, the slot-placeholder classes in GfxLibrary.h)
-   cast from `this`, read smart pointers through `.p` into those views, and read the light, texture, CLUT and
-   buffer lists at raw offsets; the texture creator at 0x17aa20 (`igPsx2VisualContext_CreateTexture`, called by
-   both `createTexture` slots and `setRenderDestination`) stays a free function over a view. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
+   calls (the blend-function and multipass setters) still take the flat struct. The context's record pools are one
+   template, `igPsx2HandlePool<T>` (include/dw4/gfx/igPsx2HandlePool.h, the kit's igTHandlePool scheme as a plain
+   20-byte record: element array, stack of free indices, registry-sized capacity, `getFreeElement`/`freeElement`/
+   `isIndexAllocated`, allocated from the list memory pool): lights (`p2Light`, include/dw4/p2/p2lighting.h),
+   render destinations (`igPsx2RenderDestination`, igPsx2RenderDestination.h), colour tables (`igPsx2ClutRecord`,
+   igPsx2ClutRecord.h), render lists (pointers to `igPsx2RenderList`, igPsx2RenderList.h: the recorded p2 display
+   lists and the vertex array they were compiled for) and textures (`TexEntry`). Each pool's builder, teardown and
+   the members over it read those records; the current material is a `p2Material`. The texture allocator at
+   0x17aa20, which both `createTexture` slots and `setRenderDestination` call, is the non-virtual member
+   `allocateTexture` (its `config/class-members.tsv` row declares it). Still on stand-ins: the texture side
+   (`createTexture`'s record helpers, `setTexture`, the texture-stage and buffer-set views, the `MipImage`,
+   `TexMemoryPool`, `ListAllocator` and `TexList` views of the texture pool and its images, the CLUT context view
+   of the palette upload), the statistics capture setup and report (`StatContext` views), `constructFields`
+   (`igVisualContextFieldsView`), `copyRenderDestinationToMemory`'s helper (`VisualContextTextures`), and
+   `deleteRenderDestination`'s slot view, whose extra argument keeps the pool in the second argument register as
+   retail does. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
    `GfxLibrary_MarkRegistered` (it tests and sets `g_GfxLibrary_registered` and registers the eight extensions, as
    core's latch registers its threads), so tools/gen_odl_source.py finds the gfx classes (`--library Gfx`).
    Converted so far (specs in scratch/Gfx2/specs/index.py, vertex.py, clut.py): `igIndexArray` and

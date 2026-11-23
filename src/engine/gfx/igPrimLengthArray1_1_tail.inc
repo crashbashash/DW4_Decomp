@@ -140,7 +140,7 @@ void igVertexArray1_1::userMakeConcrete(igMetaObject *meta)
     count = vertexFormat.getBlendWeightCount();
     vertexCount = _numVerts;
     if (count != 0) {
-        _blendWeights = (float *)((igMemoryPoolView *)_memPool.p)->allocateAligned(vertexCount * (count * 4), 0x10);
+        _blendWeights = (float *)((igMemoryPoolView *)_memPool.p)->AllocateAligned(vertexCount * (count * 4), 0x10);
         i = 0;
         goto testWeights;
     weights:
@@ -158,7 +158,7 @@ void igVertexArray1_1::userMakeConcrete(igMetaObject *meta)
     }
     count = vertexFormat.getBlendIndexCount();
     if (count != 0) {
-        _blendIndices = (unsigned char *)((igMemoryPoolView *)_memPool.p)->allocateAligned(count * vertexCount, 0x10);
+        _blendIndices = (unsigned char *)((igMemoryPoolView *)_memPool.p)->AllocateAligned(count * vertexCount, 0x10);
         i = 0;
         goto testIndices;
     indices:
@@ -193,7 +193,7 @@ unsigned int igVertexArray1_1::allocateAbstractVertexArrayMemory()
     }
     if (vertexFormat.hasPositions()) {
         size = _numVerts * 12;
-        _vdata[0] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        _vdata[0] = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     if (vertexFormat.hasNormals()) {
@@ -201,32 +201,32 @@ unsigned int igVertexArray1_1::allocateAbstractVertexArrayMemory()
         if (vertexFormat.hasBinormals() || vertexFormat.hasTangents()) {
             size += _numVerts * 24;
         }
-        _vdata[1] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        _vdata[1] = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     if (vertexFormat.hasVertexColors()) {
         size = _numVerts * 4;
-        _vdata[2] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        _vdata[2] = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     if (vertexFormat.getBlendWeightCount() != 0) {
         size = _numVerts * vertexFormat.getBlendWeightCount() * 4;
         total += size;
         if (_blendWeights == 0) {
-            _blendWeights = (float *)((igMemoryPoolView *)_memPool.p)->allocateAligned(size, 0x10);
+            _blendWeights = (float *)((igMemoryPoolView *)_memPool.p)->AllocateAligned(size, 0x10);
         }
     }
     if (vertexFormat.getBlendIndexCount() != 0) {
         size = _numVerts * vertexFormat.getBlendIndexCount();
         total += size;
         if (_blendIndices == 0) {
-            _blendIndices = (unsigned char *)((igMemoryPoolView *)_memPool.p)->allocateAligned(size, 0x10);
+            _blendIndices = (unsigned char *)((igMemoryPoolView *)_memPool.p)->AllocateAligned(size, 0x10);
         }
     }
     for (i = 0; i < vertexFormat.getTextureCoordCount(); i++) {
         unsigned int stream = i + 11;
         size = _numVerts * 8;
-        _vdata[stream] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        _vdata[stream] = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     total += allocatePointSpriteMemory();
@@ -508,7 +508,7 @@ unsigned int igVertexArray1_1::allocatePointSpriteMemory()
         /* matching construct: retail zero-extends the count a second time before the multiply */
         size = _numVerts * ((count & 0xFF) * sizeof(float));
         stream = &_vdata[15];
-        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        *stream = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     void **&streams = _vdata;
@@ -516,7 +516,7 @@ unsigned int igVertexArray1_1::allocatePointSpriteMemory()
     if (vertexFormat.hasSpriteRadians()) {
         size = _numVerts * 4;
         stream = &streams[19];
-        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        *stream = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     return total;
@@ -547,13 +547,13 @@ unsigned int igVertexArray1_1::allocateAbstractBiNormalsAndTangentsMemory()
     if (vertexFormat.hasBinormals()) {
         stream = &_vdata[17];
         size = _numVerts * 12;
-        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        *stream = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     if (vertexFormat.hasTangents()) {
         stream = &_vdata[18];
         size = _numVerts * 12;
-        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        *stream = ((igMemoryPoolView *)_memPool.p)->Allocate(size);
         total += size;
     }
     return total;
@@ -561,33 +561,51 @@ unsigned int igVertexArray1_1::allocateAbstractBiNormalsAndTangentsMemory()
 }
 }
 
-static int FUN_0015f430(void *arg0, int arg1, int arg2, int arg3) { if (arg1 == *(int *)((char *)(arg0) + 16)) { if (arg2 == *(int *)((char *)(arg0) + 20)) { return 1; } } return 0; }
-
-static int FUN_0015f460(void *arg0, int arg1, int arg2, int arg3)
-{
-  if (arg1 == (*((int *) (((char *) arg0) + 16))))
-  {
-    if ((arg3 == (*((int *) (((char *) arg0) + 28)))) && (arg2 == (*((int *) (((char *) arg0) + 20)))))
-    {
-      return 1;
-      return 0;
+/* Whether `data` holds component `type` number `index`; the last parameter is unused. */
+static int FUN_0015f430(void *object, int type, int index, int unused) {
+    igVertexData *data = (igVertexData *)object;
+    if (type == data->_componentType) {
+        if ((unsigned int)index == data->_componentIndex) {
+            return 1;
+        }
     }
-  }
-  return 0;
+    return 0;
 }
 
-int *FUN_0015f4a0(struct S_15f430 *s, int a1, unsigned int a2) {
-    int *found = 0;
+/* Whether `data` holds component `type` number `index` with `userID`. */
+static int FUN_0015f460(void *object, int type, int index, int userID)
+{
+    igVertexData *data = (igVertexData *)object;
+    if (type == data->_componentType)
+    {
+        if ((userID == data->_userID) && ((unsigned int)index == data->_componentIndex))
+        {
+            return 1;
+            return 0;
+        }
+    }
+    return 0;
+}
+
+/* The first vertex data of the list holding component `type` number `index`, or 0. */
+igVertexData *FUN_0015f4a0(igVertexDataList *list, int type, unsigned int index) {
+    igVertexData *found = 0;
     int i;
-    for (i = 0; i < s->count; i++) {
-        int *item = s->items[i];
-        if (FUN_0015f430(item, a1, a2, 0) != 0) { found = item; break; }
+    for (i = 0; i < list->_count; i++) {
+        igVertexData *item = ((igVertexData **)list->_data)[i];
+        if (FUN_0015f430(item, type, index, 0) != 0) { found = item; break; }
     }
     return found;
 }
 
-void *FUN_0015f510(L *l, int a1, int a2, int a3) {
-  void *r = 0; int i; void *e;
-  for (i = 0; i < l->n; i++) { e = (void*)l->data[i]; if (FUN_0015f460(e, a1, a3, a2)) { r = e; break; } }
-  return r; }
+/* The first vertex data of the list holding component `type` number `index` with `userID`, or 0. */
+igVertexData *FUN_0015f510(igVertexDataList *list, int type, int userID, int index) {
+    igVertexData *found = 0;
+    int i;
+    for (i = 0; i < list->_count; i++) {
+        igVertexData *data = ((igVertexData **)list->_data)[i];
+        if (FUN_0015f460(data, type, index, userID)) { found = data; break; }
+    }
+    return found;
+}
 

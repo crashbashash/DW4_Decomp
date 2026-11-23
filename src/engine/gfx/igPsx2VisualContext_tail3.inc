@@ -107,9 +107,9 @@ igIndexArray *igPsx2VisualContext::getIndexArray() const {
 }
 
 /* The second texture-coordinate stream, which sprites read; an indexed draw addresses it from the start. */
-static inline int SpriteTexCoordArray(igPsx2VisualContext *vc, int *components, int first) {
+static inline int SpriteTexCoordArray(igPsx2VisualContext *vc, void **streams, int first) {
     int start = vc->_pIndexArray != 0 ? 0 : first;
-    return components[12] != 0 ? components[12] + start * 8 : 0;
+    return streams[12] != 0 ? (int)streams[12] + start * 8 : 0;
 }
 
 namespace Gap {
@@ -124,7 +124,7 @@ void igPsx2VisualContext::draw(IG_GFX_DRAW primType, int numPrimitives, int offs
         positions = 0;
         normals = 0;
         blendState = FUN_00177010((::igPsx2VisualContext *)this, &positions, &normals, -1, -1);
-        FUN_0016cc60((char *)this);
+        FUN_0016cc60(this);
         switch (primType) {
         case 0:
             FUN_0016d910((::igPsx2VisualContext *)this, numPrimitives, offset, (float *)positions, (float *)normals, (int (*)(...))p2DrawPoints, 0);
@@ -145,24 +145,24 @@ void igPsx2VisualContext::draw(IG_GFX_DRAW primType, int numPrimitives, int offs
             FUN_0016d910((::igPsx2VisualContext *)this, numPrimitives + 2, offset, (float *)positions, (float *)normals, (int (*)(...))p2DrawTriangleFan, (int (*)(...))p2DrawIndexedTriangleFan);
             break;
         default: {
-            int *components = ((VertexArray177 *)_pVertexArray.p)->f8;
-            int sizes = components[15] != 0 ? components[15] : 0;
-            int bytes = components[19] != 0 ? components[19] : 0;
-            p2SetTexCoordArray(1, (const float *)SpriteTexCoordArray((::igPsx2VisualContext *)this, components, offset));
+            void **streams = ((Gap::Gfx::igPsx2VertexArray1_1 *)_pVertexArray.p)->_vdata;
+            int sizes = streams[15] != 0 ? (int)streams[15] : 0;
+            int bytes = streams[19] != 0 ? (int)streams[19] : 0;
+            p2SetTexCoordArray(1, (const float *)SpriteTexCoordArray((::igPsx2VisualContext *)this, streams, offset));
             p2SetSpriteByteArray((const unsigned char *)bytes);
             FUN_0016d910((::igPsx2VisualContext *)this, numPrimitives, offset, (float *)positions, (float *)sizes, (int (*)(...))p2DrawSprites, (int (*)(...))p2DrawIndexedSprites);
             break;
         }
         }
         if (blendState == 1) {
-            void *array = (void *)_pVertexArray.p;
+            Gap::Gfx::igPsx2VertexArray1_1 *array = (Gap::Gfx::igPsx2VertexArray1_1 *)_pVertexArray.p;
             FUN_0016e140(array, (int)p2GetVif1WaitSequence());
         }
-        FUN_0016cd10((::igPsx2VisualContext *)this);
+        FUN_0016cd10(this);
         {
-            Q_16d660 *q = (Q_16d660 *)_pVertexArray.p;
-            if (q->f20 & 4) {
-                q->f64 = p2GetVif1WaitSequence();
+            Gap::Gfx::igPsx2VertexArray1_1 *array = (Gap::Gfx::igPsx2VertexArray1_1 *)_pVertexArray.p;
+            if (array->_usageFlags & 4) {
+                array->_lSequence = p2GetVif1WaitSequence();
             }
         }
     } else {
@@ -171,69 +171,69 @@ void igPsx2VisualContext::draw(IG_GFX_DRAW primType, int numPrimitives, int offs
 }
 
 void igPsx2VisualContext::drawMultiple(IG_GFX_DRAW_MULTIPLE stripType, int numStrips, int vertexOffset, int primitiveOffset) {
-    int sp8C;
-    int sp88;
-    int *p;
-    int s6, i, *s1, *s0;
-    int *rec;
-    int *tbl;
-    struct Q_16d660 *q;
+    int positions;
+    int normals;
+    int *lengths;
+    int blendState, i, *texCoords, *colors;
+    int *texCoordStream;
+    void **streams;
+    Gap::Gfx::igPsx2VertexArray1_1 *array;
     int t;
     if (_pVertexArray != 0) {
-        sp8C = 0;
-        sp88 = 0;
-        s6 = FUN_00177010((::igPsx2VisualContext *)this, &sp8C, &sp88, -1, -1);
-        FUN_0016cc60((char *)this);
-        p = (int *)(((int *)_pStripLengthArray.p)[2] + primitiveOffset * 4);
+        positions = 0;
+        normals = 0;
+        blendState = FUN_00177010((::igPsx2VisualContext *)this, &positions, &normals, -1, -1);
+        FUN_0016cc60(this);
+        lengths = (int *)(((igPrimLengthArray *)_pStripLengthArray.p)->_lengthData + primitiveOffset * 4);
         switch (stripType) {
         case 0:
             for (i = 0; i < numStrips; i++) {
-                FUN_0016d910((::igPsx2VisualContext *)this, *p, vertexOffset, (float *)sp8C, (float *)sp88, (int (*)(...))p2DrawLineStrip, 0);
-                vertexOffset += *p;
-                p++;
+                FUN_0016d910((::igPsx2VisualContext *)this, *lengths, vertexOffset, (float *)positions, (float *)normals, (int (*)(...))p2DrawLineStrip, 0);
+                vertexOffset += *lengths;
+                lengths++;
             }
             break;
         case 2:
             for (i = 0; i < numStrips; i++) {
-                FUN_0016d910((::igPsx2VisualContext *)this, *p, vertexOffset, (float *)sp8C, (float *)sp88, (int (*)(...))p2DrawTriangleFan, (int (*)(...))p2DrawIndexedTriangleFan);
-                vertexOffset += *p;
-                p++;
+                FUN_0016d910((::igPsx2VisualContext *)this, *lengths, vertexOffset, (float *)positions, (float *)normals, (int (*)(...))p2DrawTriangleFan, (int (*)(...))p2DrawIndexedTriangleFan);
+                vertexOffset += *lengths;
+                lengths++;
             }
             break;
         case 1:
             i = 0;
             if (_pIndexArray != 0) {
                 for (; i < numStrips; i++) {
-                    FUN_0016d910((::igPsx2VisualContext *)this, *p, vertexOffset, (float *)sp8C, (float *)sp88, (int (*)(...))p2DrawTriangleStrip, (int (*)(...))p2DrawIndexedTriangleStrip);
-                    vertexOffset += *p;
-                    p++;
+                    FUN_0016d910((::igPsx2VisualContext *)this, *lengths, vertexOffset, (float *)positions, (float *)normals, (int (*)(...))p2DrawTriangleStrip, (int (*)(...))p2DrawIndexedTriangleStrip);
+                    vertexOffset += *lengths;
+                    lengths++;
                 }
             } else {
-                tbl = ((struct Q_16d660 *)_pVertexArray.p)->f8;
-                t = _texCoordIndex[0] + 11; rec = (int *)tbl[t];
-                s1 = 0;
-                if (rec != 0) {
-                    s1 = (int *)((char *)rec + vertexOffset * 8);
+                streams = ((Gap::Gfx::igPsx2VertexArray1_1 *)_pVertexArray.p)->_vdata;
+                t = _texCoordIndex[0] + 11; texCoordStream = (int *)streams[t];
+                texCoords = 0;
+                if (texCoordStream != 0) {
+                    texCoords = (int *)((char *)texCoordStream + vertexOffset * 8);
                 }
-                s0 = 0;
-                if (tbl[2] != 0) {
-                    s0 = (int *)(tbl[2] + vertexOffset * 4);
+                colors = 0;
+                if (streams[2] != 0) {
+                    colors = (int *)((int)streams[2] + vertexOffset * 4);
                 }
                 FUN_0016db20((::igPsx2VisualContext *)this, vertexOffset);
                 t = vertexOffset * 12;
-                p2SetVertexArrays((float *)(sp8C + t), (float *)(sp88 + t), (unsigned int *)s0, (float *)s1);
-                p2DrawTriangleStrips(numStrips, p);
+                p2SetVertexArrays((float *)(positions + t), (float *)(normals + t), (unsigned int *)colors, (float *)texCoords);
+                p2DrawTriangleStrips(numStrips, lengths);
             }
             break;
         }
-        FUN_0016cd10((::igPsx2VisualContext *)this);
-        if (s6 == 1) {
-            q = (struct Q_16d660 *)_pVertexArray.p;
-            FUN_0016e140(q, (int)p2GetVif1WaitSequence());
+        FUN_0016cd10(this);
+        if (blendState == 1) {
+            array = (Gap::Gfx::igPsx2VertexArray1_1 *)_pVertexArray.p;
+            FUN_0016e140(array, (int)p2GetVif1WaitSequence());
         }
-        q = (struct Q_16d660 *)_pVertexArray.p;
-        if (q->f20 & 4) {
-            q->f64 = p2GetVif1WaitSequence();
+        array = (Gap::Gfx::igPsx2VertexArray1_1 *)_pVertexArray.p;
+        if (array->_usageFlags & 4) {
+            array->_lSequence = p2GetVif1WaitSequence();
         }
     } else {
         FUN_0017f080((::igPsx2VisualContext *)this, stripType + 0x2000, numStrips, vertexOffset, primitiveOffset);
@@ -248,14 +248,14 @@ static inline int ColourArray(igPsx2VisualContext *vc, int first) {
     int start = first;
     int colours;
     if (vc->_pIndexArray != 0) start = 0;
-    colours = ((VertexArray177 *)vc->_pVertexArray)->f8[2];
+    colours = (int)((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_vdata[2];
     return colours != 0 ? colours + start * 4 : 0;
 }
 
 static inline int TexCoordArray(igPsx2VisualContext *vc, int unit, int first) {
     int start = vc->_pIndexArray != 0 ? 0 : first;
     int component = vc->_texCoordIndex[unit] + 11;
-    int texCoords = ((VertexArray177 *)vc->_pVertexArray)->f8[component];
+    int texCoords = (int)((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->_vdata[component];
     return texCoords != 0 ? texCoords + start * 8 : 0;
 }
 
@@ -274,11 +274,11 @@ void FUN_0016d910(igPsx2VisualContext *vc, unsigned int count, int first, const 
     }
     if (normals == 0) {
         normalArray = 0;
-    } else if (*((VertexFormat177 *)vc->_pVertexArray)->format() & 2) {
+    } else if (((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->getVertexFormat().hasNormals()) {
         normalArray = normals + first * 3;
-    } else if ((unsigned char)(((unsigned int)*((VertexFormat177 *)vc->_pVertexArray)->format() & 0x300000) >> 20) == 1) {
+    } else if (((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->getVertexFormat().getPointSpriteCoordCount() == 1) {
         normalArray = normals + first;
-    } else if ((unsigned char)(((unsigned int)*((VertexFormat177 *)vc->_pVertexArray)->format() & 0x300000) >> 20) == 2) {
+    } else if (((Gap::Gfx::igPsx2VertexArray1_1 *)vc->_pVertexArray)->getVertexFormat().getPointSpriteCoordCount() == 2) {
         normalArray = normals + first * 2;
     } else {
         normalArray = 0;
@@ -294,7 +294,7 @@ bool igPsx2VisualContext::beginDraw() {
     StatisticsCapture *capture;
 
     if (_showFrameRate != 0) {
-        _frameStartTime = __floatdisf(((igTimerDispatchView *)_timer.p)->GetElapsedTime());
+        _frameStartTime = __floatdisf(_timer->getTimeAsLong());
     }
     capture = (StatisticsCapture *)_statisticCaptures;
     if (capture != 0) {
@@ -302,7 +302,7 @@ bool igPsx2VisualContext::beginDraw() {
             if (capture->active != 0) {
                 if (capture->startCapture == 0) {
                     p2GetStatistics(&capture->start);
-                    capture->f936 = ((igTimerDispatchView *)_timer.p)->GetElapsedTime();
+                    capture->f936 = _timer->getTimeAsLong();
                 }
                 capture->startCapture = capture->startCapture - 1;
             }
@@ -316,8 +316,8 @@ void igPsx2VisualContext::endDraw() {
     float frameTime = 0.0f;
     StatisticsCapture *n;
     if (_showFrameRate != 0) {
-        frameTime = dptofp(((igTimerDispatchView *)_timer.p)->GetTimeAsDouble());
-        ((igTimerDispatchView *)_timer.p)->Reset();
+        frameTime = dptofp(_timer->getTimeAsDouble());
+        _timer->reset();
     }
     p2EndFrame();
     p2SwapBuffers();
@@ -331,7 +331,7 @@ void igPsx2VisualContext::endDraw() {
       while (n != 0) {
         if (n->active != 0 && n->startCapture == -n->frameCount) {
             p2GetStatistics(&n->end);
-            n->f936 = ((igTimerDispatchView *)_timer.p)->GetElapsedTime();
+            n->f936 = _timer->getTimeAsLong();
             FUN_00178970((::igPsx2VisualContext *)this, n);
             n->active = 0;
         }
@@ -347,17 +347,12 @@ void igPsx2VisualContext::flushDraw() {
 }
 }
 
-void FUN_0016e140(void *arg0, int arg1) {
-    long long v;
-    int temp_a2;
-    void *temp_a1;
-    int temp_v1;
-    v = arg1;
-    temp_a2 = *(int *)((char *)(arg0) + 60);
-    temp_a1 = (void *)(*(int *)((char *)(arg0) + 56));
-    temp_v1 = *(int *)((char *)(temp_a1) + 8);
-    if ((temp_v1 != 0) && (temp_a2 >= 0) && (temp_a2 < temp_v1)) {
-        *(long long *)(*(int *)((char *)(temp_a1) + 16) + (temp_a2 * 8)) = (long long)v;
+/* Records the VIF1 wait sequence of a draw in the vertex array's wait-sequence list, at the slot of the array just used. */
+void FUN_0016e140(Gap::Gfx::igPsx2VertexArray1_1 *array, int sequence) {
+    long long wait = sequence;
+    int index = array->_lastArrayUsed;
+    ::igPsx2LongList *list = array->_pWaitSeqList.p;
+    if ((list->_count != 0) && (index >= 0) && (index < list->_count)) {
+        ((long long *)list->_data)[index] = (long long)wait;
     }
 }
-

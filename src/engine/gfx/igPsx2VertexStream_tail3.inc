@@ -7,7 +7,7 @@ void igPsx2VertexStream::getEditableComponent(igComponentEditInfo2 &componentInf
         waitForSync();
     }
     if (!(_accessMode == IG_VERTEX_ACCESS_WRITE_ONCE || _accessMode == IG_VERTEX_ACCESS_WRITE)) {
-        igSmartPointer<igVertexData> vertexData((igVertexData *)FUN_0015f4a0((S_15f430 *)_vertexDataList.p, componentInfo._componentType, componentInfo._componentIndex), kRetainReference);
+        igSmartPointer<igVertexData> vertexData(FUN_0015f4a0((igVertexDataList *)_vertexDataList.p, componentInfo._componentType, componentInfo._componentIndex), kRetainReference);
         unsigned int componentSize = vertexData->_componentSize;
         unsigned int elementSize = ((igDataList *)vertexData->_data)->getElementSize();
         unsigned int stride = elementSize * componentSize;

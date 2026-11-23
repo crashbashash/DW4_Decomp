@@ -34,18 +34,18 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**17,573** of the 20,465 matched functions are readable: **2,750,932** code bytes, **79.2 %** of the code.
+**17,616** of the 20,465 matched functions are readable: **2,756,880** code bytes, **79.4 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 1,609 | 328,424 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 1,967 | 445,620 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 901 | 243,780 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 1,594 | 326,192 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 1,953 | 442,320 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 816 | 212,000 |
 | it sits in its class or module file, not `src/unmatched/` | 0 | 0 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 831 | 254,700 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,291 | 246,848 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 907 | 196,928 |
-| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 399 | 100,456 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 830 | 254,312 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,182 | 223,436 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 814 | 168,372 |
+| virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 380 | 93,472 |
 | what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol (a copy with an owner `local-decl` row aside), no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 0 | 0 |
 
 ## Debt
@@ -98,17 +98,17 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `decl.header_conflicts` | 0 | 0 | 0 | symbols declared in two or more headers that disagree on the type |
 | `decl.named_placeholders` | 0 | 0 | 0 | `FUN_<va>`/`DAT_<va>` identifiers in src/ and include/ whose address config/SLUS-20836/symbols.txt or data-names.tsv names: a copy of a named symbol the build binds by address and a rename passes by |
 | `decl.member_conflicts` | 0 | 0 | 0 | members defined out of their class (`T Class::name(...) {`) that no declaration in the class body states the same way: parameters, constness, return or data type, or another view of the class declaring the name otherwise (tools/declarations.py) |
-| `free_methods.functions` | 9,309 | 9,309 | 0 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
-| `free_methods.bytes` | 1,542,920 | 1,542,920 | 0 | bytes of those |
+| `free_methods.functions` | 9,323 | 9,323 | 0 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
+| `free_methods.bytes` | 1,543,852 | 1,543,852 | 0 | bytes of those |
 | `vfunc_slots.functions` | 403 | 403 | 0 | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
-| `virtual_views.types` | 181 | 181 | 0 | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) instead of the real class declarations |
-| `virtual_views.slots` | 20,777 | 20,777 | 0 | placeholder virtual slots in stand-in classes (`virtual void d21();`, `vX(...)`) |
+| `virtual_views.types` | 173 | 173 | 0 | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) instead of the real class declarations |
+| `virtual_views.slots` | 16,080 | 16,080 | 0 | placeholder virtual slots in stand-in classes (`virtual void d21();`, `vX(...)`) |
 | `boilerplate.functions` | 6,076 | 6,076 | 0 | reflection plumbing written out as function definitions (`<Class>_GetMetaObject`, `_Register`, `_EnsureRegistered`, `_InitFields`, `_GetVTable`, `_GetMeta`, ...) where the kit generates it with its declare/define macros |
 | `reflected.untyped_refs` | 3,884 | 3,884 | 0 | object-reference fields include/dw4/support/reflected.h types as `int` instead of a typed reference |
 | `layout.tail_fragments` | 396 | 396 | 0 | `.inc` fragments of src/ named `_tail` after how the work was split, not after the original's per-class files |
-| `matching_constructs` | 543 | 543 | 0 | `matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original |
-| `views.local` | 259 | 259 | 0 | local `…View` structs standing in for real types (dispatch views counted apart) |
-| `members.offset_named` | 2,059 | 2,059 | 0 | struct members still named by offset (`fNN`) in src/ and include/ |
+| `matching_constructs` | 550 | 550 | 0 | `matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original |
+| `views.local` | 247 | 247 | 0 | local `…View` structs standing in for real types (dispatch views counted apart) |
+| `members.offset_named` | 1,670 | 1,670 | 0 | struct members still named by offset (`fNN`) in src/ and include/ |
 | `strings.externs` | 48 | 48 | 0 | strings declared as `text_…` externs instead of written as literals |
 
 ## The data half
@@ -200,14 +200,14 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 19,315 of 20,576 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 15,084 of 20,576 (14,876 of them matched) |
+| functions with a recovered name (any: role names included) | 19,330 of 20,576 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 15,099 of 20,576 (14,891 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 33,232 of 71,335 (46.59 %) |
+| field accesses using a **recovered** type (not an offset cast) | 33,548 of 70,946 (47.29 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

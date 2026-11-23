@@ -142,7 +142,7 @@ what they are.
 | `+0x28` | primary descriptor |
 | `+0x2c` | secondary descriptor |
 
-`igPsx2VisualContext_CreateTexture` pops a free index from the `_pTexList` pool (`+0x144`) and fills a 0x88-byte record: the
+`igPsx2VisualContext_AllocateTexture` pops a free index from the `_pTexList` pool (`+0x144`) and fills a 0x88-byte record: the
 primary descriptor goes to `+0x48`, the secondary to `+0x4c`, and `+0x84` = 2. `p2LoadTexture`
 (`0x20c270`) allocates from the `p2AllocTextureRecord` pool (global `0x56c0c8`) and writes image argument
 `+0x30`, px `+0x3c`, py `+0x3e`, format `+0x42`, TBW (`(px+0x3f)>>6`) in word 2 bits 14-19, a size at

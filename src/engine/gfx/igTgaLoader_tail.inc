@@ -142,55 +142,15 @@ IG_GFX_TEXTURE_FORMAT igTgaLoader::estimateImageFormat(int ftype, int w, IG_GFX_
 }
 }
 
-void FUN_001690d0(Arg0d0 *arg0) {
-    int sp5C;
-    int i;
-    P_1690d0 *p;
-    int n;
-    int v;
-    int *old;
-    int *s3;
-    Buf860 *b;
-    sp5C = 4;
-    igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_RD_ARRAY_SIZE", &sp5C, 4, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)((Gap::Gfx::igVisualContext *)arg0)->getListMemoryPool());
-    if (p != 0) {
-        n = sp5C;
-        p->f8 = 0;
-        if (g_stringPool == 0) {
-            v = (int)StringPool_Allocate(16);
-            if (v != 0) {
-                v = (int)StringPool_Construct((StringPool *)v);
-            }
-            g_stringPool = (StringPool *)v;
-        }
-        s3 = (int *)StringPool_Intern(g_stringPool, "IG_GFX_VC_RD_ARRAY_SIZE");
-        old = p->f8;
-        if (old != 0) {
-            int *a1 = old - 2;
-            int v0 = old[-1] - 1;
-            old[-1] = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
-            }
-        }
-        p->f8 = s3;
-        if (n == 0) {
-            n = 1;
-        }
-        b = (Buf860 *)Memory_FindBufferOwner(p);
-        p->f16 = b->vA(n, 48, 16);
-        p->f12 = b->vB(n, 2);
-        i = 0;
-        p->f2 = n;
-        p->f0 = n;
-        p->f4 = n;
-        while (i < n) {
-            p->f12[i] = i;
-            i = i + 1;
-        }
-    }
-    arg0->f868 = p;
-    arg0->f872 = -1;
+/* Builds the render-destination pool, sized by the registry value IG_GFX_VC_RD_ARRAY_SIZE, with no destination
+ * current. */
+void FUN_001690d0(Gap::Gfx::igPsx2VisualContext *vc) {
+    int destinationCount;
+    igPsx2RenderDestinationPool *pool;
+    destinationCount = 4;
+    igGetRegistryValue_Int(g_objectSystem->configRegistry, 4, "IG_GFX_VC_RD_ARRAY_SIZE", &destinationCount, 4, 0);
+    pool = new ((igMemoryPoolView *)vc->getListMemoryPool()) igPsx2RenderDestinationPool(destinationCount, "IG_GFX_VC_RD_ARRAY_SIZE");
+    vc->_pBufList = (int)pool;
+    vc->_currentBuf = -1;
 }
 

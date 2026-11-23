@@ -2,114 +2,111 @@ namespace Gap {
 namespace Gfx {
 
 void igPsx2VisualContext::setBlendingMatrices(const unsigned int matrixCount, const igMatrix44f *matrixArray) {
-    struct S_180030 *arg0 = (struct S_180030 *)this;
-    arg0->f72 = matrixCount;
-    arg0->f84 = (int)matrixArray;
-    arg0->f1424 = 1;
-    arg0->f76 = arg0->f76 + 1;
-    p2SetBlendMatrices(arg0->f84, arg0->f72);
+    _blendMatricesCount = matrixCount;
+    _blendMatrices = matrixArray;
+    _inverseTransposeNeedValidation = 1;
+    _blendIndex = _blendIndex + 1;
+    p2SetBlendMatrices((int)_blendMatrices, _blendMatricesCount);
 }
 }
 }
 
-void FUN_00180060(O_180060 *arg0) {
-    int v[3];
-    char *s0;
-    char *s2;
+/* Rebuilds the inverse-transpose of every blend matrix (the inverse with its translation cleared, then
+ * transposed), growing the driver-data array first when the matrix count outgrew it. */
+void FUN_00180060(igPsx2VisualContext *vc) {
+    int zeroTranslation[3];
+    float *inverse;
     unsigned int i;
-    int off;
-    if (arg0->f84 != 0) {
-        if (arg0->f1420 < (int)arg0->f72) {
-            s0 = arg0->f80;
-            if (s0 != 0) {
-                ((V1 *)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool())->v264(s0);
-                arg0->f80 = 0;
+    if (vc->_blendMatrices != 0) {
+        if (vc->_inverseTransposeCount_ < (int)vc->_blendMatricesCount) {
+            if (vc->_inverseTranspose != 0) {
+                ((igMemoryPoolView *)((Gap::Gfx::igVisualContext *)vc)->getDriverDataMemoryPool())->Free((void *)vc->_inverseTranspose);
+                vc->_inverseTranspose = 0;
             }
-            arg0->f80 = (char *)((V2_180060 *)((Gap::Gfx::igVisualContext *)arg0)->getDriverDataMemoryPool())->v220(arg0->f72 << 6, 0x10);
-            arg0->f1420 = arg0->f72;
+            vc->_inverseTranspose = (int)((igMemoryPoolView *)((Gap::Gfx::igVisualContext *)vc)->getDriverDataMemoryPool())->AllocateAligned(vc->_blendMatricesCount << 6, 0x10);
+            vc->_inverseTransposeCount_ = vc->_blendMatricesCount;
         }
-        for (i = 0; i < arg0->f72; i++) {
-            off = i << 6;
-            s2 = arg0->f80 + off;
-            igMatrix44f_Invert((float *)s2, (const float *)(arg0->f84 + off));
-            v[0] = 0;
-            v[1] = 0;
-            v[2] = 0;
-            igMatrix44f_SetTranslation((float *)s2, (float *)v);
-            FUN_001903d0((float *)s2);
+        for (i = 0; i < (unsigned int)vc->_blendMatricesCount; i++) {
+            inverse = (float *)(vc->_inverseTranspose + (i << 6));
+            igMatrix44f_Invert(inverse, (const float *)(vc->_blendMatrices + (i << 6)));
+            zeroTranslation[0] = 0;
+            zeroTranslation[1] = 0;
+            zeroTranslation[2] = 0;
+            igMatrix44f_SetTranslation(inverse, (float *)zeroTranslation);
+            FUN_001903d0(inverse);
         }
     }
-    arg0->f1424 = 0;
+    vc->_inverseTransposeNeedValidation = 0;
 }
 
-static inline void createOwned(igSmartPointer<BuildResource> &holder, AdoptReference) {
-    RELEASE(holder.p);
-    holder.p = (BuildResource *)igVertexData_Create(0);
+/* A new vertex data, its reference adopted: the old one is released first. */
+static inline void createOwned(igSmartPointer<igVertexData> &holder, AdoptReference) {
+    igVertexData *old = holder.p;
+    if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
+    }
+    holder.p = (igVertexData *)igVertexData_Create(0);
 }
 
-static inline void setMember(const igSmartPointer<BuildResource> &owner, const igSmartPointer<BuildResource> &value) {
-    BuildResource *held = value.p;
-    BuildResource *target = owner.p;
-    BuildResource *old;
+/* Makes `list` the component list of `owner`, taking a counted reference to it. */
+static inline void setComponentList(const igSmartPointer<igVertexData> &owner, const igSmartPointer<igVec3fList> &list) {
+    igVec3fList *held = list.p;
+    igVertexData *target = owner.p;
+    igObject *old;
     if (held != 0) held->_refCount = held->_refCount + 1;
-    old = target->f12;
+    old = (igObject *)target->_data;
     igObject::release(old);
-    target->f12 = held;
+    target->_data = (int)held;
 }
 
-void FUN_001805a0(ResourceBuilder *arg0, ResourceSource *arg1, int arg2) {
-BuildResource *s2;
-BuildResource *s1;
-ResourceList *ll;
-BuildResource *s0o;
-int s0;
-BuildResource *s7;
-    s0 = arg1->f20;
-    s2 = 0;
-    igSmartPointer<BuildResource> first((BuildResource *)0, kRetainReference);
-    igSmartPointer<BuildResource> second((BuildResource *)0, kRetainReference);
-    s7 = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 5, 0);
-    s1 = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 6, 0);
-    if (arg0->f1340 != 0 || arg0->f644 == 2) {
-        if (arg0->f1424 != 0) FUN_00180060((O_180060 *)arg0);
-        second = (BuildResource *)FUN_0015f510((L *)s0, 3, 0, 0x7734);
-        if (second.p == 0) {
-            igSmartPointer<BuildResource> values((BuildResource *)igVec3fList_Create(0), AdoptReference());
-            ll = (ResourceList *)values.p;
-            if (arg2 >= 0) {
-                if (arg2 <= ll->cap) ll->count = arg2;
-                else ((Gap::Core::igDataList *)ll)->resizeAndSetCount(arg2, 12);
-            }
-            createOwned(second, AdoptReference());
-            setMember(second, values);
-            second.p->f16 = 3;
-            second.p->f28 = 0x7734;
-            ((Gap::Core::igObjectList *)s0)->append((Gap::Core::igObject *)second.p);
-            s2 = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 3, 0);
-            s2->f20 = 0x7734;
+/* Blends the stream's vertices on the CPU. The blend writes into position (and, with lighting or texture
+ * generation, normal) components carrying the user ID 0x7734; the stream gets a vertex data for each when it
+ * has none, the inverse-transpose matrices are refreshed for the normals, and the weights and indices go to the
+ * blend routine. */
+void FUN_001805a0(igPsx2VisualContext *vc, Gap::Gfx::igPsx2VertexStream *stream, int count) {
+    igVertexData *srcNormals;
+    igVertexData *indices;
+    igVertexData *srcPositions;
+    igVertexDataList *list;
+    igVertexData *weights;
+    list = (igVertexDataList *)stream->_vertexDataList.p;
+    srcNormals = 0;
+    igSmartPointer<igVertexData> outPositions((igVertexData *)0, kRetainReference);
+    igSmartPointer<igVertexData> outNormals((igVertexData *)0, kRetainReference);
+    weights = FUN_0015f4a0(list, IG_VERTEX_COMPONENT_WEIGHT, 0);
+    indices = FUN_0015f4a0(list, IG_VERTEX_COMPONENT_INDEX, 0);
+    if (vc->_bLightingEnabled != 0 || vc->_texCoordSource[0] == 2) {
+        if (vc->_inverseTransposeNeedValidation != 0) FUN_00180060(vc);
+        outNormals = FUN_0015f510(list, IG_VERTEX_COMPONENT_NORMAL, 0, 0x7734);
+        if (outNormals.p == 0) {
+            igSmartPointer<igVec3fList> values(igVec3fList_Create(0), AdoptReference());
+            ((Gap::Core::igTDataList<igVec3f> *)values.p)->setCount(count);
+            createOwned(outNormals, AdoptReference());
+            setComponentList(outNormals, values);
+            outNormals.p->_componentType = IG_VERTEX_COMPONENT_NORMAL;
+            outNormals.p->_userID = 0x7734;
+            ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)outNormals.p);
+            srcNormals = FUN_0015f4a0(list, IG_VERTEX_COMPONENT_NORMAL, 0);
+            srcNormals->_componentIndex = 0x7734;
         } else {
-            s2 = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 3, 0x7734);
+            srcNormals = FUN_0015f4a0(list, IG_VERTEX_COMPONENT_NORMAL, 0x7734);
         }
     }
-    first = (BuildResource *)FUN_0015f510((L *)s0, 1, 0, 0x7734);
-    if (first.p == 0) {
-        igSmartPointer<BuildResource> values((BuildResource *)igVec3fList_Create(0), AdoptReference());
-        ll = (ResourceList *)values.p;
-        if (arg2 >= 0) {
-            if (arg2 <= ll->cap) ll->count = arg2;
-            else ((Gap::Core::igDataList *)ll)->resizeAndSetCount(arg2, 12);
-        }
-        createOwned(first, AdoptReference());
-        setMember(first, values);
-        first.p->f16 = 1;
-        first.p->f28 = 0x7734;
-        ((Gap::Core::igObjectList *)s0)->append((Gap::Core::igObject *)first.p);
-        s0o = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 1, 0);
-        s0o->f20 = 0x7734;
+    outPositions = FUN_0015f510(list, IG_VERTEX_COMPONENT_POSITION, 0, 0x7734);
+    if (outPositions.p == 0) {
+        igSmartPointer<igVec3fList> values(igVec3fList_Create(0), AdoptReference());
+        ((Gap::Core::igTDataList<igVec3f> *)values.p)->setCount(count);
+        createOwned(outPositions, AdoptReference());
+        setComponentList(outPositions, values);
+        outPositions.p->_componentType = IG_VERTEX_COMPONENT_POSITION;
+        outPositions.p->_userID = 0x7734;
+        ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)outPositions.p);
+        srcPositions = FUN_0015f4a0(list, IG_VERTEX_COMPONENT_POSITION, 0);
+        srcPositions->_componentIndex = 0x7734;
     } else {
-        s0o = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 1, 0x7734);
+        srcPositions = FUN_0015f4a0(list, IG_VERTEX_COMPONENT_POSITION, 0x7734);
     }
-    ((Gap::Gfx::igPsx2VertexStream *)((long long *)arg1))->waitForSync();
-    FUN_00180ab0(arg0, s0o, first.p, s2, second.p, s7, s1, Gap::Gfx::igVertexArray2Helper::getIndexCount((const igVertexData *)s1));
+    stream->waitForSync();
+    FUN_00180ab0(vc, srcPositions, outPositions.p, srcNormals, outNormals.p, weights, indices, Gap::Gfx::igVertexArray2Helper::getIndexCount(indices));
 }
-

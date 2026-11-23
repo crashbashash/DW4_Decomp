@@ -227,10 +227,10 @@ void igVisualContext::setBlendingMatrices(const unsigned int matrixCount, const 
     _blendMatrices = matrixArray;
     if (_inverseTransposeCount < matrixCount) {
         if (_inverseTranspose != 0) {
-            ((igMemoryPoolView *)getDriverDataMemoryPool())->free(_inverseTranspose);
+            ((igMemoryPoolView *)getDriverDataMemoryPool())->Free(_inverseTranspose);
             _inverseTranspose = 0;
         }
-        _inverseTranspose = (igMatrix44f *)((igMemoryPoolView *)getDriverDataMemoryPool())->allocateAligned(matrixCount << 6, 0x10);
+        _inverseTranspose = (igMatrix44f *)((igMemoryPoolView *)getDriverDataMemoryPool())->AllocateAligned(matrixCount << 6, 0x10);
         _inverseTransposeCount = matrixCount;
     }
     inverse = _inverseTranspose;
@@ -299,7 +299,7 @@ igVertexArray *igVisualContext::softwareBlendVertex(const igVertexArray *vertexA
             dst->setPosition(i, acc);
         }
         if (flags.hasNormals()) {
-            buf = (igMatrix44f *)poolOf(this, kIGMemoryPoolHandleTemporary)->malloc(_blendMatricesCount << 6);
+            buf = (igMatrix44f *)poolOf(this, kIGMemoryPoolHandleTemporary)->Allocate(_blendMatricesCount << 6);
             for (i = 0; i < _blendMatricesCount; i++) {
                 igMatrix44f *b = buf + i;
                 igMatrix44f_Invert((float *)b, (const float *)(_blendMatrices + i));
@@ -532,7 +532,7 @@ void igVisualContext::loadDefaultDriverDatabase()
         ((Gap::Core::igDataList *)l)->resizeAndSetCount(count + 1, 4);
     }
     ((int *)l->_data)[count] = (int)this;
-    igDriverDatabase_GatherProperties(builder, (igTDataList<igVisualContextView *> *)(igIntList *)list);
+    igDriverDatabase_GatherProperties(builder, (igTDataList<Gap::Gfx::igVisualContext *> *)(igIntList *)list);
     if (igRegistry_IsLoadingEnabled() != 0) {
         if (igDriverDatabase_Load((igDriverDatabase *)builder, (const char *)"", (const char *)"") != 0) igDriverDatabase_ApplyToRegistry((igDriverDatabase *)builder, (int)registry, 4, 0);
     }

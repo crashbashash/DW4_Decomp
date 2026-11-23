@@ -3368,3 +3368,4 @@ igPsx2VisualContext	void setMatrixOptimizationState(bool enable);
 igPsx2VisualContext	bool getMatrixOptimizationState();
 igPsx2VisualContext	void setTextureMatrixProjectiveState(int stage, unsigned char enable);
 igPsx2VisualContext	unsigned char getTextureMatrixProjectiveState(int stage);
+igPsx2VisualContext	int allocateTexture(int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount);

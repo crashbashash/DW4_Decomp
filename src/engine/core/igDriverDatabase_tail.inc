@@ -80,7 +80,7 @@ static inline char *textOf(const igSmartPointer<igStringObj> &ref) {
     return s;
 }
 
-void igDriverDatabase_GatherProperties(void *self, igTDataList<igVisualContextView *> *list) {
+void igDriverDatabase_GatherProperties(void *self, igTDataList<Gap::Gfx::igVisualContext *> *list) {
     int i;
     igSmartPointer<igStringObj> text(((igStringObj *)igStringObj_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
     if (igDriverDatabase_GetOSName((void *)(text.get())) != 0) {
@@ -96,7 +96,7 @@ void igDriverDatabase_GatherProperties(void *self, igTDataList<igVisualContextVi
         return;
     }
     for (i = 0; i < list->_count; i++) {
-        list->_data[i]->Describe(self);
+        list->_data[i]->detectDriverDatabaseProperties((igDriverDatabase *)self);
     }
 }
 
