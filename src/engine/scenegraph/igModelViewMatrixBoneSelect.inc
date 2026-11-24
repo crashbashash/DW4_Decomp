@@ -1,82 +1,67 @@
-igModelViewMatrixBoneSelect *igModelViewMatrixBoneSelect_CreateInstance(int allocator) {
-    igModelViewMatrixBoneSelect_EnsureRegistered();
-    return (igModelViewMatrixBoneSelect *)igMetaObject_CreateInstance((igMetaObject *)g_igModelViewMatrixBoneSelect_metaObject, (igMemoryPoolView *)allocator);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igModelViewMatrixBoneSelect_metaObject;
-igMetaField *g_igModelViewMatrixBoneSelect_matrixIndexMetaField;
-
-igMetaObject *igModelViewMatrixBoneSelect_GetMetaObject(void)
+igModelViewMatrixBoneSelect *igModelViewMatrixBoneSelect::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igModelViewMatrixBoneSelect_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igModelViewMatrixBoneSelect_EnsureRegistered();
-    return g_igModelViewMatrixBoneSelect_metaObject;
+    arkRegister();
+    return (igModelViewMatrixBoneSelect *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igModelViewMatrixBoneSelect_GetVTable(void) {
-    union U_19d480 u;
-    int temp_s0;
+igMetaObject *igModelViewMatrixBoneSelect::_Meta;
+igMetaField *igModelViewMatrixBoneSelect::k_matrixIndex;
 
-    igObject_InitHeader((igObject *)u.b);
-    u.w[2] = 0;
-    u.w[3] = 0;
-    u.w[4] = 0;
-    u.w[7] = 0;
-    u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
-    igGroup_Destroy((igGroup *)&u.w[0], 0);
-    return temp_s0;
-}
-
-void igModelViewMatrixBoneSelect_EnsureRegistered(void)
+igMetaObject *igModelViewMatrixBoneSelect::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igModelViewMatrixBoneSelect_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igModelViewMatrixBoneSelect_Register(void) {
+void *igModelViewMatrixBoneSelect::retrieveVTablePointer()
+{
+    igModelViewMatrixBoneSelect temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igModelViewMatrixBoneSelect::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igModelViewMatrixBoneSelect::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igModelViewMatrixBoneSelect_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igGroup::arkRegisterInternal,
         Gap::Sg::igGroup::getClassMeta,
-        igModelViewMatrixBoneSelect_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igModelViewMatrixBoneSelect",
-        0x24, /* instance size */
-        igModelViewMatrixBoneSelect_GetVTable,
-        &igModelViewMatrixBoneSelect_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igModelViewMatrixBoneSelect),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igModelViewMatrixBoneSelect_GetMetaObjectFunction(void) {
-    igModelViewMatrixBoneSelect_GetMetaObject();
+void igModelViewMatrixBoneSelect::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_matrixIndex" };
+    static igMetaField **enumStorage[] = { &k_matrixIndex };
+    static int offsets[] = { 32 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igModelViewMatrixBoneSelect_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igModelViewMatrixBoneSelect_fieldTable[] = {
-    "_matrixIndex",
-};
-static igMetaField **g_igModelViewMatrixBoneSelect_fieldHandles[] = {
-    &g_igModelViewMatrixBoneSelect_matrixIndexMetaField,
-};
-static int g_igModelViewMatrixBoneSelect_fieldOffsets[] = {
-    32,
-};
-
-void igModelViewMatrixBoneSelect_InitFields(void) {
-    int base;
-    void *meta;
-
-    meta = (void *)g_igModelViewMatrixBoneSelect_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igModelViewMatrixBoneSelect_ctorTable, 1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igModelViewMatrixBoneSelect_fieldTable, g_igModelViewMatrixBoneSelect_fieldHandles, g_igModelViewMatrixBoneSelect_fieldOffsets, base);
+}
 }
 

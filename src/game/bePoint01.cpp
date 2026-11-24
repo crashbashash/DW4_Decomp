@@ -58,10 +58,10 @@ int bePoint01_OnMessage(bePoint01 *self, beBaseInfoRam *ram, beMessengerWork *wo
     command = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, bePoint01_GetMsgActionEnum(), (const char *)work->_message);
     switch (command) {
     case 0:
-        igBitMask_SetAll((igBitMask *)(((igSwitch *)info->_switch)->_childMask));
+        ((Gap::Core::igBitMask *)(((igSwitch *)info->_switch)->_childMask))->setAll();
         return 1;
     case 1:
-        igBitMask_ClearAll((igBitMask *)(((igSwitch *)info->_switch)->_childMask));
+        ((Gap::Core::igBitMask *)(((igSwitch *)info->_switch)->_childMask))->clearAll();
         return 1;
     case 2: {
         int pointNo = self->_pointNo;

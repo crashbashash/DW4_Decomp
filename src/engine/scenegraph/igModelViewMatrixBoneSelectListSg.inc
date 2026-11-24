@@ -1,43 +1,50 @@
-igMetaObject *igModelViewMatrixBoneSelectListSg_GetMetaObject(void)
+namespace Gap {
+namespace Sg {
+
+igMetaObject *igModelViewMatrixBoneSelectList::getClassTypeSafe()
 {
-    igMetaObject *g = g_igModelViewMatrixBoneSelectListSg_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igModelViewMatrixBoneSelectListSg_EnsureRegistered();
-    return g_igModelViewMatrixBoneSelectListSg_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igModelViewMatrixBoneSelectListSg_GetVTable(void) {
-    union U u;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&DAT_0052aab0[0];
-    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-}
-
-void igModelViewMatrixBoneSelectListSg_EnsureRegistered(void)
+void *igModelViewMatrixBoneSelectList::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igModelViewMatrixBoneSelectListSg_Register);
+    igModelViewMatrixBoneSelectList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igModelViewMatrixBoneSelectListSg_callbackList[] = { igModelViewMatrixBoneSelect_EnsureRegistered, 0 };
+void igModelViewMatrixBoneSelectList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+}
+}
 
-CallbackArray *igModelViewMatrixBoneSelectListSg_Register(void) {
+static igMetaObjectCallback g_igModelViewMatrixBoneSelectListSg_callbackList[] = { Gap::Sg::igModelViewMatrixBoneSelect::arkRegister, 0 };
+
+namespace Gap {
+namespace Sg {
+
+CallbackArray *igModelViewMatrixBoneSelectList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igModelViewMatrixBoneSelect::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igModelViewMatrixBoneSelectListSg_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igModelViewMatrixBoneSelectListSg_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igModelViewMatrixBoneSelectList",
-        0x14, /* instance size */
-        igModelViewMatrixBoneSelectListSg_GetVTable,
+        sizeof(igModelViewMatrixBoneSelectList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igModelViewMatrixBoneSelectListSg_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igModelViewMatrixBoneSelectListSg_GetMetaObjectFunction(void) {
-    igModelViewMatrixBoneSelectListSg_GetMetaObject();
+}
 }
 

@@ -4,14 +4,14 @@ namespace Sg {
 bool igSwitch::insertChild(int index, igNode *child)
 {
     bool inserted = igGroup::insertChild(index, child);
-    igBitMask_SetBitCount(_childMask, getChildCount());
+    _childMask->setBitCount(getChildCount());
     return inserted;
 }
 
 igNode *igSwitch::removeChild(int index)
 {
     igNode *removed = igGroup::removeChild(index).p;
-    igBitMask_SetBitCount(_childMask, getChildCount());
+    _childMask->setBitCount(getChildCount());
     return removed;
 }
 }

@@ -637,44 +637,28 @@ namespace Sg {
 
 void igSwitch::activateChild(unsigned int index)
 {
-    /* igBitMask's inline bit setter, open-coded (the class is still flat): the word is read before its index is checked */
-    ::igBitMask *mask = _childMask;
-    unsigned int word = index >> 5;
-    int *slot = (int *)(mask->_data + word * 4);
-    int count = mask->_count;
-    int value = (1 << (index & 0x1F)) | *slot;
-    if (count != 0 && (int)word >= 0 && (int)word < count) {
-        *slot = value;
-    }
+    _childMask->setBit(index);
 }
 
 void igSwitch::activateAllChildren()
 {
-    igBitMask_SetAll(_childMask);
+    _childMask->setAll();
 }
 
 void igSwitch::deactivateChild(unsigned int index)
 {
-    /* igBitMask's inline bit clearer, open-coded (the class is still flat) */
-    ::igBitMask *mask = _childMask;
-    unsigned int word = index >> 5;
-    int *slot = (int *)(mask->_data + word * 4);
-    int count = mask->_count;
-    int value = ~(1 << (index & 0x1F)) & *slot;
-    if (count != 0 && (int)word >= 0 && (int)word < count) {
-        *slot = value;
-    }
+    _childMask->clearBit(index);
 }
 
 void igSwitch::deactivateAllChildren()
 {
-    igBitMask_ClearAll(_childMask);
+    _childMask->clearAll();
 }
 
 int igSwitch::appendChild(igNode *child)
 {
     int index = igGroup::appendChild(child);
-    igBitMask_SetBitCount(_childMask, getChildCount());
+    _childMask->setBitCount(getChildCount());
     return index;
 }
 }

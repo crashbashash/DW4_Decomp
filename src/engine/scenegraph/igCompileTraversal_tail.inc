@@ -95,11 +95,11 @@ void igCompileTraversal::_registerClass(igTraversalFunctionList *arg0, igMetaObj
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bd0e0);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igModelViewMatrixBoneSelect_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igModelViewMatrixBoneSelect::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseModelViewMatrixBoneSelect);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igBlendMatrixSelect_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igBlendMatrixSelect::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseBlendMatrixSelect);
         return;
     }
@@ -628,7 +628,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
     for (i = 0; i < count; i++) {
         RemapObject *item = o->_items->_data[i];
         if (((Gap::Core::igObject *)item)->isOfType(g_igVertexBlendMatrixListAttr_metaObject) != 0) {
-            RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)((Gap::Core::igObject *)ctx)->getMemoryPool()))));
+            RemapEntry *e = ((RemapEntry *)Gap::Sg::igBlendListRecord::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)ctx)->getMemoryPool()));
             RemapTable *t;
             unsigned int n;
             int j;
@@ -649,7 +649,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
                 t->_data[(unsigned int)j] = r;
             }
         } else if (((Gap::Core::igObject *)item)->isOfType(Gap::Attrs::igBlendMatrixPaletteAttr::getClassMeta()) != 0) {
-            RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)((Gap::Core::igObject *)ctx)->getMemoryPool()))));
+            RemapEntry *e = ((RemapEntry *)Gap::Sg::igBlendListRecord::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)ctx)->getMemoryPool()));
             ((Gap::Core::igObjectList *)o->_entries)->append((Gap::Core::igObject *)e);
             releaseRefCounted(e);
             setTarget(e, item);

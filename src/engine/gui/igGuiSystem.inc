@@ -107,15 +107,15 @@ void igGuiSystem_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystem_Register);
 }
 
-static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, igGuiSystemModel_RunStaticInit, Gap::Gui::igViewList::arkRegister, Gap::Sg::igAttrSet::arkRegister, igMouseCursor_RunStaticInit, Gap::Sg::igTransform::arkRegister, 0 };
+static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, Gap::Gui::igGuiSystemModel::arkRegister, Gap::Gui::igViewList::arkRegister, Gap::Sg::igAttrSet::arkRegister, Gap::Gui::igMouseCursor::arkRegister, Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *igGuiSystem_Register(void) {
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiSystem_metaObject,
-        igEventReceiver_Register,
-        igEventReceiver_GetPublishedMetaObject,
+        Gap::Gui::igEventReceiver::arkRegisterInternal,
+        Gap::Gui::igEventReceiver::getClassMeta,
         thunk_igGuiSystem_GetMetaObject,
         "igGuiSystem",
         0x24, /* instance size */
@@ -184,7 +184,7 @@ void igGuiSystem_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igGuiSystemRenderer_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igGuiSystemModel_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Gui::igGuiSystemModel::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Gui::igViewList::getClassTypeLazy();
@@ -193,7 +193,7 @@ void igGuiSystem_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)(Gap::Sg::igAttrSet::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igMouseCursor_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)Gap::Gui::igMouseCursor::getClassTypeLazy();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(Gap::Sg::igTransform::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;

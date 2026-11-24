@@ -67,7 +67,7 @@ int igGuiSystem_MouseMotionEvent(A_457100 *arg0, float fparg0, float fparg1) {
     }
     temp_v1->f14 = fparg0;
     temp_v1->f18 = fparg1;
-    igNotifyEvent s((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
+    igNotifyEvent s((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePosition);
     ((Gap::Gui::igModel *)arg0->fc)->notifyAllViews(s);
     return arg0->fc->fb0 != 0;
 }
@@ -76,7 +76,7 @@ int igGuiSystem_WindowResizeEvent(int *self, int x, int y) {
     float *f = (float *)self[3];
     f[3] = (float)x;
     f[4] = (float)y;
-    igNotifyEvent p((Gap::Core::igMetaField *)g_igGuiSystemModel_windowSizeMetaField);
+    igNotifyEvent p((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_windowSize);
     ((Gap::Gui::igModel *)((void *)self[3]))->notifyAllViews(p);
     return 0;
 }
@@ -84,7 +84,7 @@ int igGuiSystem_WindowResizeEvent(int *self, int x, int y) {
 int igGuiSystem_WindowCloseEvent(igGuiSystem *arg0) {
 
     *(char *)((char *)(arg0->_model) + 180) = 1;
-    igNotifyEvent buf((Gap::Core::igMetaField *)g_igGuiSystemModel_windowCloseRequestedMetaField);
+    igNotifyEvent buf((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_windowCloseRequested);
     ((Gap::Gui::igModel *)arg0->_model)->notifyAllViews(buf);
     return 1;
 }
@@ -100,7 +100,7 @@ int igGuiSystem_MouseButtonEvent(struct P_457220 *arg0, int arg1, char arg2) {
         return 0;
     }
     o->f1c = arg2;
-    igNotifyEvent sp((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePressedMetaField);
+    igNotifyEvent sp((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePressed);
     ((Gap::Gui::igModel *)arg0->o)->notifyAllViews(sp);
     return arg0->o->fac != 0;
 }
@@ -163,44 +163,40 @@ int igGuiSystem_ControllerMotionEvent(void) {
     return 0;
 }
 
-void igHotKeyEventReceiver_AddKey(igHotKeyEventReceiver *receiver, int key, igObject *action) {
-    igHotKeyEventReceiver_AddBinding(receiver, key, 32, action);
+namespace Gap {
+namespace Gui {
+
+void igHotKeyEventReceiver::appendHotKey(Display::igKey::KEY_VALUES key, igAction *action)
+{
+    appendHotKey(key, Display::igController::MAX_BUTTONS, action);
 }
 
-void igHotKeyEventReceiver_AddButton(igHotKeyEventReceiver *receiver, int button, igObject *action) {
-    igHotKeyEventReceiver_AddBinding(receiver, 0, button, action);
+void igHotKeyEventReceiver::appendHotKey(Display::igController::BUTTONS button, igAction *action)
+{
+    appendHotKey(Display::igKey::UNKNOWN, button, action);
 }
 
-void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, int button, igObject *action) {
-    igSmartPointer<Gap::Gui::igHotKeyBinding> binding(Gap::Gui::igHotKeyBinding::_instantiateFromPool(((Gap::Core::igObject *)receiver)->getMemoryPool()));
+void igHotKeyEventReceiver::appendHotKey(Display::igKey::KEY_VALUES key, Display::igController::BUTTONS button, igAction *action)
+{
+    igSmartPointer<igHotKeyBinding> binding(igHotKeyBinding::_instantiateFromPool(getMemoryPool()));
     binding->_key = key;
     binding->_button = button;
-    binding->_action = (Gap::Gui::igAction *)action;
-    ((Gap::Core::igObjectList *)receiver->_hotKeyList)->append((Gap::Core::igObject *)(binding.get()));
+    binding->_action = action;
+    _hotKeyList->append(binding);
 }
 
-void igHotKeyEventReceiver_RemoveBinding(igHotKeyEventReceiver *receiver, int button) {
-    E_4574f0 *temp_a0;
-    int var_s1;
-    LST *temp_s0;
-
-    for (var_s1 = ((LST *)receiver->_hotKeyList)->f8 - 1; var_s1 >= 0; var_s1 -= 1) {
-        temp_s0 = (LST *)receiver->_hotKeyList;
-        temp_a0 = temp_s0->f16[var_s1];
-        if (temp_a0->f12 == button) {
-            if (temp_a0->f8 == 0) {
-                if (temp_a0 != 0) {
-                    temp_a0->f4 = temp_a0->f4 - 1;
-                    if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy((igObject *)temp_a0);
-                    }
-                }
-                List_RemoveWordAt((igDataList *)temp_s0, var_s1);
-                temp_s0->f16[temp_s0->f8] = 0;
-            } else {
-                temp_a0->f12 = 0x20;
-            }
+void igHotKeyEventReceiver::removeHotKey(Display::igController::BUTTONS button)
+{
+    for (int i = _hotKeyList->getCount() - 1; i >= 0; i--) {
+        igHotKeyBinding *binding = _hotKeyList->get(i);
+        if (binding->_button == button) {
+            if (binding->_key == Display::igKey::UNKNOWN)
+                _hotKeyList->remove(i);
+            else
+                binding->_button = Display::igController::MAX_BUTTONS;
         }
     }
+}
+}
 }
 

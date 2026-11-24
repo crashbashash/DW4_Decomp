@@ -1,95 +1,68 @@
-igMetaObject *g_igEnbayaTransformSource_metaObject;
-igMetaField *g_igEnbayaTransformSource_trackIdMetaField;
-igMetaField *g_igEnbayaTransformSource_enbayaAnimationSourceMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igEnbayaTransformSource_GetMetaObject(void)
+igMetaObject *igEnbayaTransformSource::_Meta;
+igMetaField *igEnbayaTransformSource::k_trackId;
+igMetaField *igEnbayaTransformSource::k_enbayaAnimationSource;
+
+igMetaObject *igEnbayaTransformSource::getClassTypeSafe()
 {
-    igMetaObject *g = g_igEnbayaTransformSource_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igEnbayaTransformSource_EnsureRegistered();
-    return g_igEnbayaTransformSource_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igEnbayaTransformSource_GetVTable(void) {
-    Obj_1a1900 o;
-    int **ps;
-    int *temp_a0;
-    int temp_s0;
-
-    igObject_InitHeader((igObject *)&o);
-    ps = &o.ref;
-    o.vt = &g_igEnbayaTransformSource_vtable[0];
-    *ps = 0;
-    temp_s0 = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igEnbayaTransformSource_vtable[0];
-    if (ps != 0) {
-        temp_a0 = *ps;
-        if (temp_a0 != 0) {
-            temp_a0[1] = temp_a0[1] - 1;
-            if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igEnbayaTransformSource_EnsureRegistered(void)
+void *igEnbayaTransformSource::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igEnbayaTransformSource_Register);
+    igEnbayaTransformSource temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igEnbayaTransformSource_callbackList[] = { igEnbayaAnimationSource_EnsureRegistered, 0 };
+void igEnbayaTransformSource::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igEnbayaTransformSource_Register(void) {
+CallbackArray *igEnbayaTransformSource::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igEnbayaAnimationSource::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igEnbayaTransformSource_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igTransformSource::arkRegisterInternal,
         Gap::Sg::igTransformSource::getClassMeta,
-        igEnbayaTransformSource_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igEnbayaTransformSource",
-        sizeof(igEnbayaTransformSource),                   /* Instance size. */
-        igEnbayaTransformSource_GetVTable,
-        &igEnbayaTransformSource_InitFields,
-        0, /* extra callback item */
-        g_igEnbayaTransformSource_callbackList /* callback list */
+        sizeof(igEnbayaTransformSource),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igEnbayaTransformSource_GetMetaObjectFunction(void) {
-    igEnbayaTransformSource_GetMetaObject();
+void igEnbayaTransformSource::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_trackId", "_enbayaAnimationSource" };
+    static igMetaField **enumStorage[] = { &k_trackId, &k_enbayaAnimationSource };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Sg::igEnbayaAnimationSource::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igEnbayaTransformSource_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igEnbayaTransformSource_fieldTable[] = {
-    "_trackId",
-    "_enbayaAnimationSource",
-};
-static igMetaField **g_igEnbayaTransformSource_fieldHandles[] = {
-    &g_igEnbayaTransformSource_trackIdMetaField,
-    &g_igEnbayaTransformSource_enbayaAnimationSourceMetaField,
-};
-static int g_igEnbayaTransformSource_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void igEnbayaTransformSource_InitFields(void) {
-    int base;
-    void *enbayaAnimationSourceField;
-    void *meta;
-
-    meta = (void *)g_igEnbayaTransformSource_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igEnbayaTransformSource_ctorTable, 2);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
-    enbayaAnimationSourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)enbayaAnimationSourceField)->_metaObject = (int)igEnbayaAnimationSource_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)meta, g_igEnbayaTransformSource_fieldTable, g_igEnbayaTransformSource_fieldHandles, g_igEnbayaTransformSource_fieldOffsets, base);
+}
 }
 

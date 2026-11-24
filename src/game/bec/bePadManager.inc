@@ -74,8 +74,8 @@ CallbackArray *bePadManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_bePadManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         bePadManager_GetMetaObjectFunction,
         "bePadManager",
         0x20, /* instance size */

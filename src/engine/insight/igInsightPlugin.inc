@@ -1,36 +1,37 @@
-igMetaObject *g_igInsightPlugin_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igInsightPlugin_GetMetaObject(void)
+igMetaObject *igInsightPlugin::_Meta;
+
+igMetaObject *igInsightPlugin::getClassTypeSafe()
 {
-    igMetaObject *g = g_igInsightPlugin_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igInsightPlugin_EnsureRegistered();
-    return g_igInsightPlugin_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igInsightPlugin_EnsureRegistered(void)
+void igInsightPlugin::arkRegister()
 {
-    igMetaObject_RunStaticInit(igInsightPlugin_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *igInsightPlugin_Register(void) {
+CallbackArray *igInsightPlugin::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igInsightPlugin_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igInsightPlugin_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igInsightPlugin",
-        8, /* instance size */
+        sizeof(igInsightPlugin),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igInsightPlugin_GetMetaObjectFunction(void) {
-    igInsightPlugin_GetMetaObject();
+}
 }
 

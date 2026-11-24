@@ -1,15 +1,3 @@
-igMetaObject *igSerialScheduler_GetMeta(void) {
-    return g_igSerialScheduler_metaObject;
-}
-
-igMetaObject *igFilterMessageDispatcher_GetMeta(void) {
-    return g_igFilterMessageDispatcher_metaObject;
-}
-
-igMetaObject *igMessageDefaultReceiver_GetMeta(void) {
-    return g_igMessageDefaultReceiver_metaObject;
-}
-
 igMetaObject *igInsightCore_GetMeta(void) {
     return g_igInsightCore_metaObject;
 }
@@ -72,68 +60,13 @@ int igEventReceiver_WindowCloseEvent(void) {
     return 0;
 }
 
-igMetaObject *igInfoManagerList_GetMeta(void) {
-    return g_igInfoManagerList_metaObject;
-}
-
-igMetaObject *igInfoManagerOrderedList_GetMeta(void) {
-    return g_igInfoManagerOrderedList_metaObject;
-}
-
-int igDependencyOrderedList_GetMeta(void) {
-    return (int)g_igDependencyOrderedList_metaObject;
-}
-
-igMetaObject *igViewportResizedMessage_GetMeta(void) {
-    return g_igViewportResizedMessage_metaObject;
-}
-
+/* Retail's out-of-line copy of igEventReceiver's inline getMeta. */
 igMetaObject *igEventReceiver_GetMeta(void) {
-    return g_igEventReceiver_metaObject;
+    return Gap::Gui::igEventReceiver::getClassMeta();
 }
 
 /* Slot 30, empty override returning 0. */
 int igEventReceiver_WindowResizeEvent(void) {
     return 0;
-}
-
-igMetaObject *igInsightPluginList_GetMeta(void) {
-    return g_igInsightPluginList_metaObject;
-}
-
-igMetaObject *igMessageFilter_GetMeta(void) {
-    return g_igMessageFilter_metaObject;
-}
-
-igMetaObject *igMessageFilterList_GetMeta(void) {
-    return g_igMessageFilterList_metaObject;
-}
-
-igMetaObject *igMessageReceiverList_GetMeta(void) {
-    return g_igMessageReceiverList_metaObject;
-}
-
-igMetaObject *igMessenger_GetMeta(void) {
-    return g_igMessenger_metaObject;
-}
-
-int igMessage_GetMeta(void) {
-    return (int)g_igMessage_metaObject;
-}
-
-igMetaObject *igInsightPluginList_GetElementMeta(void) {
-    return g_igInsightPlugin_metaObject;
-}
-
-igMetaObject *igMessageFilterList_GetElementMeta(void) {
-    return g_igMessageFilter_metaObject;
-}
-
-igMetaObject *igInfoManagerList_GetElementMeta(void) {
-    return g_igInfoManager_metaObject;
-}
-
-igMetaObject *igMessageReceiverList_GetElementMeta(void) {
-    return g_igMessageReceiver_metaObject;
 }
 

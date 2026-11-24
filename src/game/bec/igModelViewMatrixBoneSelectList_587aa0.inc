@@ -16,7 +16,7 @@ void igModelViewMatrixBoneSelectListBec_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igModelViewMatrixBoneSelectListBec_Register);
 }
 
-static igMetaObjectCallback g_igModelViewMatrixBoneSelectListBec_callbackList[] = { igModelViewMatrixBoneSelect_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igModelViewMatrixBoneSelectListBec_callbackList[] = { Gap::Sg::igModelViewMatrixBoneSelect::arkRegister, 0 };
 
 CallbackArray *igModelViewMatrixBoneSelectListBec_Register(void) {
     BecLibrary_MarkRegistered();

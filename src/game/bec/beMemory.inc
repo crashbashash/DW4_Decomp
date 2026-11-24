@@ -48,8 +48,8 @@ CallbackArray *beMemory_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beMemory_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beMemory_GetMetaObjectFunction,
         "beMemory",
         0x24, /* instance size */

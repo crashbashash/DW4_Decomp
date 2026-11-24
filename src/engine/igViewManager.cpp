@@ -238,21 +238,15 @@ void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVecto
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(event);
 }
 
-/* Bounds at one time instead of over the whole animation. */
-static inline void setMakerTime(igBoundingBoxesMaker *maker, long long time) {
-    maker->_useWholeAnimation = 0;
-    maker->_time = time;
-}
-
 /* The centre of `scene`'s bounding box and the length of its diagonal, over the whole animation or at `time`. */
 void igViewManager_GetObjectProps(igNode *scene, float *center, float *size, bool wholeAnimation, long long time) {
-    igSmartPointer<igBoundingBoxesMaker> maker(igBoundingBoxesMaker_Create(0), AdoptReference());
+    igSmartPointer<Gap::Sg::igBoundingBoxesMaker> maker(Gap::Sg::igBoundingBoxesMaker::_instantiateFromPool(0), AdoptReference());
     if (wholeAnimation) {
-        maker->_useWholeAnimation = 1;
+        maker->setUseWholeAnimation();
     } else {
-        setMakerTime(maker, time);
+        maker->setTime(time);
     }
-    igSmartPointer<igAABox> box(igBoundingBoxesMaker_ComputeBox(maker, scene), kRetainReference);
+    igSmartPointer<igAABox> box(igBoundingBoxesMaker_ComputeBox((igBoundingBoxesMaker *)maker.p, scene), kRetainReference);
     dropCreatedReference(box);
     const igAABox *bounds = box;
     float minX = bounds->_min[0];

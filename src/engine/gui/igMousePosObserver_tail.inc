@@ -38,20 +38,20 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
     int type;
     model = (igGuiSystemModel *)self->_model;
     type = msg->type;
-    if (type == (int)g_igGuiSystemModel_mousePositionMetaField) {
+    if (type == (int)Gap::Gui::igGuiSystemModel::k_mousePosition) {
         igVec3f v(model->_mousePosition[0], model->_mousePosition[1], 0.0f);
         igVec3f p;
         Vec3f_TransformProjective((float *)&v, (const float *)&v, self->_inverseProjectionMatrix);
         p = v;
         FUN_00456b80((int *)self->_guiSystem, &p.vec[0]);
         FUN_00456050(self, model);
-    } else if (type == (int)g_igGuiSystemModel_projectionMatrixMetaField) {
+    } else if (type == (int)Gap::Gui::igGuiSystemModel::k_projectionMatrix) {
         igMatrix44f_Invert(self->_inverseProjectionMatrix, model->_projectionMatrix);
-    } else if (type == (int)g_igGuiSystemModel_mousePressedMetaField) {
+    } else if (type == (int)Gap::Gui::igGuiSystemModel::k_mousePressed) {
         igObject *under;
         under = (igObject *)model->_componentUnderMouse;
         if ((igObject *)model->_focusedComponent != under) {
-            FUN_00456c20(model, (igGuiComponent *)under);
+            ((Gap::Gui::igGuiSystemModel *)model)->setFocusedComponent((igGuiComponent *)under);
         }
         if (model->_mousePressed) {
             igObject::ref(under);
@@ -61,7 +61,7 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
             igObject::release((igObject *)model->_pushedComponent);
             model->_pushedComponent = 0;
         }
-        igNotifyEvent m((Gap::Core::igMetaField *)g_igGuiSystemModel_pushedComponentMetaField);
+        igNotifyEvent m((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_pushedComponent);
         ((Gap::Gui::igModel *)model)->notifyAllViews(m);
     } else if (msg->handled == 0) {
         igMatrix44f_Invert(self->_inverseProjectionMatrix, model->_projectionMatrix);
@@ -120,7 +120,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
         igObject::release(t);
     }
     b->_componentUnderMouse = (int)s0;
-    igNotifyEvent sp((Gap::Core::igMetaField *)g_igGuiSystemModel_componentUnderMouseMetaField, (Gap::Gui::igView *)(int)a);
+    igNotifyEvent sp((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_componentUnderMouse, (Gap::Gui::igView *)(int)a);
     ((Gap::Gui::igModel *)b)->notifyAllViews(sp);
 }
 

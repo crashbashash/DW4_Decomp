@@ -7,7 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igMetaObject *igViewportResizedMessage_GetMetaObject(void);
 
 #ifdef __cplusplus
 }

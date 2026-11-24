@@ -1,47 +1,49 @@
-igMetaObject *g_igInsightScheduler_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igInsightScheduler_GetOrCreateMetaObject(void) {
-    if (g_igInsightScheduler_metaObject == 0) {
-        g_igInsightScheduler_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igInsightScheduler_metaObject;
-}
+igMetaObject *igInsightScheduler::_Meta;
 
-igMetaObject *igInsightScheduler_GetMetaObject(void)
+igMetaObject *igInsightScheduler::getClassTypeLazy()
 {
-    igMetaObject *g = g_igInsightScheduler_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igInsightScheduler_EnsureRegistered();
-    return g_igInsightScheduler_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igInsightScheduler_EnsureRegistered(void)
+igMetaObject *igInsightScheduler::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igInsightScheduler_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igInsightScheduler_Register(void) {
+void igInsightScheduler::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igInsightScheduler::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igInsightScheduler_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igInsightScheduler_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igInsightScheduler",
-        8, /* instance size */
+        sizeof(igInsightScheduler),
         0,
-        igInsightScheduler_SetAbstractProxy_002325a0, /* post-init hook */
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igInsightScheduler_GetMetaObjectFunction(void) {
-    igInsightScheduler_GetMetaObject();
+void igInsightScheduler::arkRegisterInitialize()
+{
+    _Meta->_abstractProxy = (int)&Gap::Insight::igSerialScheduler::getClassMetaSafe;
 }
-
-void igInsightScheduler_SetAbstractProxy(void) {
-    *(int *)((char *)(g_igInsightScheduler_metaObject) + 60) = (int)(&igSerialScheduler_GetMetaObjectFunction);
+}
 }
 

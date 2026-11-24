@@ -76,8 +76,8 @@ CallbackArray *igActorManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igActorManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         igActorManager_GetMetaObjectFunction,
         "igActorManager",
         0x38, /* instance size */

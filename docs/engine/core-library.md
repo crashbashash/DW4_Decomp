@@ -193,7 +193,7 @@ warnings and errors (to `g_reportOutputFile` when set); `igErrorHandler` is the 
     `igDriverDatabase_GetSubPropertyValue`. The frame (160 bytes, six 4-byte holder slots) is reproduced by a
     draft with the two list holders and four string references declared in that order. Each new list is put into
     its table slot as retain, release of the old element, then a store guarded by `count != 0 && index >= 0 &&
-    index < count`, the order of the `setRetained` inline in `igSerialScheduler_tail.inc`; with that order a
+    index < count`, the order of igObjectList's `set` inline (as `igSerialScheduler::update` uses it); with that order a
     draft is 1444 bytes against 1448. Retail keeps the name in `s4`, the value in `s3` and the property in `s1`
     (its scaled index in `s0`); a draft with the parameters in that order gets `s4`, `s3`, `s2` for property,
     name, value. The allocator's graph-edit search ([register allocation](register-allocation.md)) finds no

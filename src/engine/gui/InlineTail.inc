@@ -15,10 +15,6 @@ int igTextElement_GetMeta(void) {
     return (int)g_igTextElement_metaObject;
 }
 
-igMetaObject *igHotKeyEventReceiver_GetMeta(void) {
-    return g_igHotKeyEventReceiver_metaObject;
-}
-
 igMetaObject *igGuiSystem_GetMeta(void) {
     return g_igGuiSystem_metaObject;
 }
@@ -32,7 +28,7 @@ igMetaObject *igActiveComponentsObserver_GetMeta(void) {
 }
 
 void igActiveComponentsObserver_IsCompatible(void *arg0, int arg1) {
-    ((Gap::Core::igObject *)arg1)->isOfType(igGuiSystemModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(Gap::Gui::igGuiSystemModel::getClassTypeSafe());
 }
 
 igMetaObject *igMousePosObserver_GetMeta(void) {
@@ -40,7 +36,7 @@ igMetaObject *igMousePosObserver_GetMeta(void) {
 }
 
 void igMousePosObserver_IsCompatible(void *arg0, int arg1) {
-    ((Gap::Core::igObject *)arg1)->isOfType(igGuiSystemModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(Gap::Gui::igGuiSystemModel::getClassTypeSafe());
 }
 
 igMetaObject *igWindowSizeObserver_GetMeta(void) {
@@ -48,11 +44,7 @@ igMetaObject *igWindowSizeObserver_GetMeta(void) {
 }
 
 void igWindowSizeObserver_IsCompatible(void *arg0, int arg1) {
-    ((Gap::Core::igObject *)arg1)->isOfType(igGuiSystemModel_GetMetaObject());
-}
-
-igMetaObject *igGuiSystemModel_GetMeta(void) {
-    return g_igGuiSystemModel_metaObject;
+    ((Gap::Core::igObject *)arg1)->isOfType(Gap::Gui::igGuiSystemModel::getClassTypeSafe());
 }
 
 igMetaObject *igGuiComponentNode_GetMeta(void) {
@@ -119,24 +111,12 @@ igMetaObject *igDefaultAspectElementList_GetMeta(void) {
     return g_igDefaultAspectElementList_metaObject;
 }
 
-igMetaObject *igEventReceiverOrderedList_GetMeta(void) {
-    return g_igEventReceiverOrderedList_metaObject;
-}
-
 igMetaObject *igGuiComponentList_GetMeta(void) {
     return g_igGuiComponentList_metaObject;
 }
 
-igMetaObject *igMouseCursor_GetMeta(void) {
-    return g_igMouseCursor_metaObject;
-}
-
-igMetaObject *igRendererOrderedList_GetMeta(void) {
-    return g_igRendererOrderedList_metaObject;
-}
-
 int FUN_00458310(void) {
-    return (int)g_igGeometryElement_metaObject;
+    return (int)Gap::Gui::igGeometryElement::getClassMeta();
 }
 
 /* Element size in bytes of the list's items: 0x28 (one igCharMetrics record). The same class's

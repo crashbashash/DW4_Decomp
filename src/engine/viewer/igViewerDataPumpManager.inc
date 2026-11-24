@@ -70,8 +70,8 @@ CallbackArray *igViewerDataPumpManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerDataPumpManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         igViewerDataPumpManager_GetMetaObjectFunction,
         "igViewerDataPumpManager",
         0x14, /* instance size */

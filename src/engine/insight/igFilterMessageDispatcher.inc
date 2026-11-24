@@ -1,100 +1,70 @@
-igMetaObject *g_igFilterMessageDispatcher_metaObject;
-igMetaField *g_igFilterMessageDispatcher_defaultFiltersMetaField;
-igMetaField *g_igFilterMessageDispatcher_filtersMetaField;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igFilterMessageDispatcher_GetMetaObject(void)
+igMetaObject *igFilterMessageDispatcher::_Meta;
+igMetaField *igFilterMessageDispatcher::k_defaultFilters;
+igMetaField *igFilterMessageDispatcher::k_filters;
+
+igMetaObject *igFilterMessageDispatcher::getClassTypeSafe()
 {
-    igMetaObject *g = g_igFilterMessageDispatcher_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igFilterMessageDispatcher_EnsureRegistered();
-    return g_igFilterMessageDispatcher_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igFilterMessageDispatcher_GetVTable(void) {
-    igFilterMessageDispatcher obj;
-    igObject *o;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
-    obj._defaultFilters = 0;
-    obj._filters = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
-    if (&obj._filters != 0) {
-        o = (igObject *)obj._filters;
-        igObject::release(o);
-    }
-    if (&obj._defaultFilters != 0) {
-        o = (igObject *)obj._defaultFilters;
-        igObject::release(o);
-    }
-    return t;
-}
-
-void igFilterMessageDispatcher_EnsureRegistered(void)
+void *igFilterMessageDispatcher::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igFilterMessageDispatcher_Register);
+    igFilterMessageDispatcher temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igFilterMessageDispatcher_callbackList[] = { igMessageFilterList_EnsureRegistered, 0 };
+void igFilterMessageDispatcher::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igFilterMessageDispatcher_Register(void) {
+CallbackArray *igFilterMessageDispatcher::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Insight::igMessageFilterList::arkRegister, 0 };
+
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igFilterMessageDispatcher_metaObject,
-        igMessageDispatcher_Register,
-        igMessageDispatcher_GetPublishedMetaObject,
-        igFilterMessageDispatcher_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Insight::igMessageDispatcher::arkRegisterInternal,
+        Gap::Insight::igMessageDispatcher::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFilterMessageDispatcher",
-        0x10, /* instance size */
-        igFilterMessageDispatcher_GetVTable,
-        &igFilterMessageDispatcher_InitFields,
-        0, /* extra callback item */
-        g_igFilterMessageDispatcher_callbackList /* callback list */
+        sizeof(igFilterMessageDispatcher),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igFilterMessageDispatcher_GetMetaObjectFunction(void) {
-    igFilterMessageDispatcher_GetMetaObject();
+void igFilterMessageDispatcher::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_defaultFilters", "_filters" };
+    static igMetaField **enumStorage[] = { &k_defaultFilters, &k_filters };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Insight::igMessageFilterList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Insight::igMessageFilterList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-igMetaObject *igMessageDispatcher_GetPublishedMetaObject(void) {
-    return g_igMessageDispatcher_metaObject;
 }
-
-static FieldFactory g_igFilterMessageDispatcher_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_igFilterMessageDispatcher_fieldTable[] = {
-    "_defaultFilters",
-    "_filters",
-};
-static igMetaField **g_igFilterMessageDispatcher_fieldHandles[] = {
-    &g_igFilterMessageDispatcher_defaultFiltersMetaField,
-    &g_igFilterMessageDispatcher_filtersMetaField,
-};
-static int g_igFilterMessageDispatcher_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void igFilterMessageDispatcher_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
-
-    temp_s0 = g_igFilterMessageDispatcher_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igFilterMessageDispatcher_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMessageFilterList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMessageFilterList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFilterMessageDispatcher_fieldTable, g_igFilterMessageDispatcher_fieldHandles, g_igFilterMessageDispatcher_fieldOffsets, temp_s2);
 }
 

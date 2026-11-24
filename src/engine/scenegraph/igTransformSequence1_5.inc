@@ -38,7 +38,7 @@ void igTransformSequence1_5::arkRegister()
 
 CallbackArray *igTransformSequence1_5::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Core::igLongList::arkRegister, igVec3fList_EnsureRegistered, igCompressedTransformSequence1_5Data_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igLongList::arkRegister, igVec3fList_EnsureRegistered, Gap::Sg::igCompressedTransformSequence1_5Data::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(

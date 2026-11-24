@@ -654,8 +654,8 @@ CallbackArray *libBecRuntimePlugin_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_libBecRuntimePlugin_metaObject,
-        igInsightPlugin_Register,
-        igInsightPlugin_GetPublishedMetaObject,
+        Gap::Insight::igInsightPlugin::arkRegisterInternal,
+        Gap::Insight::igInsightPlugin::getClassMeta,
         libBecRuntimePlugin_GetMetaObjectFunction,
         "libBecRuntimePlugin",
         0xa4, /* instance size */

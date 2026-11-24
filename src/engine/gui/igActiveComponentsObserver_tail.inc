@@ -8,7 +8,7 @@ void igActiveComponentsObserver_OnModelChange(igActiveComponentsObserver *self, 
     int type;
     type = msg->type;
     model = (igGuiSystemModel *)self->_model;
-    if (type == (int)g_igGuiSystemModel_componentUnderMouseMetaField) {
+    if (type == (int)Gap::Gui::igGuiSystemModel::k_componentUnderMouse) {
         igObject *under = (igObject *)model->_componentUnderMouse;
         if ((igObject *)self->_oldComponentUnderMouse != under) {
             if (self->_oldComponentUnderMouse != 0) {
@@ -19,10 +19,10 @@ void igActiveComponentsObserver_OnModelChange(igActiveComponentsObserver *self, 
             }
         }
         if (under != 0 && FUN_004555e0(under) != 0 && under != (igObject *)model->_focusedComponent) {
-            FUN_00456c20(model, (igGuiComponent *)under);
+            ((Gap::Gui::igGuiSystemModel *)model)->setFocusedComponent((igGuiComponent *)under);
         }
         setComponent_4561e0(&self->_oldComponentUnderMouse, under);
-    } else if (type == (int)g_igGuiSystemModel_focusedComponentMetaField) {
+    } else if (type == (int)Gap::Gui::igGuiSystemModel::k_focusedComponent) {
         igObject *focused = (igObject *)model->_focusedComponent;
         void *common = FUN_004565c0((int)self, focused);
         if (self->_oldFocusedComponent != 0) {
@@ -34,7 +34,7 @@ void igActiveComponentsObserver_OnModelChange(igActiveComponentsObserver *self, 
             FUN_00456540((int)self, (N *)focused, (N *)common, 1);
         }
         setComponent_4561e0(&self->_oldFocusedComponent, focused);
-    } else if (type == (int)g_igGuiSystemModel_pushedComponentMetaField) {
+    } else if (type == (int)Gap::Gui::igGuiSystemModel::k_pushedComponent) {
         igObject *pushed = (igObject *)model->_pushedComponent;
         if (self->_oldPushedComponent != 0) {
             FUN_00455610((int *)self->_oldPushedComponent, 0);

@@ -1,53 +1,52 @@
-igMetaObject *g_igMessageFilterList_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igMessageFilterList_GetOrCreateMetaObject(void) {
-    if (g_igMessageFilterList_metaObject == 0) {
-        g_igMessageFilterList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igMessageFilterList_metaObject;
-}
+igMetaObject *igMessageFilterList::_Meta;
 
-igMetaObject *igMessageFilterList_GetMetaObject(void)
+igMetaObject *igMessageFilterList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igMessageFilterList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMessageFilterList_EnsureRegistered();
-    return g_igMessageFilterList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igMessageFilterList_GetVTable(void) {
-    struct Obj_231a70 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igMessageFilterList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igMessageFilterList_EnsureRegistered(void)
+igMetaObject *igMessageFilterList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMessageFilterList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMessageFilterList_callbackList[] = { igMessageFilter_EnsureRegistered, 0 };
+void *igMessageFilterList::retrieveVTablePointer()
+{
+    igMessageFilterList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMessageFilterList_Register(void) {
+void igMessageFilterList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMessageFilterList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Insight::igMessageFilter::arkRegister, 0 };
+
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMessageFilterList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igMessageFilterList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMessageFilterList",
-        0x14, /* instance size */
-        igMessageFilterList_GetVTable,
+        sizeof(igMessageFilterList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igMessageFilterList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igMessageFilterList_GetMetaObjectFunction(void) {
-    igMessageFilterList_GetMetaObject();
+}
 }
 

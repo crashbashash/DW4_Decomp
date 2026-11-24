@@ -1,116 +1,83 @@
-igMetaObject *g_igDependencyOrderedList_metaObject;
-igMetaField *g_igDependencyOrderedList_objectListMetaField;
-igMetaField *g_igDependencyOrderedList_dependenciesMetaField;
-igMetaField *g_igDependencyOrderedList_orderMetaField;
-igMetaField *g_igDependencyOrderedList_checkPointsMetaField;
-igMetaField *g_igDependencyOrderedList_hasCircularDependenciesMetaField;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igDependencyOrderedList_GetMetaObject(void)
+igMetaObject *igDependencyOrderedList::_Meta;
+igMetaField *igDependencyOrderedList::k_objectList;
+igMetaField *igDependencyOrderedList::k_dependencies;
+igMetaField *igDependencyOrderedList::k_order;
+igMetaField *igDependencyOrderedList::k_checkPoints;
+igMetaField *igDependencyOrderedList::k_hasCircularDependencies;
+
+igMetaObject *igDependencyOrderedList::getClassTypeSafe()
 {
-    igMetaObject *g = g_igDependencyOrderedList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igDependencyOrderedList_EnsureRegistered();
-    return g_igDependencyOrderedList_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igDependencyOrderedList_GetVTable(void) {
-    igDependencyOrderedList list;
-    int t;
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igDependencyOrderedList_vtable[0];
-    list._objectList = 0;
-    list._dependencies = 0;
-    list._order = 0;
-    list._checkPoints = 0;
-    t = *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-    list._vtable = (int)&g_igDependencyOrderedList_vtable[0];
-    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&list._checkPoints, -1);
-    igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)&list._order, -1);
-    igSmartPointer_igDependencyList_Destruct((igSmartPointer<igObject> *)&list._dependencies, -1);
-    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&list._objectList, -1);
-    return t;
-}
-
-void igDependencyOrderedList_EnsureRegistered(void)
+void *igDependencyOrderedList::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igDependencyOrderedList_Register);
+    igDependencyOrderedList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igDependencyOrderedList_callbackList[] = { Gap::Core::igObjectList::arkRegister, Gap::Core::igDependencyList::arkRegister, Gap::Core::igPointerList::arkRegister, igStringRefList_EnsureRegistered, 0 };
+void igDependencyOrderedList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igDependencyOrderedList_Register(void) {
+CallbackArray *igDependencyOrderedList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igObjectList::arkRegister, Gap::Core::igDependencyList::arkRegister, Gap::Core::igPointerList::arkRegister, igStringRefList_EnsureRegistered, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igDependencyOrderedList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igDependencyOrderedList_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igDependencyOrderedList",
-        0x1C,
-        igDependencyOrderedList_GetVTable,
-        igDependencyOrderedList_InitFields,
+        sizeof(igDependencyOrderedList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igDependencyOrderedList_callbackList
+        regFunctions
     );
 }
 
-void igDependencyOrderedList_GetMetaObjectFunction(void) {
-    igDependencyOrderedList_GetMetaObject();
+void igDependencyOrderedList::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create };
+    static const char *names[] = { "_objectList", "_dependencies", "_order", "_checkPoints", "_hasCircularDependencies" };
+    static igMetaField **enumStorage[] = { &k_objectList, &k_dependencies, &k_order, &k_checkPoints, &k_hasCircularDependencies };
+    static int offsets[] = { 8, 12, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Core::igDependencyList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igDependencyOrderedList_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igDependencyOrderedList_fieldTable[] = {
-    "_objectList",
-    "_dependencies",
-    "_order",
-    "_checkPoints",
-    "_hasCircularDependencies",
-};
-static igMetaField **g_igDependencyOrderedList_fieldDescriptors[] = {
-    &g_igDependencyOrderedList_objectListMetaField,
-    &g_igDependencyOrderedList_dependenciesMetaField,
-    &g_igDependencyOrderedList_orderMetaField,
-    &g_igDependencyOrderedList_checkPointsMetaField,
-    &g_igDependencyOrderedList_hasCircularDependenciesMetaField,
-};
-static int g_igDependencyOrderedList_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-};
-
-void igDependencyOrderedList_InitFields(void) {
-    int base;
-    void *objectListField;
-    void *dependenciesField;
-    void *orderField;
-    void *checkPointsField;
-    void *meta;
-
-    meta = (void *)g_igDependencyOrderedList_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igDependencyOrderedList_ctorTable, 5);
-    objectListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)objectListField)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
-    ((igRefMetaField *)objectListField)->_construct = 1;
-    dependenciesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)dependenciesField)->_metaObject = (int)Gap::Core::igDependencyList::getClassTypeLazy();
-    ((igRefMetaField *)dependenciesField)->_construct = 1;
-    orderField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)orderField)->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
-    ((igRefMetaField *)orderField)->_construct = 1;
-    checkPointsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)checkPointsField)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
-    ((igRefMetaField *)checkPointsField)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igDependencyOrderedList_fieldTable, g_igDependencyOrderedList_fieldDescriptors, g_igDependencyOrderedList_fieldOffsets, base);
+}
 }
 

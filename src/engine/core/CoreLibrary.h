@@ -79,7 +79,6 @@ extern "C" {
 #include "dw4/support/softfloat.h"
 #include "dw4/p2/p2timer.h"
 #include "dw4/game/beFont.h"
-#include "dw4/gui/igRendererOrderedList.h"
 
 /* Assigning a smart pointer to an object-reference field: the field takes its own reference on the
  * new object and drops the one it held. */
@@ -441,10 +440,6 @@ extern "C" void igDriverDatabase_EnsureRegistered(void);
 extern "C" CallbackArray *igDriverDatabase_Register(void);
 extern "C" void igDriverDatabase_GetMetaObjectFunction(void);
 extern "C" void igDriverDatabase_InitFields(void);
-extern "C" int igDependencyOrderedList_GetVTable(void);
-extern "C" void igDependencyOrderedList_EnsureRegistered(void);
-extern "C" void igDependencyOrderedList_GetMetaObjectFunction(void);
-extern "C" void igDependencyOrderedList_InitFields(void);
 extern "C" int igDependencyMetaField_GetVTable(void);
 extern "C" CallbackArray *igDependencyMetaField_Register(void);
 extern "C" void igDependencyMetaField_GetMetaObjectFunction(void);
@@ -1293,7 +1288,6 @@ extern "C" int g_igErrorHandler_vtable[4];
 extern "C" igMetaObject *g_igDriverDatabase_metaObject;
 extern "C" igMetaObject *igDriverDatabase_GetMetaObject(void);
 extern "C" int g_igDriverDatabase_vtable[4];
-extern "C" igMetaObject *igDependencyOrderedList_GetMetaObject(void);
 extern "C" igMetaObject *g_igDependencyMetaField_metaObject;
 extern "C" igMetaObject *igDependencyMetaField_GetMetaObject(void);
 extern "C" int g_igDependencyMetaField_vtable[4];
@@ -1620,7 +1614,6 @@ struct igDependencyOrderedListView {
     int _checkPoints;
     unsigned char _hasCircularDependencies;
 };
-extern "C" void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner);
 class igDirEntryView : public igVirtualObject { public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10();
     virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18();

@@ -164,7 +164,6 @@ igMetaObject *igMovieManager_GetMeta(void);
 #include "dw4/movie/igMovieCodecList.h"
 #include "dw4/movie/igMovieInfoList.h"
 #include "dw4/audio/igAudioContext.h"
-#include "dw4/gui/igRendererOrderedList.h"
 #include "dw4/insight/igInsightCore.h"
 #include "dw4/scenegraph/igAttrSet.h"
 #include "dw4/scenegraph/igGeometry.h"
@@ -439,16 +438,16 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                     if (self->_rendererList == 0) {
                         allocator = MovieAllocator(self);
                         igObject::release((igObject *)self->_rendererList);
-                        self->_rendererList = (int)igRendererOrderedList_CreateInstance(allocator);
+                        self->_rendererList = (int)Gap::Gui::igRendererOrderedList::_instantiateFromPool((igMemoryPoolView *)allocator);
                     }
                     {
                         int n = ((igObjectListView *)((igRendererOrderedList *)((igInsightCore *)self->_insight)->_rendererList)->_objectList)->_count;
                         for (i = 0; i < n; i++) {
-                            igRendererOrderedList_Append((igDependencyOrderedList *)self->_rendererList,
-                                ((igObjectListView *)((igRendererOrderedList *)((igInsightCore *)self->_insight)->_rendererList)->_objectList)->_data[(unsigned)i] /* matching construct: unsigned index keeps the scale inside the loop */, 0);
+                            ((Gap::Core::igDependencyOrderedList *)self->_rendererList)->append((Gap::Core::igObject *)
+                                ((igObjectListView *)((igRendererOrderedList *)((igInsightCore *)self->_insight)->_rendererList)->_objectList)->_data[(unsigned)i] /* matching construct: unsigned index keeps the scale inside the loop */);
                         }
                     }
-                    igRendererOrderedList_Clear((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList);
+                    ((Gap::Core::igDependencyOrderedList *)(((igInsightCore *)self->_insight)->_rendererList))->removeAll();
                     igInsightCore_AddRenderer((igInsightCore *)self->_insight, (igObject *)self->_movieRenderer);
                     return 1;
                 }
@@ -524,17 +523,17 @@ int igMovieManager_StopMovie(igMovieManager *self, void *object) {
                 igObject::release((igObject *)self->_codecList);
                 self->_codecList = 0;
             }
-            igRendererOrderedList_Clear((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList);
+            ((Gap::Core::igDependencyOrderedList *)(((igInsightCore *)self->_insight)->_rendererList))->removeAll();
             {
                 igRendererOrderedList *saved = (igRendererOrderedList *)self->_rendererList;
                 int n = ((igObjectListView *)saved->_objectList)->_count;
                 int i;
                 for (i = 0; i < n; i++) {
-                    igRendererOrderedList_Append((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList,
-                                                 ((igObjectListView *)((igRendererOrderedList *)self->_rendererList)->_objectList)->_data[(unsigned)i], 0);
+                    ((Gap::Core::igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList)->append((Gap::Core::igObject *)
+                                                 ((igObjectListView *)((igRendererOrderedList *)self->_rendererList)->_objectList)->_data[(unsigned)i]);
                 }
             }
-            igRendererOrderedList_Clear((igDependencyOrderedList *)self->_rendererList);
+            ((Gap::Core::igDependencyOrderedList *)self->_rendererList)->removeAll();
             igObject::release((igObject *)self->_rendererList);
             self->_rendererList = 0;
             return 1;

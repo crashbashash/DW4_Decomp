@@ -35,8 +35,8 @@ CallbackArray *igWindowResizeEventReceiver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igWindowResizeEventReceiver_metaObject,
-        igEventReceiver_Register,
-        igEventReceiver_GetPublishedMetaObject,
+        Gap::Gui::igEventReceiver::arkRegisterInternal,
+        Gap::Gui::igEventReceiver::getClassMeta,
         igWindowResizeEventReceiver_GetMetaObjectFunction,
         "igWindowResizeEventReceiver",
         0xC, /* instance size */
@@ -49,10 +49,6 @@ CallbackArray *igWindowResizeEventReceiver_Register(void) {
 
 void igWindowResizeEventReceiver_GetMetaObjectFunction(void) {
     igWindowResizeEventReceiver_GetMetaObject();
-}
-
-igMetaObject *igEventReceiver_GetPublishedMetaObject(void) {
-    return g_igEventReceiver_metaObject;
 }
 
 static FieldFactory g_igWindowResizeEventReceiver_ctorTable[] = {

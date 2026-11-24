@@ -134,7 +134,6 @@ igSmartPointer<igObject> *igSmartPointer_igBoolList_Destruct(igSmartPointer<igOb
 igSmartPointer<igObject> *igSmartPointer_igCharList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igCharMetricsList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igColorAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
-igSmartPointer<igObject> *igSmartPointer_igDependencyList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igDirectoryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igDirectory_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igFile_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
@@ -156,6 +155,7 @@ igSmartPointer<igObject> *igSmartPointer_igMetaFieldList_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_igMetaField_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igMetaObjectList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igMetaObject_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igModelViewMatrixBoneSelect_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igMovieManager_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igNamedObjectList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igNodeList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);

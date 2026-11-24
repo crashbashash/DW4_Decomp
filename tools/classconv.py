@@ -88,7 +88,7 @@ import memberize  # noqa: E402
 SYMBOLS = "config/SLUS-20836/symbols.txt"
 UNIT_OBJECTS = "config/SLUS-20836/unit-objects.json"
 # a library's source directories (the DataPump classes are igCore's in the kit and live in retail's own library file)
-LIBRARY_DIRS = {"Core": ("src/engine/core", "src/engine/datapump"), "Math": "src/engine/maths",
+LIBRARY_DIRS = {"Core": ("src/engine/core", "src/engine/datapump", "src/engine/scenegraph"), "Math": "src/engine/maths",
                 "Attrs": "src/engine/attrs",
                 "Gfx": "src/engine/gfx", "Sg": "src/engine/scenegraph", "Gui": "src/engine/gui",
                 "Insight": "src/engine/insight", "Viewer": "src/engine/viewer"}

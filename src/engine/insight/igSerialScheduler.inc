@@ -1,28 +1,23 @@
-igMetaObject *g_igSerialScheduler_metaObject;
-igMetaField *g_igSerialScheduler_managerListMetaField;
-igMetaField *g_igSerialScheduler_cachedManagerListMetaField;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igSerialScheduler_GetMetaObject(void)
+igMetaObject *igSerialScheduler::_Meta;
+igMetaField *igSerialScheduler::k_managerList;
+igMetaField *igSerialScheduler::k_cachedManagerList;
+
+igMetaObject *igSerialScheduler::getClassTypeSafe()
 {
-    igMetaObject *g = g_igSerialScheduler_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igSerialScheduler_EnsureRegistered();
-    return g_igSerialScheduler_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igSerialScheduler_GetVTable(void) {
-    Obj obj;
-    int r;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igSerialScheduler_vtable[0];
-    obj.m8 = 0;
-    obj.m12 = 0;
-    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igSerialScheduler_vtable[0];
-    obj.rel12();
-    obj.rel8();
-    return r;
+void *igSerialScheduler::retrieveVTablePointer()
+{
+    igSerialScheduler temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 void **igSmartPointer_igInfoManagerOrderedList_Destruct(void **arg0, long long arg1) {
@@ -43,70 +38,56 @@ void **igSmartPointer_igInfoManagerOrderedList_Destruct(void **arg0, long long a
     return arg0;
 }
 
-void igSerialScheduler_EnsureRegistered(void)
+namespace Gap {
+namespace Insight {
+
+void igSerialScheduler::arkRegister()
 {
-    igMetaObject_RunStaticInit(igSerialScheduler_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-static igMetaObjectCallback g_igSerialScheduler_callbackList[] = { igInfoManagerOrderedList_EnsureRegistered, igInfoManagerList_EnsureRegistered, 0 };
+CallbackArray *igSerialScheduler::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Insight::igInfoManagerOrderedList::arkRegister, Gap::Insight::igInfoManagerList::arkRegister, 0 };
 
-CallbackArray *igSerialScheduler_Register(void) {
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igSerialScheduler_metaObject,
-        igInsightScheduler_Register,
-        igInsightScheduler_GetPublishedMetaObject,
-        igSerialScheduler_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Insight::igInsightScheduler::arkRegisterInternal,
+        Gap::Insight::igInsightScheduler::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igSerialScheduler",
-        0x10, /* instance size */
-        igSerialScheduler_GetVTable,
-        &igSerialScheduler_InitFields,
-        0, /* extra callback item */
-        g_igSerialScheduler_callbackList /* callback list */
+        sizeof(igSerialScheduler),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igSerialScheduler_GetMetaObjectFunction(void) {
-    igSerialScheduler_GetMetaObject();
+void igSerialScheduler::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_managerList", "_cachedManagerList" };
+    static igMetaField **enumStorage[] = { &k_managerList, &k_cachedManagerList };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Insight::igInfoManagerOrderedList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Insight::igInfoManagerList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-igMetaObject *igInsightScheduler_GetPublishedMetaObject(void) {
-    return g_igInsightScheduler_metaObject;
 }
-
-static FieldFactory g_igSerialScheduler_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_igSerialScheduler_fieldTable[] = {
-    "_managerList",
-    "_cachedManagerList",
-};
-static igMetaField **g_igSerialScheduler_fieldHandles[] = {
-    &g_igSerialScheduler_managerListMetaField,
-    &g_igSerialScheduler_cachedManagerListMetaField,
-};
-static int g_igSerialScheduler_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void igSerialScheduler_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
-
-    temp_s0 = g_igSerialScheduler_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSerialScheduler_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igInfoManagerOrderedList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igInfoManagerList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSerialScheduler_fieldTable, g_igSerialScheduler_fieldHandles, g_igSerialScheduler_fieldOffsets, temp_s2);
 }
 

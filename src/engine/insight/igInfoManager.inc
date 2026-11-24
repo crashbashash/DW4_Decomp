@@ -1,66 +1,58 @@
-igMetaObject *g_igInfoManager_metaObject;
-igMetaField *g_igInfoManager_insightMetaField;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igInfoManager_GetMetaObject(void)
+igMetaObject *igInfoManager::_Meta;
+igMetaField *igInfoManager::k_insight;
+
+igMetaObject *igInfoManager::getClassTypeSafe()
 {
-    igMetaObject *g = g_igInfoManager_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igInfoManager_EnsureRegistered();
-    return g_igInfoManager_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igInfoManager_EnsureRegistered(void)
+void igInfoManager::arkRegister()
 {
-    igMetaObject_RunStaticInit(igInfoManager_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-static igMetaObjectCallback g_igInfoManager_callbackList[] = { igInsightCore_EnsureRegistered, 0 };
+CallbackArray *igInfoManager::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igInsightCore_EnsureRegistered, 0 };
 
-CallbackArray *igInfoManager_Register(void) {
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igInfoManager_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igInfoManager_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igInfoManager",
-        0x10, /* instance size */
+        sizeof(igInfoManager),
         0,
-        &igInfoManager_InitFields,
-        0, /* extra callback item */
-        g_igInfoManager_callbackList /* callback list */
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igInfoManager_GetMetaObjectFunction(void) {
-    igInfoManager_GetMetaObject();
+void igInfoManager::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_insight" };
+    static igMetaField **enumStorage[] = { &k_insight };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
+        metaField->_refCounted = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igInfoManager_ctorTable[] = {
-    igObjectRefMetaField_Create,
-};
-static const char *g_igInfoManager_fieldTable[] = {
-    "_insight",
-};
-static igMetaField **g_igInfoManager_fieldHandles[] = {
-    &g_igInfoManager_insightMetaField,
-};
-static int g_igInfoManager_fieldOffsets[] = {
-    12,
-};
-
-void igInfoManager_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
-
-    temp_s0 = g_igInfoManager_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igInfoManager_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igInfoManager_fieldTable, g_igInfoManager_fieldHandles, g_igInfoManager_fieldOffsets, temp_s2);
+}
 }
 

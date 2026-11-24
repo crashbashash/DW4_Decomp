@@ -108,8 +108,8 @@ CallbackArray *beMessenger_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beMessenger_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beMessenger_GetMetaObjectFunction,
         "beMessenger",
         0x38, /* instance size */

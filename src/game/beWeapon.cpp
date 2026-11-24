@@ -13,7 +13,6 @@
 #include "dw4/core/igDataLists.h"
 #include "dw4/scenegraph/igGroup.h"
 #include "dw4/core/igMemoryPoolContext.h"
-#include "dw4/scenegraph/igModelViewMatrixBoneSelect.h"
 #include "dw4/core/igObject.h"
 
 #pragma push
@@ -128,9 +127,9 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                 if (bone >= 0) {
                     int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                    igSmartPointer<igModelViewMatrixBoneSelect> boneSelect(igModelViewMatrixBoneSelect_CreateInstance(allocator));
-                    boneSelect.p->_matrixIndex = bone;
-                    ((Gap::Sg::igGroup *)boneSelect.p)->appendChild((Gap::Sg::igNode *)(((igObject **)((igObjectList *)info->_nodeList)->_data)[j]));
+                    igSmartPointer<Gap::Sg::igModelViewMatrixBoneSelect> boneSelect(Gap::Sg::igModelViewMatrixBoneSelect::_instantiateFromPool((igMemoryPoolView *)allocator));
+                    boneSelect.p->setMatrixIndex(bone);
+                    boneSelect.p->appendChild((Gap::Sg::igNode *)(((igObject **)((igObjectList *)info->_nodeList)->_data)[j]));
                     int appearanceCount = appearances->_count;
                     for (int k = 0; k < appearanceCount; k++) {
                         ((Gap::Sg::igAppearance *)(((igObject **)appearances->_data)[k]))->attachGraph((Gap::Sg::igNode *)boneSelect.p);

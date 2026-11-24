@@ -175,7 +175,7 @@ void igInsightCore_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igInsightCore_Register);
 }
 
-static igMetaObjectCallback g_igInsightCore_callbackList[] = { igInfoManagerOrderedList_EnsureRegistered, igInsightScheduler_EnsureRegistered, Gap::Core::igInfoList::arkRegister, igWindow_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, igRendererOrderedList_EnsureRegistered, igEventDispatcher_EnsureRegistered, igWindowResizeEventReceiver_EnsureRegistered, igMessenger_EnsureRegistered, Gap::Gui::igClearRenderer::arkRegister, Gap::Core::igTimer::arkRegister, igInsightPluginList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igInsightCore_callbackList[] = { Gap::Insight::igInfoManagerOrderedList::arkRegister, Gap::Insight::igInsightScheduler::arkRegister, Gap::Core::igInfoList::arkRegister, igWindow_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, Gap::Gui::igRendererOrderedList::arkRegister, igEventDispatcher_EnsureRegistered, igWindowResizeEventReceiver_EnsureRegistered, Gap::Insight::igMessenger::arkRegister, Gap::Gui::igClearRenderer::arkRegister, Gap::Core::igTimer::arkRegister, Gap::Insight::igInsightPluginList::arkRegister, 0 };
 
 CallbackArray *igInsightCore_Register(void) {
     InsightLibrary_MarkRegistered();
@@ -303,10 +303,10 @@ void igInsightCore_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igInsightCore_ctorTable, 0x13);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igInfoManagerOrderedList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Insight::igInfoManagerOrderedList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igInsightScheduler_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Insight::igInsightScheduler::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(Gap::Core::igInfoList::getClassTypeLazy());
@@ -316,7 +316,7 @@ void igInsightCore_InitFields(void) {
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)(Gap::Gfx::igVisualContext::getClassTypeLazy());
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igRendererOrderedList_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(Gap::Gui::igRendererOrderedList::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igEventDispatcher_GetOrCreateMetaObject();
@@ -325,7 +325,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igWindowResizeEventReceiver_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igMessenger_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)Gap::Insight::igMessenger::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)Gap::Gui::igClearRenderer::getClassTypeLazy();
@@ -334,7 +334,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)Gap::Core::igTimer::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igInsightPluginList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)Gap::Insight::igInsightPluginList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igInsightCore_fieldTable, g_igInsightCore_fieldHandles, g_igInsightCore_fieldOffsets, temp_s1);
 }

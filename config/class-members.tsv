@@ -662,6 +662,7 @@ igObjectList	private: typedef igTDataList<igObject *> Parent;
 igObjectList	inline virtual void userPreWrite() { trimCapacity(); }
 igObjectList	inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
 igObjectList	void append(igObject *object);
+igObjectList	inline void insert(int index, igObject *object) { igObject::ref(object); Parent::insert(index, object); }
 igObjectList	void concatenate(const igObjectList *list);
 igObjectList	inline void set(int index, igObject *object) { igObject::ref(object); igObject::release(get(index)); Parent::set(index, object); }
 igObjectList	void setAll(igObject *object);
@@ -676,6 +677,7 @@ igObjectList	int removeAllByValue(const igObject *obj, int startIndex);
 igObjectList	int appendUnique(igObject *obj);
 igObjectList	void setCount(int newCount);
 igObjectList	void clearAll();
+igObjectList	inline void remove(int index) { igObject::release(get(index)); Parent::remove(index); ((igObject **)(void *)_data)[_count] = 0; }
 igObjectList	inline void removeAll() { releaseObjects(0, _count); clearPointers(0, _count); _count = 0; }
 igObjectList	private: inline void releaseObjects(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) igObject::release(((igObject **)(void *)_data)[i]); }
 igObjectList	private: inline void clearPointers(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) ((igObject **)(void *)_data)[i] = 0; }
@@ -4592,3 +4594,265 @@ igAnimationTransitionDefinition	inline igAnimation *getBaseAnimation() const { r
 igAnimationTransitionDefinition	inline void setTransitionParams(igAnimationTransitionParams *params) { _params = params; }
 igAnimationTransitionDefinition	inline igAnimationTransitionParams *getTransitionParams() { return _params; }
 igAnimationTransitionDefinitionList	IG_OBJECT_DEFINE(igAnimationTransitionDefinitionList)
+igBitMask	IG_OBJECT_DEFINE(igBitMask)
+igBitMask	private: static igMetaField *k_bitCount;
+igBitMask	inline void setCount(int i) { igUnsignedIntList::setCount(i); }
+igBitMask	inline int getCount() const { return igUnsignedIntList::getCount(); }
+igBitMask	inline unsigned int &get(int i) const { return igUnsignedIntList::get(i); }
+igBitMask	public: inline bool getBit(unsigned int i) const { return (get((int)(i >> 5)) & (1 << (i & 0x1F))) != 0; }
+igBitMask	inline void setBit(unsigned int i) { const int byteOffset = (int)(i >> 5); set(byteOffset, get(byteOffset) | (1 << (i & 0x1F))); }
+igBitMask	inline void toggleBit(unsigned int i) { const int byteOffset = (int)(i >> 5); set(byteOffset, get(byteOffset) ^ (1 << (i & 0x1F))); }
+igBitMask	inline void clearBit(unsigned int i) { const int byteOffset = (int)(i >> 5); set(byteOffset, get(byteOffset) & ~(1 << (i & 0x1F))); }
+igBitMask	inline void setBit(unsigned int i, bool b) { if (b) setBit(i); else clearBit(i); }
+igBitMask	inline bool isOn(unsigned int i) const { return (get((int)(i >> 5)) & (1 << (i & 0x1F))) != 0; }
+igBitMask	inline void setBitCountUnsafe(unsigned int bitCount) { _bitCount = bitCount; setCount((int)((bitCount + 31) >> 5)); }
+igBitMask	void setBitCount(unsigned int bitCount);
+igBitMask	inline unsigned int getBitCount() const { return _bitCount; }
+igBitMask	void setAll();
+igBitMask	void clearAll();
+igBlendMatrixSelect	IG_OBJECT_DEFINE(igBlendMatrixSelect)
+igBlendMatrixSelect	protected: static igMetaField *k_blendMatrixIndices;
+igBlendMatrixSelect	static igMetaField *k_skeletonTransform;
+igBlendMatrixSelect	static igMetaField *k_skeletonInverseTransform;
+igBlendMatrixSelect	public: inline void setBlendMatrixIndices(igIntList *blendMatrixIndicesParam) { _blendMatrixIndices = blendMatrixIndicesParam; }
+igBlendMatrixSelect	inline const igIntList *getBlendMatrixIndices() const { return _blendMatrixIndices; }
+igBlendMatrixSelect	inline void setBlendMatrixIndexCount(int count) { _blendMatrixIndices->setCount(count); }
+igBlendMatrixSelect	inline int getBlendMatrixIndexCount() const { return _blendMatrixIndices->getCount(); }
+igBlendMatrixSelect	inline void setBlendMatrixIndex(int blendMatrixNumber, int index) { _blendMatrixIndices->set(blendMatrixNumber, index); }
+igBlendMatrixSelect	inline int getBlendMatrixIndex(int blendMatrixNumber) const { return _blendMatrixIndices->get(blendMatrixNumber); }
+igBlendMatrixSelect	inline void setSkeletonTransform(const igMatrix44f &transform, const igMatrix44f &inverseTransform) { _skeletonTransform = transform; _skeletonInverseTransform = inverseTransform; }
+igModelViewMatrixBoneSelect	IG_OBJECT_DEFINE(igModelViewMatrixBoneSelect)
+igModelViewMatrixBoneSelect	private: static igMetaField *k_matrixIndex;
+igModelViewMatrixBoneSelect	public: inline void setMatrixIndex(int index) { _matrixIndex = index; }
+igModelViewMatrixBoneSelect	inline int getMatrixIndex() const { return _matrixIndex; }
+igModelViewMatrixBoneSelectList	IG_OBJECT_DEFINE(igModelViewMatrixBoneSelectList)
+igBlendListRecord	IG_OBJECT_DEFINE(igBlendListRecord)
+igBlendListRecord	protected: static igMetaField *k_attr;
+igBlendListRecord	static igMetaField *k_fwdPtr;
+igBoundingBoxesMaker	IG_OBJECT_DEFINE(igBoundingBoxesMaker)
+igBoundingBoxesMaker	private: static igMetaField *k_time;
+igBoundingBoxesMaker	static igMetaField *k_useWholeAnimation;
+igBoundingBoxesMaker	static igMetaField *k_setBoundingBoxes;
+igBoundingBoxesMaker	static igMetaField *k_skinnedBox;
+igBoundingBoxesMaker	static igMetaField *k_bboxList;
+igBoundingBoxesMaker	static igMetaField *k_preserveActorBoxes;
+igBoundingBoxesMaker	static igMetaField *k_exclusionList;
+igBoundingBoxesMaker	static igMetaField *k_metaObjectList;
+igBoundingBoxesMaker	public: inline void setPreserveActorBoxes(bool preserveActorBoxesParam) { _preserveActorBoxes = preserveActorBoxesParam; }
+igBoundingBoxesMaker	inline void setExclusionList(igStringObj *exclusionListParam) { _exclusionList = exclusionListParam; }
+igBoundingBoxesMaker	inline void setUseWholeAnimation() { _useWholeAnimation = true; }
+igBoundingBoxesMaker	inline void setTime(long long time) { _useWholeAnimation = false; _time = time; }
+igCompressedTransformSequence1_5Data	IG_OBJECT_DEFINE(igCompressedTransformSequence1_5Data)
+igCompressedTransformSequence1_5Data	protected: static igMetaField *k_compressedTranslationList;
+igCompressedTransformSequence1_5Data	static igMetaField *k_compressedQuatList;
+igCompressedTransformSequence1_5Data	static igMetaField *k_compressedScaleList;
+igCompressedTransformSequence1_5Data	static igMetaField *k_compressedTimeList;
+igCompressedTransformSequence1_5Data	static igMetaField *k_translationBase;
+igCompressedTransformSequence1_5Data	static igMetaField *k_translationRange;
+igCompressedTransformSequence1_5Data	static igMetaField *k_quatBase;
+igCompressedTransformSequence1_5Data	static igMetaField *k_quatRange;
+igCompressedTransformSequence1_5Data	static igMetaField *k_scaleBase;
+igCompressedTransformSequence1_5Data	static igMetaField *k_scaleRange;
+igEnbayaContextPool	IG_OBJECT_DEFINE(igEnbayaContextPool)
+igEnbayaContextPool	protected: static igMetaField *k_poolList;
+igEnbayaContextPool	static igMetaField *k_boneCountList;
+igEnbayaContextPool	static igMetaField *k_freeIndexList;
+igEnbayaContextPool	public: virtual void resetFields(int flag);
+igEnbayaContextPool	virtual void destructFields();
+igEnbayaContextPool	void *allocate(unsigned int boneCount);
+igEnbayaContextPool	void deallocate(void *context, unsigned int boneCount);
+igEnbayaContextPool	void setCapacity(unsigned int boneCount, unsigned int capacity);
+igEnbayaAnimationSource	IG_OBJECT_DEFINE(igEnbayaAnimationSource)
+igEnbayaAnimationSource	private: static igMetaField *k_interpolationMethod;
+igEnbayaAnimationSource	static igMetaField *k_drivenChannels;
+igEnbayaAnimationSource	static igMetaField *k_playMode;
+igEnbayaAnimationSource	static igMetaField *k_lastUpdateTimef;
+igEnbayaAnimationSource	static igMetaField *k_lastUpdateTime;
+igEnbayaAnimationSource	protected: static igMetaField *k_enbayaAnimationStream;
+igEnbayaAnimationSource	public: inline void setDrivenChannels(unsigned char drivenChannelsParam) { _drivenChannels = drivenChannelsParam; }
+igEnbayaAnimationSource	inline unsigned char getDrivenChannels() const { return _drivenChannels; }
+igEnbayaAnimationSource	inline void setPlayMode(int playModeParam) { _playMode = playModeParam; }
+igEnbayaAnimationSource	inline int getPlayMode() const { return _playMode; }
+igEnbayaAnimationSource	virtual void resetFields(int flag);
+igEnbayaAnimationSource	virtual void userPostLoad();
+igEnbayaAnimationSource	virtual bool getMatrix(igMatrix44f &matrix, long long time, int trackId);
+igEnbayaAnimationSource	virtual bool getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags, int trackId);
+igEnbayaAnimationSource	virtual bool evaluateRotation(float *quaternion, long long time, int trackId);
+igEnbayaAnimationSource	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags, int trackId);
+igEnbayaAnimationSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int trackId);
+igEnbayaAnimationSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags, int trackId);
+igEnbayaAnimationSource	unsigned long long getDurationNs();
+igEnbayaTransformSource	IG_OBJECT_DEFINE(igEnbayaTransformSource)
+igEnbayaTransformSource	private: static igMetaField *k_trackId;
+igEnbayaTransformSource	static igMetaField *k_enbayaAnimationSource;
+igEnbayaTransformSource	public: inline void setTrackId(int trackIdParam) { _trackId = trackIdParam; }
+igEnbayaTransformSource	inline int getTrackId() const { return _trackId; }
+igEnbayaTransformSource	inline void setEnbayaAnimationSource(igEnbayaAnimationSource *enbayaAnimationSourceParam) { _enbayaAnimationSource = enbayaAnimationSourceParam; }
+igEnbayaTransformSource	inline igEnbayaAnimationSource *getEnbayaAnimationSource() const { return _enbayaAnimationSource; }
+igEnbayaTransformSource	virtual bool getMatrix(igMatrix44f &matrix, long long time);
+igEnbayaTransformSource	virtual bool getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags);
+igEnbayaTransformSource	virtual bool evaluateRotation(float *quaternion, long long time);
+igEnbayaTransformSource	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
+igEnbayaTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time);
+igEnbayaTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
+igEnbayaTransformSource	virtual long long getFirstFrameTime();
+igEnbayaTransformSource	virtual long long getLastFrameTime();
+igEnbayaAnimationState	IG_OBJECT_DEFINE(igEnbayaAnimationState)
+igEnbayaAnimationState	private: static igMetaField *k_context;
+igEnbayaAnimationState	static igMetaField *k_fastCacheDecodingState;
+igEnbayaAnimationState	public: inline void setFastCacheDecodingState(bool fastCacheDecodingStateParam) { _fastCacheDecodingState = fastCacheDecodingStateParam; }
+igEnbayaAnimationState	inline bool getFastCacheDecodingState() const { return _fastCacheDecodingState; }
+igEnbayaAnimationState	virtual void userPostLoad();
+igEnbayaAnimationState	virtual void activate();
+igEnbayaAnimationState	virtual void deactivate();
+igEnbayaAnimationState	virtual void preVisit();
+igEnbayaAnimationState	virtual void postVisit();
+igEnbayaAnimationState	static void setEnbayaEnabled(int mode);
+igEventReceiver	IG_OBJECT_DEFINE(igEventReceiver)
+igEventReceiver	public: virtual bool keyEvent(Display::igKey::KEY_VALUES key, bool status) { return false; }
+igEventReceiver	virtual bool mouseMotionEvent(float x, float y) { return false; }
+igEventReceiver	virtual bool mouseButtonEvent(Display::igMouse::MOUSE_BUTTON button, bool status) { return false; }
+igEventReceiver	virtual bool controllerMotionEvent(int controllerNum, unsigned short joystick, float x, float y) { return false; }
+igEventReceiver	virtual bool controllerButtonEvent(int controllerNum, Display::igController::BUTTONS button, bool status) { return false; }
+igEventReceiver	virtual bool controllerButtonPressureEvent(int controllerNum, Display::igController::BUTTONS button, float pressure) { return false; }
+igEventReceiver	virtual bool controllerSlider(int controllerNum, unsigned short joystick, float value) { return false; }
+igEventReceiver	virtual bool controllerPointOfView(int controllerNum, unsigned short pov, float value) { return false; }
+igEventReceiver	virtual bool controllerConnectionEvent(int controllerNum, bool status) { return false; }
+igEventReceiver	virtual bool windowResizeEvent(int width, int height) { return false; }
+igEventReceiver	virtual bool windowMoveEvent(int X, int Y) { return false; }
+igEventReceiver	virtual bool windowCloseEvent() { return false; }
+igHotKeyEventReceiver	IG_OBJECT_DEFINE(igHotKeyEventReceiver)
+igHotKeyEventReceiver	private: static igMetaField *k_hotKeyList;
+igHotKeyEventReceiver	public: void appendHotKey(Display::igKey::KEY_VALUES key, igAction *action);
+igHotKeyEventReceiver	void appendHotKey(Display::igController::BUTTONS button, igAction *action);
+igHotKeyEventReceiver	void appendHotKey(Display::igKey::KEY_VALUES key, Display::igController::BUTTONS button, igAction *action);
+igHotKeyEventReceiver	void removeHotKey(Display::igController::BUTTONS button);
+igHotKeyEventReceiver	virtual bool keyEvent(Display::igKey::KEY_VALUES key, bool status);
+igHotKeyEventReceiver	virtual bool controllerButtonEvent(int controllerNum, Display::igController::BUTTONS button, bool status);
+igGuiSystemModel	IG_OBJECT_DEFINE(igGuiSystemModel)
+igGuiSystemModel	public: static igMetaField *k_windowSize;
+igGuiSystemModel	static igMetaField *k_mousePosition;
+igGuiSystemModel	static igMetaField *k_mousePressed;
+igGuiSystemModel	static igMetaField *k_viewMatrix;
+igGuiSystemModel	static igMetaField *k_projectionMatrix;
+igGuiSystemModel	static igMetaField *k_active;
+igGuiSystemModel	static igMetaField *k_rootComponent;
+igGuiSystemModel	static igMetaField *k_focusedComponent;
+igGuiSystemModel	static igMetaField *k_componentUnderMouse;
+igGuiSystemModel	static igMetaField *k_pushedComponent;
+igGuiSystemModel	static igMetaField *k_windowCloseRequested;
+igGuiSystemModel	virtual void resetFields(int persistent);
+igGuiSystemModel	void setFocusedComponent(igGuiComponent *component);
+igDependencyOrderedList	IG_OBJECT_DEFINE(igDependencyOrderedList)
+igDependencyOrderedList	private: static igMetaField *k_objectList;
+igDependencyOrderedList	static igMetaField *k_dependencies;
+igDependencyOrderedList	static igMetaField *k_order;
+igDependencyOrderedList	static igMetaField *k_checkPoints;
+igDependencyOrderedList	static igMetaField *k_hasCircularDependencies;
+igDependencyOrderedList	public: inline bool getHasCircularDependencies() const { return _hasCircularDependencies; }
+igDependencyOrderedList	inline unsigned int getCount() const { return (unsigned int)_objectList->getCount(); }
+igDependencyOrderedList	inline igObject *get(unsigned int index) const { return _objectList->get((int)index); }
+igDependencyOrderedList	inline void append(igObject *object) { internalAppend(object, false); }
+igDependencyOrderedList	inline void appendUnique(igObject *object) { internalAppend(object, true); }
+igDependencyOrderedList	igResult remove(igObject *object);
+igDependencyOrderedList	void removeAll();
+igDependencyOrderedList	inline int find(igObject *object) const { return _objectList->find(object, 0); }
+igDependencyOrderedList	void appendCheckPoint(const char *name);
+igDependencyOrderedList	void appendDependency(const void *before, const void *after);
+igDependencyOrderedList	igResult removeDependency(const void *before, const void *after);
+igDependencyOrderedList	void removeAllDependencies(const void *object);
+igDependencyOrderedList	private: void reOrderObjects();
+igDependencyOrderedList	void internalAppend(igObject *object, bool unique);
+igEventReceiverOrderedList	IG_OBJECT_DEFINE(igEventReceiverOrderedList)
+igRendererOrderedList	IG_OBJECT_DEFINE(igRendererOrderedList)
+igGeometryElement	IG_ABSTRACT_OBJECT_DEFINE(igGeometryElement)
+igGeometryElement	protected: static igMetaField *k_geometry;
+igGeometryElement	static igMetaField *k_defaultSize;
+igGeometryElement	static igMetaField *k_color;
+igGeometryElement	static igMetaField *k_sharableAttrs;
+igGeometryElement	public: inline igGeometry *getGeometry() const { return _geometry; }
+igGeometryElement	inline const igVec4f &getColor() const { return _color; }
+igGeometryElement	inline const igAttrList *getSharableAttrs() const { return _sharableAttrs; }
+igGeometryElement	virtual void setCurrentSize(const igVec3f &size) = 0;
+igGeometryElement	inline const igVec3f &getDefaultSize() const { return _defaultSize; }
+igGeometryElement	inline void setColor(const igVec4f &color) { _color = color; updateColor(); }
+igGeometryElement	virtual void updateColor() = 0;
+igMouseCursor	IG_OBJECT_DEFINE(igMouseCursor)
+igMouseCursor	private: static igMetaField *k_geometryElement;
+igMouseCursor	static igMetaField *k_offset;
+igMouseCursor	public: inline void setGeometryElement(igGeometryElement *geometryElementParam) { _geometryElement = geometryElementParam; }
+igMouseCursor	inline igGeometryElement *getGeometryElement() const { return _geometryElement; }
+igMouseCursor	inline void setOffset(const igVec2f &offset) { _offset = offset; }
+igMouseCursor	inline const igVec2f &getOffset() { return _offset; }
+igMessage	IG_OBJECT_DEFINE(igMessage)
+igMessageReceiver	IG_ABSTRACT_OBJECT_DEFINE(igMessageReceiver)
+igMessageReceiver	virtual void messageHandler(igMessage *msg) = 0;
+igMessageReceiverList	IG_OBJECT_DEFINE(igMessageReceiverList)
+igMessageFilter	IG_OBJECT_DEFINE(igMessageFilter)
+igMessageFilter	public: static igMetaField *k_msgType;
+igMessageFilter	static igMetaField *k_receivers;
+igMessageFilter	virtual int acceptMessage(igMessage *msg);
+igMessageFilterList	IG_OBJECT_DEFINE(igMessageFilterList)
+igMessageDispatcher	IG_ABSTRACT_OBJECT_DEFINE(igMessageDispatcher)
+igMessageDispatcher	virtual void addFiltering(igMessageReceiver *receiver, igMetaObject *msgType) = 0;
+igMessageDispatcher	virtual void addFiltering(igMessageReceiver *receiver, igMessageFilter *msgFilter) = 0;
+igMessageDispatcher	virtual void removeFiltering(igMessageReceiver *receiver) = 0;
+igMessageDispatcher	virtual void removeFiltering(igMessageReceiver *receiver, igMetaObject *msgType) = 0;
+igMessageDispatcher	virtual void removeFiltering(igMessageReceiver *receiver, igMessageFilter *msgFilter) = 0;
+igMessageDispatcher	virtual void postMessage(igMessage *msg) const = 0;
+igFilterMessageDispatcher	IG_OBJECT_DEFINE(igFilterMessageDispatcher)
+igFilterMessageDispatcher	private: static igMetaField *k_defaultFilters;
+igFilterMessageDispatcher	static igMetaField *k_filters;
+igFilterMessageDispatcher	public: virtual void addFiltering(igMessageReceiver *receiver, igMetaObject *msgType);
+igFilterMessageDispatcher	virtual void addFiltering(igMessageReceiver *receiver, igMessageFilter *msgFilter);
+igFilterMessageDispatcher	virtual void removeFiltering(igMessageReceiver *receiver);
+igFilterMessageDispatcher	virtual void removeFiltering(igMessageReceiver *receiver, igMetaObject *msgType);
+igFilterMessageDispatcher	virtual void removeFiltering(igMessageReceiver *receiver, igMessageFilter *msgFilter);
+igFilterMessageDispatcher	virtual void postMessage(igMessage *msg) const;
+igFilterMessageDispatcher	igMessageFilter *getFilter(igMetaObject *msgType) const;
+igFilterMessageDispatcher	private: igSmartPointer<igMessageFilter> getFilterOrCreate(igMetaObject *msgType);
+igMessenger	IG_OBJECT_DEFINE(igMessenger)
+igMessenger	private: static igMetaField *k_dispatcher;
+igMessenger	public: void registerReceiver(igMessageReceiver *receiver, igMetaObject *msgType) const;
+igMessenger	void postMessage(igMessage *msg) const;
+igMessageDefaultReceiver	IG_OBJECT_DEFINE(igMessageDefaultReceiver)
+igMessageDefaultReceiver	public: static igMetaField *k_msgHandler;
+igMessageDefaultReceiver	static igMetaField *k_msgHandlerFunc;
+igMessageDefaultReceiver	inline void setMessageHandling(igObject *msgHandler, igMessageHandlerFunction msgHandlerFunc) { _msgHandler = msgHandler; _msgHandlerFunc = msgHandlerFunc; }
+igMessageDefaultReceiver	virtual void messageHandler(igMessage *msg);
+igInsightPlugin	IG_ABSTRACT_OBJECT_DEFINE(igInsightPlugin)
+igInsightPlugin	virtual void registerPlugin(igInsightCore *insight) = 0;
+igInsightPlugin	virtual void unregisterPlugin(igInsightCore *insight) = 0;
+igInsightPluginList	IG_OBJECT_DEFINE(igInsightPluginList)
+igInsightScheduler	IG_ABSTRACT_OBJECT_DEFINE(igInsightScheduler)
+igInsightScheduler	virtual void update() = 0;
+igInsightScheduler	virtual void schedule(igInfoManager *manager) = 0;
+igInsightScheduler	virtual void unschedule(igInfoManager *manager) = 0;
+igInsightScheduler	virtual bool isScheduled(igInfoManager *manager) = 0;
+igInsightScheduler	virtual void appendDependency(const void *before, const void *after) = 0;
+igInsightScheduler	virtual void removeDependency(const void *before, const void *after) = 0;
+igInsightScheduler	virtual void removeAllDependencies(const void *object) = 0;
+igInfoManager	IG_ABSTRACT_OBJECT_DEFINE(igInfoManager)
+igInfoManager	protected: static igMetaField *k_insight;
+igInfoManager	public: virtual void registerToInsight() = 0;
+igInfoManager	virtual void unRegisterFromInsight() = 0;
+igInfoManager	virtual void begin() = 0;
+igInfoManager	virtual void end() = 0;
+igInfoManager	virtual bool appendInfo(igInfo *info) = 0;
+igInfoManager	virtual void removeAllInfos() = 0;
+igInfoManager	virtual void update() = 0;
+igInfoManagerList	IG_OBJECT_DEFINE(igInfoManagerList)
+igViewportResizedMessage	IG_OBJECT_DEFINE(igViewportResizedMessage)
+igViewportResizedMessage	public: static igMetaField *k_origin;
+igViewportResizedMessage	static igMetaField *k_size;
+igInfoManagerOrderedList	IG_OBJECT_DEFINE(igInfoManagerOrderedList)
+igSerialScheduler	IG_OBJECT_DEFINE(igSerialScheduler)
+igSerialScheduler	protected: static igMetaField *k_managerList;
+igSerialScheduler	static igMetaField *k_cachedManagerList;
+igSerialScheduler	public: virtual void update();
+igSerialScheduler	virtual void schedule(igInfoManager *manager);
+igSerialScheduler	virtual void unschedule(igInfoManager *manager);
+igSerialScheduler	virtual bool isScheduled(igInfoManager *manager);
+igSerialScheduler	virtual void appendDependency(const void *before, const void *after);
+igSerialScheduler	virtual void removeDependency(const void *before, const void *after);
+igSerialScheduler	virtual void removeAllDependencies(const void *object);

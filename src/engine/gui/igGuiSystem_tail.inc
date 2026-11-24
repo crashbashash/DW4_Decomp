@@ -84,7 +84,7 @@ void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
         ((Gap::Sg::igGroup *)arg0->f28)->appendChild((Gap::Sg::igNode *)arg1->f8->f8);
     }
     igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
-    igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
+    igNotifyEvent sp30((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePosition);
     ((Gap::Gui::igModel *)arg0->f12)->notifyAllViews(sp30);
 }
 
@@ -109,14 +109,16 @@ void FUN_00456b80(int *arg0, float *arg1) {
     }
 }
 
-void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
-    igGuiComponent *o;
-    igObject::ref(arg1);
-    o = (igGuiComponent *)arg0->_focusedComponent;
-    igObject::release(o);
-    arg0->_focusedComponent = (int)arg1;
-    igNotifyEvent sp30((Gap::Core::igMetaField *)g_igGuiSystemModel_focusedComponentMetaField);
-    ((Gap::Gui::igModel *)arg0)->notifyAllViews(sp30);
+namespace Gap {
+namespace Gui {
+
+void igGuiSystemModel::setFocusedComponent(igGuiComponent *component)
+{
+    _focusedComponent = component;
+    igNotifyEvent event(k_focusedComponent);
+    notifyAllViews(event);
+}
+}
 }
 
 void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
@@ -132,7 +134,7 @@ void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
         if (((unsigned long long)(long long)old->references & 0x7fffffULL) == 0) { igObject_Destroy((igObject *)old); }
     }
     *p = arg1;
-    igNotifyEvent sp40((Gap::Core::igMetaField *)g_igGuiSystemModel_rootComponentMetaField);
+    igNotifyEvent sp40((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_rootComponent);
     ((Gap::Gui::igModel *)arg0->f12)->notifyAllViews(sp40);
     l = arg0->f20->f28;
     if (l != 0) { v = l->f8; } else { v = 0; }
@@ -183,6 +185,6 @@ void FUN_00456eb0(Ctl *arg0, int arg1) {
             if (s0 == arg0->f12->f168 || s0 == 0) break;
         } while ((FUN_004555e0(s0) != 0) ^ 1);
     }
-    FUN_00456c20((igGuiSystemModel *)arg0->f12, (igGuiComponent *)s0);
+    ((Gap::Gui::igGuiSystemModel *)arg0->f12)->setFocusedComponent((igGuiComponent *)s0);
 }
 

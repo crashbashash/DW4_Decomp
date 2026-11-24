@@ -6,30 +6,40 @@ void FUN_001c07e0(void) {
 
 }
 
-void igEnbayaAnimationSource_resetFields(igEnbayaAnimationSource *self) {
-    self->_interpolationMethod[0] = 1;
-    *(char *)((char *)(self) + 9) = 3;
-    *(char *)((char *)(self) + 10) = 1;
+namespace Gap {
+namespace Sg {
+
+void igEnbayaAnimationSource::resetFields(int flag)
+{
+    _interpolationMethod[0] = 1;
+    _interpolationMethod[1] = 3;
+    _interpolationMethod[2] = 1;
 }
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_23(void **arg0, int arg1, int arg2, int arg3) {
-    int sp40[4];
-    int sp30[4];
-    int temp_s0;
-
-    temp_s0 = ((DW4VC_108_4 *)(arg0))->vX((int)sp30, (int)sp40, (int)(arg2), (int)(arg3)) & 0xFF;
-    FUN_00192810((const float *)sp30, (float *)arg1);
-    igMatrix44f_SetTranslation((float *)arg1, (float *)sp40);
-    return temp_s0;
+bool igEnbayaAnimationSource::getMatrix(igMatrix44f &matrix, long long time, int trackId)
+{
+    float translation[4];
+    float quaternion[4];
+    bool result = evaluateRotationAndTranslation(quaternion, translation, time, trackId);
+    FUN_00192810((const float *)quaternion, (float *)&matrix);
+    igMatrix44f_SetTranslation((float *)&matrix, translation);
+    return result;
 }
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_24(EnbayaSourceSlots24 *o, int a, int b, int c, int d, int e) {
-    return o->f(a, b, e);
+bool igEnbayaAnimationSource::getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags, int trackId)
+{
+    return getMatrix(matrix, time, trackId);
+}
+}
 }
 
 float g_enbayaPlayOnceEndOffset;
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_25(EnbayaSourceView *o, float *out, long long time, int track) {
+namespace Gap {
+namespace Sg {
+
+bool igEnbayaAnimationSource::evaluateRotation(float *quaternion, long long time, int trackId)
+{
     float blend;
     EnbayaKeyView *ka;
     EnbayaKeyView *kb;
@@ -39,38 +49,40 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_25(EnbayaSourceView *o, float *out, 
     EnbayaKeyView *b;
     EnbayaDecoderView *decoder;
     float r;
-    if (o->_lastUpdateTime == time) {
-        t = o->_lastUpdateTimef;
+    if (_lastUpdateTime == time) {
+        t = _lastUpdateTimef;
     } else {
         t = 0.00026214399258606136f * (float)(int)(time >> 18);
-        duration = o->_enbayaAnimationStream->duration();
+        duration = ((EnbayaStreamSlots *)_enbayaAnimationStream)->duration();
         if (duration <= 0.03333333507180214f) {
             duration = 0.05000000447034836f;
         }
-        switch (o->_playMode) {
+        switch (_playMode) {
         case 4: duration += g_enbayaPlayOnceEndOffset; case 1: if (t > duration) { r = duration; } else if (t < 0.0f) { r = 0.0f; } else { FUN_001c0ae0(&r, t, duration); } break;
         case 3: case 0: FUN_001c0ae0(&r, t, duration); break;
         case 2: if (FUN_001c0ae0(&r, t, duration) & 1) { r = duration - r; } break;
         default: r = 0.0f; break;
         }
         t = r;
-        o->_lastUpdateTimef = t;
-        o->_lastUpdateTime = time;
+        _lastUpdateTimef = t;
+        _lastUpdateTime = time;
     }
     decoder = ((EnbayaDecoderView * *)DAT_00562720)[0];
     a = 0;
     b = 0;
-    FUN_0027fa60((EnbayaContext *)decoder, t, track, (EnbayaSlot **)&a, (EnbayaSlot **)&b);
+    FUN_0027fa60((EnbayaContext *)decoder, t, trackId, (EnbayaSlot **)&a, (EnbayaSlot **)&b);
     ka = a;
     kb = b;
     blend = (t - ka->_translation[3]) / decoder->_interval;
-    switch (o->_interpolationMethod[1]) {
-    case 3: FUN_00192ab0(out, blend, (void *)ka, (void *)kb); break;
-    case 1: Quaternion_Lerp(out, blend, (const float *)ka, (const float *)kb); break;
-    case 0: out[0] = kb->_quaternion[0]; out[1] = kb->_quaternion[1]; out[2] = kb->_quaternion[2]; out[3] = kb->_quaternion[3]; break;
+    switch (_interpolationMethod[1]) {
+    case 3: FUN_00192ab0(quaternion, blend, (void *)ka, (void *)kb); break;
+    case 1: Quaternion_Lerp(quaternion, blend, (const float *)ka, (const float *)kb); break;
+    case 0: quaternion[0] = kb->_quaternion[0]; quaternion[1] = kb->_quaternion[1]; quaternion[2] = kb->_quaternion[2]; quaternion[3] = kb->_quaternion[3]; break;
     case 2: break;
     }
     return 1;
+}
+}
 }
 
 static int FUN_001c0ae0(float *arg0, float fparg0, float fparg1) {
@@ -93,11 +105,16 @@ static int FUN_001c0ae0(float *arg0, float fparg0, float fparg1) {
     return temp_f0;
 }
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_26(EnbayaSourceSlots26 *o, int a, int b, int c, int d, int e) {
-    return o->f(a, b, e);
+namespace Gap {
+namespace Sg {
+
+bool igEnbayaAnimationSource::evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags, int trackId)
+{
+    return evaluateRotation(quaternion, time, trackId);
 }
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_27(EnbayaSourceView *o, float *out, float *pos, long long time, int track) {
+bool igEnbayaAnimationSource::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int trackId)
+{
     float blend;
     float *ta;
     float *tb;
@@ -109,56 +126,61 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_27(EnbayaSourceView *o, float *out, 
     EnbayaKeyView *b;
     EnbayaDecoderView *decoder;
     float r;
-    if (o->_lastUpdateTime == time) {
-        t = o->_lastUpdateTimef;
+    if (_lastUpdateTime == time) {
+        t = _lastUpdateTimef;
     } else {
         t = 0.00026214399258606136f * (float)(int)(time >> 18);
-        duration = o->_enbayaAnimationStream->duration();
+        duration = ((EnbayaStreamSlots *)_enbayaAnimationStream)->duration();
         if (duration <= 0.03333333507180214f) {
             duration = 0.05000000447034836f;
         }
-        switch (o->_playMode) {
+        switch (_playMode) {
         case 4: duration += g_enbayaPlayOnceEndOffset; case 1: if (t > duration) { r = duration; } else if (t < 0.0f) { r = 0.0f; } else { FUN_001c0ae0(&r, t, duration); } break;
         case 3: case 0: FUN_001c0ae0(&r, t, duration); break;
         case 2: if (FUN_001c0ae0(&r, t, duration) & 1) { r = duration - r; } break;
         default: r = 0.0f; break;
         }
         t = r;
-        o->_lastUpdateTimef = t;
-        o->_lastUpdateTime = time;
+        _lastUpdateTimef = t;
+        _lastUpdateTime = time;
     }
     decoder = ((EnbayaDecoderView * *)DAT_00562720)[0];
     a = 0;
     b = 0;
-    FUN_0027fa60((EnbayaContext *)decoder, t, track, (EnbayaSlot **)&a, (EnbayaSlot **)&b);
+    FUN_0027fa60((EnbayaContext *)decoder, t, trackId, (EnbayaSlot **)&a, (EnbayaSlot **)&b);
     ka = a;
     kb = b;
     blend = (t - ka->_translation[3]) / decoder->_interval;
     ta = ka->_translation;
     tb = kb->_translation;
-    switch (o->_interpolationMethod[0]) {
-    case 1: Vec3_Lerp(pos, blend, (const float *)ta, (const float *)tb); break;
-    case 0: pos[0] = tb[0]; pos[1] = tb[1]; pos[2] = tb[2]; pos[3] = tb[3]; break;
+    switch (_interpolationMethod[0]) {
+    case 1: Vec3_Lerp(translation, blend, (const float *)ta, (const float *)tb); break;
+    case 0: translation[0] = tb[0]; translation[1] = tb[1]; translation[2] = tb[2]; translation[3] = tb[3]; break;
     case 3: case 2: break;
     }
-    switch (o->_interpolationMethod[1]) {
-    case 3: FUN_00192ab0(out, blend, (void *)ka, (void *)kb); break;
-    case 1: Quaternion_Lerp(out, blend, (const float *)ka, (const float *)kb); break;
-    case 0: out[0] = kb->_quaternion[0]; out[1] = kb->_quaternion[1]; out[2] = kb->_quaternion[2]; out[3] = kb->_quaternion[3]; break;
+    switch (_interpolationMethod[1]) {
+    case 3: FUN_00192ab0(quaternion, blend, (void *)ka, (void *)kb); break;
+    case 1: Quaternion_Lerp(quaternion, blend, (const float *)ka, (const float *)kb); break;
+    case 0: quaternion[0] = kb->_quaternion[0]; quaternion[1] = kb->_quaternion[1]; quaternion[2] = kb->_quaternion[2]; quaternion[3] = kb->_quaternion[3]; break;
     case 2: break;
     }
     return 1;
 }
 
-int Gap__Sg__igEnbayaAnimationSource__vfunc_28(EnbayaSourceSlots28 *o, int a, int b, int c, int d, int e, int g) {
-    return o->f(a, b, c, g);
+bool igEnbayaAnimationSource::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags, int trackId)
+{
+    return evaluateRotationAndTranslation(quaternion, translation, time, trackId);
 }
 
-void igEnbayaAnimationSource_UserPostLoad(Obj_1c0e70 *arg0) {
-    arg0->f32 = FUN_002808f0(arg0->f32);
+void igEnbayaAnimationSource::userPostLoad()
+{
+    _enbayaAnimationStream = FUN_002808f0(_enbayaAnimationStream);
 }
 
-unsigned long long FUN_001c0ea0(EnbayaSourceView *o) {
-    return (unsigned long long)(1000000000 * (double)o->_enbayaAnimationStream->duration());
+unsigned long long igEnbayaAnimationSource::getDurationNs()
+{
+    return (unsigned long long)(1000000000 * (double)((EnbayaStreamSlots *)_enbayaAnimationStream)->duration());
+}
+}
 }
 

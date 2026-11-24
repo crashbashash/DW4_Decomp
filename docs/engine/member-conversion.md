@@ -885,3 +885,15 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
   (`sony_libkernl_exit`) without `--source`; its row stays as it was and still verifies. A start the present row
   places (`0x37a600`, which three duplicate smart-pointer destructors fit) is its name's alone: the other
   byte-identical destructors stay duplicates, and those rows regenerate unchanged.
+
+### Scenegraph leaf classes (SgRest)
+
+igBitMask (Gap::Core, compiled in the scenegraph unit; classconv's Core library searches the scenegraph sources too),
+igBlendMatrixSelect, igModelViewMatrixBoneSelect and its Sg list, igBlendListRecord, igBoundingBoxesMaker,
+igCompressedTransformSequence1_5Data and igEnbayaContextPool are converted. Not yet converted: igCompressedAnimationSequenceQS,
+igEnbayaAnimationSource, igEnbayaTransformSource, igEnbayaAnimationState, igActorInfo, igActor, igActorList.
+The game library's own `igModelViewMatrixBoneSelectList` (`...ListBec_*`) stays flat. igBoundingBoxesMaker keeps
+`igBoundingBoxesMaker_ComputeBox` free (DW4's form is not the kit's getBoundingBox). igEnbayaContextPool's
+appendPool and setPoolCapacity stay free functions: the member forms change register
+allocation, the free forms with int parameters match. `igSmartPointer_igModelViewMatrixBoneSelect_Destruct` stays a
+C copy (nothing in the unit instantiates the template destructor retail emits there).

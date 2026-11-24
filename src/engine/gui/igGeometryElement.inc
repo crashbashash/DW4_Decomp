@@ -1,108 +1,81 @@
-igMetaObject *g_igGeometryElement_metaObject;
-igMetaField *g_igGeometryElement_geometryMetaField;
-igMetaField *g_igGeometryElement_defaultSizeMetaField;
-igMetaField *g_igGeometryElement_colorMetaField;
-igMetaField *g_igGeometryElement_sharableAttrsMetaField;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igGeometryElement_GetOrCreateMetaObject(void) {
-    if (g_igGeometryElement_metaObject == 0) {
-        g_igGeometryElement_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igGeometryElement_metaObject;
-}
+igMetaObject *igGeometryElement::_Meta;
+igMetaField *igGeometryElement::k_geometry;
+igMetaField *igGeometryElement::k_defaultSize;
+igMetaField *igGeometryElement::k_color;
+igMetaField *igGeometryElement::k_sharableAttrs;
 
-igMetaObject *igGeometryElement_GetMetaObject(void)
+igMetaObject *igGeometryElement::getClassTypeLazy()
 {
-    igMetaObject *g = g_igGeometryElement_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igGeometryElement_EnsureRegistered();
-    return g_igGeometryElement_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igGeometryElement_EnsureRegistered(void)
+igMetaObject *igGeometryElement::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igGeometryElement_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igGeometryElement_callbackList[] = { Gap::Sg::igGeometry::arkRegister, Gap::Attrs::igAttrList::arkRegister, 0 };
+void igGeometryElement::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igGeometryElement_Register(void) {
+CallbackArray *igGeometryElement::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igGeometry::arkRegister, Gap::Attrs::igAttrList::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igGeometryElement_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igGeometryElement_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igGeometryElement",
-        0x2C, /* instance size */
+        sizeof(igGeometryElement),
         0,
-        &igGeometryElement_InitFields,
-        0, /* extra callback item */
-        g_igGeometryElement_callbackList /* callback list */
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igGeometryElement_GetMetaObjectFunction(void) {
-    igGeometryElement_GetMetaObject();
+void igGeometryElement::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_geometry", "_defaultSize", "_color", "_sharableAttrs" };
+    static igMetaField **enumStorage[] = { &k_geometry, &k_defaultSize, &k_color, &k_sharableAttrs };
+    static int offsets[] = { 8, 12, 24, 40 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igGeometry::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(igVec4f(1.0f, 1.0f, 1.0f, 1.0f));
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igGeometryElement_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    igObjectRefMetaField_Create,
-};
-static const char *g_igGeometryElement_fieldTable[] = {
-    "_geometry",
-    "_defaultSize",
-    "_color",
-    "_sharableAttrs",
-};
-static igMetaField **g_igGeometryElement_fieldHandles[] = {
-    &g_igGeometryElement_geometryMetaField,
-    &g_igGeometryElement_defaultSizeMetaField,
-    &g_igGeometryElement_colorMetaField,
-    &g_igGeometryElement_sharableAttrsMetaField,
-};
-static int g_igGeometryElement_fieldOffsets[] = {
-    8,
-    12,
-    24,
-    40,
-};
-
-void igGeometryElement_InitFields(void) {
-    struct GeometryMetaFieldView { char p[52]; char f52; char p2[3]; int f56; };
-    void *temp_a0;
-    struct GeometryMetaFieldView *temp_s1_2;
-    int temp_s2;
-    struct GeometryMetaFieldView *temp_s1;
-    void *temp_s0;
-    void *temp_a0_2;
-    float v4[4];
-    float v3[3];
-
-    temp_s0 = (void *)g_igGeometryElement_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGeometryElement_ctorTable, 4);
-    temp_s1 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    temp_s1->f56 = (int)(Gap::Sg::igGeometry::getClassTypeLazy());
-    temp_s1->f52 = 1;
-    temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    v3[0] = 0.0f;
-    v3[1] = 0.0f;
-    v3[2] = 0.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v3);
-    temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    v4[0] = 1.0f;
-    v4[1] = 1.0f;
-    v4[2] = 1.0f;
-    v4[3] = 1.0f;
-    ((Gap::Math::igVec4fMetaField *)temp_a0_2)->setDefault(*(const igVec4f *)v4);
-    temp_s1_2 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
-    temp_s1_2->f56 = (int)(Gap::Attrs::igAttrList::getClassTypeLazy());
-    temp_s1_2->f52 = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGeometryElement_fieldTable, g_igGeometryElement_fieldHandles, g_igGeometryElement_fieldOffsets, temp_s2);
+}
 }
 

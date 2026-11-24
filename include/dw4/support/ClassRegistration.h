@@ -44,15 +44,7 @@ void igParticleAttr_EnsureRegistered(void);
 /* SceneGraph */
 void igActorList_EnsureRegistered(void);
 void igActor_EnsureRegistered(void);
-void igBitMask_EnsureRegistered(void);
-void igBlendMatrixSelect_EnsureRegistered(void);
 void igCompressedAnimationSequenceQS_EnsureRegistered(void);
-void igEnbayaAnimationSource_EnsureRegistered(void);
-void igEnbayaAnimationState_EnsureRegistered(void);
-void igEnbayaContextPool_RunStaticInit(void);
-void igEnbayaTransformSource_EnsureRegistered(void);
-void igModelViewMatrixBoneSelectListSg_EnsureRegistered(void);
-void igModelViewMatrixBoneSelect_EnsureRegistered(void);
 
 /* Libraries */
 void AdxMovieLibrary_RegisterClasses(void);

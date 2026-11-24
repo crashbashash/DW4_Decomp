@@ -26,7 +26,6 @@
 #include "src/engine/insight/igInsightCore_tail.inc"
 #include "src/engine/insight/igMessageDefaultReceiver_tail.inc"
 #include "src/engine/insight/igFilterMessageDispatcher_tail.inc"
-#include "src/engine/insight/igMessageFilter_tail.inc"
 #include "src/engine/insight/igFilterMessageDispatcher_tail2.inc"
 #include "src/engine/insight/igSerialScheduler_tail.inc"
 #include "src/engine/insight/InlineTail.inc"

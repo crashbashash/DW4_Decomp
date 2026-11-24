@@ -1,42 +1,43 @@
-igMetaObject *g_igMessage_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igMessage_GetMetaObject(void)
+igMetaObject *igMessage::_Meta;
+
+igMetaObject *igMessage::getClassTypeSafe()
 {
-    igMetaObject *g = g_igMessage_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMessage_EnsureRegistered();
-    return g_igMessage_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igMessage_GetVTable(void) {
-    struct Obj_2316c0 o; igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igMessage_vtable[0];
-    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-}
-
-void igMessage_EnsureRegistered(void)
+void *igMessage::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igMessage_Register);
+    igMessage temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igMessage_Register(void) {
+void igMessage::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMessage::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMessage_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igMessage_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMessage",
-        8, /* instance size */
-        igMessage_GetVTable,
+        sizeof(igMessage),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igMessage_GetMetaObjectFunction(void) {
-    igMessage_GetMetaObject();
+}
 }
 

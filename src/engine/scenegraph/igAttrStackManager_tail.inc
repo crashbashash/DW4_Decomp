@@ -589,13 +589,15 @@ void igBillboard::computeTransform(igMatrix44f *result, const igMatrix44f *model
 }
 }
 
-void igBitMask_SetAll(igBitMask *mask) {
-    igDataList *arg0 = (igDataList *)mask;
+namespace Gap {
+namespace Core {
+
+void igBitMask::setAll() {
     unsigned int temp_a2;
     int *temp_a0;
 
-    temp_a2 = arg0->_count;
-    temp_a0 = (int *)arg0->_data;
+    temp_a2 = _count;
+    temp_a0 = (int *)_data;
     switch (temp_a2) {
     case 16:
         temp_a0[15] = -1;
@@ -653,13 +655,12 @@ void igBitMask_SetAll(igBitMask *mask) {
     }
 }
 
-void igBitMask_ClearAll(igBitMask *mask) {
-    igDataList *arg0 = (igDataList *)mask;
+void igBitMask::clearAll() {
     unsigned int temp_a2;
     int *temp_a0;
 
-    temp_a2 = arg0->_count;
-    temp_a0 = (int *)(arg0->_data);
+    temp_a2 = _count;
+    temp_a0 = (int *)_data;
     switch (temp_a2) {
     case 16:
         temp_a0[15] = 0;
@@ -716,30 +717,30 @@ void igBitMask_ClearAll(igBitMask *mask) {
     }
 }
 
-void igBitMask_SetBitCount(igBitMask *arg, unsigned int bits) {
-    igBitMaskWords *m;
+void igBitMask::setBitCount(unsigned int bitCount) {
     unsigned int old;
     int partial;
     int i;
     int n;
-    m = (igBitMaskWords *)arg;
-    old = m->_bitCount;
-    if (bits <= old) {
-        m->_bitCount = bits;
-        m->setCount((bits + 31) >> 5);
+    old = _bitCount;
+    if (bitCount <= old) {
+        _bitCount = bitCount;
+        setCount((bitCount + 31) >> 5);
     } else {
-        i = m->_count;
+        i = _count;
         partial = old & 31;
-        m->_bitCount = bits;
-        m->setCount((bits + 31) >> 5);
+        _bitCount = bitCount;
+        setCount((bitCount + 31) >> 5);
         if (partial != 0) {
-            unsigned int mask = ((1 << partial) - 1) & m->getWord(i - 1);
-            m->setWord(i - 1, mask);
+            unsigned int mask = ((1 << partial) - 1) & get(i - 1);
+            set(i - 1, mask);
         }
-        n = m->_count;
+        n = _count;
         for (; i < n; i++) {
-            m->setWord(i, DAT_0048d8d0);
+            set(i, DAT_0048d8d0);
         }
     }
+}
+}
 }
 

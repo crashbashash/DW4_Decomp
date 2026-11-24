@@ -1134,11 +1134,12 @@ class Planner:
 
     def is_enum(self, t, cls):
         """Whether parameter type `t` (normalised) of a member of `cls` is an enum: one the class, a base or the
-        qualifying class declares, or one at file scope."""
+        qualifying class declares, or one at file scope (a class of a header that no class-members.tsv row
+        declares qualifies it too: `Display::igKey::KEY_VALUES`)."""
         parts = re.sub(r"\s*:\s*:\s*", "::", t or "").split("::")
         if len(parts) > 1:
             hit = self.scope.nested.get(parts[-2], {}).get(parts[-1])
-            return bool(hit) and hit[0] == "enum"
+            return hit[0] == "enum" if hit else parts[-1] in self.scope.enums
         return self.scope.enum_of(cls, t) is not None
 
     def gap_receiver(self, conv, inside, gap):

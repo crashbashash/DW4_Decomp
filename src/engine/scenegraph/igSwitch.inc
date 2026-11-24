@@ -42,7 +42,7 @@ void igSwitch::arkRegister()
 
 CallbackArray *igSwitch::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igBitMask_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igBitMask::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -72,7 +72,7 @@ void igSwitch::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 1);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Core::igBitMask::getClassTypeLazy();
         metaField->_construct = 1;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);

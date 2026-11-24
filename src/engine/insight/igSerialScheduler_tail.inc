@@ -1,56 +1,54 @@
-static inline void setRetained(SchedulerManager *manager, ManagerArray *list, int index) {
-    igObject *previous;
+namespace Gap {
+namespace Insight {
 
-    igObject::ref(((igObject *)manager));
-    previous = (igObject *)list->_data[index];
-    igObject::release(previous);
-    if (list->_count != 0 && index >= 0 && index < list->_count) {
-        list->_data[index] = manager;
-    }
-}
-
-/* matching construct: 4 variants, the inline parameter order */
-void igSerialScheduler_Update(igSerialScheduler *scheduler) {
-    unsigned int count = ((ManagerListView *)scheduler->_managerList)->_list->_count;
+void igSerialScheduler::update()
+{
+    unsigned int count = _managerList->getCount();
     int i;
 
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)scheduler->_cachedManagerList))->setCount(count);
+    _cachedManagerList->setCount(count);
+    /* matching construct: the manager is read through the ordered list's igObjectList with the int index (the
+     * template's get takes an unsigned one, and retail shares one scaled index between the read and the set). */
     for (i = 0; i < count; i++) {
-        setRetained(((ManagerListView *)scheduler->_managerList)->_list->_data[i], (ManagerArray *)scheduler->_cachedManagerList, i);
+        _cachedManagerList->set(i, (igInfoManager *)_managerList->_objectList->get(i));
     }
     for (i = 0; i < count; i++) {
-        ((ManagerArray *)scheduler->_cachedManagerList)->_data[i]->update();
+        _cachedManagerList->get(i)->update();
     }
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)scheduler->_cachedManagerList))->setCount(0);
+    _cachedManagerList->setCount(0);
 }
 
-void igSerialScheduler_Schedule(igSerialScheduler *self, int arg1) {
-    igRendererOrderedList_Append((igDependencyOrderedList *)(self->_managerList), (igObject *)arg1, 1);
+void igSerialScheduler::schedule(igInfoManager *manager)
+{
+    _managerList->appendUnique(manager);
 }
 
-void igSerialScheduler_Unschedule(Obj_238020 *arg0, int arg1) {
-    igObjectList_RemoveRetained((igDependencyOrderedList *)arg0->f8, (igObject *)arg1);
+void igSerialScheduler::unschedule(igInfoManager *manager)
+{
+    _managerList->remove(manager);
 }
 
 /* Whether the scheduler already holds manager. */
-int igSerialScheduler_IsScheduled(igSerialScheduler *scheduler, igObject *manager) {
-    igDependencyOrderedList *managers = (igDependencyOrderedList *)scheduler->_managerList;
-    /* matching construct: the copy taken by address keeps the manager in the 12(sp) slot, stored after the first list load. */
-    igObject *item = manager;
-    igObjectList *list = (igObjectList *)managers->_objectList;
-    return indexOfItem(list, &item) >= 0;
+bool igSerialScheduler::isScheduled(igInfoManager *manager)
+{
+    return _managerList->find(manager) >= 0;
 }
 
-void igSerialScheduler_AppendDependency(S0 *arg0, void *arg1, void *arg2) {
-    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)arg0->f8, arg1, arg2);
+void igSerialScheduler::appendDependency(const void *before, const void *after)
+{
+    _managerList->appendDependency(before, after);
 }
 
-void igSerialScheduler_RemoveDependency(S0 *arg0, void *arg1, void *arg2) {
-    igDependencyOrderedList_RemoveDependency((igDependencyOrderedList *)arg0->f8, arg1, arg2);
+void igSerialScheduler::removeDependency(const void *before, const void *after)
+{
+    _managerList->removeDependency(before, after);
 }
 
-void igSerialScheduler_RemoveAllDependencies(S0 *arg0, void *arg1) {
-    igDependencyOrderedList_RemoveDependencies((igDependencyOrderedList *)arg0->f8, arg1);
+void igSerialScheduler::removeAllDependencies(const void *object)
+{
+    _managerList->removeAllDependencies(object);
+}
+}
 }
 
 SharedViewerOptions *igViewerDefaults_Construct(SharedViewerOptions *self) {

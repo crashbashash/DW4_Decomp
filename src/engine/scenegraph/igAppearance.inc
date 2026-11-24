@@ -40,7 +40,7 @@ void igAppearance::arkRegister()
 
 CallbackArray *igAppearance::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igSkin::arkRegister, Gap::Sg::igSkinList::arkRegister, igModelViewMatrixBoneSelectListSg_EnsureRegistered, igStringObjList_EnsureRegistered, Gap::Sg::igNodeList::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igSkin::arkRegister, Gap::Sg::igSkinList::arkRegister, Gap::Sg::igModelViewMatrixBoneSelectList::arkRegister, igStringObjList_EnsureRegistered, Gap::Sg::igNodeList::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -79,7 +79,7 @@ void igAppearance::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
-        metaField->_metaObject = (int)igModelViewMatrixBoneSelectListSg_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igModelViewMatrixBoneSelectList::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {

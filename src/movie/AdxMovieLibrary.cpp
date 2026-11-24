@@ -35,7 +35,6 @@ class igMemoryPoolView;
 #include "dw4/audio/igAudioContext.h"
 #include "dw4/gfx/igVisualContext.h"
 #include "dw4/core/igObject.h"
-#include "dw4/gui/igRendererOrderedList.h"
 
 extern "C" void AdxMovieLibrary_MarkRegistered(void);
 extern "C" void *igAdx_GetMetaObject(void);
@@ -1865,15 +1864,15 @@ void igMovieManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMovieManager_Register);
 }
 
-static igMetaObjectCallback g_igMovieManager_callbackList[] = { igMovieInfoList_EnsureRegistered, igAudioContext_EnsureRegistered, igMovieCodecList_EnsureRegistered, igMovieRenderer_EnsureRegistered, igRendererOrderedList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMovieManager_callbackList[] = { igMovieInfoList_EnsureRegistered, igAudioContext_EnsureRegistered, igMovieCodecList_EnsureRegistered, igMovieRenderer_EnsureRegistered, Gap::Gui::igRendererOrderedList::arkRegister, 0 };
 
 CallbackArray *igMovieManager_Register(void) {
     AdxMovieLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMovieManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         igMovieManager_GetMetaObjectFunction,
         "igMovieManager",
         0x28, /* instance size */
@@ -1948,7 +1947,7 @@ void igMovieManager_InitFields(void) {
     movieRendererField->_construct = 1;
     movieRendererField->_persistent = 0;
     rendererListField = ((igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, startIndex + 5));
-    rendererListField->_metaObject = (int)igRendererOrderedList_GetOrCreateMetaObject();
+    rendererListField->_metaObject = (int)Gap::Gui::igRendererOrderedList::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igMovieManager_fieldTable, g_igMovieManager_fieldHandles, g_igMovieManager_fieldOffsets, startIndex);
 }
 
@@ -1990,8 +1989,8 @@ CallbackArray *igMoviePlugin_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMoviePlugin_metaObject,
-        igInsightPlugin_Register,
-        igInsightPlugin_GetPublishedMetaObject,
+        Gap::Insight::igInsightPlugin::arkRegisterInternal,
+        Gap::Insight::igInsightPlugin::getClassMeta,
         igMoviePlugin_GetMetaObjectFunction,
         "igMoviePlugin",
         0xc, /* instance size */
@@ -2005,10 +2004,6 @@ CallbackArray *igMoviePlugin_Register(void) {
 void igMoviePlugin_GetMetaObjectFunction(void)
 {
     igMoviePlugin_GetMetaObject();
-}
-
-igMetaObject *igInsightPlugin_GetPublishedMetaObject(void) {
-    return g_igInsightPlugin_metaObject;
 }
 
 static FieldFactory g_igMoviePlugin_ctorTable[] = {
@@ -2037,9 +2032,10 @@ void igMoviePlugin_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)meta, g_igMoviePlugin_fieldTable, g_igMoviePlugin_fieldHandles, g_igMoviePlugin_fieldOffsets, firstField);
 }
 
+/* Retail's out-of-line copy of igInsightPlugin::getMeta: this unit's flat igMoviePlugin stamps the plugin vtable. */
 int igInsightPlugin_GetMeta(void)
 {
-    return (int)g_igInsightPlugin_metaObject;
+    return (int)Gap::Insight::igInsightPlugin::getClassMeta();
 }
 
 igMetaObject *igMovieInfo_GetMeta(void)

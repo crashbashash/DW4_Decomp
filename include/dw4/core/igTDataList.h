@@ -65,6 +65,21 @@ public:
         data[index1] = data[index2];
         data[index2] = tmp;
     }
+    inline void insert(int index, int numItems, const T *items) {
+        if (sizeof(T) == 4) {
+            Parent::insert4(index, numItems, (const unsigned char *)items);
+        } else {
+            Parent::insert(index, numItems, (const unsigned char *)items, sizeof(T));
+        }
+    }
+    inline void insert(int index, const T &item) { insert(index, 1, &item); }
+    inline void remove(int index) {
+        if (sizeof(T) == 4) {
+            Parent::remove4(index);
+        } else {
+            Parent::remove(index, sizeof(T));
+        }
+    }
     inline int find(const T &value, int startIndex = 0) const {
         const int count = _count;
         for (int i = startIndex; i < count; i++) {

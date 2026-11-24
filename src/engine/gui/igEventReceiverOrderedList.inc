@@ -1,77 +1,52 @@
-igMetaObject *g_igEventReceiverOrderedList_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igEventReceiverOrderedList_GetOrCreateMetaObject(void) {
-    if (g_igEventReceiverOrderedList_metaObject == 0) {
-        g_igEventReceiverOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igEventReceiverOrderedList_metaObject;
-}
+igMetaObject *igEventReceiverOrderedList::_Meta;
 
-igMetaObject *igEventReceiverOrderedList_GetMetaObject(void)
+igMetaObject *igEventReceiverOrderedList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igEventReceiverOrderedList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igEventReceiverOrderedList_EnsureRegistered();
-    return g_igEventReceiverOrderedList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igEventReceiverOrderedList_GetVTable(void) {
-    union U_4510f0 u;
-    int t;
-    igObject_InitHeader((igObject *)u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[12] = 0;
-    *(int *)&u.b[16] = 0;
-    *(int *)&u.b[20] = 0;
-    u.vt = (int)&g_igEventReceiverOrderedList_vtable[0];
-    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igEventReceiverOrderedList_vtable[0];
-    FUN_00451160((int **)u.b, 0);
-    return t;
-}
-
-int **FUN_00451160(int **arg0, long long arg1) {
-    if (arg0 != 0) {
-        *arg0 = &DAT_00541970[0];
-        if (arg0 != 0) {
-            *arg0 = &g_igDependencyOrderedList_vtable[0];
-            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x14), -1);
-            igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x10), -1);
-            igSmartPointer_igDependencyList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0xC), -1);
-            igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 8), -1);
-        }
-        if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
-void igEventReceiverOrderedList_EnsureRegistered(void)
+igMetaObject *igEventReceiverOrderedList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igEventReceiverOrderedList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igEventReceiverOrderedList_callbackList[] = { igEventReceiver_EnsureRegistered, 0 };
+void *igEventReceiverOrderedList::retrieveVTablePointer()
+{
+    igEventReceiverOrderedList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igEventReceiverOrderedList_Register(void) {
+void igEventReceiverOrderedList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igEventReceiverOrderedList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igEventReceiver::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igEventReceiverOrderedList_metaObject,
-        igDependencyOrderedList_Register,
-        igDependencyOrderedList_GetPublishedMetaObject,
-        igEventReceiverOrderedList_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igDependencyOrderedList::arkRegisterInternal,
+        Gap::Core::igDependencyOrderedList::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igEventReceiverOrderedList",
-        0x1C, /* instance size */
-        igEventReceiverOrderedList_GetVTable,
+        sizeof(igEventReceiverOrderedList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igEventReceiverOrderedList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igEventReceiverOrderedList_GetMetaObjectFunction(void) {
-    igEventReceiverOrderedList_GetMetaObject();
+}
 }
 

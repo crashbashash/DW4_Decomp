@@ -1,40 +1,47 @@
-int Gap__Sg__igEnbayaTransformSource__vfunc_23(S_1c1b50 *arg0, int arg1, int arg2) {
-    arg0->obj->vX(arg1, arg2, arg0->f8);
-    return 1;
+namespace Gap {
+namespace Sg {
+
+bool igEnbayaTransformSource::getMatrix(igMatrix44f &matrix, long long time)
+{
+    _enbayaAnimationSource->getMatrix(matrix, time, _trackId);
+    return true;
 }
 
-int Gap__Sg__igEnbayaTransformSource__vfunc_24(void *arg0, int a1, int a2, int a3, int a4) {
-    EB *p = (EB *)arg0;
-    p->obj->vX(a1, a2, a3, a4, p->f8);
-    return 1;
+bool igEnbayaTransformSource::getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags)
+{
+    _enbayaAnimationSource->getMatrix(matrix, time, cachedLastTimeFrame, flags, _trackId);
+    return true;
 }
 
-int Gap__Sg__igEnbayaTransformSource__vfunc_25(EnbayaTransformSourceView *o, int a, int b) {
-    return o->_enbayaAnimationSource->f(a, b, o->_trackId);
+bool igEnbayaTransformSource::evaluateRotation(float *quaternion, long long time)
+{
+    return _enbayaAnimationSource->evaluateRotation(quaternion, time, _trackId);
 }
 
-int igEnbayaTransformSource_evaluateRotation(EnbayaTransformSourceView_1c1bd0 *o, int a, int b, int c, int d) {
-    return o->_enbayaAnimationSource->f(a, b, c, d, o->_trackId);
+bool igEnbayaTransformSource::evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags)
+{
+    return _enbayaAnimationSource->evaluateRotation(quaternion, time, cachedLastTimeFrame, flags, _trackId);
 }
 
-int Gap__Sg__igEnbayaTransformSource__vfunc_27(EnbayaTransformSourceView_1c1bf0 *o, int a, int b, int c) {
-    return o->_enbayaAnimationSource->f(a, b, c, o->_trackId);
+bool igEnbayaTransformSource::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time)
+{
+    return _enbayaAnimationSource->evaluateRotationAndTranslation(quaternion, translation, time, _trackId);
 }
 
-int igEnbayaTransformSource_evaluateRotationAndTranslation(EnbayaTransformSourceView_1c1c10 *o, int a, int b, int c, int d, int e) {
-    return o->_enbayaAnimationSource->f(a, b, c, d, e, o->_trackId);
+bool igEnbayaTransformSource::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags)
+{
+    return _enbayaAnimationSource->evaluateRotationAndTranslation(quaternion, translation, time, cachedLastTimeFrame, flags, _trackId);
 }
 
-int Gap__Sg__igEnbayaTransformSource__vfunc_31(void) {
+long long igEnbayaTransformSource::getFirstFrameTime()
+{
     return 0;
 }
 
-void Gap__Sg__igEnbayaTransformSource__vfunc_32(int a0) {
-    FUN_001c0ea0(*(EnbayaSourceView **)((char *)a0 + 12));
+long long igEnbayaTransformSource::getLastFrameTime()
+{
+    return _enbayaAnimationSource->getDurationNs();
 }
-
-namespace Gap {
-namespace Sg {
 
 void igEnvironmentMapShader2::userConstruct(int flag) {
     igNode_userConstruct((void * *)(void * *)this, flag);

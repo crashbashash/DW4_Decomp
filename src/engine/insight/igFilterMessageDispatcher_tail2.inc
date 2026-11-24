@@ -1,46 +1,53 @@
-void igFilterMessageDispatcher_AddFilteringForType(FilterDispatcherSlots *self, int message, igObject *target)
+namespace Gap {
+namespace Insight {
+
+void igFilterMessageDispatcher::addFiltering(igMessageReceiver *receiver, igMetaObject *msgType)
 {
-    igSmartPointer<MessageFilter> filter = igFilterMessageDispatcher_GetFilterOrCreate((FilterDispatcher *)self, target);
+    igSmartPointer<igMessageFilter> filter = getFilterOrCreate(msgType);
 
-    self->dispatch(message, filter.get());
+    addFiltering(receiver, filter.get());
 }
 
-void igFilterMessageDispatcher_AddFiltering(igFilterMessageDispatcher *self, void *arg1, void *arg2) {
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(*(int *)((char *)(arg2) + 12))))->appendUnique((Gap::Core::igObject *)arg1);
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(self->_filters)))->appendUnique((Gap::Core::igObject *)arg2);
+void igFilterMessageDispatcher::addFiltering(igMessageReceiver *receiver, igMessageFilter *msgFilter)
+{
+    msgFilter->_receivers->appendUnique(receiver);
+    _filters->appendUnique(msgFilter);
 }
 
-void igFilterMessageDispatcher_RemoveFilteringForType(void **arg0, int arg1, int arg2) {
-    int temp_v0;
+void igFilterMessageDispatcher::removeFiltering(igMessageReceiver *receiver, igMetaObject *msgType)
+{
+    igMessageFilter *filter = getFilter(msgType);
 
-    temp_v0 = (int)igFilterMessageDispatcher_GetFilter((const A_237990 *)arg0, arg2);
-    if (temp_v0 != 0) {
-        ((DW4VC_108_2 *)(arg0))->vX((int)(arg1), (int)(temp_v0));
+    if (filter != 0) {
+        removeFiltering(receiver, filter);
     }
 }
 
-void igFilterMessageDispatcher_RemoveFilteringForReceiver(V *arg0, int arg1) {
-    int i;
-    for (i = arg0->list->n - 1; i >= 0; i--) {
-        arg0->vX(arg1, arg0->list->arr[i]);
+void igFilterMessageDispatcher::removeFiltering(igMessageReceiver *receiver)
+{
+    for (int i = _filters->getCount() - 1; i >= 0; i--) {
+        removeFiltering(receiver, _filters->get(i));
     }
 }
 
-void igFilterMessageDispatcher_RemoveFiltering(S_arg0 *arg0, void *arg1, S_arg2 *arg2) {
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg2->f12))->removeByValue((Gap::Core::igObject *)arg1, 0);
-    if (*(int *)((char *)(arg2->f12) + 8) == 0) {
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg0->f12))->removeByValue((Gap::Core::igObject *)arg2, 0);
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg0->f8))->removeByValue((Gap::Core::igObject *)arg2, 0);
+void igFilterMessageDispatcher::removeFiltering(igMessageReceiver *receiver, igMessageFilter *msgFilter)
+{
+    msgFilter->_receivers->removeByValue(receiver, 0);
+    if (msgFilter->_receivers->getCount() == 0) {
+        _filters->removeByValue(msgFilter, 0);
+        _defaultFilters->removeByValue(msgFilter, 0);
     }
 }
 
-void igMessenger_AddReceiver(igMessenger *messenger, igObject *receiver, igMetaObject *messageType)
+void igMessenger::registerReceiver(igMessageReceiver *receiver, igMetaObject *msgType) const
 {
-    ((igFilterMessageDispatcherView *)messenger->_dispatcher)->vfunc_21(receiver, messageType);
+    _dispatcher->addFiltering(receiver, msgType);
 }
 
-void igMessenger_PostMessage(igMessageDispatcherOwnerView *self, void *message)
+void igMessenger::postMessage(igMessage *msg) const
 {
-    self->f8->vfunc_26(message);
+    _dispatcher->postMessage(msg);
+}
+}
 }
 

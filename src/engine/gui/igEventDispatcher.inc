@@ -71,7 +71,7 @@ void igEventDispatcher_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEventDispatcher_Register);
 }
 
-static igMetaObjectCallback g_igEventDispatcher_callbackList[] = { igEventReceiverOrderedList_EnsureRegistered, igControllerManager_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igEventDispatcher_callbackList[] = { Gap::Gui::igEventReceiverOrderedList::arkRegister, igControllerManager_EnsureRegistered, 0 };
 
 CallbackArray *igEventDispatcher_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -121,7 +121,7 @@ void igEventDispatcher_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEventDispatcher_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igEventReceiverOrderedList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gui::igEventReceiverOrderedList::getClassTypeLazy();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igControllerManager_GetOrCreateMetaObject();

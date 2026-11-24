@@ -7,7 +7,6 @@ struct igMessageDefaultReceiver;
 extern "C" {
 #endif
 
-struct igMessageDefaultReceiver *igMessageDefaultReceiver_CreateInstance(int allocator);
 
 #ifdef __cplusplus
 }

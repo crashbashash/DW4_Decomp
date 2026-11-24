@@ -73,8 +73,8 @@ CallbackArray *beLua_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLua_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beLua_GetMetaObjectFunction,
         "beLua",
         0x20, /* instance size */

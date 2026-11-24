@@ -1,44 +1,43 @@
-igMetaObject *g_igEventReceiver_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igEventReceiver_GetMetaObject(void)
+igMetaObject *igEventReceiver::_Meta;
+
+igMetaObject *igEventReceiver::getClassTypeSafe()
 {
-    igMetaObject *g = g_igEventReceiver_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igEventReceiver_EnsureRegistered();
-    return g_igEventReceiver_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igEventReceiver_GetVTable(void) {
-    struct Obj_4512e0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igEventReceiver_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igEventReceiver_EnsureRegistered(void)
+void *igEventReceiver::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igEventReceiver_Register);
+    igEventReceiver temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igEventReceiver_Register(void) {
+void igEventReceiver::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igEventReceiver::arkRegisterInternal()
+{
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igEventReceiver_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igEventReceiver_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igEventReceiver",
-        8, /* instance size */
-        igEventReceiver_GetVTable,
+        sizeof(igEventReceiver),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igEventReceiver_GetMetaObjectFunction(void) {
-    igEventReceiver_GetMetaObject();
+}
 }
 

@@ -63,7 +63,6 @@ extern "C" void igActorManagerParams_EnsureRegistered(void);
 #include "dw4/gui/igGuiComponentList.h"
 #include "dw4/gui/igGuiComponent.h"
 #include "dw4/gui/igGuiSystem.h"
-#include "dw4/gui/igHotKeyEventReceiver.h"
 #include "dw4/core/igMetaFieldList.h"
 #include "dw4/core/igPointerList.h"
 #include "dw4/core/igMetaObjectList.h"
@@ -307,7 +306,6 @@ extern "C" int g_igViewManager_vtable[4];
 extern "C" int DAT_00542680[8];
 union U_45d1a0 { int vt; int w[21]; char b[84]; };
 extern "C" int igViewManager_GetVTable(void);
-#include "dw4/gui/igEventReceiver.h"
 extern "C" CallbackArray *igViewManager_Register(void);
 extern "C" void igViewManager_GetMetaObjectFunction(void);
 extern "C" void igViewManager_InitFields(void);

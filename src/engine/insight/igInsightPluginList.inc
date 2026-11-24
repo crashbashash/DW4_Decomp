@@ -1,53 +1,52 @@
-igMetaObject *g_igInsightPluginList_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igInsightPluginList_GetOrCreateMetaObject(void) {
-    if (g_igInsightPluginList_metaObject == 0) {
-        g_igInsightPluginList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igInsightPluginList_metaObject;
-}
+igMetaObject *igInsightPluginList::_Meta;
 
-igMetaObject *igInsightPluginList_GetMetaObject(void)
+igMetaObject *igInsightPluginList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igInsightPluginList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igInsightPluginList_EnsureRegistered();
-    return g_igInsightPluginList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igInsightPluginList_GetVTable(void) {
-    struct Obj_232660 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igInsightPluginList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igInsightPluginList_EnsureRegistered(void)
+igMetaObject *igInsightPluginList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igInsightPluginList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igInsightPluginList_callbackList[] = { igInsightPlugin_EnsureRegistered, 0 };
+void *igInsightPluginList::retrieveVTablePointer()
+{
+    igInsightPluginList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igInsightPluginList_Register(void) {
+void igInsightPluginList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igInsightPluginList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Insight::igInsightPlugin::arkRegister, 0 };
+
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igInsightPluginList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igInsightPluginList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igInsightPluginList",
-        0x14, /* instance size */
-        igInsightPluginList_GetVTable,
+        sizeof(igInsightPluginList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igInsightPluginList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igInsightPluginList_GetMetaObjectFunction(void) {
-    igInsightPluginList_GetMetaObject();
+}
 }
 

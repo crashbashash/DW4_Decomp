@@ -108,19 +108,19 @@ void FUN_004541f0(int *arg0, int *arg1) {
 }
 
 void igEventDispatcher_AddReceiver(igEventDispatcher *dispatcher, igObject *receiver) {
-    igRendererOrderedList_Append((igDependencyOrderedList *)dispatcher->_receivers, receiver, 0);
+    ((Gap::Core::igDependencyOrderedList *)dispatcher->_receivers)->append((Gap::Core::igObject *)receiver);
 }
 
 void igEventDispatcher_RemoveReceiver(igEventDispatcher *dispatcher, igObject *receiver) {
-    igObjectList_RemoveRetained((igDependencyOrderedList *)dispatcher->_receivers, receiver);
+    ((Gap::Core::igDependencyOrderedList *)dispatcher->_receivers)->remove((Gap::Core::igObject *)receiver);
 }
 
 void igEventDispatcher_AddReceiverOrder(igEventDispatcher *dispatcher, igObject *first, igObject *second)
 {
-    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)dispatcher->_receivers, first, second);
+    ((Gap::Core::igDependencyOrderedList *)dispatcher->_receivers)->appendDependency(first, second);
 }
 
 void igEventDispatcher_RemoveReceiverOrder(igEventDispatcher *dispatcher, igObject *first, igObject *second) {
-    igDependencyOrderedList_RemoveDependency((igDependencyOrderedList *)dispatcher->_receivers, first, second);
+    ((Gap::Core::igDependencyOrderedList *)dispatcher->_receivers)->removeDependency(first, second);
 }
 

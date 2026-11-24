@@ -1,78 +1,64 @@
-igMetaObject *g_igViewportResizedMessage_metaObject;
-igMetaField *g_igViewportResizedMessage_originMetaField;
-igMetaField *g_igViewportResizedMessage_sizeMetaField;
+namespace Gap {
+namespace Insight {
 
-int FUN_002332b0(int arg0) {
-    igViewportResizedMessage_EnsureRegistered();
-    return (int)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x56DC10), (igMemoryPoolView *)arg0));
-}
+igMetaObject *igViewportResizedMessage::_Meta;
+igMetaField *igViewportResizedMessage::k_origin;
+igMetaField *igViewportResizedMessage::k_size;
 
-igMetaObject *igViewportResizedMessage_GetMetaObject(void)
+igViewportResizedMessage *igViewportResizedMessage::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igViewportResizedMessage_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igViewportResizedMessage_EnsureRegistered();
-    return g_igViewportResizedMessage_metaObject;
+    arkRegister();
+    return (igViewportResizedMessage *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igViewportResizedMessage_GetVTable(void) {
-    struct Obj_233340 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igViewportResizedMessage_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igViewportResizedMessage_EnsureRegistered(void)
+igMetaObject *igViewportResizedMessage::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igViewportResizedMessage_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igViewportResizedMessage_Register(void) {
+void *igViewportResizedMessage::retrieveVTablePointer()
+{
+    igViewportResizedMessage temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igViewportResizedMessage::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewportResizedMessage::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewportResizedMessage_metaObject,
-        igMessage_Register,
-        igMessage_GetPublishedMetaObject,
-        igViewportResizedMessage_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Insight::igMessage::arkRegisterInternal,
+        Gap::Insight::igMessage::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewportResizedMessage",
-        0x18, /* instance size */
-        igViewportResizedMessage_GetVTable,
-        &igViewportResizedMessage_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igViewportResizedMessage),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igViewportResizedMessage_GetMetaObjectFunction(void) {
-    igViewportResizedMessage_GetMetaObject();
+void igViewportResizedMessage::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool };
+    static const char *names[] = { "_origin", "_size" };
+    static igMetaField **enumStorage[] = { &k_origin, &k_size };
+    static int offsets[] = { 8, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewportResizedMessage_ctorTable[] = {
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-};
-static const char *g_igViewportResizedMessage_fieldTable[] = {
-    "_origin",
-    "_size",
-};
-static igMetaField **g_igViewportResizedMessage_fieldHandles[] = {
-    &g_igViewportResizedMessage_originMetaField,
-    &g_igViewportResizedMessage_sizeMetaField,
-};
-static int g_igViewportResizedMessage_fieldOffsets[] = {
-    8,
-    16,
-};
-
-void igViewportResizedMessage_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
-
-    temp_s0 = g_igViewportResizedMessage_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewportResizedMessage_ctorTable, 2);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewportResizedMessage_fieldTable, g_igViewportResizedMessage_fieldHandles, g_igViewportResizedMessage_fieldOffsets, temp_s1);
+}
 }
 

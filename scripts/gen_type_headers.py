@@ -128,11 +128,14 @@ FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
 # igRay::ISET_SIDES that igGeometryAttr's intersectRay takes, igVertexArrayLock.h, the kit's vertex component
 # enum igGeometryAttr1_5's vector helper takes, and igVisualContextTypes.h, the structures igVisualContext's slots
 # take (igRenderDestinationFormat, igVideoFormat), and igNotifyEvent.h, the event igView's notify slot takes, and
-# dw4/scenegraph/igSg.h, the scene graph library's IG_TRAVERSAL_RETURN that the shader processors' shade slot returns.
+# dw4/scenegraph/igSg.h, the scene graph library's IG_TRAVERSAL_RETURN that the shader processors' shade slot returns,
+# dw4/windowinput/igInputEnums.h, the key, mouse and controller button enums the event receivers' handlers take, and
+# dw4/gui/igGui.h, the GUI library's IG_DIRECTION that igGuiSystem moves focus by.
 KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h",
                     "dw4/gfx/igVertexFormat.h", "dw4/gfx/igVertexData.h", "dw4/gfx/png.h", "dw4/maths/igRay.h",
                     "dw4/gfx/igVertexArrayLock.h", "dw4/gfx/igVisualContextTypes.h",
-                    "dw4/gui/igNotifyEvent.h", "dw4/scenegraph/igTraversal.h", "dw4/scenegraph/igSg.h")
+                    "dw4/gui/igNotifyEvent.h", "dw4/scenegraph/igTraversal.h", "dw4/scenegraph/igSg.h",
+                    "dw4/windowinput/igInputEnums.h", "dw4/gui/igGui.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.
@@ -692,6 +695,10 @@ def main(argv=None):
             trailing = i + 1 >= len(fields)
             span = C_SIZE.get(META_TO_C.get(f["type"], "int"), 4) if trailing \
                 else fields[i + 1]["offset"] - off
+            if trailing and f["type"] == "igStructMetaField" and inst_size is not None \
+                    and (name, raw_name) in typed_fields:
+                # a typed inline struct that closes the class (a pointer to member) fills the registered size
+                span = inst_size - off
             if off < cursor:
                 # reflection listed a field inside the previous one; the offset still wins,
                 # so the field is dropped rather than allowed to overlap

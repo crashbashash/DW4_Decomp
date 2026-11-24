@@ -267,7 +267,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igAnimationCombinerBoneInfoPool::arkRegister();
     Gap::Sg::igAnimationStatePool::arkRegister();
     Gap::Sg::igIniShaderFactory::arkRegister();
-    igEnbayaContextPool_RunStaticInit();
+    Gap::Sg::igEnbayaContextPool::arkRegister();
     Gap::Gfx::igClut::arkRegister();
     igAABox_EnsureRegistered();
     Gap::Gfx::igVertexArray1_1::arkRegister();
@@ -280,7 +280,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igNonRefCountedNodeList::arkRegister();
     Gap::Sg::igNodeList::arkRegister();
     Gap::Sg::igSwitch::arkRegister();
-    igBitMask_EnsureRegistered();
+    Gap::Core::igBitMask::arkRegister();
     Gap::Sg::igAttrSet::arkRegister();
     Gap::Sg::igGeometry::arkRegister();
     Gap::Sg::igSceneInfo::arkRegister();
@@ -297,7 +297,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igSkeletonBoneInfoList::arkRegister();
     Gap::Sg::igSkeleton::arkRegister();
     Gap::Sg::igSkeletonList::arkRegister();
-    igModelViewMatrixBoneSelectListSg_EnsureRegistered();
+    Gap::Sg::igModelViewMatrixBoneSelectList::arkRegister();
     Gap::Sg::igAnimationBinding::arkRegister();
     Gap::Sg::igAnimationTrack::arkRegister();
     igActor_EnsureRegistered();
@@ -311,10 +311,10 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igAnimationCombinerBoneInfoList::arkRegister();
     Gap::Sg::igAnimationStateList::arkRegister();
     Gap::Sg::igAnimationModifierList::arkRegister();
-    igEnbayaTransformSource_EnsureRegistered();
-    igEnbayaAnimationSource_EnsureRegistered();
-    igEnbayaAnimationState_EnsureRegistered();
-    igBlendMatrixSelect_EnsureRegistered();
+    Gap::Sg::igEnbayaTransformSource::arkRegister();
+    Gap::Sg::igEnbayaAnimationSource::arkRegister();
+    Gap::Sg::igEnbayaAnimationState::arkRegister();
+    Gap::Sg::igBlendMatrixSelect::arkRegister();
     igActorList_EnsureRegistered();
     Gap::Attrs::igProjectionMatrixAttr::arkRegister();
     Gap::Attrs::igModelViewMatrixAttr::arkRegister();
@@ -353,7 +353,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igCamera::arkRegister();
     Gap::Core::igUnsignedShortList::arkRegister();
     igCompressedAnimationSequenceQS_EnsureRegistered();
-    igModelViewMatrixBoneSelect_EnsureRegistered();
+    Gap::Sg::igModelViewMatrixBoneSelect::arkRegister();
     igFloatListList_EnsureRegistered();
     Gap::Sg::igTransformRecorder::arkRegister();
     Gap::Sg::igLod::arkRegister();
@@ -386,7 +386,7 @@ extern "C" int main(int argc, char **argv) {
     g_igEnbayaContextPool_instance.p = 0;
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
     ReleaseObject((igObject **)&g_igEnbayaContextPool_instance.p);
-    g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(allocator);
+    g_igEnbayaContextPool_instance.p = (igEnbayaContextPool *)Gap::Sg::igEnbayaContextPool::_instantiateFromPool((igMemoryPoolView *)allocator);
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
     ReleaseObject((igObject **)&g_igAnimationCombinerBoneInfoPool_instance.p);
     g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)Gap::Sg::igAnimationCombinerBoneInfoPool::_instantiateFromPool((igMemoryPoolView *)allocator);
@@ -778,7 +778,7 @@ void GameMain_ClearScene(Blk *app) {
     g_igEnbayaContextPool_instance.p = 0;
     { igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator(); allocator = g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0); }
     RELEASE_SHIFTED(g_igEnbayaContextPool_instance.p);
-    g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create((int)allocator);
+    g_igEnbayaContextPool_instance.p = (igEnbayaContextPool *)Gap::Sg::igEnbayaContextPool::_instantiateFromPool(allocator);
     { igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator(); allocator = g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0); }
     RELEASE_SHIFTED(g_igAnimationCombinerBoneInfoPool_instance.p);
     g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)Gap::Sg::igAnimationCombinerBoneInfoPool::_instantiateFromPool(allocator);

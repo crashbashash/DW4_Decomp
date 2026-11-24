@@ -11,7 +11,6 @@
 #include "dw4/core/igObject.h"
 #include "dw4/scenegraph/igBitMask.h"
 #include "dw4/viewer/ViewerOptions.h"
-#include "dw4/gui/igHotKeyEventReceiver.h"
 #include "dw4/gui/igView.h"
 #include "dw4/core/StringPool.h"
 #include <string.h>
@@ -92,10 +91,10 @@ struct RendererLink {
     char pad[12];
     igObject *parameters;
 };
-#define BIND(setter, receiver, name, ...)                                                 \
+#define BIND(receiver, name, ...)                                                         \
     {                                                                                     \
         igSmartPointer<igViewerAction> action(igViewerGuiFactory_CreateAction((igViewerGuiFactory *)self->_guiFactory, self, *(igViewerFunction *)&name)); \
-        setter(receiver, __VA_ARGS__, action.p);                                          \
+        ((Gap::Gui::igHotKeyEventReceiver *)(receiver))->appendHotKey(__VA_ARGS__, (Gap::Gui::igAction *)action.p); \
     }
 
 
@@ -364,24 +363,24 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
     ((igViewerSceneInfoManagerController *)self->_applicationController)->_viewerRenderer = self->_viewerRenderer;
     ((igViewerSceneInfoManagerController *)self->_applicationController)->_application = (int)self;
     ((Gap::Gui::igView *)self->_applicationController)->setModel((Gap::Gui::igModel *)self->_parameters);
-    igBitMask_SetBitCount((igBitMask *)(((igViewerParameters *)self->_parameters)->_disables), (unsigned int)0xC);
+    ((Gap::Core::igBitMask *)(((igViewerParameters *)self->_parameters)->_disables))->setBitCount((unsigned int)0xC);
     {
         igBitMask *disables = (igBitMask *)((igViewerParameters *)self->_parameters)->_disables;
         memset((void *)disables->_data, 0, disables->_count * 4);
     }
-    BIND(igHotKeyEventReceiver_AddKey, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_fitSelectionHandler, 'F')
-    BIND(igHotKeyEventReceiver_AddKey, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_printViewMatrixHandler, 'D')
-    BIND(igHotKeyEventReceiver_AddBinding, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_centerSelectionHandler, 'C', 0xF)
-    BIND(igHotKeyEventReceiver_AddBinding, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_cycleGuiVisibilityHandler, 'H', 0xC)
-    BIND(igHotKeyEventReceiver_AddButton, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_playHandler, 3)
-    BIND(igHotKeyEventReceiver_AddButton, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_pauseHandler, 0)
-    BIND(igHotKeyEventReceiver_AddKey, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_hotKeyMHandler, 'M')
-    BIND(igHotKeyEventReceiver_AddKey, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_hotKeyWHandler, 'W')
-    BIND(igHotKeyEventReceiver_AddBinding, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_resetOperationModeHandler, 'R', 0xA)
-    BIND(igHotKeyEventReceiver_AddBinding, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_hotKeyTHandler, 'T', 0xB)
-    BIND(igHotKeyEventReceiver_AddKey, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_hotKeyPHandler, 'P')
-    BIND(igHotKeyEventReceiver_AddButton, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_button1Handler, 1)
-    BIND(igHotKeyEventReceiver_AddButton, (igHotKeyEventReceiver *)self->_hotKeyReceiver, g_button2Handler, 2)
+    BIND(self->_hotKeyReceiver, g_fitSelectionHandler, Gap::Display::igKey::F)
+    BIND(self->_hotKeyReceiver, g_printViewMatrixHandler, Gap::Display::igKey::D)
+    BIND(self->_hotKeyReceiver, g_centerSelectionHandler, Gap::Display::igKey::C, Gap::Display::igController::BUTTON_15)
+    BIND(self->_hotKeyReceiver, g_cycleGuiVisibilityHandler, Gap::Display::igKey::H, Gap::Display::igController::BUTTON_12)
+    BIND(self->_hotKeyReceiver, g_playHandler, Gap::Display::igController::BUTTON_3)
+    BIND(self->_hotKeyReceiver, g_pauseHandler, Gap::Display::igController::BUTTON_0)
+    BIND(self->_hotKeyReceiver, g_hotKeyMHandler, Gap::Display::igKey::M)
+    BIND(self->_hotKeyReceiver, g_hotKeyWHandler, Gap::Display::igKey::W)
+    BIND(self->_hotKeyReceiver, g_resetOperationModeHandler, Gap::Display::igKey::R, Gap::Display::igController::BUTTON_10)
+    BIND(self->_hotKeyReceiver, g_hotKeyTHandler, Gap::Display::igKey::T, Gap::Display::igController::BUTTON_11)
+    BIND(self->_hotKeyReceiver, g_hotKeyPHandler, Gap::Display::igKey::P)
+    BIND(self->_hotKeyReceiver, g_button1Handler, Gap::Display::igController::BUTTON_1)
+    BIND(self->_hotKeyReceiver, g_button2Handler, Gap::Display::igController::BUTTON_2)
 }
 
 void igViewerSceneInfoManager_OnActivate(void);
@@ -463,10 +462,10 @@ void igViewerSceneInfoManager_Activate(igViewerSceneInfoManager *self) {
     igInsightCore_AddRendererOrder((igInsightCore *)self->_insight, (igObject *)scenesDone.p, (igObject *)(((igGuiSystem *)self->_gui)->_renderer));
     igInsightCore_AddRendererOrder((igInsightCore *)self->_insight, (igObject *)(((igGuiSystem *)self->_gui)->_renderer), (igObject *)overlaysDone.p);
     igInsightCore_AddRendererOrder((igInsightCore *)self->_insight, (igObject *)overlaysDone.p, (igObject *)self->_flushRenderer);
-    igSmartPointer<MessageReceiver> receiver((MessageReceiver *)igMessageDefaultReceiver_CreateInstance(0), AdoptReference());
+    igSmartPointer<MessageReceiver> receiver((MessageReceiver *)Gap::Insight::igMessageDefaultReceiver::_instantiateFromPool(0), AdoptReference());
     ResizeFunction resized = g_viewerRendererResizeHandler;
     receiver->setHandler((igObject *)self->_viewerRenderer, resized);
-    igMessenger_AddReceiver((igMessenger *)(((igInsightCore *)self->_insight)->_messenger), (igObject *)receiver.p, igViewportResizedMessage_GetMetaObject());
+    ((Gap::Insight::igMessenger *)(((igInsightCore *)self->_insight)->_messenger))->registerReceiver((Gap::Insight::igMessageReceiver *)receiver.p, Gap::Insight::igViewportResizedMessage::getClassTypeSafe());
     igInsightCore_AddRenderer((igInsightCore *)self->_insight, (igObject *)self->_viewerRenderer);
     if (((igViewerParameters *)self->_parameters)->_showNormals != 0) {
         igInsightCore_AddRenderer((igInsightCore *)self->_insight, (igObject *)self->_normalsRenderer);

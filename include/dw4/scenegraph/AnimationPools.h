@@ -5,7 +5,6 @@
 /* The scene graph's shared animation pools: the combiners' bone-info pool, the animation-state pool
  * and the Enbaya decompression-context pool. */
 extern "C" {
-igEnbayaContextPool *igEnbayaContextPool_Create(int allocator);
 }
 
 extern igSmartPointer<igAnimationCombinerBoneInfoPool> g_igAnimationCombinerBoneInfoPool_instance;

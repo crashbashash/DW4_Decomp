@@ -67,8 +67,8 @@ CallbackArray *beFileListInfoManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beFileListInfoManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beFileListInfoManager_GetMetaObjectFunction,
         "beFileListInfoManager",
         0x40, /* instance size */

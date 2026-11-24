@@ -313,3 +313,39 @@ igAnimationTransitionPoint	Sg
 igAnimationTransitionPointList	Sg	igTObjectList<igAnimationTransitionPoint>
 igAnimationTransitionDefinition	Sg
 igAnimationTransitionDefinitionList	Sg	igTObjectList<igAnimationTransitionDefinition>
+igBitMask	Core
+igBlendMatrixSelect	Sg
+igModelViewMatrixBoneSelect	Sg
+igModelViewMatrixBoneSelectList	Sg	igTObjectList<igModelViewMatrixBoneSelect>
+igBlendListRecord	Sg
+igBoundingBoxesMaker	Sg
+igCompressedTransformSequence1_5Data	Sg
+igEnbayaContextPool	Sg
+igEnbayaAnimationSource	Sg
+igEnbayaTransformSource	Sg
+igEnbayaAnimationState	Sg
+igEventReceiver	Gui
+igHotKeyEventReceiver	Gui
+igGuiSystemModel	Gui
+igDependencyOrderedList	Core
+igEventReceiverOrderedList	Gui	igTDependencyOrderedList<igEventReceiver>
+igRendererOrderedList	Gui	igTDependencyOrderedList<igRenderer>
+igGeometryElement	Gui
+igMouseCursor	Gui
+igMessage	Insight
+igMessageReceiver	Insight
+igMessageReceiverList	Insight	igTObjectList<igMessageReceiver>
+igMessageFilter	Insight
+igMessageFilterList	Insight	igTObjectList<igMessageFilter>
+igMessageDispatcher	Insight
+igFilterMessageDispatcher	Insight
+igMessenger	Insight
+igMessageDefaultReceiver	Insight
+igInsightPlugin	Insight
+igInsightPluginList	Insight	igTObjectList<igInsightPlugin>
+igInsightScheduler	Insight
+igInfoManager	Insight
+igInfoManagerList	Insight	igTObjectList<igInfoManager>
+igViewportResizedMessage	Insight
+igInfoManagerOrderedList	Insight	igTDependencyOrderedList<igInfoManager>
+igSerialScheduler	Insight

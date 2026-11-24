@@ -538,12 +538,12 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
         return 1;
     case MSG_SHOWPOLYGON:
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
-            igBitMask_SetAll((igBitMask *)((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask);
+            ((Gap::Core::igBitMask *)(((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask))->setAll();
         }
         return 1;
     case MSG_HIDEPOLYGON:
         if (beCameraCtrl_IsBoxCamera(self, info) != 0) {
-            igBitMask_ClearAll((igBitMask *)((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask);
+            ((Gap::Core::igBitMask *)(((igSwitch *)((beCameraBoxData *)info->_data)->_switch)->_childMask))->clearAll();
         }
         return 1;
     case MSG_ENABLE:

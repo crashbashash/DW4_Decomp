@@ -43,8 +43,8 @@ CallbackArray *beKeyboardReceiver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beKeyboardReceiver_metaObject,
-        igEventReceiver_Register,
-        igEventReceiver_GetPublishedMetaObject,
+        Gap::Gui::igEventReceiver::arkRegisterInternal,
+        Gap::Gui::igEventReceiver::getClassMeta,
         beKeyboardReceiver_GetMetaObjectFunction,
         "beKeyboardReceiver",
         0xc, /* instance size */

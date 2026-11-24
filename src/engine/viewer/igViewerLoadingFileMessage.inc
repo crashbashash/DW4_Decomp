@@ -50,8 +50,8 @@ CallbackArray *igViewerLoadingFileMessage_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerLoadingFileMessage_metaObject,
-        igMessage_Register,
-        igMessage_GetPublishedMetaObject,
+        Gap::Insight::igMessage::arkRegisterInternal,
+        Gap::Insight::igMessage::getClassMeta,
         igViewerLoadingFileMessage_GetMetaObjectFunction,
         "igViewerLoadingFileMessage",
         0x10, /* instance size */

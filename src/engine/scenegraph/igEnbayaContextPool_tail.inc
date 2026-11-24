@@ -1,4 +1,7 @@
-void igEnbayaContextPool_resetFields(int arg0, int flags) {
+namespace Gap {
+namespace Sg {
+
+void igEnbayaContextPool::resetFields(int flags) {
     void *sp5C;
     int var_a0;
     int temp_s2;
@@ -9,9 +12,9 @@ void igEnbayaContextPool_resetFields(int arg0, int flags) {
     int sp54;
     int var_v0;
 
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
+    Gap__Core__igObject__resetFields((::igObject *)this, flags);
     temp_s2 = *(int *)((char *)g_objectSystem + 56);
-    var_v0 = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
+    var_v0 = (int)((Gap::Core::igObject *)this)->getMemoryPool();
     var_v0 = (int)(g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     sp5C = (void *)(igStringObj_Create(var_v0));
     temp_s0 = ((Gap::Core::igRegistry *)temp_s2)->getKeyCount(7);
@@ -26,7 +29,7 @@ void igEnbayaContextPool_resetFields(int arg0, int flags) {
                 var_a0 = *(int *)((char *)(sp5C) + 8);
                 var_a0 = (var_a0 == 0) ? ((int)g_stringObjEmptyText) : var_a0;
                 if ((sscanf((char *)var_a0, "enbayaContextPool%d", &sp54) == 1) && (sp54 >= 0) && (sp58 >= 0)) {
-                    FUN_001c1a80((T_1c1a80 *)arg0, sp54, sp58);
+                    setCapacity(sp54, sp58);
                 }
             }
         }
@@ -36,12 +39,13 @@ void igEnbayaContextPool_resetFields(int arg0, int flags) {
     if (var_v0 != 0) {
         *(int *)((char *)(var_v0) + 4) = (int)((int) (*(int *)((char *)(var_v0) + 4) - 1));
         if (((unsigned long long) ((long long) *(int *)((char *)(var_v0) + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)var_v0);
+            igObject_Destroy((::igObject *)var_v0);
         }
     }
 }
 
-void igEnbayaContextPool_destructFields(Obj_1c1450 *arg0) {
+void igEnbayaContextPool::destructFields() {
+    Obj_1c1450 *arg0;
     int i;
     int n;
     L_1c1450 *inner;
@@ -50,6 +54,7 @@ void igEnbayaContextPool_destructFields(Obj_1c1450 *arg0) {
     L_1c1450 *d;
     void *x;
     Alloc *al;
+    arg0 = (Obj_1c1450 *)this;
     n = arg0->outer->count;
     for (i = 0; i < n; i++) {
         d = arg0->dst;
@@ -60,14 +65,15 @@ void igEnbayaContextPool_destructFields(Obj_1c1450 *arg0) {
         m = inner->count;
         for (j = 0; j < m; j++) {
             x = (void *)inner->data[j];
-            al = ((Alloc *)((Gap::Core::igObject *)arg0)->getMemoryPool());
+            al = ((Alloc *)((Gap::Core::igObject *)this)->getMemoryPool());
             al->vX(x);
         }
     }
-    Gap__Core__igObject__destructFields((igObject *)arg0);
+    Gap__Core__igObject__destructFields((::igObject *)this);
 }
 
-int FUN_001c1560(T_1c1560 *arg0, int arg1) {
+void *igEnbayaContextPool::allocate(unsigned int arg1) {
+    T_1c1560 *arg0;
     int i;
     int r;
     L_1c1560 *l;
@@ -76,41 +82,45 @@ int FUN_001c1560(T_1c1560 *arg0, int arg1) {
     int nv;
     L_1c1560 *q;
     int v;
+    arg0 = (T_1c1560 *)this;
     l = arg0->f12;
     n = l->n;
     for (i = 0; i < n; i++) { if (arg1 == l->d[i]) { r = i; goto found; } }
     r = -1;
 found:
     if (r == -1) {
-        FUN_001c17e0((EnbayaContextPoolView *)arg0, arg1);
+        FUN_001c17e0((EnbayaContextPoolView *)this, arg1);
         r = arg0->f8->n - 1;
     }
     s1 = arg0->f16->d[r];
     if (s1 >= ((O_1c1560 *)arg0->f8->d[r])->c) {
         /* matching construct: permuter — l reused for arg0->f8 before the grow call */
         l = arg0->f8;
-        FUN_001c1a80((T_1c1a80 *)arg0, arg1, ((O_1c1560 *)l->d[r])->c + 1);
+        setCapacity(arg1, ((O_1c1560 *)l->d[r])->c + 1);
     }
     v = ((int *)((L_1c1560 *)arg0->f8->d[r])->d)[s1];
     nv = s1 + 1;
     q = arg0->f16;
     if (q->n != 0 && r >= 0 && r < q->n) q->d[r] = nv;
-    return v;
+    return (void *)v;
 }
 
 /* igEnbayaContextPool::deallocate (kit igSg/igEnbayaContextPool.igo): moves the context to the end of its pool's
  * allocated range (swaps it with the last allocated one) and shrinks the range by one. */
-void FUN_001c16a0(igEnbayaContextPool *pool, void *context, int boneCount) {
-    int poolIndex = ((Gap::Core::igUnsignedIntList *)pool->_boneCountList)->find(boneCount);
-    Gap::Core::igPointerList *contexts = (Gap::Core::igPointerList *)((Gap::Core::igObjectList *)pool->_poolList)->get(poolIndex);
+void igEnbayaContextPool::deallocate(void *context, unsigned int boneCount) {
+    int poolIndex = _boneCountList->find(boneCount);
+    Gap::Core::igPointerList *contexts = (Gap::Core::igPointerList *)((Gap::Core::igObjectList *)_poolList.get())->get(poolIndex);
     int contextIndex = contexts->find(context);
-    int freeIndex = ((Gap::Core::igUnsignedIntList *)pool->_freeIndexList)->get(poolIndex);
+    int freeIndex = _freeIndexList->get(poolIndex);
     /* matching construct: dead read — an unused read of the pool beside the swap's: two reads of it in one block
      * give the pool list's element array its own common-subexpression temporary in the first round, so the shared
      * poolIndex * 4 gets the lower register (retail's t1/t0); the read itself is gone before code generation */
-    Gap::Core::igPointerList *unused = (Gap::Core::igPointerList *)((Gap::Core::igObjectList *)pool->_poolList)->get(poolIndex);
-    ((Gap::Core::igPointerList *)((Gap::Core::igObjectList *)pool->_poolList)->get(poolIndex))->swap(freeIndex - 1, contextIndex);
-    ((Gap::Core::igUnsignedIntList *)pool->_freeIndexList)->set(poolIndex, freeIndex - 1);
+    Gap::Core::igPointerList *unused = (Gap::Core::igPointerList *)((Gap::Core::igObjectList *)_poolList.get())->get(poolIndex);
+    ((Gap::Core::igPointerList *)((Gap::Core::igObjectList *)_poolList.get())->get(poolIndex))->swap(freeIndex - 1, contextIndex);
+    _freeIndexList->set(poolIndex, freeIndex - 1);
+}
+
+}
 }
 
 void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
@@ -148,12 +158,13 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
             if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)held);
+                igObject_Destroy((::igObject *)held);
             }
         }
     }
 }
 
+/* The pool grows to hold `count` contexts: capacity first, then the count. */
 static inline void reserveContexts(igTDataList<void *> *list, int count) {
     if (count >= list->getCount()) {
         ((Gap::Core::igDataList *)list)->setCapacity(count, 4);
@@ -181,21 +192,26 @@ void FUN_001c1950(T_1c1a80 *pool, igTDataList<void *> *list, int boneCount, int 
     }
 }
 
-void FUN_001c1a80(T_1c1a80 *arg0, int arg1, int arg2) {
+namespace Gap {
+namespace Sg {
+
+void igEnbayaContextPool::setCapacity(unsigned int arg1, unsigned int arg2) {
     int i;
     int r;
     L_1c1a80 *l;
     int n;
-    FUN_001c17e0((EnbayaContextPoolView *)arg0, arg1);
-    l = arg0->f12;
+    FUN_001c17e0((EnbayaContextPoolView *)this, arg1);
+    l = ((T_1c1a80 *)this)->f12;
     n = l->n;
     for (i = 0; i < n; i++) { if (arg1 == l->d[i]) { r = i; goto found; } }
     r = -1;
 found:
     if (r == -1) {
-        FUN_001c17e0((EnbayaContextPoolView *)arg0, arg1);
-        r = arg0->f8->n - 1;
+        FUN_001c17e0((EnbayaContextPoolView *)this, arg1);
+        r = ((T_1c1a80 *)this)->f8->n - 1;
     }
-    FUN_001c1950(arg0, (igTDataList<void *> *)arg0->f8->d[r], arg1, arg2);
+    FUN_001c1950((T_1c1a80 *)this, (igTDataList<void *> *)((T_1c1a80 *)this)->f8->d[r], arg1, arg2);
+}
+}
 }
 

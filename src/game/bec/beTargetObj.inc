@@ -54,8 +54,8 @@ CallbackArray *beTargetObj_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTargetObj_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beTargetObj_GetMetaObjectFunction,
         "beTargetObj",
         0x1c, /* instance size */

@@ -10,7 +10,6 @@ struct igNode;
 extern "C" {
 #endif
 
-struct igBoundingBoxesMaker *igBoundingBoxesMaker_Create(struct igMemoryPoolView *pool);
 /* The bounding box of `node`, in a new box that already holds one reference. */
 struct igAABox *igBoundingBoxesMaker_ComputeBox(struct igBoundingBoxesMaker *maker, struct igNode *node);
 

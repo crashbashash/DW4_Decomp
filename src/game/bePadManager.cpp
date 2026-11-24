@@ -8,7 +8,6 @@
 #include "dw4/game/beSystem.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/gui/igEventDispatcher.h"
-#include "dw4/gui/igHotKeyEventReceiver.h"
 #include "dw4/insight/igInsightCore.h"
 #include "dw4/core/igMemoryPoolContext.h"
 #include "dw4/core/igObject.h"
@@ -59,14 +58,14 @@ void bePadManager_Start(bePadManager *self) {
     igEventDispatcher_AddReceiver((igEventDispatcher *)dispatcher, (igObject *)self->_kbReceiver);
     igViewerSceneInfoManager *viewer = (igViewerSceneInfoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
     int hotKeys = viewer->_hotKeyReceiver;
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 15);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 3);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 0);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 10);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 11);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 1);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 2);
-    igHotKeyEventReceiver_RemoveBinding((igHotKeyEventReceiver *)hotKeys, 12);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_15);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_3);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_0);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_10);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_11);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_1);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_2);
+    ((Gap::Gui::igHotKeyEventReceiver *)hotKeys)->removeHotKey(Gap::Display::igController::BUTTON_12);
     igViewerSceneInfoManager_CycleGuiVisibility(viewer);
 }
 

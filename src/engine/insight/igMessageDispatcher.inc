@@ -1,47 +1,49 @@
-igMetaObject *g_igMessageDispatcher_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igMessageDispatcher_GetOrCreateMetaObject(void) {
-    if (g_igMessageDispatcher_metaObject == 0) {
-        g_igMessageDispatcher_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igMessageDispatcher_metaObject;
-}
+igMetaObject *igMessageDispatcher::_Meta;
 
-igMetaObject *igMessageDispatcher_GetMetaObject(void)
+igMetaObject *igMessageDispatcher::getClassTypeLazy()
 {
-    igMetaObject *g = g_igMessageDispatcher_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMessageDispatcher_EnsureRegistered();
-    return g_igMessageDispatcher_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igMessageDispatcher_EnsureRegistered(void)
+igMetaObject *igMessageDispatcher::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMessageDispatcher_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igMessageDispatcher_Register(void) {
+void igMessageDispatcher::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMessageDispatcher::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igMessageDispatcher_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igMessageDispatcher_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMessageDispatcher",
-        8, /* instance size */
+        sizeof(igMessageDispatcher),
         0,
-        igMessageDispatcher_SetAbstractProxy_002321e0, /* post-init hook */
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igMessageDispatcher_GetMetaObjectFunction(void) {
-    igMessageDispatcher_GetMetaObject();
+void igMessageDispatcher::arkRegisterInitialize()
+{
+    _Meta->_abstractProxy = (int)&Gap::Insight::igFilterMessageDispatcher::getClassMetaSafe;
 }
-
-void igMessageDispatcher_SetAbstractProxy(void) {
-    *(int *)((char *)(g_igMessageDispatcher_metaObject) + 60) = (int)(&igFilterMessageDispatcher_GetMetaObjectFunction);
+}
 }
 

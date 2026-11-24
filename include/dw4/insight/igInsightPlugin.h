@@ -7,9 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igInsightPlugin_metaObject;
-struct CallbackArray *igInsightPlugin_Register(void);
-struct igMetaObject *igInsightPlugin_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }

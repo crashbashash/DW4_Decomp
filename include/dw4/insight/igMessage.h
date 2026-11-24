@@ -8,8 +8,6 @@ struct CallbackArray;
 extern "C" {
 #endif
 
-struct CallbackArray *igMessage_Register(void);
-struct igMetaObject *igMessage_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }

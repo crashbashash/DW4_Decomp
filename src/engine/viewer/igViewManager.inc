@@ -80,8 +80,8 @@ CallbackArray *igViewManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewManager_metaObject,
-        igEventReceiver_Register,
-        igEventReceiver_GetPublishedMetaObject,
+        Gap::Gui::igEventReceiver::arkRegisterInternal,
+        Gap::Gui::igEventReceiver::getClassMeta,
         igViewManager_GetMetaObjectFunction,
         "igViewManager",
         0x54, /* instance size */

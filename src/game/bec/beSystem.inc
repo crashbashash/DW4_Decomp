@@ -99,8 +99,8 @@ CallbackArray *beSystem_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSystem_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beSystem_GetMetaObjectFunction,
         "beSystem",
         0x68, /* instance size */

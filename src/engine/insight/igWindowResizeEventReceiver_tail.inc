@@ -1,5 +1,5 @@
 int igWindowResizeEventReceiver_WindowResizeEvent(Receiver *self, int width, int height) {
-    igSmartPointer<ResizeEvent> event((ResizeEvent *)FUN_002332b0((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<ResizeEvent> event((ResizeEvent *)Gap::Insight::igViewportResizedMessage::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
     {
         ResizeEvent *e = event.get();
         e->origin[0] = DAT_004e0fa0[0];
@@ -10,13 +10,13 @@ int igWindowResizeEventReceiver_WindowResizeEvent(Receiver *self, int width, int
         e->size[0] = (float)width;
         e->size[1] = (float)height;
     }
-    igMessenger_PostMessage((igMessageDispatcherOwnerView *)self->f8->f40, event.get());
+    ((Gap::Insight::igMessenger *)self->f8->f40)->postMessage((Gap::Insight::igMessage *)(event.get()));
     return 0;
 }
 
 void igInsightCore_AddManager(igInsightCore *core, igObject *manager) {
     if (igInsightCore_IsRegistered(core, manager) == 0) {
-        igRendererOrderedList_Append((igDependencyOrderedList *)core->_managerList, manager, 0);
+        ((Gap::Core::igDependencyOrderedList *)core->_managerList)->append((Gap::Core::igObject *)manager);
         *(int *)((char *)(manager) + 12) = (int)(core);
         ((DW4VC_92_0 *)manager)->vX();
     }
@@ -26,7 +26,7 @@ void igInsightCore_RemoveManager(igInsightCore *core, igObject *manager) {
     if (igInsightCore_IsRegistered(core, manager) != 0) {
         ((DW4VC_96_0 *)manager)->vX();
         *(int *)((char *)(manager) + 12) = 0;
-        igObjectList_RemoveRetained((igDependencyOrderedList *)core->_managerList, manager);
+        ((Gap::Core::igDependencyOrderedList *)core->_managerList)->remove((Gap::Core::igObject *)manager);
     }
 }
 
@@ -65,7 +65,7 @@ void igInsightCore_RegisterAllPlugins(igInsightCore *core) {
     int meta;
     int count;
     int i;
-    count = igMetaObject_CountTree((igMetaObject *)(meta = (int)igInsightPlugin_GetMetaObject()));
+    count = igMetaObject_CountTree((igMetaObject *)(meta = (int)Gap::Insight::igInsightPlugin::getClassTypeSafe()));
     for (i = 0; i < count; i++) {
         int type = (int)(igMetaObject_GetTreeNode((igMetaObject *)meta, i));
         igSmartPointer<Instance> plugin((Instance *)igMetaObject_CreateInstanceRef((igMetaObject *)type, ((Gap::Core::igObject *)self)->getMemoryPool()).get(), kRetainReference);
@@ -96,11 +96,11 @@ void igInsightCore_UnregisterAllPlugins(igInsightCore *core) {
 
 void igInsightCore_AddRenderer(igInsightCore *core, igObject *renderer) {
     ((Gap::Gui::igRenderer *)renderer)->setVisualContext((Gap::Gfx::igVisualContext *)core->_visualContext);
-    igRendererOrderedList_Append((igDependencyOrderedList *)core->_rendererList, renderer, 0);
+    ((Gap::Core::igDependencyOrderedList *)core->_rendererList)->append((Gap::Core::igObject *)renderer);
 }
 
 void igInsightCore_RemoveRenderer(igInsightCore *core, igObject *renderer) {
-    igResult removed = igObjectList_RemoveRetained((igDependencyOrderedList *)core->_rendererList, renderer);
+    igResult removed = ((Gap::Core::igDependencyOrderedList *)core->_rendererList)->remove((Gap::Core::igObject *)renderer);
     if (removed.v == g_resultSuccess.v) {
         ((Gap::Gui::igRenderer *)renderer)->setVisualContext(0);
     }
@@ -116,11 +116,11 @@ igObject *igInsightCore_FindManager(igInsightCore *core, igMetaObject *kind) {
 }
 
 int FUN_00237010(void) {
-    return (int)g_igInfoManager_metaObject;
+    return (int)Gap::Insight::igInfoManager::getClassMeta();
 }
 
 void igInsightCore_AddRendererOrder(igInsightCore *core, igObject *first, igObject *second)
 {
-    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)core->_rendererList, first, second);
+    ((Gap::Core::igDependencyOrderedList *)core->_rendererList)->appendDependency(first, second);
 }
 

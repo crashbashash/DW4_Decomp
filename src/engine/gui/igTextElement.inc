@@ -101,8 +101,8 @@ CallbackArray *igTextElement_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextElement_metaObject,
-        igGeometryElement_Register,
-        igGeometryElement_GetPublishedMetaObject,
+        Gap::Gui::igGeometryElement::arkRegisterInternal,
+        Gap::Gui::igGeometryElement::getClassMeta,
         igTextElement_GetMetaObjectFunction,
         "igTextElement",
         0x38, /* instance size */
@@ -115,10 +115,6 @@ CallbackArray *igTextElement_Register(void) {
 
 void igTextElement_GetMetaObjectFunction(void) {
     igTextElement_GetMetaObject();
-}
-
-igMetaObject *igGeometryElement_GetPublishedMetaObject(void) {
-    return g_igGeometryElement_metaObject;
 }
 
 static FieldFactory g_igTextElement_ctorTable[] = {
@@ -158,29 +154,6 @@ void igTextElement_InitFields(void) {
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)))->setDefault("");
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);
-}
-
-igModel *igModel_Destroy(igModel *self, short deleteFlag) {
-    igObject *views;
-    int rc;
-
-    if (self != 0) {
-        self->_vtable = (int)&g_igModel_vtable[0];
-        if (&self->_views) {
-            views = (igObject *)self->_views;
-            if (views != 0) {
-                rc = views->_refCount - 1;
-                views->_refCount = rc;
-                if (((unsigned long long) ((long long) (int)views->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(views);
-                }
-            }
-        }
-        if (deleteFlag > 0) {
-            Memory_FreeBufferAliasC(self);
-        }
-    }
-    return self;
 }
 
 void **FUN_0044c1c0(void **arg0, int arg1) {

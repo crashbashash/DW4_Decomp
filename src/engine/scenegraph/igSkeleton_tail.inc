@@ -146,22 +146,13 @@ int igSkin::traverse(igTraversal *traversal)
 }
 }
 
-void **igSmartPointer_igModelViewMatrixBoneSelect_Destruct(void **arg0, short arg1) {
-    S_temp_a0_1d9770 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_1d9770 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+igSmartPointer<igObject> *igSmartPointer_igModelViewMatrixBoneSelect_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        igObject::release(object);
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 igSmartPointer<igObject> *igSmartPointer_igAttrSet_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

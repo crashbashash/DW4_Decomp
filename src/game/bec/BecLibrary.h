@@ -203,7 +203,6 @@
 #include "dw4/attrs/igColorAttr.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/core/igDirectory.h"
-#include "dw4/gui/igEventReceiver.h"
 #include "dw4/scenegraph/igGeometry.h"
 #include "dw4/attrs/igGeometryAttrList.h"
 #include "dw4/scenegraph/igGeometryList.h"

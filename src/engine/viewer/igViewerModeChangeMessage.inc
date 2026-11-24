@@ -56,8 +56,8 @@ CallbackArray *igViewerModeChangeMessage_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerModeChangeMessage_metaObject,
-        igMessage_Register,
-        igMessage_GetPublishedMetaObject,
+        Gap::Insight::igMessage::arkRegisterInternal,
+        Gap::Insight::igMessage::getClassMeta,
         igViewerModeChangeMessage_GetMetaObjectFunction,
         "igViewerModeChangeMessage",
         0x10, /* instance size */

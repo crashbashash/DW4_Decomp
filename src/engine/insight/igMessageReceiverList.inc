@@ -1,53 +1,52 @@
-igMetaObject *g_igMessageReceiverList_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igMessageReceiverList_GetOrCreateMetaObject(void) {
-    if (g_igMessageReceiverList_metaObject == 0) {
-        g_igMessageReceiverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igMessageReceiverList_metaObject;
-}
+igMetaObject *igMessageReceiverList::_Meta;
 
-igMetaObject *igMessageReceiverList_GetMetaObject(void)
+igMetaObject *igMessageReceiverList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igMessageReceiverList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMessageReceiverList_EnsureRegistered();
-    return g_igMessageReceiverList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igMessageReceiverList_GetVTable(void) {
-    struct Obj_231830 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igMessageReceiverList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igMessageReceiverList_EnsureRegistered(void)
+igMetaObject *igMessageReceiverList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMessageReceiverList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMessageReceiverList_callbackList[] = { igMessageReceiver_EnsureRegistered, 0 };
+void *igMessageReceiverList::retrieveVTablePointer()
+{
+    igMessageReceiverList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMessageReceiverList_Register(void) {
+void igMessageReceiverList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMessageReceiverList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Insight::igMessageReceiver::arkRegister, 0 };
+
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMessageReceiverList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igMessageReceiverList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMessageReceiverList",
-        0x14, /* instance size */
-        igMessageReceiverList_GetVTable,
+        sizeof(igMessageReceiverList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igMessageReceiverList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igMessageReceiverList_GetMetaObjectFunction(void) {
-    igMessageReceiverList_GetMetaObject();
+}
 }
 

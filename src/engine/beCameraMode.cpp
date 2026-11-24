@@ -24,7 +24,6 @@
 #include <math.h>
 #include "dw4/maths/igMathConstants.h"
 #include "dw4/maths/igRay.h"
-#include "dw4/gui/igGuiSystemModel.h"
 extern "C" {
 
 /* The pick mode whose intersect traversal is running, for its hit callback. */
@@ -650,7 +649,7 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
         dy *= seconds;
         model->_mousePosition[0] += dx;
         model->_mousePosition[1] += dy;
-        igNotifyEvent event((Gap::Core::igMetaField *)g_igGuiSystemModel_mousePositionMetaField);
+        igNotifyEvent event((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePosition);
         ((Gap::Gui::igModel *)model)->notifyAllViews(event);
     }
 }

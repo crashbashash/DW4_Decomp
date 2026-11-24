@@ -11,18 +11,15 @@
 #include "dw4/gui/igBoxComponent.h"
 #include "dw4/gui/igDefaultAspect.h"
 #include "dw4/gui/igEventDispatcher.h"
-#include "dw4/gui/igEventReceiver.h"
 #include "dw4/gui/igGuiComponent.h"
 #include "dw4/gui/igGuiComponentList.h"
 #include "dw4/gui/igGuiSystem.h"
-#include "dw4/gui/igHotKeyEventReceiver.h"
 #include "dw4/gui/igModel.h"
 #include "dw4/gui/igMouseCursor.h"
 #include "dw4/gui/igOnOffColorChanger.h"
 #include "dw4/gui/igOnOffModel.h"
 #include "dw4/gui/igRadioGroup.h"
 #include "dw4/gui/igRenderer.h"
-#include "dw4/gui/igRendererOrderedList.h"
 #include "dw4/gui/igTextElement.h"
 #include "dw4/gui/igView.h"
 #define CHAR_METRICS_ITEM_SIZE 0x28
@@ -68,27 +65,15 @@ extern "C" int igTextElement_GetVTable(void);
 extern "C" int DAT_00541e90[4];
 extern "C" void *FUN_0044be30(igGeometryElement *arg0, short arg1);
 extern "C" void **FUN_0044bf10(void **arg0, long long arg1);
-extern "C" igMetaObject *igGeometryElement_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igTextElement_Register(void);
 extern "C" void igTextElement_GetMetaObjectFunction(void);
-extern "C" igMetaObject *g_igGeometryElement_metaObject;
-extern "C" igMetaObject *igGeometryElement_GetPublishedMetaObject(void);
 extern "C" void igTextElement_InitFields(void);
 extern "C" void **FUN_0044c1c0(void **arg0, int arg1);
 extern "C" igMetaObject *g_igGuiComponentAspect_metaObject;
 extern "C" igMetaObject *igGuiComponentAspect_GetPublishedMetaObject(void);
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_44c2f0 { int vt; char b[16]; };
-extern "C" igMetaObject *g_igRendererOrderedList_metaObject;
-extern "C" igMetaObject *igRendererOrderedList_GetMetaObject(void);
-struct Obj_44c570 { int *vt; int w[7]; };
-extern "C" int g_igRendererOrderedList_vtable[4];
-extern "C" int igRendererOrderedList_GetVTable(void);
 #include "dw4/core/igDependencyOrderedList.h"
-extern "C" int DAT_00541dd0[4];
-extern "C" int **FUN_0044c5e0(int **arg0, long long arg1);
-extern "C" CallbackArray *igRendererOrderedList_Register(void);
-extern "C" void igRendererOrderedList_GetMetaObjectFunction(void);
 typedef struct { int *vt; int pad[7]; } Obj_44c920;
 struct Obj_44ca40 { int *vt; char pad[12]; };
 struct O { int *vt; char post[12]; };
@@ -96,15 +81,6 @@ union U_44ce90 { int vt; char b[32]; };
 union U_44d210 { int vt; char b[16]; };
 union U_44d430 { int vt; char b[48]; };
 struct Obj_44d670 { int *vt; char pad[4]; char *m; char pad2[4]; };
-extern "C" igMetaObject *g_igHotKeyEventReceiver_metaObject;
-extern "C" igMetaObject *igHotKeyEventReceiver_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igHotKeyEventReceiver_GetMetaObject(void);
-extern "C" int g_igHotKeyEventReceiver_vtable[4];
-union U_44d8e0 { int vt; char b[16]; };
-extern "C" int igHotKeyEventReceiver_GetVTable(void);
-extern "C" CallbackArray *igHotKeyEventReceiver_Register(void);
-extern "C" void thunk_igHotKeyEventReceiver_GetMetaObject(void);
-extern "C" void igHotKeyEventReceiver_InitFields(void);
 struct R { int vt; unsigned int rc; };
 struct Obj_44dcb0 { int *vt; char pad[12]; struct R *p; char pad2[12]; };
 extern "C" igMetaEnum* FUN_00145eb0(void);
@@ -124,15 +100,6 @@ extern "C" void thunk_igGuiSystem_GetMetaObject(void);
 #include "dw4/scenegraph/igTransform.h"
 #include "dw4/scenegraph/igAttrSet.h"
 extern "C" void igGuiSystem_InitFields(void);
-extern "C" igMetaObject *g_igMouseCursor_metaObject;
-extern "C" igMetaObject *igMouseCursor_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igMouseCursor_GetMetaObject(void);
-struct Obj_44e4d0 { int *vt; char pad[4]; char *m; char pad2[20]; };
-extern "C" int g_igMouseCursor_vtable[4];
-extern "C" int igMouseCursor_GetVTable(void);
-extern "C" CallbackArray *igMouseCursor_Register(void);
-extern "C" void thunk_igMouseCursor_GetMetaObject(void);
-extern "C" void igMouseCursor_InitFields(void);
 extern "C" igMetaObject *g_igGuiSystemRenderer_metaObject;
 extern "C" igMetaObject *igGuiSystemRenderer_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGuiSystemRenderer_GetMetaObject(void);
@@ -179,15 +146,6 @@ extern "C" int igWindowSizeObserver_GetVTable(void);
 extern "C" void igWindowSizeObserver_RunStaticInit(void);
 extern "C" CallbackArray *igWindowSizeObserver_Register(void);
 extern "C" void thunk_igWindowSizeObserver_GetMetaObject(void);
-extern "C" igMetaObject *g_igGuiSystemModel_metaObject;
-extern "C" igMetaObject *igGuiSystemModel_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igGuiSystemModel_GetMetaObject(void);
-extern "C" int g_igGuiSystemModel_vtable[4];
-extern "C" int igGuiSystemModel_GetVTable(void);
-extern "C" void igGuiSystemModel_RunStaticInit(void);
-extern "C" CallbackArray *igGuiSystemModel_Register(void);
-extern "C" void thunk_igGuiSystemModel_GetMetaObject(void);
-extern "C" void igGuiSystemModel_InitFields(void);
 extern "C" igMetaObject *g_igGuiComponentNode_metaObject;
 extern "C" igMetaObject *igGuiComponentNode_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGuiComponentNode_GetMetaObject(void);
@@ -239,14 +197,8 @@ extern "C" ObjectRefWord *FUN_00450370(ObjectRefWord *self,int delete_storage);
 extern "C" CallbackArray *igGuiComponent_Register(void);
 extern "C" void igGuiComponent_GetMetaObjectFunction(void);
 extern "C" void igGuiComponent_InitFields(void);
-extern "C" igMetaObject *igGeometryElement_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igGeometryElement_GetMetaObject(void);
-extern "C" void igGeometryElement_EnsureRegistered(void);
-extern "C" CallbackArray *igGeometryElement_Register(void);
-extern "C" void igGeometryElement_GetMetaObjectFunction(void);
 #include "dw4/attrs/igAttrList.h"
 #include "dw4/scenegraph/igGeometry.h"
-extern "C" void igGeometryElement_InitFields(void);
 extern "C" igMetaObject *g_igFont_metaObject;
 extern "C" igMetaObject *igFont_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igFont_GetMetaObject(void);
@@ -257,23 +209,6 @@ extern "C" void igFont_GetMetaObjectFunction(void);
 extern "C" void igFont_InitFields(void);
 struct Obj_450aa0 { int *vt; char pad[4]; struct R *p; char pad2[4]; };
 struct Obj_450e70 { int *vt; char pad[12]; char *m; char pad2[12]; };
-extern "C" igMetaObject *g_igEventReceiverOrderedList_metaObject;
-extern "C" igMetaObject *igEventReceiverOrderedList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igEventReceiverOrderedList_GetMetaObject(void);
-extern "C" int g_igEventReceiverOrderedList_vtable[4];
-union U_4510f0 { int vt; char b[32]; };
-extern "C" int igEventReceiverOrderedList_GetVTable(void);
-extern "C" int DAT_00541970[4];
-extern "C" int **FUN_00451160(int **arg0, long long arg1);
-extern "C" void igEventReceiverOrderedList_EnsureRegistered(void);
-extern "C" CallbackArray *igEventReceiverOrderedList_Register(void);
-extern "C" void igEventReceiverOrderedList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igEventReceiver_GetMetaObject(void);
-struct Obj_4512e0 { int *vt; char pad[4]; };
-extern "C" int g_igEventReceiver_vtable[4];
-extern "C" int igEventReceiver_GetVTable(void);
-extern "C" void igEventReceiver_EnsureRegistered(void);
-extern "C" void igEventReceiver_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igEventDispatcher_metaObject;
 extern "C" igMetaObject *igEventDispatcher_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igEventDispatcher_GetMetaObject(void);
@@ -716,7 +651,6 @@ extern "C" void FUN_001900d0(void**, int);
 extern "C" void igGuiComponentNode_resetFields(Node *self, int flags);
 extern "C" int g_activeMousePosObserver;
 extern "C" int FUN_00455ad0(int arg0, int arg1, int arg2);
-extern "C" void igGuiSystemModel_resetFields(int arg0, int arg1);
 struct A_455b90 { char pad[8]; int x; int y; };
 struct T_455b90 { char pad[12]; float w; float h; };
 extern "C" int FUN_00191860(void *, float, float, float, float, float, float);
@@ -763,7 +697,6 @@ typedef struct P_456a60 { char pad28[28]; Q *f28; } P_456a60;
 typedef struct A_456a60 { char pad12[12]; int f12; char pad16[8]; Rc_456a60 *f24; P_456a60 *f28; bool f32; } A_456a60;
 typedef struct R_456a60 { char pad8[8]; Q *f8; } R_456a60;
 typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
-#include "dw4/gui/igGuiSystemModel.h"
 #include "dw4/attrs/igDisplayListAttr.h"
 #include "dw4/attrs/igGeometryAttr.h"
 #include "dw4/attrs/igTextureBindAttr.h"
@@ -771,7 +704,6 @@ typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
 class Obj_456b80 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vX(void *); };
 struct P_456b80 { char pad[12]; float x; float y; };
 extern "C" void FUN_00456b80(int *arg0, float *arg1);
-extern "C" void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1);
 struct T_456cc0 { int word0; int references; int f8; char pad12[16]; int f28; };
 struct LL { char pad8[8]; int f8; };
 class VC_456cc0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void v140(int, int); };
@@ -842,16 +774,6 @@ struct GuiModelView {
 };
 extern "C" bool igGuiSystem_ControllerButtonEvent(igGuiSystem *system, int device, int key, int pressed);
 extern "C" int igGuiSystem_ControllerMotionEvent(void);
-typedef struct E_4574f0 { char pad4[4]; int f4; int f8; int f12; } E_4574f0;
-typedef struct LST { char pad8[8]; int f8; char pad12[4]; E_4574f0 **f16; } LST;
-class VC_4575d0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(); };
-struct E_4575d0 { char pad8[8]; int f08; char pad12[4]; VC_4575d0 *f10; };
-struct B_4575d0 { char pad8[8]; int cnt; char pad2[4]; E_4575d0 **arr; };
-extern "C" int igHotKeyEventReceiver_OnKeyEvent(igHotKeyEventReceiver *self, int arg1, int arg2);
-class VC_457650 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(); };
-struct E_457650 { char pad12[12]; int f0c; VC_457650 *f10; };
-struct B_457650 { char pad8[8]; int cnt; char pad2[4]; E_457650 **arr; };
-extern "C" int igHotKeyEventReceiver_ControllerButtonEvent(igHotKeyEventReceiver *self, int arg1, int arg2, int arg3);
 struct RadioButtonListView { char p[8]; int n; char q[4]; int *arr; };
 struct RadioSelectionView { char p[12]; int sel; };
 struct RadioGroupView { char p[8]; struct RadioSelectionView *a; char p2[4]; struct RadioButtonListView *b; int f20; int cur; };
@@ -878,7 +800,6 @@ struct M_457e10 { char p0[12]; V168 *obj; };
 struct O_457e10 { char p0[24]; char buf[1]; char p1[23]; M_457e10 *m; };
 extern "C" void Gap__Gui__igTextElement__vfunc_24(O_457e10 *arg0);
 extern "C" int igTextElement_GetMeta(void);
-extern "C" igMetaObject *igHotKeyEventReceiver_GetMeta(void);
 extern "C" igMetaObject *igGuiSystem_GetMeta(void);
 extern "C" igMetaObject *igGuiSystemRenderer_GetMeta(void);
 extern "C" igMetaObject *igActiveComponentsObserver_GetMeta(void);
@@ -887,7 +808,6 @@ extern "C" igMetaObject *igMousePosObserver_GetMeta(void);
 extern "C" void igMousePosObserver_IsCompatible(void *arg0, int arg1);
 extern "C" igMetaObject *igWindowSizeObserver_GetMeta(void);
 extern "C" void igWindowSizeObserver_IsCompatible(void *arg0, int arg1);
-extern "C" igMetaObject *igGuiSystemModel_GetMeta(void);
 extern "C" igMetaObject *igGuiComponentNode_GetMeta(void);
 extern "C" int igGuiComponentController_GetMeta(void);
 extern "C" igMetaObject *igGuiComponent_GetMeta(void);
@@ -904,10 +824,7 @@ extern "C" int igCharMetricsList_GetMeta(void);
 extern "C" igMetaObject *igBoxComponent_GetMeta(void);
 extern "C" igMetaObject *igDefaultAspectElement_GetMeta(void);
 extern "C" igMetaObject *igDefaultAspectElementList_GetMeta(void);
-extern "C" igMetaObject *igEventReceiverOrderedList_GetMeta(void);
 extern "C" igMetaObject *igGuiComponentList_GetMeta(void);
-extern "C" igMetaObject *igMouseCursor_GetMeta(void);
-extern "C" igMetaObject *igRendererOrderedList_GetMeta(void);
 extern "C" int FUN_00458310(void);
 extern "C" int igCharMetricsList_GetElementSize(void);
 extern "C" igMetaObject *igDefaultAspectElementList_GetElementMeta(void);

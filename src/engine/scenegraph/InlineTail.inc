@@ -185,22 +185,6 @@ void igPlanarShadowShader::reset()
 }
 }
 
-igMetaObject *igEnbayaTransformSource_GetMeta(void) {
-    return g_igEnbayaTransformSource_metaObject;
-}
-
-igMetaObject *igEnbayaContextPool_GetMeta(void) {
-    return g_igEnbayaContextPool_metaObject;
-}
-
-igMetaObject *igEnbayaAnimationState_GetMeta(void) {
-    return g_igEnbayaAnimationState_metaObject;
-}
-
-igMetaObject *igEnbayaAnimationSource_GetMeta(void) {
-    return g_igEnbayaAnimationSource_metaObject;
-}
-
 /* Getter for the reflected `_channels` member (igUnsignedCharMetaField at +56). */
 
 
@@ -302,20 +286,8 @@ int FUN_001e35f0(igAnimationBindingList *self) {
     return self->_capacity != 0;
 }
 
-int igBitMask_GetMeta(void) {
-    return ((int)g_igBitMask_metaObject);
-}
-
 int igUnsignedIntList_GetMeta(void) {
     return (int)Gap::Core::igUnsignedIntList::getClassMeta();
-}
-
-igMetaObject *igBlendMatrixSelect_GetMeta(void) {
-    return g_igBlendMatrixSelect_metaObject;
-}
-
-int igBoundingBoxesMaker_GetMeta(void) {
-    return ((int)g_igBoundingBoxesMaker_metaObject);
 }
 
 int igCompiledTransform_GetMeta(void) {
@@ -326,32 +298,12 @@ igMetaObject *igCompiledTransformList_GetMeta(void) {
     return g_igCompiledTransformList_metaObject;
 }
 
-igMetaObject *igBlendListRecord_GetMeta(void) {
-    return g_igBlendListRecord_metaObject;
-}
-
-igMetaObject *igCompressedTransformSequence1_5Data_GetMeta(void) {
-    return g_igCompressedTransformSequence1_5Data_metaObject;
-}
-
-int igModelViewMatrixBoneSelect_GetMeta(void) {
-    return ((int)g_igModelViewMatrixBoneSelect_metaObject);
-}
-
-igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObject(void) {
-    return g_igModelViewMatrixBoneSelectListSg_metaObject;
-}
-
 int igDoubleList_GetMeta(void) {
     return (int)Gap::Core::igDoubleList::getClassMeta();
 }
 
 int igDoubleList_GetElementSize(void) {
     return 8;
-}
-
-int igUnsignedIntList_GetElementSize(void) {
-    return 4;
 }
 
 int FUN_001e3ab0(igIntList *list, int *value) {
@@ -387,22 +339,8 @@ int igActorList_GetElementMeta(void) {
     return ((int)g_igActor_metaObject);
 }
 
-int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)
-{
-    return ((int)g_igModelViewMatrixBoneSelect_metaObject);
-}
-
 int igCompiledTransformList_GetElementMeta(void) {
     return ((int)g_igCompiledTransform_metaObject);
-}
-
-void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self) {
-    int temp_a1;
-
-    temp_a1 = self->_count;
-    if (temp_a1 < self->_capacity) {
-        ((Gap::Core::igDataList *)self)->setCapacity(temp_a1, 4);
-    }
 }
 
 void igDoubleList_TrimCapacity(igDataList *arg0) {

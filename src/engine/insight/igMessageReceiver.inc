@@ -1,36 +1,37 @@
-igMetaObject *g_igMessageReceiver_metaObject;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igMessageReceiver_GetMetaObject(void)
+igMetaObject *igMessageReceiver::_Meta;
+
+igMetaObject *igMessageReceiver::getClassTypeSafe()
 {
-    igMetaObject *g = g_igMessageReceiver_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMessageReceiver_EnsureRegistered();
-    return g_igMessageReceiver_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igMessageReceiver_EnsureRegistered(void)
+void igMessageReceiver::arkRegister()
 {
-    igMetaObject_RunStaticInit(igMessageReceiver_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *igMessageReceiver_Register(void) {
+CallbackArray *igMessageReceiver::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igMessageReceiver_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igMessageReceiver_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMessageReceiver",
-        8, /* instance size */
+        sizeof(igMessageReceiver),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igMessageReceiver_GetMetaObjectFunction(void) {
-    igMessageReceiver_GetMetaObject();
+}
 }
 

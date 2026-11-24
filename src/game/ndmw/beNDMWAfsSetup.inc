@@ -66,8 +66,8 @@ CallbackArray *beNDMWAfsSetup_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWAfsSetup_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beNDMWAfsSetup_GetMetaObject,
         "beNDMWAfsSetup",
         0x20, /* instance size */

@@ -63,7 +63,7 @@ void igTransformSequence1_5::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
-        metaField->_metaObject = (int)igCompressedTransformSequence1_5Data_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igCompressedTransformSequence1_5Data::getClassTypeLazy();
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }

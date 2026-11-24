@@ -6,10 +6,6 @@ void InsightLibrary_MarkRegistered(void) {
     }
 }
 
-igMetaObject *igMessage_GetPublishedMetaObject(void) {
-    return g_igMessage_metaObject;
-}
-
 void *igInfoManager_Destroy(igInfoManager *manager, short flags) {
     void *p;
     int *h;
@@ -38,7 +34,8 @@ void *igInfoManager_Destroy(igInfoManager *manager, short flags) {
     return manager;
 }
 
+/* Retail's out-of-line copy of igInfoManager::getClassMeta; no unit that builds it takes its address here. */
 igMetaObject *igInfoManager_GetPublishedMetaObject(void) {
-    return g_igInfoManager_metaObject;
+    return Gap::Insight::igInfoManager::getClassMeta();
 }
 

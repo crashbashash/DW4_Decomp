@@ -74,8 +74,8 @@ CallbackArray *beDemoManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beDemoManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beDemoManager_GetMetaObjectFunction,
         "beDemoManager",
         0x24, /* instance size */

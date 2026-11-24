@@ -83,7 +83,7 @@ void igDefaultAspectElement_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDefaultAspectElement_Register);
 }
 
-static igMetaObjectCallback g_igDefaultAspectElement_callbackList[] = { igGeometryElement_EnsureRegistered, igColorChanger_RunStaticInit, Gap::Sg::igTransform::arkRegister, 0 };
+static igMetaObjectCallback g_igDefaultAspectElement_callbackList[] = { Gap::Gui::igGeometryElement::arkRegister, igColorChanger_RunStaticInit, Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *igDefaultAspectElement_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -151,7 +151,7 @@ void igDefaultAspectElement_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igDefaultAspectElement_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)igGeometryElement_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1) + 56) = (int)Gap::Gui::igGeometryElement::getClassTypeLazy();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     *(int *)((char *)(temp_s1_2) + 56) = (int)igColorChanger_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));

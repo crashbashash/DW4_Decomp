@@ -30,7 +30,6 @@
 #include "dw4/scenegraph/igLightSet.h"
 #include "dw4/scenegraph/igLightStateSet.h"
 #include "dw4/scenegraph/igLod.h"
-#include "dw4/scenegraph/igModelViewMatrixBoneSelect.h"
 #include "dw4/scenegraph/igNode.h"
 #include "dw4/scenegraph/igNodeList.h"
 #include "dw4/scenegraph/igPlanarShadowShader.h"
@@ -219,19 +218,9 @@ extern igMetaObject *g_igActorInfo_metaObject;
 extern igMetaObject *g_igActorList_metaObject;
 extern igMetaObject *g_igAnimationSequence_metaObject;
 extern igMetaObject *g_igAnimationTrackList_metaObject;
-extern igMetaObject *g_igBitMask_metaObject;
-extern igMetaObject *g_igBlendListRecord_metaObject;
-extern igMetaObject *g_igBlendMatrixSelect_metaObject;
-extern igMetaObject *g_igBoundingBoxesMaker_metaObject;
 extern igMetaObject *g_igCompiledTransform_metaObject;
 extern igMetaObject *g_igCompiledTransformList_metaObject;
 extern igMetaObject *g_igCompressedAnimationSequenceQS_metaObject;
-extern igMetaObject *g_igCompressedTransformSequence1_5Data_metaObject;
-extern igMetaObject *g_igEnbayaAnimationSource_metaObject;
-extern igMetaObject *g_igEnbayaAnimationState_metaObject;
-extern igMetaObject *g_igEnbayaContextPool_metaObject;
-extern igMetaObject *g_igModelViewMatrixBoneSelect_metaObject;
-extern igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;
 extern igMetaObject *g_igOverrideAttrSet_metaObject;
 extern igMetaObject *g_igProjectiveShadowShader_metaObject;
 extern igMetaObject *g_igTransformSource_metaObject;
@@ -319,8 +308,6 @@ typedef struct { float x, y, z, w; } V4;
 struct Obj_19c960 { int *vt; char pad[28]; };
 typedef struct { int *vt; int pad[7]; } Obj_19cad0;
 struct Obj_19cc80 { int *vt; char pad[28]; };
-extern "C" int DAT_0052aab0[4];
-extern "C" int g_igModelViewMatrixBoneSelect_vtable[4];
 union U_19d480 { int vt; int w[12]; void *p[12]; char b[48]; };
 struct W_19d660 { int *vt; int f[19]; };
 struct Obj_19e070 { int *vt; int w[15]; };
@@ -385,21 +372,14 @@ struct Obj_19fde0 {
 };
 
 typedef struct { int *vt; int p1[2]; int *ref; int pad[0]; } Obj_1a1900;
-extern "C" int g_igEnbayaTransformSource_vtable[4];
-extern "C" int g_igEnbayaContextPool_vtable[4];
-extern "C" int g_igEnbayaAnimationState_vtable[4];
-extern "C" int g_igAnimationState_vtable[4];
 union U_1a1e80 { int vt; char b[176]; };
-extern "C" int g_igEnbayaAnimationSource_vtable[4];
 union U_1a22b0 { int vt; int w[12]; void *p[12]; char b[48]; };
 struct Obj_1a2590 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" ObjectRefWord* FUN_00164870(ObjectRefWord*, int);
-extern "C" int g_igCompressedTransformSequence1_5Data_vtable[4];
 extern "C" int g_igCompressedAnimationSequenceQS_vtable[4];
 union U_1a2810 { int vt; char b[64]; };
 extern "C" igMetaObject *igAnimationSequence_GetPublishedMetaObject(void);
 struct Fld_1a29e0 { char p0[38]; char f38; char p39[13]; int f52; int f56; };
-extern "C" int g_igBlendListRecord_vtable[4];
 union U_1a2d00 { int vt; int w[4]; void *p[4]; char b[16]; };
 extern "C" int DAT_00529320[8];
 union U_1a2f80 { int vt; char b[528]; };
@@ -413,12 +393,9 @@ struct O_1a38e0 { int vt; char b[468]; };
 extern "C" int D_005293c0[4];
 typedef struct { int *vt; int w[15]; } Obj_1a4600;
 struct Obj_1a48c0 { int *vt; int w[11]; };
-extern "C" int g_igBoundingBoxesMaker_vtable[4];
 
 struct Obj_1a4ba0 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; int f32; int f36; int f40; char sub1[64]; char sub2[64]; char pad[4]; };
-extern "C" int g_igBlendMatrixSelect_vtable[4];
 struct Obj_1a4e30 { int *vt; char pad[28]; };
-extern "C" int g_igBitMask_vtable[4];
 
 union U_1a4fd0 { int vt; int w[16]; void *p[16]; char b[64]; };
 struct Obj_1a59a0 { int *vt; char pad[28]; };
@@ -862,11 +839,6 @@ struct A_1b13d0 { char p[16]; struct X_1b13d0 *f16; char q[28]; int f48; char r[
 struct B_1b13d0 { char p[8]; short idx; short off; };
 struct L_1b1490 { char pad[8]; int n; int cap; int *arr; };
 
-struct igBitMaskWords { char pad8[8]; int _count; int _capacity; unsigned int *_data; unsigned int _bitCount;
-    inline void setCount(int n);
-    inline void setWord(int i, const unsigned int &v);
-    inline unsigned int getWord(unsigned int i) { return _data[i]; }
-};
 extern unsigned int DAT_0048d8d0;
 struct A_1b21d0 { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual unsigned v34(); char pad[28]; unsigned f32; };
 class VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int *vX(); };
@@ -1562,7 +1534,6 @@ struct List_1c0f00 {
 struct Meta { char p0[60]; void *f60; };
 extern void *DAT_00562728[4];
 /* Returns a decoding context to the pool's free list. */
-extern "C" void FUN_001c16a0(igEnbayaContextPool *pool, void *context, int boneCount);
 
 class Alloc { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void vX(void *); };
 extern "C" int DAT_0048da00[4];
@@ -1574,11 +1545,11 @@ typedef struct T_1c1560 { char p0[8]; L_1c1560 *f8; L_1c1560 *f12; L_1c1560 *f16
 typedef struct PoolObject { int _vtable; int _refCount; } PoolObject;
 typedef struct EnbayaIntList { int _pad0[2]; int _count; int _capacity; int *_data; int count() const { return _count; } } EnbayaIntList;
 typedef struct EnbayaContextPoolView { int _pad0[2]; int _poolList; EnbayaIntList *_boneCountList; EnbayaIntList *_freeIndexList; } EnbayaContextPoolView;
+extern "C" void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount);
 extern "C" int DAT_0048da08[4];
 struct PoolListHolder { PoolObject *p; ~PoolListHolder() {} };
 typedef struct L_1c1a80 { char p0[8]; int n; int p1; int *d; } L_1c1a80;
 typedef struct T_1c1a80 { char p0[8]; L_1c1a80 *f8; L_1c1a80 *f12; } T_1c1a80;
-extern "C" void FUN_001c1950(T_1c1a80 *pool, igTDataList<void *> *list, int boneCount, int count);
 extern "C" int FUN_0027ede0(int boneCount);
 class DW4VC_92_0_1c1b50 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int, int, int); };
 struct S_1c1b50 { char pad[8]; int f8; DW4VC_92_0_1c1b50 *obj; };
@@ -1723,7 +1694,6 @@ struct EnbayaTransformSourceView_1c1c10 {
     int _trackId;
     EnbayaSourceSlots_1c1c10 *_enbayaAnimationSource;
 };
-extern "C" unsigned long long FUN_001c0ea0(EnbayaSourceView *o);
 
 struct Ref_1c1c60 { int w0; int rc; };
 struct List_1c1c60 { int w0; int w4; int count; int cap; Ref_1c1c60 **data; };
@@ -2686,7 +2656,6 @@ public:
     virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36();
     virtual void update(long long time);                                    /* slot 37 */
 };
-typedef struct S_temp_a0_1d9770 { char pad4[4]; int f4; } S_temp_a0_1d9770;
 /* igObject header: the reference count at +4 is not a reflected field */
 typedef struct RefCountedHeader { char pad4[4]; int references; } RefCountedHeader;
 typedef struct SortItemView { char pad[24]; float key; } SortItemView;
@@ -3098,7 +3067,6 @@ extern "C" int *igSmartPointer_igNodeList_Construct(int *p);
 extern "C" int FUN_0019ace0(int a0);
 extern "C" int *igSmartPointer_igTextureUnloadAttr_Construct(int *p);
 extern "C" int *igSmartPointer_igGeometryAttr_Construct(int *p);
-extern "C" void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1);
 extern "C" ObjectRefWord *igSmartPointer_igStencilStateAttr_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" int *igSmartPointer_igStencilStateAttr_Construct(int *p);
 extern "C" int *igSmartPointer_igVolume_Construct(int *p);
@@ -3108,16 +3076,6 @@ extern "C" int *igSmartPointer_igModelViewMatrixAttrList_Construct(int *p);
 extern "C" igMetaObject *igOverrideAttrSet_GetOrCreateMetaObject(void);
 extern "C" void **igSmartPointer_igRenderListAttr_Destruct(void **arg0, long long arg1);
 extern "C" int *igSmartPointer_igFloatList_Construct(int *p);
-extern "C" igMetaObject *igModelViewMatrixBoneSelectListSg_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igModelViewMatrixBoneSelectListSg_GetMetaObject(void);
-extern "C" int igModelViewMatrixBoneSelectListSg_GetVTable(void);
-extern "C" CallbackArray *igModelViewMatrixBoneSelectListSg_Register(void);
-extern "C" void igModelViewMatrixBoneSelectListSg_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igModelViewMatrixBoneSelect_GetMetaObject(void);
-extern "C" int igModelViewMatrixBoneSelect_GetVTable(void);
-extern "C" CallbackArray *igModelViewMatrixBoneSelect_Register(void);
-extern "C" void igModelViewMatrixBoneSelect_GetMetaObjectFunction(void);
-extern "C" void igModelViewMatrixBoneSelect_InitFields(void);
 extern "C" igMetaObject *igAnimationSequence_GetPublishedMetaObject(void);
 extern "C" void thunk_igIntersectTraversal_UserUnregister(void);
 extern "C" ObjectRefWord *igSmartPointer_igInterpretedShaderData_Destruct(ObjectRefWord *self,int delete_storage);
@@ -3144,39 +3102,11 @@ extern "C" O *igSmartPointer_igBlendMatricesAttrPool_Destruct(O *arg0, short arg
 extern "C" ObjectRefWord *igSmartPointer_igTimeAttr_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" int *igSmartPointer_igAABox_Construct(int *p);
 extern "C" void thunk_FUN_001c45d0(void);
-extern "C" igMetaObject *igEnbayaTransformSource_GetMetaObject(void);
-extern "C" int igEnbayaTransformSource_GetVTable(void);
-extern "C" CallbackArray *igEnbayaTransformSource_Register(void);
-extern "C" void igEnbayaTransformSource_GetMetaObjectFunction(void);
-extern "C" void igEnbayaTransformSource_InitFields(void);
-extern "C" igMetaObject *igEnbayaContextPool_GetMetaObject(void);
-extern "C" int igEnbayaContextPool_GetVTable(void);
-extern "C" CallbackArray *igEnbayaContextPool_Register(void);
-extern "C" void thunk_igEnbayaContextPool_GetMetaObject(void);
-extern "C" void igEnbayaContextPool_InitFields(void);
-extern "C" igMetaObject *igEnbayaAnimationState_GetMetaObject(void);
-extern "C" int igEnbayaAnimationState_GetVTable(void);
-extern "C" CallbackArray *igEnbayaAnimationState_Register(void);
-extern "C" void igEnbayaAnimationState_GetMetaObjectFunction(void);
-extern "C" void igEnbayaAnimationState_InitFields(void);
 extern "C" void FUN_001a2190(void);
 extern "C" void FUN_001a21a0(void);
 extern "C" igMetaEnum *FUN_001a21b0(void);
-extern "C" igMetaObject *igEnbayaAnimationSource_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igEnbayaAnimationSource_GetMetaObject(void);
-extern "C" int igEnbayaAnimationSource_GetVTable(void);
-extern "C" CallbackArray *igEnbayaAnimationSource_Register(void);
-extern "C" void igEnbayaAnimationSource_GetMetaObjectFunction(void);
-extern "C" void igEnbayaAnimationSource_InitFields(void);
 extern "C" void FUN_001a24d0(void);
 extern "C" void FUN_001a24e0(void);
-extern "C" igMetaObject *igCompressedTransformSequence1_5Data_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igCompressedTransformSequence1_5Data_GetMetaObject(void);
-extern "C" int igCompressedTransformSequence1_5Data_GetVTable(void);
-extern "C" void igCompressedTransformSequence1_5Data_EnsureRegistered(void);
-extern "C" CallbackArray *igCompressedTransformSequence1_5Data_Register(void);
-extern "C" void igCompressedTransformSequence1_5Data_GetMetaObjectFunction(void);
-extern "C" void igCompressedTransformSequence1_5Data_InitFields(void);
 extern "C" igMetaObject *igCompressedAnimationSequenceQS_GetMetaObject(void);
 extern "C" int igCompressedAnimationSequenceQS_GetVTable(void);
 extern "C" CallbackArray *igCompressedAnimationSequenceQS_Register(void);
@@ -3186,13 +3116,6 @@ extern "C" void **igSmartPointer_igCompiledTransformList_Destruct(void **arg0, s
 extern "C" ObjectRefWord *igSmartPointer_igEnvironmentMapShader2List_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" int *igSmartPointer_igEnvironmentMapShader2List_Construct(int *p);
 extern "C" int *igSmartPointer_igCompiledTransformList_Construct(int *p);
-extern "C" int FUN_001a2c70(int arg0);
-extern "C" igMetaObject *igBlendListRecord_GetMetaObject(void);
-extern "C" int igBlendListRecord_GetVTable(void);
-extern "C" void igBlendListRecord_EnsureRegistered(void);
-extern "C" CallbackArray *igBlendListRecord_Register(void);
-extern "C" void igBlendListRecord_GetMetaObjectFunction(void);
-extern "C" void igBlendListRecord_InitFields(void);
 extern "C" void *FUN_001a2ef0(int allocator);
 extern "C" struct R **igSmartPointer_igBlendMatrixPaletteAttrList_Destruct(struct R **arg0, short arg1);
 extern "C" int *igSmartPointer_igBlendMatrixPaletteAttrList_Construct(int *p);
@@ -3232,27 +3155,8 @@ extern "C" int *igSmartPointer_igAttrStackManager_Construct(void *p);
 extern "C" int *igSmartPointer_igAttrDefaultManager_Construct(void *p);
 extern "C" int *igSmartPointer_igCapabilityManager_Construct(void *p);
 extern "C" void thunk_igCommonTraversal_UserUnregister(void);
-extern "C" igMetaObject *igBoundingBoxesMaker_GetMetaObject(void);
-extern "C" int igBoundingBoxesMaker_GetVTable(void);
-extern "C" void igBoundingBoxesMaker_EnsureRegistered(void);
-extern "C" CallbackArray *igBoundingBoxesMaker_Register(void);
-extern "C" void igBoundingBoxesMaker_GetMetaObjectFunction(void);
-extern "C" void igBoundingBoxesMaker_InitFields(void);
-extern "C" igMetaObject *igBlendMatrixSelect_GetMetaObject(void);
-extern "C" int igBlendMatrixSelect_GetVTable(void);
-extern "C" CallbackArray *igBlendMatrixSelect_Register(void);
-extern "C" void igBlendMatrixSelect_GetMetaObjectFunction(void);
-extern "C" void igBlendMatrixSelect_InitFields(void);
-extern "C" igMetaObject *igBitMask_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igBitMask_GetMetaObject(void);
-extern "C" int igBitMask_GetVTable(void);
-extern "C" CallbackArray *igBitMask_Register(void);
-extern "C" void igBitMask_GetMetaObjectFunction(void);
-extern "C" int FUN_001a4f00(void);
-extern "C" void igBitMask_InitFields(void);
 extern "C" void **igSmartPointer_igSkin_Destruct(void **arg0, short arg1);
 extern "C" void **igSmartPointer_igSkinList_Destruct(struct Ref **self, short flag);
-extern "C" void **igSmartPointer_igModelViewMatrixBoneSelectList_Destruct(void **arg0, long long arg1);
 extern "C" void FUN_001a6bb0(int arg0);
 extern "C" igMetaObject *igAnimationSequence_GetMetaObject(void);
 extern "C" void igAnimationSequence_EnsureRegistered(void);
@@ -3424,36 +3328,8 @@ extern "C" int FUN_001c0390(void *, int);
 extern "C" void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1);
 extern "C" void FUN_001c07d0(void);
 extern "C" void FUN_001c07e0(void);
-extern "C" void igEnbayaAnimationSource_resetFields(igEnbayaAnimationSource *self);
-extern "C" int Gap__Sg__igEnbayaAnimationSource__vfunc_23(void **arg0, int arg1, int arg2, int arg3);
-extern "C" int Gap__Sg__igEnbayaAnimationSource__vfunc_24(EnbayaSourceSlots24 *o, int a, int b, int c, int d, int e);
-extern "C" int Gap__Sg__igEnbayaAnimationSource__vfunc_25(EnbayaSourceView *o, float *out, long long time, int track);
-extern "C" int Gap__Sg__igEnbayaAnimationSource__vfunc_26(EnbayaSourceSlots26 *o, int a, int b, int c, int d, int e);
-extern "C" int Gap__Sg__igEnbayaAnimationSource__vfunc_27(EnbayaSourceView *o, float *out, float *pos, long long time, int track);
-extern "C" int Gap__Sg__igEnbayaAnimationSource__vfunc_28(EnbayaSourceSlots28 *o, int a, int b, int c, int d, int e, int g);
-extern "C" void igEnbayaAnimationSource_UserPostLoad(Obj_1c0e70 *arg0);
-extern "C" void FUN_001c0f00(int mode);
-extern "C" igMetaObject *igEnbayaAnimationState_GetPublishedMetaObject(void);
 extern "C" void FUN_001c10f0(void);
 extern "C" void FUN_001c1100(void);
-extern "C" void igEnbayaAnimationState_UserPostLoad(void **arg0);
-extern "C" void Gap__Sg__igEnbayaAnimationState__vfunc_23(igEnbayaAnimationState *arg0);
-extern "C" void Gap__Sg__igEnbayaAnimationState__vfunc_24(igEnbayaAnimationState *self);
-extern "C" void Gap__Sg__igEnbayaAnimationState__vfunc_25(igEnbayaAnimationState *self);
-extern "C" void Gap__Sg__igEnbayaAnimationState__vfunc_26(igEnbayaAnimationState *self);
-extern "C" void igEnbayaContextPool_resetFields(int arg0, int flags);
-extern "C" void igEnbayaContextPool_destructFields(Obj_1c1450 *arg0);
-extern "C" int FUN_001c1560(T_1c1560 *arg0, int arg1);
-extern "C" void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount);
-extern "C" void FUN_001c1a80(T_1c1a80 *arg0, int arg1, int arg2);
-extern "C" int Gap__Sg__igEnbayaTransformSource__vfunc_23(S_1c1b50 *arg0, int arg1, int arg2);
-extern "C" int Gap__Sg__igEnbayaTransformSource__vfunc_24(void *arg0, int a1, int a2, int a3, int a4);
-extern "C" int Gap__Sg__igEnbayaTransformSource__vfunc_25(EnbayaTransformSourceView *o, int a, int b);
-extern "C" int igEnbayaTransformSource_evaluateRotation(EnbayaTransformSourceView_1c1bd0 *o, int a, int b, int c, int d);
-extern "C" int Gap__Sg__igEnbayaTransformSource__vfunc_27(EnbayaTransformSourceView_1c1bf0 *o, int a, int b, int c);
-extern "C" int igEnbayaTransformSource_evaluateRotationAndTranslation(EnbayaTransformSourceView_1c1c10 *o, int a, int b, int c, int d, int e);
-extern "C" int Gap__Sg__igEnbayaTransformSource__vfunc_31(void);
-extern "C" void Gap__Sg__igEnbayaTransformSource__vfunc_32(int a0);
 struct EnvAttr { char _pad0[8]; short _attrIndex; short _unitOffset; };
 struct EnvAttrList { char _pad0[8]; int _count; int _capacity; EnvAttr **_data; };
 struct EnvListList { char _pad0[8]; int _count; int _capacity; EnvAttrList **_data; };
@@ -3580,7 +3456,6 @@ extern "C" int FUN_001d82f0(void *arg0, int arg1);
 extern "C" int FUN_001d8310(void *arg0, int arg1);
 extern "C" int FUN_001d8330(void *arg0, unsigned int arg1);
 extern "C" void FUN_001d9090(SkeletonBitOwnerView *o, int index, int value);
-extern "C" void **igSmartPointer_igModelViewMatrixBoneSelect_Destruct(void **arg0, short arg1);
 extern "C" void **FUN_001d9870(void **arg0, short arg1);
 extern "C" int FUN_001d9970(int *a, int *b);
 extern "C" int FUN_001d99d0(int *arg0, int *arg1);
@@ -3608,9 +3483,6 @@ public:
 extern "C" void FUN_001dcb80(ObjectPool *pool, igObject *object);
 extern "C" int FUN_001dcc80(KeyTrackView *o, double t);
 extern "C" int FUN_001dce70(struct S_1dce70 *arg0, double arg1);
-extern "C" int Gap__Sg__igTransformSource__vfunc_29(void);
-extern "C" void Gap__Sg__igTransformSource__vfunc_30(void);
-extern "C" void Gap__Sg__igTransformSource__vfunc_33(void);
 extern "C" void FUN_001ddfd0(void);
 extern "C" void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
 extern "C" void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
@@ -3624,10 +3496,6 @@ extern "C" void FUN_001e16a0(EnvMapShaderView *arg0, void *);
 extern "C" void FUN_001e1ac0(S_1e1ac0 *arg0, void *);
 extern "C" void FUN_001e1e70(EnvMapShaderView_1e1e70 *arg0, void *);
 extern "C" void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *);
-extern "C" igMetaObject *igEnbayaTransformSource_GetMeta(void);
-extern "C" igMetaObject *igEnbayaContextPool_GetMeta(void);
-extern "C" igMetaObject *igEnbayaAnimationState_GetMeta(void);
-extern "C" igMetaObject *igEnbayaAnimationSource_GetMeta(void);
 extern "C" unsigned char Gap__Sg__igCompressedAnimationSequenceQS__vfunc_34(igCompressedAnimationSequenceQS *self);
 extern "C" void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_37(struct S_1e3300 *arg0);
 extern "C" int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_38(void);
@@ -3648,28 +3516,18 @@ extern "C" int igActor_IsTransformable(void);
 extern "C" int igActorList_GetMeta(void);
 extern "C" igMetaObject *igActorInfo_GetMeta(void);
 extern "C" int FUN_001e35f0(igAnimationBindingList *self);
-extern "C" int igBitMask_GetMeta(void);
 extern "C" int igUnsignedIntList_GetMeta(void);
-extern "C" igMetaObject *igBlendMatrixSelect_GetMeta(void);
-extern "C" int igBoundingBoxesMaker_GetMeta(void);
 extern "C" int igCompiledTransform_GetMeta(void);
 extern "C" igMetaObject *igCompiledTransformList_GetMeta(void);
-extern "C" igMetaObject *igBlendListRecord_GetMeta(void);
-extern "C" igMetaObject *igCompressedTransformSequence1_5Data_GetMeta(void);
-extern "C" int igModelViewMatrixBoneSelect_GetMeta(void);
-extern "C" igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObject(void);
 extern "C" int igDoubleList_GetMeta(void);
 extern "C" int igDoubleList_GetElementSize(void);
-extern "C" int igUnsignedIntList_GetElementSize(void);
 extern "C" int FUN_001e3ab0(igIntList *list, int *value);
 extern "C" int igActorList_GetElementMeta(void);
 extern "C" igMetaObject *igAppearanceList_GetElementMeta(void);
 extern "C" igMetaObject *igGraphPathList_GetElementMeta(void);
-extern "C" int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void);
 extern "C" igMetaObject *igSkeletonBoneInfoList_GetElementMeta(void);
 extern "C" int igCompiledTransformList_GetElementMeta(void);
 extern "C" igMetaObject *igGeometryList_GetElementMeta(void);
-extern "C" void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self);
 extern "C" void igDoubleList_TrimCapacity(igDataList *arg0);
 extern "C" int igCommonTraversal_TraverseActor(void *arg0, ForwardTarget *arg1);
 extern "C" int igCommonTraversal_TraverseProjectiveShadowShader(char *arg0, struct S_1d6190 *arg1);
@@ -3793,21 +3651,6 @@ static inline void attrFieldSet(AttrObj **slot, AttrObj *v) {
     *slot = v;
 }
 static inline int n_of_1b1490(const struct L_1b1490 *list) { return list->n; }
-inline void igBitMaskWords::setCount(int n) {
-    if (n >= 0) {
-        if (!(n > _capacity)) {
-            _count = n;
-        } else {
-            ((Gap::Core::igDataList *)this)->resizeAndSetCount(n, 4);
-        }
-    }
-}
-inline void igBitMaskWords::setWord(int i, const unsigned int &v) {
-    int n = _count;
-    if (n != 0 && i >= 0 && i < n) {
-        _data[i] = v;
-    }
-}
 static inline void clearRetained(TravObjectList *l) {
     int n = l->_count;
     int i;

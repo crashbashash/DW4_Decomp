@@ -16,6 +16,10 @@ public:
     const void *_before;
     const void *_after;
     inline igDependency() : _before(0), _after(0) {}
+    inline igDependency(const void *before, const void *after) : _before(before), _after(after) {}
+    inline bool operator==(const igDependency &other) const {
+        return (_before == other._before && _after == other._after);
+    }
 };
 class igExternalDirEntry;
 /* An external entry's load callback (alchemy-kit_202309 igCore/igExternalDirEntry.h). */
@@ -24,6 +28,16 @@ typedef igResolveFunction *igResolveFunctionPtr;
 /* An asynchronous call's completion callback (alchemy-kit_202309 igCore/igFile.h): the id the call was given
  * and its result. */
 typedef void igIOCallbackFunction(int requestID, int result);
+}
+namespace Insight {
+class igMessage;
+}
+namespace Core {
+class igObject;
+}
+namespace Insight {
+/* A default receiver's handler (alchemy-kit_202309 igInsight/igMessageDefaultReceiver.h). */
+typedef void (Core::igObject::*igMessageHandlerFunction)(igMessage *msg);
 }
 }
 #endif

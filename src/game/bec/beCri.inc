@@ -85,8 +85,8 @@ CallbackArray *beCri_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCri_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beCri_GetMetaObjectFunction,
         "beCri",
         0x48, /* instance size */

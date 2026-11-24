@@ -1,79 +1,69 @@
-igMetaObject *g_igBitMask_metaObject;
-igMetaField *g_igBitMask_bitCountMetaField;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igBitMask_GetOrCreateMetaObject(void) {
-    if (g_igBitMask_metaObject == 0) {
-        g_igBitMask_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igBitMask_metaObject;
-}
+igMetaObject *igBitMask::_Meta;
+igMetaField *igBitMask::k_bitCount;
 
-igMetaObject *igBitMask_GetMetaObject(void)
+igMetaObject *igBitMask::getClassTypeLazy()
 {
-    igMetaObject *g = g_igBitMask_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igBitMask_EnsureRegistered();
-    return g_igBitMask_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igBitMask_GetVTable(void) {
-    struct Obj_1a4e30 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igBitMask_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igBitMask_EnsureRegistered(void)
+igMetaObject *igBitMask::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igBitMask_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igBitMask_Register(void) {
+void *igBitMask::retrieveVTablePointer()
+{
+    igBitMask temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igBitMask::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igBitMask::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igBitMask_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igUnsignedIntList::arkRegisterInternal,
-        igUnsignedIntList_GetPublishedMetaObject,
-        igBitMask_GetMetaObjectFunction,
+        Gap::Core::igUnsignedIntList::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igBitMask",
-        0x18, /* instance size */
-        igBitMask_GetVTable,
-        &igBitMask_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igBitMask),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
-
-void igBitMask_GetMetaObjectFunction(void) {
-    igBitMask_GetMetaObject();
+}
 }
 
-int FUN_001a4f00(void) {
-    return (int)Gap::Core::igUnsignedIntList::getClassMeta();
+namespace Gap {
+namespace Core {
+
+void igBitMask::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_bitCount" };
+    static igMetaField **enumStorage[] = { &k_bitCount };
+    static int offsets[] = { 20 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igBitMask_ctorTable[] = {
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igBitMask_fieldTable[] = {
-    "_bitCount",
-};
-static igMetaField **g_igBitMask_fieldHandles[] = {
-    &g_igBitMask_bitCountMetaField,
-};
-static int g_igBitMask_fieldOffsets[] = {
-    20,
-};
-
-void igBitMask_InitFields(void) {
-    int base;
-    void *meta;
-
-    meta = (void *)g_igBitMask_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igBitMask_ctorTable, 1);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igBitMask_fieldTable, g_igBitMask_fieldHandles, g_igBitMask_fieldOffsets, base);
+}
 }
 

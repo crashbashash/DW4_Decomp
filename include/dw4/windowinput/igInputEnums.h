@@ -1,0 +1,55 @@
+#ifndef DW4_IGINPUTENUMS_H
+#define DW4_IGINPUTENUMS_H
+
+#ifdef __cplusplus
+namespace Gap {
+namespace Display {
+
+/* The kit's input enums (alchemy-kit_202309 igDisplay/igKey.h, igMouse.h, igController.h), which the event
+ * receivers' handlers take. igKey, igMouse and igController are not converted: these holders carry only their
+ * enums, and the enums move into the classes when the window-input library converts them. */
+class igKey {
+public:
+    enum KEY_VALUES {
+        UNKNOWN = 0, BACKSPACE = 8, TAB = 9, RETURN = 13, CAPS_LOCK = 20, ESCAPE = 27, SPACE = 32, APOSTROPHE = 39,
+        TILDE = 96, COMMA = 44, MINUS, DECIMAL, SLASH, SEMICOLON = 59, EQUAL = 61, LEFT_BRACKET = 91,
+        BACKSLASH = 92, RIGHT_BRACKET,
+        KEYBOARD_0 = 48, KEYBOARD_1, KEYBOARD_2, KEYBOARD_3, KEYBOARD_4, KEYBOARD_5, KEYBOARD_6, KEYBOARD_7,
+        KEYBOARD_8, KEYBOARD_9,
+        A = 65, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+        LEFT_ARROW = 128, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT = 132, DELETE_KEY = 133, HOME, END, PAGE_UP,
+        PAGE_DOWN,
+        KEYPAD_0 = 144, KEYPAD_1, KEYPAD_2, KEYPAD_3, KEYPAD_4, KEYPAD_5, KEYPAD_6, KEYPAD_7, KEYPAD_8, KEYPAD_9,
+        KEYPAD_DECIMAL, KEYPAD_ENTER, KEYPAD_ADD, KEYPAD_SUBTRACT, KEYPAD_MULTIPLY, KEYPAD_DIVIDE,
+        F1 = 172, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+        NUM_LOCK = 184, PRINT_SCREEN, SCROLL_LOCK, BREAK,
+        LEFT_ALT = 200, RIGHT_ALT = 201, LEFT_SHIFT = 202, RIGHT_SHIFT = 203, LEFT_CTRL = 204, RIGHT_CTRL = 205,
+        LEFT_WINDOWSKEY = 206, RIGHT_WINDOWSKEY = 207, CONTEXTMENU_WINDOWSKEY = 208
+    };
+};
+
+class igMouse {
+public:
+    enum MOUSE_BUTTON { LEFT_BUTTON = 0, RIGHT_BUTTON = 1, MIDDLE_BUTTON = 2, WHEEL_UP = 3, WHEEL_DOWN = 4 };
+};
+
+class igController {
+public:
+    enum BUTTONS {
+        BUTTON_0 = 0, SELECT_BUTTON = 0, BUTTON_1 = 1, LEFT_JOYSTICK_BUTTON = 1, BUTTON_2 = 2,
+        RIGHT_JOYSTICK_BUTTON = 2, BUTTON_3 = 3, START_BUTTON = 3, BUTTON_4 = 4, LEFT_PAD_UP_BUTTON = 4,
+        BUTTON_5 = 5, LEFT_PAD_RIGHT_BUTTON = 5, BUTTON_6 = 6, LEFT_PAD_DOWN_BUTTON = 6, BUTTON_7 = 7,
+        LEFT_PAD_LEFT_BUTTON = 7, BUTTON_8 = 8, LOWER_LEFT_TRIGGER = 8, BUTTON_9 = 9, LOWER_RIGHT_TRIGGER = 9,
+        BUTTON_10 = 10, UPPER_LEFT_TRIGGER = 10, BUTTON_11 = 11, UPPER_RIGHT_TRIGGER = 11, BUTTON_12 = 12,
+        RIGHT_PAD_UP_BUTTON = 12, BUTTON_13 = 13, RIGHT_PAD_RIGHT_BUTTON = 13, BUTTON_14 = 14,
+        RIGHT_PAD_DOWN_BUTTON = 14, BUTTON_15 = 15, RIGHT_PAD_LEFT_BUTTON = 15, BUTTON_16 = 16, BUTTON_17 = 17,
+        BUTTON_18 = 18, BUTTON_19 = 19, BUTTON_20 = 20, BUTTON_21 = 21, BUTTON_22 = 22, BUTTON_23 = 23,
+        BUTTON_24 = 24, BUTTON_25 = 25, BUTTON_26 = 26, BUTTON_27 = 27, BUTTON_28 = 28, BUTTON_29 = 29,
+        BUTTON_30 = 30, BUTTON_31 = 31, MAX_BUTTONS
+    };
+};
+}
+}
+#endif
+
+#endif

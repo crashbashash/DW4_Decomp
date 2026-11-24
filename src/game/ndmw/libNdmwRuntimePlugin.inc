@@ -364,8 +364,8 @@ CallbackArray *libNdmwRuntimePlugin_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_libNdmwRuntimePlugin_metaObject,
-        igInsightPlugin_Register,
-        igInsightPlugin_GetPublishedMetaObject,
+        Gap::Insight::igInsightPlugin::arkRegisterInternal,
+        Gap::Insight::igInsightPlugin::getClassMeta,
         libNdmwRuntimePlugin_GetMetaObjectFunction,
         "libNdmwRuntimePlugin",
         0x5c, /* instance size */

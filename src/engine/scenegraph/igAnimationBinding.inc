@@ -34,7 +34,7 @@ void igAnimationBinding::arkRegister()
 
 CallbackArray *igAnimationBinding::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationHierarchy::arkRegister, Gap::Core::igIntList::arkRegister, igBitMask_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationHierarchy::arkRegister, Gap::Core::igIntList::arkRegister, Gap::Core::igBitMask::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -79,7 +79,7 @@ void igAnimationBinding::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
-        metaField->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Core::igBitMask::getClassTypeLazy();
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }

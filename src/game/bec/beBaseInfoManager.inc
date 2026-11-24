@@ -31,8 +31,8 @@ CallbackArray *beBaseInfoManager_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_beBaseInfoManager_metaObject,
-        igInfoManager_Register,
-        igInfoManager_GetPublishedMetaObject,
+        Gap::Insight::igInfoManager::arkRegisterInternal,
+        Gap::Insight::igInfoManager::getClassMeta,
         beBaseInfoManager_GetMetaObjectFunction,
         "beBaseInfoManager",
         0x20, /* instance size */

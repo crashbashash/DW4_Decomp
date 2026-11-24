@@ -6622,256 +6622,256 @@
 00230e20	__make_dp	match	-
 00230e50	dptofp	match	-
 00230ea8	dptoul	match	-
-00230f50	InsightLibrary_MarkRegistered	match	-
-00230f70	igRenderer_Destroy	match	-
-00231010	FUN_00231010	match	-
-00231020	igMessage_GetPublishedMetaObject	match	-
-00231030	igInfoManager_Destroy	match	-
-002310d0	igInfoManager_GetPublishedMetaObject	match	-
-002310e0	igSerialScheduler_GetMetaObject	match	-
-00231130	igSerialScheduler_GetVTable	match	-
-00231210	igSmartPointer_igInfoManagerOrderedList_Destruct	match	-
-00231290	igSerialScheduler_EnsureRegistered	match	-
-002312a0	igSerialScheduler_Register	match	-
-00231320	igSerialScheduler_GetMetaObjectFunction	match	-
-00231330	igInsightScheduler_GetPublishedMetaObject	match	-
-00231340	igSerialScheduler_InitFields	match	-
-00231400	igMessenger_GetOrCreateMetaObject	match	-
-00231450	igMessenger_GetMetaObject	match	-
-002314a0	igMessenger_GetVTable	match	-
-00231530	igMessenger_EnsureRegistered	match	-
-00231540	igMessenger_Register	match	-
-002315c0	igMessenger_GetMetaObjectFunction	match	-
-002315d0	igMessenger_InitFields	match	-
-00231670	igMessage_GetMetaObject	match	-
-002316c0	igMessage_GetVTable	match	-
-00231700	igMessage_EnsureRegistered	match	-
-00231710	igMessage_Register	match	-
-00231780	igMessage_GetMetaObjectFunction	match	-
-00231790	igMessageReceiverList_GetOrCreateMetaObject	match	-
-002317e0	igMessageReceiverList_GetMetaObject	match	-
-00231830	igMessageReceiverList_GetVTable	match	-
-00231870	igMessageReceiverList_EnsureRegistered	match	-
-00231880	igMessageReceiverList_Register	match	-
-002318f0	igMessageReceiverList_GetMetaObjectFunction	match	-
-00231900	igMessageReceiver_GetMetaObject	match	-
-00231950	igMessageReceiver_EnsureRegistered	match	-
-00231960	igMessageReceiver_Register	match	-
-002319c0	igMessageReceiver_GetMetaObjectFunction	match	-
-002319d0	igMessageFilterList_GetOrCreateMetaObject	match	-
-00231a20	igMessageFilterList_GetMetaObject	match	-
-00231a70	igMessageFilterList_GetVTable	match	-
-00231ab0	igMessageFilterList_EnsureRegistered	match	-
-00231ac0	igMessageFilterList_Register	match	-
-00231b30	igMessageFilterList_GetMetaObjectFunction	match	-
-00231b40	FUN_00231b40	match	-
-00231b80	igMessageFilter_GetMetaObject	match	-
-00231bd0	igMessageFilter_GetVTable	match	-
-00231cb0	igMessageFilter_EnsureRegistered	match	-
-00231cc0	igMessageFilter_Register	match	-
-00231d40	igMessageFilter_GetMetaObjectFunction	match	-
-00231d50	igMessageFilter_InitFields	match	-
-00231e10	igFilterMessageDispatcher_GetMetaObject	match	-
-00231e60	igFilterMessageDispatcher_GetVTable	match	-
-00231f40	igFilterMessageDispatcher_EnsureRegistered	match	-
-00231f50	igFilterMessageDispatcher_Register	match	-
-00231fd0	igFilterMessageDispatcher_GetMetaObjectFunction	match	-
-00231fe0	igMessageDispatcher_GetPublishedMetaObject	match	-
-00231ff0	igFilterMessageDispatcher_InitFields	match	-
-002320b0	igMessageDispatcher_GetOrCreateMetaObject	match	-
-00232100	igMessageDispatcher_GetMetaObject	match	-
-00232150	igMessageDispatcher_EnsureRegistered	match	-
-00232160	igMessageDispatcher_Register	match	-
-002321d0	igMessageDispatcher_GetMetaObjectFunction	match	-
-002321e0	igMessageDispatcher_SetAbstractProxy	match	-
-00232200	igMessageDefaultReceiver_CreateInstance	match	-
-00232240	igMessageDefaultReceiver_GetMetaObject	match	-
-00232290	igMessageDefaultReceiver_GetVTable	match	-
-00232320	igMessageDefaultReceiver_EnsureRegistered	match	-
-00232330	igMessageDefaultReceiver_Register	match	-
-002323b0	igMessageDefaultReceiver_GetMetaObjectFunction	match	-
-002323c0	igMessageReceiver_GetPublishedMetaObject	match	-
-002323d0	igMessageDefaultReceiver_InitFields	match	-
-00232470	igInsightScheduler_GetOrCreateMetaObject	match	-
-002324c0	igInsightScheduler_GetMetaObject	match	-
-00232510	igInsightScheduler_EnsureRegistered	match	-
-00232520	igInsightScheduler_Register	match	-
-00232590	igInsightScheduler_GetMetaObjectFunction	match	-
-002325a0	igInsightScheduler_SetAbstractProxy	match	-
-002325c0	igInsightPluginList_GetOrCreateMetaObject	match	-
-00232610	igInsightPluginList_GetMetaObject	match	-
-00232660	igInsightPluginList_GetVTable	match	-
-002326a0	igInsightPluginList_EnsureRegistered	match	-
-002326b0	igInsightPluginList_Register	match	-
-00232720	igInsightPluginList_GetMetaObjectFunction	match	-
-00232730	igInsightPlugin_GetMetaObject	match	-
-00232780	igInsightPlugin_EnsureRegistered	match	-
-00232790	igInsightPlugin_Register	match	-
-002327f0	igInsightPlugin_GetMetaObjectFunction	match	-
-00232800	igInsightCore_CreateInstance	match	-
-00232840	igInsightCore_GetOrCreateMetaObject	match	-
-00232890	igInsightCore_GetMetaObject	match	-
-002328e0	igInsightCore_GetVTable	match	-
-00232a60	igSmartPointer_igInsightScheduler_Destruct	match	-
-00232ae0	igSmartPointer_igRendererOrderedList_Destruct	match	-
-00232b60	igSmartPointer_igEventDispatcher_Destruct	match	-
-00232be0	igSmartPointer_igWindowResizeEventReceiver_Destruct	match	-
-00232c60	igSmartPointer_igMessenger_Destruct	match	-
-00232ce0	igSmartPointer_igClearRenderer_Destruct	match	-
-00232d60	igSmartPointer_igInsightPluginList_Destruct	match	-
-00232de0	igInsightCore_EnsureRegistered	match	-
-00232df0	igInsightCore_Register	match	-
-00232e70	igInsightCore_GetMetaObjectFunction	match	-
-00232e80	igInsightCore_InitFields	match	-
-00233070	igInsightCore_UserRegisterFunction	match	-
-00233080	igWindowResizeEventReceiver_GetOrCreateMetaObject	match	-
-002330d0	igWindowResizeEventReceiver_GetMetaObject	match	-
-00233120	igWindowResizeEventReceiver_GetVTable	match	-
-00233160	igWindowResizeEventReceiver_EnsureRegistered	match	-
-00233170	igWindowResizeEventReceiver_Register	match	-
-002331f0	igWindowResizeEventReceiver_GetMetaObjectFunction	match	-
-00233200	igEventReceiver_GetPublishedMetaObject	match	-
-00233210	igWindowResizeEventReceiver_InitFields	match	-
-002332b0	FUN_002332b0	match	-
-002332f0	igViewportResizedMessage_GetMetaObject	match	-
-00233340	igViewportResizedMessage_GetVTable	match	-
-00233380	igViewportResizedMessage_EnsureRegistered	match	-
-00233390	igViewportResizedMessage_Register	match	-
-00233400	igViewportResizedMessage_GetMetaObjectFunction	match	-
-00233410	igViewportResizedMessage_InitFields	match	-
-00233480	igInfoManagerOrderedList_GetOrCreateMetaObject	match	-
-002334d0	igInfoManagerOrderedList_GetMetaObject	match	-
-00233520	igInfoManagerOrderedList_GetVTable	match	-
-00233590	igSmartPointer_igDependencyList_Destruct	match	-
-00233610	FUN_00233610	match	-
-002336b0	igInfoManagerOrderedList_EnsureRegistered	match	-
-002336c0	igInfoManagerOrderedList_Register	match	-
-00233730	igInfoManagerOrderedList_GetMetaObjectFunction	match	-
-00233740	FUN_00233740	match	-
-00233750	igInfoManagerList_GetOrCreateMetaObject	match	-
-002337a0	igInfoManagerList_GetMetaObject	match	-
-002337f0	igInfoManagerList_GetVTable	match	-
-00233830	igInfoManagerList_EnsureRegistered	match	-
-00233840	igInfoManagerList_Register	match	-
-002338b0	igInfoManagerList_GetMetaObjectFunction	match	-
-002338c0	igInfoManager_GetMetaObject	match	-
-00233910	igInfoManager_EnsureRegistered	match	-
-00233920	igInfoManager_Register	match	-
-00233990	igInfoManager_GetMetaObjectFunction	match	-
-002339a0	igInfoManager_InitFields	match	-
-00233a40	igFlushRenderer_GetOrCreateMetaObject	match	-
-00233a90	igFlushRenderer_GetMetaObject	match	-
-00233ae0	igFlushRenderer_GetVTable	match	-
-00233b80	igFlushRenderer_EnsureRegistered	match	-
-00233b90	igFlushRenderer_Register	match	-
-00233c00	igFlushRenderer_GetMetaObjectFunction	match	-
-00233c10	igCommandLine_PrintUsage	match	-
-002342b0	igCommandLine_PrintOptionBool	match	-
-002342e0	igCommandLine_PrintOptionInt	match	-
-00234300	igCommandLine_PrintOptionFloat	match	-
-00234350	igCommandLine_PrintOptionVec3f	match	-
-002343d0	igCommandLine_PrintOptionVec4f	match	-
-00234470	igCommandLine_GetOption	match	-
-00234510	igCommandLine_GetOptionInt	match	-
-00234560	igCommandLine_GetOptionFloat	match	-
-002345b0	igCommandLine_GetOptionString	match	-
-002346c0	igCommandLine_GetDefaultValueStringRef	match	-
-00234770	igCommandLine_GetDefaultValueBool	match	-
-00234800	igCommandLine_GetDefaultValueInt	match	-
-00234810	igCommandLine_GetDefaultValueFloat	match	-
-00234860	igCommandLine_GetDefaultValueVec3f	match	-
-002348b0	igCommandLine_GetDefaultValueVec4f	match	-
-00234900	igCommandLine_Construct	match	-
-00234b90	igCommandLine_Destruct	match	-
-00234ca0	igViewerDefaults_ReleaseInstance	match	-
-00234d70	igCommandLine_ParseArgs	match	-
-00235370	igCommandLine_Setup	match	-
-00236120	igFlushRenderer_Render	match	-
-00236140	igInsightCore_UserRegister	match	-
-00236260	igInsightCore_CreateRenderDestinationFormat	match	-
-002364e0	igInsightCore_CreateWindow	match	-
-002369e0	igWindowResizeEventReceiver_WindowResizeEvent	match	-
-00236ab0	igInsightCore_AddManager	match	-
-00236b10	igInsightCore_RemoveManager	match	-
-00236b70	igInsightCore_IsRegistered	match	-
-00236be0	igInsightCore_AddToScheduler	match	-
-00236c40	igInsightCore_RemoveFromScheduler	match	-
-00236ca0	igInsightCore_RegisterAllPlugins	match	-
-00236dd0	igInsightCore_RegisterPlugin	match	-
-00236e20	igInsightCore_UnregisterPlugin	match	-
-00236e80	igInsightCore_UnregisterAllPlugins	match	-
-00236ee0	igInsightCore_AddRenderer	match	-
-00236f30	igInsightCore_RemoveRenderer	match	-
-00236f80	igInsightCore_FindManager	match	-
-00237010	FUN_00237010	match	-
-00237020	igInsightCore_AddRendererOrder	match	-
-00237030	igInsightCore_AddInfo	match	-
-002370c0	igInsightCore_RemoveAllInfos	match	-
-002371f0	igInsightCore_Begin	match	-
-00237280	igInsightCore_End	match	-
-00237300	igInsightCore_resetFields	match	-
-00237530	igInsightCore_InitializeDrawing	match	-
-002376b0	igInsightCore_TerminateDrawing	match	-
-00237730	igInsightCore_HandleEvents	match	-
-002377c0	igInsightCore_DrawFrame	match	-
-00237940	igMessageDefaultReceiver_MessageHandler	match	-
-00237990	igFilterMessageDispatcher_GetFilter	match	-
-002379e0	igFilterMessageDispatcher_GetFilterOrCreate	match	-
-00237b50	igFilterMessageDispatcher_PostMessage	match	-
-00237c40	igMessageFilter_AcceptMessage	match	-
-00237c50	igFilterMessageDispatcher_AddFilteringForType	match	-
-00237ce0	igFilterMessageDispatcher_AddFiltering	match	-
-00237d20	igFilterMessageDispatcher_RemoveFilteringForType	match	-
-00237d80	igFilterMessageDispatcher_RemoveFilteringForReceiver	match	-
-00237e00	igFilterMessageDispatcher_RemoveFiltering	match	-
-00237e80	igMessenger_AddReceiver	match	-
-00237ea0	igMessenger_PostMessage	match	-
-00237ec0	igSerialScheduler_Update	match	-
-00238010	igSerialScheduler_Schedule	match	-
-00238020	igSerialScheduler_Unschedule	match	-
-00238050	igSerialScheduler_IsScheduled	match	-
-002380c0	igSerialScheduler_AppendDependency	match	-
-002380d0	igSerialScheduler_RemoveDependency	match	-
-00238100	igSerialScheduler_RemoveAllDependencies	match	-
-00238110	igViewerDefaults_Construct	match	-
-002382e0	igViewerDefaults_LoadFromRegistry	match	-
-00238af0	igSerialScheduler_GetMeta	match	-
-00238b00	igFilterMessageDispatcher_GetMeta	match	-
-00238b10	igMessageDefaultReceiver_GetMeta	match	-
-00238b20	igInsightCore_GetMeta	match	-
-00238b30	igWindowResizeEventReceiver_GetMeta	match	-
-00238b40	igEventReceiver_OnKeyEvent	match	-
-00238b50	igEventReceiver_MouseMotionEvent	match	-
-00238b60	igEventReceiver_MouseButtonEvent	match	-
-00238b70	igEventReceiver_ControllerMotionEvent	match	-
-00238b80	igEventReceiver_ControllerButtonEvent	match	-
-00238b90	igEventReceiver_ControllerButtonPressureEvent	match	-
-00238ba0	igEventReceiver_ControllerSlider	match	-
-00238bb0	igEventReceiver_ControllerPointOfView	match	-
-00238bc0	igEventReceiver_ControllerConnectionEvent	match	-
-00238bd0	igEventReceiver_WindowMoveEvent	match	-
-00238be0	igEventReceiver_WindowCloseEvent	match	-
-00238bf0	igFlushRenderer_GetMeta	match	-
-00238c00	igFlushRenderer_Traverse	match	-
-00238c10	igFlushRenderer_InitializeDrawing	match	-
-00238c20	igFlushRenderer_ReleaseDrawing	match	-
-00238c30	igInfoManagerList_GetMeta	match	-
-00238c40	igInfoManagerOrderedList_GetMeta	match	-
-00238c50	igDependencyOrderedList_GetMeta	match	-
-00238c60	igViewportResizedMessage_GetMeta	match	-
-00238c70	igEventReceiver_GetMeta	match	-
-00238c80	igEventReceiver_WindowResizeEvent	match	-
-00238c90	igInsightPluginList_GetMeta	match	-
-00238ca0	igMessageFilter_GetMeta	match	-
-00238cb0	igMessageFilterList_GetMeta	match	-
-00238cc0	igMessageReceiverList_GetMeta	match	-
-00238cd0	igMessenger_GetMeta	match	-
-00238ce0	igMessage_GetMeta	match	-
-00238cf0	FUN_00238cf0	match	-
-00238d00	igInsightPluginList_GetElementMeta	match	-
-00238d10	igMessageFilterList_GetElementMeta	match	-
-00238d20	igInfoManagerList_GetElementMeta	match	-
-00238d30	igMessageReceiverList_GetElementMeta	match	-
+00230f50	InsightLibrary_MarkRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00230f70	igRenderer_Destroy	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231010	FUN_00231010	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231020	igMessage_GetPublishedMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231030	igInfoManager_Destroy	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002310d0	igInfoManager_GetPublishedMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002310e0	igSerialScheduler_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231130	igSerialScheduler_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231210	igSmartPointer_igInfoManagerOrderedList_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231290	igSerialScheduler_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002312a0	igSerialScheduler_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231320	igSerialScheduler_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231330	igInsightScheduler_GetPublishedMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231340	igSerialScheduler_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231400	igMessenger_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231450	igMessenger_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002314a0	igMessenger_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231530	igMessenger_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231540	igMessenger_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002315c0	igMessenger_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002315d0	igMessenger_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231670	igMessage_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002316c0	igMessage_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231700	igMessage_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231710	igMessage_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231780	igMessage_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231790	igMessageReceiverList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002317e0	igMessageReceiverList_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231830	igMessageReceiverList_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231870	igMessageReceiverList_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231880	igMessageReceiverList_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002318f0	igMessageReceiverList_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231900	igMessageReceiver_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231950	igMessageReceiver_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231960	igMessageReceiver_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002319c0	igMessageReceiver_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002319d0	igMessageFilterList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231a20	igMessageFilterList_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231a70	igMessageFilterList_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231ab0	igMessageFilterList_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231ac0	igMessageFilterList_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231b30	igMessageFilterList_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231b40	FUN_00231b40	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231b80	igMessageFilter_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231bd0	igMessageFilter_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231cb0	igMessageFilter_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231cc0	igMessageFilter_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231d40	igMessageFilter_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231d50	igMessageFilter_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231e10	igFilterMessageDispatcher_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231e60	igFilterMessageDispatcher_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231f40	igFilterMessageDispatcher_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231f50	igFilterMessageDispatcher_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231fd0	igFilterMessageDispatcher_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231fe0	igMessageDispatcher_GetPublishedMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00231ff0	igFilterMessageDispatcher_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002320b0	igMessageDispatcher_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232100	igMessageDispatcher_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232150	igMessageDispatcher_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232160	igMessageDispatcher_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002321d0	igMessageDispatcher_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002321e0	igMessageDispatcher_SetAbstractProxy	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232200	igMessageDefaultReceiver_CreateInstance	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232240	igMessageDefaultReceiver_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232290	igMessageDefaultReceiver_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232320	igMessageDefaultReceiver_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232330	igMessageDefaultReceiver_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002323b0	igMessageDefaultReceiver_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002323c0	igMessageReceiver_GetPublishedMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002323d0	igMessageDefaultReceiver_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232470	igInsightScheduler_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002324c0	igInsightScheduler_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232510	igInsightScheduler_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232520	igInsightScheduler_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232590	igInsightScheduler_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002325a0	igInsightScheduler_SetAbstractProxy	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002325c0	igInsightPluginList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232610	igInsightPluginList_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232660	igInsightPluginList_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002326a0	igInsightPluginList_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002326b0	igInsightPluginList_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232720	igInsightPluginList_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232730	igInsightPlugin_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232780	igInsightPlugin_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232790	igInsightPlugin_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002327f0	igInsightPlugin_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232800	igInsightCore_CreateInstance	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232840	igInsightCore_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232890	igInsightCore_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002328e0	igInsightCore_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232a60	igSmartPointer_igInsightScheduler_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232ae0	igSmartPointer_igRendererOrderedList_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232b60	igSmartPointer_igEventDispatcher_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232be0	igSmartPointer_igWindowResizeEventReceiver_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232c60	igSmartPointer_igMessenger_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232ce0	igSmartPointer_igClearRenderer_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232d60	igSmartPointer_igInsightPluginList_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232de0	igInsightCore_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232df0	igInsightCore_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232e70	igInsightCore_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00232e80	igInsightCore_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233070	igInsightCore_UserRegisterFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233080	igWindowResizeEventReceiver_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002330d0	igWindowResizeEventReceiver_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233120	igWindowResizeEventReceiver_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233160	igWindowResizeEventReceiver_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233170	igWindowResizeEventReceiver_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002331f0	igWindowResizeEventReceiver_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233200	igEventReceiver_GetPublishedMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233210	igWindowResizeEventReceiver_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002332b0	FUN_002332b0	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002332f0	igViewportResizedMessage_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233340	igViewportResizedMessage_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233380	igViewportResizedMessage_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233390	igViewportResizedMessage_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233400	igViewportResizedMessage_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233410	igViewportResizedMessage_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233480	igInfoManagerOrderedList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002334d0	igInfoManagerOrderedList_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233520	igInfoManagerOrderedList_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233590	igSmartPointer_igDependencyList_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233610	FUN_00233610	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002336b0	igInfoManagerOrderedList_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002336c0	igInfoManagerOrderedList_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233730	igInfoManagerOrderedList_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233740	FUN_00233740	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233750	igInfoManagerList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002337a0	igInfoManagerList_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002337f0	igInfoManagerList_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233830	igInfoManagerList_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233840	igInfoManagerList_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002338b0	igInfoManagerList_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002338c0	igInfoManager_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233910	igInfoManager_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233920	igInfoManager_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233990	igInfoManager_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002339a0	igInfoManager_InitFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233a40	igFlushRenderer_GetOrCreateMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233a90	igFlushRenderer_GetMetaObject	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233ae0	igFlushRenderer_GetVTable	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233b80	igFlushRenderer_EnsureRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233b90	igFlushRenderer_Register	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233c00	igFlushRenderer_GetMetaObjectFunction	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00233c10	igCommandLine_PrintUsage	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002342b0	igCommandLine_PrintOptionBool	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002342e0	igCommandLine_PrintOptionInt	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234300	igCommandLine_PrintOptionFloat	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234350	igCommandLine_PrintOptionVec3f	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002343d0	igCommandLine_PrintOptionVec4f	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234470	igCommandLine_GetOption	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234510	igCommandLine_GetOptionInt	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234560	igCommandLine_GetOptionFloat	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002345b0	igCommandLine_GetOptionString	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002346c0	igCommandLine_GetDefaultValueStringRef	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234770	igCommandLine_GetDefaultValueBool	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234800	igCommandLine_GetDefaultValueInt	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234810	igCommandLine_GetDefaultValueFloat	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234860	igCommandLine_GetDefaultValueVec3f	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002348b0	igCommandLine_GetDefaultValueVec4f	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234900	igCommandLine_Construct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234b90	igCommandLine_Destruct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234ca0	igViewerDefaults_ReleaseInstance	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00234d70	igCommandLine_ParseArgs	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00235370	igCommandLine_Setup	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236120	igFlushRenderer_Render	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236140	igInsightCore_UserRegister	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236260	igInsightCore_CreateRenderDestinationFormat	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002364e0	igInsightCore_CreateWindow	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002369e0	igWindowResizeEventReceiver_WindowResizeEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236ab0	igInsightCore_AddManager	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236b10	igInsightCore_RemoveManager	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236b70	igInsightCore_IsRegistered	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236be0	igInsightCore_AddToScheduler	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236c40	igInsightCore_RemoveFromScheduler	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236ca0	igInsightCore_RegisterAllPlugins	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236dd0	igInsightCore_RegisterPlugin	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236e20	igInsightCore_UnregisterPlugin	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236e80	igInsightCore_UnregisterAllPlugins	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236ee0	igInsightCore_AddRenderer	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236f30	igInsightCore_RemoveRenderer	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00236f80	igInsightCore_FindManager	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237010	FUN_00237010	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237020	igInsightCore_AddRendererOrder	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237030	igInsightCore_AddInfo	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002370c0	igInsightCore_RemoveAllInfos	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002371f0	igInsightCore_Begin	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237280	igInsightCore_End	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237300	igInsightCore_resetFields	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237530	igInsightCore_InitializeDrawing	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002376b0	igInsightCore_TerminateDrawing	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237730	igInsightCore_HandleEvents	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002377c0	igInsightCore_DrawFrame	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237940	igMessageDefaultReceiver_MessageHandler	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237990	igFilterMessageDispatcher_GetFilter	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002379e0	igFilterMessageDispatcher_GetFilterOrCreate	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237b50	igFilterMessageDispatcher_PostMessage	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237c40	igMessageFilter_AcceptMessage	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237c50	igFilterMessageDispatcher_AddFilteringForType	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237ce0	igFilterMessageDispatcher_AddFiltering	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237d20	igFilterMessageDispatcher_RemoveFilteringForType	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237d80	igFilterMessageDispatcher_RemoveFilteringForReceiver	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237e00	igFilterMessageDispatcher_RemoveFiltering	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237e80	igMessenger_AddReceiver	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237ea0	igMessenger_PostMessage	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00237ec0	igSerialScheduler_Update	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238010	igSerialScheduler_Schedule	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238020	igSerialScheduler_Unschedule	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238050	igSerialScheduler_IsScheduled	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002380c0	igSerialScheduler_AppendDependency	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002380d0	igSerialScheduler_RemoveDependency	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238100	igSerialScheduler_RemoveAllDependencies	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238110	igViewerDefaults_Construct	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+002382e0	igViewerDefaults_LoadFromRegistry	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238af0	igSerialScheduler_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b00	igFilterMessageDispatcher_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b10	igMessageDefaultReceiver_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b20	igInsightCore_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b30	igWindowResizeEventReceiver_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b40	igEventReceiver_OnKeyEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b50	igEventReceiver_MouseMotionEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b60	igEventReceiver_MouseButtonEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b70	igEventReceiver_ControllerMotionEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b80	igEventReceiver_ControllerButtonEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238b90	igEventReceiver_ControllerButtonPressureEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238ba0	igEventReceiver_ControllerSlider	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238bb0	igEventReceiver_ControllerPointOfView	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238bc0	igEventReceiver_ControllerConnectionEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238bd0	igEventReceiver_WindowMoveEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238be0	igEventReceiver_WindowCloseEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238bf0	igFlushRenderer_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c00	igFlushRenderer_Traverse	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c10	igFlushRenderer_InitializeDrawing	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c20	igFlushRenderer_ReleaseDrawing	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c30	igInfoManagerList_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c40	igInfoManagerOrderedList_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c50	igDependencyOrderedList_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c60	igViewportResizedMessage_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c70	igEventReceiver_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c80	igEventReceiver_WindowResizeEvent	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238c90	igInsightPluginList_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238ca0	igMessageFilter_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238cb0	igMessageFilterList_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238cc0	igMessageReceiverList_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238cd0	igMessenger_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238ce0	igMessage_GetMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238cf0	FUN_00238cf0	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238d00	igInsightPluginList_GetElementMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238d10	igMessageFilterList_GetElementMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238d20	igInfoManagerList_GetElementMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
+00238d30	igMessageReceiverList_GetElementMeta	match	DEFERRED duplicate 0x14aa70 __dt__41igSmartPointer<Q33Gap4Core12igObjectList>Fv 128B (compared under the profile of its retail unit)
 00238d40	SceneSearchLibrary_RegisterClasses	match	-
 00238d50	SceneSearchLibrary_MarkRegistered	match	-
 00238d70	FUN_00238d70	match	-
@@ -17290,13 +17290,13 @@
 003a1690	beWaterPlain_OnAddRam	match	DEFERRED duplicate 0x1354b0 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
 003a16c0	beWaterPlain_OnMessage	match	DEFERRED duplicate 0x1354b0 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
 003a17b0	beWaterPlain_GetMeta	match	DEFERRED duplicate 0x1354b0 __dt__29igSmartPointer<11igFloatList>Fv 128B (compared under the profile of its retail unit)
-003a17c0	beWeapon_Prepare	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
-003a1820	beWeapon_GetInfoMeta	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
-003a1830	beWeapon_OnAddRam	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
-003a19d0	igSmartPointer_beWeaponAttachData_Destruct	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
-003a1a50	beWeapon_UpdateRam	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
-003a1a60	beWeapon_OnMessageText	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
-003a2120	beWeapon_GetMeta	match	DEFERRED duplicate 0x1d9770 __dt__45igSmartPointer<27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a17c0	beWeapon_Prepare	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1820	beWeapon_GetInfoMeta	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1830	beWeapon_OnAddRam	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a19d0	igSmartPointer_beWeaponAttachData_Destruct	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1a50	beWeapon_UpdateRam	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a1a60	beWeapon_OnMessageText	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
+003a2120	beWeapon_GetMeta	match	DEFERRED duplicate 0x1d9770 __dt__54igSmartPointer<Q33Gap2Sg27igModelViewMatrixBoneSelect>Fv 128B (compared under the profile of its retail unit)
 003a2130	libBecRuntimePlugin_Attach	match	-
 003a3470	libBecRuntimePlugin_Detach	match	-
 003a3840	libBecRuntimePlugin_GetMeta	match	-
@@ -19496,547 +19496,547 @@
 0044b290	beNDMWMdlMapCursor_OnGenerate	match	-
 0044b520	beNDMWMdlMapCursor_OnUpdateRam	match	-
 0044b850	beNDMWMdlMapCursor_GetMeta	match	-
-0044b860	GuiLibrary_MarkRegistered	match	-
-0044b880	igNonRefCountedViewList_GetOrCreateMetaObject	match	-
-0044b8d0	igNonRefCountedViewList_GetMetaObject	match	-
-0044b920	igNonRefCountedViewList_GetVTable	match	-
-0044b960	igNonRefCountedViewList_EnsureRegistered	match	-
-0044b970	igNonRefCountedViewList_Register	match	-
-0044b9e0	igNonRefCountedViewList_GetMetaObjectFunction	match	-
-0044b9f0	igViewList_GetOrCreateMetaObject	match	-
-0044ba40	igViewList_GetMetaObject	match	-
-0044ba90	igViewList_GetVTable	match	-
-0044bad0	igViewList_EnsureRegistered	match	-
-0044bae0	igViewList_Register	match	-
-0044bb50	igViewList_GetMetaObjectFunction	match	-
-0044bb60	igView_GetMetaObject	match	-
-0044bbb0	igView_EnsureRegistered	match	-
-0044bbc0	igView_Register	match	-
-0044bc30	igView_GetMetaObjectFunction	match	-
-0044bc40	igView_InitFields	match	-
-0044bce0	igTextElement_GetOrCreateMetaObject	match	-
-0044bd30	igTextElement_GetMetaObject	match	-
-0044bd80	igTextElement_GetVTable	match	-
-0044be30	FUN_0044be30	match	-
-0044bf10	FUN_0044bf10	match	-
-0044bf90	igTextElement_EnsureRegistered	match	-
-0044bfa0	igTextElement_Register	match	-
-0044c020	igTextElement_GetMetaObjectFunction	match	-
-0044c030	igGeometryElement_GetPublishedMetaObject	match	-
-0044c040	igTextElement_InitFields	match	-
-0044c110	igModel_Destroy	match	-
-0044c1b0	igGuiComponentModel_GetPublishedMetaObject	match	-
-0044c1c0	FUN_0044c1c0	match	-
-0044c240	igGuiComponentAspect_GetPublishedMetaObject	match	-
-0044c250	igClearRenderer_GetOrCreateMetaObject	match	-
-0044c2a0	igClearRenderer_GetMetaObject	match	-
-0044c2f0	igClearRenderer_GetVTable	match	-
-0044c390	igClearRenderer_EnsureRegistered	match	-
-0044c3a0	igClearRenderer_Register	match	-
-0044c410	igClearRenderer_GetMetaObjectFunction	match	-
-0044c420	igClearRenderer_InitFields	match	-
-0044c490	igRendererOrderedList_CreateInstance	match	-
-0044c4d0	igRendererOrderedList_GetOrCreateMetaObject	match	-
-0044c520	igRendererOrderedList_GetMetaObject	match	-
-0044c570	igRendererOrderedList_GetVTable	match	-
-0044c5e0	FUN_0044c5e0	match	-
-0044c680	igRendererOrderedList_EnsureRegistered	match	-
-0044c690	igRendererOrderedList_Register	match	-
-0044c700	igRendererOrderedList_GetMetaObjectFunction	match	-
-0044c710	igRenderer_GetMetaObject	match	-
-0044c760	igRenderer_EnsureRegistered	match	-
-0044c770	igRenderer_Register	match	-
-0044c7e0	igRenderer_GetMetaObjectFunction	match	-
-0044c7f0	igRenderer_InitFields	match	-
-0044c880	igOnOffValueObserverList_GetOrCreateMetaObject	match	-
-0044c8d0	igOnOffValueObserverList_GetMetaObject	match	-
-0044c920	igOnOffValueObserverList_GetVTable	match	-
-0044c960	igOnOffValueObserverList_EnsureRegistered	match	-
-0044c970	igOnOffValueObserverList_Register	match	-
-0044c9e0	igOnOffValueObserverList_GetMetaObjectFunction	match	-
-0044c9f0	igOnOffValueObserver_GetMetaObject	match	-
-0044ca40	igOnOffValueObserver_GetVTable	match	-
-0044ca80	igOnOffValueObserver_EnsureRegistered	match	-
-0044ca90	igOnOffValueObserver_Register	match	-
-0044cb10	igOnOffValueObserver_GetMetaObjectFunction	match	-
-0044cb20	igView_GetPublishedMetaObject	match	-
-0044cb30	igOnOffValueObserver_InitFields	match	-
-0044cbd0	igRadioGroupSelectedObserver_GetOrCreateMetaObject	match	-
-0044cc20	igRadioGroupSelectedObserver_GetMetaObject	match	-
-0044cc70	igRadioGroupSelectedObserver_GetVTable	match	-
-0044ccb0	igRadioGroupSelectedObserver_EnsureRegistered	match	-
-0044ccc0	igRadioGroupSelectedObserver_Register	match	-
-0044cd40	igRadioGroupSelectedObserver_GetMetaObjectFunction	match	-
-0044cd50	igRadioGroupSelectedObserver_InitFields	match	-
-0044cdf0	igRadioGroup_GetOrCreateMetaObject	match	-
-0044ce40	igRadioGroup_GetMetaObject	match	-
-0044ce90	igRadioGroup_GetVTable	match	-
-0044cfc0	igRadioGroup_EnsureRegistered	match	-
-0044cfd0	igRadioGroup_Register	match	-
-0044d050	igRadioGroup_GetMetaObjectFunction	match	-
-0044d060	igRadioGroup_InitFields	match	-
-0044d170	igRadioGroupModel_GetOrCreateMetaObject	match	-
-0044d1c0	igRadioGroupModel_GetMetaObject	match	-
-0044d210	igRadioGroupModel_GetVTable	match	-
-0044d2b0	igRadioGroupModel_RunStaticInit	match	-
-0044d2c0	igRadioGroupModel_Register	match	-
-0044d330	thunk_igRadioGroupModel_GetMetaObject	match	-
-0044d340	igModel_GetPublishedMetaObject	match	-
-0044d350	igRadioGroupModel_InitFields	match	-
-0044d3e0	igOnOffModel_GetMetaObject	match	-
-0044d430	igOnOffModel_GetVTable	match	-
-0044d4d0	igOnOffModel_RunStaticInit	match	-
-0044d4e0	igOnOffModel_Register	match	-
-0044d550	thunk_igOnOffModel_GetMetaObject	match	-
-0044d560	igOnOffModel_InitFields	match	-
-0044d5d0	igModel_GetOrCreateMetaObject	match	-
-0044d620	igModel_GetMetaObject	match	-
-0044d670	igModel_GetVTable	match	-
-0044d700	igModel_RunStaticInit	match	-
-0044d710	igModel_Register	match	-
-0044d790	thunk_igModel_GetMetaObject	match	-
-0044d7a0	igModel_InitFields	match	-
-0044d840	igHotKeyEventReceiver_GetOrCreateMetaObject	match	-
-0044d890	igHotKeyEventReceiver_GetMetaObject	match	-
-0044d8e0	igHotKeyEventReceiver_GetVTable	match	-
-0044d970	igHotKeyEventReceiver_RunStaticInit	match	-
-0044d980	igHotKeyEventReceiver_Register	match	-
-0044da00	thunk_igHotKeyEventReceiver_GetMetaObject	match	-
-0044da10	igHotKeyEventReceiver_InitFields	match	-
-0044dab0	igHotKeyBindingList_GetOrCreateMetaObject	match	-
-0044db00	igHotKeyBindingList_GetMetaObject	match	-
-0044db50	igHotKeyBindingList_GetVTable	match	-
-0044db90	igHotKeyBindingList_RunStaticInit	match	-
-0044dba0	igHotKeyBindingList_Register	match	-
-0044dc10	thunk_igHotKeyBindingList_GetMetaObject	match	-
-0044dc20	igHotKeyBinding_Create	match	-
-0044dc60	igHotKeyBinding_GetMetaObject	match	-
-0044dcb0	igHotKeyBinding_GetVTable	match	-
-0044dd40	igHotKeyBinding_RunStaticInit	match	-
-0044dd50	igHotKeyBinding_Register	match	-
-0044ddd0	thunk_igHotKeyBinding_GetMetaObject	match	-
-0044dde0	igHotKeyBinding_InitFields	match	-
-0044ded0	igGuiSystem_GetOrCreateMetaObject	match	-
-0044df20	igGuiSystem_GetMetaObject	match	-
-0044df70	igGuiSystem_GetVTable	match	-
-0044e060	FUN_0044e060	match	-
-0044e0e0	FUN_0044e0e0	match	-
-0044e160	FUN_0044e160	match	-
-0044e1e0	igSmartPointer_igMouseCursor_Destruct	match	-
-0044e260	igGuiSystem_RunStaticInit	match	-
-0044e270	igGuiSystem_Register	match	-
-0044e2f0	thunk_igGuiSystem_GetMetaObject	match	-
-0044e300	igGuiSystem_InitFields	match	-
-0044e430	igMouseCursor_GetOrCreateMetaObject	match	-
-0044e480	igMouseCursor_GetMetaObject	match	-
-0044e4d0	igMouseCursor_GetVTable	match	-
-0044e560	igMouseCursor_RunStaticInit	match	-
-0044e570	igMouseCursor_Register	match	-
-0044e5f0	thunk_igMouseCursor_GetMetaObject	match	-
-0044e600	igMouseCursor_InitFields	match	-
-0044e6b0	igGuiSystemRenderer_GetOrCreateMetaObject	match	-
-0044e700	igGuiSystemRenderer_GetMetaObject	match	-
-0044e750	igGuiSystemRenderer_GetVTable	match	-
-0044e810	igGuiSystemRenderer_RunStaticInit	match	-
-0044e820	igGuiSystemRenderer_Register	match	-
-0044e8a0	thunk_igGuiSystemRenderer_GetMetaObject	match	-
-0044e8b0	igGuiSystemRenderer_InitFields	match	-
-0044e990	igActiveComponentsObserver_Create	match	-
-0044e9d0	igActiveComponentsObserver_GetMetaObject	match	-
-0044ea20	igActiveComponentsObserver_GetVTable	match	-
-0044eb50	igActiveComponentsObserver_RunStaticInit	match	-
-0044eb60	igActiveComponentsObserver_Register	match	-
-0044ebe0	thunk_igActiveComponentsObserver_GetMetaObject	match	-
-0044ebf0	igActiveComponentsObserver_InitFields	match	-
-0044ecb0	igMousePosObserver_Create	match	-
-0044ecf0	igMousePosObserver_GetMetaObject	match	-
-0044ed40	igMousePosObserver_GetVTable	match	-
-0044ee80	FUN_0044ee80	match	-
-0044ef00	igMousePosObserver_RunStaticInit	match	-
-0044ef10	igMousePosObserver_Register	match	-
-0044ef90	thunk_igMousePosObserver_GetMetaObject	match	-
-0044efa0	igMousePosObserver_InitFields	match	-
-0044f0b0	igWindowSizeObserver_Create	match	-
-0044f0f0	igWindowSizeObserver_GetMetaObject	match	-
-0044f140	igWindowSizeObserver_GetVTable	match	-
-0044f180	igWindowSizeObserver_RunStaticInit	match	-
-0044f190	igWindowSizeObserver_Register	match	-
-0044f200	thunk_igWindowSizeObserver_GetMetaObject	match	-
-0044f210	igGuiSystemModel_GetOrCreateMetaObject	match	-
-0044f260	igGuiSystemModel_GetMetaObject	match	-
-0044f2b0	igGuiSystemModel_GetVTable	match	-
-0044f370	igGuiSystemModel_RunStaticInit	match	-
-0044f380	igGuiSystemModel_Register	match	-
-0044f400	thunk_igGuiSystemModel_GetMetaObject	match	-
-0044f410	igGuiSystemModel_InitFields	match	-
-0044f540	igGuiComponentNode_GetOrCreateMetaObject	match	-
-0044f590	igGuiComponentNode_GetMetaObject	match	-
-0044f5e0	igGuiComponentNode_GetVTable	match	-
-0044f650	igGuiComponentNode_RunStaticInit	match	-
-0044f660	igGuiComponentNode_Register	match	-
-0044f6e0	thunk_igGuiComponentNode_GetMetaObject	match	-
-0044f6f0	igGuiComponentNode_InitFields	match	-
-0044f790	igGuiComponentModel_GetOrCreateMetaObject	match	-
-0044f7e0	igGuiComponentModel_GetMetaObject	match	-
-0044f830	igGuiComponentModel_GetVTable	match	-
-0044f8d0	igGuiComponentModel_RunStaticInit	match	-
-0044f8e0	igGuiComponentModel_Register	match	-
-0044f960	thunk_igGuiComponentModel_GetMetaObject	match	-
-0044f970	igGuiComponentModel_InitFields	match	-
-0044fa40	igGuiComponentController_GetOrCreateMetaObject	match	-
-0044fa90	igGuiComponentController_GetMetaObject	match	-
-0044fae0	igGuiComponentController_GetVTable	match	-
-0044fb20	igGuiComponentController_EnsureRegistered	match	-
-0044fb30	igGuiComponentController_Register	match	-
-0044fba0	igGuiComponentController_GetMetaObjectFunction	match	-
-0044fbb0	igGuiComponentAspect_GetOrCreateMetaObject	match	-
-0044fc00	igGuiComponentAspect_GetMetaObject	match	-
-0044fc50	igGuiComponentAspect_EnsureRegistered	match	-
-0044fc60	igGuiComponentAspect_Register	match	-
-0044fcd0	igGuiComponentAspect_GetMetaObjectFunction	match	-
-0044fce0	igGuiComponentAspect_InitFields	match	-
-0044fdd0	igGuiComponentList_GetOrCreateMetaObject	match	-
-0044fe20	igGuiComponentList_GetMetaObject	match	-
-0044fe70	igGuiComponentList_GetVTable	match	-
-0044feb0	igGuiComponentList_EnsureRegistered	match	-
-0044fec0	igGuiComponentList_Register	match	-
-0044ff30	igGuiComponentList_GetMetaObjectFunction	match	-
-0044ff40	igGuiComponent_GetOrCreateMetaObject	match	-
-0044ff90	igGuiComponent_GetMetaObject	match	-
-0044ffe0	igGuiComponent_GetVTable	match	-
-00450090	FUN_00450090	match	-
-004501f0	FUN_004501f0	match	-
-00450270	FUN_00450270	match	-
-004502f0	FUN_004502f0	match	-
-00450370	FUN_00450370	match	-
-004503f0	igGuiComponent_EnsureRegistered	match	-
-00450400	igGuiComponent_Register	match	-
-00450480	igGuiComponent_GetMetaObjectFunction	match	-
-00450490	igGuiComponent_InitFields	match	-
-004505b0	igGeometryElement_GetOrCreateMetaObject	match	-
-00450600	igGeometryElement_GetMetaObject	match	-
-00450650	igGeometryElement_EnsureRegistered	match	-
-00450660	igGeometryElement_Register	match	-
-004506d0	igGeometryElement_GetMetaObjectFunction	match	-
-004506e0	igGeometryElement_InitFields	match	-
-004507f0	igFont_GetOrCreateMetaObject	match	-
-00450840	igFont_GetMetaObject	match	-
-00450890	igFont_EnsureRegistered	match	-
-004508a0	igFont_Register	match	-
-00450910	igFont_GetMetaObjectFunction	match	-
-00450920	igFont_InitFields	match	-
-004509c0	igFieldSynchronizer_Create	match	-
-00450a00	igFieldSynchronizer_GetOrCreateMetaObject	match	-
-00450a50	igFieldSynchronizer_GetMetaObject	match	-
-00450aa0	igFieldSynchronizer_GetVTable	match	-
-00450b30	igFieldSynchronizer_EnsureRegistered	match	-
-00450b40	igFieldSynchronizer_Register	match	-
-00450bc0	igFieldSynchronizer_GetMetaObjectFunction	match	-
-00450bd0	igFieldSynchronizer_InitFields	match	-
-00450c70	igFieldChangeViewList_GetOrCreateMetaObject	match	-
-00450cc0	igFieldChangeViewList_GetMetaObject	match	-
-00450d10	igFieldChangeViewList_GetVTable	match	-
-00450d50	igFieldChangeViewList_EnsureRegistered	match	-
-00450d60	igFieldChangeViewList_Register	match	-
-00450dd0	igFieldChangeViewList_GetMetaObjectFunction	match	-
-00450de0	igFieldChangeView_Create	match	-
-00450e20	igFieldChangeView_GetMetaObject	match	-
-00450e70	igFieldChangeView_GetVTable	match	-
-00450f00	igFieldChangeView_EnsureRegistered	match	-
-00450f10	igFieldChangeView_Register	match	-
-00450f90	igFieldChangeView_GetMetaObjectFunction	match	-
-00450fa0	igFieldChangeView_InitFields	match	-
-00451050	igEventReceiverOrderedList_GetOrCreateMetaObject	match	-
-004510a0	igEventReceiverOrderedList_GetMetaObject	match	-
-004510f0	igEventReceiverOrderedList_GetVTable	match	-
-00451160	FUN_00451160	match	-
-00451200	igEventReceiverOrderedList_EnsureRegistered	match	-
-00451210	igEventReceiverOrderedList_Register	match	-
-00451280	igEventReceiverOrderedList_GetMetaObjectFunction	match	-
-00451290	igEventReceiver_GetMetaObject	match	-
-004512e0	igEventReceiver_GetVTable	match	-
-00451320	igEventReceiver_EnsureRegistered	match	-
-00451330	igEventReceiver_Register	match	-
-004513a0	igEventReceiver_GetMetaObjectFunction	match	-
-004513b0	igEventDispatcher_GetOrCreateMetaObject	match	-
-00451400	igEventDispatcher_GetMetaObject	match	-
-00451450	igEventDispatcher_GetVTable	match	-
-00451580	igEventDispatcher_EnsureRegistered	match	-
-00451590	igEventDispatcher_Register	match	-
-00451610	igEventDispatcher_GetMetaObjectFunction	match	-
-00451620	igEventDispatcher_InitFields	match	-
-004516e0	igDefaultAspect_GetOrCreateMetaObject	match	-
-00451730	igDefaultAspect_GetMetaObject	match	-
-00451780	igDefaultAspect_GetVTable	match	-
-00451810	igDefaultAspect_EnsureRegistered	match	-
-00451820	igDefaultAspect_Register	match	-
-004518a0	igDefaultAspect_GetMetaObjectFunction	match	-
-004518b0	igDefaultAspect_InitFields	match	-
-00451950	igDefaultAspectElementList_GetOrCreateMetaObject	match	-
-004519a0	igDefaultAspectElementList_GetMetaObject	match	-
-004519f0	igDefaultAspectElementList_GetVTable	match	-
-00451a30	igDefaultAspectElementList_EnsureRegistered	match	-
-00451a40	igDefaultAspectElementList_Register	match	-
-00451ab0	igDefaultAspectElementList_GetMetaObjectFunction	match	-
-00451ac0	FUN_00451ac0	match	-
-00451b20	igDefaultAspectElement_GetMetaObject	match	-
-00451b70	igDefaultAspectElement_GetVTable	match	-
-00451ca0	igDefaultAspectElement_EnsureRegistered	match	-
-00451cb0	igDefaultAspectElement_Register	match	-
-00451d30	igDefaultAspectElement_GetMetaObjectFunction	match	-
-00451d40	igDefaultAspectElement_InitFields	match	-
-00451e40	igOnOffColorChanger_GetOrCreateMetaObject	match	-
-00451e90	igOnOffColorChanger_GetMetaObject	match	-
-00451ee0	igOnOffColorChanger_GetVTable	match	-
-00451f20	igOnOffColorChanger_RunStaticInit	match	-
-00451f30	igOnOffColorChanger_Register	match	-
-00451fa0	thunk_igOnOffColorChanger_GetMetaObject	match	-
-00451fb0	igBasicColorChanger_GetPublishedMetaObject	match	-
-00451fc0	igBasicColorChanger_GetOrCreateMetaObject	match	-
-00452010	igBasicColorChanger_GetMetaObject	match	-
-00452060	igBasicColorChanger_GetVTable	match	-
-004520a0	igBasicColorChanger_RunStaticInit	match	-
-004520b0	igBasicColorChanger_Register	match	-
-00452120	thunk_igBasicColorChanger_GetMetaObject	match	-
-00452130	igColorChanger_GetPublishedMetaObject	match	-
-00452140	igBasicColorChanger_InitFields	match	-
-004521d0	igColorChanger_GetOrCreateMetaObject	match	-
-00452220	igColorChanger_GetMetaObject	match	-
-00452270	igColorChanger_GetVTable	match	-
-004522b0	igColorChanger_RunStaticInit	match	-
-004522c0	igColorChanger_Register	match	-
-00452330	thunk_igColorChanger_GetMetaObject	match	-
-00452340	igBoxComponent_GetOrCreateMetaObject	match	-
-00452390	igBoxComponent_GetMetaObject	match	-
-004523e0	igBoxComponent_GetVTable	match	-
-00452450	igBoxComponent_RunStaticInit	match	-
-00452460	igBoxComponent_Register	match	-
-004524d0	thunk_igBoxComponent_GetMetaObject	match	-
-004524e0	igGuiComponent_GetPublishedMetaObject	match	-
-004524f0	igBitmapFont_GetOrCreateMetaObject	match	-
-00452540	igBitmapFont_GetMetaObject	match	-
-00452590	igBitmapFont_GetVTable	match	-
-00452620	igBitmapFont_RunStaticInit	match	-
-00452630	igBitmapFont_Register	match	-
-004526b0	thunk_igBitmapFont_GetMetaObject	match	-
-004526c0	igFont_GetPublishedMetaObject	match	-
-004526d0	igBitmapFont_InitFields	match	-
-00452790	igCharMetricsList_GetOrCreateMetaObject	match	-
-004527e0	igCharMetricsList_GetMetaObject	match	-
-00452830	igCharMetricsList_GetVTable	match	-
-00452870	igCharMetricsList_RunStaticInit	match	-
-00452880	igCharMetricsList_Register	match	-
-004528f0	thunk_igCharMetricsList_GetMetaObject	match	-
-00452900	FUN_00452900	match	-
-004529c0	igCharMetricsMetaField_GetMetaObject	match	-
-00452a10	igCharMetricsMetaField_GetVTable	match	-
-00452ae0	igCharMetricsMetaField_RunStaticInit	match	-
-00452af0	igCharMetricsMetaField_Register	match	-
-00452b60	thunk_igCharMetricsMetaField_GetMetaObject	match	-
-00452b70	FUN_00452b70	match	-
-00452c40	FUN_00452c40	match	-
-00452c80	Gap__Gui__igCharMetricsMetaField__vfunc_25	match	-
-00452c90	igCharMetricsMetaField_InitDefaults	match	-
-00452ca0	FUN_00452ca0	match	-
-00453250	igAction_GetOrCreateMetaObject	match	-
-004532a0	igAction_GetMetaObject	match	-
-004532f0	igAction_RunStaticInit	match	-
-00453300	igAction_Register	match	-
-00453360	thunk_igAction_GetMetaObject	match	-
-00453370	FUN_00453370	match	-
-00453380	Gap__Bec__beFontImage__vfunc_23	match	-
-004533b0	Gap__Bec__beFontImage__vfunc_24	match	-
-00453410	Gap__Bec__beFontImage__vfunc_21	match	-
-004534f0	Gap__Bec__beFontImage__vfunc_22	match	-
-004535d0	FUN_004535d0	match	-
-00453830	FUN_00453830	match	-
-00453860	igBitmapFont_resetFields	match	-
-00453980	FUN_00453980	match	-
-00453990	FUN_00453990	match	-
-00453a20	igGuiComponent_AppendChild	match	-
-00453a30	Gap__Gui__igColorChanger__vfunc_23	match	-
-00453a40	igBasicColorChanger_SetColor	match	-
-00453ac0	Gap__Gui__igBasicColorChanger__vfunc_23	match	-
-00453b10	Gap__Gui__igOnOffColorChanger__vfunc_23	match	-
-00453b80	igOnOffColorChanger_SetColor	match	-
-00453b90	FUN_00453b90	match	-
-00453be0	igDefaultAspectElement_PlaceGeometry	match	-
-00453df0	Gap__Gui__igDefaultAspect__vfunc_25	match	-
-00453e70	igDefaultAspect_UpdateMinimumSize	match	-
-00453f70	Gap__Gui__igDefaultAspect__vfunc_26	match	-
-00454050	Gap__Gui__igDefaultAspect__vfunc_27	match	-
-004540d0	FUN_004540d0	match	-
-00454180	FUN_00454180	match	-
-004541f0	FUN_004541f0	match	-
-00454290	igEventDispatcher_AddReceiver	match	-
-004542a0	igEventDispatcher_RemoveReceiver	match	-
-004542d0	igEventDispatcher_AddReceiverOrder	match	-
-004542e0	igEventDispatcher_RemoveReceiverOrder	match	-
-00454310	igEventDispatcher_MouseMotion	match	-
-004544d0	igEventDispatcher_MouseButtonDown	match	-
-00454570	igEventDispatcher_MouseButtonUp	match	-
-00454610	igEventDispatcher_WindowMove	match	-
-004546c0	igEventDispatcher_WindowResize	match	-
-00454770	igEventDispatcher_WindowClose	match	-
-00454820	igEventDispatcher_ControllerJoystickMotion	match	-
-00454930	igEventDispatcher_ControllerButtonDown	match	-
-00454a30	igEventDispatcher_ControllerButtonUp	match	-
-00454b30	igEventDispatcher_ControllerButtonPressure	match	-
-00454c30	igEventDispatcher_ControllerPointOfView	match	-
-00454d30	igEventDispatcher_ControllerSlider	match	-
-00454e30	igEventDispatcher_ControllerConnection	match	-
-00454f20	igEventDispatcher_ControllerDisconnection	match	-
-00455010	igEventDispatcher_KeyDown	match	-
-004550b0	igEventDispatcher_KeyUp	match	-
-00455150	igFieldChangeView_OnModelChange	match	-
-004551a0	FUN_004551a0	match	-
-004551f0	igFieldSynchronizer_AddField	match	-
-004552e0	FUN_004552e0	match	-
-00455370	beFontImage_CountTriangles	match	-
-004553e0	beFontImage_CountTrianglesWide	match	-
-00455440	igGuiComponent_resetFields	match	-
-00455470	FUN_00455470	match	-
-004554d0	igGuiComponent_userDestruct	match	-
-00455510	FUN_00455510	match	-
-004555c0	FUN_004555c0	match	-
-004555e0	FUN_004555e0	match	-
-004555f0	FUN_004555f0	match	-
-00455600	FUN_00455600	match	-
-00455610	FUN_00455610	match	-
-00455620	FUN_00455620	match	-
-00455630	igDefaultAspect_OnModelChange	match	-
-004556b0	igGuiComponentController_IsCompatible	match	-
-004556e0	igGuiComponentController_OnModelChange	match	-
-00455820	Gap__Gui__igGuiComponentController__vfunc_33	match	-
-00455830	Gap__Gui__igGuiComponentController__vfunc_32	match	-
-00455840	Gap__Gui__igGuiComponentController__vfunc_31	match	-
-00455850	Gap__Gui__igGuiComponentController__vfunc_30	match	-
-00455860	Gap__Gui__igGuiComponentController__vfunc_29	match	-
-00455870	Gap__Gui__igGuiComponentController__vfunc_28	match	-
-00455880	Gap__Gui__igGuiComponentController__vfunc_27	match	-
-00455890	Gap__Gui__igGuiComponentController__vfunc_26	match	-
-004558a0	Gap__Gui__igGuiComponentController__vfunc_25	match	-
-004558b0	FUN_004558b0	match	-
-00455900	FUN_00455900	match	-
-00455950	FUN_00455950	match	-
-004559a0	FUN_004559a0	match	-
-004559f0	igGuiComponentNode_resetFields	match	-
-00455ad0	FUN_00455ad0	match	-
-00455b00	igGuiSystemModel_resetFields	match	-
-00455b90	igWindowSizeObserver_OnModelChange	match	-
-00455c30	igMousePosObserver_resetFields	match	-
-00455d80	igMousePosObserver_OnModelChange	match	-
-00455f50	FUN_00455f50	match	-
-00456050	FUN_00456050	match	-
-004561e0	igActiveComponentsObserver_OnModelChange	match	-
-00456540	FUN_00456540	match	-
-004565c0	FUN_004565c0	match	-
-00456610	igGuiSystemRenderer_InitializeDrawing	match	-
-00456660	igGuiSystemRenderer_ReleaseDrawing	match	-
-00456670	igGuiSystemRenderer_Traverse	match	-
-00456730	igGuiSystemRenderer_Render	match	-
-00456780	igGuiSystem_resetFields	match	-
-004569c0	igGuiSystem_SetMouseCursorVisible	match	-
-00456a60	igGuiSystem_SetMouseCursor	match	-
-00456b80	FUN_00456b80	match	-
-00456c20	FUN_00456c20	match	-
-00456cc0	igGuiSystem_SetRootComponent	match	-
-00456e10	FUN_00456e10	match	-
-00456eb0	FUN_00456eb0	match	-
-00456f70	Gap__Gui__igGuiComponentController__vfunc_34	match	-
-00456f80	igGuiSystem_OnKeyEvent	match	-
-004570a0	FUN_004570a0	match	-
-00457100	igGuiSystem_MouseMotionEvent	match	-
-00457170	igGuiSystem_WindowResizeEvent	match	-
-004571d0	igGuiSystem_WindowCloseEvent	match	-
-00457220	igGuiSystem_MouseButtonEvent	match	-
-004572a0	igGuiSystem_ControllerButtonEvent	match	-
-004573b0	igGuiSystem_ControllerMotionEvent	match	-
-004573c0	igHotKeyEventReceiver_AddKey	match	-
-004573d0	igHotKeyEventReceiver_AddButton	match	-
-004573f0	igHotKeyEventReceiver_AddBinding	match	-
-004574f0	igHotKeyEventReceiver_RemoveBinding	match	-
-004575d0	igHotKeyEventReceiver_OnKeyEvent	match	-
-00457650	igHotKeyEventReceiver_ControllerButtonEvent	match	-
-004576d0	FUN_004576d0	match	-
-004577f0	FUN_004577f0	match	-
-004578c0	igModel_NotifyViews	match	-
-00457950	igModel_userDestruct	match	-
-004579d0	igRadioGroup_resetFields	match	-
-00457a10	FUN_00457a10	match	-
-00457ab0	FUN_00457ab0	match	-
-00457bc0	igRadioGroupSelectedObserver_OnModelChange	match	-
-00457bf0	igOnOffValueObserver_OnModelChange	match	-
-00457c40	FUN_00457c40	match	-
-00457ca0	igRenderer_SetVisualContext	match	-
-00457d60	igClearRenderer_InitializeDrawing	match	-
-00457de0	igClearRenderer_Render	match	-
-00457e00	Gap__Gui__igTextElement__vfunc_23	match	-
-00457e10	Gap__Gui__igTextElement__vfunc_24	match	-
-00457e90	igView_SetModel	match	-
-00457ef0	igView_userDestruct	match	-
-00457f30	igTextElement_GetMeta	match	-
-00457f40	igClearRenderer_GetMeta	match	-
-00457f50	igClearRenderer_Traverse	match	-
-00457f60	igClearRenderer_ReleaseDrawing	match	-
-00457f70	igOnOffValueObserver_GetMeta	match	-
-00457f80	igOnOffValueObserver_IsCompatible	match	-
-00457fb0	igRadioGroupSelectedObserver_GetMeta	match	-
-00457fc0	igRadioGroupSelectedObserver_IsCompatible	match	-
-00457ff0	igRadioGroup_GetMeta	match	-
-00458000	igModel_GetMeta	match	-
-00458010	igHotKeyEventReceiver_GetMeta	match	-
-00458020	igGuiSystem_GetMeta	match	-
-00458030	igGuiSystemRenderer_GetMeta	match	-
-00458040	igActiveComponentsObserver_GetMeta	match	-
-00458050	igActiveComponentsObserver_IsCompatible	match	-
-00458080	igMousePosObserver_GetMeta	match	-
-00458090	igMousePosObserver_IsCompatible	match	-
-004580c0	igWindowSizeObserver_GetMeta	match	-
-004580d0	igWindowSizeObserver_IsCompatible	match	-
-00458100	igGuiSystemModel_GetMeta	match	-
-00458110	igGuiComponentNode_GetMeta	match	-
-00458120	igGuiComponentController_GetMeta	match	-
-00458130	igGuiComponent_GetMeta	match	-
-00458140	igFieldChangeView_GetMeta	match	-
-00458150	igFieldChangeView_IsCompatible	match	-
-00458160	igEventDispatcher_GetMeta	match	-
-00458170	igDefaultAspect_GetMeta	match	-
-00458180	igDefaultAspect_IsCompatible	match	-
-004581b0	igOnOffColorChanger_GetMeta	match	-
-004581c0	igBasicColorChanger_GetMeta	match	-
-004581d0	igColorChanger_GetMeta	match	-
-004581e0	igBitmapFont_GetMeta	match	-
-004581f0	igCharMetricsMetaField_GetMeta	match	-
-00458200	igCharMetricsMetaField_GetDescriptor	match	-
-00458210	igCharMetricsList_GetMeta	match	-
-00458220	igBoxComponent_GetMeta	match	-
-00458230	igDefaultAspectElement_GetMeta	match	-
-00458240	igDefaultAspectElementList_GetMeta	match	-
-00458250	igEventReceiverOrderedList_GetMeta	match	-
-00458260	igFieldChangeViewList_GetMeta	match	-
-00458270	igFieldSynchronizer_GetMeta	match	-
-00458280	igGuiComponentList_GetMeta	match	-
-00458290	igMouseCursor_GetMeta	match	-
-004582a0	igHotKeyBinding_GetMeta	match	-
-004582b0	igHotKeyBindingList_GetMeta	match	-
-004582c0	igOnOffModel_GetMeta	match	-
-004582d0	igRadioGroupModel_GetMeta	match	-
-004582e0	igOnOffValueObserverList_GetMeta	match	-
-004582f0	igRendererOrderedList_GetMeta	match	-
-00458300	igGuiComponentModel_GetMeta	match	-
-00458310	FUN_00458310	match	-
-00458320	igViewList_GetMeta	match	-
-00458330	igNonRefCountedViewList_GetMeta	match	-
-00458340	igNonRefCountedViewList_GetElementMeta	match	-
-00458350	igCharMetricsList_GetElementSize	match	-
-00458360	igDefaultAspectElementList_GetElementMeta	match	-
-00458370	igFieldChangeViewList_GetElementMeta	match	-
-00458380	igHotKeyBindingList_GetElementMeta	match	-
-00458390	igOnOffValueObserverList_GetElementMeta	match	-
-004583a0	igGuiComponentList_GetElementMeta	match	-
-004583b0	igViewList_GetElementMeta	match	-
-004583c0	igCharMetricsList_TrimCapacity	match	-
+0044b860	GuiLibrary_MarkRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b880	igNonRefCountedViewList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b8d0	igNonRefCountedViewList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b920	igNonRefCountedViewList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b960	igNonRefCountedViewList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b970	igNonRefCountedViewList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b9e0	igNonRefCountedViewList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044b9f0	igViewList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ba40	igViewList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ba90	igViewList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bad0	igViewList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bae0	igViewList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bb50	igViewList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bb60	igView_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bbb0	igView_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bbc0	igView_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bc30	igView_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bc40	igView_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bce0	igTextElement_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bd30	igTextElement_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bd80	igTextElement_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044be30	FUN_0044be30	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bf10	FUN_0044bf10	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bf90	igTextElement_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044bfa0	igTextElement_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c020	igTextElement_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c030	igGeometryElement_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c040	igTextElement_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c110	igModel_Destroy	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c1b0	igGuiComponentModel_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c1c0	FUN_0044c1c0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c240	igGuiComponentAspect_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c250	igClearRenderer_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c2a0	igClearRenderer_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c2f0	igClearRenderer_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c390	igClearRenderer_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c3a0	igClearRenderer_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c410	igClearRenderer_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c420	igClearRenderer_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c490	igRendererOrderedList_CreateInstance	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c4d0	igRendererOrderedList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c520	igRendererOrderedList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c570	igRendererOrderedList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c5e0	FUN_0044c5e0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c680	igRendererOrderedList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c690	igRendererOrderedList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c700	igRendererOrderedList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c710	igRenderer_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c760	igRenderer_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c770	igRenderer_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c7e0	igRenderer_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c7f0	igRenderer_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c880	igOnOffValueObserverList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c8d0	igOnOffValueObserverList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c920	igOnOffValueObserverList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c960	igOnOffValueObserverList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c970	igOnOffValueObserverList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c9e0	igOnOffValueObserverList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044c9f0	igOnOffValueObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ca40	igOnOffValueObserver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ca80	igOnOffValueObserver_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ca90	igOnOffValueObserver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cb10	igOnOffValueObserver_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cb20	igView_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cb30	igOnOffValueObserver_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cbd0	igRadioGroupSelectedObserver_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cc20	igRadioGroupSelectedObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cc70	igRadioGroupSelectedObserver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ccb0	igRadioGroupSelectedObserver_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ccc0	igRadioGroupSelectedObserver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cd40	igRadioGroupSelectedObserver_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cd50	igRadioGroupSelectedObserver_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cdf0	igRadioGroup_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ce40	igRadioGroup_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ce90	igRadioGroup_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cfc0	igRadioGroup_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044cfd0	igRadioGroup_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d050	igRadioGroup_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d060	igRadioGroup_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d170	igRadioGroupModel_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d1c0	igRadioGroupModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d210	igRadioGroupModel_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d2b0	igRadioGroupModel_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d2c0	igRadioGroupModel_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d330	thunk_igRadioGroupModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d340	igModel_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d350	igRadioGroupModel_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d3e0	igOnOffModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d430	igOnOffModel_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d4d0	igOnOffModel_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d4e0	igOnOffModel_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d550	thunk_igOnOffModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d560	igOnOffModel_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d5d0	igModel_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d620	igModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d670	igModel_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d700	igModel_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d710	igModel_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d790	thunk_igModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d7a0	igModel_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d840	igHotKeyEventReceiver_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d890	igHotKeyEventReceiver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d8e0	igHotKeyEventReceiver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d970	igHotKeyEventReceiver_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044d980	igHotKeyEventReceiver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044da00	thunk_igHotKeyEventReceiver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044da10	igHotKeyEventReceiver_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dab0	igHotKeyBindingList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044db00	igHotKeyBindingList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044db50	igHotKeyBindingList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044db90	igHotKeyBindingList_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dba0	igHotKeyBindingList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dc10	thunk_igHotKeyBindingList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dc20	igHotKeyBinding_Create	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dc60	igHotKeyBinding_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dcb0	igHotKeyBinding_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dd40	igHotKeyBinding_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dd50	igHotKeyBinding_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ddd0	thunk_igHotKeyBinding_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044dde0	igHotKeyBinding_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ded0	igGuiSystem_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044df20	igGuiSystem_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044df70	igGuiSystem_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e060	FUN_0044e060	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e0e0	FUN_0044e0e0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e160	FUN_0044e160	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e1e0	igSmartPointer_igMouseCursor_Destruct	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e260	igGuiSystem_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e270	igGuiSystem_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e2f0	thunk_igGuiSystem_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e300	igGuiSystem_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e430	igMouseCursor_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e480	igMouseCursor_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e4d0	igMouseCursor_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e560	igMouseCursor_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e570	igMouseCursor_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e5f0	thunk_igMouseCursor_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e600	igMouseCursor_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e6b0	igGuiSystemRenderer_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e700	igGuiSystemRenderer_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e750	igGuiSystemRenderer_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e810	igGuiSystemRenderer_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e820	igGuiSystemRenderer_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e8a0	thunk_igGuiSystemRenderer_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e8b0	igGuiSystemRenderer_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e990	igActiveComponentsObserver_Create	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044e9d0	igActiveComponentsObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ea20	igActiveComponentsObserver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044eb50	igActiveComponentsObserver_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044eb60	igActiveComponentsObserver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ebe0	thunk_igActiveComponentsObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ebf0	igActiveComponentsObserver_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ecb0	igMousePosObserver_Create	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ecf0	igMousePosObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ed40	igMousePosObserver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ee80	FUN_0044ee80	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ef00	igMousePosObserver_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ef10	igMousePosObserver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ef90	thunk_igMousePosObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044efa0	igMousePosObserver_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f0b0	igWindowSizeObserver_Create	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f0f0	igWindowSizeObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f140	igWindowSizeObserver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f180	igWindowSizeObserver_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f190	igWindowSizeObserver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f200	thunk_igWindowSizeObserver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f210	igGuiSystemModel_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f260	igGuiSystemModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f2b0	igGuiSystemModel_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f370	igGuiSystemModel_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f380	igGuiSystemModel_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f400	thunk_igGuiSystemModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f410	igGuiSystemModel_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f540	igGuiComponentNode_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f590	igGuiComponentNode_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f5e0	igGuiComponentNode_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f650	igGuiComponentNode_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f660	igGuiComponentNode_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f6e0	thunk_igGuiComponentNode_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f6f0	igGuiComponentNode_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f790	igGuiComponentModel_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f7e0	igGuiComponentModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f830	igGuiComponentModel_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f8d0	igGuiComponentModel_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f8e0	igGuiComponentModel_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f960	thunk_igGuiComponentModel_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044f970	igGuiComponentModel_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fa40	igGuiComponentController_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fa90	igGuiComponentController_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fae0	igGuiComponentController_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fb20	igGuiComponentController_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fb30	igGuiComponentController_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fba0	igGuiComponentController_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fbb0	igGuiComponentAspect_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fc00	igGuiComponentAspect_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fc50	igGuiComponentAspect_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fc60	igGuiComponentAspect_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fcd0	igGuiComponentAspect_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fce0	igGuiComponentAspect_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fdd0	igGuiComponentList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fe20	igGuiComponentList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fe70	igGuiComponentList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044feb0	igGuiComponentList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044fec0	igGuiComponentList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ff30	igGuiComponentList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ff40	igGuiComponent_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ff90	igGuiComponent_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+0044ffe0	igGuiComponent_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450090	FUN_00450090	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004501f0	FUN_004501f0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450270	FUN_00450270	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004502f0	FUN_004502f0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450370	FUN_00450370	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004503f0	igGuiComponent_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450400	igGuiComponent_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450480	igGuiComponent_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450490	igGuiComponent_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004505b0	igGeometryElement_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450600	igGeometryElement_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450650	igGeometryElement_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450660	igGeometryElement_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004506d0	igGeometryElement_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004506e0	igGeometryElement_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004507f0	igFont_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450840	igFont_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450890	igFont_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004508a0	igFont_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450910	igFont_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450920	igFont_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004509c0	igFieldSynchronizer_Create	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450a00	igFieldSynchronizer_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450a50	igFieldSynchronizer_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450aa0	igFieldSynchronizer_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450b30	igFieldSynchronizer_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450b40	igFieldSynchronizer_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450bc0	igFieldSynchronizer_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450bd0	igFieldSynchronizer_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450c70	igFieldChangeViewList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450cc0	igFieldChangeViewList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450d10	igFieldChangeViewList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450d50	igFieldChangeViewList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450d60	igFieldChangeViewList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450dd0	igFieldChangeViewList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450de0	igFieldChangeView_Create	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450e20	igFieldChangeView_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450e70	igFieldChangeView_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450f00	igFieldChangeView_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450f10	igFieldChangeView_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450f90	igFieldChangeView_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00450fa0	igFieldChangeView_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451050	igEventReceiverOrderedList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004510a0	igEventReceiverOrderedList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004510f0	igEventReceiverOrderedList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451160	FUN_00451160	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451200	igEventReceiverOrderedList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451210	igEventReceiverOrderedList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451280	igEventReceiverOrderedList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451290	igEventReceiver_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004512e0	igEventReceiver_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451320	igEventReceiver_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451330	igEventReceiver_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004513a0	igEventReceiver_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004513b0	igEventDispatcher_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451400	igEventDispatcher_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451450	igEventDispatcher_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451580	igEventDispatcher_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451590	igEventDispatcher_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451610	igEventDispatcher_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451620	igEventDispatcher_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004516e0	igDefaultAspect_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451730	igDefaultAspect_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451780	igDefaultAspect_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451810	igDefaultAspect_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451820	igDefaultAspect_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004518a0	igDefaultAspect_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004518b0	igDefaultAspect_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451950	igDefaultAspectElementList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004519a0	igDefaultAspectElementList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004519f0	igDefaultAspectElementList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451a30	igDefaultAspectElementList_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451a40	igDefaultAspectElementList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451ab0	igDefaultAspectElementList_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451ac0	FUN_00451ac0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451b20	igDefaultAspectElement_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451b70	igDefaultAspectElement_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451ca0	igDefaultAspectElement_EnsureRegistered	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451cb0	igDefaultAspectElement_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451d30	igDefaultAspectElement_GetMetaObjectFunction	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451d40	igDefaultAspectElement_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451e40	igOnOffColorChanger_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451e90	igOnOffColorChanger_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451ee0	igOnOffColorChanger_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451f20	igOnOffColorChanger_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451f30	igOnOffColorChanger_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451fa0	thunk_igOnOffColorChanger_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451fb0	igBasicColorChanger_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00451fc0	igBasicColorChanger_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452010	igBasicColorChanger_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452060	igBasicColorChanger_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004520a0	igBasicColorChanger_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004520b0	igBasicColorChanger_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452120	thunk_igBasicColorChanger_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452130	igColorChanger_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452140	igBasicColorChanger_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004521d0	igColorChanger_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452220	igColorChanger_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452270	igColorChanger_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004522b0	igColorChanger_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004522c0	igColorChanger_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452330	thunk_igColorChanger_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452340	igBoxComponent_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452390	igBoxComponent_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004523e0	igBoxComponent_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452450	igBoxComponent_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452460	igBoxComponent_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004524d0	thunk_igBoxComponent_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004524e0	igGuiComponent_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004524f0	igBitmapFont_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452540	igBitmapFont_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452590	igBitmapFont_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452620	igBitmapFont_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452630	igBitmapFont_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004526b0	thunk_igBitmapFont_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004526c0	igFont_GetPublishedMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004526d0	igBitmapFont_InitFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452790	igCharMetricsList_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004527e0	igCharMetricsList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452830	igCharMetricsList_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452870	igCharMetricsList_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452880	igCharMetricsList_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004528f0	thunk_igCharMetricsList_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452900	FUN_00452900	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004529c0	igCharMetricsMetaField_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452a10	igCharMetricsMetaField_GetVTable	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452ae0	igCharMetricsMetaField_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452af0	igCharMetricsMetaField_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452b60	thunk_igCharMetricsMetaField_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452b70	FUN_00452b70	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452c40	FUN_00452c40	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452c80	Gap__Gui__igCharMetricsMetaField__vfunc_25	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452c90	igCharMetricsMetaField_InitDefaults	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00452ca0	FUN_00452ca0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453250	igAction_GetOrCreateMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004532a0	igAction_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004532f0	igAction_RunStaticInit	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453300	igAction_Register	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453360	thunk_igAction_GetMetaObject	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453370	FUN_00453370	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453380	Gap__Bec__beFontImage__vfunc_23	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004533b0	Gap__Bec__beFontImage__vfunc_24	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453410	Gap__Bec__beFontImage__vfunc_21	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004534f0	Gap__Bec__beFontImage__vfunc_22	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004535d0	FUN_004535d0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453830	FUN_00453830	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453860	igBitmapFont_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453980	FUN_00453980	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453990	FUN_00453990	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453a20	igGuiComponent_AppendChild	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453a30	Gap__Gui__igColorChanger__vfunc_23	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453a40	igBasicColorChanger_SetColor	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453ac0	Gap__Gui__igBasicColorChanger__vfunc_23	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453b10	Gap__Gui__igOnOffColorChanger__vfunc_23	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453b80	igOnOffColorChanger_SetColor	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453b90	FUN_00453b90	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453be0	igDefaultAspectElement_PlaceGeometry	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453df0	Gap__Gui__igDefaultAspect__vfunc_25	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453e70	igDefaultAspect_UpdateMinimumSize	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00453f70	Gap__Gui__igDefaultAspect__vfunc_26	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454050	Gap__Gui__igDefaultAspect__vfunc_27	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004540d0	FUN_004540d0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454180	FUN_00454180	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004541f0	FUN_004541f0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454290	igEventDispatcher_AddReceiver	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004542a0	igEventDispatcher_RemoveReceiver	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004542d0	igEventDispatcher_AddReceiverOrder	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004542e0	igEventDispatcher_RemoveReceiverOrder	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454310	igEventDispatcher_MouseMotion	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004544d0	igEventDispatcher_MouseButtonDown	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454570	igEventDispatcher_MouseButtonUp	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454610	igEventDispatcher_WindowMove	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004546c0	igEventDispatcher_WindowResize	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454770	igEventDispatcher_WindowClose	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454820	igEventDispatcher_ControllerJoystickMotion	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454930	igEventDispatcher_ControllerButtonDown	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454a30	igEventDispatcher_ControllerButtonUp	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454b30	igEventDispatcher_ControllerButtonPressure	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454c30	igEventDispatcher_ControllerPointOfView	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454d30	igEventDispatcher_ControllerSlider	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454e30	igEventDispatcher_ControllerConnection	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00454f20	igEventDispatcher_ControllerDisconnection	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455010	igEventDispatcher_KeyDown	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004550b0	igEventDispatcher_KeyUp	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455150	igFieldChangeView_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004551a0	FUN_004551a0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004551f0	igFieldSynchronizer_AddField	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004552e0	FUN_004552e0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455370	beFontImage_CountTriangles	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004553e0	beFontImage_CountTrianglesWide	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455440	igGuiComponent_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455470	FUN_00455470	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004554d0	igGuiComponent_userDestruct	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455510	FUN_00455510	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004555c0	FUN_004555c0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004555e0	FUN_004555e0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004555f0	FUN_004555f0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455600	FUN_00455600	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455610	FUN_00455610	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455620	FUN_00455620	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455630	igDefaultAspect_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004556b0	igGuiComponentController_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004556e0	igGuiComponentController_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455820	Gap__Gui__igGuiComponentController__vfunc_33	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455830	Gap__Gui__igGuiComponentController__vfunc_32	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455840	Gap__Gui__igGuiComponentController__vfunc_31	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455850	Gap__Gui__igGuiComponentController__vfunc_30	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455860	Gap__Gui__igGuiComponentController__vfunc_29	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455870	Gap__Gui__igGuiComponentController__vfunc_28	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455880	Gap__Gui__igGuiComponentController__vfunc_27	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455890	Gap__Gui__igGuiComponentController__vfunc_26	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004558a0	Gap__Gui__igGuiComponentController__vfunc_25	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004558b0	FUN_004558b0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455900	FUN_00455900	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455950	FUN_00455950	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004559a0	FUN_004559a0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004559f0	igGuiComponentNode_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455ad0	FUN_00455ad0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455b00	igGuiSystemModel_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455b90	igWindowSizeObserver_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455c30	igMousePosObserver_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455d80	igMousePosObserver_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00455f50	FUN_00455f50	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456050	FUN_00456050	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004561e0	igActiveComponentsObserver_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456540	FUN_00456540	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004565c0	FUN_004565c0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456610	igGuiSystemRenderer_InitializeDrawing	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456660	igGuiSystemRenderer_ReleaseDrawing	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456670	igGuiSystemRenderer_Traverse	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456730	igGuiSystemRenderer_Render	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456780	igGuiSystem_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004569c0	igGuiSystem_SetMouseCursorVisible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456a60	igGuiSystem_SetMouseCursor	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456b80	FUN_00456b80	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456c20	FUN_00456c20	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456cc0	igGuiSystem_SetRootComponent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456e10	FUN_00456e10	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456eb0	FUN_00456eb0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456f70	Gap__Gui__igGuiComponentController__vfunc_34	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00456f80	igGuiSystem_OnKeyEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004570a0	FUN_004570a0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457100	igGuiSystem_MouseMotionEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457170	igGuiSystem_WindowResizeEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004571d0	igGuiSystem_WindowCloseEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457220	igGuiSystem_MouseButtonEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004572a0	igGuiSystem_ControllerButtonEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004573b0	igGuiSystem_ControllerMotionEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004573c0	igHotKeyEventReceiver_AddKey	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004573d0	igHotKeyEventReceiver_AddButton	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004573f0	igHotKeyEventReceiver_AddBinding	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004574f0	igHotKeyEventReceiver_RemoveBinding	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004575d0	igHotKeyEventReceiver_OnKeyEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457650	igHotKeyEventReceiver_ControllerButtonEvent	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004576d0	FUN_004576d0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004577f0	FUN_004577f0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004578c0	igModel_NotifyViews	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457950	igModel_userDestruct	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004579d0	igRadioGroup_resetFields	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457a10	FUN_00457a10	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457ab0	FUN_00457ab0	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457bc0	igRadioGroupSelectedObserver_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457bf0	igOnOffValueObserver_OnModelChange	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457c40	FUN_00457c40	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457ca0	igRenderer_SetVisualContext	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457d60	igClearRenderer_InitializeDrawing	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457de0	igClearRenderer_Render	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457e00	Gap__Gui__igTextElement__vfunc_23	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457e10	Gap__Gui__igTextElement__vfunc_24	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457e90	igView_SetModel	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457ef0	igView_userDestruct	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457f30	igTextElement_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457f40	igClearRenderer_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457f50	igClearRenderer_Traverse	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457f60	igClearRenderer_ReleaseDrawing	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457f70	igOnOffValueObserver_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457f80	igOnOffValueObserver_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457fb0	igRadioGroupSelectedObserver_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457fc0	igRadioGroupSelectedObserver_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00457ff0	igRadioGroup_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458000	igModel_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458010	igHotKeyEventReceiver_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458020	igGuiSystem_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458030	igGuiSystemRenderer_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458040	igActiveComponentsObserver_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458050	igActiveComponentsObserver_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458080	igMousePosObserver_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458090	igMousePosObserver_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004580c0	igWindowSizeObserver_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004580d0	igWindowSizeObserver_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458100	igGuiSystemModel_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458110	igGuiComponentNode_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458120	igGuiComponentController_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458130	igGuiComponent_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458140	igFieldChangeView_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458150	igFieldChangeView_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458160	igEventDispatcher_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458170	igDefaultAspect_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458180	igDefaultAspect_IsCompatible	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004581b0	igOnOffColorChanger_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004581c0	igBasicColorChanger_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004581d0	igColorChanger_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004581e0	igBitmapFont_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004581f0	igCharMetricsMetaField_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458200	igCharMetricsMetaField_GetDescriptor	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458210	igCharMetricsList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458220	igBoxComponent_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458230	igDefaultAspectElement_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458240	igDefaultAspectElementList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458250	igEventReceiverOrderedList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458260	igFieldChangeViewList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458270	igFieldSynchronizer_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458280	igGuiComponentList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458290	igMouseCursor_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004582a0	igHotKeyBinding_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004582b0	igHotKeyBindingList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004582c0	igOnOffModel_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004582d0	igRadioGroupModel_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004582e0	igOnOffValueObserverList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004582f0	igRendererOrderedList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458300	igGuiComponentModel_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458310	FUN_00458310	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458320	igViewList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458330	igNonRefCountedViewList_GetMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458340	igNonRefCountedViewList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458350	igCharMetricsList_GetElementSize	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458360	igDefaultAspectElementList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458370	igFieldChangeViewList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458380	igHotKeyBindingList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+00458390	igOnOffValueObserverList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004583a0	igGuiComponentList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004583b0	igViewList_GetElementMeta	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
+004583c0	igCharMetricsList_TrimCapacity	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
 004583f0	igSmartPointer_igViewerGuiFactory_Destruct	match	-
 00458470	igSmartPointer_igRadioGroup_Destruct	match	-
 004584f0	igSmartPointer_igViewerSceneInfoManager_Destruct	match	-
@@ -20473,7 +20473,7 @@
 005216a0	__sinit_igCriMovieCodec.cpp	match	DEFERRED duplicate 0x150180 __dt__34igSmartPointer<Q33Gap4Core6igFile>Fv 128B (compared under the profile of its retail unit)
 005216e0	__sinit_be.cpp	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 00521730	__sinit_beTargetObj.cpp	match	-
-00521750	__sinit_GuiLibrary.cpp	match	-
+00521750	__sinit_GuiLibrary.cpp	match	DEFERRED duplicate 0x3cafa0 __dt__32igSmartPointer<14igGuiComponent>Fv 128B (compared under the profile of its retail unit)
 00521790	__sinit_igViewerGuiFactory.cpp	match	DEFERRED duplicate 0x19ace0 __ct__7igVec3fFv 8B (compared under the profile of its retail unit)
 00522240	__sinit_igViewerSceneInfoManager.cpp	match	-
 005223f0	__sinit_beCameraMode.cpp	match	-

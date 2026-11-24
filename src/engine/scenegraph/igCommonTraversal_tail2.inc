@@ -328,7 +328,7 @@ int FUN_001b3ad0(igCommonTraversal *arg0, int arg1) {
     }
     b = ((H_1b2fa0 *)DAT_005625f0)->f184;
     s2 = b->_bitCount;
-    igBitMask_SetBitCount((igBitMask *)b, s2 + 1);
+    ((Gap::Core::igBitMask *)b)->setBitCount(s2 + 1);
     b2 = ((H_1b2fa0 *)DAT_005625f0)->f184;
     if (flag) {
         idx = s2 >> 5;
@@ -759,7 +759,7 @@ void igCommonTraversal::_registerClass(igTraversalFunctionList *tpl, igMetaObjec
         t.e[20].meta = (int)Gap::Sg::igPlanarShadowShader::getClassMeta();
         t.e[21].meta = g_igShader_metaObject[0];
         t.e[22].meta = g_igShader2_metaObject;
-        t.e[23].meta = (int)g_igBlendMatrixSelect_metaObject;
+        t.e[23].meta = (int)Gap::Sg::igBlendMatrixSelect::getClassMeta();
         t.e[24].meta = (int)Gap::Sg::igOverrideAttrSet::getClassMeta();
         t.e[25].meta = (int)Gap::Sg::igAttrSet::getClassMeta();
         t.e[26].meta = (int)Gap::Sg::igTransform::getClassMeta();
@@ -768,7 +768,7 @@ void igCommonTraversal::_registerClass(igTraversalFunctionList *tpl, igMetaObjec
         t.e[29].meta = (int)Gap::Sg::igTransformRecorder::getClassMeta();
         t.e[30].meta = g_igTimeTransform_metaObject[0];
         t.e[31].meta = g_igCompiledGraph_metaObject[0];
-        t.e[32].meta = (int)g_igModelViewMatrixBoneSelect_metaObject;
+        t.e[32].meta = (int)Gap::Sg::igModelViewMatrixBoneSelect::getClassMeta();
         t.e[33].meta = g_igTimeSwitch_metaObject;
         for (i = 0; i < 34; i++) {
             NodeProcEntry *e = &t.e[i];

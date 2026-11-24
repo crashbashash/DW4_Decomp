@@ -118,12 +118,17 @@ igSmartPointer<igObject> *igSmartPointer_igIntListList_Destruct(igSmartPointer<i
     return self;
 }
 
-igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igModelViewMatrixBoneSelectListSg_GetOrCreateMetaObject(void) {
-    if (g_igModelViewMatrixBoneSelectListSg_metaObject == 0) {
-        g_igModelViewMatrixBoneSelectListSg_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igModelViewMatrixBoneSelectListSg_metaObject;
+igMetaObject *igModelViewMatrixBoneSelectList::_Meta;
+
+igMetaObject *igModelViewMatrixBoneSelectList::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+}
 }
 
