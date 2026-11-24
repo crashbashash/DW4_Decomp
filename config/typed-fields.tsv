@@ -354,7 +354,7 @@ igSceneInfo	_cameras	igSmartPointer<igGraphPathList>
 igSceneInfo	_sceneGraphList	igSmartPointer<igNodeList>
 igTransform	_m	igMatrix44f
 igTransform	_mvm	igSmartPointer<igVisualAttribute>
-igTransform	_transformInput	igSmartPointer<igObject>
+igTransform	_transformInput	igSmartPointer<igTransformSource>
 igProbe	_volume	igSmartPointer<igVolume>
 igProbe	_rays	igSmartPointer<igRayList>
 igProbe	_intersectFaceType	igSmartPointer<igIntList>
@@ -370,7 +370,7 @@ igCompileTraversal	_containsShader	bool
 igCompileTraversal	_isSkin	bool
 igCompileTraversal	_bound	igSmartPointer<igAABox>
 igCompileTraversal	_transformList	igSmartPointer<igNonRefCountedTransformList>
-igCompileTraversal	_environmentShader2List	igSmartPointer<igEnvironmentMapShader2List>
+igCompileTraversal	_environmentShader2List	igSmartPointer< ::igEnvironmentMapShader2List>
 igCompileTraversal	_bmpaList	igSmartPointer<igBlendMatrixPaletteAttrList>
 igFrustCullTraversal	_compMat	igMatrix44f
 igFrustCullTraversal	_boundingBox	igSmartPointer<igAABox>
@@ -425,3 +425,23 @@ igEnvironmentMapShader2	_diffuseBlendState	igSmartPointer<igBlendStateAttr>
 igEnvironmentMapShader2	_glossMapTextureBind	igSmartPointer<igTextureBindAttr>
 igEnvironmentMapShader2	_glossMapCoordSource	igSmartPointer<igTextureCoordSourceAttr>
 igEnvironmentMapShader2	_glossMapTextureFunc	igSmartPointer<igTextureFunctionAttr>
+igRenderPackage	_stateAttrs	igSmartPointer<igNonRefCountedAttrList>
+igRenderPackage	_geomAttrs	igSmartPointer<igNonRefCountedAttrList>
+igRenderPackage	_theMass	igSmartPointer<igRenderPackageList>
+igAttrStack	_default	igSmartPointer<igAttr>
+igTransformSequence	_xlateList	igSmartPointer<igVec3fList>
+igTransformSequence	_quatList	igSmartPointer<igQuaternionfList>
+igTransformSequence	_scaleList	igSmartPointer<igVec3fList>
+igTransformSequence	_timeList	igSmartPointer<igDoubleList>
+igTransformSequence1_5	_timeListLong	igSmartPointer<igLongList>
+igTransformSequence1_5	_interpolationDataTranslation	igSmartPointer<igVec3fList>
+igTransformSequence1_5	_interpolationDataRotation	igSmartPointer<igVec3fList>
+igTransformSequence1_5	_interpolationDataScale	igSmartPointer<igVec3fList>
+igTransformSequence1_5	_compressedDataObject	igSmartPointer<igCompressedTransformSequence1_5Data>
+igPsx2EnvironmentMapShader	_envMapBlendFunc	igSmartPointer< ::igBlendFunctionAttr>
+igPsx2EnvironmentMapShader	_envMapTexGenMatrix	igSmartPointer<igTexGenMatrixAttr>
+igPsx2EnvironmentMapShader	_multiPassEnable	igSmartPointer<igMultiPassStateAttr>
+igFieldChangeView	_synchronizer	igFieldSynchronizer *
+igFieldChangeView	_field	igSmartPointer<igMetaField>
+igFieldSynchronizer	_views	igSmartPointer<igFieldChangeViewList>
+igHotKeyBinding	_action	igSmartPointer<igAction>

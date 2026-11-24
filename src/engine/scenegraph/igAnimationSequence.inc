@@ -16,8 +16,8 @@ CallbackArray *igAnimationSequence_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAnimationSequence_metaObject,
-        igTransformSource_Register,
-        igTransformSource_GetPublishedMetaObject,
+        Gap::Sg::igTransformSource::arkRegisterInternal,
+        Gap::Sg::igTransformSource::getClassMeta,
         igAnimationSequence_GetMetaObjectFunction,
         "igAnimationSequence",
         8, /* instance size */

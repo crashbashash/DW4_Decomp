@@ -140,7 +140,13 @@ int igTraversal_TraverseChildren(igTraversal *traversal, igNode *node) {
     return 0;
 }
 
-void thunk_FUN_001c1c50(void **self, int flag) {
-    FUN_001c1c50((void * *)self, flag);
+namespace Gap {
+namespace Sg {
+
+void igPsx2EnvironmentMapShader::userConstruct(int flag)
+{
+    igEnvironmentMapShader2::userConstruct(flag);
+}
+}
 }
 

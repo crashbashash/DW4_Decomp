@@ -1,109 +1,86 @@
-igMetaObject *g_igHotKeyBinding_metaObject;
-igMetaField *g_igHotKeyBinding_keyMetaField;
-igMetaField *g_igHotKeyBinding_buttonMetaField;
-igMetaField *g_igHotKeyBinding_actionMetaField;
+namespace Gap {
+namespace Gui {
 
-int igHotKeyBinding_Create(int arg0) {
-    igHotKeyBinding_RunStaticInit();
-    return (int)(igMetaObject_CreateInstance(g_igHotKeyBinding_metaObject, (igMemoryPoolView *)arg0));
-}
+igMetaObject *igHotKeyBinding::_Meta;
+igMetaField *igHotKeyBinding::k_key;
+igMetaField *igHotKeyBinding::k_button;
+igMetaField *igHotKeyBinding::k_action;
 
-igMetaObject *igHotKeyBinding_GetMetaObject(void)
+igHotKeyBinding *igHotKeyBinding::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igHotKeyBinding_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igHotKeyBinding_RunStaticInit();
-    return g_igHotKeyBinding_metaObject;
+    arkRegister();
+    return (igHotKeyBinding *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igHotKeyBinding_GetVTable(void) {
-    struct Obj_44dcb0 o;
-    struct R *t;
-    int r;
-    igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igHotKeyBinding_vtable[0];
-    o.p = 0;
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igHotKeyBinding_vtable[0];
-    if (&o.p != 0) {
-        t = o.p;
-        if (t != 0) {
-            t->rc = t->rc - 1;
-            if ((t->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)t);
-            }
-        }
-    }
-    return r;
-}
-
-void igHotKeyBinding_RunStaticInit(void)
+igMetaObject *igHotKeyBinding::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igHotKeyBinding_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igHotKeyBinding_callbackList[] = { igAction_RunStaticInit, 0 };
+void *igHotKeyBinding::retrieveVTablePointer()
+{
+    igHotKeyBinding temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igHotKeyBinding_Register(void) {
+void igHotKeyBinding::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igHotKeyBinding::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igAction::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igHotKeyBinding_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        thunk_igHotKeyBinding_GetMetaObject,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igHotKeyBinding",
-        0x14, /* instance size */
-        igHotKeyBinding_GetVTable,
-        &igHotKeyBinding_InitFields,
-        0, /* extra callback item */
-        g_igHotKeyBinding_callbackList /* callback list */
+        sizeof(igHotKeyBinding),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
-
-void thunk_igHotKeyBinding_GetMetaObject(void) {
-    igHotKeyBinding_GetMetaObject();
+}
 }
 
-static FieldFactory g_igHotKeyBinding_ctorTable[] = {
-    igEnumMetaField_Create,
-    igEnumMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_igHotKeyBinding_fieldTable[] = {
-    "_key",
-    "_button",
-    "_action",
-};
-static igMetaField **g_igHotKeyBinding_fieldHandles[] = {
-    &g_igHotKeyBinding_keyMetaField,
-    &g_igHotKeyBinding_buttonMetaField,
-    &g_igHotKeyBinding_actionMetaField,
-};
-static int g_igHotKeyBinding_fieldOffsets[] = {
-    8,
-    12,
-    16,
-};
+namespace Gap {
+namespace Gui {
 
-void igHotKeyBinding_InitFields(void) {
-    int temp_s2;
-    void *temp_v0_2;
-    void *temp_v0;
-    void *temp_s1;
-    void *temp_s0;
+void igHotKeyBinding::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igEnumMetaField_Create, igEnumMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_key", "_button", "_action" };
+    static igMetaField **enumStorage[] = { &k_key, &k_button, &k_action };
+    static int offsets[] = { 8, 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-    temp_s0 = (void *)g_igHotKeyBinding_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igHotKeyBinding_ctorTable, 3);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_00145eb0);
-    temp_v0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((Gap::Core::igEnumMetaField *)temp_v0_2)->setDefault(0x20);
-    ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(FUN_00146850);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igAction_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igHotKeyBinding_fieldTable, g_igHotKeyBinding_fieldHandles, g_igHotKeyBinding_fieldOffsets, temp_s2);
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())FUN_00145eb0;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(32);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())FUN_00146850;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Gui::igAction::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+}
+}
 }
 

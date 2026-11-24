@@ -161,7 +161,6 @@
 #include "dw4/game/bePadManager.h"
 #include "dw4/game/beSaveDataDeliver.h"
 #include "dw4/game/beSystem.h"
-#include "dw4/gui/igAction.h"
 #include "dw4/audio/igAdxAfsFileList.h"
 #include "dw4/core/igBoolList.h"
 #include "dw4/gui/igBoxComponent.h"
@@ -1207,7 +1206,6 @@ extern "C" int beNDMWAfsStageLoad_GetVTable(void);
 extern "C" void beNDMWAfsStageLoad_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWAfsStageLoad_Register(void);
 extern "C" void beNDMWAfsStageLoad_GetMetaObject(void);
-extern "C" igMetaObject *igAction_GetPublishedMetaObject(void);
 extern "C" void beNDMWAfsStageLoad_InitFields(void);
 extern "C" igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWAfsSetup_ResolveMetaObject(void);

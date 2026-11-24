@@ -1,43 +1,44 @@
-igMetaObject *g_igTransformSource_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igTransformSource_GetOrCreateMetaObject(void) {
-    if (g_igTransformSource_metaObject == 0) {
-        g_igTransformSource_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTransformSource_metaObject;
-}
+igMetaObject *igTransformSource::_Meta;
 
-igMetaObject *igTransformSource_GetMetaObject(void)
+igMetaObject *igTransformSource::getClassTypeLazy()
 {
-    igMetaObject *g = g_igTransformSource_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTransformSource_EnsureRegistered();
-    return g_igTransformSource_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igTransformSource_EnsureRegistered(void)
+igMetaObject *igTransformSource::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igTransformSource_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igTransformSource_Register(void) {
+void igTransformSource::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTransformSource::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igTransformSource_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igTransformSource_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTransformSource",
-        8, /* instance size */
+        sizeof(igTransformSource),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igTransformSource_GetMetaObjectFunction(void) {
-    igTransformSource_GetMetaObject();
+}
 }
 

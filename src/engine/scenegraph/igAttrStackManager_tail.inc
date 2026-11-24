@@ -125,7 +125,7 @@ void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta) {
         m->_numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {
             igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, i);
-            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)FUN_001a5a70((int)((Gap::Core::igObject *)m)->getMemoryPool())));
+            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)Gap::Sg::igAttrStack::_instantiateFromPool(((Gap::Core::igObject *)m)->getMemoryPool())));
             AttrObj **slot;
             AttrObj *value;
             slot = &stack.p->_default;

@@ -45,7 +45,7 @@ void igCompileTraversal::arkRegister()
 
 CallbackArray *igCompileTraversal::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igModelViewMatrixAttrList::arkRegister, igCompiledTransformList_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igAABox_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, igEnvironmentMapShader2List_EnsureRegistered, Gap::Attrs::igBlendMatrixPaletteAttrList::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igModelViewMatrixAttrList::arkRegister, igCompiledTransformList_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igAABox_EnsureRegistered, Gap::Sg::igNonRefCountedTransformList::arkRegister, Gap::Sg::igEnvironmentMapShader2List::arkRegister, Gap::Attrs::igBlendMatrixPaletteAttrList::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -102,7 +102,7 @@ void igCompileTraversal::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
-        metaField->_metaObject = (int)igNonRefCountedTransformList_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igNonRefCountedTransformList::getClassTypeLazy();
         metaField->_construct = 1;
         metaField->_persistent = 0;
     }
@@ -112,7 +112,7 @@ void igCompileTraversal::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
-        metaField->_metaObject = (int)igEnvironmentMapShader2List_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igEnvironmentMapShader2List::getClassTypeLazy();
         metaField->_construct = 1;
         metaField->_persistent = 0;
     }

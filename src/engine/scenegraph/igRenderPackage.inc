@@ -1,162 +1,97 @@
-void FUN_00197ab0(int arg0) {
-    igRenderPackage_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igRenderPackage_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igRenderPackage_metaObject;
-igMetaField *g_igRenderPackage_stateAttrsMetaField;
-igMetaField *g_igRenderPackage_cachedStateAttrsMetaField;
-igMetaField *g_igRenderPackage_geomAttrsMetaField;
-igMetaField *g_igRenderPackage_sortingCacheMetaField;
-igMetaField *g_igRenderPackage_distanceMetaField;
-igMetaField *g_igRenderPackage_theMassMetaField;
-
-igMetaObject *igRenderPackage_GetOrCreateMetaObject(void) {
-    if (g_igRenderPackage_metaObject == 0) {
-        g_igRenderPackage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igRenderPackage_metaObject;
-}
-
-igMetaObject *igRenderPackage_GetMetaObject(void)
+igRenderPackage *igRenderPackage::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igRenderPackage_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igRenderPackage_EnsureRegistered();
-    return g_igRenderPackage_metaObject;
+    arkRegister();
+    return (igRenderPackage *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igRenderPackage_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    S_ref *q2;
+igMetaObject *igRenderPackage::_Meta;
+igMetaField *igRenderPackage::k_stateAttrs;
+igMetaField *igRenderPackage::k_cachedStateAttrs;
+igMetaField *igRenderPackage::k_geomAttrs;
+igMetaField *igRenderPackage::k_sortingCache;
+igMetaField *igRenderPackage::k_distance;
+igMetaField *igRenderPackage::k_theMass;
 
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igRenderPackage_vtable[0];
-    q2 = (S_ref *)&u.b[8];
-    *(int *)q2 = 0;
-    q1 = (S_ref *)&u.b[16];
-    *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[28];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igRenderPackage_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    if (q2 != 0) {
-        q2 = *(S_ref **)q2;
-        if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q2);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igRenderPackage_EnsureRegistered(void)
+igMetaObject *igRenderPackage::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igRenderPackage_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igRenderPackage_callbackList[] = { Gap::Attrs::igNonRefCountedAttrList::arkRegister, igRenderPackageList_EnsureRegistered, 0 };
+igMetaObject *igRenderPackage::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igRenderPackage_Register(void) {
+void *igRenderPackage::retrieveVTablePointer()
+{
+    igRenderPackage temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igRenderPackage::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igRenderPackage::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igNonRefCountedAttrList::arkRegister, Gap::Sg::igRenderPackageList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igRenderPackage_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igRenderPackage_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igRenderPackage",
-        0x20, /* instance size */
-        igRenderPackage_GetVTable,
-        &igRenderPackage_InitFields,
-        0, /* extra callback item */
-        g_igRenderPackage_callbackList /* callback list */
+        sizeof(igRenderPackage),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igRenderPackage_GetMetaObjectFunction(void) {
-    igRenderPackage_GetMetaObject();
+void igRenderPackage::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igRawRefMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_stateAttrs", "_cachedStateAttrs", "_geomAttrs", "_sortingCache", "_distance", "_theMass" };
+    static igMetaField **enumStorage[] = { &k_stateAttrs, &k_cachedStateAttrs, &k_geomAttrs, &k_sortingCache, &k_distance, &k_theMass };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 6);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
+        metaField->_refCounted = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_metaObject = (int)Gap::Sg::igRenderPackageList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igRenderPackage_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igRenderPackage_fieldTable[] = {
-    "_stateAttrs",
-    "_cachedStateAttrs",
-    "_geomAttrs",
-    "_sortingCache",
-    "_distance",
-    "_theMass",
-};
-static igMetaField **g_igRenderPackage_fieldHandles[] = {
-    &g_igRenderPackage_stateAttrsMetaField,
-    &g_igRenderPackage_cachedStateAttrsMetaField,
-    &g_igRenderPackage_geomAttrsMetaField,
-    &g_igRenderPackage_sortingCacheMetaField,
-    &g_igRenderPackage_distanceMetaField,
-    &g_igRenderPackage_theMassMetaField,
-};
-static int g_igRenderPackage_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-};
-
-void igRenderPackage_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s1;
-
-    temp_s1 = (void *)g_igRenderPackage_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igRenderPackage_ctorTable, 6);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
-    ((igObjectRefMetaField *)temp_s2_2)->_refCounted = 0;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igRenderPackageList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igRenderPackage_fieldTable, g_igRenderPackage_fieldHandles, g_igRenderPackage_fieldOffsets, temp_s0);
+}
 }
 

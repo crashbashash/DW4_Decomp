@@ -1,53 +1,52 @@
-igMetaObject *g_igProjectionMatrixAttrPool_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igProjectionMatrixAttrPool_GetOrCreateMetaObject(void) {
-    if (g_igProjectionMatrixAttrPool_metaObject == 0) {
-        g_igProjectionMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igProjectionMatrixAttrPool_metaObject;
-}
+igMetaObject *igProjectionMatrixAttrPool::_Meta;
 
-igMetaObject *igProjectionMatrixAttrPool_GetMetaObject(void)
+igMetaObject *igProjectionMatrixAttrPool::getClassTypeLazy()
 {
-    igMetaObject *g = g_igProjectionMatrixAttrPool_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igProjectionMatrixAttrPool_EnsureRegistered();
-    return g_igProjectionMatrixAttrPool_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igProjectionMatrixAttrPool_GetVTable(void) {
-    struct Obj_19a1c0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igProjectionMatrixAttrPool_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igProjectionMatrixAttrPool_EnsureRegistered(void)
+igMetaObject *igProjectionMatrixAttrPool::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igProjectionMatrixAttrPool_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igProjectionMatrixAttrPool_callbackList[] = { Gap::Attrs::igProjectionMatrixAttr::arkRegister, 0 };
+void *igProjectionMatrixAttrPool::retrieveVTablePointer()
+{
+    igProjectionMatrixAttrPool temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igProjectionMatrixAttrPool_Register(void) {
+void igProjectionMatrixAttrPool::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igProjectionMatrixAttrPool::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igProjectionMatrixAttr::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igProjectionMatrixAttrPool_metaObject,
-        igObjectPool_Register,
-        igObjectPool_GetPublishedMetaObject,
-        igProjectionMatrixAttrPool_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Sg::igObjectPool::arkRegisterInternal,
+        Gap::Sg::igObjectPool::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igProjectionMatrixAttrPool",
-        0x20, /* instance size */
-        igProjectionMatrixAttrPool_GetVTable,
+        sizeof(igProjectionMatrixAttrPool),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igProjectionMatrixAttrPool_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igProjectionMatrixAttrPool_GetMetaObjectFunction(void) {
-    igProjectionMatrixAttrPool_GetMetaObject();
+}
 }
 

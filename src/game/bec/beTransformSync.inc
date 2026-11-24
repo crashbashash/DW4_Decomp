@@ -28,7 +28,7 @@ void beTransformSync_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beTransformSync_Register);
 }
 
-static igMetaObjectCallback g_beTransformSync_callbackList[] = { igTransformList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beTransformSync_callbackList[] = { Gap::Sg::igTransformList::arkRegister, 0 };
 
 CallbackArray *beTransformSync_Register(void) {
     BecLibrary_MarkRegistered();
@@ -74,7 +74,7 @@ void beTransformSync_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTransformSync_ctorTable, 1);
     syncTransformList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)syncTransformList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)syncTransformList)->_metaObject = (int)Gap::Sg::igTransformList::getClassTypeLazy();
     ((igRefMetaField *)syncTransformList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beTransformSync_fieldTable, g_beTransformSync_fieldHandles, g_beTransformSync_fieldOffsets, base);
 }

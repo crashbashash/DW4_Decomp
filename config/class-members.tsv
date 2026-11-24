@@ -3901,9 +3901,9 @@ igTransform	inline igMatrix44f *getMatrix() { return &_m; }
 igTransform	inline const igMatrix44f *getMatrix() const { return &_m; }
 igTransform	inline virtual void setTarget(int tgt) { _target = tgt; }
 igTransform	inline int getTarget() const { return _target; }
-igTransform	inline void setTransformSource(igObject *transformInput) { _transformInput = transformInput; }
-igTransform	inline igObject *getTransformSource() { return _transformInput; }
-igTransform	inline const igObject *getTransformSource() const { return _transformInput; }
+igTransform	inline void setTransformSource(igTransformSource *transformInput) { _transformInput = transformInput; }
+igTransform	inline igTransformSource *getTransformSource() { return _transformInput; }
+igTransform	inline const igTransformSource *getTransformSource() const { return _transformInput; }
 igTransform	virtual void update(long long time);
 igTransform	virtual bool isTransformable() const;
 igTransform	virtual void transform(const igMatrix44f &matrix);
@@ -4092,7 +4092,7 @@ igEnvironmentMapShader2	virtual void setGlossTextureCoordIndex(int index);
 igEnvironmentMapShader2	virtual void setReflectionAmount(float amount);
 igEnvironmentMapShader2	virtual void setTransparencyState(bool enabled);
 igEnvironmentMapShader2	virtual void shade(igCommonTraversal *ct);
-igEnvironmentMapShader2	virtual void vfunc_45(igCommonTraversal *ct) = 0;
+igEnvironmentMapShader2	inline virtual void vfunc_45(igCommonTraversal *ct) {}
 igEnvironmentMapShader2	virtual void update(igCommonTraversal *ct);
 igEnvironmentMapShader2	inline virtual int vfunc_47() { return 0; }
 igEnvironmentMapShader2	inline virtual void reset() { _configured = false; }
@@ -4102,3 +4102,192 @@ igEnvironmentMapShader2	virtual void destroyStaticAttrs();
 igEnvironmentMapShader2	virtual void initAttrs(igCapabilityManager *capabilityManager);
 igEnvironmentMapShader2	virtual void destroyAttrs();
 igEnvironmentMapShader2	inline virtual bool isTransformable() const { return false; }
+igObjectPool	IG_OBJECT_DEFINE(igObjectPool)
+igObjectPool	static igMetaField *k_freeIndex;
+igObjectPool	static igMetaField *k_capabilityIncrease;
+igObjectPool	static igMetaField *k_resetMode;
+igRenderPackage	IG_OBJECT_DEFINE(igRenderPackage)
+igRenderPackage	static igMetaField *k_stateAttrs;
+igRenderPackage	static igMetaField *k_cachedStateAttrs;
+igRenderPackage	static igMetaField *k_geomAttrs;
+igRenderPackage	static igMetaField *k_sortingCache;
+igRenderPackage	static igMetaField *k_distance;
+igRenderPackage	static igMetaField *k_theMass;
+igRenderPackageList	IG_OBJECT_DEFINE(igRenderPackageList)
+igRenderPackagePool	IG_OBJECT_DEFINE(igRenderPackagePool)
+igMatrixObjectPool	IG_OBJECT_DEFINE(igMatrixObjectPool)
+igBlendMatricesAttrPool	IG_OBJECT_DEFINE(igBlendMatricesAttrPool)
+igLightStateAttrPool	IG_OBJECT_DEFINE(igLightStateAttrPool)
+igModelViewMatrixAttrPool	IG_OBJECT_DEFINE(igModelViewMatrixAttrPool)
+igProjectionMatrixAttrPool	IG_OBJECT_DEFINE(igProjectionMatrixAttrPool)
+igTextureMatrixAttrPool	IG_OBJECT_DEFINE(igTextureMatrixAttrPool)
+igTimeAttrPool	IG_OBJECT_DEFINE(igTimeAttrPool)
+igVertexBlendMatrixAttrPool	IG_OBJECT_DEFINE(igVertexBlendMatrixAttrPool)
+igVertexBlendMatrixListAttrPool	IG_OBJECT_DEFINE(igVertexBlendMatrixListAttrPool)
+igNonRefCountedObjectStack	IG_OBJECT_DEFINE(igNonRefCountedObjectStack)
+igNonRefCountedObjectStack	private: static igMetaField *k_data;
+igNonRefCountedObjectStack	public: inline virtual void trimCapacity() { if (_count < _capacity) setCapacity(_count, 4); }
+igAttrStack	IG_OBJECT_DEFINE(igAttrStack)
+igAttrStack	static igMetaField *k_default;
+igAttrStack	static igMetaField *k_cachedOverride;
+igAttrStack	static igMetaField *k_popProc;
+igAttrStack	static igMetaField *k_hasChangedFromLastIncrementalFlush;
+igAttrStack	static igMetaField *k_lastIncrementalFlushedAttr;
+igAttrStack	static igMetaField *k_hasChangedFromRoot;
+igAttrStack	static igMetaField *k_lastFlushedAttr;
+igAttrStack	static igMetaField *k_cachedRenderPackage;
+igAttrStackList	IG_OBJECT_DEFINE(igAttrStackList)
+igTransformSource	IG_ABSTRACT_OBJECT_DEFINE(igTransformSource)
+igTransformSource	public: virtual bool getMatrix(igMatrix44f &matrix, long long time) = 0;
+igTransformSource	inline virtual bool getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags) { return getMatrix(matrix, time); }
+igTransformSource	virtual bool evaluateRotation(float *quaternion, long long time) = 0;
+igTransformSource	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags) = 0;
+igTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time) = 0;
+igTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) = 0;
+igTransformSource	inline virtual bool isTransformable() const { return false; }
+igTransformSource	inline virtual void transform(const igMatrix44f &matrix) { }
+igTransformSource	inline virtual long long getFirstFrameTime() { return 0; }
+igTransformSource	inline virtual long long getLastFrameTime() { return 0; }
+igTransformSource	inline virtual void reset() { }
+igTransformList	IG_OBJECT_DEFINE(igTransformList)
+igNonRefCountedTransformList	IG_OBJECT_DEFINE(igNonRefCountedTransformList)
+igTransformSequence	IG_ABSTRACT_OBJECT_DEFINE(igTransformSequence)
+igTransformSequence	protected: static igMetaField *k_xlateList;
+igTransformSequence	static igMetaField *k_quatList;
+igTransformSequence	static igMetaField *k_scaleList;
+igTransformSequence	static igMetaField *k_timeList;
+igTransformSequence	static igMetaField *k_startTime;
+igTransformSequence	static igMetaField *k_uniformTimeEnabled;
+igTransformSequence	static igMetaField *k_playMode;
+igTransformSequence	static igMetaField *k_lastTime;
+igTransformSequence	static igMetaField *k_centerOfRotation;
+igTransformSequence	public: virtual void setMatrix(int i, const igMatrix44f *matrix);
+igTransformSequence	virtual void getMatrix(int i, igMatrix44f *matrix) const;
+igTransformSequence	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
+igTransformSequence	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
+igTransformSequence	virtual void removeKeyFrame(int n) = 0;
+igTransformSequence	virtual void insertKeyFrame(int index) = 0;
+igTransformSequence	virtual void setKeyFrameCount(int n) = 0;
+igTransformSequence	virtual int getKeyFrameCount() const = 0;
+igTransformSequence	virtual void setTranslation(int i, const igVec3f *xlate) = 0;
+igTransformSequence	virtual int getTranslationCount() const = 0;
+igTransformSequence	virtual const igVec3f *getTranslation(int i) const = 0;
+igTransformSequence	virtual igVec3fList *getTranslationList() = 0;
+igTransformSequence	virtual void setQuaternion(int i, const igVec4f *q) = 0;
+igTransformSequence	virtual const igVec4f *getQuaternion(int i) const = 0;
+igTransformSequence	virtual igQuaternionfList *getQuaternionList();
+igTransformSequence	virtual void setEulerRotation(int i, const igVec3f *euler) = 0;
+igTransformSequence	virtual const igVec3f *getEulerRotation(int i) const = 0;
+igTransformSequence	virtual void setScale(int i, const igVec3f *scale) = 0;
+igTransformSequence	virtual const igVec3f *getScale(int i) const = 0;
+igTransformSequence	virtual igVec3fList *getScaleList();
+igTransformSequence	virtual void setUniformTimeState(bool en);
+igTransformSequence	inline virtual bool getRotation(float *quaternion, long long time) { return ((igTransformSource *)this)->evaluateRotation(quaternion, time); }
+igTransformSequence	inline virtual bool getRotationAndTranslation(float *quaternion, float *translation, long long time) { return ((igTransformSource *)this)->evaluateRotationAndTranslation(quaternion, translation, time); }
+igTransformSequence	virtual void setTimeAsLong(int i, long long time) = 0;
+igTransformSequence	virtual long long getTimeAsLong(int i) const = 0;
+igTransformSequence	virtual void setInterpolationMethod(int channel, unsigned int method) = 0;
+igTransformSequence	virtual void setComponentChannels(unsigned char channels) = 0;
+igTransformSequence	virtual int getInterpolationMethod(int channel) const = 0;
+igTransformSequence	virtual unsigned char getComponentChannels() const = 0;
+igTransformSequence	virtual void setInterpolationData(int index, int channel, const igVec3f *bezierControlPoint1, const igVec3f *bezierControlPoint2) = 0;
+igTransformSequence	virtual void setKeyFrameTimeOffset(long long keyframeTimeOffset) = 0;
+igTransformSequence	virtual long long getKeyFrameTimeOffset() const = 0;
+igTransformSequence	virtual void setDuration(long long duration) = 0;
+igTransformSequence	virtual long long getDuration() = 0;
+igTransformSequence	virtual bool isTransformable() const;
+igTransformSequence	virtual void transform(const igMatrix44f &matrix);
+igTransformSequence	virtual void reset();
+igTransformSequence1_5	IG_OBJECT_DEFINE(igTransformSequence1_5)
+igTransformSequence1_5	private: static igMetaField *k_timeListLong;
+igTransformSequence1_5	static igMetaField *k_timeList;
+igTransformSequence1_5	static igMetaField *k_interpolationDataTranslation;
+igTransformSequence1_5	static igMetaField *k_interpolationDataRotation;
+igTransformSequence1_5	static igMetaField *k_interpolationDataScale;
+igTransformSequence1_5	static igMetaField *k_drivenChannels;
+igTransformSequence1_5	static igMetaField *k_interpolationMethod;
+igTransformSequence1_5	static igMetaField *k_keyframeTimeOffset;
+igTransformSequence1_5	static igMetaField *k_animationDuration;
+igTransformSequence1_5	protected: static igMetaField *k_compressedDataObject;
+igTransformSequence1_5	public: virtual void userPostLoad();
+igTransformSequence1_5	protected: virtual void userMakeConcrete(igMetaObject *sourceObjectType);
+igTransformSequence1_5	public: virtual void validateKeyframes();
+igTransformSequence1_5	virtual bool getMatrix(igMatrix44f &matrix, long long time);
+igTransformSequence1_5	inline virtual bool evaluateRotation(float *quaternion, long long time) { return evaluateRotation(quaternion, time, &_lastTime, 0); }
+igTransformSequence1_5	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
+igTransformSequence1_5	inline virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time) { return evaluateRotationAndTranslation(quaternion, translation, time, &_lastTime, 0); }
+igTransformSequence1_5	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
+igTransformSequence1_5	inline virtual bool getRotation(float *quaternion, long long time) { return evaluateRotation(quaternion, time); }
+igTransformSequence1_5	inline virtual bool getRotationAndTranslation(float *quaternion, float *translation, long long time) { return evaluateRotationAndTranslation(quaternion, translation, time); }
+igTransformSequence1_5	virtual void removeTranslationChannel();
+igTransformSequence1_5	virtual void removeScaleChannel();
+igTransformSequence1_5	virtual void removeKeyFrame(int n);
+igTransformSequence1_5	virtual void setKeyFrameCount(int n);
+igTransformSequence1_5	virtual int getKeyFrameCount() const;
+igTransformSequence1_5	virtual void setTimeAsLong(int i, long long time);
+igTransformSequence1_5	virtual long long getTimeAsLong(int i) const;
+igTransformSequence1_5	virtual void setTranslation(int i, const igVec3f *xlate);
+igTransformSequence1_5	virtual const igVec3f *getTranslation(int i) const;
+igTransformSequence1_5	virtual int getTranslationCount() const;
+igTransformSequence1_5	virtual igVec3fList *getTranslationList();
+igTransformSequence1_5	virtual void setQuaternion(int i, const igVec4f *q);
+igTransformSequence1_5	virtual const igVec4f *getQuaternion(int i) const;
+igTransformSequence1_5	virtual void setEulerRotation(int i, const igVec3f *euler);
+igTransformSequence1_5	virtual const igVec3f *getEulerRotation(int i) const;
+igTransformSequence1_5	virtual void setScale(int i, const igVec3f *scale);
+igTransformSequence1_5	virtual const igVec3f *getScale(int i) const;
+igTransformSequence1_5	virtual int getScaleCount() const;
+igTransformSequence1_5	virtual void setMatrix(int i, const igMatrix44f *matrix);
+igTransformSequence1_5	virtual void getMatrix(int i, igMatrix44f *matrix) const;
+igTransformSequence1_5	virtual void setInterpolationMethod(int channel, unsigned int method);
+igTransformSequence1_5	virtual void setComponentChannels(unsigned char channels);
+igTransformSequence1_5	virtual int getInterpolationMethod(int channel) const;
+igTransformSequence1_5	virtual unsigned char getComponentChannels() const;
+igTransformSequence1_5	virtual void setInterpolationData(int index, int channel, const igVec3f *bezierControlPoint1, const igVec3f *bezierControlPoint2);
+igTransformSequence1_5	virtual void setKeyFrameTimeOffset(long long keyframeTimeOffset);
+igTransformSequence1_5	virtual long long getKeyFrameTimeOffset() const;
+igTransformSequence1_5	virtual void setDuration(long long duration);
+igTransformSequence1_5	virtual long long getDuration();
+igTransformSequence1_5	virtual long long getFirstFrameTime();
+igTransformSequence1_5	virtual long long getLastFrameTime();
+igTransformSequence1_5	virtual void insertKeyFrame(int index);
+igTransformSequence1_5	virtual bool isTransformable() const;
+igPsx2EnvironmentMapShader	IG_OBJECT_DEFINE(igPsx2EnvironmentMapShader)
+igPsx2EnvironmentMapShader	private: static igMetaField *k_envMapBlendFunc;
+igPsx2EnvironmentMapShader	private: static igMetaField *k_envMapTexGenMatrix;
+igPsx2EnvironmentMapShader	private: static igMetaField *k_multiPassEnable;
+igPsx2EnvironmentMapShader	public: virtual void userConstruct(int flag);
+igPsx2EnvironmentMapShader	virtual void userDestruct();
+igPsx2EnvironmentMapShader	virtual void vfunc_45(igCommonTraversal *ct);
+igPsx2EnvironmentMapShader	virtual void update(igCommonTraversal *ct);
+igPsx2EnvironmentMapShader	virtual void configure(igCapabilityManager *capabilityManager);
+igPsx2EnvironmentMapShader	virtual void initStaticAttrs(igCapabilityManager *capabilityManager);
+igPsx2EnvironmentMapShader	virtual void destroyStaticAttrs();
+igPsx2EnvironmentMapShader	virtual void initAttrs(igCapabilityManager *capabilityManager);
+igPsx2EnvironmentMapShader	virtual void destroyAttrs();
+igEnvironmentMapShader2List	IG_OBJECT_DEFINE(igEnvironmentMapShader2List)
+igFieldChangeView	IG_OBJECT_DEFINE(igFieldChangeView)
+igFieldChangeView	private: static igMetaField *k_synchronizer;
+igFieldChangeView	protected: static igMetaField *k_field;
+igFieldChangeView	public: inline void setSynchronizer(igFieldSynchronizer *synchronizerParam) { _synchronizer = synchronizerParam; }
+igFieldChangeView	inline const igFieldSynchronizer *getSynchronizer() const { return _synchronizer; }
+igFieldChangeView	inline void setField(igMetaField *fieldParam) { _field = fieldParam; }
+igFieldChangeView	inline igMetaField *getField() const { return _field; }
+igFieldChangeView	virtual void notify(const igNotifyEvent &event);
+igFieldChangeView	virtual int isCompatible(igModel *model) { return true; }
+igFieldChangeView	private: void synchronizeTo(igModel *model, igMetaField *field);
+igFieldChangeView	friend class igFieldSynchronizer;
+igFieldChangeViewList	IG_OBJECT_DEFINE(igFieldChangeViewList)
+igFieldSynchronizer	IG_OBJECT_DEFINE(igFieldSynchronizer)
+igFieldSynchronizer	private: static igMetaField *k_views;
+igFieldSynchronizer	public: void appendModelAndField(igModel *model, igMetaField *field);
+igFieldSynchronizer	inline int getCount() { return _views->getCount(); }
+igFieldSynchronizer	private: void synchronizeTo(igFieldChangeView *view);
+igFieldSynchronizer	friend class igFieldChangeView;
+igAction	IG_ABSTRACT_OBJECT_DEFINE(igAction)
+igAction	public: virtual void doIt() = 0;
+igHotKeyBinding	IG_OBJECT_DEFINE(igHotKeyBinding)
+igHotKeyBinding	public: static igMetaField *k_key;
+igHotKeyBinding	static igMetaField *k_button;
+igHotKeyBinding	static igMetaField *k_action;
+igHotKeyBindingList	IG_OBJECT_DEFINE(igHotKeyBindingList)

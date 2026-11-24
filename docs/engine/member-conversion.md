@@ -776,6 +776,21 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    (igTransformSource is not converted and has no flat struct; the accessors take `igObject *`). `setMatrix` is
    out of line (the kit's inline `_m = *matrix` copies word by word; retail tail-calls `igMatrix44f_Copy`). Retail's
    out-of-line `getClassMeta` copy (0x19de30) stays a C function, as the other registrars' do.
+   `igObjectPool` (an igObjectList with `_freeIndex`, `_capabilityIncrease`, `_resetMode`; its vtable adds only
+   `getMeta`, and `igObjectPool_Grow` stays free: the kit does not declare it) and its subclasses (`igMatrixObjectPool`,
+   `igRenderPackagePool` and the `*AttrPool` classes: `igBlendMatricesAttrPool`, `igLightStateAttrPool`,
+   `igModelViewMatrixAttrPool`, `igProjectionMatrixAttrPool`, `igTextureMatrixAttrPool`, `igTimeAttrPool`,
+   `igVertexBlendMatrixAttrPool`, `igVertexBlendMatrixListAttrPool`) are converted; C code and the flat views keep
+   passing the flat `igObjectPool` to `igObjectPool_Grow`, and a Gap member names it `::igObjectPool`. `igRenderPackage`
+   (three smart-pointer fields, +8, +16 and +28, as its `retrieveVTablePointer` temporary releases them), its list
+   (an `igTNonRefCountedObjectList`: retail's slot 12 is the non-counted list's `userPreWrite`) and pool are converted.
+   `igAttrStack` derives from `igNonRefCountedObjectStack` (retail's DataPump library, an igDataList whose `_data` is
+   a non-counted object reference and whose `trimCapacity` trims to the count in four-byte elements; spec
+   scratch/SgPools/specs/stack.py), which is converted in `Gap::Core`: the kit declares its stacks under igCore
+   (igCore/igObjectStack.h) and no retail string names the namespace of the DataPump classes, so this is medium
+   confidence. Open: whether the rest of the DataPump library (`igLongStack`, `igMatrixStack`, `igDataPump`) is igCore's
+   too. Retail's copies of the stack's `getClassMeta` and `getMeta` (0x1462f0, 0x149370) are linked in the window-input
+   unit, so that unit keeps them as C definitions reading `getClassMeta()`, as attrs does for igNamedObject.
 7. the game's `be*` classes last.
 
 ## Known differences and gaps

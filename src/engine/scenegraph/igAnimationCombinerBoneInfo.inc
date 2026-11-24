@@ -59,7 +59,7 @@ void igAnimationCombinerBoneInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfo_Register);
 }
 
-static igMetaObjectCallback g_igAnimationCombinerBoneInfo_callbackList[] = { igAnimationState_EnsureRegistered, igTransformSource_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationCombinerBoneInfo_callbackList[] = { igAnimationState_EnsureRegistered, Gap::Sg::igTransformSource::arkRegister, 0 };
 
 CallbackArray *igAnimationCombinerBoneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -137,7 +137,7 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
     *(int *)((char *)(temp_s1) + 56) = (int)igAnimationState_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 36) = 2;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)igTransformSource_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)Gap::Sg::igTransformSource::getClassTypeLazy();
     *(char *)((char *)(temp_s1_2) + 36) = 2;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)));
     ((Gap::Core::igIntMetaField *)temp_v0)->setDefault(1);

@@ -129,14 +129,14 @@ void igPlanarShadowShader::shade(igCommonTraversal *arg1) {
     for (i = 0; i < ((::igDataList *)_lights.get())->_count; i++) {
         if (igAttrStackManager_IsLightEnabled((igAttrStackManager *)s1, ((::igLightAttr **)((::igDataList *)_lights.get())->_data)[i]) != 0) {
             int *m = (int *)((int *)((::igDataList *)_mvmList.get())->_data)[i];
-            igAttrStack *nd;
+            ::igAttrStack *nd;
             int *s5;
-            igObjectPool *pool;
+            ::igObjectPool *pool;
             char *o;
             igMatrix44f_Copy((float *)sp70, (const float *)&arg1->_viewMatInv);
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)((char *)m + 12));
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)&arg1->_viewMat);
-            nd = (igAttrStack *)((int *)((::igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)Gap::Attrs::igProjectionMatrixAttr::getClassMeta())->_id]];
+            nd = (::igAttrStack *)((int *)((::igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)Gap::Attrs::igProjectionMatrixAttr::getClassMeta())->_id]];
             if (nd->_cachedOverride >= 0) {
                 s5 = (int *)((int *)nd->_data)[nd->_cachedOverride];
             } else if (nd->_count != 0) {
@@ -145,8 +145,8 @@ void igPlanarShadowShader::shade(igCommonTraversal *arg1) {
             } else {
                 s5 = (int *)nd->_default;
             }
-            pool = (igObjectPool *)arg1->_projectionMatrixPool.get();
-            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((igObjectPool *)pool, (::igObject *(*)(int))((void *)&Gap::Attrs::igProjectionMatrixAttr::_instantiateFromPool));
+            pool = (::igObjectPool *)arg1->_projectionMatrixPool.get();
+            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow(pool, (::igObject *(*)(int))((void *)&Gap::Attrs::igProjectionMatrixAttr::_instantiateFromPool));
             o = (char *)((int *)pool->_data)[pool->_freeIndex++];
             igMatrix44f_Multiply((float *)(o + 12), (const float *)sp70, (const float *)((char *)s5 + 12));
             FUN_001b1030((igAttrStackManager *)s1, (::igAttr *)o);

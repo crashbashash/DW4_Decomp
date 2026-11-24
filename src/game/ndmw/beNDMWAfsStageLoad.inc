@@ -43,8 +43,8 @@ CallbackArray *beNDMWAfsStageLoad_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWAfsStageLoad_metaObject,
-        igAction_Register,
-        igAction_GetPublishedMetaObject,
+        Gap::Gui::igAction::arkRegisterInternal,
+        Gap::Gui::igAction::getClassMeta,
         beNDMWAfsStageLoad_GetMetaObject,
         "beNDMWAfsStageLoad",
         0x10, /* instance size */
@@ -58,10 +58,6 @@ CallbackArray *beNDMWAfsStageLoad_Register(void) {
 void beNDMWAfsStageLoad_GetMetaObject(void)
 {
     beNDMWAfsStageLoad_ResolveMetaObject();
-}
-
-igMetaObject *igAction_GetPublishedMetaObject(void) {
-    return g_igAction_metaObject;
 }
 
 static FieldFactory g_beNDMWAfsStageLoad_ctorTable[] = {

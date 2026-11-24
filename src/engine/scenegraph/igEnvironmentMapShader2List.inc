@@ -1,53 +1,52 @@
-igMetaObject *g_igEnvironmentMapShader2List_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igEnvironmentMapShader2List_GetOrCreateMetaObject(void) {
-    if (g_igEnvironmentMapShader2List_metaObject == 0) {
-        g_igEnvironmentMapShader2List_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igEnvironmentMapShader2List_metaObject;
-}
+igMetaObject *igEnvironmentMapShader2List::_Meta;
 
-igMetaObject *igEnvironmentMapShader2List_GetMetaObject(void)
+igMetaObject *igEnvironmentMapShader2List::getClassTypeLazy()
 {
-    igMetaObject *g = g_igEnvironmentMapShader2List_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igEnvironmentMapShader2List_EnsureRegistered();
-    return g_igEnvironmentMapShader2List_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igEnvironmentMapShader2List_GetVTable(void) {
-    struct Obj_1a1480 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igEnvironmentMapShader2List_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igEnvironmentMapShader2List_EnsureRegistered(void)
+igMetaObject *igEnvironmentMapShader2List::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igEnvironmentMapShader2List_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igEnvironmentMapShader2List_callbackList[] = { Gap::Sg::igEnvironmentMapShader2::arkRegister, 0 };
+void *igEnvironmentMapShader2List::retrieveVTablePointer()
+{
+    igEnvironmentMapShader2List temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igEnvironmentMapShader2List_Register(void) {
+void igEnvironmentMapShader2List::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igEnvironmentMapShader2List::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igEnvironmentMapShader2::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igEnvironmentMapShader2List_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igEnvironmentMapShader2List_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igEnvironmentMapShader2List",
-        0x14, /* instance size */
-        igEnvironmentMapShader2List_GetVTable,
+        sizeof(igEnvironmentMapShader2List),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igEnvironmentMapShader2List_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igEnvironmentMapShader2List_GetMetaObjectFunction(void) {
-    igEnvironmentMapShader2List_GetMetaObject();
+}
 }
 

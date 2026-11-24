@@ -1,69 +1,31 @@
-igMetaObject *igTransformSequence1_5_GetMeta(void) {
-    return g_igTransformSequence1_5_metaObject;
+namespace Gap {
+namespace Sg {
+
+void igTransformSequence1_5::removeKeyFrame(int index) {
+    List_RemoveAt((::igDataList *)((TransformSequenceChannelView *)this)->_timeListLong, index, 8);
+    if (_drivenChannels & 1) { List_RemoveAt((::igDataList *)((TransformSequenceChannelView *)this)->_xlateList, index, 12); }
+    if ((_drivenChannels & 2) || (_drivenChannels & 4)) { List_RemoveAt((::igDataList *)((TransformSequenceChannelView *)this)->_quatList, index, 16); }
+    if (_drivenChannels & 8) { List_RemoveAt((::igDataList *)((TransformSequenceChannelView *)this)->_scaleList, index, 12); }
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_53(IgForwardTarget_1e28b0 *o) { o->slot23(); }
-
-void Gap__Sg__igTransformSequence1_5__vfunc_54(IgForwardTarget_1e28c0 *o) { o->slot25(); }
-
-void Gap__Sg__igTransformSequence1_5__vfunc_36(TransformSequenceChannelView *o, int index) {
-    List_RemoveAt((igDataList *)o->_timeListLong, index, 8);
-    if (o->_drivenChannels & 1) { List_RemoveAt((igDataList *)o->_xlateList, index, 12); }
-    if ((o->_drivenChannels & 2) || (o->_drivenChannels & 4)) { List_RemoveAt((igDataList *)o->_quatList, index, 16); }
-    if (o->_drivenChannels & 8) { List_RemoveAt((igDataList *)o->_scaleList, index, 12); }
-}
-
-void Gap__Sg__igTransformSequence1_5__vfunc_38(struct T_1e2970 *t, int n) {
-    struct L_1e2970 *l;
-    l = t->d;
-    if (n >= 0) {
-        if (n <= l->cap) {
-            l->count = n;
-        } else {
-            ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 8);
-        }
+void igTransformSequence1_5::setKeyFrameCount(int n) {
+    _timeListLong->setCount(n);
+    if (_drivenChannels & 1) {
+        Core::igTDataList<igVec3f> *list = (Core::igTDataList<igVec3f> *)_xlateList.p;
+        list->setCount(n);
     }
-    if (t->flags & 1) {
-        l = t->a;
-        if (n >= 0) {
-            if (n <= l->cap) {
-                l->count = n;
-            } else {
-                ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 12);
-            }
-        }
+    if ((_drivenChannels & 2) || (_drivenChannels & 4)) {
+        Core::igTDataList<igVec4f> *list = (Core::igTDataList<igVec4f> *)_quatList.p;
+        list->setCount(n);
     }
-    if ((t->flags & 2) || (t->flags & 4)) {
-        l = t->b;
-        if (n >= 0) {
-            if (n <= l->cap) {
-                l->count = n;
-            } else {
-                ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 16);
-            }
-        }
-    }
-    if (t->flags & 8) {
-        l = t->c;
-        if (n >= 0) {
-            if (n <= l->cap) {
-                l->count = n;
-            } else {
-                ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 12);
-            }
-        }
+    if (_drivenChannels & 8) {
+        Core::igTDataList<igVec3f> *list = (Core::igTDataList<igVec3f> *)_scaleList.p;
+        list->setCount(n);
     }
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_55(igTransformSequence1_5 *arg0, int arg1, long long arg2) {
-    void *temp_a3;
-    int temp_v1;
-
-    temp_a3 = (void *)(arg0->_timeListLong);
-    temp_v1 = *(int *)((char *)(temp_a3) + 8);
-    if ((temp_v1 != 0) && (arg1 >= 0) && (arg1 < temp_v1)) {
-        *(long long *)(*(int *)((char *)(temp_a3) + 16) + (arg1 * 8)) = arg2;
-    }
+void igTransformSequence1_5::setTimeAsLong(int arg1, long long arg2) {
+    _timeListLong->set(arg1, arg2);
 }
 
 /* IgTransformSequence1_5 vfunc_40: overwrite one keyframe of the translation list (_xlateList,
@@ -71,143 +33,106 @@ void Gap__Sg__igTransformSequence1_5__vfunc_55(igTransformSequence1_5 *arg0, int
  * _drivenChannels is set and `index` is inside the list. Sibling accessors with the same shape:
  * vfunc_44 (quaternion list, bit 1) and vfunc_49 (scale list, bit 3). */
 
-void Gap__Sg__igTransformSequence1_5__vfunc_40(igTransformSequence1_5 *self, int index, float *translation) {
-    igVec3fList *xlateList;
-    int count;
-    float *entry;
-
-    if (self->_drivenChannels & 1) {
-        xlateList = (igVec3fList *)(self->_xlateList);
-        count = xlateList->_count;
-        if ((count != 0) && (index >= 0) && (index < count)) {
-            entry = (float *)(xlateList->_data + (index * 0xC));
-            entry[0] = translation[0];
-            entry[1] = translation[1];
-            entry[2] = translation[2];
-        }
+void igTransformSequence1_5::setTranslation(int index, const igVec3f *xlate) {
+    if (_drivenChannels & 1) {
+        Core::igTDataList<igVec3f> *list = (Core::igTDataList<igVec3f> *)_xlateList.p;
+        list->set(index, *xlate);
     }
 }
 
 /* Overwrites rotation key `index` (a 16-byte quaternion of _quatList) with the four floats at
  * `quaternion`. Ignored unless channel bit 2 of _drivenChannels is set and the index is inside the
- * list (the sibling accessors vfunc_42/vfunc_48 gate their lists on _drivenChannels the same way). */
+ * list (the sibling accessors setTranslation and setScale gate their lists the same way). */
 
-void Gap__Sg__igTransformSequence1_5__vfunc_44(igTransformSequence1_5 *self, int index, void *quaternion) {
-    igQuaternionfList *quatList;
-    int count;
-    void *key;
-
-    if (self->_drivenChannels & 2) {
-        quatList = (igQuaternionfList *)(self->_quatList);
-        count = quatList->_count;
-        if ((count != 0) && (index >= 0) && (index < count)) {
-            key = (void *)(quatList->_data + (index * 0x10));
-            *(float *)((char *)(key) + 0) = (float) *(float *)((char *)(quaternion) + 0);
-            *(float *)((char *)(key) + 4) = (float) *(float *)((char *)(quaternion) + 4);
-            *(float *)((char *)(key) + 8) = (float) *(float *)((char *)(quaternion) + 8);
-            *(float *)((char *)(key) + 12) = (float) *(float *)((char *)(quaternion) + 12);
-        }
+void igTransformSequence1_5::setQuaternion(int index, const igVec4f *q) {
+    if (_drivenChannels & 2) {
+        Core::igTDataList<igVec4f> *list = (Core::igTDataList<igVec4f> *)_quatList.p;
+        list->set(index, *q);
     }
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_47(igTransformSequence1_5 *arg0, int arg1, void *arg2) {
+void igTransformSequence1_5::setEulerRotation(int arg1, const igVec3f *euler) {
+    void *arg2 = (void *)euler;
     void *temp_v1;
-    if (arg0->_drivenChannels & 4) {
+    if (_drivenChannels & 4) {
         float z = *(float *)((char *)(arg2) + 8);
         float y = *(float *)((char *)(arg2) + 4);
         float x = *(float *)((char *)(arg2) + 0);
-        temp_v1 = (void *)(((igDataList *)arg0->_quatList)->_data + (arg1 * 0x10));
+        temp_v1 = (void *)((char *)_quatList->_data + (arg1 * 0x10));
         *(float *)((char *)(temp_v1) + 0) = x;
         *(float *)((char *)(temp_v1) + 4) = y;
         *(float *)((char *)(temp_v1) + 8) = z;
         *(int *)((char *)(temp_v1) + 12) = 0;
     }
 }
+}
+}
 
-#define TRANSFORM_CHANNEL_SCALE 8
-/* IgTransformSequence1_5 vfunc_49: store one scale key. When the sequence drives the scale channel
- * it copies the three floats at `scale` into key `index` of _scaleList (12 bytes per key); a
- * missing channel or an out-of-range index is ignored. Counterpart of vfunc_50, which returns the
- * address of the same key (it tests the same channel bit and uses the same 12-byte stride). */
+namespace Gap {
+namespace Sg {
 
-/* _drivenChannels bit for the scale channel (vfunc_50 tests it before reading _scaleList) */
-
-void Gap__Sg__igTransformSequence1_5__vfunc_49(igTransformSequence1_5 *self, int index, void *scale) {
-    igVec3fList *scaleList;
-    int count;
-    float *key;
-    float *src;
-
-    if (self->_drivenChannels & TRANSFORM_CHANNEL_SCALE) {
-        scaleList = (igVec3fList *)(self->_scaleList);
-        count = scaleList->_count;
-        if ((count != 0) && (index >= 0) && (index < count)) {
-            key = (float *)(scaleList->_data + (index * 0xC));
-            src = (float *)scale;
-            key[0] = (float) src[0];
-            key[1] = (float) src[1];
-            key[2] = (float) src[2];
-        }
+/* Stores one scale key: when the sequence drives the scale channel it copies the three floats at
+ * `scale` into key `index` of _scaleList; a missing channel or an out-of-range index is ignored. */
+void igTransformSequence1_5::setScale(int index, const igVec3f *scale) {
+    if (_drivenChannels & 8) {
+        Core::igTDataList<igVec3f> *list = (Core::igTDataList<igVec3f> *)_scaleList.p;
+        list->set(index, *scale);
     }
+}
+}
 }
 #undef TRANSFORM_CHANNEL_SCALE
 
-long long Gap__Sg__igTransformSequence1_5__vfunc_63(igTransformSequence1_5 *self) {
-    return self->_keyframeTimeOffset;
+namespace Gap {
+namespace Sg {
+
+long long igTransformSequence1_5::getKeyFrameTimeOffset() const {
+    return _keyframeTimeOffset;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_64(igTransformSequence1_5 *self, long long arg1) {
-    self->_animationDuration = arg1;
+void igTransformSequence1_5::setDuration(long long arg1) {
+    _animationDuration = arg1;
 }
 
 /* Caches the sequence length: the span from the first to the last key time, computed once while the
  * duration is still unset (-1). The first key time is read through self->_timeListLong again rather than
  * through {times} (matching construct: the second read makes the data pointer take its register before
  * the scaled index). */
-void igTransformSequence1_5_UserPostLoad(igTransformSequence1_5 *self) {
-    if (self->_animationDuration == -1) {
-        igTDataList<long long> *times = (igTDataList<long long> *)self->_timeListLong;
+void igTransformSequence1_5::userPostLoad() {
+    if (_animationDuration == -1) {
+        igTDataList<long long> *times = (igTDataList<long long> *)_timeListLong.p;
         int count = times->count();
         int last = count - 1;
         if (count != 0) {
-            self->_animationDuration = times->get(last) - ((igTDataList<long long> *)self->_timeListLong)->get(0);
+            _animationDuration = times->get(last) - ((igTDataList<long long> *)_timeListLong.p)->get(0);
         } else {
-            self->_animationDuration = 0;
+            _animationDuration = 0;
         }
     }
 }
-
-void FUN_001e2cd0(IgForwardTarget_1e2cd0 *o) { o->slot21(); }
+}
+}
 
 /* Setter for the reflected bool field _uniformTimeEnabled. */
 
-void FUN_001e2ce0(igTransformSequence1_5 *self, char enabled) {
-    self->_uniformTimeEnabled = enabled;
-}
-
-void FUN_001e2cf0(void *arg0) {
-    *(int *)((char *)(arg0) + 40) = 1;
-}
-
-igMetaObject *FUN_001e2d00(void) {
-    return g_igTransformSequence_metaObject;
-}
-
-int FUN_001e2d10(void **arg0, int arg1) {
-    char sp30[64];
-    int temp_s0;
-
-    temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(&sp30[0])) & 0xFF;
-    igMatrix44f_GetQuaternion((float *)arg1, (float *)&sp30[0]);
-    return temp_s0;
-}
-
-void FUN_001e2d60(IgForwardTarget_1e2d60 *o) { o->slot23(); }
-
-void FUN_001e2d70(IgForwardTarget_1e2d70 *o) { o->slot25(); }
-
 namespace Gap {
 namespace Sg {
+
+void igTransformSequence::setUniformTimeState(bool enabled) {
+    _uniformTimeEnabled = enabled;
+}
+
+void igTransformSequence::reset() {
+    _lastTime = 1;
+}
+
+bool igTransformSequence::evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags) {
+    float matrix[16];
+    bool result = ((igTransformSource *)this)->getMatrix(*(igMatrix44f *)matrix, time, cachedLastTimeFrame, flags);
+    igMatrix44f_GetQuaternion(quaternion, matrix);
+    return result;
+}
+
 
 void igTransform::setMatrix(const igMatrix44f *matrix)
 {
@@ -434,24 +359,12 @@ igMetaObject *igAnimationCombinerBoneInfoPool_GetMeta(void) {
     return g_igAnimationCombinerBoneInfoPool_metaObject;
 }
 
-igMetaObject *igObjectPool_GetMeta(void) {
-    return g_igObjectPool_metaObject;
-}
-
 igMetaObject *igAnimationStateList_GetMeta(void) {
     return g_igAnimationStateList_metaObject;
 }
 
 igMetaObject *igAnimationStatePool_GetMeta(void) {
     return g_igAnimationStatePool_metaObject;
-}
-
-igMetaObject *igAttrStack_GetMeta(void) {
-    return g_igAttrStack_metaObject;
-}
-
-igMetaObject *igAttrStackList_GetMeta(void) {
-    return g_igAttrStackList_metaObject;
 }
 
 igMetaObject *igNonRefCountedAttrStackManagerList_GetMeta(void) {
@@ -490,10 +403,6 @@ igMetaObject *igCompressedTransformSequence1_5Data_GetMeta(void) {
     return g_igCompressedTransformSequence1_5Data_metaObject;
 }
 
-igMetaObject *igEnvironmentMapShader2List_GetMeta(void) {
-    return g_igEnvironmentMapShader2List_metaObject;
-}
-
 igMetaObject *igAnimation_GetMeta(void) {
     return g_igAnimation_metaObject;
 }
@@ -506,54 +415,6 @@ igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObject(void) {
     return g_igModelViewMatrixBoneSelectListSg_metaObject;
 }
 
-igMetaObject *igLightStateAttrPool_GetMeta(void) {
-    return g_igLightStateAttrPool_metaObject;
-}
-
-igMetaObject *igModelViewMatrixAttrPool_GetMeta(void) {
-    return g_igModelViewMatrixAttrPool_metaObject;
-}
-
-igMetaObject *igTimeAttrPool_GetMeta(void) {
-    return g_igTimeAttrPool_metaObject;
-}
-
-igMetaObject *igProjectionMatrixAttrPool_GetMeta(void) {
-    return g_igProjectionMatrixAttrPool_metaObject;
-}
-
-igMetaObject *igVertexBlendMatrixAttrPool_GetMeta(void) {
-    return g_igVertexBlendMatrixAttrPool_metaObject;
-}
-
-igMetaObject *igVertexBlendMatrixListAttrPool_GetMeta(void) {
-    return g_igVertexBlendMatrixListAttrPool_metaObject;
-}
-
-igMetaObject *igMatrixObjectPool_GetMeta(void) {
-    return g_igMatrixObjectPool_metaObject;
-}
-
-igMetaObject *igTextureMatrixAttrPool_GetMeta(void) {
-    return g_igTextureMatrixAttrPool_metaObject;
-}
-
-igMetaObject *igBlendMatricesAttrPool_GetMeta(void) {
-    return g_igBlendMatricesAttrPool_metaObject;
-}
-
-igMetaObject *igRenderPackage_GetMeta(void) {
-    return g_igRenderPackage_metaObject;
-}
-
-igMetaObject *igRenderPackagePool_GetMeta(void) {
-    return g_igRenderPackagePool_metaObject;
-}
-
-igMetaObject *igRenderPackageList_GetMeta(void) {
-    return g_igRenderPackageList_metaObject;
-}
-
 int igDoubleList_GetMeta(void) {
     return (int)Gap::Core::igDoubleList::getClassMeta();
 }
@@ -562,28 +423,12 @@ igMetaObject *igTransformStack_GetMeta(void) {
     return g_igTransformStack_metaObject;
 }
 
-igMetaObject *igTransformList_GetMeta(void) {
-    return g_igTransformList_metaObject;
-}
-
-igMetaObject *igNonRefCountedTransformList_GetMeta(void) {
-    return g_igNonRefCountedTransformList_metaObject;
-}
-
 igMetaObject *igTransformRecorder_GetMeta(void) {
     return g_igTransformRecorder_metaObject;
 }
 
-igMetaObject *igRenderPackageList_GetElementMeta(void) {
-    return g_igRenderPackage_metaObject;
-}
-
 igMetaObject *igNonRefCountedAttrStackManagerList_GetElementMeta(void) {
     return g_igAttrStackManager_metaObject;
-}
-
-igMetaObject *igNonRefCountedTransformList_GetElementMeta(void) {
-    return Gap::Sg::igTransform::getClassMeta();
 }
 
 int igDoubleList_GetElementSize(void) {
@@ -644,10 +489,6 @@ igMetaObject *igAnimationCombinerBoneInfoList_GetElementMeta(void) {
     return g_igAnimationCombinerBoneInfo_metaObject;
 }
 
-igMetaObject *igEnvironmentMapShader2List_GetElementMeta(void) {
-    return Gap::Sg::igEnvironmentMapShader2::getClassMeta();
-}
-
 igMetaObject *igAnimationList_GetElementMeta(void) {
     return g_igAnimation_metaObject;
 }
@@ -675,14 +516,6 @@ int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)
 
 int igCompiledTransformList_GetElementMeta(void) {
     return ((int)g_igCompiledTransform_metaObject);
-}
-
-igMetaObject *igAttrStackList_GetElementMeta(void) {
-    return g_igAttrStack_metaObject;
-}
-
-igMetaObject *igTransformList_GetElementMeta(void) {
-    return Gap::Sg::igTransform::getClassMeta();
 }
 
 void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self) {

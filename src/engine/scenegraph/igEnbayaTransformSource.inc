@@ -46,8 +46,8 @@ CallbackArray *igEnbayaTransformSource_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnbayaTransformSource_metaObject,
-        igTransformSource_Register,
-        igTransformSource_GetPublishedMetaObject,
+        Gap::Sg::igTransformSource::arkRegisterInternal,
+        Gap::Sg::igTransformSource::getClassMeta,
         igEnbayaTransformSource_GetMetaObjectFunction,
         "igEnbayaTransformSource",
         sizeof(igEnbayaTransformSource),                   /* Instance size. */

@@ -2,17 +2,21 @@ void Gap__Sg__igTransformSource__vfunc_33(void) {
 
 }
 
-void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
+namespace Gap {
+namespace Sg {
+
+void igTransformSequence::setMatrix(int index, const igMatrix44f *matrix) {
+    float (*m)[4] = (float (*)[4])matrix;
     float rot[4][4];
     float inv[3];
     float *t;
     float *s;
     int i;
-    t = o->_xlateList->_data[index];
+    t = ((TransformSampleView *)this)->_xlateList->_data[index];
     t[0] = m[3][0];
     t[1] = m[3][1];
     t[2] = m[3][2];
-    s = o->_scaleList->_data[index];
+    s = ((TransformSampleView *)this)->_scaleList->_data[index];
     for (i = 0; i < 3; i++) {
         float *r = m[i];
         s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
@@ -35,72 +39,56 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         inv[1] = y;
     }
     FUN_00190cb0((float *)rot, inv);
-    igMatrix44f_GetQuaternion(o->_quatList->_data[index], (float *)rot);
+    igMatrix44f_GetQuaternion(((TransformSampleView *)this)->_quatList->_data[index], (float *)rot);
 }
 
-void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
-    igVec3f sp50;
+void igTransformSequence::getMatrix(int index, igMatrix44f *matrix) const {
+    igVec3f rotated;
     float f22, f21, f20;
     int idx;
     igVec3f *v;
-    FUN_00192810((const float *)(arg0->b12->data + arg1 * 16), (float *)arg2);
-    idx = arg1 * 12;
-    v = (igVec3f *)(arg0->b8->data + idx);
+    FUN_00192810((const float *)((char *)_quatList->_data + index * 16), matrix->m);
+    idx = index * 12;
+    v = (igVec3f *)((char *)_xlateList->_data + idx);
     f22 = v->vec[0];
     f21 = v->vec[1];
     f20 = v->vec[2];
-    if (arg0->f44 == 0.0f && arg0->f48 == 0.0f && arg0->f52 == 0.0f) {
+    if (_centerOfRotation.vec[0] == 0.0f && _centerOfRotation.vec[1] == 0.0f && _centerOfRotation.vec[2] == 0.0f) {
     } else {
-        Vec3f_TransformDirection((float *)&sp50, (const float *)&arg0->f44, (const float *)arg2);
-        f22 = f22 - sp50.vec[0];
-        f21 = f21 - sp50.vec[1];
-        f20 = f20 - sp50.vec[2];
-        f22 = f22 + arg0->f44;
-        f21 = f21 + arg0->f48;
-        f20 = f20 + arg0->f52;
+        Vec3f_TransformDirection(rotated.vec, _centerOfRotation.vec, matrix->m);
+        f22 = f22 - rotated.vec[0];
+        f21 = f21 - rotated.vec[1];
+        f20 = f20 - rotated.vec[2];
+        f22 = f22 + _centerOfRotation.vec[0];
+        f21 = f21 + _centerOfRotation.vec[1];
+        f20 = f20 + _centerOfRotation.vec[2];
     }
-    *(float *)(arg2 + 48) = f22;
-    *(float *)(arg2 + 52) = f21;
-    *(float *)(arg2 + 56) = f20;
-    FUN_00190cb0((float *)arg2, (const float *)(arg0->b16->data + idx));
+    matrix->m[12] = f22;
+    matrix->m[13] = f21;
+    matrix->m[14] = f20;
+    FUN_00190cb0(matrix->m, (const float *)((char *)_scaleList->_data + idx));
 }
 
-int FUN_001dd370(void *arg0) {
-    int var_v0;
-
-    var_v0 = 1;
-    if (*(float *)((char *)(arg0) + 44) == g_vec3Zero[0]) {
-        var_v0 = 0;
-    }
-    if (var_v0 == 0) {
-        var_v0 = 1;
-        if (*(float *)((char *)(arg0) + 48) == DAT_004e105c[0]) {
-            var_v0 = 0;
-        }
-    }
-    if (var_v0 == 0) {
-        var_v0 = 1;
-        if (*(float *)((char *)(arg0) + 52) == DAT_004e1060[0]) {
-            var_v0 = 0;
-        }
-    }
-    return var_v0 ^ 1;
+bool igTransformSequence::isTransformable() const {
+    return !(_centerOfRotation.vec[0] != g_vec3Zero[0] || _centerOfRotation.vec[1] != DAT_004e105c[0] ||
+             _centerOfRotation.vec[2] != DAT_004e1060[0]);
 }
 
-void FUN_001dd3e0(void *arg0, int arg1) {
-    int sp50[16];
-    int n;
-    int i;
-    n = ((V_1dd3e0 *)arg0)->vCount();
-    for (i = 0; i < n; i++) {
-        igMatrix44f_SetIdentity((float *)sp50);
-        ((V_1dd3e0 *)arg0)->vGet(i, sp50);
-        igMatrix44f_Multiply((float *)sp50, (const float *)sp50, (const float *)arg1);
-        ((V_1dd3e0 *)arg0)->vSet(i, sp50);
-        ((F_1dd3e0 *)arg0)->a = g_vec3Zero[0];
-        ((F_1dd3e0 *)arg0)->b = DAT_004e105c[0];
-        ((F_1dd3e0 *)arg0)->c = DAT_004e1060[0];
+void igTransformSequence::transform(const igMatrix44f &matrix)
+{
+    int count = getKeyFrameCount();
+    for (int i = 0; i < count; i++) {
+        float key[16];
+        igMatrix44f_SetIdentity(key);
+        getMatrix(i, (igMatrix44f *)key);
+        igMatrix44f_Multiply(key, key, matrix.m);
+        setMatrix(i, (const igMatrix44f *)key);
+        _centerOfRotation.vec[0] = g_vec3Zero[0];
+        _centerOfRotation.vec[1] = DAT_004e105c[0];
+        _centerOfRotation.vec[2] = DAT_004e1060[0];
     }
+}
+}
 }
 
 int UnsignedDivMod64_Cached(long long arg0, long long arg1, long long *arg2) {

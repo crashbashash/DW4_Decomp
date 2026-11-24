@@ -6,7 +6,6 @@
 #include "dw4/core/igTDataList.h"
 #include "dw4/maths/igVec3f.h"
 #include "dw4/game/beFontImage.h"
-#include "dw4/gui/igAction.h"
 #include "dw4/gui/igBasicColorChanger.h"
 #include "dw4/gui/igBitmapFont.h"
 #include "dw4/gui/igBoxComponent.h"
@@ -106,27 +105,10 @@ extern "C" int igHotKeyEventReceiver_GetVTable(void);
 extern "C" CallbackArray *igHotKeyEventReceiver_Register(void);
 extern "C" void thunk_igHotKeyEventReceiver_GetMetaObject(void);
 extern "C" void igHotKeyEventReceiver_InitFields(void);
-extern "C" igMetaObject *g_igHotKeyBindingList_metaObject;
-extern "C" igMetaObject *igHotKeyBindingList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igHotKeyBindingList_GetMetaObject(void);
-extern "C" int g_igHotKeyBindingList_vtable[4];
-extern "C" int igHotKeyBindingList_GetVTable(void);
-extern "C" void igHotKeyBindingList_RunStaticInit(void);
-extern "C" CallbackArray *igHotKeyBindingList_Register(void);
-extern "C" void thunk_igHotKeyBindingList_GetMetaObject(void);
-extern "C" int igHotKeyBinding_Create(int arg0);
-extern "C" igMetaObject *g_igHotKeyBinding_metaObject;
-extern "C" igMetaObject *igHotKeyBinding_GetMetaObject(void);
-extern "C" int g_igHotKeyBinding_vtable[4];
 struct R { int vt; unsigned int rc; };
 struct Obj_44dcb0 { int *vt; char pad[12]; struct R *p; char pad2[12]; };
-extern "C" int igHotKeyBinding_GetVTable(void);
-extern "C" void igHotKeyBinding_RunStaticInit(void);
-extern "C" CallbackArray *igHotKeyBinding_Register(void);
-extern "C" void thunk_igHotKeyBinding_GetMetaObject(void);
 extern "C" igMetaEnum* FUN_00145eb0(void);
 extern "C" igMetaEnum* FUN_00146850(void);
-extern "C" void igHotKeyBinding_InitFields(void);
 extern "C" igMetaObject *g_igGuiSystem_metaObject;
 extern "C" igMetaObject *igGuiSystem_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGuiSystem_GetMetaObject(void);
@@ -273,34 +255,8 @@ extern "C" void igFont_EnsureRegistered(void);
 extern "C" CallbackArray *igFont_Register(void);
 extern "C" void igFont_GetMetaObjectFunction(void);
 extern "C" void igFont_InitFields(void);
-extern "C" igMetaObject *g_igFieldSynchronizer_metaObject;
-extern "C" igMetaObject *igFieldSynchronizer_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igFieldSynchronizer_GetMetaObject(void);
-extern "C" int g_igFieldSynchronizer_vtable[4];
 struct Obj_450aa0 { int *vt; char pad[4]; struct R *p; char pad2[4]; };
-extern "C" int igFieldSynchronizer_GetVTable(void);
-extern "C" void igFieldSynchronizer_EnsureRegistered(void);
-extern "C" CallbackArray *igFieldSynchronizer_Register(void);
-extern "C" void igFieldSynchronizer_GetMetaObjectFunction(void);
-extern "C" void igFieldSynchronizer_InitFields(void);
-extern "C" igMetaObject *g_igFieldChangeViewList_metaObject;
-extern "C" igMetaObject *igFieldChangeViewList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igFieldChangeViewList_GetMetaObject(void);
-extern "C" int g_igFieldChangeViewList_vtable[4];
-extern "C" int igFieldChangeViewList_GetVTable(void);
-extern "C" void igFieldChangeViewList_EnsureRegistered(void);
-extern "C" CallbackArray *igFieldChangeViewList_Register(void);
-extern "C" void igFieldChangeViewList_GetMetaObjectFunction(void);
-extern "C" int igFieldChangeView_Create(int arg0);
-extern "C" igMetaObject *g_igFieldChangeView_metaObject;
-extern "C" igMetaObject *igFieldChangeView_GetMetaObject(void);
 struct Obj_450e70 { int *vt; char pad[12]; char *m; char pad2[12]; };
-extern "C" int g_igFieldChangeView_vtable[4];
-extern "C" int igFieldChangeView_GetVTable(void);
-extern "C" void igFieldChangeView_EnsureRegistered(void);
-extern "C" CallbackArray *igFieldChangeView_Register(void);
-extern "C" void igFieldChangeView_GetMetaObjectFunction(void);
-extern "C" void igFieldChangeView_InitFields(void);
 extern "C" igMetaObject *g_igEventReceiverOrderedList_metaObject;
 extern "C" igMetaObject *igEventReceiverOrderedList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igEventReceiverOrderedList_GetMetaObject(void);
@@ -447,10 +403,6 @@ extern "C" int FUN_00452c40(void);
 extern "C" int Gap__Gui__igCharMetricsMetaField__vfunc_25(void);
 extern "C" void igCharMetricsMetaField_InitDefaults(igCharMetricsMetaField *self);
 extern "C" void FUN_00452ca0(int arg0);
-extern "C" igMetaObject *igAction_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igAction_GetMetaObject(void);
-extern "C" void igAction_RunStaticInit(void);
-extern "C" void thunk_igAction_GetMetaObject(void);
 extern "C" int FUN_00453370(unsigned short *arg0, unsigned short *arg1);
 extern "C" int Gap__Bec__beFontImage__vfunc_23(beFontImage *arg0, int arg1);
 extern "C" float Gap__Bec__beFontImage__vfunc_24(beFontImage *arg0, int arg1);
@@ -679,9 +631,7 @@ struct O_455010 { int vt; int p1; int p2; L1_455010 *f12; };
 extern "C" void igEventDispatcher_KeyDown(O_455010 *arg0, int arg1, int arg2);
 class A_4550b0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int, int); };
 extern "C" void igEventDispatcher_KeyUp(igEventDispatcher *self, int arg1, int arg2);
-extern "C" void igFieldChangeView_OnModelChange(igFieldChangeView *self, void *arg1);
 struct S_4551a0 { char pad[8]; int a; int pad2; int b; };
-extern "C" void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2);
 struct Rc_4551f0 { int vt; int rc; int p8; int f12; int f16; };
 struct Ref_4551f0 {
     Rc_4551f0 *p;
@@ -695,7 +645,6 @@ struct Ref_4551f0 {
     }
 };
 struct A_4551f0 { char pad8[8]; int f8; };
-extern "C" void FUN_004552e0(int *arg0, int *arg1);
 class VC_455370 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(long long); };
 class VC100 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 extern "C" void igGuiComponent_resetFields(igGuiComponent *self, int flags);
@@ -819,7 +768,6 @@ typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
 #include "dw4/attrs/igGeometryAttr.h"
 #include "dw4/attrs/igTextureBindAttr.h"
 #include "dw4/windowinput/igControllerManager.h"
-#include "dw4/gui/igFieldSynchronizer.h"
 class Obj_456b80 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void vX(void *); };
 struct P_456b80 { char pad[12]; float x; float y; };
 extern "C" void FUN_00456b80(int *arg0, float *arg1);
@@ -894,7 +842,6 @@ struct GuiModelView {
 };
 extern "C" bool igGuiSystem_ControllerButtonEvent(igGuiSystem *system, int device, int key, int pressed);
 extern "C" int igGuiSystem_ControllerMotionEvent(void);
-struct Entry : igObject { int a; int b; igObject *value; };
 typedef struct E_4574f0 { char pad4[4]; int f4; int f8; int f12; } E_4574f0;
 typedef struct LST { char pad8[8]; int f8; char pad12[4]; E_4574f0 **f16; } LST;
 class VC_4575d0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(); };
@@ -944,8 +891,6 @@ extern "C" igMetaObject *igGuiSystemModel_GetMeta(void);
 extern "C" igMetaObject *igGuiComponentNode_GetMeta(void);
 extern "C" int igGuiComponentController_GetMeta(void);
 extern "C" igMetaObject *igGuiComponent_GetMeta(void);
-extern "C" igMetaObject *igFieldChangeView_GetMeta(void);
-extern "C" int igFieldChangeView_IsCompatible(void);
 extern "C" igMetaObject *igEventDispatcher_GetMeta(void);
 extern "C" int igDefaultAspect_GetMeta(void);
 extern "C" void igDefaultAspect_IsCompatible(igDefaultAspect *self, int model);
@@ -960,18 +905,12 @@ extern "C" igMetaObject *igBoxComponent_GetMeta(void);
 extern "C" igMetaObject *igDefaultAspectElement_GetMeta(void);
 extern "C" igMetaObject *igDefaultAspectElementList_GetMeta(void);
 extern "C" igMetaObject *igEventReceiverOrderedList_GetMeta(void);
-extern "C" int igFieldChangeViewList_GetMeta(void);
-extern "C" igMetaObject *igFieldSynchronizer_GetMeta(void);
 extern "C" igMetaObject *igGuiComponentList_GetMeta(void);
 extern "C" igMetaObject *igMouseCursor_GetMeta(void);
-extern "C" igMetaObject *igHotKeyBinding_GetMeta(void);
-extern "C" igMetaObject *igHotKeyBindingList_GetMeta(void);
 extern "C" igMetaObject *igRendererOrderedList_GetMeta(void);
 extern "C" int FUN_00458310(void);
 extern "C" int igCharMetricsList_GetElementSize(void);
 extern "C" igMetaObject *igDefaultAspectElementList_GetElementMeta(void);
-extern "C" int igFieldChangeViewList_GetElementMeta(void);
-extern "C" igMetaObject *igHotKeyBindingList_GetElementMeta(void);
 extern "C" igMetaObject *igGuiComponentList_GetElementMeta(void);
 extern "C" void igCharMetricsList_TrimCapacity(igCharMetricsList *self);
 extern "C" void FUN_00453990(struct FontLayers_453990 *self, int index, struct FontLayerItem_453990 *item);

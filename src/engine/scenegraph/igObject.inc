@@ -147,7 +147,7 @@ namespace Sg {
 void igTransform::update(long long time)
 {
     if (_transformInput != 0) {
-        ((V_1b2750 *)(_transformInput.p))->vX(_m.m, time);
+        _transformInput->getMatrix(_m, time);
     }
 }
 }

@@ -88,7 +88,6 @@ igSmartPointer<igBlendFunctionAttr> g_envMapBlendZeroSrcAlphaUnit1(0, kRetainRef
 #include "src/engine/scenegraph/igFrustCullTraversal.inc"
 #include "src/engine/scenegraph/igEnvironmentMapShader2List.inc"
 #include "src/engine/scenegraph/igEnvironmentMapShader2.inc"
-#include "src/engine/scenegraph/igPsx2EnvironmentMapShader.inc"
 #include "src/engine/scenegraph/igEnbayaTransformSource.inc"
 #include "src/engine/scenegraph/igEnbayaContextPool.inc"
 #include "src/engine/scenegraph/igEnbayaAnimationState.inc"

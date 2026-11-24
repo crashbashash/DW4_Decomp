@@ -1,53 +1,52 @@
-igMetaObject *g_igHotKeyBindingList_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igHotKeyBindingList_GetOrCreateMetaObject(void) {
-    if (g_igHotKeyBindingList_metaObject == 0) {
-        g_igHotKeyBindingList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igHotKeyBindingList_metaObject;
-}
+igMetaObject *igHotKeyBindingList::_Meta;
 
-igMetaObject *igHotKeyBindingList_GetMetaObject(void)
+igMetaObject *igHotKeyBindingList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igHotKeyBindingList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igHotKeyBindingList_RunStaticInit();
-    return g_igHotKeyBindingList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igHotKeyBindingList_GetVTable(void) {
-    struct Obj obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igHotKeyBindingList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igHotKeyBindingList_RunStaticInit(void)
+igMetaObject *igHotKeyBindingList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igHotKeyBindingList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igHotKeyBindingList_callbackList[] = { igHotKeyBinding_RunStaticInit, 0 };
+void *igHotKeyBindingList::retrieveVTablePointer()
+{
+    igHotKeyBindingList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igHotKeyBindingList_Register(void) {
+void igHotKeyBindingList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igHotKeyBindingList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igHotKeyBinding::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igHotKeyBindingList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        thunk_igHotKeyBindingList_GetMetaObject,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igHotKeyBindingList",
-        0x14, /* instance size */
-        igHotKeyBindingList_GetVTable,
+        sizeof(igHotKeyBindingList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igHotKeyBindingList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void thunk_igHotKeyBindingList_GetMetaObject(void) {
-    igHotKeyBindingList_GetMetaObject();
+}
 }
 

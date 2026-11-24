@@ -323,7 +323,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Core::igLongList::arkRegister();
     igVec3fList_EnsureRegistered();
     Gap::Sg::igGroup::arkRegister();
-    igTransformSequence1_5_EnsureRegistered();
+    Gap::Sg::igTransformSequence1_5::arkRegister();
     igQuaternionfList_EnsureRegistered();
     Gap::Attrs::igAlphaFunctionAttr::arkRegister();
     Gap::Sg::igBillboard::arkRegister();
@@ -347,7 +347,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igProjectiveShadowShader::arkRegister();
     Gap::Sg::igLightStateSet::arkRegister();
     Gap::Sg::igLightSet::arkRegister();
-    igTransformList_EnsureRegistered();
+    Gap::Sg::igTransformList::arkRegister();
     Gap::Sg::igGraphPath::arkRegister();
     Gap::Sg::igGeometryList::arkRegister();
     Gap::Sg::igCamera::arkRegister();

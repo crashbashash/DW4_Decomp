@@ -39,7 +39,7 @@ void beCameraBoxData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCameraBoxData_Register);
 }
 
-static igMetaObjectCallback g_beCameraBoxData_callbackList[] = { Gap::Sg::igSwitch::arkRegister, Gap::Sg::igGeometryList::arkRegister, igTransformList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCameraBoxData_callbackList[] = { Gap::Sg::igSwitch::arkRegister, Gap::Sg::igGeometryList::arkRegister, Gap::Sg::igTransformList::arkRegister, 0 };
 
 CallbackArray *beCameraBoxData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -110,13 +110,13 @@ void beCameraBoxData_InitFields(void) {
     ((igObjectRefMetaField *)geometryList)->_metaObject = (int)Gap::Sg::igGeometryList::getClassTypeLazy();
     ((igRefMetaField *)geometryList)->_construct = 1;
     transformList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)transformList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transformList)->_metaObject = (int)Gap::Sg::igTransformList::getClassTypeLazy();
     ((igRefMetaField *)transformList)->_construct = 1;
     eyePosList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)eyePosList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)eyePosList)->_metaObject = (int)Gap::Sg::igTransformList::getClassTypeLazy();
     ((igRefMetaField *)eyePosList)->_construct = 1;
     intPosList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)intPosList)->_metaObject = (int)igTransformList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)intPosList)->_metaObject = (int)Gap::Sg::igTransformList::getClassTypeLazy();
     ((igRefMetaField *)intPosList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beCameraBoxData_fieldTable, g_beCameraBoxData_fieldHandles, g_beCameraBoxData_fieldOffsets, base);
 }

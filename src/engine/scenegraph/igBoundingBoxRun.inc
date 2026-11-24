@@ -1,5 +1,5 @@
 int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1) {
-    if (((Gap::Core::igObject *)arg1)->isOfType(g_igTransformSequence_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(Gap::Sg::igTransformSequence::getClassMeta()) != 0) {
         Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
         igVolume_ExtendBy((void **)a.o, (void **)arg0);
         Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));

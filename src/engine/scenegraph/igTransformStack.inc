@@ -35,8 +35,8 @@ CallbackArray *igTransformStack_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTransformStack_metaObject,
-        igNonRefCountedObjectStack_Register,
-        igNonRefCountedObjectStack_GetPublishedMetaObject,
+        Gap::Core::igNonRefCountedObjectStack::arkRegisterInternal,
+        Gap::Core::igNonRefCountedObjectStack::getClassMeta,
         igTransformStack_GetMetaObjectFunction,
         "igTransformStack",
         0x14, /* instance size */

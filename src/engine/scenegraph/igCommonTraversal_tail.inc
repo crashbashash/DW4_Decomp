@@ -3,7 +3,7 @@ namespace Sg {
 
 CallbackArray *igCommonTraversal::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igAttrStackManager_EnsureRegistered, igTransformStack_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, Gap::Gfx::igCapabilityManager::arkRegister, Gap::Attrs::igAttrDefaultManager::arkRegister, Gap::Attrs::igNonRefCountedAttrList::arkRegister, igSorter_EnsureRegistered, igModelViewMatrixAttrPool_EnsureRegistered, igTimeAttrPool_EnsureRegistered, igVertexBlendMatrixAttrPool_EnsureRegistered, igTextureMatrixAttrPool_EnsureRegistered, igVertexBlendMatrixListAttrPool_EnsureRegistered, igMatrixObjectPool_EnsureRegistered, igProjectionMatrixAttrPool_EnsureRegistered, Gap::Attrs::igMatrixOptStateAttr::arkRegister, Gap::Attrs::igNormalizeNormalsStateAttr::arkRegister, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igStringObjList_EnsureRegistered, Gap::Sg::igNodeListList::arkRegister, igBlendMatricesAttrPool_EnsureRegistered, Gap::Attrs::igTimeAttr::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { igAttrStackManager_EnsureRegistered, igTransformStack_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, Gap::Gfx::igCapabilityManager::arkRegister, Gap::Attrs::igAttrDefaultManager::arkRegister, Gap::Attrs::igNonRefCountedAttrList::arkRegister, igSorter_EnsureRegistered, Gap::Sg::igModelViewMatrixAttrPool::arkRegister, Gap::Sg::igTimeAttrPool::arkRegister, Gap::Sg::igVertexBlendMatrixAttrPool::arkRegister, Gap::Sg::igTextureMatrixAttrPool::arkRegister, Gap::Sg::igVertexBlendMatrixListAttrPool::arkRegister, Gap::Sg::igMatrixObjectPool::arkRegister, Gap::Sg::igProjectionMatrixAttrPool::arkRegister, Gap::Attrs::igMatrixOptStateAttr::arkRegister, Gap::Attrs::igNormalizeNormalsStateAttr::arkRegister, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, Gap::Sg::igNonRefCountedTransformList::arkRegister, Gap::Core::igIntList::arkRegister, igStringObjList_EnsureRegistered, Gap::Sg::igNodeListList::arkRegister, Gap::Sg::igBlendMatricesAttrPool::arkRegister, Gap::Attrs::igTimeAttr::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -65,37 +65,37 @@ void igCommonTraversal::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
-        metaField->_metaObject = (int)igModelViewMatrixAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igModelViewMatrixAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
-        metaField->_metaObject = (int)igTimeAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igTimeAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
-        metaField->_metaObject = (int)igVertexBlendMatrixAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igVertexBlendMatrixAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);
-        metaField->_metaObject = (int)igTextureMatrixAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igTextureMatrixAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
-        metaField->_metaObject = (int)igVertexBlendMatrixListAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igVertexBlendMatrixListAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 12);
-        metaField->_metaObject = (int)igMatrixObjectPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igMatrixObjectPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 13);
-        metaField->_metaObject = (int)igProjectionMatrixAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igProjectionMatrixAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
@@ -140,13 +140,13 @@ void igCommonTraversal::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 23);
-        metaField->_metaObject = (int)igNonRefCountedTransformList_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igNonRefCountedTransformList::getClassTypeLazy();
         metaField->_construct = 1;
         metaField->_persistent = 0;
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 24);
-        metaField->_metaObject = (int)igNonRefCountedTransformList_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igNonRefCountedTransformList::getClassTypeLazy();
         metaField->_construct = 1;
         metaField->_persistent = 0;
     }
@@ -170,7 +170,7 @@ void igCommonTraversal::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 28);
-        metaField->_metaObject = (int)igBlendMatricesAttrPool_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igBlendMatricesAttrPool::getClassTypeLazy();
         metaField->_construct = 1;
         metaField->_persistent = 0;
     }

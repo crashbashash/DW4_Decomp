@@ -57,7 +57,7 @@ void igAnimationTrack_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationTrack_Register);
 }
 
-static igMetaObjectCallback g_igAnimationTrack_callbackList[] = { igTransformSource_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationTrack_callbackList[] = { Gap::Sg::igTransformSource::arkRegister, 0 };
 
 CallbackArray *igAnimationTrack_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -110,7 +110,7 @@ void igAnimationTrack_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationTrack_ctorTable, 3);
     sourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)sourceField)->_metaObject = (int)igTransformSource_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sourceField)->_metaObject = (int)Gap::Sg::igTransformSource::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationTrack_fieldTable, g_igAnimationTrack_fieldHandles, g_igAnimationTrack_fieldOffsets, base);
 }
 

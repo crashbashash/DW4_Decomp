@@ -17,7 +17,7 @@ static inline void fastPopAttr(igAttrStackManager *manager, const igAttr *attr, 
     stack->_count--;
     if (stack->_count == stack->_cachedOverride)
         stack->_cachedOverride = -1;
-    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, attrHandle);
+    igAttrStackManager_MarkStackChanged(manager, (::igAttrStack *)stack, attrHandle);
 }
 
 bool igShaderProcessor::configure(igSimpleShaderDispatchView *shader, igCapabilityManager *capabilityManager)

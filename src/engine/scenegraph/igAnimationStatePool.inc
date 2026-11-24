@@ -32,8 +32,8 @@ CallbackArray *igAnimationStatePool_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationStatePool_metaObject,
-        igObjectPool_Register,
-        igObjectPool_GetPublishedMetaObject,
+        Gap::Sg::igObjectPool::arkRegisterInternal,
+        Gap::Sg::igObjectPool::getClassMeta,
         thunk_igAnimationStatePool_GetMetaObject,
         "igAnimationStatePool",
         0x20, /* instance size */

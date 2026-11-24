@@ -1,43 +1,43 @@
-igMetaObject *g_igAction_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igAction_GetOrCreateMetaObject(void) {
-    if (g_igAction_metaObject == 0) {
-        g_igAction_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAction_metaObject;
-}
+igMetaObject *igAction::_Meta;
 
-igMetaObject *igAction_GetMetaObject(void)
+igMetaObject *igAction::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAction_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAction_RunStaticInit();
-    return g_igAction_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igAction_RunStaticInit(void)
+igMetaObject *igAction::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAction_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igAction_Register(void) {
+void igAction::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAction::arkRegisterInternal()
+{
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igAction_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        thunk_igAction_GetMetaObject,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAction",
-        8, /* instance size */
+        sizeof(igAction),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void thunk_igAction_GetMetaObject(void) {
-    igAction_GetMetaObject();
 }
-
+}

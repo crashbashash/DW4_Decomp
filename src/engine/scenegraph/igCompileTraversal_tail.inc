@@ -663,7 +663,3 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
     return 0;
 }
 
-void FUN_001bf020(void) {
-
-}
-

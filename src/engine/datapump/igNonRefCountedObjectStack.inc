@@ -1,66 +1,61 @@
-igMetaObject *g_igNonRefCountedObjectStack_metaObject;
-igMetaField *g_igNonRefCountedObjectStack_dataMetaField;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igNonRefCountedObjectStack_GetMetaObject(void)
+igMetaObject *igNonRefCountedObjectStack::_Meta;
+igMetaField *igNonRefCountedObjectStack::k_data;
+
+igMetaObject *igNonRefCountedObjectStack::getClassTypeSafe()
 {
-    igMetaObject *g = g_igNonRefCountedObjectStack_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNonRefCountedObjectStack_EnsureRegistered();
-    return g_igNonRefCountedObjectStack_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igNonRefCountedObjectStack_GetVTable(void) {
-    struct Obj obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igNonRefCountedObjectStack_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igNonRefCountedObjectStack_EnsureRegistered(void)
+void *igNonRefCountedObjectStack::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igNonRefCountedObjectStack_Register);
+    igNonRefCountedObjectStack temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igNonRefCountedObjectStack_Register(void) {
+void igNonRefCountedObjectStack::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNonRefCountedObjectStack::arkRegisterInternal()
+{
     DataPumpLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNonRefCountedObjectStack_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igDataList::arkRegisterInternal,
         Gap::Core::igDataList::getClassMeta,
-        igNonRefCountedObjectStack_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNonRefCountedObjectStack",
-        0x14, /* instance size */
-        igNonRefCountedObjectStack_GetVTable,
-        igNonRefCountedObjectStack_InitFields, /* Field adder. */
-        0,                                                  /* extra callback-vector item (none) */
-        0                                                   /* zero-terminated callback-vector item list (none) */
+        sizeof(igNonRefCountedObjectStack),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igNonRefCountedObjectStack_GetMetaObjectFunction(void) {
-    igNonRefCountedObjectStack_GetMetaObject();
-}
+void igNonRefCountedObjectStack::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
 
-void igNonRefCountedObjectStack_InitFields(void) {
-    int index;
-    void **found;
-    igMemoryRefMetaField *field;
-    igMetaObject *meta;
-
-    meta = g_igNonRefCountedObjectStack_metaObject;
-    found = (void **)igMetaObject_FindFieldByName(meta, "_data");
-    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)found);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
-    field->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
-    field->_memSize = 0;
-    field->_refCounted = 0;
-    field->_externalEnumStorage = (int)&g_igNonRefCountedObjectStack_dataMetaField;
-    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    field->_refCount = (int)((int) (field->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) field->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
+        metaField->_memSize = 0;
+        metaField->_refCounted = 0;
+        metaField->_externalEnumStorage = (int)&k_data;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
     }
+}
+}
 }
 

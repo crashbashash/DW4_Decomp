@@ -33,8 +33,8 @@ CallbackArray *igAnimationCombinerBoneInfoPool_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationCombinerBoneInfoPool_metaObject,
-        igObjectPool_Register,
-        igObjectPool_GetPublishedMetaObject,
+        Gap::Sg::igObjectPool::arkRegisterInternal,
+        Gap::Sg::igObjectPool::getClassMeta,
         thunk_igAnimationCombinerBoneInfoPool_GetMetaObject,
         "igAnimationCombinerBoneInfoPool",
         0x20, /* instance size */

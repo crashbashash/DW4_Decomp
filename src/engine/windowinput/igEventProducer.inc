@@ -34,7 +34,8 @@ void igEventProducer_GetMetaObjectFunction(void) {
     igEventProducer_GetMetaObject();
 }
 
+/* Retail's copy of igNonRefCountedObjectStack::getClassMeta, kept in this unit. */
 igMetaObject *igNonRefCountedObjectStack_GetPublishedMetaObject(void) {
-    return g_igNonRefCountedObjectStack_metaObject;
+    return Gap::Core::igNonRefCountedObjectStack::getClassMeta();
 }
 

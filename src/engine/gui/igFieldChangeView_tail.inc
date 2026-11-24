@@ -1,54 +1,44 @@
-void igFieldChangeView_OnModelChange(igFieldChangeView *self, void *arg1) {
-    int temp_a0;
+namespace Gap {
+namespace Gui {
 
-    if ((*(int *)((char *)arg1 + 0) == 0) || (self->_field == *(int *)((char *)arg1 + 8))) {
-        temp_a0 = self->_synchronizer;
-        if (temp_a0 != 0) {
-            FUN_004552e0((int *)temp_a0, (int *)self);
+void igFieldChangeView::notify(const igNotifyEvent &event)
+{
+    if (event._eventType == igNotifyEvent::ATTACH || _field.get() == event._field) {
+        if (_synchronizer) {
+            _synchronizer->synchronizeTo(this);
         }
     }
 }
 
-void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
-    int b;
-    ((Gap::Core::igMetaField *)arg0->b)->setFromField((Gap::Core::igObject *)arg0->a, (Gap::Core::igMetaField *)arg2, (Gap::Core::igObject *)arg1);
-    b = arg0->b;
-    igNotifyEvent sp((Gap::Core::igMetaField *)b, (Gap::Gui::igView *)(int)arg0);
-    ((Gap::Gui::igModel *)arg0->a)->notifyAllViews(sp);
+void igFieldChangeView::synchronizeTo(igModel *model, igMetaField *field)
+{
+    _field->setFromField(_model, field, model);
+    _model->notifyAllViews(igNotifyEvent(_field, this));
 }
 
-void igFieldSynchronizer_AddField(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field) {
-    A_4551f0 *arg0 = (A_4551f0 *)synchronizer;
-    Rc_4551f0 *arg2 = (Rc_4551f0 *)field;
-    Ref_4551f0 sp4C;
-    sp4C.p = (Rc_4551f0 *)igFieldChangeView_Create((int)(((Gap::Core::igObject *)synchronizer)->getMemoryPool()));
-    ((Gap::Core::igObjectList *)arg0->f8)->append((Gap::Core::igObject *)sp4C.p);
-    sp4C.p->f12 = (int)arg0;
-    Rc_4551f0 *t = sp4C.p;
-    if (arg2 != 0) {
-        arg2->rc = arg2->rc + 1;
-    }
-    Rc_4551f0 *old = (Rc_4551f0 *)t->f16;
-    if (old != 0) {
-        old->rc = old->rc - 1;
-        if (((unsigned long long)((long long)old->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)old);
-        }
-    }
-    t->f16 = (int)arg2;
-    ((Gap::Gui::igView *)sp4C.p)->setModel((Gap::Gui::igModel *)model);
+void igFieldSynchronizer::appendModelAndField(igModel *model, igMetaField *field)
+{
+    igSmartPointer<igFieldChangeView> view = igFieldChangeView::_instantiateFromPool(getMemoryPool());
+
+    _views->append(view);
+    view->setSynchronizer(this);
+    view->setField(field);
+    view->setModel(model);
 }
 
-void FUN_004552e0(int *arg0, int *arg1) {
-    int n = *(int *)(arg0[2] + 8);
-    int i = 0;
-    while (i < n) {
-        int a = ((int *)*(int *)(arg0[2] + 16))[i];
-        if (a != (int)arg1) {
-            FUN_004551a0((S_4551a0 *)a, arg1[2], arg1[4]);
+void igFieldSynchronizer::synchronizeTo(igFieldChangeView *view)
+{
+    int count = _views->getCount();
+
+    for (int i = 0; i < count; i++) {
+        igFieldChangeView *other = _views->get(i);
+
+        if (other != view) {
+            other->synchronizeTo(view->_model, view->_field);
         }
-        i++;
     }
+}
+}
 }
 
 int beFontImage_CountTriangles(beFontImage *image, const char *text) {

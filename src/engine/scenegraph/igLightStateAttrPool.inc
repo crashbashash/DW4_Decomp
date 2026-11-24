@@ -1,53 +1,52 @@
-igMetaObject *g_igLightStateAttrPool_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igLightStateAttrPool_GetOrCreateMetaObject(void) {
-    if (g_igLightStateAttrPool_metaObject == 0) {
-        g_igLightStateAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igLightStateAttrPool_metaObject;
-}
+igMetaObject *igLightStateAttrPool::_Meta;
 
-igMetaObject *igLightStateAttrPool_GetMetaObject(void)
+igMetaObject *igLightStateAttrPool::getClassTypeLazy()
 {
-    igMetaObject *g = g_igLightStateAttrPool_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igLightStateAttrPool_EnsureRegistered();
-    return g_igLightStateAttrPool_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igLightStateAttrPool_GetVTable(void) {
-    struct Obj_19a610 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igLightStateAttrPool_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igLightStateAttrPool_EnsureRegistered(void)
+igMetaObject *igLightStateAttrPool::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igLightStateAttrPool_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igLightStateAttrPool_callbackList[] = { Gap::Attrs::igLightStateAttr::arkRegister, 0 };
+void *igLightStateAttrPool::retrieveVTablePointer()
+{
+    igLightStateAttrPool temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igLightStateAttrPool_Register(void) {
+void igLightStateAttrPool::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igLightStateAttrPool::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igLightStateAttr::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igLightStateAttrPool_metaObject,
-        igObjectPool_Register,
-        igObjectPool_GetPublishedMetaObject,
-        igLightStateAttrPool_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Sg::igObjectPool::arkRegisterInternal,
+        Gap::Sg::igObjectPool::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igLightStateAttrPool",
-        0x20, /* instance size */
-        igLightStateAttrPool_GetVTable,
+        sizeof(igLightStateAttrPool),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igLightStateAttrPool_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igLightStateAttrPool_GetMetaObjectFunction(void) {
-    igLightStateAttrPool_GetMetaObject();
+}
 }
 

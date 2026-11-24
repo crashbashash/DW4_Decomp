@@ -60,8 +60,9 @@ extern "C" void igEventProducer_EnsureRegistered(void);
 extern "C" CallbackArray *igEventProducer_Register(void);
 extern "C" void igEventProducer_GetMetaObjectFunction(void);
 #include "dw4/datapump/igNonRefCountedObjectStack.h"
-#include "dw4/sony/libpad.h"
 extern "C" igMetaObject *igNonRefCountedObjectStack_GetPublishedMetaObject(void);
+extern "C" igMetaObject *igNonRefCountedObjectStack_GetMeta(void);
+#include "dw4/sony/libpad.h"
 extern "C" igMetaObject *g_igControllerList_metaObject;
 extern "C" igMetaObject *igControllerList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igControllerList_GetMetaObject(void);
@@ -263,7 +264,6 @@ extern "C" void igInterfaceManager_AddEventProducer(void *a0, igObject *object);
 extern "C" int igDefaultInterfaceManager_GetMeta(void);
 extern "C" igMetaObject *FUN_00149350(void);
 extern "C" int igControllerList_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedObjectStack_GetMeta(void);
 extern "C" igMetaObject *igEventProducerList_GetMeta(void);
 extern "C" int igControllerList_GetElementMeta(void);
 extern "C" igMetaObject *igEventProducerList_GetElementMeta(void);

@@ -186,7 +186,7 @@ class TreeTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         root = self.tmp.name
-        for d in ("config/SLUS-20836", "src/engine/core"):
+        for d in ("config/SLUS-20836", "src/engine/core", "src/engine/datapump"):
             os.makedirs(os.path.join(root, d))
         files = {
             "config/converted-classes.tsv": "# class\tlibrary\nigObject\tCore\n",

@@ -18,8 +18,9 @@ int igControllerList_GetMeta(void) {
     return (int)g_igControllerList_metaObject;
 }
 
+/* Retail's copy of igNonRefCountedObjectStack::getMeta, kept in this unit. */
 igMetaObject *igNonRefCountedObjectStack_GetMeta(void) {
-    return g_igNonRefCountedObjectStack_metaObject;
+    return Gap::Core::igNonRefCountedObjectStack::getClassMeta();
 }
 
 igMetaObject *igEventProducerList_GetMeta(void) {

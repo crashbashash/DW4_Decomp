@@ -63,7 +63,7 @@ void igCompiledTransform_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCompiledTransform_Register);
 }
 
-static igMetaObjectCallback g_igCompiledTransform_callbackList[] = { igTransformSource_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCompiledTransform_callbackList[] = { Gap::Sg::igTransformSource::arkRegister, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *igCompiledTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -140,7 +140,7 @@ void igCompiledTransform_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompiledTransform_ctorTable, 8);
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))->f38 = 0;
     temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    temp_s1->f56 = (int)igTransformSource_GetOrCreateMetaObject();
+    temp_s1->f56 = (int)Gap::Sg::igTransformSource::getClassTypeLazy();
     temp_s1->f38 = 0;
     temp_v0 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((Gap::Core::igIntMetaField *)temp_v0)->setDefault(-1);

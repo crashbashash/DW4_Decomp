@@ -180,7 +180,7 @@ static inline igAttr *lastAttr(igAttrStack *stack) {
 static inline igRenderPackage *nextPackage(igRenderPackagePool *pool) {
     int index;
     if (pool->_freeIndex >= pool->_count) {
-        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))&FUN_00197ab0);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))&Gap::Sg::igRenderPackage::_instantiateFromPool);
     }
     index = pool->_freeIndex;
     pool->_freeIndex = index + 1;
@@ -544,7 +544,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
         arg0->f114 = arg2;
         temp_s0 = arg0->f16;
         if (temp_s0->f20 >= temp_s0->f8) {
-            igObjectPool_Grow((igObjectPool *)temp_s0, (igObject *(*)(int))&FUN_00197ab0);
+            igObjectPool_Grow((igObjectPool *)temp_s0, (igObject *(*)(int))&Gap::Sg::igRenderPackage::_instantiateFromPool);
         }
         temp_a0 = temp_s0->f20;
         temp_s0->f20 = temp_a0 + 1;

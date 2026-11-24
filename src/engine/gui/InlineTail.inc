@@ -67,14 +67,6 @@ igMetaObject *igGuiComponent_GetMeta(void) {
     return g_igGuiComponent_metaObject;
 }
 
-igMetaObject *igFieldChangeView_GetMeta(void) {
-    return g_igFieldChangeView_metaObject;
-}
-
-int igFieldChangeView_IsCompatible(void) {
-    return 1;
-}
-
 igMetaObject *igEventDispatcher_GetMeta(void) {
     return g_igEventDispatcher_metaObject;
 }
@@ -131,28 +123,12 @@ igMetaObject *igEventReceiverOrderedList_GetMeta(void) {
     return g_igEventReceiverOrderedList_metaObject;
 }
 
-int igFieldChangeViewList_GetMeta(void) {
-    return (int)g_igFieldChangeViewList_metaObject;
-}
-
-igMetaObject *igFieldSynchronizer_GetMeta(void) {
-    return g_igFieldSynchronizer_metaObject;
-}
-
 igMetaObject *igGuiComponentList_GetMeta(void) {
     return g_igGuiComponentList_metaObject;
 }
 
 igMetaObject *igMouseCursor_GetMeta(void) {
     return g_igMouseCursor_metaObject;
-}
-
-igMetaObject *igHotKeyBinding_GetMeta(void) {
-    return g_igHotKeyBinding_metaObject;
-}
-
-igMetaObject *igHotKeyBindingList_GetMeta(void) {
-    return g_igHotKeyBindingList_metaObject;
 }
 
 igMetaObject *igRendererOrderedList_GetMeta(void) {
@@ -174,14 +150,6 @@ int igCharMetricsList_GetElementSize(void) {
 
 igMetaObject *igDefaultAspectElementList_GetElementMeta(void) {
     return g_igDefaultAspectElement_metaObject;
-}
-
-int igFieldChangeViewList_GetElementMeta(void) {
-    return (int)g_igFieldChangeView_metaObject;
-}
-
-igMetaObject *igHotKeyBindingList_GetElementMeta(void) {
-    return g_igHotKeyBinding_metaObject;
 }
 
 igMetaObject *igGuiComponentList_GetElementMeta(void) {

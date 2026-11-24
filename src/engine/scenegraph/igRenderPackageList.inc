@@ -1,53 +1,52 @@
-igMetaObject *g_igRenderPackageList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igRenderPackageList_GetOrCreateMetaObject(void) {
-    if (g_igRenderPackageList_metaObject == 0) {
-        g_igRenderPackageList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igRenderPackageList_metaObject;
-}
+igMetaObject *igRenderPackageList::_Meta;
 
-igMetaObject *igRenderPackageList_GetMetaObject(void)
+igMetaObject *igRenderPackageList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igRenderPackageList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igRenderPackageList_EnsureRegistered();
-    return g_igRenderPackageList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igRenderPackageList_GetVTable(void) {
-    struct Obj_197860 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igRenderPackageList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igRenderPackageList_EnsureRegistered(void)
+igMetaObject *igRenderPackageList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igRenderPackageList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igRenderPackageList_callbackList[] = { igRenderPackage_EnsureRegistered, 0 };
+void *igRenderPackageList::retrieveVTablePointer()
+{
+    igRenderPackageList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igRenderPackageList_Register(void) {
+void igRenderPackageList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igRenderPackageList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igRenderPackage::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igRenderPackageList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
         Gap::Core::igNonRefCountedObjectList::getClassMeta,
-        igRenderPackageList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igRenderPackageList",
-        0x14, /* instance size */
-        igRenderPackageList_GetVTable,
+        sizeof(igRenderPackageList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igRenderPackageList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igRenderPackageList_GetMetaObjectFunction(void) {
-    igRenderPackageList_GetMetaObject();
+}
 }
 

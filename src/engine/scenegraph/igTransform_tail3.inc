@@ -9,7 +9,7 @@ unsigned int igTransform::getInherantFlags()
 void igTransform::reset()
 {
     if (_transformInput != 0) {
-        ((DW4VC_132_0 *)(_transformInput.p))->vX();
+        _transformInput->reset();
         igMatrix44f_SetIdentity(_m.m);
     }
 }

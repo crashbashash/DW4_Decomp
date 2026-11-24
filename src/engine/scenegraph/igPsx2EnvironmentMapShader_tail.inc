@@ -1,37 +1,24 @@
-igMetaObject *g_igPsx2EnvironmentMapShader_metaObject;
-igMetaField *g_igPsx2EnvironmentMapShader_envMapBlendFuncMetaField;
-igMetaField *g_igPsx2EnvironmentMapShader_envMapTexGenMatrixMetaField;
-igMetaField *g_igPsx2EnvironmentMapShader_multiPassEnableMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igPsx2EnvironmentMapShader_GetMetaObject(void)
+igMetaObject *igPsx2EnvironmentMapShader::_Meta;
+igMetaField *igPsx2EnvironmentMapShader::k_envMapBlendFunc;
+igMetaField *igPsx2EnvironmentMapShader::k_envMapTexGenMatrix;
+igMetaField *igPsx2EnvironmentMapShader::k_multiPassEnable;
+
+igMetaObject *igPsx2EnvironmentMapShader::getClassTypeSafe()
 {
-    igMetaObject *g = g_igPsx2EnvironmentMapShader_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPsx2EnvironmentMapShader_EnsureRegistered();
-    return g_igPsx2EnvironmentMapShader_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igPsx2EnvironmentMapShader_GetVTable(void) {
-    union U_1aae40 u;
-    int temp_s2;
-    char *p0;
-    char *p2;
-    char *p1;
-    FUN_001ab4a0((igEnvironmentMapShader2 *)u.b);
-    u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
-    p0 = &u.b[112];
-    igSmartPointer_igBlendFunctionAttr_Construct((int *)p0);
-    p1 = &u.b[116];
-    igSmartPointer_igTexGenMatrixAttr_Construct((int *)p1);
-    p2 = &u.b[120];
-    igSmartPointer_igMultiPassStateAttr_Construct((int *)p2);
-    temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
-    igSmartPointer_igMultiPassStateAttr_Destruct((ObjectRefWord *)p2, -1);
-    igSmartPointer_igTexGenMatrixAttr_Destruct((igSmartPointer<igObject> *)p1, -1);
-    igSmartPointer_igBlendFunctionAttr_Destruct((igSmartPointer<igObject> *)p0, -1);
-    FUN_001aaf80((Obj_1aaf80 *)u.b, 0);
-    return temp_s2;
+void *igPsx2EnvironmentMapShader::retrieveVTablePointer()
+{
+    igPsx2EnvironmentMapShader temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 igSmartPointer<igObject> *igSmartPointer_igBlendStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
@@ -43,153 +30,63 @@ igSmartPointer<igObject> *igSmartPointer_igBlendStateAttr_Destruct(igSmartPointe
     return self;
 }
 
-Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
-    if (arg0) {
-        arg0->vt = DAT_00528fa0;
-        arg0->rel(&arg0->m108);
-        arg0->rel(&arg0->m104);
-        arg0->rel(&arg0->m100);
-        arg0->rel(&arg0->m96);
-        arg0->rel(&arg0->m92);
-        arg0->rel(&arg0->m88);
-        arg0->rel(&arg0->m84);
-        arg0->rel(&arg0->m80);
-        arg0->rel(&arg0->m76);
-        arg0->rel(&arg0->m68);
-        arg0->rel(&arg0->m64);
-        arg0->rel(&arg0->m52);
-        arg0->rel(&arg0->m36);
-        arg0->rel(&arg0->m32);
-        if (arg0) {
-            arg0->vt = g_igGroup_vtable;
-            igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 28), -1);
-            igNode_Destroy((igNode *)arg0, 0);
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
+namespace Gap {
+namespace Sg {
 
-ObjectRefWord *igSmartPointer_igMultiPassStateAttr_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-int *igSmartPointer_igMultiPassStateAttr_Construct(int *p)
+void igPsx2EnvironmentMapShader::arkRegister()
 {
-    *p = 0;
-    return p;
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-int *igSmartPointer_igBlendFunctionAttr_Construct(int *p)
+CallbackArray *igPsx2EnvironmentMapShader::arkRegisterInternal()
 {
-    *p = 0;
-    return p;
-}
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igBlendFunctionAttr::arkRegister, Gap::Attrs::igTexGenMatrixAttr::arkRegister, Gap::Attrs::igMultiPassStateAttr::arkRegister, 0 };
 
-void *FUN_001ab4a0(igEnvironmentMapShader2 *arg0) {
-    igObject_InitHeader((igObject *)arg0);
-    arg0->_vtable = (int)(&g_igNamedObject_vtable[0]);
-    arg0->_name = 0;
-    arg0->_vtable = (int)(&g_igNode_vtable[0]);
-    arg0->_bound = 0;
-    arg0->_parentList = 0;
-    arg0->_vtable = (int)(&g_igGroup_vtable[0]);
-    arg0->_childList = 0;
-    arg0->_vtable = (int)(&DAT_00528fa0[0]);
-    arg0->_envMapTexture = 0;
-    arg0->_diffuseTextureBind = 0;
-    arg0->_glossMapTexture = 0;
-    arg0->_attrPushLists = 0;
-    arg0->_attrPopLists = 0;
-    arg0->_envMapTextureBind = 0;
-    arg0->_envMapCoordSource = 0;
-    arg0->_envMapTextureFunc = 0;
-    arg0->_diffuseCoordSource = 0;
-    arg0->_diffuseTextureFunc = 0;
-    arg0->_diffuseBlendState = 0;
-    arg0->_glossMapTextureBind = 0;
-    arg0->_glossMapCoordSource = 0;
-    arg0->_glossMapTextureFunc = 0;
-    return arg0;
-}
-
-void igPsx2EnvironmentMapShader_EnsureRegistered(void)
-{
-    igMetaObject_RunStaticInit(igPsx2EnvironmentMapShader_Register);
-}
-
-static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { Gap::Attrs::igBlendFunctionAttr::arkRegister, Gap::Attrs::igTexGenMatrixAttr::arkRegister, Gap::Attrs::igMultiPassStateAttr::arkRegister, 0 };
-
-CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPsx2EnvironmentMapShader_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igEnvironmentMapShader2::arkRegisterInternal,
         Gap::Sg::igEnvironmentMapShader2::getClassMeta,
-        igPsx2EnvironmentMapShader_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2EnvironmentMapShader",
-        0x7C, /* instance size */
-        igPsx2EnvironmentMapShader_GetVTable,
-        &igPsx2EnvironmentMapShader_InitFields,
-        0, /* extra callback item */
-        g_igPsx2EnvironmentMapShader_callbackList /* callback list */
+        sizeof(igPsx2EnvironmentMapShader),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-static FieldFactory g_igPsx2EnvironmentMapShader_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igPsx2EnvironmentMapShader_fieldTable[] = {
-    "_envMapBlendFunc",
-    "_envMapTexGenMatrix",
-    "_multiPassEnable",
-};
-static igMetaField **g_igPsx2EnvironmentMapShader_fieldHandles[] = {
-    &g_igPsx2EnvironmentMapShader_envMapBlendFuncMetaField,
-    &g_igPsx2EnvironmentMapShader_envMapTexGenMatrixMetaField,
-    &g_igPsx2EnvironmentMapShader_multiPassEnableMetaField,
-};
-static int g_igPsx2EnvironmentMapShader_fieldOffsets[] = {
-    112,
-    116,
-    120,
-};
+void igPsx2EnvironmentMapShader::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_envMapBlendFunc", "_envMapTexGenMatrix", "_multiPassEnable" };
+    static igMetaField **enumStorage[] = { &k_envMapBlendFunc, &k_envMapTexGenMatrix, &k_multiPassEnable };
+    static int offsets[] = { 112, 116, 120 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-void igPsx2EnvironmentMapShader_InitFields(void) {
-    void *temp_s1_2;
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)(g_igPsx2EnvironmentMapShader_metaObject);
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Attrs::igBlendFunctionAttr::getClassTypeLazy();
-    ((igMetaField *)temp_s1)->_persistent = 0;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 1 + temp_s2)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Attrs::igTexGenMatrixAttr::getClassTypeLazy();
-    ((igMetaField *)temp_s1_2)->_persistent = 0;
-    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 2 + temp_s2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)Gap::Attrs::igMultiPassStateAttr::getClassTypeLazy();
-    ((igMetaField *)temp_s1_3)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_fieldTable, g_igPsx2EnvironmentMapShader_fieldHandles, g_igPsx2EnvironmentMapShader_fieldOffsets, temp_s2);
-    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)Gap::Sg::igEnvironmentMapShader2::getClassMetaSafe;
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Attrs::igBlendFunctionAttr::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Attrs::igTexGenMatrixAttr::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Attrs::igMultiPassStateAttr::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_writeProxy = (void (*)())Gap::Sg::igEnvironmentMapShader2::getClassMetaSafe;
+}
+}
 }
 
 int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {

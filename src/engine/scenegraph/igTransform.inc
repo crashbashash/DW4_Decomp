@@ -40,7 +40,7 @@ void igTransform::arkRegister()
 
 CallbackArray *igTransform::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igVisualAttribute::arkRegister, (igMetaObjectCallback)igTransformSource_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igVisualAttribute::arkRegister, (igMetaObjectCallback)Gap::Sg::igTransformSource::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -84,7 +84,7 @@ void igTransform::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
-        metaField->_metaObject = (int)igTransformSource_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igTransformSource::getClassTypeLazy();
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }

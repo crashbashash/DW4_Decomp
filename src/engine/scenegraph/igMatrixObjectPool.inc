@@ -1,52 +1,52 @@
-igMetaObject *g_igMatrixObjectPool_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igMatrixObjectPool_GetOrCreateMetaObject(void) {
-    if (g_igMatrixObjectPool_metaObject == 0) {
-        g_igMatrixObjectPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igMatrixObjectPool_metaObject;
-}
+igMetaObject *igMatrixObjectPool::_Meta;
 
-igMetaObject *igMatrixObjectPool_GetMetaObject(void)
+igMetaObject *igMatrixObjectPool::getClassTypeLazy()
 {
-    igMetaObject *g = g_igMatrixObjectPool_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMatrixObjectPool_EnsureRegistered();
-    return g_igMatrixObjectPool_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igMatrixObjectPool_GetVTable(void) {
-    union U u;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igMatrixObjectPool_vtable[0];
-    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-}
-
-void igMatrixObjectPool_EnsureRegistered(void)
+igMetaObject *igMatrixObjectPool::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMatrixObjectPool_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMatrixObjectPool_callbackList[] = { igMatrixObject_EnsureRegistered, 0 };
+void *igMatrixObjectPool::retrieveVTablePointer()
+{
+    igMatrixObjectPool temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMatrixObjectPool_Register(void) {
+void igMatrixObjectPool::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMatrixObjectPool::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igMatrixObject_EnsureRegistered, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMatrixObjectPool_metaObject,
-        igObjectPool_Register,
-        igObjectPool_GetPublishedMetaObject,
-        igMatrixObjectPool_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Sg::igObjectPool::arkRegisterInternal,
+        Gap::Sg::igObjectPool::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMatrixObjectPool",
-        0x20, /* instance size */
-        igMatrixObjectPool_GetVTable,
+        sizeof(igMatrixObjectPool),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igMatrixObjectPool_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igMatrixObjectPool_GetMetaObjectFunction(void) {
-    igMatrixObjectPool_GetMetaObject();
+}
 }
 

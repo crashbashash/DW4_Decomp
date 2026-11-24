@@ -24,7 +24,6 @@
 #include "dw4/viewer/igActorManager.h"
 #include "dw4/viewer/igLogoRenderer.h"
 #include "dw4/viewer/igViewerDataPumpManager.h"
-#include "dw4/gui/igFieldSynchronizer.h"
 #include "dw4/viewer/igViewModeDispatchView.h"
 #include "dw4/windowinput/igWindowDispatchView.h"
 extern "C" {
@@ -168,43 +167,43 @@ void ViewerSetup_ClearInfos(ViewerSetup *setup)
     igInsightCore_RemoveAllInfos((igInsightCore *)setup->core.p);
 }
 
-static inline void createSynchronizer(igSmartPointer<igFieldSynchronizer> &synchronizer, AdoptReference) {
-    igObject::release(synchronizer.p);
-    synchronizer.p = igFieldSynchronizer_Create(0);
+static inline void createSynchronizer(igSmartPointer<Gap::Gui::igFieldSynchronizer> &synchronizer, AdoptReference) {
+    igObject::release((igObject *)synchronizer.p);
+    synchronizer.p = Gap::Gui::igFieldSynchronizer::_instantiateFromPool(0);
 }
 
 /* Keeps each view-model field and the parameters' field of the same name equal. */
 void igViewManager_SynchronizeParameters(igViewManager *manager, igViewerParameters *parameters) {
-    igSmartPointer<igFieldSynchronizer> synchronizer;
+    igSmartPointer<Gap::Gui::igFieldSynchronizer> synchronizer;
 
     createSynchronizer(synchronizer, AdoptReference());
-    igFieldSynchronizer_AddField(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_viewMatrixMetaField);
-    igFieldSynchronizer_AddField(synchronizer, parameters, g_igViewerParameters_viewMatrixMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_viewMatrixMetaField);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    igFieldSynchronizer_AddField(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_ratioMetaField);
-    igFieldSynchronizer_AddField(synchronizer, parameters, g_igViewerParameters_ratioMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_ratioMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_ratioMetaField);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    igFieldSynchronizer_AddField(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_hfovMetaField);
-    igFieldSynchronizer_AddField(synchronizer, parameters, g_igViewerParameters_hfovMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_hfovMetaField);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    igFieldSynchronizer_AddField(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_nearPlaneMetaField);
-    igFieldSynchronizer_AddField(synchronizer, parameters, g_igViewerParameters_nearPlaneMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_nearPlaneMetaField);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    igFieldSynchronizer_AddField(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_farPlaneMetaField);
-    igFieldSynchronizer_AddField(synchronizer, parameters, g_igViewerParameters_farPlaneMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_farPlaneMetaField);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    igFieldSynchronizer_AddField(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_drawTimeMetaField);
-    igFieldSynchronizer_AddField(synchronizer, parameters, g_igViewerParameters_drawTimeMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_drawTimeMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_drawTimeMetaField);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 }
 

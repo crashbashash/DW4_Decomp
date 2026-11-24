@@ -94,10 +94,10 @@ void igSceneInfo::updateAnimationTime(igDirectory *dir) {
         temp_v0 = (EE_1d6790 *)((Gap::Core::igDirectory *)arg1)->get(var_s2);
         if (0 != ((Gap::Core::igObject *)temp_v0)->isOfType(Gap::Core::igObjectDirEntry::getClassMeta())) {
             temp_s6 = temp_v0->f24;
-            if (((Gap::Core::igObject *)temp_s6)->isOfType(g_igTransformSource_metaObject) != 0) {
+            if (((Gap::Core::igObject *)temp_s6)->isOfType(Gap::Sg::igTransformSource::getClassMeta()) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();
                 var_s0 = ((DW4VC_128_0 *)(temp_s6))->vX();
-                if (((Gap::Core::igObject *)temp_s6)->isOfType(g_igTransformSequence1_5_metaObject) != 0) {
+                if (((Gap::Core::igObject *)temp_s6)->isOfType(Gap::Sg::igTransformSequence1_5::getClassMeta()) != 0) {
                     temp_v1 = temp_s1 + ((DW4VC_260_0 *)(temp_s6))->vX();
                     if (var_s0 < temp_v1) {
                         var_s0 = temp_v1;
@@ -115,14 +115,6 @@ void igSceneInfo::updateAnimationTime(igDirectory *dir) {
     }
 }
 }
-}
-
-int FUN_001d68e0(void) {
-    return 0;
-}
-
-int FUN_001d68f0(void) {
-    return 0;
 }
 
 int FUN_001d6900(Primitive **out) {

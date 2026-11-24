@@ -193,8 +193,13 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_27(O_1c00e0 *arg0, int arg1,
 
 /* Getter: the scale keyframe list (`_scaleList`). */
 
-int FUN_001c0240(igTransformSequence1_5 *self) {
-    return self->_scaleList;
+namespace Gap {
+namespace Sg {
+
+igVec3fList *igTransformSequence::getScaleList() {
+    return _scaleList;
+}
+}
 }
 
 class ProjectionMatrixAttrView {

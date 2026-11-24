@@ -1,10 +1,13 @@
-void Gap__Sg__igTransformSequence1_5__vfunc_66(VC_1dd570 *arg0) {
+namespace Gap {
+namespace Sg {
+
+void igTransformSequence1_5::validateKeyframes() {
     int n, i; float *a; float *b; float dot;
-    if (arg0->v240() & 2) {
-        n = arg0->v156();
+    if (getComponentChannels() & 2) {
+        n = getKeyFrameCount();
         for (i = 0; i < n - 1; i++) {
-            a = arg0->v180(i);
-            b = arg0->v180(i + 1);
+            a = (float *)getQuaternion(i);
+            b = (float *)getQuaternion(i + 1);
             dot = a[0]*b[0] + a[1]*b[1] + a[2]*b[2] + a[3]*b[3];
             if (dot < -0.999989986f) {
                 b[0] = -b[0]; b[1] = -b[1]; b[2] = -b[2]; b[3] = -b[3];
@@ -18,18 +21,20 @@ void Gap__Sg__igTransformSequence1_5__vfunc_66(VC_1dd570 *arg0) {
  * slots, 8 = scale); the key array starts 16 bytes into the list object and each key is 0x10
  * bytes. */
 
-int Gap__Sg__igTransformSequence1_5__vfunc_45(igTransformSequence1_5 *self, int index) {
-    if (self->_drivenChannels & 2) {
-        return *(int *)((char *)(self->_quatList) + 16) + (index * 0x10);
+igVec4f const *igTransformSequence1_5::getQuaternion(int index) const {
+    if (_drivenChannels & 2) {
+        return (const igVec4f *)_quatList->_data + index;
     }
     return 0;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_62(igTransformSequence1_5 *self, long long arg1) {
-    self->_keyframeTimeOffset = arg1;
+void igTransformSequence1_5::setKeyFrameTimeOffset(long long arg1) {
+    _keyframeTimeOffset = arg1;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, KeyMatrixView *m) {
+void igTransformSequence1_5::setMatrix(int index, const igMatrix44f *matrix) {
+    KeyMatrixView *m = (KeyMatrixView *)matrix;
+    KeySequenceView *o = (KeySequenceView *)this;
     int off;
     int i;
     KeyQuatView *q;
@@ -42,14 +47,14 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
     float euler[3];
     float inv[3];
     float rot[16];
-    if (o->_drivenChannels & 1) {
+    if (_drivenChannels & 1) {
         igVec3f *t = &o->_xlateList->_data[index];
         t->vec[0] = m->tx;
         t->vec[1] = m->ty;
         t->vec[2] = m->tz;
     }
     igMatrix44f_SetIdentity(rot);
-    if (o->_drivenChannels & 8) {
+    if (_drivenChannels & 8) {
         s = (float *)&o->_scaleList->_data[index];
         for (i = 0; i < 3; i++) {
             float *r = m->r[i];
@@ -73,9 +78,9 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
     } else {
         igMatrix44f_Copy(rot, (const float *)m);
     }
-    if (o->_drivenChannels & 2) {
+    if (_drivenChannels & 2) {
         igMatrix44f_GetQuaternion((float *)&o->_quatList->_data[index], rot);
-    } else if (o->_drivenChannels & 4) {
+    } else if (_drivenChannels & 4) {
         off = index * 16;
         igMatrix44f_GetQuaternion((float *)((char *)o->_quatList->_data + off), rot);
         pz = &euler[2];
@@ -102,7 +107,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
 
 /* matching construct: the list/arena-reference fields are 4-byte handles; the casts give the typed list views (no layout effect).
  * The three interpolation-data lists (+60/+64/+68) are hypothesised to be Vec3f lists (12-byte elements, two per key); kept as igDataList. */
-void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int idx) {
+void igTransformSequence1_5::insertKeyFrame(int idx) {
     long long sp216;
     igVec3f sp200;
     igVec3f sp184;
@@ -114,62 +119,63 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
     igVec3f sp88;
     V4_1dda90 sp64;
     int s0;
-    sp216 = ((long long *)((igLongList *)t->_timeListLong)->_data)[idx];
-    List_InsertBytes((igDataList *)t->_timeListLong, idx, 1, &sp216, 8);
-    if (t->_drivenChannels & 1) {
-        sp200 = ((igVec3f *)((igVec3fList *)t->_xlateList)->_data)[idx];
-        List_InsertBytes((igDataList *)t->_xlateList, idx, 1, &sp200, 12);
-        if (t->_interpolationDataTranslation != 0) {
+    sp216 = _timeListLong->get(idx);
+    List_InsertBytes((::igDataList *)_timeListLong.p, idx, 1, &sp216, 8);
+    if (_drivenChannels & 1) {
+        sp200 = ((igVec3f *)_xlateList->_data)[idx];
+        List_InsertBytes((::igDataList *)_xlateList.p, idx, 1, &sp200, 12);
+        if (_interpolationDataTranslation != 0) {
             s0 = idx * 2;
-            sp184 = ((igVec3f *)((igDataList *)t->_interpolationDataTranslation)->_data)[idx * 2];
-            sp168 = ((igVec3f *)((igDataList *)t->_interpolationDataTranslation)->_data)[s0 + 1];
-            List_InsertBytes((igDataList *)t->_interpolationDataTranslation, s0, 1, &sp168, 12);
-            List_InsertBytes((igDataList *)t->_interpolationDataTranslation, s0, 1, &sp184, 12);
+            sp184 = ((igVec3f *)_interpolationDataTranslation->_data)[idx * 2];
+            sp168 = ((igVec3f *)_interpolationDataTranslation->_data)[s0 + 1];
+            List_InsertBytes((::igDataList *)_interpolationDataTranslation.p, s0, 1, &sp168, 12);
+            List_InsertBytes((::igDataList *)_interpolationDataTranslation.p, s0, 1, &sp184, 12);
         }
     }
-    if (t->_drivenChannels & 8) {
-        sp152 = ((igVec3f *)((igVec3fList *)t->_scaleList)->_data)[idx];
-        List_InsertBytes((igDataList *)t->_scaleList, idx, 1, &sp152, 12);
-        if (t->_interpolationDataScale != 0) {
+    if (_drivenChannels & 8) {
+        sp152 = ((igVec3f *)_scaleList->_data)[idx];
+        List_InsertBytes((::igDataList *)_scaleList.p, idx, 1, &sp152, 12);
+        if (_interpolationDataScale != 0) {
             s0 = idx * 2;
-            sp136 = ((igVec3f *)((igDataList *)t->_interpolationDataScale)->_data)[idx * 2];
-            sp120 = ((igVec3f *)((igDataList *)t->_interpolationDataScale)->_data)[s0 + 1];
-            List_InsertBytes((igDataList *)t->_interpolationDataScale, s0, 1, &sp120, 12);
-            List_InsertBytes((igDataList *)t->_interpolationDataScale, s0, 1, &sp136, 12);
+            sp136 = ((igVec3f *)_interpolationDataScale->_data)[idx * 2];
+            sp120 = ((igVec3f *)_interpolationDataScale->_data)[s0 + 1];
+            List_InsertBytes((::igDataList *)_interpolationDataScale.p, s0, 1, &sp120, 12);
+            List_InsertBytes((::igDataList *)_interpolationDataScale.p, s0, 1, &sp136, 12);
         }
     }
-    if ((t->_drivenChannels & 2) || (t->_drivenChannels & 4)) {
-        sp64 = ((V4_1dda90 *)((igQuaternionfList *)t->_quatList)->_data)[idx];
-        List_InsertBytes((igDataList *)t->_quatList, idx, 1, &sp64, 16);
-        if (t->_interpolationDataRotation != 0) {
+    if ((_drivenChannels & 2) || (_drivenChannels & 4)) {
+        sp64 = ((V4_1dda90 *)_quatList->_data)[idx];
+        List_InsertBytes((::igDataList *)_quatList.p, idx, 1, &sp64, 16);
+        if (_interpolationDataRotation != 0) {
             s0 = idx * 2;
-            sp104 = ((igVec3f *)((igDataList *)t->_interpolationDataRotation)->_data)[idx * 2];
-            sp88 = ((igVec3f *)((igDataList *)t->_interpolationDataRotation)->_data)[s0 + 1];
-            List_InsertBytes((igDataList *)t->_interpolationDataRotation, s0, 1, &sp88, 12);
-            List_InsertBytes((igDataList *)t->_interpolationDataRotation, s0, 1, &sp104, 12);
+            sp104 = ((igVec3f *)_interpolationDataRotation->_data)[idx * 2];
+            sp88 = ((igVec3f *)_interpolationDataRotation->_data)[s0 + 1];
+            List_InsertBytes((::igDataList *)_interpolationDataRotation.p, s0, 1, &sp88, 12);
+            List_InsertBytes((::igDataList *)_interpolationDataRotation.p, s0, 1, &sp104, 12);
         }
     }
 }
 
 /* Builds key {index}'s transform: rotation (quaternion, or Euler angles in degrees) about the centre of
  * rotation, then the translation, then the scale. */
-void Gap__Sg__igTransformSequence1_5__vfunc_35(igTransformSequence1_5 *self, int index, float *matrix) {
+void igTransformSequence1_5::getMatrix(int index, igMatrix44f *matrixOut) const {
+    float *matrix = (float *)matrixOut;
     bool rotated = false;
     igMatrix44f_SetIdentity(matrix);
-    if (self->_drivenChannels & 2) {
-        FUN_00192810((const float *)&((igTDataList<KeyQuatView> *)self->_quatList)->_data[index], matrix);
+    if (_drivenChannels & 2) {
+        FUN_00192810((const float *)&((igTDataList<KeyQuatView> *)_quatList.p)->_data[index], matrix);
         rotated = true;
-    } else if (self->_drivenChannels & 4) {
-        KeyQuatView *euler = &((igTDataList<KeyQuatView> *)self->_quatList)->_data[index];
+    } else if (_drivenChannels & 4) {
+        KeyQuatView *euler = &((igTDataList<KeyQuatView> *)_quatList.p)->_data[index];
         igMatrix44f_SetEulerRotation(matrix, degToRad(euler->x), degToRad(euler->y), degToRad(euler->z));
         rotated = true;
     }
     if (rotated) {
         float center[3];
         float moved[3];
-        center[0] = self->_centerOfRotation[0];
-        center[1] = self->_centerOfRotation[1];
-        center[2] = self->_centerOfRotation[2];
+        center[0] = _centerOfRotation[0];
+        center[1] = _centerOfRotation[1];
+        center[2] = _centerOfRotation[2];
         Vec3f_TransformDirection(moved, center, matrix);
         center[0] -= moved[0];
         center[1] -= moved[1];
@@ -178,23 +184,25 @@ void Gap__Sg__igTransformSequence1_5__vfunc_35(igTransformSequence1_5 *self, int
         matrix[13] = center[1];
         matrix[14] = center[2];
     }
-    if (self->_drivenChannels & 1) {
-        igVec3f translation = ((igTDataList<igVec3f> *)self->_xlateList)->_data[index];
+    if (_drivenChannels & 1) {
+        igVec3f translation = ((igTDataList<igVec3f> *)_xlateList.p)->_data[index];
         matrix[12] += translation[0];
         matrix[13] += translation[1];
         matrix[14] += translation[2];
     }
-    if (self->_drivenChannels & 8) {
-        igVec3f scale = ((igTDataList<igVec3f> *)self->_scaleList)->_data[index];
+    if (_drivenChannels & 8) {
+        igVec3f scale = ((igTDataList<igVec3f> *)_scaleList.p)->_data[index];
         FUN_00190cb0(matrix, (const float *)&scale);
     }
+}
+}
 }
 
 void FUN_001ddfd0(void) {
     int temp_v0;
 
-    if (g_igTransformSequence1_5_metaObject != 0) {
-        temp_v0 = (int)igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject, "_interpolationMethod");
+    if (Gap::Sg::igTransformSequence1_5::getClassMeta() != 0) {
+        temp_v0 = (int)igMetaObject_FindFieldByName(Gap::Sg::igTransformSequence1_5::getClassMeta(), "_interpolationMethod");
         if (temp_v0 != 0) {
             ((Gap::Core::igCharArrayMetaField *)temp_v0)->setDefault(0, 1);
             ((Gap::Core::igCharArrayMetaField *)temp_v0)->setDefault(1, 3);
@@ -203,14 +211,18 @@ void FUN_001ddfd0(void) {
     }
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int channel, unsigned int mode) {
+namespace Gap {
+namespace Sg {
+
+void igTransformSequence1_5::setInterpolationMethod(int channel, unsigned int mode) {
+    TransformSequenceView *s = (TransformSequenceView *)this;
     if ((s->channels & channel) == 0) { return; }
     switch (channel) {
     case 1:
         if (mode < 3) {
             s->translationMode = mode;
             if (mode == 2) {
-                assignRef(s->translations, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
+                assignRef(s->translations, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)this)->getMemoryPool())));
                 setCount_1de040(s->translations, s->keys->count * 2, 12);
             } else {
                 releaseRef_1de040(s->translations);
@@ -229,7 +241,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
         if (mode < 3) {
             s->rotationMode = mode;
             if (mode == 2) {
-                assignRef(s->rotations, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
+                assignRef(s->rotations, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)this)->getMemoryPool())));
                 setCount_1de040(s->rotations, s->keys->count * 2, 12);
             } else {
                 releaseRef_1de040(s->rotations);
@@ -241,7 +253,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
         if (mode < 3) {
             s->scaleMode = mode;
             if (mode == 2) {
-                assignRef(s->scales, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
+                assignRef(s->scales, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)this)->getMemoryPool())));
                 setCount_1de040(s->scales, s->keys->count * 2, 12);
             } else {
                 releaseRef_1de040(s->scales);
@@ -252,24 +264,25 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
     }
 }
 
-int Gap__Sg__igTransformSequence1_5__vfunc_59(igTransformSequence1_5 *self, int arg1) {
-    if (!(self->_drivenChannels & arg1)) {
+int igTransformSequence1_5::getInterpolationMethod(int arg1) const {
+    if (!(_drivenChannels & arg1)) {
         return -1;
     }
     switch (arg1) {
     case 1:
-        return self->_interpolationMethod[0];
+        return _interpolationMethod[0];
     case 2:
     case 4:
-        return *(unsigned char *)((char *)(self) + 74);
+        return *(unsigned char *)((char *)((::igTransformSequence1_5 *)this) + 74);
     case 8:
-        return *(unsigned char *)((char *)(self) + 75);
+        return *(unsigned char *)((char *)((::igTransformSequence1_5 *)this) + 75);
     default:
         return -1;
     }
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigned char channels) {
+void igTransformSequence1_5::setComponentChannels(unsigned char channels) {
+    TransformSequenceView *s = (TransformSequenceView *)this;
     unsigned char old;
     if ((channels & 2) != 0 && (channels & 4) != 0) { return; }
     old = s->channels;
@@ -277,7 +290,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     if ((channels & 1) != 0) {
         s->translationMode = 1;
         if ((old & 1) == 0) {
-            assignRef_1de4e0(s->translationKeys, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
+            assignRef_1de4e0(s->translationKeys, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)this)->getMemoryPool())));
             setCount_1de4e0(s->translationKeys, s->keys->count, 12);
             releaseRef_1de4e0(s->translations);
             s->translations = 0;
@@ -290,7 +303,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     s->translations = 0;
     if ((channels & 2) != 0 || (channels & 4) != 0) {
         if ((old & 2) == 0 && (old & 4) == 0) {
-            assignRef_1de4e0(s->rotationKeys, SeqTempRef((SeqData *)igQuaternionfList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
+            assignRef_1de4e0(s->rotationKeys, SeqTempRef((SeqData *)igQuaternionfList_Create(((Gap::Core::igObject *)this)->getMemoryPool())));
             setCount_1de4e0(s->rotationKeys, s->keys->count, 16);
         }
         if ((channels & 2) != 0) {
@@ -306,7 +319,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     s->rotations = 0;
     if ((channels & 8) != 0) {
         if ((old & 8) == 0) {
-            assignRef_1de4e0(s->scaleKeys, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
+            assignRef_1de4e0(s->scaleKeys, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)this)->getMemoryPool())));
             setCount_1de4e0(s->scaleKeys, s->keys->count, 12);
         }
         s->scaleMode = 1;
@@ -318,22 +331,24 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     s->scales = 0;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, igVec3f *p, igVec3f *q) {
+void igTransformSequence1_5::setInterpolationData(int idx, int ch, const igVec3f *bezierControlPoint1, const igVec3f *bezierControlPoint2) {
+    igVec3f *p = (igVec3f *)bezierControlPoint1;
+    igVec3f *q = (igVec3f *)bezierControlPoint2;
     L_1de9c0 *l;
     int n;
     int i;
     igVec3f *e;
-    if (t->flags & ch) {
+    if (((T_1de9c0 *)this)->flags & ch) {
         l = 0;
         if (ch & 1) {
-            l = t->a;
+            l = ((T_1de9c0 *)this)->a;
         } else if ((ch & 2) || (ch & 4)) {
-            l = t->b;
+            l = ((T_1de9c0 *)this)->b;
         } else if (ch & 8) {
-            l = t->c;
+            l = ((T_1de9c0 *)this)->c;
         }
         if (l->count == 0) {
-            n = t->tl->count * 2;
+            n = ((T_1de9c0 *)this)->tl->count * 2;
             if (n >= 0) {
                 if (n <= l->cap) {
                     l->count = n;
@@ -352,11 +367,13 @@ void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, igV
  * slots, 8 = scale); the key array starts 16 bytes into the list object and each key is 0x10
  * bytes. */
 
-int Gap__Sg__igTransformSequence1_5__vfunc_48(igTransformSequence1_5 *self, int index) {
-    if (self->_drivenChannels & 4) {
-        return *(int *)((char *)(self->_quatList) + 16) + (index * 0x10);
+igVec3f const *igTransformSequence1_5::getEulerRotation(int index) const {
+    if (_drivenChannels & 4) {
+        return (const igVec3f *)((char *)_quatList->_data + index * 0x10);
     }
     return 0;
+}
+}
 }
 
 void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self, float *out, int from, int to, float t) {
@@ -438,20 +455,24 @@ void igTransformSequence1_5_FindUniformKeys(SequenceKeyTimes *arg0, long long ar
     *arg4 = fmodf(a, b) / b;
 }
 
-long long Gap__Sg__igTransformSequence1_5__vfunc_31(O_1df6e0 *o) {
-    int r = o->a();
+namespace Gap {
+namespace Sg {
+
+long long igTransformSequence1_5::getFirstFrameTime() {
+    int r = ((O_1df6e0 *)this)->a();
     long long v = 0;
     if (r != 0) {
-        v = o->b(0);
+        v = ((O_1df6e0 *)this)->b(0);
     }
-    return o->f80 + v;
+    return ((O_1df6e0 *)this)->f80 + v;
 }
 
-long long Gap__Sg__igTransformSequence1_5__vfunc_32(V_1df740 *arg0) {
-    return arg0->f80 + (arg0->vA() != 0 ? arg0->f88 + arg0->vB() : 0);
+long long igTransformSequence1_5::getLastFrameTime() {
+    return ((V_1df740 *)this)->f80 + (((V_1df740 *)this)->vA() != 0 ? ((V_1df740 *)this)->f88 + ((V_1df740 *)this)->vB() : 0);
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_27(IgForwardTarget *o, int a, int b, int c) { o->slot26(a, b, c, (char *)o + 40, 0); }
+}
+}
 
 /* The igTransformSequence1_5 virtuals the key evaluators call (vfunc_N sits at vtable offset 4N). */
 class TransformSequence1_5Slots {
@@ -476,16 +497,18 @@ extern "C" void igTransformSequence1_5_FindKeys(igTransformSequence1_5 *self, lo
 extern "C" void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
 extern "C" void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
 extern "C" void igTransformSequence1_5_FindUniformKeys(SequenceKeyTimes *arg0, long long arg1, int *arg2, int *arg3, float *arg4);
-extern "C" int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformSequence1_5 *self, float *quat, float *translation, long long time, int *lastKey, int flags);
+
+namespace Gap {
+namespace Sg {
 
 /* Evaluates the translation and rotation tracks at {time}: wraps the time by the play mode, finds the
  * bracketing keys and interpolates between them into {translation} and {quat}. {lastKey} caches the
  * key search position. */
-int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformSequence1_5 *self, float *quat, float *translation, long long time, int *lastKey, int flags) {
+bool igTransformSequence1_5::evaluateRotationAndTranslation(float *quat, float *translation, long long time, int *lastKey, int flags) {
     long long first;
     long long end;
     long long last;
-    igLongList *times;
+    ::igLongList *times;
     long long duration;
     long long rem;
     float t;
@@ -493,37 +516,37 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformS
     int key0;
     float span;
 
-    long long now = time - self->_keyframeTimeOffset;
-    if (!self->_uniformTimeEnabled) {
-        times = (igLongList *)self->_timeListLong;
+    long long now = time - _keyframeTimeOffset;
+    if (!_uniformTimeEnabled) {
+        times = (::igLongList *)_timeListLong.p;
         first = ((long long *)times->_data)[0];
         last = keyTime(times, times->_count - 1);
-        duration = self->_animationDuration;
+        duration = _animationDuration;
         end = first + duration;
     } else {
-        times = (igLongList *)self->_timeListLong;
+        times = (::igLongList *)_timeListLong.p;
         first = 0;
-        last = ((long long *)times->_data)[0] * (long long)(((igQuaternionfList *)self->_quatList)->_count - 1);
-        end = self->_animationDuration;
+        last = ((long long *)times->_data)[0] * (long long)(((igQuaternionfList *)_quatList)->_count - 1);
+        end = _animationDuration;
         duration = end;
     }
     if (duration == 0) {
-        copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(0));
+        copyTranslation(translation, ((TransformSequence1_5Slots *)this)->getTranslationKey(0));
         return 1;
     }
     if (end < now) {
-        switch (self->_playMode) {
+        switch (_playMode) {
         case 1: {
             int lastIndex = times->_count - 1;
-            copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(lastIndex));
-            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(lastIndex));
+            copyTranslation(translation, ((TransformSequence1_5Slots *)this)->getTranslationKey(lastIndex));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(lastIndex));
         }
             return 1;
         case 3:
         case 0:
             UnsignedDivMod64_Cached(now - first, duration, &rem);
             now = first + rem;
-            if (*lastKey != 1 && now < keyTime((igLongList *)self->_timeListLong, *lastKey - 1)) {
+            if (*lastKey != 1 && now < keyTime((::igLongList *)_timeListLong.p, *lastKey - 1)) {
                 *lastKey = 1;
             }
             break;
@@ -536,25 +559,25 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformS
             }
         } break;
         default:
-            copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(0));
-            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+            copyTranslation(translation, ((TransformSequence1_5Slots *)this)->getTranslationKey(0));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(0));
             return 1;
         }
     } else if (now < first) {
-        copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(0));
-        copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+        copyTranslation(translation, ((TransformSequence1_5Slots *)this)->getTranslationKey(0));
+        copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(0));
         return 1;
     }
     if (last < now) {
-        if (self->_playMode == 3) {
+        if (_playMode == 3) {
             float elapsed;
-            key0 = ((igLongList *)self->_timeListLong)->_count - 1;
+            key0 = ((::igLongList *)_timeListLong.p)->_count - 1;
             key1 = 0;
-            if (!self->_uniformTimeEnabled) {
+            if (!_uniformTimeEnabled) {
                 elapsed = (float)(unsigned int)(int)((now - last) >> 18);
                 span = (float)(unsigned int)(int)((end - last) >> 18);
             } else {
-                span = (float)(unsigned int)(int)(((long long *)((igLongList *)self->_timeListLong)->_data)[0] >> 18);
+                span = (float)(unsigned int)(int)(((long long *)((::igLongList *)_timeListLong.p)->_data)[0] >> 18);
                 elapsed = fmodf((float)(unsigned int)(int)(now >> 18), span);
             }
             if (span < 9.99999997e-07f) {
@@ -563,32 +586,29 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotationAndTranslation(igTransformS
                 t = elapsed / span;
             }
         } else {
-            int lastIndex = ((TransformSequence1_5Slots *)self)->getKeyCount() - 1;
-            copyTranslation(translation, ((TransformSequence1_5Slots *)self)->getTranslationKey(lastIndex));
-            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(lastIndex));
+            int lastIndex = ((TransformSequence1_5Slots *)this)->getKeyCount() - 1;
+            copyTranslation(translation, ((TransformSequence1_5Slots *)this)->getTranslationKey(lastIndex));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(lastIndex));
             return 1;
         }
-    } else if (!self->_uniformTimeEnabled) {
-        igTransformSequence1_5_FindKeys(self, now, &key0, &key1, &t, lastKey);
+    } else if (!_uniformTimeEnabled) {
+        igTransformSequence1_5_FindKeys((::igTransformSequence1_5 *)this, now, &key0, &key1, &t, lastKey);
     } else {
-        igTransformSequence1_5_FindUniformKeys((SequenceKeyTimes *)self, now, &key0, &key1, &t);
+        igTransformSequence1_5_FindUniformKeys((SequenceKeyTimes *)this, now, &key0, &key1, &t);
     }
-    igTransformSequence1_5_InterpolateTranslation(self, translation, key0, key1, t);
-    igTransformSequence1_5_InterpolateRotation(self, quat, key0, key1, t);
+    igTransformSequence1_5_InterpolateTranslation((::igTransformSequence1_5 *)this, translation, key0, key1, t);
+    igTransformSequence1_5_InterpolateRotation((::igTransformSequence1_5 *)this, quat, key0, key1, t);
     return 1;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_25(IgForwardTarget_1dfd60 *o, int a, int b) { o->slot24(a, b, (char *)o + 40, 0); }
-
-extern "C" int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *self, float *quat, long long time, int *lastKey, int flags);
 
 /* Evaluates the rotation track at {time}: wraps the time by the play mode, finds the bracketing keys
  * and interpolates between them into {quat}. {lastKey} caches the key search position. */
-int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *self, float *quat, long long time, int *lastKey, int flags) {
+bool igTransformSequence1_5::evaluateRotation(float *quat, long long time, int *lastKey, int flags) {
     long long first;
     long long end;
     long long last;
-    igLongList *times;
+    ::igLongList *times;
     long long duration;
     long long rem;
     float t;
@@ -596,34 +616,34 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *se
     int key0;
     float span;
 
-    long long now = time - self->_keyframeTimeOffset;
-    if (!self->_uniformTimeEnabled) {
-        times = (igLongList *)self->_timeListLong;
+    long long now = time - _keyframeTimeOffset;
+    if (!_uniformTimeEnabled) {
+        times = (::igLongList *)_timeListLong.p;
         first = ((long long *)times->_data)[0];
         last = keyTime(times, times->_count - 1);
-        duration = self->_animationDuration;
+        duration = _animationDuration;
         end = first + duration;
     } else {
-        times = (igLongList *)self->_timeListLong;
+        times = (::igLongList *)_timeListLong.p;
         first = 0;
-        last = ((long long *)times->_data)[0] * (long long)(((igQuaternionfList *)self->_quatList)->_count - 1);
-        end = self->_animationDuration;
+        last = ((long long *)times->_data)[0] * (long long)(((igQuaternionfList *)_quatList)->_count - 1);
+        end = _animationDuration;
         duration = end;
     }
     if (duration == 0) {
-        copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+        copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(0));
         return 1;
     }
     if (end < now) {
-        switch (self->_playMode) {
+        switch (_playMode) {
         case 1:
-            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(times->_count - 1));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(times->_count - 1));
             return 1;
         case 3:
         case 0:
             UnsignedDivMod64_Cached(now - first, duration, &rem);
             now = first + rem;
-            if (*lastKey != 1 && now < keyTime((igLongList *)self->_timeListLong, *lastKey - 1)) {
+            if (*lastKey != 1 && now < keyTime((::igLongList *)_timeListLong.p, *lastKey - 1)) {
                 *lastKey = 1;
             }
             break;
@@ -636,23 +656,23 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *se
             }
         } break;
         default:
-            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(0));
             return 1;
         }
     } else if (now < first) {
-        copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(0));
+        copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(0));
         return 1;
     }
     if (last < now) {
-        if (self->_playMode == 3) {
+        if (_playMode == 3) {
             float elapsed;
-            key0 = ((igLongList *)self->_timeListLong)->_count - 1;
+            key0 = ((::igLongList *)_timeListLong.p)->_count - 1;
             key1 = 0;
-            if (!self->_uniformTimeEnabled) {
+            if (!_uniformTimeEnabled) {
                 elapsed = (float)(unsigned int)(int)((now - last) >> 18);
                 span = (float)(unsigned int)(int)((end - last) >> 18);
             } else {
-                span = (float)(unsigned int)(int)(((long long *)((igLongList *)self->_timeListLong)->_data)[0] >> 18);
+                span = (float)(unsigned int)(int)(((long long *)((::igLongList *)_timeListLong.p)->_data)[0] >> 18);
                 elapsed = fmodf((float)(unsigned int)(int)(now >> 18), span);
             }
             if (span < 9.99999997e-07f) {
@@ -661,25 +681,27 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *se
                 t = elapsed / span;
             }
         } else {
-            copyQuaternion(quat, ((TransformSequence1_5Slots *)self)->getQuaternionKey(((TransformSequence1_5Slots *)self)->getKeyCount() - 1));
+            copyQuaternion(quat, ((TransformSequence1_5Slots *)this)->getQuaternionKey(((TransformSequence1_5Slots *)this)->getKeyCount() - 1));
             return 1;
         }
-    } else if (!self->_uniformTimeEnabled) {
-        igTransformSequence1_5_FindKeys(self, now, &key0, &key1, &t, lastKey);
+    } else if (!_uniformTimeEnabled) {
+        igTransformSequence1_5_FindKeys((::igTransformSequence1_5 *)this, now, &key0, &key1, &t, lastKey);
     } else {
-        igTransformSequence1_5_FindUniformKeys((SequenceKeyTimes *)self, now, &key0, &key1, &t);
+        igTransformSequence1_5_FindUniformKeys((SequenceKeyTimes *)this, now, &key0, &key1, &t);
     }
-    igTransformSequence1_5_InterpolateRotation(self, quat, key0, key1, t);
+    igTransformSequence1_5_InterpolateRotation((::igTransformSequence1_5 *)this, quat, key0, key1, t);
     return 1;
 }
 
 
-bool Gap__Sg__igTransformSequence1_5__vfunc_29(igTransformSequence1_5 *o) {
-    if (o->_centerOfRotation != g_vec3Zero) {
+bool igTransformSequence1_5::isTransformable() const {
+    if (_centerOfRotation != g_vec3Zero) {
         return false;
     }
-    if (o->_interpolationDataTranslation != 0 || o->_interpolationDataRotation != 0 || o->_interpolationDataScale != 0) {
+    if (_interpolationDataTranslation != 0 || _interpolationDataRotation != 0 || _interpolationDataScale != 0) {
         return false;
     }
     return true;
+}
+}
 }

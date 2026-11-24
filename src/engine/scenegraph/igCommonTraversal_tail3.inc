@@ -169,7 +169,7 @@ void igCommonTraversal::begin(igNode *root) {
     unit = attr->_cachedUnitID + m->_firstUnit[unit];
     list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
     list->append(attr);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (igAttrStack *)list, unit);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (::igAttrStack *)list, unit);
     igTraversal::begin(root);
 }
 }
@@ -214,7 +214,7 @@ void igCommonTraversal::end(igNode *arg1) {
         e->fn(v, m->arg);
     }
     e->count = e->count - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (igAttrStack *)e, idx);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (::igAttrStack *)e, idx);
     igTraversal::end(arg1);
 }
 }
@@ -434,7 +434,7 @@ static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *a
         ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
     }
     stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (::igAttrStack *)stack, slot);
 }
 static inline void setTransformMvm(TransformView *transform, MatrixAttrView *attr) {
     if (attr != 0) {
@@ -551,7 +551,7 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
         }
     }
     stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
+    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (::igAttrStack *)stack, slot);
     if (result == 2) {
         return 2;
     }

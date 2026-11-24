@@ -36,8 +36,8 @@ CallbackArray *igViewerAction_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerAction_metaObject,
-        igAction_Register,
-        igAction_GetPublishedMetaObject,
+        Gap::Gui::igAction::arkRegisterInternal,
+        Gap::Gui::igAction::getClassMeta,
         igViewerAction_GetMetaObjectFunction,
         "igViewerAction",
         0x18, /* instance size */

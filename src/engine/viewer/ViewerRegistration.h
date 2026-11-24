@@ -112,7 +112,6 @@ extern "C" void *igViewerAction_GetMetaObject(void);
 extern "C" int g_igViewerAction_vtable[4];
 extern "C" int igViewerAction_GetVTable(void);
 extern "C" void igViewerAction_EnsureRegistered(void);
-#include "dw4/gui/igAction.h"
 extern "C" CallbackArray *igViewerAction_Register(void);
 extern "C" void igViewerAction_GetMetaObjectFunction(void);
 extern "C" void igViewerAction_InitFields(void);

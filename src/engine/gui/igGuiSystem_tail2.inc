@@ -171,20 +171,12 @@ void igHotKeyEventReceiver_AddButton(igHotKeyEventReceiver *receiver, int button
     igHotKeyEventReceiver_AddBinding(receiver, 0, button, action);
 }
 
-static inline void assign(igObject **slot, igObject *value) {
-    igObject *old;
-    igObject::ref(value);
-    old = *slot;
-    igObject::release(old);
-    *slot = value;
-}
-
 void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, int button, igObject *action) {
-    igSmartPointer<Entry> entry((Entry *)igHotKeyBinding_Create((int)(((Gap::Core::igObject *)receiver)->getMemoryPool())));
-    entry->a = key;
-    entry->b = button;
-    assign(&entry->value, action);
-    ((Gap::Core::igObjectList *)receiver->_hotKeyList)->append((Gap::Core::igObject *)(entry.get()));
+    igSmartPointer<Gap::Gui::igHotKeyBinding> binding(Gap::Gui::igHotKeyBinding::_instantiateFromPool(((Gap::Core::igObject *)receiver)->getMemoryPool()));
+    binding->_key = key;
+    binding->_button = button;
+    binding->_action = (Gap::Gui::igAction *)action;
+    ((Gap::Core::igObjectList *)receiver->_hotKeyList)->append((Gap::Core::igObject *)(binding.get()));
 }
 
 void igHotKeyEventReceiver_RemoveBinding(igHotKeyEventReceiver *receiver, int button) {

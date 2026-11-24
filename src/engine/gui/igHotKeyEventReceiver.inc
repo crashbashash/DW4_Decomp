@@ -44,7 +44,7 @@ void igHotKeyEventReceiver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igHotKeyEventReceiver_Register);
 }
 
-static igMetaObjectCallback g_igHotKeyEventReceiver_callbackList[] = { igHotKeyBindingList_RunStaticInit, 0 };
+static igMetaObjectCallback g_igHotKeyEventReceiver_callbackList[] = { Gap::Gui::igHotKeyBindingList::arkRegister, 0 };
 
 CallbackArray *igHotKeyEventReceiver_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -89,7 +89,7 @@ void igHotKeyEventReceiver_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igHotKeyEventReceiver_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igHotKeyBindingList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gui::igHotKeyBindingList::getClassTypeLazy();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igHotKeyEventReceiver_fieldTable, g_igHotKeyEventReceiver_fieldHandles, g_igHotKeyEventReceiver_fieldOffsets, temp_s2);
 }

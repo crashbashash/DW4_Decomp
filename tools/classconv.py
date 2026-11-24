@@ -87,7 +87,9 @@ import memberize  # noqa: E402
 
 SYMBOLS = "config/SLUS-20836/symbols.txt"
 UNIT_OBJECTS = "config/SLUS-20836/unit-objects.json"
-LIBRARY_DIRS = {"Core": "src/engine/core", "Math": "src/engine/maths", "Attrs": "src/engine/attrs",
+# a library's source directories (the DataPump classes are igCore's in the kit and live in retail's own library file)
+LIBRARY_DIRS = {"Core": ("src/engine/core", "src/engine/datapump"), "Math": "src/engine/maths",
+                "Attrs": "src/engine/attrs",
                 "Gfx": "src/engine/gfx", "Sg": "src/engine/scenegraph", "Gui": "src/engine/gui",
                 "Insight": "src/engine/insight", "Viewer": "src/engine/viewer"}
 
@@ -568,10 +570,12 @@ class Tree:
         return changed
 
     def files(self, lib):
-        d = LIBRARY_DIRS.get(lib)
-        if d is None:
+        dirs = LIBRARY_DIRS.get(lib)
+        if dirs is None:
             raise ConvError("no source directory for library %s (classconv.LIBRARY_DIRS)" % lib)
-        return sorted(os.path.join(d, f) for f in os.listdir(self.path(d))
+        if isinstance(dirs, str):
+            dirs = (dirs,)
+        return sorted(os.path.join(d, f) for d in dirs for f in os.listdir(self.path(d))
                       if f.endswith((".inc", ".cpp", ".h")))
 
     def files_naming(self, lib, word):

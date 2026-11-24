@@ -248,6 +248,7 @@ igGraphPathList	Sg	igTObjectList<igGraphPath>
 igGeometryList	Sg	igTObjectList<igGeometry>
 igCamera	Sg
 igSceneInfo	Sg
+igTransformSource	Sg
 igTransform	Sg
 igProbe	Sg
 igIntersectTraversal	Sg
@@ -257,3 +258,31 @@ igProjectiveShadowShader	Sg
 igPlanarShadowShader	Sg
 igOverrideAttrSet	Sg
 igEnvironmentMapShader2	Sg
+igObjectPool	Sg
+igRenderPackage	Sg
+igRenderPackageList	Sg	igTNonRefCountedObjectList<igRenderPackage>
+igRenderPackagePool	Sg
+igMatrixObjectPool	Sg
+igBlendMatricesAttrPool	Sg
+igLightStateAttrPool	Sg
+igModelViewMatrixAttrPool	Sg
+igProjectionMatrixAttrPool	Sg
+igTextureMatrixAttrPool	Sg
+igTimeAttrPool	Sg
+igVertexBlendMatrixAttrPool	Sg
+igVertexBlendMatrixListAttrPool	Sg
+igNonRefCountedObjectStack	Core
+igAttrStack	Sg
+igAttrStackList	Sg	igTObjectList<igAttrStack>
+igTransformList	Sg	igTObjectList<igTransform>
+igNonRefCountedTransformList	Sg	igTNonRefCountedObjectList<igTransform>
+igTransformSequence	Sg
+igTransformSequence1_5	Sg
+igPsx2EnvironmentMapShader	Sg
+igEnvironmentMapShader2List	Sg	igTObjectList<igEnvironmentMapShader2>
+igFieldChangeView	Gui
+igFieldChangeViewList	Gui	igTObjectList<igFieldChangeView>
+igFieldSynchronizer	Gui
+igAction	Gui
+igHotKeyBinding	Gui
+igHotKeyBindingList	Gui	igTObjectList<igHotKeyBinding>

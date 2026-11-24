@@ -17,7 +17,7 @@ bool igTransform::isTransformable() const
     if (_transformInput == 0) {
         return true;
     }
-    return ((DW4VC_116_0 *)(_transformInput.p))->vX();
+    return _transformInput->isTransformable();
 }
 }
 }

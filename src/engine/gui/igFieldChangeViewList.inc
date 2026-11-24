@@ -1,53 +1,52 @@
-igMetaObject *g_igFieldChangeViewList_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igFieldChangeViewList_GetOrCreateMetaObject(void) {
-    if (g_igFieldChangeViewList_metaObject == 0) {
-        g_igFieldChangeViewList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igFieldChangeViewList_metaObject;
-}
+igMetaObject *igFieldChangeViewList::_Meta;
 
-igMetaObject *igFieldChangeViewList_GetMetaObject(void)
+igMetaObject *igFieldChangeViewList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igFieldChangeViewList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igFieldChangeViewList_EnsureRegistered();
-    return g_igFieldChangeViewList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igFieldChangeViewList_GetVTable(void) {
-    struct Obj obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igFieldChangeViewList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igFieldChangeViewList_EnsureRegistered(void)
+igMetaObject *igFieldChangeViewList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igFieldChangeViewList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igFieldChangeViewList_callbackList[] = { igFieldChangeView_EnsureRegistered, 0 };
+void *igFieldChangeViewList::retrieveVTablePointer()
+{
+    igFieldChangeViewList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igFieldChangeViewList_Register(void) {
+void igFieldChangeViewList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igFieldChangeViewList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igFieldChangeView::arkRegister, 0 };
+
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igFieldChangeViewList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igFieldChangeViewList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFieldChangeViewList",
-        0x14, /* instance size */
-        igFieldChangeViewList_GetVTable,
+        sizeof(igFieldChangeViewList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igFieldChangeViewList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igFieldChangeViewList_GetMetaObjectFunction(void) {
-    igFieldChangeViewList_GetMetaObject();
+}
 }
 

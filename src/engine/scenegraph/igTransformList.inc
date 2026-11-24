@@ -1,54 +1,52 @@
-igMetaObject *g_igTransformList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igTransformList_GetOrCreateMetaObject(void) {
-    if (g_igTransformList_metaObject == 0) {
-        g_igTransformList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTransformList_metaObject;
-}
+igMetaObject *igTransformList::_Meta;
 
-igMetaObject *igTransformList_GetMetaObject(void)
+igMetaObject *igTransformList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igTransformList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTransformList_EnsureRegistered();
-    return g_igTransformList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igTransformList_GetVTable(void) {
-    int tmp[8];
-    int off;
-    igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&g_igTransformList_vtable[0];
-    off = g_objectSystem->vtableProbeOffset;
-    return *(int *)((char *)tmp + off);
-}
-
-void igTransformList_EnsureRegistered(void)
+igMetaObject *igTransformList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igTransformList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igTransformList_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
+void *igTransformList::retrieveVTablePointer()
+{
+    igTransformList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igTransformList_Register(void) {
+void igTransformList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTransformList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igTransform::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTransformList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igTransformList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTransformList",
-        0x14, /* instance size */
-        igTransformList_GetVTable,
+        sizeof(igTransformList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igTransformList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igTransformList_GetMetaObjectFunction(void) {
-    igTransformList_GetMetaObject();
+}
 }
 

@@ -1,52 +1,52 @@
-igMetaObject *g_igVertexBlendMatrixListAttrPool_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igVertexBlendMatrixListAttrPool_GetOrCreateMetaObject(void) {
-    if (g_igVertexBlendMatrixListAttrPool_metaObject == 0) {
-        g_igVertexBlendMatrixListAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igVertexBlendMatrixListAttrPool_metaObject;
-}
+igMetaObject *igVertexBlendMatrixListAttrPool::_Meta;
 
-igMetaObject *igVertexBlendMatrixListAttrPool_GetMetaObject(void)
+igMetaObject *igVertexBlendMatrixListAttrPool::getClassTypeLazy()
 {
-    igMetaObject *g = g_igVertexBlendMatrixListAttrPool_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igVertexBlendMatrixListAttrPool_EnsureRegistered();
-    return g_igVertexBlendMatrixListAttrPool_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igVertexBlendMatrixListAttrPool_GetVTable(void) {
-    int obj[8];
-    igObject_InitHeader((igObject *)obj);
-    obj[0] = (int)&g_igVertexBlendMatrixListAttrPool_vtable[0];
-    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igVertexBlendMatrixListAttrPool_EnsureRegistered(void)
+igMetaObject *igVertexBlendMatrixListAttrPool::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igVertexBlendMatrixListAttrPool_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igVertexBlendMatrixListAttrPool_callbackList[] = { igVertexBlendMatrixListAttr_EnsureRegistered, 0 };
+void *igVertexBlendMatrixListAttrPool::retrieveVTablePointer()
+{
+    igVertexBlendMatrixListAttrPool temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igVertexBlendMatrixListAttrPool_Register(void) {
+void igVertexBlendMatrixListAttrPool::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igVertexBlendMatrixListAttrPool::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igVertexBlendMatrixListAttr_EnsureRegistered, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igVertexBlendMatrixListAttrPool_metaObject,
-        igObjectPool_Register,
-        igObjectPool_GetPublishedMetaObject,
-        igVertexBlendMatrixListAttrPool_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Sg::igObjectPool::arkRegisterInternal,
+        Gap::Sg::igObjectPool::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igVertexBlendMatrixListAttrPool",
-        0x20, /* instance size */
-        igVertexBlendMatrixListAttrPool_GetVTable,
+        sizeof(igVertexBlendMatrixListAttrPool),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igVertexBlendMatrixListAttrPool_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igVertexBlendMatrixListAttrPool_GetMetaObjectFunction(void) {
-    igVertexBlendMatrixListAttrPool_GetMetaObject();
+}
 }
 
