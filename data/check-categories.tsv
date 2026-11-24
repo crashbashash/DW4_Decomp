@@ -5402,6 +5402,7 @@
 001dd4b0	UnsignedDivMod64_Cached	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001dd570	Gap__Sg__igTransformSequence1_5__vfunc_66	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001dd690	Gap__Sg__igTransformSequence1_5__vfunc_45	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
+001dd6c0	igTransformSequence1_5_UserMakeConcrete	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001dd820	Gap__Sg__igTransformSequence1_5__vfunc_62	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001dd830	Gap__Sg__igTransformSequence1_5__vfunc_34	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001dda90	Gap__Sg__igTransformSequence1_5__vfunc_37	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)

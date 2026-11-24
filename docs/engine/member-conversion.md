@@ -791,6 +791,19 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    confidence. Open: whether the rest of the DataPump library (`igLongStack`, `igMatrixStack`, `igDataPump`) is igCore's
    too. Retail's copies of the stack's `getClassMeta` and `getMeta` (0x1462f0, 0x149370) are linked in the window-input
    unit, so that unit keeps them as C definitions reading `getClassMeta()`, as attrs does for igNamedObject.
+   `igSorter` is converted (spec scratch/SgSorter/specs/sorter.py: twenty-five typed smart-pointer fields; slots 21-22
+   are the kit's `getOutput(igAttrStackManager *)`, which returns `_dlist`, and `reset`, which empties the lists). The igSmartPointer<T> constructors and
+   destructors its `retrieveVTablePointer` temporary needs are the compiler's template copies; the C-named stand-ins
+   are gone, and gui and viewer still call two of them (`igDisplayListAttr`, `igCullFaceAttr`) by their symbols.txt
+   names through the prototypes in igSmartPointer.h. The list destructor (0x1970e0) needs `--at` in the unit's
+   rows: the present row had it stripped. `userConstruct` open-codes the list append (byte-only, commented).
+   `igAttrStackManager` and `igNonRefCountedAttrStackManagerList` are converted (spec scratch/SgSorter/specs/manager.py;
+   the kit's names for push/pop, the light-state members, flush, setup and registration). `MarkStackChanged`
+   (0x1b1490, the kit's private `updateAttrUpdateList`) stays a free function for now, as do the open-coded fast
+   push/pop helpers its other callers use. Several bodies keep byte-only shapes, each commented: the push members
+   hold the stack list and then the stack in one variable, and the light-state members read three smart-pointer
+   fields through the pointer word (`.p`) or through view casts, because `operator->` numbers the load later and
+   swaps saved registers.
 7. the game's `be*` classes last.
 
 ## Known differences and gaps

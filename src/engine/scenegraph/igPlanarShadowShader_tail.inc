@@ -111,23 +111,23 @@ void igPlanarShadowShader::shade(igCommonTraversal *arg1) {
     int i;
     ((VA_1d3e20 *)_shadowColorAttr.get())->v30(_shadowColor.vec);
     ((VB *)_stencilState.get())->v30(_shadowUseStencil);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627a8)[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627b0)[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627b8)[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)_shadowColorAttr.get());
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627c8)[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627c0)[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)_stencilState.get());
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627d0)[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627d8)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627a8)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627b0)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627b8)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)_shadowColorAttr.get());
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627c8)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627c0)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)_stencilState.get());
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627d0)[0]);
+    ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627d8)[0]);
     if (_shadowUseBlend != 0) {
-        igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_00562798)[0]);
+        ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_00562798)[0]);
     } else {
-        igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627a0)[0]);
+        ((igAttrStackManager *)s1)->pushOverride((igAttr *)((int *)DAT_005627a0)[0]);
     }
     FUN_001d3c60((::igPlanarShadowShader *)this, (::igCommonTraversal *)arg1);
     for (i = 0; i < ((::igDataList *)_lights.get())->_count; i++) {
-        if (igAttrStackManager_IsLightEnabled((igAttrStackManager *)s1, ((::igLightAttr **)((::igDataList *)_lights.get())->_data)[i]) != 0) {
+        if (s1->getLightState((igLightAttr *)(((::igLightAttr **)((::igDataList *)_lights.get())->_data)[i]))) {
             int *m = (int *)((int *)((::igDataList *)_mvmList.get())->_data)[i];
             ::igAttrStack *nd;
             int *s5;
@@ -136,7 +136,7 @@ void igPlanarShadowShader::shade(igCommonTraversal *arg1) {
             igMatrix44f_Copy((float *)sp70, (const float *)&arg1->_viewMatInv);
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)((char *)m + 12));
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)&arg1->_viewMat);
-            nd = (::igAttrStack *)((int *)((::igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)Gap::Attrs::igProjectionMatrixAttr::getClassMeta())->_id]];
+            nd = (::igAttrStack *)((int *)s1->_attrStacks->_data)[s1->_attrStackIndexTable[((igMetaObject *)Gap::Attrs::igProjectionMatrixAttr::getClassMeta())->_id]];
             if (nd->_cachedOverride >= 0) {
                 s5 = (int *)((int *)nd->_data)[nd->_cachedOverride];
             } else if (nd->_count != 0) {
@@ -149,25 +149,25 @@ void igPlanarShadowShader::shade(igCommonTraversal *arg1) {
             if (pool->_freeIndex >= pool->_count) igObjectPool_Grow(pool, (::igObject *(*)(int))((void *)&Gap::Attrs::igProjectionMatrixAttr::_instantiateFromPool));
             o = (char *)((int *)pool->_data)[pool->_freeIndex++];
             igMatrix44f_Multiply((float *)(o + 12), (const float *)sp70, (const float *)((char *)s5 + 12));
-            FUN_001b1030((igAttrStackManager *)s1, (::igAttr *)o);
+            ((igAttrStackManager *)s1)->pushAttr((igAttr *)o);
             igTraversal_TraverseChildren((::igTraversal *)arg1, (::igNode *)this);
-            FUN_001b1100((struct A_1b1100 *)s1, (struct B_1b1100 *)o);
+            ((igAttrStackManager *)s1)->popAttr((igAttr *)o);
         }
     }
     if (_shadowUseBlend != 0) {
-        igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_00562798)[0]);
+        ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_00562798)[0]);
     } else {
-        igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627a0)[0]);
+        ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627a0)[0]);
     }
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627d8)[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627d0)[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)_stencilState.get());
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627c0)[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627c8)[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)_shadowColorAttr.get());
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627b8)[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627b0)[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s1, (::igAttr *)((int *)DAT_005627a8)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627d8)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627d0)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)_stencilState.get());
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627c0)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627c8)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)_shadowColorAttr.get());
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627b8)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627b0)[0]);
+    ((igAttrStackManager *)s1)->popOverride((igAttr *)((int *)DAT_005627a8)[0]);
 }
 }
 }

@@ -51,6 +51,6 @@ void FUN_001d9ac0(struct A_1d9ac0 *arg0, int arg1, int arg2) {
 }
 
 void FUN_001d9bb0(void *arg0, int arg1) {
-    FUN_001b0250((PendingValueCollector *)arg1, (PendingIntList *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 12)));
+    ((Gap::Sg::igAttrStackManager *)arg1)->flushUpdateAttrsNoReset((Gap::Attrs::igNonRefCountedAttrList *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 12)));
 }
 

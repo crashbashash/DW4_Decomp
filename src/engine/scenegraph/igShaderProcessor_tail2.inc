@@ -3,10 +3,10 @@ namespace Sg {
 
 /* The kit's igAttrStackManager::getAttrHandle(attr) and fastPopAttr(attr, handle); this build's pop runs the
  * stack's pop procedure only when the popped attribute is the stack's top. */
-static inline int attrHandleOf(igAttrStackManager *manager, const igAttr *attr) {
+static inline int attrHandleOf(::igAttrStackManager *manager, const igAttr *attr) {
     return attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
 }
-static inline void fastPopAttr(igAttrStackManager *manager, const igAttr *attr, int attrHandle) {
+static inline void fastPopAttr(::igAttrStackManager *manager, const igAttr *attr, int attrHandle) {
     AttrObjectStack *stack = getAttrStack(manager, attrHandle);
     int last = stack->_count - 1;
     ::igObject **data = stack->_data;
@@ -36,7 +36,7 @@ IG_TRAVERSAL_RETURN igShaderProcessor::shade(igSimpleShaderDispatchView *shader,
 {
     /* matching construct: the declaration order (pass and the index the push and pop loops share before stop,
      * pushCount ahead of passCount and passMask) sets retail's saved registers and spill slots. */
-    igAttrStackManager *attrStacks = (igAttrStackManager *)ct->_attrStack;
+    ::igAttrStackManager *attrStacks = (::igAttrStackManager *)ct->_attrStack.get();
     int pass;
     int i;
     bool stop = false;

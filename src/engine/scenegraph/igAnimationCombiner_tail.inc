@@ -170,11 +170,16 @@ void igAnimationCombiner_SetHierarchyUpdated(igAnimationCombiner *self, char arg
     self->_hierarchyUpdated = arg1;
 }
 
-bool Gap::Sg::igTransformSequence::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) {
+namespace Gap {
+namespace Sg {
+
+bool igTransformSequence::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) {
     float matrix[16];
     bool result = ((igTransformSource *)this)->getMatrix(*(igMatrix44f *)matrix, time, cachedLastTimeFrame, flags);
     igMatrix44f_GetQuaternion(quaternion, matrix);
     igMatrix44f_GetTranslation(matrix, translation);
     return result;
+}
+}
 }
 

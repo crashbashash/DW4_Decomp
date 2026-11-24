@@ -112,11 +112,11 @@ void igViewerRenderer_PushLightStates(igViewerRenderer *self) {
     int i;
 
     attrStack = (igAttrStackManager *)((igFrustCullTraversal *)self->_sceneTraversal)->_attrStack;
-    igAttrStackManager_PushLightStateAttr(attrStack, (igLightStateAttr *)self->_headlightStateAttr, 0);
+    ((Gap::Sg::igAttrStackManager *)attrStack)->pushLightState((Gap::Attrs::igLightStateAttr *)self->_headlightStateAttr, 0);
     if (attrStack->_simpleLightMgr == 0 && ((igViewerParameters *)self->_parameters)->_useSceneLights == 0) {
         count = ((igObjectList *)self->_lightStateList)->_count;
         for (i = 0; i < count; i++) {
-            igAttrStackManager_PushLightStateAttr(attrStack, ((igLightStateAttr **)((igObjectList *)self->_lightStateList)->_data)[i], 1);
+            ((Gap::Sg::igAttrStackManager *)attrStack)->pushLightState((Gap::Attrs::igLightStateAttr *)(((igLightStateAttr **)((igObjectList *)self->_lightStateList)->_data)[i]), 1);
         }
     }
 }
@@ -127,11 +127,11 @@ void igViewerRenderer_PopLightStates(igViewerRenderer *self) {
     int i;
 
     attrStack = (igAttrStackManager *)((igFrustCullTraversal *)self->_sceneTraversal)->_attrStack;
-    igAttrStackManager_PopLightStateAttr(attrStack, (igLightStateAttr *)self->_headlightStateAttr, 0);
+    ((Gap::Sg::igAttrStackManager *)attrStack)->popLightState((Gap::Attrs::igLightStateAttr *)self->_headlightStateAttr, 0);
     if ((attrStack->_simpleLightMgr == 0) && (((igViewerParameters *)self->_parameters)->_useSceneLights == 0)) {
         count = ((igObjectList *)self->_lightStateList)->_count;
         for (i = 0; i < count; i++) {
-            igAttrStackManager_PopLightStateAttr(attrStack, ((igLightStateAttr **)((igObjectList *)self->_lightStateList)->_data)[i], 1);
+            ((Gap::Sg::igAttrStackManager *)attrStack)->popLightState((Gap::Attrs::igLightStateAttr *)(((igLightStateAttr **)((igObjectList *)self->_lightStateList)->_data)[i]), 1);
         }
     }
 }
@@ -401,8 +401,8 @@ void igViewerRenderer_ViewportResized(igViewerRenderer *self) {
     igFrustCullTraversal *traversal;
 
     traversal = (igFrustCullTraversal *)self->_sceneTraversal;
-    igAttrStackManager_Setup((igAttrStackManager *)traversal->_attrStack, Gap::Attrs::igViewportAttr::getClassMeta(),
-                 (igAttrDefaultManager *)traversal->_defaultManager, (igVisualContextCapabilityManager *)traversal->_capabilityManager);
+    ((Gap::Sg::igAttrStackManager *)traversal->_attrStack)->setup(Gap::Attrs::igViewportAttr::getClassMeta(),
+                 (Gap::Attrs::igAttrDefaultManager *)traversal->_defaultManager, (Gap::Gfx::igCapabilityManager *)traversal->_capabilityManager);
 }
 
 void igViewerRenderer_UpdateProjection(igViewerRenderer *self) {

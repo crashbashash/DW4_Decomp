@@ -239,7 +239,6 @@ extern igMetaObject *g_igAnimationTransitionDefinitionList_metaObject;
 extern igMetaObject *g_igAnimationTransitionParams_metaObject;
 extern igMetaObject *g_igAnimationTransitionPoint_metaObject;
 extern igMetaObject *g_igAnimationTransitionPointList_metaObject;
-extern igMetaObject *g_igAttrStackManager_metaObject;
 extern igMetaObject *g_igBitMask_metaObject;
 extern igMetaObject *g_igBlendListRecord_metaObject;
 extern igMetaObject *g_igBlendMatrixSelect_metaObject;
@@ -253,10 +252,8 @@ extern igMetaObject *g_igEnbayaAnimationState_metaObject;
 extern igMetaObject *g_igEnbayaContextPool_metaObject;
 extern igMetaObject *g_igModelViewMatrixBoneSelect_metaObject;
 extern igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;
-extern igMetaObject *g_igNonRefCountedAttrStackManagerList_metaObject;
 extern igMetaObject *g_igOverrideAttrSet_metaObject;
 extern igMetaObject *g_igProjectiveShadowShader_metaObject;
-extern igMetaObject *g_igSorter_metaObject;
 extern igMetaObject *g_igTransformRecorder_metaObject;
 extern igMetaObject *g_igTransformSource_metaObject;
 extern igMetaObject *g_igTransformStack_metaObject;
@@ -304,7 +301,6 @@ struct V { int x; int y; int z; int w; };
 union U_1969d0 { int vt; char b[48]; };
 union U_196c10 { int vt; char b[144]; };
 
-extern int g_igSorter_vtable[4];
 extern int DAT_00528620[8];
 
 extern "C" void** FUN_001380e0(void**, short);
@@ -450,10 +446,6 @@ struct Obj_1a4e30 { int *vt; char pad[28]; };
 extern "C" int g_igBitMask_vtable[4];
 
 union U_1a4fd0 { int vt; int w[16]; void *p[16]; char b[64]; };
-struct Obj_1a5260 { int *vt; char pad[28]; };
-extern "C" int g_igNonRefCountedAttrStackManagerList_vtable[4];
-struct Obj_1a53d0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; };
-extern "C" int g_igAttrStackManager_vtable[4];
 struct Obj_1a59a0 { int *vt; char pad[28]; };
 union U_1a5b00 { int vt; int w[16]; void *p[16]; char b[64]; };
 typedef struct { int *vt; int w[7]; int s; } Obj_1a5e10;
@@ -774,10 +766,8 @@ struct S_1af7e0 { char pad32[32]; L_1af7e0 *l; };
 struct A_1af890 { int p0; int p1; int p2; int p3; int *arr; };
 struct B { int p0; int p1; int f8; int p3; int p4; int f20; };
 struct O_1af890 { int p0; int p1; int p2; int n; struct A_1af890 *l16; int p5; struct B *b24; struct B *b28; char pad[12]; struct B *b44; char pad2[16]; struct B *b64; };
-struct L_1af920 { char pad8[8]; int n; int cap; int *data; };
-struct Z { char pad56[56]; int f56; };
-
-extern "C" struct L_1af920 *DAT_00562580[4];
+/* The live attribute stack managers, and the registered attribute types each new manager builds stacks for. */
+extern "C" Gap::Sg::igNonRefCountedAttrStackManagerList *DAT_00562580[4];
 
 struct K { void *p; K(void *x) { p = x; } ~K() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 struct AttrStackList {
@@ -795,8 +785,7 @@ struct Finder {
         return -1;
     }
 };
-typedef struct R_1afb00 { char pad4[4]; int f4; } R_1afb00;
-extern "C" R_1afb00 *DAT_00562578[4];
+extern "C" igMetaObjectList *DAT_00562578[4];
 struct RefObj { int w0; int references; int count; int capacity; void **data; };
 
 struct Finder_1afb60 {
@@ -2529,7 +2518,6 @@ struct S_1d6190 { char p0[32]; float f32; float f36; float f40; float f44; float
 struct R_1d6240 { int w0; int rc; };
 struct L_1d6240 { char pad[8]; int cnt; int cap; int *data; };
 struct S_1d6240 { char pad[64]; struct L_1d6240 *f64; };
-class DW4VC_112_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(); };
 
 
 typedef struct NodeList { char p0[8]; unsigned count; char p1[4]; int *data; } NodeList;
@@ -2791,52 +2779,9 @@ typedef struct SorterPackageListView { int _vtable; unsigned int _refCount; int 
 typedef struct SorterIndexListView { int _vtable; unsigned int _refCount; int _count; int _capacity; int *_data; } SorterIndexListView;
 typedef struct SorterOpaqueView { char pad[60]; SorterIndexListView *_opaquePackageIndices; } SorterOpaqueView;
 extern "C" int DAT_0048dae8[4];
-struct SorterDevice {
-    virtual void d0();
-    virtual void d1();
-    virtual void d2();
-    virtual void d3();
-    virtual void d4();
-    virtual void d5();
-    virtual void d6();
-    virtual void d7();
-    virtual void d8();
-    virtual void d9();
-    virtual void d10();
-    virtual void d11();
-    virtual void d12();
-    virtual void d13();
-    virtual void d14();
-    virtual void d15();
-    virtual void d16();
-    virtual void d17();
-    virtual void d18();
-    virtual void d19();
-    virtual void d20();
-    virtual void d21();
-    virtual void d22();
-    virtual void d23();
-    virtual void d24();
-    virtual void d25();
-    virtual void d26();
-    virtual void d27();
-    virtual void d28();
-    virtual void d29();
-    virtual void f30(int);
-    virtual void f31(int);
-};
-struct SorterList { int pad[2]; int count; int cap; int *items; int getCount() const { return count; } };
-struct SorterState { char pad[64]; SorterDevice *a; SorterDevice *b; SorterDevice *c; int pad2; SorterList *l80; SorterList *l84; SorterList *l88; };
 typedef struct L_1db500 { char pad[8]; int count; int cap; int *data; } L_1db500;
 typedef struct B_1db500 { char pad[12]; L_1db500 *f12; } B_1db500;
 typedef struct A_1db500 { char pad[8]; B_1db500 *f8; char pad12[24]; int f36; int f40; } A_1db500;
-struct Sorter;
-struct List_1db5d0 { char pad8[8]; int f8; int f12; int *f16; };
-struct Ent_1db5d0 { char pad28[28]; List_1db5d0 *f28; };
-struct EL { char pad8[8]; int f8; char pad16[4]; Ent_1db5d0 **f16; int f20; };
-struct Sorter {
-  char pad8[8]; DW4VC_112_0 *f8; char pad12[4]; EL *f16; char pad20[4]; List_1db5d0 *f24; List_1db5d0 *f28; List_1db5d0 *f32; DW4VC_112_0 *f36; DW4VC_112_0 *f40; DW4VC_112_0 *f44; DW4VC_112_0 *f48; char pad52[40]; DW4VC_112_0 *f92; DW4VC_112_0 *f96; char pad100[4]; List_1db5d0 *f104; List_1db5d0 *f108; unsigned char f112; char pad113[11]; int f124; unsigned char f128;
-};
 struct L_1dc400 { char p0[8]; int cnt; int cap; int *data; };
 struct LA_1dc400 { char p0[12]; struct L_1dc400 *l; };
 typedef struct L2 { char pad[8]; int f8; int f12; } L2;
@@ -3217,23 +3162,6 @@ extern "C" void igTransformStack_EnsureRegistered(void);
 extern "C" CallbackArray *igTransformStack_Register(void);
 extern "C" void igTransformStack_GetMetaObjectFunction(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igTextureMatrixAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
-extern "C" igMetaObject *FUN_00196c10(void);
-extern "C" igMetaObject *igSorter_GetMetaObject(void);
-extern "C" int igSorter_GetVTable(void);
-extern "C" igSmartPointer<igObject> *igSmartPointer_igRenderPackagePool_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
-extern "C" igSmartPointer<igObject> *igSmartPointer_igDepthWriteStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
-extern "C" igSmartPointer<igObject> *igSmartPointer_igRenderPackageList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
-extern "C" igSmartPointer<igObject> *igSmartPointer_igRenderPackage_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
-extern "C" int *igSmartPointer_igGeometry_Construct(int *p);
-extern "C" int *igSmartPointer_igRenderPackage_Construct(int *p);
-extern "C" int *igSmartPointer_igDepthWriteStateAttr_Construct(int *p);
-extern "C" int *igSmartPointer_igRenderPackageList_Construct(int *p);
-extern "C" int *igSmartPointer_igNonRefCountedAttrList_Construct(int *p);
-extern "C" int *igSmartPointer_igRenderPackagePool_Construct(int *p);
-extern "C" void igSorter_EnsureRegistered(void);
-extern "C" CallbackArray *igSorter_Register(void);
-extern "C" void igSorter_GetMetaObjectFunction(void);
-extern "C" void igSorter_InitFields(void);
 extern "C" void thunk_FUN_001d8ab0(void);
 extern "C" struct R **igSmartPointer_igModelViewMatrixAttrList_Destruct(struct R **arg0, short arg1);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igProjectionMatrixAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
@@ -3409,23 +3337,6 @@ extern "C" CallbackArray *igBitMask_Register(void);
 extern "C" void igBitMask_GetMetaObjectFunction(void);
 extern "C" int FUN_001a4f00(void);
 extern "C" void igBitMask_InitFields(void);
-extern "C" int FUN_001a51d0(int arg0);
-extern "C" igMetaObject *igNonRefCountedAttrStackManagerList_GetMetaObject(void);
-extern "C" int igNonRefCountedAttrStackManagerList_GetVTable(void);
-extern "C" void igNonRefCountedAttrStackManagerList_EnsureRegistered(void);
-extern "C" CallbackArray *igNonRefCountedAttrStackManagerList_Register(void);
-extern "C" void igNonRefCountedAttrStackManagerList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igAttrStackManager_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igAttrStackManager_GetMetaObject(void);
-extern "C" int igAttrStackManager_GetVTable(void);
-extern "C" void **igSmartPointer_igAttrStackList_Destruct(void **arg0, long long arg1);
-extern "C" void **igSmartPointer_igLightStateAttrPool_Destruct(void **arg0, int arg1);
-extern "C" void igAttrStackManager_EnsureRegistered(void);
-extern "C" CallbackArray *igAttrStackManager_Register(void);
-extern "C" void igAttrStackManager_GetMetaObjectFunction(void);
-extern "C" void igAttrStackManager_InitFields(void);
-extern "C" void FUN_001a58e0(void);
-extern "C" void thunk_igAttrStackManager_UserUnregister(void);
 extern "C" void **igSmartPointer_igSkin_Destruct(void **arg0, short arg1);
 extern "C" void **igSmartPointer_igSkinList_Destruct(struct Ref **self, short flag);
 extern "C" void **igSmartPointer_igModelViewMatrixBoneSelectList_Destruct(void **arg0, long long arg1);
@@ -3642,20 +3553,6 @@ extern "C" void Gap__Sg__igAnimationState__vfunc_25(void);
 extern "C" void Gap__Sg__igAnimationState__vfunc_26(void);
 extern "C" int FUN_001af620(igAppearanceView *a, void *t);
 extern "C" void FUN_001af860(igAttrStack *arg0);
-extern "C" void Gap__Sg__igAttrStackManager__vfunc_23(struct O_1af890 *arg0);
-extern "C" void igAttrStackManager_userConstruct(unsigned char *arg0, int arg1);
-extern "C" void igAttrStackManager_userDestruct(int arg0);
-extern "C" void igAttrStackManager_UserUnregister(void);
-extern "C" void igAttrStackManager_RegisterClass(char *arg0);
-extern "C" void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta);
-extern "C" void FUN_001b0250(PendingValueCollector *arg0, PendingIntList *arg1);
-extern "C" void FUN_001b0440(int a0, int a1);
-extern "C" void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1);
-extern "C" void FUN_001b0dc0(O_1b0dc0 *arg0);
-extern "C" void FUN_001b1030(igAttrStackManager *self, igAttr *attr);
-extern "C" void FUN_001b1100(struct A_1b1100 *arg0, struct B_1b1100 *arg1);
-extern "C" void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1);
-extern "C" void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2);
 extern "C" void FUN_001b21d0(A_1b21d0 *arg0, igVec3f *arg1, igVec3f *arg2);
 extern "C" void FUN_001b23b0(int *arg0, int *arg1);
 extern "C" int FUN_001b23e0(int arg0, Y *arg1);
@@ -3667,7 +3564,7 @@ extern "C" void FUN_001b2f30(struct O_1b2750 *arg0, int arg1, struct B_1b2750 *a
 extern "C" int FUN_001b3ad0(igCommonTraversal *arg0, int arg1);
 extern "C" void FUN_001b3c90(A0 *arg0, A1 *arg1);
 extern "C" void FUN_001b3ff0(void *arg0, int arg1);
-extern "C" void FUN_001b4090(T_1b2fa0 *arg0, int arg1, int arg2);
+extern "C" void FUN_001b4090(T_1b2fa0 *arg0, int arg1, bool arg2);
 extern "C" int FUN_001b40f0(void *arg0, int arg1);
 extern "C" int FUN_001b4120(int *p);
 extern "C" int FUN_001b4130(struct O4130 *arg0);
@@ -3940,9 +3837,7 @@ extern "C" void FUN_001d9ac0(struct A_1d9ac0 *arg0, int arg1, int arg2);
 extern "C" void FUN_001d9bb0(void *arg0, int arg1);
 extern "C" void FUN_001da6e0(igSorter *arg0);
 extern "C" void FUN_001da790(SorterOpaqueView *o);
-extern "C" void igSorter_userConstruct(SorterState *o, int arg1);
 extern "C" void FUN_001db500(A_1db500 *arg0);
-extern "C" void Gap__Sg__igSorter__vfunc_24(Sorter *arg0);
 extern "C" void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2);
 extern "C" void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2);
 extern "C" void FUN_001d23a0(void *shader);
@@ -3977,7 +3872,6 @@ extern "C" void FUN_001e16a0(EnvMapShaderView *arg0, void *);
 extern "C" void FUN_001e1ac0(S_1e1ac0 *arg0, void *);
 extern "C" void FUN_001e1e70(EnvMapShaderView_1e1e70 *arg0, void *);
 extern "C" void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *);
-extern "C" int igSorter_GetMeta(void);
 extern "C" igMetaObject *igEnbayaTransformSource_GetMeta(void);
 extern "C" igMetaObject *igEnbayaContextPool_GetMeta(void);
 extern "C" igMetaObject *igEnbayaAnimationState_GetMeta(void);
@@ -3992,7 +3886,6 @@ extern "C" long long Gap__Sg__igCompressedAnimationSequenceQS__vfunc_43(igCompre
 extern "C" void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_45(igCompressedAnimationSequenceQS *self, long long animationDuration);
 extern "C" int igCompressedAnimationSequenceQS_evaluateRotation(void **arg0, int arg1);
 extern "C" igMetaObject *igCompressedAnimationSequenceQS_GetMeta(void);
-extern "C" igMetaObject *igAttrStackManager_GetMeta(void);
 extern "C" int igAnimationState_GetMeta(void);
 extern "C" igMetaObject *igAnimationDatabase_GetMeta(void);
 extern "C" igMetaObject *igAnimationCombiner_GetMeta(void);
@@ -4024,7 +3917,6 @@ extern "C" igMetaObject *igAnimationCombinerBoneInfoListList_GetMeta(void);
 extern "C" igMetaObject *igAnimationCombinerBoneInfoPool_GetMeta(void);
 extern "C" igMetaObject *igAnimationStateList_GetMeta(void);
 extern "C" igMetaObject *igAnimationStatePool_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedAttrStackManagerList_GetMeta(void);
 extern "C" int igBitMask_GetMeta(void);
 extern "C" int igUnsignedIntList_GetMeta(void);
 extern "C" igMetaObject *igBlendMatrixSelect_GetMeta(void);
@@ -4039,7 +3931,6 @@ extern "C" igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObjec
 extern "C" int igDoubleList_GetMeta(void);
 extern "C" igMetaObject *igTransformStack_GetMeta(void);
 extern "C" igMetaObject *igTransformRecorder_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedAttrStackManagerList_GetElementMeta(void);
 extern "C" int igDoubleList_GetElementSize(void);
 extern "C" int igUnsignedIntList_GetElementSize(void);
 extern "C" int FUN_001e3ab0(igIntList *list, int *value);
@@ -4154,7 +4045,6 @@ static inline int overrideName(igAppearanceView *a, int i) {
     s = s == 0 ? ((int)g_stringObjEmptyText) : s;
     return s;
 }
-static inline int n_of(const struct L_1af920 *list) { return list->n; }
 static inline void attrRelease(igObject *o) {
     if (o != 0) {
         o->_refCount = o->_refCount - 1;
@@ -4522,9 +4412,6 @@ static inline void clearBit(SkeletonBitListView *l, int i) {
 }
 static inline int count_of_1da6e0(const igDataList *list) { return list->_count; }
 static inline int a_of(const struct Pair *pair) { return pair->a; }
-static inline void setRef(SorterList *l, int i, const int &v) {
-    if (l->count != 0 && i >= 0 && i < l->count) { l->items[i] = v; }
-}
 static inline int count_of_1db500(const L_1db500 *list) { return list->count; }
 static inline int cnt_of(const struct L_1dc400 *list) { return list->cnt; }
 static inline int count_of_1dca40(const List_1dca40 *list) { return list->count; }
@@ -4694,7 +4581,6 @@ public:
     igObjectPool *_blendMatrixPool;
     igObjectPool *_texMatPool;
 };
-extern "C" int igAttrStackManager_IsLightEnabled(igAttrStackManager *self, igLightAttr *light);
 extern "C" float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversal);
 extern "C" int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, igCommonTraversal *traversal);
 extern "C" int igCommonTraversal_TraverseOverrideAttrSet(igCommonTraversal *self, igOverrideAttrSet *set);

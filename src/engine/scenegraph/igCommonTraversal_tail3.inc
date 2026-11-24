@@ -60,8 +60,8 @@ void igCommonTraversal::setViewMatrix(const igMatrix44f *mat) {
 void igCommonTraversal::setup(igAttrDefaultManager *defaultManager, igCapabilityManager *capabilityManager) {
     _capabilityManager = capabilityManager;
     _defaultManager = defaultManager;
-    igAttrStackManager_Setup((::igAttrStackManager *)_attrStack.get(), Gap::Attrs::igAttr::getClassMeta(), (::igAttrDefaultManager *)_defaultManager.get(),
-                 (igVisualContextCapabilityManager *)_capabilityManager.get());
+    ((igAttrStackManager *)(_attrStack.get()))->setup(Gap::Attrs::igAttr::getClassMeta(), (igAttrDefaultManager *)_defaultManager.get(),
+                 (igCapabilityManager *)_capabilityManager.get());
 }
 
 void igCommonTraversal::setVisualContext(igVisualContext *vc) {
@@ -128,12 +128,12 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
     l->count = idx + 1;
     e = l->items[idx];
     e->vX((int)arg1);
-    FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)e);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->pushAttr((Gap::Attrs::igAttr *)e);
     return e;
 }
 
 void FUN_001b73d0(struct S_1b73d0 *arg0) {
-    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
+    ((Gap::Sg::igAttrStackManager *)arg0->x)->popAttr((igMetaObject *)(struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
 }
 
 namespace Gap {
@@ -169,7 +169,7 @@ void igCommonTraversal::begin(igNode *root) {
     unit = attr->_cachedUnitID + m->_firstUnit[unit];
     list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
     list->append(attr);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (::igAttrStack *)list, unit);
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)m, (::igAttrStack *)list, unit);
     igTraversal::begin(root);
 }
 }
@@ -214,7 +214,7 @@ void igCommonTraversal::end(igNode *arg1) {
         e->fn(v, m->arg);
     }
     e->count = e->count - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (::igAttrStack *)e, idx);
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)m, (::igAttrStack *)e, idx);
     igTraversal::end(arg1);
 }
 }
@@ -352,9 +352,9 @@ int FUN_001b7ce0(C_1b7ce0 *arg0, A_1b7ce0 *arg1) {
         return 0;
     }
     FUN_001d1760((void *)arg1, arg0->vX());
-    FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f236);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->pushAttr((Gap::Attrs::igAttr *)arg0->f236);
     temp_s0 = igCommonTraversal_TraverseGeometry((igCommonTraversal *)arg0, (igGeometry *)arg1);
-    FUN_001b1100((struct A_1b1100 *)arg0->f52, (struct B_1b1100 *)arg0->f236);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->popAttr((Gap::Attrs::igAttr *)arg0->f236);
     return temp_s0;
 }
 

@@ -174,11 +174,11 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     }
     node->_oldTime = now;
     for (i = 0; i < ((igObjectList *)node->_overrideAttrList)->_count; i++) {
-        igAttrStackManager_PushOverrideAttr(attrs, ((igAttr **)OverrideAttrsOf(node)->_data)[i]);
+        ((Gap::Sg::igAttrStackManager *)attrs)->pushOverride((Gap::Attrs::igAttr *)(((igAttr **)OverrideAttrsOf(node)->_data)[i]));
     }
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
     for (j = ((igObjectList *)node->_overrideAttrList)->_count - 1; j >= 0; j--) {
-        igAttrStackManager_PopOverrideAttr(attrs, ((igAttr **)OverrideAttrsOf(node)->_data)[j]);
+        ((Gap::Sg::igAttrStackManager *)attrs)->popOverride((Gap::Attrs::igAttr *)(((igAttr **)OverrideAttrsOf(node)->_data)[j]));
     }
     if (result == 2) {
         return 2;

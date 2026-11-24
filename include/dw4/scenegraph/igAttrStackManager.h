@@ -14,12 +14,6 @@ extern "C" {
 #endif
 
 void igAttrStackManager_MarkStackChanged(struct igAttrStackManager *manager, struct igAttrStack *stack, int index);
-void igAttrStackManager_PopLightStateAttr(struct igAttrStackManager *manager, struct igLightStateAttr *attr, int isOverride);
-void igAttrStackManager_PopOverrideAttr(struct igAttrStackManager *manager, struct igAttr *attr);
-void igAttrStackManager_PushOverrideAttr(struct igAttrStackManager *manager, struct igAttr *attr);
-void igAttrStackManager_PushLightStateAttr(struct igAttrStackManager *manager, struct igLightStateAttr *attr, int isOverride);
-void igAttrStackManager_Setup(struct igAttrStackManager *manager, struct igMetaObject *meta,
-                  struct igAttrDefaultManager *defaultManager, struct igVisualContextCapabilityManager *capabilityManager);
 
 #ifdef __cplusplus
 }

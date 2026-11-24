@@ -153,14 +153,14 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     if (j < overrides(node)->_count) {
         jo = 0;
         do {
-            igAttrStackManager_PushOverrideAttr(mgr, (igAttr *)*(int *)(((igAttrList *)node->_overrideAttrList)->_data + jo));
+            ((Gap::Sg::igAttrStackManager *)mgr)->pushOverride((Gap::Attrs::igAttr *)*(int *)(((igAttrList *)node->_overrideAttrList)->_data + jo));
             j++;
             jo += 4;
         } while (j < ((igAttrList *)node->_overrideAttrList)->_count);
     }
     result = igTraversal_TraverseChildren((igTraversal *)trav, (igNode *)node);
     for (l = ((igAttrList *)node->_overrideAttrList)->_count - 1, lo = l * 4; l >= 0; l--) {
-        igAttrStackManager_PopOverrideAttr(mgr, (igAttr *)*(int *)(((igAttrList *)node->_overrideAttrList)->_data + lo));
+        ((Gap::Sg::igAttrStackManager *)mgr)->popOverride((Gap::Attrs::igAttr *)*(int *)(((igAttrList *)node->_overrideAttrList)->_data + lo));
         lo -= 4;
     }
     PopAttr(mgr, *timeUnitID + ((int *)mgr->_attrStackIndexTable)[*timeAttrIndex]);

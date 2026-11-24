@@ -356,57 +356,57 @@ void FUN_001b3c90(A0 *arg0, A1 *arg1) {
     ((Gap::Gfx::igImage *)temp_a0)->convert(IG_GFX_TEXTURE_FORMAT_A_8, (Gap::Gfx::igImage *)temp_a0);
     temp_s0 = arg1->f52;
     FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625b8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f176);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f32);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625e0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625e8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625b8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)arg0->f176);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)arg0->f32);
     igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f32);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f176);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625b8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562598[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)arg0->f32);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)arg0->f176);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625b8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_00562598[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
     igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_00562598[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625b0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f180);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f32);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_00562598[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625b0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)arg0->f180);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)arg0->f32);
     igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f32);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg0->f180);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625b0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625a8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)arg0->f32);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)arg0->f180);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625b0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625a8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
     igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625a8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625a0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625d0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625a8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625d8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushOverride((Gap::Attrs::igAttr *)DAT_005625a0[0]);
     igTraversal_TraverseChildren((igTraversal *)arg1, (igNode *)arg0);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625a0[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625c8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e8[0]);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625a0[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625c8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625d8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625e8[0]);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popOverride((Gap::Attrs::igAttr *)DAT_005625e0[0]);
     FUN_001dc610((igSorter *)arg1->f68);
 }
 
@@ -427,9 +427,9 @@ void FUN_001b3ff0(void *arg0, int arg1) {
     FUN_001b3c90((A0 *)arg0, (A1 *)arg1);
 }
 
-void FUN_001b4090(T_1b2fa0 *arg0, int arg1, int arg2) {
+void FUN_001b4090(T_1b2fa0 *arg0, int arg1, bool arg2) {
     if (arg1 < 8) {
-        if (arg2 != 0) {
+        if (arg2) {
             arg0->flags |= (1 << arg1);
         } else {
             arg0->flags &= ~(1 << arg1);
@@ -495,7 +495,7 @@ void FUN_001b4220(struct A4220 *arg0, struct B4220 *arg1) {
         n = 8;
     }
     for (i = 0; i < n; i++) {
-        FUN_001b4090((T_1b2fa0 *)arg0, i, igAttrStackManager_IsLightEnabled((igAttrStackManager *)temp_s2, (igLightAttr *)arg0->f144->data[i]));
+        FUN_001b4090((T_1b2fa0 *)arg0, i, ((Gap::Sg::igAttrStackManager *)temp_s2)->getLightState((Gap::Attrs::igLightAttr *)arg0->f144->data[i]));
     }
 }
 

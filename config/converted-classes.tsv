@@ -286,3 +286,6 @@ igFieldSynchronizer	Gui
 igAction	Gui
 igHotKeyBinding	Gui
 igHotKeyBindingList	Gui	igTObjectList<igHotKeyBinding>
+igSorter	Sg
+igAttrStackManager	Sg
+igNonRefCountedAttrStackManagerList	Sg	igTNonRefCountedObjectList<igAttrStackManager>

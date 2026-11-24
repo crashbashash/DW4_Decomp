@@ -110,6 +110,34 @@ void igTransformSequence1_5::userPostLoad() {
         }
     }
 }
+
+/* Converts a pre-1.5 sequence: the double key times (seconds) become nanosecond longs, and the start time becomes
+ * the key-frame offset. The append is written out (matching construct: the count read through a `const` view is a
+ * load of its own, so `_count++` reads the count again as retail does, and `count` is numbered below the list). */
+void igTransformSequence1_5::userMakeConcrete(igMetaObject *sourceObjectType) {
+    if (igTransformSequence::_Meta == sourceObjectType) {
+        if (_timeList) {
+            for (int i = 0; i < _timeList->_count; i++) {
+                long long time = (long long)(_timeList->get(i) * 1000000000LL);
+                igLongList *list = _timeListLong;
+                int count = ((const igLongList *)list)->_count;
+                if (count < list->_capacity) {
+                    list->_count++;
+                } else {
+                    list->resizeAndSetCount(count + 1, sizeof(long long));
+                }
+                ((long long *)list->_data)[count] = time;
+            }
+            _timeList->_count = 0;
+        }
+        if (_startTime >= 0) {
+            setKeyFrameTimeOffset((long long)(_startTime * 1000000000LL));
+        }
+    }
+    _interpolationMethod[0] = 1;
+    _interpolationMethod[1] = 3;
+    _interpolationMethod[2] = 1;
+}
 }
 }
 
@@ -142,10 +170,6 @@ void igTransform::setMatrix(const igMatrix44f *matrix)
 }
 
 /* Slot 36, shared by igTransform descendants: store the igTransform::_target field (+96). */
-
-int igSorter_GetMeta(void) {
-    return ((int)g_igSorter_metaObject);
-}
 
 namespace Gap {
 namespace Sg {
@@ -236,10 +260,6 @@ int igCompressedAnimationSequenceQS_evaluateRotation(void **arg0, int arg1) {
 
 igMetaObject *igCompressedAnimationSequenceQS_GetMeta(void) {
     return g_igCompressedAnimationSequenceQS_metaObject;
-}
-
-igMetaObject *igAttrStackManager_GetMeta(void) {
-    return g_igAttrStackManager_metaObject;
 }
 
 int igAnimationState_GetMeta(void) {
@@ -367,10 +387,6 @@ igMetaObject *igAnimationStatePool_GetMeta(void) {
     return g_igAnimationStatePool_metaObject;
 }
 
-igMetaObject *igNonRefCountedAttrStackManagerList_GetMeta(void) {
-    return g_igNonRefCountedAttrStackManagerList_metaObject;
-}
-
 int igBitMask_GetMeta(void) {
     return ((int)g_igBitMask_metaObject);
 }
@@ -425,10 +441,6 @@ igMetaObject *igTransformStack_GetMeta(void) {
 
 igMetaObject *igTransformRecorder_GetMeta(void) {
     return g_igTransformRecorder_metaObject;
-}
-
-igMetaObject *igNonRefCountedAttrStackManagerList_GetElementMeta(void) {
-    return g_igAttrStackManager_metaObject;
 }
 
 int igDoubleList_GetElementSize(void) {

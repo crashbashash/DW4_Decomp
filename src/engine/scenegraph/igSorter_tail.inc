@@ -69,36 +69,37 @@ void FUN_001da790(SorterOpaqueView *o) {
     }
 }
 
-void igSorter_userConstruct(SorterState *o, int arg1) {
-    int s3;
-    SorterList *s2;
-    SorterList *s0;
-    SorterList *l;
-    if (arg1 == 0) {
-        FUN_001db500((A_1db500 *)o);
-        o->a->f30(0);
-        o->b->f30(1);
-        o->b->f31(1);
-        o->c->f30(0);
-        o->c->f31(1);
-        o->l80->cap = o->l80->count;
-        s2 = o->l84;
-        s3 = s2->count;
-        s0 = o->l80;
-        if (s3 < s2->cap) {
-            s2->count = s2->getCount() + 1;
+namespace Gap {
+namespace Sg {
+
+void igSorter::userConstruct(int flag) {
+    int count;
+    igRenderPackageList *packages;
+    igRenderPackage *package;
+    if (flag == 0) {
+        FUN_001db500((A_1db500 *)this);
+        _depthWriteDisable->setState(false);
+        _cullFaceFront->setMode(IG_GFX_CULL_FACE_MODE_FRONT);
+        _cullFaceFront->setState(true);
+        _cullFaceBack->setMode(IG_GFX_CULL_FACE_MODE_BACK);
+        _cullFaceBack->setState(true);
+        _emptyRenderPackage->_cachedStateAttrs = (int)_emptyRenderPackage->_stateAttrs.get();
+        /* The list's append, written out: the kit's inline append allocates the receiver and the list the
+         * other way round (byte-only spelling). */
+        packages = _emptyRenderPackageList;
+        count = packages->_count;
+        package = _emptyRenderPackage;
+        if (count < packages->_capacity) {
+            packages->_count = packages->getCount() + 1;
         } else {
-            ((Gap::Core::igDataList *)s2)->resizeAndSetCount(s3 + 1, 4);
+            packages->resizeAndSetCount(count + 1, 4);
         }
-        s2->items[s3] = (int)s0;
-        l = o->l88;
-        if (l->cap > 0) {
-            l->count = 1;
-        } else {
-            ((Gap::Core::igDataList *)l)->resizeAndSetCount(1, 4);
-        }
-        setRef(o->l88, 0, DAT_0048dae8[0]);
+        ((igRenderPackage **)packages->_data)[count] = package;
+        _emptyRenderPackageIndices->setCount(1);
+        _emptyRenderPackageIndices->set(0, DAT_0048dae8[0]);
     }
+}
+}
 }
 
 void FUN_001db500(A_1db500 *arg0) {
@@ -129,32 +130,35 @@ void FUN_001db500(A_1db500 *arg0) {
     temp_s1->data[temp_s2_2] = temp_s0_2;
 }
 
-void Gap__Sg__igSorter__vfunc_24(Sorter *arg0) {
+namespace Gap {
+namespace Sg {
+
+void igSorter::reset() {
     int i;
-    List_1db5d0 *l;
-    EL *e;
-    if (arg0->f112 != 0) { arg0->f112 = 0; }
-    arg0->f128 = 0;
-    i = 0;
-    arg0->f32->f8 = 0;
-    arg0->f24->f8 = 0;
-    arg0->f28->f8 = 0;
-    for (; i < arg0->f16->f8; i++) {
-        l = arg0->f16->f16[i]->f28;
-        if (0 <= l->f12) { l->f8 = 0; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(0, 4); }
+    if (_isCompoundPackageOpen) {
+        _isCompoundPackageOpen = false;
     }
-    arg0->f16->f20 = 0;
-    arg0->f40->vX();
-    arg0->f44->vX();
-    arg0->f48->vX();
-    arg0->f92->vX();
-    arg0->f96->vX();
-    arg0->f36->vX();
-    arg0->f8->vX();
-    FUN_001db500((A_1db500 *)arg0);
-    arg0->f104->f8 = 0;
-    arg0->f108->f8 = 0;
-    arg0->f124 = 0;
+    _outputCreated = false;
+    _firstPackages->_count = 0;
+    _transpPackages->_count = 0;
+    _opaquePackages->_count = 0;
+    for (i = 0; i < _renderPackagePool->_count; i++) {
+        ((igRenderPackage *)_renderPackagePool->get(i))->_theMass->setCount(0);
+    }
+    _renderPackagePool->_freeIndex = 0;
+    _firstAttrs->reset();
+    _transpAttrs->reset();
+    _opaqueAttrs->reset();
+    _lastEmptyRenderPackageAttrs->reset();
+    _firstEmptyRenderPackageAttrs->reset();
+    _lightAttrs->reset();
+    _dlist->reset();
+    FUN_001db500((A_1db500 *)this);
+    _curList->_count = 0;
+    _prevList->_count = 0;
+    _cachedPackage = 0;
+}
+}
 }
 
 extern "C" void FUN_00190200(void *bound, float *center);
@@ -223,7 +227,7 @@ void FUN_001db720(igSorter *sorter, igGeometry *geometry, igAttrStackManager *ma
         AttrPointerList *attributes;
         int firstCount;
         igObject *retained;
-        FUN_001b0250((PendingValueCollector *)manager, (PendingIntList *)((igDisplayListAttr *)sorter->_dlist)->_contents);
+        ((Gap::Sg::igAttrStackManager *)manager)->flushUpdateAttrsNoReset((Gap::Attrs::igNonRefCountedAttrList *)((igDisplayListAttr *)sorter->_dlist)->_contents);
         AttrPointerList *list = (AttrPointerList *)((igDisplayListAttr *)sorter->_dlist)->_contents;
         if (geometry->_flags & 0xC) {
             igGeometrySetAttr *set = *(igGeometrySetAttr **)((char *)geometry + ((igMetaField *)DAT_00562768[0])->_offset);

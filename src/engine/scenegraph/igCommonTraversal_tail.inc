@@ -3,7 +3,7 @@ namespace Sg {
 
 CallbackArray *igCommonTraversal::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igAttrStackManager_EnsureRegistered, igTransformStack_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, Gap::Gfx::igCapabilityManager::arkRegister, Gap::Attrs::igAttrDefaultManager::arkRegister, Gap::Attrs::igNonRefCountedAttrList::arkRegister, igSorter_EnsureRegistered, Gap::Sg::igModelViewMatrixAttrPool::arkRegister, Gap::Sg::igTimeAttrPool::arkRegister, Gap::Sg::igVertexBlendMatrixAttrPool::arkRegister, Gap::Sg::igTextureMatrixAttrPool::arkRegister, Gap::Sg::igVertexBlendMatrixListAttrPool::arkRegister, Gap::Sg::igMatrixObjectPool::arkRegister, Gap::Sg::igProjectionMatrixAttrPool::arkRegister, Gap::Attrs::igMatrixOptStateAttr::arkRegister, Gap::Attrs::igNormalizeNormalsStateAttr::arkRegister, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, Gap::Sg::igNonRefCountedTransformList::arkRegister, Gap::Core::igIntList::arkRegister, igStringObjList_EnsureRegistered, Gap::Sg::igNodeListList::arkRegister, Gap::Sg::igBlendMatricesAttrPool::arkRegister, Gap::Attrs::igTimeAttr::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAttrStackManager::arkRegister, igTransformStack_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, Gap::Gfx::igCapabilityManager::arkRegister, Gap::Attrs::igAttrDefaultManager::arkRegister, Gap::Attrs::igNonRefCountedAttrList::arkRegister, Gap::Sg::igSorter::arkRegister, Gap::Sg::igModelViewMatrixAttrPool::arkRegister, Gap::Sg::igTimeAttrPool::arkRegister, Gap::Sg::igVertexBlendMatrixAttrPool::arkRegister, Gap::Sg::igTextureMatrixAttrPool::arkRegister, Gap::Sg::igVertexBlendMatrixListAttrPool::arkRegister, Gap::Sg::igMatrixObjectPool::arkRegister, Gap::Sg::igProjectionMatrixAttrPool::arkRegister, Gap::Attrs::igMatrixOptStateAttr::arkRegister, Gap::Attrs::igNormalizeNormalsStateAttr::arkRegister, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, Gap::Sg::igNonRefCountedTransformList::arkRegister, Gap::Core::igIntList::arkRegister, igStringObjList_EnsureRegistered, Gap::Sg::igNodeListList::arkRegister, Gap::Sg::igBlendMatricesAttrPool::arkRegister, Gap::Attrs::igTimeAttr::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -33,7 +33,7 @@ void igCommonTraversal::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 35);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igAttrStackManager_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igAttrStackManager::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {
@@ -60,7 +60,7 @@ void igCommonTraversal::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
-        metaField->_metaObject = (int)FUN_00196c10();
+        metaField->_metaObject = (int)Gap::Sg::igSorter::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {

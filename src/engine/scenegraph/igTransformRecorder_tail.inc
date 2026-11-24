@@ -24,9 +24,9 @@ int FUN_001baa10(RecorderTraversalView *o, TransformRecorderVisitor *v) {
     t = v->sample(o->channel());
     o->begin(t);
     frame->_time = t;
-    FUN_001b1030((igAttrStackManager *)state, (igAttr *)frame);
+    ((Gap::Sg::igAttrStackManager *)state)->pushAttr((Gap::Attrs::igAttr *)frame);
     r = igTraversal_TraverseChildren((igTraversal *)(o), (igNode *)v);
-    FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)frame);
+    ((Gap::Sg::igAttrStackManager *)state)->popAttr((Gap::Attrs::igAttr *)frame);
     o->end();
     if (r == 2) {
         return 2;
@@ -101,9 +101,9 @@ int igCommonTraversal_TraverseModelViewMatrixBoneSelect(DrawItemSource *arg0, Dr
     }
     igMatrix44f_Multiply((float *)buf, (const float *)(base + (off << 6)), (const float *)base);
     obj->v(buf);
-    FUN_001b1030((igAttrStackManager *)x, (igAttr *)obj);
+    ((Gap::Sg::igAttrStackManager *)x)->pushAttr((Gap::Attrs::igAttr *)obj);
     r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
-    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
+    ((Gap::Sg::igAttrStackManager *)x)->popAttr((igMetaObject *)(struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
     if (r == 2) {
         return 2;
     }
@@ -147,9 +147,9 @@ int igCommonTraversal_TraverseBlendMatrixSelect(CompileTraversalHead *o, BlendNo
     for (i = 0; i < node->_boneIndices->_count; i++, out += 64) {
         igMatrix44f_Copy((float *)out, (const float *)(palette + (node->_boneIndices->_data[i] << 6)));
     }
-    FUN_001b1030((igAttrStackManager *)state, (igAttr *)frame);
+    ((Gap::Sg::igAttrStackManager *)state)->pushAttr((Gap::Attrs::igAttr *)frame);
     r = igCommonTraversal_TraverseAttrSet((igCommonTraversal *)o, (igAttrSet *)node);
-    FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)frame);
+    ((Gap::Sg::igAttrStackManager *)state)->popAttr((Gap::Attrs::igAttr *)frame);
     if (r == 2) {
         return 2;
     }

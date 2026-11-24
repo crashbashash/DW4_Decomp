@@ -1,51 +1,51 @@
-int FUN_001a51d0(int arg0) {
-    igNonRefCountedAttrStackManagerList_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igNonRefCountedAttrStackManagerList_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igNonRefCountedAttrStackManagerList_metaObject;
-
-igMetaObject *igNonRefCountedAttrStackManagerList_GetMetaObject(void)
+igNonRefCountedAttrStackManagerList *igNonRefCountedAttrStackManagerList::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igNonRefCountedAttrStackManagerList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNonRefCountedAttrStackManagerList_EnsureRegistered();
-    return g_igNonRefCountedAttrStackManagerList_metaObject;
+    arkRegister();
+    return (igNonRefCountedAttrStackManagerList *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igNonRefCountedAttrStackManagerList_GetVTable(void) {
-    struct Obj_1a5260 obj;
+igMetaObject *igNonRefCountedAttrStackManagerList::_Meta;
 
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igNonRefCountedAttrStackManagerList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igNonRefCountedAttrStackManagerList_EnsureRegistered(void)
+igMetaObject *igNonRefCountedAttrStackManagerList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igNonRefCountedAttrStackManagerList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igNonRefCountedAttrStackManagerList_callbackList[] = { igAttrStackManager_EnsureRegistered, 0 };
+void *igNonRefCountedAttrStackManagerList::retrieveVTablePointer()
+{
+    igNonRefCountedAttrStackManagerList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igNonRefCountedAttrStackManagerList_Register(void) {
+void igNonRefCountedAttrStackManagerList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNonRefCountedAttrStackManagerList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAttrStackManager::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNonRefCountedAttrStackManagerList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
         Gap::Core::igNonRefCountedObjectList::getClassMeta,
-        igNonRefCountedAttrStackManagerList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNonRefCountedAttrStackManagerList",
-        0x14, /* instance size */
-        igNonRefCountedAttrStackManagerList_GetVTable,
+        sizeof(igNonRefCountedAttrStackManagerList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igNonRefCountedAttrStackManagerList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igNonRefCountedAttrStackManagerList_GetMetaObjectFunction(void) {
-    igNonRefCountedAttrStackManagerList_GetMetaObject();
+}
 }
 

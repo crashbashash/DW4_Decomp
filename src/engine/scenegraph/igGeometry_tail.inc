@@ -261,9 +261,9 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
             item = pool->data[pool->used++];
             item->setMatrix(&world);
             state = renderer->state;
-            FUN_001b1030((igAttrStackManager *)state, (igAttr *)item);
+            ((Gap::Sg::igAttrStackManager *)state)->pushAttr((Gap::Attrs::igAttr *)item);
             ((Gap::Sg::igTraversal *)renderer)->dispatch((Gap::Core::igObject *)child);
-            FUN_001b1100((struct A_1b1100 *)state, (struct B_1b1100 *)item);
+            ((Gap::Sg::igAttrStackManager *)state)->popAttr((Gap::Attrs::igAttr *)item);
         }
     }
 }

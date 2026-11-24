@@ -426,6 +426,8 @@ def converted_classes(converted, parent, layouts, members, bases=None):
                 if held in converted and held in layouts and held not in visiting:
                     visit(held)
         visiting.discard(cls)
+        if cls in seen:  # a held class's visit (an ownership cycle) placed it already
+            return
         seen.add(cls)
         order.append(cls)
 

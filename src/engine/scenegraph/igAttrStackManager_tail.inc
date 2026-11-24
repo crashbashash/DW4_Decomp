@@ -7,406 +7,320 @@ void FUN_001af860(igAttrStack *arg0) {
     arg0->_cachedRenderPackage = 0;
 }
 
-void Gap__Sg__igAttrStackManager__vfunc_23(struct O_1af890 *arg0) {
-    int var_s0;
-    if (arg0->n > 0) {
-        for (var_s0 = 0; var_s0 < arg0->n; var_s0++) {
-            FUN_001af860((igAttrStack *)arg0->l16->arr[var_s0]);
-        }
-        arg0->b24->f8 = 0;
-        arg0->b28->f8 = 0;
-        FUN_001b0dc0((O_1b0dc0 *)arg0);
-        arg0->b44->f8 = 0;
-        arg0->b64->f20 = 0;
-    }
-}
+namespace Gap {
+namespace Sg {
 
-void igAttrStackManager_userConstruct(unsigned char *arg0, int arg1) {
-    unsigned char sp4F;
-    int al; int idx; int z; struct L_1af920 *l;
-    Gap__Core__igObject__userConstruct((igObject *)arg0);
-    if (arg1 == 0) {
-        if (DAT_00562580[0] == 0) {
-            al = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
-            al = (int)(g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute));
-            DAT_00562580[0] = ((struct L_1af920 *)FUN_001a51d0(al));
-        }
-        l = DAT_00562580[0];
-        idx = n_of(l);
-        if (idx < l->cap) { l->n = l->n + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(idx + 1, 4); }
-        l->data[idx] = (int)arg0;
-        z = ((struct Z *)g_objectSystem)->f56;
-        sp4F = arg0[60];
-        ((Gap::Core::igRegistry *)z)->getValue(7, "simpleLightManagementState", sp4F, 0, 0);
-        arg0[60] = sp4F;
-    }
-}
-
-void igAttrStackManager_userDestruct(int arg0) {
+void igAttrStackManager::reset() {
     int i;
-    AttrStackList *p;
-    K key((void *)arg0);
-    i = Finder::Find(((AttrStackList * *)DAT_00562580)[0], key);
-    if (i >= 0) {
-        List_RemoveWordAt((igDataList *)(((AttrStackList * *)DAT_00562580)[0]), i);
-    }
-    p = ((AttrStackList * *)DAT_00562580)[0];
-    if (p->n == 0) {
-        p->rc = p->rc - 1;
-        if ((p->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)p);
+    if (_numAttrStacks > 0) {
+        for (i = 0; i < _numAttrStacks; i++) {
+            FUN_001af860((::igAttrStack *)_attrStacks->get(i));
         }
-        ((AttrStackList * *)DAT_00562580)[0] = 0;
+        _attrIncrementalUpdateList->_count = 0;
+        _attrRootUpdateList->_count = 0;
+        clearLightHandles();
+        _updateLightAttrs->_count = 0;
+        _lightDisableAttrPool->_freeIndex = 0;
     }
-    Gap__Core__igObject__userDestruct((igObject *)arg0);
 }
 
-void igAttrStackManager_UserUnregister(void) {
-    R_1afb00 *p;
-    int rc;
-    p = DAT_00562578[0];
-    if (p != 0) {
-        rc = p->f4 - 1;
-        p->f4 = rc;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)p);
+void igAttrStackManager::userConstruct(int flag) {
+    bool simpleLightMgr;
+    igMemoryPoolView *pool;
+    int index;
+    Gap::Core::igRegistry *registry;
+    igNonRefCountedAttrStackManagerList *managers;
+    Gap::Core::igObject::userConstruct(flag);
+    if (flag == 0) {
+        if (DAT_00562580[0] == 0) {
+            pool = getMemoryPool();
+            pool = g_useOwnerAllocator != 0 ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute);
+            DAT_00562580[0] = igNonRefCountedAttrStackManagerList::_instantiateFromPool(pool);
         }
+        managers = DAT_00562580[0];
+        index = managers->getCount();
+        if (index < managers->_capacity) {
+            managers->_count = managers->_count + 1;
+        } else {
+            managers->resizeAndSetCount(index + 1, 4);
+        }
+        ((igAttrStackManager **)managers->_data)[index] = this;
+        registry = (Gap::Core::igRegistry *)g_objectSystem->configRegistry;
+        simpleLightMgr = _simpleLightMgr;
+        registry->getValue(7, "simpleLightManagementState", (unsigned char &)simpleLightMgr, 0, 0);
+        _simpleLightMgr = simpleLightMgr;
+    }
+}
+
+void igAttrStackManager::userDestruct() {
+    int index;
+    igNonRefCountedAttrStackManagerList *managers;
+    K key((void *)this);
+    index = Finder::Find((AttrStackList *)DAT_00562580[0], key);
+    if (index >= 0) {
+        List_RemoveWordAt((::igDataList *)DAT_00562580[0], index);
+    }
+    managers = DAT_00562580[0];
+    if (managers->_count == 0) {
+        managers->release();
+        DAT_00562580[0] = 0;
+    }
+    Gap::Core::igObject::userDestruct();
+}
+
+void igAttrStackManager::userUnregister() {
+    ::igMetaObjectList *attrMetas;
+    attrMetas = DAT_00562578[0];
+    if (attrMetas != 0) {
+        ((Gap::Core::igObject *)attrMetas)->release();
     }
     DAT_00562578[0] = 0;
 }
 
-void igAttrStackManager_RegisterClass(char *arg0) {
-    int n;
+void igAttrStackManager::registerClass(igMetaObject *meta) {
+    int count;
     int i;
-    int idx;
-    if (igMetaObject_IsOfType((igMetaObject *)arg0, Gap::Attrs::igAttr::getClassTypeSafe()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
-        if (((RefObj * *)DAT_00562578)[0] == 0) {
-            ((RefObj * *)DAT_00562578)[0] = (RefObj *)igMetaObjectList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    int index;
+    if (igMetaObject_IsOfType(meta, Gap::Attrs::igAttr::getClassTypeSafe()) != 0 && meta->_abstractState == 0) {
+        if (DAT_00562578[0] == 0) {
+            DAT_00562578[0] = (::igMetaObjectList *)igMetaObjectList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         }
-        K key(arg0);
-        idx = Finder_1afb60::Find(((RefObj * *)DAT_00562578)[0], key);
-        if (idx < 0) {
-            ((Gap::Core::igObjectList *)(((RefObj * *)DAT_00562578)[0]))->append((Gap::Core::igObject *)arg0);
-            if (((RefObj * *)DAT_00562580)[0] != 0) {
-                n = ((RefObj * *)DAT_00562580)[0]->count;
-                for (i = 0; i < n; i++) {
-                    igAttrStackManager_RegisterAttribute((AttrManagerRec *)((RefObj * *)DAT_00562580)[0]->data[i], (AttrObj *)arg0);
+        K key(meta);
+        index = Finder_1afb60::Find((RefObj *)DAT_00562578[0], key);
+        if (index < 0) {
+            ((Gap::Core::igObjectList *)DAT_00562578[0])->append((Gap::Core::igObject *)meta);
+            if (DAT_00562580[0] != 0) {
+                count = DAT_00562580[0]->_count;
+                for (i = 0; i < count; i++) {
+                    DAT_00562580[0]->get(i)->registerAttribute(meta);
                 }
             }
         }
     }
 }
 
-void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta) {
-    if (m->_defaultManager != 0 && m->_capabilityManager != 0) {
+void igAttrStackManager::registerAttribute(igMetaObject *meta) {
+    if (_defaultManager != 0 && _capabilityManager != 0) {
         int units;
         int end;
         int first;
         int i;
         int id;
         id = meta->_id;
-        if (id >= m->_attrStackIndexTableSize) {
-            m->_attrStackIndexTableSize = id + 4;
-            m->_attrStackIndexTable = (int *)((Gap::Core::igObject *)m)->realloc(m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
+        if (id >= _attrStackIndexTableSize) {
+            _attrStackIndexTableSize = id + 4;
+            _attrStackIndexTable = (int *)realloc(_attrStackIndexTable, _attrStackIndexTableSize * 4);
         }
         units = FUN_001d8270((int)(meta));
         if (units <= 0) {
-            igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, 0);
-            units = ((AttrCaps *)def.get())->unitCount((void *)m->_capabilityManager);
+            igSmartPointer<igAttr> def = _defaultManager->getSharedDefaultAttr(meta, 0);
+            units = def->getUnitCount(_capabilityManager);
             if (units <= 0) {
                 units = 1;
             }
         }
-        first = m->_numAttrStacks;
+        first = _numAttrStacks;
         end = first + units;
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)m->_attrDefaults))->setCount(end);
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)m->_attrStacks))->setCount(end);
-        m->_attrStackIndexTable[id] = first;
-        m->_numAttrStacks = end;
+        _attrDefaults->setCount(end);
+        _attrStacks->setCount(end);
+        _attrStackIndexTable[id] = first;
+        _numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {
-            igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, i);
-            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)Gap::Sg::igAttrStack::_instantiateFromPool(((Gap::Core::igObject *)m)->getMemoryPool())));
-            AttrObj **slot;
-            AttrObj *value;
-            slot = &stack.p->_default;
-            value = def.get();
-            attrFieldSet(slot, value);
-            stack.p->_popProc = 0;
-            {
-                AttrObj *d = def.get();
-                stack.p->_lastIncrementalFlushedAttr = d;
-            }
-            {
-                igObject *entry = stack.p;
-                attrListSet(m->_attrStacks, first, entry);
-                entry = def.get();
-                attrListSet(m->_attrDefaults, first, entry);
-            }
+            igSmartPointer<igAttr> def = _defaultManager->getSharedDefaultAttr(meta, i);
+            igSmartPointer<igAttrStack> stack(igAttrStack::_instantiateFromPool(getMemoryPool()));
+            stack->_default = def;
+            stack->_popProc = 0;
+            stack->_lastIncrementalFlushedAttr = (int)def.get();
+            _attrStacks->set(first, stack);
+            _attrDefaults->set(first, def);
         }
     }
 }
 
 /* Binds the default and capability managers and rebuilds one stack for every registered attribute
- * type; the type argument is unused. */
-void igAttrStackManager_Setup(igAttrStackManager *manager, igMetaObject *meta, igAttrDefaultManager *defaultManager,
-                                  igVisualContextCapabilityManager *capabilityManager)
+ * type; the root type is unused. */
+void igAttrStackManager::setup(igMetaObject *rootMeta, igAttrDefaultManager *defaultManager, igCapabilityManager *capabilityManager)
 {
-    AttrStackManagerView *arg0 = (AttrStackManagerView *)manager;
-    AttrStackRefView *arg2 = (AttrStackRefView *)defaultManager;
-    AttrStackRefView *arg3 = (AttrStackRefView *)capabilityManager;
-    List *l;
-    int n;
+    int count;
     int i;
-    AttrStackRefView *o;
-    if (arg2 != 0) {
-        arg2->references = arg2->references + 1;
-    }
-    o = arg0->f56;
-    if (o != 0) {
-        o->references = o->references - 1;
-        if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
-    }
-    arg0->f56 = arg2;
-    if (arg3 != 0) {
-        arg3->references = arg3->references + 1;
-    }
-    o = arg0->f52;
-    if (o != 0) {
-        o->references = o->references - 1;
-        if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
-    }
-    arg0->f52 = arg3;
-    arg0->v21();
-    l = arg0->f20;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        o = l->data[i];
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-    }
-    {
-        int m = l->count;
-        int j;
-        for (j = 0; j < m; j++) {
-            l->data[j] = 0;
-        }
-    }
-    l->count = 0;
-    l = arg0->f16;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        o = l->data[i];
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-    }
-    {
-        int m = l->count;
-        int j;
-        for (j = 0; j < m; j++) {
-            l->data[j] = 0;
-        }
-    }
-    l->count = 0;
-    arg0->f12 = 0;
-    n = ((List * *)DAT_00562578)[0]->count;
-    for (i = 0; i < n; i++) {
-        igAttrStackManager_RegisterAttribute((AttrManagerRec *)arg0, (AttrObj *)((List * *)DAT_00562578)[0]->data[i]);
+    _defaultManager = defaultManager;
+    _capabilityManager = capabilityManager;
+    reset();
+    _attrDefaults->removeAll();
+    _attrStacks->removeAll();
+    _numAttrStacks = 0;
+    count = DAT_00562578[0]->_count;
+    for (i = 0; i < count; i++) {
+        registerAttribute((igMetaObject *)((Gap::Core::igObjectList *)DAT_00562578[0])->get(i));
     }
 }
 
-#define SETCNT(l, n) if ((n) >= 0) { if ((n) <= (l)->cap) (l)->cnt = (n); else ((Gap::Core::igDataList *)(l))->resizeAndSetCount((n), 4); }
-void FUN_001b0250(PendingValueCollector *arg0, PendingIntList *arg1) {
-    PendingIntList *ixl;
-    int *a2;
-    int s1;
-    int s5;
-    int c;
-    int v;
-    int s0;
-    int *ix;
-    TrackedIntStack *o;
-    TrackedIntTable *tbl;
-    TrackedIntStack **tb;
-    int k;
-    int s4;
-    int *src;
+void igAttrStackManager::flushUpdateAttrsNoReset(igNonRefCountedAttrList *al) {
+    igIntList *updates;
+    igAttr **out;
+    int updateCount;
+    int lightCount;
+    int top;
+    igAttr *attr;
+    int outCount;
+    int *indices;
+    igAttrStack *stack;
+    igAttrStackList *stackList;
+    igAttrStack **stacks;
+    int total;
+    int start;
+    igAttr **lights;
     int i;
-    s4 = arg1->cnt;
-    s0 = 0;
-    s1 = arg0->f24->cnt;
-    k = s1 + s4;
-    if (arg0->f60 == 0) {
-        SETCNT(arg1, k);
-        a2 = arg1->data + s4;
+    start = al->_count;
+    outCount = 0;
+    updateCount = _attrIncrementalUpdateList->_count;
+    total = updateCount + start;
+    if (_simpleLightMgr == 0) {
+        al->setCount(total);
+        out = (igAttr **)al->_data + start;
     } else {
-        s5 = arg0->f44->cnt;
-        k = k + s5;
-        SETCNT(arg1, k);
-        src = arg0->f44->data;
-        a2 = arg1->data + s4;
-        for (; s0 < s5; s0++) a2[s0] = src[s0];
-        arg0->f44->cnt = 0;
+        lightCount = _updateLightAttrs->_count;
+        total = total + lightCount;
+        al->setCount(total);
+        lights = (igAttr **)_updateLightAttrs->_data;
+        out = (igAttr **)al->_data + start;
+        for (; outCount < lightCount; outCount++) out[outCount] = lights[outCount];
+        _updateLightAttrs->_count = 0;
     }
-    ixl = arg0->f24;
-    ix = ixl->data;
-    tbl = arg0->f16;
-    tb = tbl->data;
-    for (i = 0; i < s1; i++) {
-        o = tb[ix[i]];
-        if (o->f24 >= 0) v = o->data[o->f24];
-        else if ((c = o->cnt) != 0) { c = c - 1; v = *(int *)((char *)o->data + c * 4); }
-        else v = o->f20;
-        o->f32 = 0;
-        if (v != o->f36) { a2[s0++] = v; o->f36 = v; }
-    }
-    k = s0 + s4;
-    SETCNT(arg1, k);
-    arg0->f24->cnt = 0;
-}
-#undef SETCNT
-
-void FUN_001b0440(int a0, int a1) {
-    *(int *)((char *)a1 + 8) = 0;
-    FUN_001b0250((PendingValueCollector *)a0, (PendingIntList *)a1);
-}
-
-void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1) {
-    Rc_1b0450 *a;
-    int n, j;
-    int *vals;
-    int *keys;
-    int *out;
-    E_1b0450 **ents;
-    int i;
-    arg1->n = 0;
-    n = arg0->f28.p->n;
-    a = arg0->f32.p;
-    if (n >= 0) {
-        if (n <= a->cap) a->n = n; else ((Gap::Core::igDataList *)a)->resizeAndSetCount(n, 4);
-    }
-    j = 0;
-    if (n >= 0) {
-        if (n <= arg1->cap) arg1->n = n; else ((Gap::Core::igDataList *)arg1)->resizeAndSetCount(n, 4);
-    }
-    keys = arg0->f28.p->data;
-    out = arg0->f32.p->data;
-    vals = arg1->data;
-    ents = arg0->f16->data;
-    for (i = 0; i < n; i++) {
-        int v = keys[i];
-        E_1b0450 *e = ents[v];
-        int x;
-        int m;
-        if (e->idx >= 0) x = e->data[e->idx];
-        else { m = e->n; if (m != 0) { int k = m - 1; x = e->data[k]; } else x = e->def; }
-        if (x != e->def) {
-            out[j] = v;
-            vals[j] = x;
-            j++;
-        } else {
-            e->flag = 0;
+    updates = _attrIncrementalUpdateList;
+    indices = (int *)updates->_data;
+    stackList = _attrStacks;
+    stacks = (igAttrStack **)stackList->_data;
+    for (i = 0; i < updateCount; i++) {
+        stack = stacks[indices[i]];
+        if (stack->_cachedOverride >= 0) attr = ((igAttr **)stack->_data)[stack->_cachedOverride];
+        else if ((top = stack->_count) != 0) { top = top - 1; attr = ((igAttr **)stack->_data)[top]; }
+        else attr = stack->_default;
+        stack->_hasChangedFromLastIncrementalFlush = 0;
+        if ((int)attr != stack->_lastIncrementalFlushedAttr) {
+            out[outCount++] = attr;
+            stack->_lastIncrementalFlushedAttr = (int)attr;
         }
     }
-    if (j >= 0) {
-        if (j <= arg1->cap) arg1->n = j; else ((Gap::Core::igDataList *)arg1)->resizeAndSetCount(j, 4);
-    }
-    a = arg0->f32.p;
-    if (j >= 0) {
-        if (j <= a->cap) a->n = j; else ((Gap::Core::igDataList *)a)->resizeAndSetCount(j, 4);
-    }
-    {
-        igSmartPointer<Rc_1b0450> swapped(arg0->f32);
-        arg0->f32 = arg0->f28;
-        arg0->f28 = swapped;
-    }
-    arg0->f8 = 0;
+    total = outCount + start;
+    al->setCount(total);
+    _attrIncrementalUpdateList->_count = 0;
 }
 
-void igAttrStackManager_PushLightStateAttr(igAttrStackManager *self, igLightStateAttr *lightState, int isOverride) {
-    LightStateAttrView *attr = (LightStateAttrView *)lightState;
+void igAttrStackManager::flushUpdateAttrs(igNonRefCountedAttrList *al) {
+    al->_count = 0;
+    flushUpdateAttrsNoReset(al);
+}
+
+void igAttrStackManager::flushAttrs(igNonRefCountedAttrList *al) {
+    igIntList *next;
+    int count, outCount;
+    igAttr **attrs;
+    int *handles;
+    int *nextHandles;
+    igAttrStack **stacks;
+    int i;
+    al->_count = 0;
+    count = _attrRootUpdateList->_count;
+    next = _nextAttrUpdateList;
+    next->setCount(count);
+    outCount = 0;
+    al->setCount(count);
+    handles = (int *)_attrRootUpdateList->_data;
+    nextHandles = (int *)_nextAttrUpdateList->_data;
+    attrs = (igAttr **)al->_data;
+    stacks = (igAttrStack **)_attrStacks->_data;
+    for (i = 0; i < count; i++) {
+        int handle = handles[i];
+        igAttrStack *stack = stacks[handle];
+        igAttr *attr;
+        int stackCount;
+        if (stack->_cachedOverride >= 0) attr = ((igAttr **)stack->_data)[stack->_cachedOverride];
+        else { stackCount = stack->_count; if (stackCount != 0) { int top = stackCount - 1; attr = ((igAttr **)stack->_data)[top]; } else attr = stack->_default; }
+        if (attr != stack->_default) {
+            nextHandles[outCount] = handle;
+            attrs[outCount] = attr;
+            outCount++;
+        } else {
+            stack->_hasChangedFromRoot = 0;
+        }
+    }
+    al->setCount(outCount);
+    _nextAttrUpdateList->setCount(outCount);
+    {
+        igSmartPointer<igIntList> swapped(_nextAttrUpdateList);
+        _nextAttrUpdateList = _attrRootUpdateList;
+        _attrRootUpdateList = swapped;
+    }
+    _stackChanged = false;
+}
+
+void igAttrStackManager::pushLightState(igLightStateAttr *ls, bool override) {
     int slot;
     int index;
     int stackIndex;
     igLightAttr *key;
-    igLightAttr *light = attr->getLight();
+    igLightAttr *light = ls->getLight();
     if (light == 0) {
         return;
     }
-    if (self->_simpleLightMgr == 1) {
+    if (_simpleLightMgr == 1) {
         int n;
-        igTDataList<LightStateAttrView *> *updates = (igTDataList<LightStateAttrView *> *)self->_updateLightAttrs;
+        igTDataList<igLightStateAttr *> *updates = (igTDataList<igLightStateAttr *> *)_updateLightAttrs.get();
         n = updates->getCount();
         if (n < updates->_capacity) {
             updates->_count = updates->_count + 1;
         } else {
             ((Gap::Core::igDataList *)updates)->resizeAndSetCount(n + 1, 4);
         }
-        updates->_data[n] = attr;
+        updates->_data[n] = ls;
         return;
     }
     key = light;
     {
-        igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)self->_lightAttrAddrs;
+        igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)_lightAttrAddrs.get();
         index = lights->sortedFind(&key);
     }
     if (index != -1) {
-        slot = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index] + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
+        /* matching construct: the offset list read through the pointer word, not operator-> (register order). */
+        slot = ((int *)_lightAttrStackAddrs.p->_data)[index] + _attrStackIndexTable[ls->_cachedAttrIndex];
     } else {
-        stackIndex = ((LightAttrAddrList *)self->_lightAttrAddrs)->_count;
+        stackIndex = _lightAttrAddrs->_count;
         if (stackIndex >= getSgMaxLightStateCount()) {
             return;
         }
-        index = ((LightAttrAddrList *)self->_lightAttrAddrs)->sortedAdd(light);
-        List_InsertWords((igDataList *)self->_lightAttrStackAddrs, index, 1, &stackIndex);
-        slot = stackIndex + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
-        LightStateAttrView *defaults = ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot];
-        igObject::ref(light);
-        igObject::release((igObject *)defaults->_light);
+        index = ((LightAttrAddrList *)_lightAttrAddrs.get())->sortedAdd((::igLightAttr *)light);
+        List_InsertWords((::igDataList *)_lightAttrStackAddrs.get(), index, 1, &stackIndex);
+        slot = stackIndex + _attrStackIndexTable[ls->_cachedAttrIndex];
+        igLightStateAttr *defaults = ((igTDataList<igLightStateAttr *> *)_attrDefaults.get())->_data[slot];
         defaults->_light = light;
-        ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot]->setEnabled(false);
+        ((igTDataList<igLightStateAttr *> *)_attrDefaults.get())->_data[slot]->setState(false);
     }
-    if (isOverride != 0) {
-        fastPushOverride(self, (igObject *)attr, slot);
+    if (override) {
+        fastPushOverride((::igAttrStackManager *)this, (::igObject *)ls, slot);
     } else {
-        fastPushAttr(self, (igObject *)attr, slot);
+        fastPushAttr((::igAttrStackManager *)this, (::igObject *)ls, slot);
     }
 }
 
-void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightStateAttr *lightState, int isOverride) {
-    LightStateAttrView *attr = (LightStateAttrView *)lightState;
+void igAttrStackManager::popLightState(igLightStateAttr *ls, bool override) {
     igLightAttr *key;
     int slot;
     AttrObjectStack *stack;
     int index;
-    igLightAttr *light = attr->_light;
+    igLightAttr *light = ls->_light;
     if (light == 0) {
         return;
     }
-    if (self->_simpleLightMgr == 1) {
-        LightStateAttrView *undo = (LightStateAttrView *)takePooled((igObjectPool *)self->_lightDisableAttrPool, (void *)Gap::Attrs::igLightStateAttr::_instantiateFromPool);
+    if (_simpleLightMgr == 1) {
+        /* matching construct: the pool read through the pointer word, not get() (register order). */
+        igLightStateAttr *undo = (igLightStateAttr *)takePooled((::igObjectPool *)_lightDisableAttrPool.p, (void *)Gap::Attrs::igLightStateAttr::_instantiateFromPool);
         int n;
-        igTDataList<LightStateAttrView *> *updates;
-        light = attr->_light;
-        igObject::ref(light);
-        if (undo->_light != 0) {
-            igLightAttr *old = undo->_light;
-            old->release();
-        }
+        igTDataList<igLightStateAttr *> *updates;
+        light = ls->_light;
         undo->_light = light;
-        undo->setEnabled(!attr->_enabled);
-        updates = (igTDataList<LightStateAttrView *> *)self->_updateLightAttrs;
+        undo->setState(!ls->_enabled);
+        updates = (igTDataList<igLightStateAttr *> *)_updateLightAttrs.get();
         n = updates->getCount();
         if (n < updates->_capacity) {
             updates->_count = updates->_count + 1;
@@ -418,72 +332,67 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
     }
     key = light;
     {
-        igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)self->_lightAttrAddrs;
+        igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)_lightAttrAddrs.get();
         index = lights->sortedFind(&key);
     }
     if (index == -1) {
         return;
     }
-    slot = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index] + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    if (isOverride != 0) {
-        igObject *top;
-        void (*pop)(igObject *, int);
-        stack = ((AttrObjectStackList *)self->_attrStacks)->_data[slot];
+    /* matching construct: the offset list read through the pointer word, not operator-> (register order). */
+    slot = ((int *)_lightAttrStackAddrs.p->_data)[index] + _attrStackIndexTable[ls->_cachedAttrIndex];
+    if (override) {
+        ::igObject *top;
+        void (*pop)(::igObject *, int);
+        stack = ((AttrObjectStackList *)_attrStacks.get())->_data[slot];
         top = stack->get(stack->_count - 1);
         pop = stack->_popProc;
-        if (pop != 0 && top == (igObject *)attr) {
-            pop(top, self->_popProcData);
+        if (pop != 0 && top == (::igObject *)ls) {
+            pop(top, (int)_popProcData);
         }
         stack->_count = stack->_count - 1;
         if (stack->_count == stack->_cachedOverride) {
             stack->_cachedOverride = -1;
         }
-        igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
+        igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
     } else {
-        igObject *top;
-        void (*pop)(igObject *, int);
-        stack = ((AttrObjectStackList *)self->_attrStacks)->_data[slot];
+        ::igObject *top;
+        void (*pop)(::igObject *, int);
+        stack = ((AttrObjectStackList *)_attrStacks.get())->_data[slot];
         top = stack->get(stack->_count - 1);
         pop = stack->_popProc;
         if (pop != 0) {
-            pop(top, self->_popProcData);
+            pop(top, (int)_popProcData);
         }
         stack->_count = stack->_count - 1;
-        igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
+        igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
     }
 }
 
-void FUN_001b0dc0(O_1b0dc0 *arg0) {
-    int n, i;
-    n = arg0->c24->n;
-    for (i = 0; i < n; i++) {
-        E2 *e = arg0->l->arr[i + arg0->base[Gap::Attrs::igLightStateAttr::getClassMeta()->_id]]->f14;
-        R_1b0dc0 **slot = &e->f10;
-        R_1b0dc0 *r = *slot;
-        if (r != 0) {
-            r->f4 = (int)((int) (r->f4 - 1));
-            if (((unsigned long long) ((long long) r->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
-        }
-        *slot = 0;
+void igAttrStackManager::clearLightHandles() {
+    int count, i;
+    count = _lightAttrAddrs->_count;
+    for (i = 0; i < count; i++) {
+        igAttrStack *stack = _attrStacks->get(i + _attrStackIndexTable[Gap::Attrs::igLightStateAttr::getClassMeta()->_id]);
+        /* matching construct: the light pointer is reached through its address, as retail keeps it in a register. */
+        igSmartPointer<igLightAttr> *defaultLight = &((igLightStateAttr *)stack->_default.get())->_light;
+        defaultLight->clear();
     }
-    arg0->c24->n = 0;
-    arg0->c28->n = 0;
+    _lightAttrAddrs->_count = 0;
+    _lightAttrStackAddrs->_count = 0;
 }
 
-int igAttrStackManager_IsLightEnabled(igAttrStackManager *self, igLightAttr *light) {
+bool igAttrStackManager::getLightState(igLightAttr *light) {
     if (light == 0) {
-        return 0;
+        return false;
     }
     int index;
     igLightAttr *key = light;
-    igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)self->_lightAttrAddrs;
+    igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)_lightAttrAddrs.get();
     index = lights->sortedFind(&key);
     if (index != -1) {
-        int base = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index];
+        int base = ((int *)_lightAttrStackAddrs->_data)[index];
         igMetaObject *meta = Gap::Attrs::igLightStateAttr::getClassTypeSafe();
-        AttrObjectStack *stack = ((AttrObjectStackList *)self->_attrStacks)->_data[base + ((int *)self->_attrStackIndexTable)[meta->_id]];
+        AttrObjectStack *stack = (AttrObjectStack *)_attrStacks->get(base + _attrStackIndexTable[meta->_id]);
         igLightStateAttr *state;
         int current = stack->_cachedOverride;
         if (current >= 0) {
@@ -499,101 +408,103 @@ int igAttrStackManager_IsLightEnabled(igAttrStackManager *self, igLightAttr *lig
         }
         return state->_enabled;
     }
-    return 0;
+    return false;
 }
 
-void FUN_001b1030(igAttrStackManager *self, igAttr *attr) {
-    AttrObjectStack *stack = (AttrObjectStack *)self->_attrStacks;
-    int slot = attr->_cachedAttrIndex;
-    slot = attr->_cachedUnitID + ((int *)self->_attrStackIndexTable)[slot];
+void igAttrStackManager::pushAttr(const igAttr *attribute) {
+    /* matching construct: one variable holds the stack list, then the stack (retail's register choice). */
+    AttrObjectStack *stack = (AttrObjectStack *)_attrStacks.get();
+    int slot = attribute->_cachedAttrIndex;
+    slot = attribute->_cachedUnitID + _attrStackIndexTable[slot];
     stack = (AttrObjectStack *)stack->_data[slot];
-    stack->append((igObject *)attr);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
+    stack->append((::igObject *)attribute);
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
 }
 
-void FUN_001b1100(struct A_1b1100 *arg0, struct B_1b1100 *arg1) {
-    int (*temp_a2)(int, int);
-    int temp_s1;
-    struct Q_1b1100 *temp_s0;
-    int x; int n1; int *a;
+void igAttrStackManager::popAttr(const igAttr *attribute) {
+    void (*pop)(igAttr *, void *);
+    int slot;
+    igAttrStack *stack;
+    igAttr *top; int last; igAttr **data;
 
-    temp_s1 = arg0->f68[arg1->idx] + arg1->off;
-    temp_s0 = arg0->f16->q[temp_s1];
-n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
-    temp_a2 = temp_s0->cb;
-    if (temp_a2 != 0) {
-        temp_a2(x, arg0->f48);
+    slot = _attrStackIndexTable[attribute->_cachedAttrIndex] + attribute->_cachedUnitID;
+    stack = _attrStacks->get(slot);
+    last = stack->_count - 1; data = (igAttr **)stack->_data; top = data[last];
+    pop = (void (*)(igAttr *, void *))stack->_popProc;
+    if (pop != 0) {
+        pop(top, _popProcData);
     }
-    temp_s0->n = temp_s0->n - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
+    stack->_count = stack->_count - 1;
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
 }
 
-void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1) {
-    int (*temp_a2)(int, int);
-    int temp_s1;
-    struct Q_1b11b0 *temp_s0;
-    int x; int n1; int *a;
+void igAttrStackManager::popAttr(igMetaObject *meta) {
+    void (*pop)(igAttr *, void *);
+    int slot;
+    igAttrStack *stack;
+    igAttr *top; int last; igAttr **data;
 
-    temp_s1 = arg0->f68[arg1->idx];
-    temp_s0 = arg0->f16->q[temp_s1];
-n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
-    temp_a2 = temp_s0->cb;
-    if (temp_a2 != 0) {
-        temp_a2(x, arg0->f48);
+    slot = _attrStackIndexTable[meta->_id];
+    stack = _attrStacks->get(slot);
+    last = stack->_count - 1; data = (igAttr **)stack->_data; top = data[last];
+    pop = (void (*)(igAttr *, void *))stack->_popProc;
+    if (pop != 0) {
+        pop(top, _popProcData);
     }
-    temp_s0->n = temp_s0->n - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
+    stack->_count = stack->_count - 1;
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
 }
 
-void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2) {
-    int (*temp_a2)(int, int);
-    int temp_s1;
-    struct Q_1b1250 *temp_s0;
-    int x; int n1; int *a;
+void igAttrStackManager::popAttr(igMetaObject *meta, int unitID) {
+    void (*pop)(igAttr *, void *);
+    int slot;
+    igAttrStack *stack;
+    igAttr *top; int last; igAttr **data;
 
-    temp_s1 = arg2 + arg0->f68[arg1->idx];
-    temp_s0 = arg0->f16->q[temp_s1];
-n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
-    temp_a2 = temp_s0->cb;
-    if (temp_a2 != 0) {
-        temp_a2(x, arg0->f48);
+    slot = unitID + _attrStackIndexTable[meta->_id];
+    stack = _attrStacks->get(slot);
+    last = stack->_count - 1; data = (igAttr **)stack->_data; top = data[last];
+    pop = (void (*)(igAttr *, void *))stack->_popProc;
+    if (pop != 0) {
+        pop(top, _popProcData);
     }
-    temp_s0->n = temp_s0->n - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
+    stack->_count = stack->_count - 1;
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
 }
 
-void igAttrStackManager_PushOverrideAttr(igAttrStackManager *self, igAttr *attr) {
-    AttrObjectStack *stack = (AttrObjectStack *)self->_attrStacks;
-    int slot = attr->_cachedAttrIndex;
-    slot = attr->_cachedUnitID + ((int *)self->_attrStackIndexTable)[slot];
+void igAttrStackManager::pushOverride(const igAttr *override) {
+    /* matching construct: one variable holds the stack list, then the stack (retail's register choice). */
+    AttrObjectStack *stack = (AttrObjectStack *)_attrStacks.get();
+    int slot = override->_cachedAttrIndex;
+    slot = override->_cachedUnitID + _attrStackIndexTable[slot];
     stack = (AttrObjectStack *)stack->_data[slot];
     if (stack->_cachedOverride < 0) {
         stack->_cachedOverride = stack->_count;
     }
-    stack->append((igObject *)attr);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)self, (igAttrStack *)stack, slot);
+    stack->append((::igObject *)override);
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
 }
 
-void igAttrStackManager_PopOverrideAttr(igAttrStackManager *manager, igAttr *attr) {
-    struct A_1b13d0 *arg0 = (struct A_1b13d0 *)manager;
-    struct B_1b13d0 *arg1 = (struct B_1b13d0 *)attr;
-    int (*temp_a2)(int, int);
-    int temp_s1;
-    struct Q_1b13d0 *temp_s0;
-    int n1; int *a; int x;
+void igAttrStackManager::popOverride(const igAttr *override) {
+    void (*pop)(igAttr *, void *);
+    int slot;
+    igAttrStack *stack;
+    int last; igAttr **data; igAttr *top;
 
-    temp_s1 = arg1->off + arg0->f68[arg1->idx];
-    temp_s0 = arg0->f16->q[temp_s1];
-    n1 = temp_s0->n - 1; a = temp_s0->a; x = a[n1];
-    temp_a2 = temp_s0->cb;
-    if ((temp_a2 != 0) && (x == (int)arg1)) {
-        temp_a2(x, arg0->f48);
+    slot = override->_cachedUnitID + _attrStackIndexTable[override->_cachedAttrIndex];
+    stack = _attrStacks->get(slot);
+    last = stack->_count - 1; data = (igAttr **)stack->_data; top = data[last];
+    pop = (void (*)(igAttr *, void *))stack->_popProc;
+    if ((pop != 0) && (top == override)) {
+        pop(top, _popProcData);
     }
-    temp_s0->n = temp_s0->n - 1;
-    if (temp_s0->n == temp_s0->f24) {
-        temp_s0->f24 = -1;
+    stack->_count = stack->_count - 1;
+    if (stack->_count == stack->_cachedOverride) {
+        stack->_cachedOverride = -1;
     }
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)arg0, (igAttrStack *)temp_s0, temp_s1);
+    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+}
+}
 }
 
 void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index) {

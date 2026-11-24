@@ -163,9 +163,9 @@ int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
         if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool));
         o = lb->data[lb->count++];
         o->vY(b);
-        FUN_001b1030((igAttrStackManager *)s4, (igAttr *)o);
+        ((Gap::Sg::igAttrStackManager *)s4)->pushAttr((Gap::Attrs::igAttr *)o);
         FUN_001b8cf0((igCommonTraversal *)arg0, (char *)a);
-        FUN_001b1100((struct A_1b1100 *)s4, (struct B_1b1100 *)o);
+        ((Gap::Sg::igAttrStackManager *)s4)->popAttr((Gap::Attrs::igAttr *)o);
     }
     return 0;
 }
@@ -204,9 +204,9 @@ int igCommonTraversal_TraverseBillboard(C_1b8f20 *arg0, D *arg1) {
     }
     arg1->f60 = o;
     igMatrix44f_Multiply((float *)((char *)o + 12), (const float *)sp80, (const float *)arg0->v100);
-    FUN_001b1030((igAttrStackManager *)arg0->x, (igAttr *)o);
+    ((Gap::Sg::igAttrStackManager *)arg0->x)->pushAttr((Gap::Attrs::igAttr *)o);
     r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
-    FUN_001b1100((struct A_1b1100 *)arg0->x, (struct B_1b1100 *)o);
+    ((Gap::Sg::igAttrStackManager *)arg0->x)->popAttr((Gap::Attrs::igAttr *)o);
     if (r == 2) return 2;
     return 0;
 }
@@ -247,7 +247,7 @@ int igCommonTraversal_TraverseOverrideAttrSet(igCommonTraversal *self, igOverrid
         igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
     }
     if (set->_trigger) {
-        FUN_001b0440(self->_attrStack, self->_flushedAttrs);
+        ((Gap::Sg::igAttrStackManager *)self->_attrStack)->flushUpdateAttrs((Gap::Attrs::igNonRefCountedAttrList *)(igNonRefCountedAttrList *)self->_flushedAttrs);
         List_AppendWords((igDataList *)(*(int *)((char *)((igSorter *)self->_sorter)->_dlist + 12)), ((igObjectList *)self->_flushedAttrs)->_count, (const int *)(((igObjectList *)self->_flushedAttrs)->_data));
     }
     result = igTraversal_TraverseChildren((igTraversal *)self, (igNode *)set);
@@ -310,7 +310,7 @@ int igCommonTraversal_TraverseAttrSet(igCommonTraversal *self, igAttrSet *set) {
         igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
     }
     if (set->_trigger != 0) {
-        FUN_001b0440(self->_attrStack, self->_flushedAttrs);
+        ((Gap::Sg::igAttrStackManager *)self->_attrStack)->flushUpdateAttrs((Gap::Attrs::igNonRefCountedAttrList *)(igNonRefCountedAttrList *)self->_flushedAttrs);
         List_AppendWords((igDataList *)(*(int *)((char *)((igSorter *)self->_sorter)->_dlist + 12)), ((igObjectList *)self->_flushedAttrs)->_count, (const int *)(((igObjectList *)self->_flushedAttrs)->_data));
     }
     result = igTraversal_TraverseChildren((igTraversal *)self, (igNode *)set);
@@ -354,7 +354,7 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
         return 0;
     }
         base = topOf(stackOf(((TraversalStateHolder *)o)->_state))->_matrix;
-    FUN_001b1030((igAttrStackManager *)o->_state, (igAttr *)o->_baseAttr);
+    ((Gap::Sg::igAttrStackManager *)o->_state)->pushAttr((Gap::Attrs::igAttr *)o->_baseAttr);
     count = g->_attrSets->_count;
     for (i = 0; i < count; i++) {
         if (FUN_001d8330((void *)g, i) == 0) {
@@ -370,12 +370,12 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
             } else {
                 attr->setMatrix(src);
             }
-            FUN_001b1030((igAttrStackManager *)o->_state, (igAttr *)attr);
+            ((Gap::Sg::igAttrStackManager *)o->_state)->pushAttr((Gap::Attrs::igAttr *)attr);
         }
         set = g->_attrSets->_data[i];
         n = set->_count;
         for (j = 0; j < n; j++) {
-            FUN_001b1030((igAttrStackManager *)o->_state, (igAttr *)set->_data[j]);
+            ((Gap::Sg::igAttrStackManager *)o->_state)->pushAttr((Gap::Attrs::igAttr *)set->_data[j]);
         }
         switch (g->_mode) {
         case 0:
@@ -389,10 +389,10 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
         }
         if (!g->_nested) {
             for (j = n - 1; j >= 0; j--) {
-                FUN_001b1100((struct A_1b1100 *)o->_state, (struct B_1b1100 *)set->_data[j]);
+                ((Gap::Sg::igAttrStackManager *)o->_state)->popAttr((Gap::Attrs::igAttr *)set->_data[j]);
             }
             if (attr != 0) {
-                FUN_001b1100((struct A_1b1100 *)o->_state, (struct B_1b1100 *)attr);
+                ((Gap::Sg::igAttrStackManager *)o->_state)->popAttr((Gap::Attrs::igAttr *)attr);
             }
         }
     }
@@ -401,16 +401,16 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
             if (FUN_001d8330((void *)g, i) != 0) {
                 set2 = g->_attrSets->_data[i];
                 for (j = set2->_count - 1; j >= 0; j--) {
-                    FUN_001b1100((struct A_1b1100 *)o->_state, (struct B_1b1100 *)set2->_data[j]);
+                    ((Gap::Sg::igAttrStackManager *)o->_state)->popAttr((Gap::Attrs::igAttr *)set2->_data[j]);
                 }
                 attr = ((ModelViewAttrView *)FUN_001d8310((void *)g, i));
                 if (attr != 0) {
-                    FUN_001b1100((struct A_1b1100 *)o->_state, (struct B_1b1100 *)attr);
+                    ((Gap::Sg::igAttrStackManager *)o->_state)->popAttr((Gap::Attrs::igAttr *)attr);
                 }
             }
         }
     }
-    FUN_001b1100((struct A_1b1100 *)o->_state, (struct B_1b1100 *)o->_baseAttr);
+    ((Gap::Sg::igAttrStackManager *)o->_state)->popAttr((Gap::Attrs::igAttr *)o->_baseAttr);
     return 0;
 }
 
@@ -468,11 +468,11 @@ int igCommonTraversal_TraverseLightStateSet(struct A_1b9fc0 *arg0, struct B_1b9f
 
     s0 = arg1->f32->n;
     for (s1 = 0; s1 < s0; s1++) {
-        igAttrStackManager_PushLightStateAttr((igAttrStackManager *)arg0->f52, (igLightStateAttr *)arg1->f32->data[s1], 0);
+        ((Gap::Sg::igAttrStackManager *)arg0->f52)->pushLightState((Gap::Attrs::igLightStateAttr *)arg1->f32->data[s1], 0);
     }
     igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     for (s0 = s0 - 1; s0 >= 0; s0--) {
-        igAttrStackManager_PopLightStateAttr((igAttrStackManager *)arg0->f52, (igLightStateAttr *)arg1->f32->data[s0], 0);
+        ((Gap::Sg::igAttrStackManager *)arg0->f52)->popLightState((Gap::Attrs::igLightStateAttr *)arg1->f32->data[s0], 0);
     }
     return 0;
 }
@@ -499,17 +499,17 @@ int igCommonTraversal_TraverseLod(CullTraversalView *o, CullNodeView *node) {
 
 int igCommonTraversal_TraverseBumpMapShader(int a0, int arg1) {
     S_1ba1a0 *arg0 = (S_1ba1a0 *)a0;
-    igAttrStackManager_PushOverrideAttr((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->pushOverride((Gap::Attrs::igAttr *)arg0->f232);
     FUN_001b3ff0((void *)arg1, (int)arg0);
-    igAttrStackManager_PopOverrideAttr((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->popOverride((Gap::Attrs::igAttr *)arg0->f232);
     return 0;
 }
 
 int igCommonTraversal_TraverseCartoonShader(int arg0_, int arg1) {
     T_1ba200 *arg0 = (T_1ba200 *)arg0_;
-    FUN_001b1030((igAttrStackManager *)arg0->f34, (igAttr *)arg0->fe8);
+    ((Gap::Sg::igAttrStackManager *)arg0->f34)->pushAttr((Gap::Attrs::igAttr *)arg0->fe8);
     igCommonTraversal_DrawCartoonShader((igCartoonShader *)arg1, (igCommonTraversal *)arg0);
-    FUN_001b1100((struct A_1b1100 *)arg0->f34, (struct B_1b1100 *)arg0->fe8);
+    ((Gap::Sg::igAttrStackManager *)arg0->f34)->popAttr((Gap::Attrs::igAttr *)arg0->fe8);
     return 0;
 }
 
@@ -616,9 +616,9 @@ int FUN_001ba260(igCommonTraversal *self, MultiPassShaderView *shader) {
 
 int igCommonTraversal_TraversePlanarShadowShader(int a0, int arg1) {
     S_1ba650 *arg0 = (S_1ba650 *)a0;
-    FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->pushAttr((Gap::Attrs::igAttr *)arg0->f232);
     ((Gap::Sg::igPlanarShadowShader *)arg1)->shade((Gap::Sg::igCommonTraversal *)arg0);
-    FUN_001b1100((struct A_1b1100 *)arg0->f52, (struct B_1b1100 *)arg0->f232);
+    ((Gap::Sg::igAttrStackManager *)arg0->f52)->popAttr((Gap::Attrs::igAttr *)arg0->f232);
     return 0;
 }
 

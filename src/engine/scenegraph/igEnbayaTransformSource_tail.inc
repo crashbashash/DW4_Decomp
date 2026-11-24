@@ -224,7 +224,7 @@ void igEnvironmentMapShader2::shade(igCommonTraversal *ct) {
             for (j = q->_count - 1; j >= 0; j--) popEnvAttr(s, q->_data[j]);
         }
     }
-    if (_useRenderPackage) FUN_001dc610((igSorter *)t->_context);
+    if (_useRenderPackage) FUN_001dc610((::igSorter *)t->_context);
 }
 
 void igEnvironmentMapShader2::setEnvironmentMapTexture(igTextureCubeAttr *envMapTexture) {

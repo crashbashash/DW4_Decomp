@@ -139,7 +139,7 @@ void igCompileTraversal::begin(igNode *arg1) {
     matrix->setMatrix((int)&_viewMat);
     ((Gap::Core::igObjectList *)_mvmList)->append((Gap::Core::igObject *)matrix.p);
     ((Gap::Core::igObjectList *)_xformInfoList.get())->append((Gap::Core::igObject *)info.p);
-    FUN_001b1030((igAttrStackManager *)_attrStack.get(), (::igAttr *)matrix.p);
+    ((igAttrStackManager *)(_attrStack.get()))->pushAttr((igAttr *)matrix.p);
     }
     if (_userTimeState != 0) {
         ((VC128L *)this)->vX(_timeLong);
@@ -171,9 +171,9 @@ int igTransform_CompileChildrenAndPopMatrix(float *matrix, igTransform *self, ig
     target = self->_target;
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     if (target == 0) {
-        FUN_001b11b0((A_1b11b0 *)manager, (B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
+        ((Gap::Sg::igAttrStackManager *)manager)->popAttr((igMetaObject *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
     } else {
-        FUN_001b1250((A_1b1250 *)manager, (B_1b1250 *)Gap::Attrs::igVertexBlendMatrixAttr::getClassMeta(), target - 1);
+        ((Gap::Sg::igAttrStackManager *)manager)->popAttr((igMetaObject *)Gap::Attrs::igVertexBlendMatrixAttr::getClassMeta(), target - 1);
     }
     return result == 2 ? 2 : 0;
 }
@@ -302,9 +302,9 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
             igObject *mvm = (igObject *)Gap::Attrs::igModelViewMatrixAttr::getIdentityAttr();
             ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)mvm);
             ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
-            FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm);
+            ((Gap::Sg::igAttrStackManager *)self->_attrStack)->pushAttr((Gap::Attrs::igAttr *)mvm);
             restore = topAttr(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, listMeta));
-            FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)restore);
+            ((Gap::Sg::igAttrStackManager *)self->_attrStack)->pushAttr((Gap::Attrs::igAttr *)restore);
         } else if (((BoolAttr_1bc1e0 *)current_1bc1e0(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, Gap::Attrs::igVertexBlendStateAttr::getClassMeta())))->_enabled != 0) {
             igTDataList<igObject *> *palettes = (igTDataList<igObject *> *)self->_boneMatrixPaletteList;
             igObject *palette = palettes->_count > 0 ? palettes->get(palettes->_count - 1) : 0;
@@ -318,16 +318,16 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
                 mvm->setMatrix(&g_matrix44Identity);
                 ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)mvm.p);
                 ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
-                FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm.p);
+                ((Gap::Sg::igAttrStackManager *)self->_attrStack)->pushAttr((Gap::Attrs::igAttr *)mvm.p);
                 pushed = true;
             }
         }
         FUN_001db720((igSorter *)self->_sorter, (igGeometry *)geometry, (igAttrStackManager *)self->_attrStack);
         if (hasList) {
-            FUN_001b1100((struct A_1b1100 *)self->_attrStack, (struct B_1b1100 *)restore);
-            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
+            ((Gap::Sg::igAttrStackManager *)self->_attrStack)->popAttr((Gap::Attrs::igAttr *)restore);
+            ((Gap::Sg::igAttrStackManager *)self->_attrStack)->popAttr((igMetaObject *)((struct B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
         } else if (pushed) {
-            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
+            ((Gap::Sg::igAttrStackManager *)self->_attrStack)->popAttr((igMetaObject *)((struct B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
         }
     }
     return 0;
@@ -402,9 +402,9 @@ int igCompileTraversal_TraverseModelViewMatrixBoneSelect(igCompileTraversal *sel
     if (((unsigned long long) ((long long) temp_v0->f4 << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_v0);
     }
-    FUN_001b1030((igAttrStackManager *)temp_s0, (igAttr *)temp_s2);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->pushAttr((Gap::Attrs::igAttr *)temp_s2);
     temp_s1 = igTraversal_TraverseChildren((igTraversal *)self, (igNode *)arg1);
-    FUN_001b1100((struct A_1b1100 *)temp_s0, (struct B_1b1100 *)temp_s2);
+    ((Gap::Sg::igAttrStackManager *)temp_s0)->popAttr((Gap::Attrs::igAttr *)temp_s2);
     if (temp_s1 == 2) {
         return 2;
     }
@@ -433,9 +433,9 @@ int igCompileTraversal_TraverseBlendMatrixSelect(A_1bcf70 *arg0, B_1bcf70 *arg1)
         o->f16[i] = arg1->f40->data[i];
         i++;
     }
-    FUN_001b1030((igAttrStackManager *)s0, (igAttr *)o);
+    ((Gap::Sg::igAttrStackManager *)s0)->pushAttr((Gap::Attrs::igAttr *)o);
     int r = igCommonTraversal_TraverseAttrSet((igCommonTraversal *)arg0, (igAttrSet *)arg1);
-    FUN_001b1100((struct A_1b1100 *)s0, (struct B_1b1100 *)o);
+    ((Gap::Sg::igAttrStackManager *)s0)->popAttr((Gap::Attrs::igAttr *)o);
     if (r == 2) return 2;
     return 0;
 }
