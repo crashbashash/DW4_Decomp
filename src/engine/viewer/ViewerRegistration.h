@@ -43,7 +43,6 @@ class igMemoryPoolView;
 #include "dw4/attrs/igGeometryAttrList.h"
 #include "dw4/gfx/igVisualContext.h"
 #include "dw4/maths/igRay.h"
-extern "C" void FUN_0019e440(void);
 extern "C" void igViewerStatisticsManager_EnsureRegistered(void);
 extern "C" void igStatisticsItemList_EnsureRegistered(void);
 extern "C" void igStatisticsItem_EnsureRegistered(void);

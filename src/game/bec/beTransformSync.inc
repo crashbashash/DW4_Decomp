@@ -35,8 +35,8 @@ CallbackArray *beTransformSync_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTransformSync_metaObject,
-        igTransform_Register,
-        igTransform_GetPublishedMetaObject,
+        Gap::Sg::igTransform::arkRegisterInternal,
+        Gap::Sg::igTransform::getClassMeta,
         beTransformSync_GetMetaObjectFunction,
         "beTransformSync",
         0x70, /* instance size */

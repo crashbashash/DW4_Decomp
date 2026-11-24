@@ -33,23 +33,26 @@ void Gap__Sg__igEnbayaTransformSource__vfunc_32(int a0) {
     FUN_001c0ea0(*(EnbayaSourceView **)((char *)a0 + 12));
 }
 
-void FUN_001c1c50(void **self, int flag) {
-    igNode_userConstruct((void * *)self, flag);
+namespace Gap {
+namespace Sg {
+
+void igEnvironmentMapShader2::userConstruct(int flag) {
+    igNode_userConstruct((void * *)(void * *)this, flag);
 }
 
-void FUN_001c1c60(T_1c1c60 *arg0) {
+void igEnvironmentMapShader2::userDestruct() {
     List_1c1c60 *l;
     int n;
     int i;
     Ref_1c1c60 *r;
-    l = arg0->f64;
+    l = ((T_1c1c60 *)this)->f64;
     n = l->count;
     for (i = 0; i < n; i++) {
         r = l->data[i];
         if (r != 0) {
             r->rc = r->rc - 1;
             if ((r->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)r);
+                igObject_Destroy((::igObject *)r);
             }
         }
     }
@@ -58,14 +61,14 @@ void FUN_001c1c60(T_1c1c60 *arg0) {
         l->data[i] = 0;
     }
     l->count = 0;
-    l = arg0->f68;
+    l = ((T_1c1c60 *)this)->f68;
     n = l->count;
     for (i = 0; i < n; i++) {
         r = l->data[i];
         if (r != 0) {
             r->rc = r->rc - 1;
             if ((r->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)r);
+                igObject_Destroy((::igObject *)r);
             }
         }
     }
@@ -74,17 +77,14 @@ void FUN_001c1c60(T_1c1c60 *arg0) {
         l->data[i] = 0;
     }
     l->count = 0;
-    if (igMetaObject_CountInstances((igMetaObject *)(arg0->vA()), 1) == 0) {
-        arg0->vB();
+    if (igMetaObject_CountInstances((igMetaObject *)(((T_1c1c60 *)this)->vA()), 1) == 0) {
+        ((T_1c1c60 *)this)->vB();
     }
-    igGroup_userDestruct((T_1c5e20 *)arg0);
+    igGroup_userDestruct((T_1c5e20 *)this);
 }
 
-int FUN_001c1e00(void) {
-    return ((int)g_igEnvironmentMapShader2_metaObject);
-}
-
-void FUN_001c1e10(void) {
+void igEnvironmentMapShader2::initStaticAttrs(igCapabilityManager *capabilityManager)
+{
     int temp_s0;
 
     if (((void * * *)DAT_00562730)[0] == 0) {
@@ -103,51 +103,53 @@ void FUN_001c1e10(void) {
     if (g_igAlphaStateAttr_instance.p == 0) {
         temp_s0 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_igAlphaStateAttr_instance.release();
-        g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0);
+        g_igAlphaStateAttr_instance.p = (::igAlphaStateAttr *)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0);
         ((DW4VC_128_1 *)g_igAlphaStateAttr_instance.p)->vX(0);
     }
 }
 
-void FUN_001c1f90(int) {
+void igEnvironmentMapShader2::destroyStaticAttrs() {
     S_ref *p;
     p = ((S_ref * *)DAT_00562730)[0];
     if (p != 0) {
         p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((::igObject *)p);
         ((S_ref * *)DAT_00562730)[0] = 0;
     }
     p = ((S_ref * *)DAT_00562738)[0];
     if (p != 0) {
         p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((::igObject *)p);
         ((S_ref * *)DAT_00562738)[0] = 0;
     }
     p = ((S_ref * *)DAT_00562740)[0];
     if (p != 0) {
         p->f4 = p->f4 - 1;
-        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
+        if (((unsigned long long) ((long long) p->f4 << 0x29) >> 0x29) == 0) igObject_Destroy((::igObject *)p);
         ((S_ref * *)DAT_00562740)[0] = 0;
     }
     g_igAlphaStateAttr_instance.clear();
 }
 
-void FUN_001c20b0(Controller *self) {
-  unsigned char flag;
-  Obj_1c20b0 *s1;
-  int props = ((PropertySet *)g_objectSystem)->props;
-  flag = 1;
-  igGetRegistryValue_Bool((igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
-  self->enabled = flag;
-  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
-  self->f76->setValue(self->a32);
-  self->f76->configure(0);
-  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
-  self->f80->setKind(2);
-  self->f80->configure(0);
-  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
-  self->f84->field12 = 2;
-  self->f84->configure(0);
-  if (self->p36 != 0) {
+void igEnvironmentMapShader2::initAttrs(igCapabilityManager *capabilityManager)
+{
+    Controller *self = (Controller *)this;
+    unsigned char flag;
+    Obj_1c20b0 *s1;
+    int props = ((PropertySet *)g_objectSystem)->props;
+    flag = 1;
+    igGetRegistryValue_Bool((::igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
+    self->enabled = flag;
+    assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
+    self->f76->setValue(self->a32);
+    self->f76->configure(0);
+    assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
+    self->f80->setKind(2);
+    self->f80->configure(0);
+    assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
+    self->f84->field12 = 2;
+    self->f84->configure(0);
+    if (self->p36 != 0) {
     self->p36->configure(0);
     assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f88->setKind(0);
@@ -163,8 +165,8 @@ void FUN_001c20b0(Controller *self) {
       s1 = ((Obj_1c20b0 * *)DAT_00562740)[0];
       assign(self->f96, s1);
     }
-  }
-  if (self->a52 != 0) {
+    }
+    if (self->a52 != 0) {
     assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f100->setValue(self->a52);
     self->f100->configure(0);
@@ -180,232 +182,133 @@ void FUN_001c20b0(Controller *self) {
     assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f108->field12 = 0;
     self->f108->configure(0);
-  }
+    }
 }
 
-void FUN_001c2880(S_1c2880 *arg0) {
-    OL *l;
-    int n;
-    int i;
-    int n2;
-    int i2;
-    R_1c2880 *p;
-    R_1c2880 *q;
-    l = arg0->l64;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        p = l->data[i];
-        if (p != 0) {
-            p->refs = p->refs - 1;
-            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
-        }
-    }
-    n2 = l->count;
-    for (i2 = 0; i2 < n2; i2++) {
-        l->data[i2] = 0;
-    }
-    l->count = 0;
-    l = arg0->l68;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        p = l->data[i];
-        if (p != 0) {
-            p->refs = p->refs - 1;
-            if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
-        }
-    }
-    n2 = l->count;
-    for (i2 = 0; i2 < n2; i2++) {
-        l->data[i2] = 0;
-    }
-    l->count = 0;
-    arg0->b72 = 0;
-    q = arg0->f76;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f76 = 0;
-    q = arg0->f80;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f80 = 0;
-    q = arg0->f84;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f84 = 0;
-    q = arg0->f88;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f88 = 0;
-    q = arg0->f92;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f92 = 0;
-    q = arg0->f96;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f96 = 0;
-    q = arg0->f100;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f100 = 0;
-    q = arg0->f104;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f104 = 0;
-    q = arg0->f108;
-    if (q != 0) {
-        q->refs = q->refs - 1;
-        if (((unsigned long long)((long long)q->refs << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q);
-    }
-    arg0->f108 = 0;
+void igEnvironmentMapShader2::destroyAttrs() {
+    _attrPushLists->removeAll();
+    _attrPopLists->removeAll();
+    _useRenderPackage = false;
+    _envMapTextureBind = 0;
+    _envMapCoordSource = 0;
+    _envMapTextureFunc = 0;
+    _diffuseCoordSource = 0;
+    _diffuseTextureFunc = 0;
+    _diffuseBlendState = 0;
+    _glossMapTextureBind = 0;
+    _glossMapCoordSource = 0;
+    _glossMapTextureFunc = 0;
 }
 
-void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t) {
+void igEnvironmentMapShader2::shade(igCommonTraversal *ct) {
+    EnvTraversalView *t = (EnvTraversalView *)ct;
     EnvAttrStack *s = t->_attrStack;
     int n;
     int i;
-    if (!self->_configured) self->configure(t->_arg32);
-    self->prepare(t);
-    n = self->_pushLists->_count;
+    if (!_configured) configure((igCapabilityManager *)t->_arg32);
+    vfunc_45(ct);
+    n = ((EnvListList *)_attrPushLists.get())->_count;
     if (n == 0) {
-        igTraversal_TraverseChildren((igTraversal *)t, (igNode *)self);
+        igTraversal_TraverseChildren((::igTraversal *)t, (::igNode *)this);
         return;
     }
-    if (self->_useContext) FUN_001dc500(t->_context, self->_unit, 0);
+    if (_useRenderPackage) FUN_001dc500(t->_context, _isTransparent, 0);
     for (i = 0; i < n; i++) {
-        EnvAttrList *p = self->_pushLists->_data[i];
+        EnvAttrList *p = ((EnvListList *)_attrPushLists.get())->_data[i];
         int m = p->_count;
         int j;
         for (j = 0; j < m; j++) pushEnvAttr(s, p->_data[j]);
-        igTraversal_TraverseChildren((igTraversal *)t, (igNode *)self);
+        igTraversal_TraverseChildren((::igTraversal *)t, (::igNode *)this);
         {
-            EnvAttrList *q = self->_popLists->_data[i];
+            EnvAttrList *q = ((EnvListList *)_attrPopLists.get())->_data[i];
             for (j = q->_count - 1; j >= 0; j--) popEnvAttr(s, q->_data[j]);
         }
     }
-    if (self->_useContext) FUN_001dc610((igSorter *)t->_context);
+    if (_useRenderPackage) FUN_001dc610((igSorter *)t->_context);
 }
 
-void igPsx2EnvironmentMapShader_SetEnvironmentMapTexture(S0_1c2eb0 *arg0, Rc *arg1) {
-    Rc *temp_a0;
-
-    if (arg1 != 0) {
-        arg1->rc = arg1->rc + 1;
-    }
-    temp_a0 = (Rc *)arg0->f32;
-    if (temp_a0 != 0) {
-        temp_a0->rc = temp_a0->rc - 1;
-        if ((temp_a0->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->f32 = (E_1c2eb0 *)arg1;
-    arg0->f32->f96 = 0;
-    bool b = ((Gap::Attrs::igTextureAttr *)arg0->f32)->getImage(0) != 0;
+void igEnvironmentMapShader2::setEnvironmentMapTexture(igTextureCubeAttr *envMapTexture) {
+    _envMapTexture = envMapTexture;
+    _envMapTexture->_applyType = igTextureCubeAttr::NOT_SET;
+    bool b = ((Gap::Attrs::igTextureAttr *)_envMapTexture.get())->getImage(0) != 0;
     if (!b) {
-        FUN_001c31e0((igTextureAttr *)arg0->f32);
+        FUN_001c31e0((::igTextureAttr *)_envMapTexture.get());
     }
-    arg0->f60 = 0;
+    _configured = 0;
 }
 
-void igPsx2EnvironmentMapShader_SetDiffuseTexture(igPsx2EnvironmentMapShader *self, igObject *value) {
-    igObject *previous;
-    igObject::ref(value);
-    previous = (igObject *)(self->_diffuseTextureBind);
-    igObject::release(previous);
-    self->_diffuseTextureBind = (int)(value);
-    self->_configured = 0;
+void igEnvironmentMapShader2::setDiffuseTexture(igTextureBindAttr *tex) {
+    _diffuseTextureBind = tex;
+    _configured = 0;
 }
 
 /* Setter for `_diffuseTextureCoordIndex` (diffuse texture-coordinate set index). It also clears
  * `_configured`, so the shader's render state is rebuilt on its next use (`_configured` is the
  * shader's built-once flag). */
 
-void igPsx2EnvironmentMapShader_SetDiffuseTextureCoordIndex(igPsx2EnvironmentMapShader *self, int coordIndex) {
-    self->_diffuseTextureCoordIndex = coordIndex;
-    self->_configured = 0;
+void igEnvironmentMapShader2::setDiffuseTextureCoordIndex(int coordIndex) {
+    _diffuseTextureCoordIndex = coordIndex;
+    _configured = 0;
 }
 
-void igPsx2EnvironmentMapShader_SetGlossMapTexture(igPsx2EnvironmentMapShader *self, igObject *value) {
-    igObject *previous;
-    igObject::ref(value);
-    previous = (igObject *)(self->_glossMapTexture);
-    igObject::release(previous);
-    self->_glossMapTexture = (int)(value);
-    self->_configured = 0;
+void igEnvironmentMapShader2::setGlossMapTexture(igTextureAttr *glossMapTexture) {
+    _glossMapTexture = glossMapTexture;
+    _configured = 0;
 }
 
 /* Setter for `_glossTextureCoordIndex` (gloss-map texture-coordinate set index). It also clears
  * `_configured`, so the shader's render state is rebuilt on its next use (`_configured` is the
  * shader's built-once flag). */
 
-void igPsx2EnvironmentMapShader_SetGlossTextureCoordIndex(igPsx2EnvironmentMapShader *self, int coordIndex) {
-    self->_glossTextureCoordIndex = coordIndex;
-    self->_configured = 0;
+void igEnvironmentMapShader2::setGlossTextureCoordIndex(int coordIndex) {
+    _glossTextureCoordIndex = coordIndex;
+    _configured = 0;
 }
 
 /* IgPsx2EnvironmentMapShader slot 42: store the reflection amount and clear _configured so the
  * shader is set up again before its next use. */
 
-void igPsx2EnvironmentMapShader_SetReflectionAmount(igPsx2EnvironmentMapShader *self, float reflectionAmount) {
-    self->_reflectionAmount = reflectionAmount;
-    self->_configured = 0;
+void igEnvironmentMapShader2::setReflectionAmount(float reflectionAmount) {
+    _reflectionAmount = reflectionAmount;
+    _configured = 0;
 }
 
 /* Setter for `_isTransparent` (transparency flag). It also clears `_configured`, so the shader's
  * render state is rebuilt on its next use (`_configured` is the shader's built-once flag). */
 
-void igPsx2EnvironmentMapShader_SetTransparencyState(igPsx2EnvironmentMapShader *self, char isTransparent) {
-    self->_isTransparent = isTransparent;
-    self->_configured = 0;
+void igEnvironmentMapShader2::setTransparencyState(bool isTransparent) {
+    _isTransparent = isTransparent;
+    _configured = 0;
 }
 
-void FUN_001c3090(V_1c3090 *arg0, int arg1) {
-    Obj_1c3090 *o;
-    arg0->c();
-    arg0->a(arg1);
-    arg0->b(arg1);
-    arg0->f60 = 1;
-    if (arg0->f32 != 0) {
-        o = ((Obj_1c3090 *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
-        ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)o);
-        ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)o);
-        o->refs = o->refs - 1;
-        if ((o->refs & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
-        arg0->f32->f96 = 2;
-        if ((((Gap::Attrs::igTextureAttr *)arg0->f32)->getImage(0) != 0) == 0) {
-            FUN_001c31e0((igTextureAttr *)arg0->f32);
-            if (arg0->f73 != 0) {
-                ((Gap::Attrs::igTextureCubeAttr *)arg0->f32)->releaseImage(Gap::Attrs::igTextureCubeAttr::CUBE_MAP);
+void igEnvironmentMapShader2::configure(igCapabilityManager *capabilityManager) {
+    destroyAttrs();
+    initStaticAttrs(capabilityManager);
+    initAttrs(capabilityManager);
+    _configured = 1;
+    if (_envMapTexture != 0) {
+        Gap::Attrs::igAttrList *attrs = Gap::Attrs::igAttrList::_instantiateFromPool(getMemoryPool());
+        ((Gap::Core::igObjectList *)_attrPushLists.get())->append(attrs);
+        ((Gap::Core::igObjectList *)_attrPopLists.get())->append(attrs);
+        attrs->release();
+        _envMapTexture->_applyType = igTextureCubeAttr::SPHERE_MAP;
+        if ((_envMapTexture->getImage(0) != 0) == 0) {
+            FUN_001c31e0((::igTextureAttr *)_envMapTexture.get());
+            if (_discardUnusedImages != 0) {
+                _envMapTexture->releaseImage(igTextureCubeAttr::CUBE_MAP);
             }
         }
-        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f80);
-        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)(((int *)DAT_00562730)[0]));
-        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f76);
-        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f84);
+        ((Gap::Core::igObjectList *)attrs)->append((Gap::Core::igObject *)_envMapCoordSource.get());
+        ((Gap::Core::igObjectList *)attrs)->append((Gap::Core::igObject *)(((int *)DAT_00562730)[0]));
+        ((Gap::Core::igObjectList *)attrs)->append((Gap::Core::igObject *)_envMapTextureBind.get());
+        ((Gap::Core::igObjectList *)attrs)->append((Gap::Core::igObject *)_envMapTextureFunc.get());
     }
 }
 
-void FUN_001c31d0(void) {
-
+void igEnvironmentMapShader2::update(igCommonTraversal *ct)
+{
+}
+}
 }
 
 /* The pool for scratch buffers: the current pool when objects allocate from their owner's pool, else the

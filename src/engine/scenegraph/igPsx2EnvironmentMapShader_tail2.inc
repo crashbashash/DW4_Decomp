@@ -497,16 +497,3 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
 
 void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_46(void) {
 }
-
-int FUN_001e2810(void) {
-    return 0;
-}
-
-void igPsx2EnvironmentMapShader_Reset(igPsx2EnvironmentMapShader *self) {
-    self->_configured = 0;
-}
-
-int igPsx2EnvironmentMapShader_IsTransformable(void) {
-    return 0;
-}
-

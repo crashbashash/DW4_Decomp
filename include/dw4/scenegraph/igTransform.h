@@ -9,13 +9,9 @@ struct igTransform;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igTransform_metaObject;
-struct igTransform *igTransform_CreateInstance(int allocator);
-struct igMetaObject *igTransform_GetOrCreateMetaObject(void);
-struct CallbackArray *igTransform_Register(void);
 extern int g_igTransform_vtable[4];
-
 struct igMetaObject *igTransform_GetPublishedMetaObject(void);
+
 
 #ifdef __cplusplus
 }

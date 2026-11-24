@@ -247,3 +247,13 @@ igGraphPath	Sg
 igGraphPathList	Sg	igTObjectList<igGraphPath>
 igGeometryList	Sg	igTObjectList<igGeometry>
 igCamera	Sg
+igSceneInfo	Sg
+igTransform	Sg
+igProbe	Sg
+igIntersectTraversal	Sg
+igCompileTraversal	Sg
+igFrustCullTraversal	Sg
+igProjectiveShadowShader	Sg
+igPlanarShadowShader	Sg
+igOverrideAttrSet	Sg
+igEnvironmentMapShader2	Sg

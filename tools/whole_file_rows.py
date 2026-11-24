@@ -893,8 +893,8 @@ def stable_row(row, old, owner, syms, resolves, elsewhere=None):
                        an address-bearing name spells; `elsewhere`, {name: address} another unit's row binds); an
                        entry `old` had not, for a name the object does not define and `resolves(name)` binds at
                        the same address without a row, stays out as before; the other new entries follow `old`'s
-                       in name order; an `externals` entry for a function the row now emits (a call target the
-                       file came to define) is dropped
+                       in name order; an entry for a function the row now emits (a call target, or a function a
+                       vtable the file keeps names, that the file came to define) is dropped
       anon             `old`'s addresses stay (an address binds itself); new ones join them, the list in ascending
                        order as unitobjects.load requires
       symbol           the `symbol` `old` wrote for the owner (`owner`, its compiled name) stays
@@ -908,7 +908,7 @@ def stable_row(row, old, owner, syms, resolves, elsewhere=None):
         new, before = dict(row.get(field) or {}), old.get(field) or {}
         kept = {}
         for name, va in before.items():
-            if field == "externals" and name in (row.get("emitted") or {}):
+            if name in (row.get("emitted") or {}):
                 continue
             if name in new:
                 kept[name] = new[name]

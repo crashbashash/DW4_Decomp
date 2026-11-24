@@ -55,7 +55,7 @@ void igAnimationModifier::arkRegister()
 
 CallbackArray *igAnimationModifier::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igTransform_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igTransform::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -89,7 +89,7 @@ void igAnimationModifier::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
-        metaField->_metaObject = (int)igTransform_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igTransform::getClassTypeLazy();
     }
     {
         igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);

@@ -136,8 +136,8 @@ CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2EnvironmentMapShader_metaObject,
-        igEnvironmentMapShader2_Register,
-        igEnvironmentMapShader2_GetPublishedMetaObject,
+        Gap::Sg::igEnvironmentMapShader2::arkRegisterInternal,
+        Gap::Sg::igEnvironmentMapShader2::getClassMeta,
         igPsx2EnvironmentMapShader_GetMetaObjectFunction,
         "igPsx2EnvironmentMapShader",
         0x7C, /* instance size */
@@ -146,10 +146,6 @@ CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
         0, /* extra callback item */
         g_igPsx2EnvironmentMapShader_callbackList /* callback list */
     );
-}
-
-igMetaObject *igEnvironmentMapShader2_GetPublishedMetaObject(void) {
-    return g_igEnvironmentMapShader2_metaObject;
 }
 
 static FieldFactory g_igPsx2EnvironmentMapShader_ctorTable[] = {
@@ -193,7 +189,7 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)Gap::Attrs::igMultiPassStateAttr::getClassTypeLazy();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_fieldTable, g_igPsx2EnvironmentMapShader_fieldHandles, g_igPsx2EnvironmentMapShader_fieldOffsets, temp_s2);
-    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)igEnvironmentMapShader2_GetMetaObjectFunction;
+    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)Gap::Sg::igEnvironmentMapShader2::getClassMetaSafe;
 }
 
 int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {

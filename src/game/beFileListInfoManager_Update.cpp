@@ -406,7 +406,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                         int *s4;
                         igMetaObject *sceneInfoMeta;
                         int *nm;
-                        sceneInfoMeta = g_igSceneInfo_metaObject;
+                        sceneInfoMeta = Gap::Sg::igSceneInfo::getClassMeta();
                         s4 = ((int **)((igInfoList *)self->_infoList)->_data)[i];
                         if (sceneInfoMeta == ((igObjectDispatchView *)s4)->GetMeta()) {
                             obj = (int *)s4[5];

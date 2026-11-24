@@ -55,8 +55,8 @@ CallbackArray *beHitLandModelTraversal_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beHitLandModelTraversal_metaObject,
-        igIntersectTraversal_Register,
-        igIntersectTraversal_GetPublishedMetaObject,
+        Gap::Sg::igIntersectTraversal::arkRegisterInternal,
+        Gap::Sg::igIntersectTraversal::getClassMeta,
         beHitLandModelTraversal_GetMetaObjectFunction,
         "beHitLandModelTraversal",
         0x48, /* instance size */
@@ -70,10 +70,6 @@ CallbackArray *beHitLandModelTraversal_Register(void) {
 void beHitLandModelTraversal_GetMetaObjectFunction(void)
 {
     beHitLandModelTraversal_GetMetaObject();
-}
-
-igMetaObject *igIntersectTraversal_GetPublishedMetaObject(void) {
-    return g_igIntersectTraversal_metaObject;
 }
 
 static FieldFactory g_beHitLandModelTraversal_ctorTable[] = {

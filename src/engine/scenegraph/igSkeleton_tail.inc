@@ -45,7 +45,7 @@ void igSkeleton::update(igCommonTraversal *traversal, igActor *actor, const igMa
                 igTransform *transform = modifier->getTransform();
                 igMatrix44f *source;
                 ((igTransformUpdateView *)transform)->update(((igCommonTraversalDispatchView *)traversal)->getTime());
-                source = (igMatrix44f *)modifier->getTransform()->_m;
+                source = modifier->getTransform()->getMatrix();
                 if (modifier->_type == igAnimationModifier::kOverride) {
                     igMatrix44f_Copy(combined, source->m);
                 }

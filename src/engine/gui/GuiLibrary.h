@@ -45,7 +45,6 @@
 #include "dw4/maths/igVec3fMetaField.h"
 #include "dw4/maths/igVec4fMetaField.h"
 #include "dw4/core/igMetaField.h"
-extern "C" void FUN_0019e440(void);
 #include "dw4/scenegraph/igNode.h"
 #include "dw4/gfx/igVisualContext.h"
 class igMemoryPoolView;

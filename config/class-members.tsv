@@ -3872,3 +3872,233 @@ igCamera	static igMetaField *k_farPlane;
 igCamera	public: inline virtual bool isTransformable() const { return false; }
 igCamera	inline virtual void activate() {}
 igCamera	inline virtual void deactivate() {}
+igSceneInfo	IG_OBJECT_DEFINE(igSceneInfo)
+igSceneInfo	static igMetaField *k_sceneGraph;
+igSceneInfo	static igMetaField *k_textures;
+igSceneInfo	static igMetaField *k_cameras;
+igSceneInfo	static igMetaField *k_animationBegin;
+igSceneInfo	static igMetaField *k_animationEnd;
+igSceneInfo	static igMetaField *k_upVector;
+igSceneInfo	private: static igMetaField *k_sceneGraphList;
+igSceneInfo	public: inline igNode *getSceneGraph() const { return _sceneGraph; }
+igSceneInfo	inline void setAnimationBegin(long long animationBeginParam) { _animationBegin = animationBeginParam; }
+igSceneInfo	inline long long getAnimationBegin() const { return _animationBegin; }
+igSceneInfo	inline void setAnimationEnd(long long animationEndParam) { _animationEnd = animationEndParam; }
+igSceneInfo	inline long long getAnimationEnd() const { return _animationEnd; }
+igSceneInfo	virtual void *resolve(const char *key);
+igSceneInfo	void updateCameraList();
+igSceneInfo	void updateAnimationTime();
+igSceneInfo	void updateAnimationTime(igDirectory *dir);
+igSceneInfo	void setSceneGraph(igNode *sceneGraphParam);
+igTransform	IG_OBJECT_DEFINE(igTransform)
+igTransform	private: static igMetaField *k_m;
+igTransform	static igMetaField *k_target;
+igTransform	static igMetaField *k_mvm;
+igTransform	protected: static igMetaField *k_transformInput;
+igTransform	public: virtual void userConstruct(int flag);
+igTransform	virtual void setMatrix(const igMatrix44f *matrix);
+igTransform	inline igMatrix44f *getMatrix() { return &_m; }
+igTransform	inline const igMatrix44f *getMatrix() const { return &_m; }
+igTransform	inline virtual void setTarget(int tgt) { _target = tgt; }
+igTransform	inline int getTarget() const { return _target; }
+igTransform	inline void setTransformSource(igObject *transformInput) { _transformInput = transformInput; }
+igTransform	inline igObject *getTransformSource() { return _transformInput; }
+igTransform	inline const igObject *getTransformSource() const { return _transformInput; }
+igTransform	virtual void update(long long time);
+igTransform	virtual bool isTransformable() const;
+igTransform	virtual void transform(const igMatrix44f &matrix);
+igTransform	virtual void reset();
+igTransform	virtual unsigned int getInherantFlags();
+igProbe	IG_OBJECT_DEFINE(igProbe)
+igProbe	static igMetaField *k_volume;
+igProbe	static igMetaField *k_rays;
+igProbe	static igMetaField *k_intersectFaceType;
+igIntersectTraversal	IG_OBJECT_DEFINE(igIntersectTraversal)
+igIntersectTraversal	enum ISECT_TRAVERSAL_MODE { START_BIT = 0, VOLUME_VOLUME = 1, RAYS_VOLUME = 2, RAYS_POLYGON = 4, HIT_NORMAL = 16, END_BIT = 16 };
+igIntersectTraversal	private: static igMetaField *k_matStack;
+igIntersectTraversal	static igMetaField *k_nodeStack;
+igIntersectTraversal	static igMetaField *k_probe;
+igIntersectTraversal	static igMetaField *k_mode;
+igIntersectTraversal	static igMetaField *k_hitProc;
+igIntersectTraversal	static igMetaField *k_volumes;
+igIntersectTraversal	static igMetaField *k_ray;
+igIntersectTraversal	static igTraversalFunctionList *travProcs;
+igIntersectTraversal	static void registerClass(igMetaObject *meta);
+igIntersectTraversal	protected: void cacheTravProcs() { _travProcs = travProcs; }
+igIntersectTraversal	static void _registerClass(igTraversalFunctionList *tpl, igMetaObject *meta);
+igIntersectTraversal	public: inline static igTraversalFunctionList *_getTraversalFunctions() { return travProcs; }
+igIntersectTraversal	inline static void _setTraversalFunctions(igTraversalFunctionList *list) { travProcs = list; }
+igIntersectTraversal	static void userRegister();
+igIntersectTraversal	static void userUnregister();
+igIntersectTraversal	virtual void userConstruct(int flag);
+igIntersectTraversal	protected: virtual void userDestruct();
+igIntersectTraversal	virtual void resetFields(int flag);
+igIntersectTraversal	private: static void arkRegisterUser();
+igIntersectTraversal	public: void reset();
+igIntersectTraversal	int intersect(igNode *node);
+igIntersectTraversal	protected: virtual void begin(igNode *root);
+igIntersectTraversal	virtual void end(igNode *root);
+igCompileTraversal	IG_OBJECT_DEFINE(igCompileTraversal)
+igCompileTraversal	static igMetaField *k_mvmList;
+igCompileTraversal	static igMetaField *k_xformInfoList;
+igCompileTraversal	static igMetaField *k_moList;
+igCompileTraversal	static igMetaField *k_containsShader;
+igCompileTraversal	static igMetaField *k_bound;
+igCompileTraversal	static igMetaField *k_transformList;
+igCompileTraversal	static igMetaField *k_isSkin;
+igCompileTraversal	protected: static igMetaField *k_environmentShader2List;
+igCompileTraversal	static igMetaField *k_bmpaList;
+igCompileTraversal	static igMetaField *k_jointChainCount;
+igCompileTraversal	static igMetaField *k_jointBaseMvmIndex;
+igCompileTraversal	static igMetaField *k_currentBoneIndex;
+igCompileTraversal	private: static igTraversalFunctionList *travProcs;
+igCompileTraversal	static void registerClass(igMetaObject *meta);
+igCompileTraversal	protected: void cacheTravProcs() { _travProcs = travProcs; }
+igCompileTraversal	static void _registerClass(igTraversalFunctionList *tpl, igMetaObject *meta);
+igCompileTraversal	public: inline static igTraversalFunctionList *_getTraversalFunctions() { return travProcs; }
+igCompileTraversal	inline static void _setTraversalFunctions(igTraversalFunctionList *list) { travProcs = list; }
+igCompileTraversal	static void userRegister();
+igCompileTraversal	static void userUnregister();
+igCompileTraversal	virtual void userConstruct(int flag);
+igCompileTraversal	virtual void userDestruct();
+igCompileTraversal	private: static void arkRegisterUser();
+igCompileTraversal	public: virtual void reset();
+igCompileTraversal	virtual void begin(igNode *root);
+igCompileTraversal	virtual void end(igNode *root);
+igFrustCullTraversal	IG_OBJECT_DEFINE(igFrustCullTraversal)
+igFrustCullTraversal	public: static igMetaField *k_boundingBox;
+igFrustCullTraversal	private: static igMetaField *k_compMat;
+igFrustCullTraversal	static igMetaField *k_curMVMat;
+igFrustCullTraversal	static igMetaField *k_curProjectionMat;
+igFrustCullTraversal	static igMetaField *k_cd;
+igFrustCullTraversal	protected: static igMetaField *k_outerFrustCullScale;
+igFrustCullTraversal	static igMetaField *k_outerScissorWindowScale;
+igFrustCullTraversal	private: static igTraversalFunctionList *travProcs;
+igFrustCullTraversal	static void registerClass(igMetaObject *meta);
+igFrustCullTraversal	protected: void cacheTravProcs() { _travProcs = travProcs; }
+igFrustCullTraversal	static void _registerClass(igTraversalFunctionList *tpl, igMetaObject *meta);
+igFrustCullTraversal	public: inline static igTraversalFunctionList *_getTraversalFunctions() { return travProcs; }
+igFrustCullTraversal	inline static void _setTraversalFunctions(igTraversalFunctionList *list) { travProcs = list; }
+igFrustCullTraversal	static void userRegister();
+igFrustCullTraversal	static void userUnregister();
+igFrustCullTraversal	virtual void userConstruct(int flag);
+igFrustCullTraversal	private: static void arkRegisterUser();
+igFrustCullTraversal	public: virtual void end(igNode *root);
+igFrustCullTraversal	virtual void reset();
+igFrustCullTraversal	bool setOuterFrustCullScale(float outerFrustCullScaleParam);
+igFrustCullTraversal	void computeCompositeMatrix(const igMatrix44f *mat, const igMatrix44f *proj);
+igProjectiveShadowShader	IG_OBJECT_DEFINE(igProjectiveShadowShader)
+igProjectiveShadowShader	private: static igMetaField *k_lightPos;
+igProjectiveShadowShader	private: static igMetaField *k_lightDir;
+igProjectiveShadowShader	private: static igMetaField *k_cutoff;
+igProjectiveShadowShader	private: static igMetaField *k_shadowCasters;
+igProjectiveShadowShader	private: static igMetaField *k_shadowReceivers;
+igProjectiveShadowShader	private: static igMetaField *k_shadowFactor;
+igProjectiveShadowShader	private: static igMetaField *k_shadowTexW;
+igProjectiveShadowShader	private: static igMetaField *k_shadowTexH;
+igProjectiveShadowShader	private: static igMetaField *k_shadowLightness;
+igProjectiveShadowShader	private: static igMetaField *k_viewToProjectedLightTextureMatrixpAttrList;
+igProjectiveShadowShader	private: static igMetaField *k_lightMVMAttr;
+igProjectiveShadowShader	private: static igMetaField *k_lightProjAttr;
+igProjectiveShadowShader	private: static igMetaField *k_blurMVMAttr;
+igProjectiveShadowShader	private: static igMetaField *k_blurProjAttr;
+igProjectiveShadowShader	private: static igMetaField *k_inited;
+igProjectiveShadowShader	private: static igMetaField *k_quadsGeom;
+igProjectiveShadowShader	private: static igMetaField *k_unused;
+igProjectiveShadowShader	private: static igMetaField *k_shadowColor;
+igProjectiveShadowShader	private: static igMetaField *k_blurState;
+igProjectiveShadowShader	private: static igMetaField *k_zNear;
+igProjectiveShadowShader	private: static igMetaField *k_zFar;
+igProjectiveShadowShader	private: static igMetaField *k_upVector;
+igProjectiveShadowShader	private: static igMetaField *k_viewToProjectedLightTextureMatrix;
+igProjectiveShadowShader	private: static igMetaField *k_drawReceiver;
+igProjectiveShadowShader	private: static igMetaField *k_updateShadowMap;
+igProjectiveShadowShader	private: static igMetaField *k_pShadowTexRD;
+igProjectiveShadowShader	private: static igMetaField *k_pSetShadowTexRD;
+igProjectiveShadowShader	private: static igMetaField *k_pShadowTex;
+igProjectiveShadowShader	private: static igMetaField *k_pShadowTexBind;
+igProjectiveShadowShader	private: static igMetaField *k_pBlurTexRD;
+igProjectiveShadowShader	private: static igMetaField *k_pSetBlurTexRD;
+igProjectiveShadowShader	private: static igMetaField *k_pBlurTex;
+igProjectiveShadowShader	private: static igMetaField *k_pBlurTexBind;
+igProjectiveShadowShader	private: static igMetaField *k_shadowCopyBack;
+igProjectiveShadowShader	private: static igMetaField *k_shadowCopyBackImage;
+igProjectiveShadowShader	private: static igMetaField *k_shadowViewport;
+igProjectiveShadowShader	private: static igMetaField *k_shadowInnerViewport;
+igProjectiveShadowShader	private: static igMetaField *k_light;
+igProjectiveShadowShader	private: static igMetaField *k_pShadowTexBind1;
+igProjectiveShadowShader	private: static igMetaField *k_useOrthographic;
+igProjectiveShadowShader	private: static igMetaField *k_top;
+igProjectiveShadowShader	private: static igMetaField *k_bottom;
+igProjectiveShadowShader	private: static igMetaField *k_right;
+igProjectiveShadowShader	private: static igMetaField *k_left;
+igProjectiveShadowShader	private: static igMetaField *k_unloadShadowTexRD;
+igProjectiveShadowShader	private: static igMetaField *k_unloadBlurTexRD;
+igProjectiveShadowShader	private: static igMetaField *k_releaseRenderDestinationAfterDraw;
+igProjectiveShadowShader	private: static igMetaField *k_useShadowFactor;
+igProjectiveShadowShader	public: virtual void userConstruct(int flag);
+igProjectiveShadowShader	virtual void userDestruct();
+igProjectiveShadowShader	virtual void userPostLoad();
+igProjectiveShadowShader	virtual void reset();
+igPlanarShadowShader	IG_OBJECT_DEFINE(igPlanarShadowShader)
+igPlanarShadowShader	private: static igMetaField *k_lights;
+igPlanarShadowShader	private: static igMetaField *k_mvmList;
+igPlanarShadowShader	private: static igMetaField *k_shadowPlane;
+igPlanarShadowShader	private: static igMetaField *k_shadowColor;
+igPlanarShadowShader	private: static igMetaField *k_mats;
+igPlanarShadowShader	private: static igMetaField *k_geoms;
+igPlanarShadowShader	private: static igMetaField *k_blendmats;
+igPlanarShadowShader	private: static igMetaField *k_savedBounds;
+igPlanarShadowShader	private: static igMetaField *k_unused;
+igPlanarShadowShader	private: static igMetaField *k_shadowColorAttr;
+igPlanarShadowShader	private: static igMetaField *k_stencilState;
+igPlanarShadowShader	protected: static igMetaField *k_shadowUseBlend;
+igPlanarShadowShader	protected: static igMetaField *k_shadowUseStencil;
+igPlanarShadowShader	public: void shade(igCommonTraversal *ct);
+igPlanarShadowShader	virtual void userConstruct(int flag);
+igPlanarShadowShader	virtual void userDestruct();
+igPlanarShadowShader	virtual void reset();
+igPlanarShadowShader	virtual void appendGeometry(igGeometry *geom, igModelViewMatrixAttr *mvm, igAttr *blend);
+igOverrideAttrSet	IG_OBJECT_DEFINE(igOverrideAttrSet)
+igEnvironmentMapShader2	IG_ABSTRACT_OBJECT_DEFINE(igEnvironmentMapShader2)
+igEnvironmentMapShader2	protected: static igMetaField *k_envMapTexture;
+igEnvironmentMapShader2	protected: static igMetaField *k_diffuseTextureBind;
+igEnvironmentMapShader2	protected: static igMetaField *k_diffuseTextureCoordIndex;
+igEnvironmentMapShader2	protected: static igMetaField *k_reflectionAmount;
+igEnvironmentMapShader2	protected: static igMetaField *k_isTransparent;
+igEnvironmentMapShader2	protected: static igMetaField *k_glossMapTexture;
+igEnvironmentMapShader2	protected: static igMetaField *k_glossTextureCoordIndex;
+igEnvironmentMapShader2	protected: static igMetaField *k_configured;
+igEnvironmentMapShader2	protected: static igMetaField *k_attrPushLists;
+igEnvironmentMapShader2	protected: static igMetaField *k_attrPopLists;
+igEnvironmentMapShader2	protected: static igMetaField *k_useRenderPackage;
+igEnvironmentMapShader2	protected: static igMetaField *k_discardUnusedImages;
+igEnvironmentMapShader2	protected: static igMetaField *k_envMapTextureBind;
+igEnvironmentMapShader2	protected: static igMetaField *k_envMapCoordSource;
+igEnvironmentMapShader2	protected: static igMetaField *k_envMapTextureFunc;
+igEnvironmentMapShader2	protected: static igMetaField *k_diffuseCoordSource;
+igEnvironmentMapShader2	protected: static igMetaField *k_diffuseTextureFunc;
+igEnvironmentMapShader2	protected: static igMetaField *k_diffuseBlendState;
+igEnvironmentMapShader2	protected: static igMetaField *k_glossMapTextureBind;
+igEnvironmentMapShader2	protected: static igMetaField *k_glossMapCoordSource;
+igEnvironmentMapShader2	protected: static igMetaField *k_glossMapTextureFunc;
+igEnvironmentMapShader2	public: virtual void userConstruct(int flag);
+igEnvironmentMapShader2	virtual void userDestruct();
+igEnvironmentMapShader2	virtual void setEnvironmentMapTexture(igTextureCubeAttr *envMapTexture);
+igEnvironmentMapShader2	virtual void setDiffuseTexture(igTextureBindAttr *tex);
+igEnvironmentMapShader2	virtual void setDiffuseTextureCoordIndex(int index);
+igEnvironmentMapShader2	virtual void setGlossMapTexture(igTextureAttr *glossMapTexture);
+igEnvironmentMapShader2	virtual void setGlossTextureCoordIndex(int index);
+igEnvironmentMapShader2	virtual void setReflectionAmount(float amount);
+igEnvironmentMapShader2	virtual void setTransparencyState(bool enabled);
+igEnvironmentMapShader2	virtual void shade(igCommonTraversal *ct);
+igEnvironmentMapShader2	virtual void vfunc_45(igCommonTraversal *ct) = 0;
+igEnvironmentMapShader2	virtual void update(igCommonTraversal *ct);
+igEnvironmentMapShader2	inline virtual int vfunc_47() { return 0; }
+igEnvironmentMapShader2	inline virtual void reset() { _configured = false; }
+igEnvironmentMapShader2	virtual void configure(igCapabilityManager *capabilityManager);
+igEnvironmentMapShader2	virtual void initStaticAttrs(igCapabilityManager *capabilityManager);
+igEnvironmentMapShader2	virtual void destroyStaticAttrs();
+igEnvironmentMapShader2	virtual void initAttrs(igCapabilityManager *capabilityManager);
+igEnvironmentMapShader2	virtual void destroyAttrs();
+igEnvironmentMapShader2	inline virtual bool isTransformable() const { return false; }

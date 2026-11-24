@@ -80,7 +80,7 @@ static inline void scaleVec3(float *v, float s) {
 }
 
 static inline int count_of(const igIntList *list) { return list->_count; }
-static inline void setProbe(igPickMode *pickMode, const igSmartPointer<igProbe> &probe) {
+static inline void setProbe(igPickMode *pickMode, const igSmartPointer<Gap::Sg::igProbe> &probe) {
     igObject *retained = (igObject *)probe.get();
     igIntersectTraversal *traversal = (igIntersectTraversal *)pickMode->_intersectTraversal;
     igObject *previous;
@@ -686,17 +686,17 @@ void igPickMode_OnButtonEvent(igPickMode *self, void *unused, int key, int down)
 }
 
 void igPickMode_OnAttach(igPickMode *pickMode) {
-    igProbe *created;
+    Gap::Sg::igProbe *created;
     igIntList *faceTypes;
     int top;
     igIntersectTraversal *traversal;
     igObject *previous;
     igObject *cursor;
     igMatrix44f_Invert(pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
-    igSmartPointer<igProbe> probe(igProbe_Create(0), AdoptReference());
+    igSmartPointer<Gap::Sg::igProbe> probe(Gap::Sg::igProbe::_instantiateFromPool(0), AdoptReference());
     created = probe.get();
-    ((Gap::Core::igObjectList *)created->_rays)->append((Gap::Core::igObject *)pickMode->_ray);
-    faceTypes = (igIntList *)created->_intersectFaceType;
+    ((Gap::Core::igObjectList *)created->_rays.get())->append((Gap::Core::igObject *)pickMode->_ray);
+    faceTypes = (igIntList *)created->_intersectFaceType.get();
     top = count_of(faceTypes);
     if (top < faceTypes->_capacity) {
         faceTypes->_count = faceTypes->_count + 1;
@@ -758,7 +758,7 @@ void igPickMode_Pick(igPickMode *self) {
     previous = (igObject *)self->_hitPath;
     igObject::release(previous);
     self->_hitPath = 0;
-    igIntersectTraversal_ResetStacks((igIntersectTraversal *)((igIntersectTraversalDispatchView *)self->_intersectTraversal));
+    ((Gap::Sg::igIntersectTraversal *)((igIntersectTraversalDispatchView *)self->_intersectTraversal))->reset();
     ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->SetTimeAsLong(model->_drawTime);
     g_pickingMode[0] = self;
     ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->Apply(((igViewerParameters *)self->_parameters)->_scene);

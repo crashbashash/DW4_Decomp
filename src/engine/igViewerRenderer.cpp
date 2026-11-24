@@ -47,7 +47,7 @@ static inline igObject *createAlphaFunctionAttr() {
 }
 static inline igObject *createFrustCullTraversal() {
     Tag tag = Tag();
-    return (igObject *)igFrustCullTraversal_Create(0);
+    return (igObject *)Gap::Sg::igFrustCullTraversal::_instantiateFromPool(0);
 }
 
 #include "dw4/attrs/igViewportAttr.h"
@@ -98,7 +98,7 @@ static inline void removeFromList(int list, int object) {
 int igViewerRenderer_ObjectsTraverseNodeSelect(igTraversal *traversal, igNode *node) {
     int *kind;
     if (node->_flags & 1) {
-        kind = (int *)g_igTransform_metaObject;
+        kind = (int *)Gap::Sg::igTransform::getClassMeta();
         if ((int *)((igObjectDispatchView *)node)->GetMeta() == kind
             || (kind = (int *)Gap::Sg::igLightSet::getClassMeta(), (int *)((igObjectDispatchView *)node)->GetMeta() == kind)) return 0;
         if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) return 2;
@@ -387,7 +387,7 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     ((igTraversal *)self->_lightTraversal)->_userTimeState = 1;
     igSmartPointer<igObject> sceneTraversal(createFrustCullTraversal());
     ((igTraversal *)sceneTraversal.p)->_userTimeState = 1;
-    igFrustCullTraversal_SetOuterFrustCullScale((igFrustCullTraversal *)sceneTraversal.p, 1.1f);
+    ((Gap::Sg::igFrustCullTraversal *)sceneTraversal.p)->setOuterFrustCullScale(1.1f);
     previous = sceneTraversal.p;
     if (previous) previous->_refCount = previous->_refCount + 1;
     {

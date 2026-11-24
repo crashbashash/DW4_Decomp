@@ -1,11 +1,17 @@
+namespace Gap {
+namespace Sg {
+
 /* Name lookup: the info's own name resolves to its scene graph; any other name falls through to
  * igObject_GetFieldValueByName, which finds the reflected field of that name
  * (igMetaObject_FindFieldByName) and returns its value in this object. */
-int Gap__Bec__ParticleInfo__vfunc_22(ParticleInfo *self, int name) {
-    if (strcmp((char *)name, (char *)self->_name) == 0) {
-        return self->_sceneGraph;
+void *igSceneInfo::resolve(const char *key)
+{
+    if (strcmp(key, (const char *)_name.p) == 0) {
+        return _sceneGraph;
     }
-    return igObject_GetFieldValueByName((void **)self, name);
+    return (void *)igObject_GetFieldValueByName((void **)this, (int)key);
+}
+}
 }
 
 void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
@@ -44,28 +50,34 @@ igSmartPointer<igObject> *igSmartPointer_igGraphPath_Destruct(igSmartPointer<igO
     return self;
 }
 
-void igSceneInfo_CollectCameras(igSceneInfo *info) {
-    O_1d65e0 *self = (O_1d65e0 *)info;
-    igObject *created = ((igObject *)Gap::Sg::igGraphPathList::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
-    igObject::ref(created);
-    igObject *previous = self->f28;
-    igObject::release(previous);
+namespace Gap {
+namespace Sg {
+
+void igSceneInfo::updateCameraList() {
+    O_1d65e0 *self = (O_1d65e0 *)this;
+    ::igObject *created = ((::igObject *)Gap::Sg::igGraphPathList::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+    Gap::Core::igObject::ref((Gap::Core::igObject *)created);
+    ::igObject *previous = self->f28;
+    Gap::Core::igObject::release((Gap::Core::igObject *)previous);
     self->f28 = created;
-    igObject *held = self->f28;
+    ::igObject *held = self->f28;
     held->release();
-    igSmartPointer<igObject> second(((igObject *)Gap::Sg::igGraphPath::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer< ::igObject> second(((::igObject *)Gap::Sg::igGraphPath::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool())));
     ((Gap::Sg::igGraphPath *)(second.get()))->configure((Gap::Sg::igNode *)self->f20);
     FUN_001d6410((TraversedNode *)self, (TraversedNode *)self->f20, (void *)(second.get()));
 }
 
-void igSceneInfo_ComputeAnimationRange(igSceneInfo *info) {
-    ChildOwner *self = (ChildOwner *)info;
+void igSceneInfo::updateAnimationTime() {
+    ChildOwner *self = (ChildOwner *)this;
     igSmartPointer<ChildObject> created((ChildObject *)Gap::Core::igDirectory::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
-    ((Gap::Core::igDirectory *)((int)(created.get())))->addObject((Gap::Core::igObject *)(igObject *)self->f20, 0, 0);
-    FUN_001d6790((OO_1d6790 *)self, (AA *)(created.get()));
+    ((Gap::Core::igDirectory *)((int)(created.get())))->addObject((Gap::Core::igObject *)(::igObject *)self->f20, 0, 0);
+    ((igSceneInfo *)self)->updateAnimationTime((igDirectory *)(created.get()));
 }
 
-void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
+void igSceneInfo::updateAnimationTime(igDirectory *dir) {
+    // byte-only: the receiver and the directory are named locals (the register allocation follows their use order)
+    OO_1d6790 *self = (OO_1d6790 *)this;
+    AA *arg1 = (AA *)dir;
     long long temp_v1;
     unsigned int temp_s3;
     unsigned int var_s2;
@@ -74,8 +86,8 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     void *temp_s6;
     EE_1d6790 *temp_v0;
 
-    arg0->f32 = 0;
-    arg0->f40 = 0;
+    self->f32 = 0;
+    self->f40 = 0;
     temp_s3 = arg1->n;
     var_s2 = 0;
     while (var_s2 < temp_s3) {
@@ -91,16 +103,18 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
                         var_s0 = temp_v1;
                     }
                 }
-                if (temp_s1 < arg0->f32) {
-                    arg0->f32 = temp_s1;
+                if (temp_s1 < self->f32) {
+                    self->f32 = temp_s1;
                 }
-                if (arg0->f40 < var_s0) {
-                    arg0->f40 = var_s0;
+                if (self->f40 < var_s0) {
+                    self->f40 = var_s0;
                 }
             }
         }
         var_s2++;
     }
+}
+}
 }
 
 int FUN_001d68e0(void) {
@@ -375,7 +389,7 @@ void FUN_001d7910(void) {
     ((Gap::Core::igObject *)DAT_005628e8[0])->copy((Gap::Core::igObject *)Gap::Sg::igCommonTraversal::_getTraversalFunctions(), 1);
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)Gap::Sg::igLightStateSet::getClassMeta());
-    metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);
+    metas[1] = ((void *)Gap::Sg::igEnvironmentMapShader2::getClassMeta());
     metas[2] = ((void *)g_igMultiTextureShader_metaObject[0]);
     metas[3] = ((void *)g_igCartoonShader_metaObject[0]);
     metas[4] = ((void *)g_igBumpMapShader_metaObject[0]);
@@ -392,7 +406,7 @@ void FUN_001d7910(void) {
     pairs._pairs[0]._meta = ((void *)g_igMultiTextureShader_metaObject[0]);
     pairs._pairs[1]._meta = ((void *)g_igCartoonShader_metaObject[0]);
     pairs._pairs[2]._meta = ((void *)g_igBumpMapShader_metaObject[0]);
-    pairs._pairs[3]._meta = ((void *)g_igEnvironmentMapShader2_metaObject);
+    pairs._pairs[3]._meta = ((void *)Gap::Sg::igEnvironmentMapShader2::getClassMeta());
     for (i = 0; i < 4; i++) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree((igMetaObject *)p->_meta);

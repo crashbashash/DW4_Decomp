@@ -283,9 +283,9 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igBitMask_EnsureRegistered();
     Gap::Sg::igAttrSet::arkRegister();
     Gap::Sg::igGeometry::arkRegister();
-    igSceneInfo_EnsureRegistered();
+    Gap::Sg::igSceneInfo::arkRegister();
     Gap::Sg::igGraphPathList::arkRegister();
-    igTransform_EnsureRegistered();
+    Gap::Sg::igTransform::arkRegister();
     Gap::Gfx::igPrimLengthArray1_1::arkRegister();
     Gap::Gfx::igIndexArray::arkRegister();
     Gap::Core::igBoolList::arkRegister();
@@ -344,7 +344,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igNonRefCountedAttrList::arkRegister();
     Gap::Attrs::igCopyRenderDestinationAttr::arkRegister();
     Gap::Attrs::igClearAttr::arkRegister();
-    igProjectiveShadowShader_EnsureRegistered();
+    Gap::Sg::igProjectiveShadowShader::arkRegister();
     Gap::Sg::igLightStateSet::arkRegister();
     Gap::Sg::igLightSet::arkRegister();
     igTransformList_EnsureRegistered();

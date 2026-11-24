@@ -53,7 +53,7 @@ void beHitLandModel_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandModel_Register);
 }
 
-static igMetaObjectCallback g_beHitLandModel_callbackList[] = { beHitLandModelOrder_EnsureRegistered, beHitLandModelTraversal_EnsureRegistered, igProbe_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beHitLandModel_callbackList[] = { beHitLandModelOrder_EnsureRegistered, beHitLandModelTraversal_EnsureRegistered, Gap::Sg::igProbe::arkRegister, 0 };
 
 CallbackArray *beHitLandModel_Register(void) {
     BecLibrary_MarkRegistered();
@@ -121,7 +121,7 @@ void beHitLandModel_InitFields(void) {
     hitTraversal = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)hitTraversal)->_metaObject = (int)beHitLandModelTraversal_GetOrCreateMetaObject();
     probe = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)probe)->_metaObject = (int)igProbe_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)probe)->_metaObject = (int)Gap::Sg::igProbe::getClassTypeLazy();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
     igMetaObject_NameFields(meta, g_beHitLandModel_fieldTable, g_beHitLandModel_fieldHandles, g_beHitLandModel_fieldOffsets, base);
 }

@@ -1,11 +1,14 @@
-void igTransform_Transform(void *arg0, int arg1) {
-    void *self = arg0;
-    arg0 = *(void **)((char *)self + 104);
-    if (arg0 == 0) {
-        void *p = (char *)self + 0x20;
-        igMatrix44f_Multiply((float *)p, (const float *)p, (const float *)arg1);
+namespace Gap {
+namespace Sg {
+
+void igTransform::transform(const igMatrix44f &matrix)
+{
+    if (_transformInput == 0) {
+        igMatrix44f_Multiply(_m.m, _m.m, matrix.m);
         return;
     }
-    ((VC_1dd010 *)arg0)->vX(arg1);
+    ((VC_1dd010 *)(_transformInput.p))->vX((int)&matrix);
+}
+}
 }
 

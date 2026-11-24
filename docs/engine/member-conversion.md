@@ -766,8 +766,16 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    reload the pointer); `insertChild` holds the element in a record whose address escapes. The implicit destructors are
    the compiler's (`igNode_Destroy`, `igGroup_Destroy` remain as C names for the flat subclasses). Next in the family:
    `igAttrSet` (slots 31 `reset`, 35 `setAttrs`, 36 `setTriggerState`), `igGeometry` (37 `getTotalTriangles`),
-   `igTransform`, `igSwitch`, `igLod`, `igBillboard`, `igCamera` (an igNode), `igSegment`, `igSceneInfo` (an igInfo),
-   `igGraphPath`, `igGeometryList`.
+   `igSwitch`, `igLod`, `igBillboard`, `igCamera` (an igNode), `igSegment`, `igGraphPath`, `igGeometryList`.
+   `igSceneInfo` (an igInfo; vtable 0x5288e0, slot 22 `resolve`; its destructor is the compiler's out-of-line 0x19b040
+   and igInfo's the one at 0x131b20, a `duplicates` row) and `igTransform` (slots 9 `userConstruct`, 26-27
+   `isTransformable`/`transform`, 30 `getInherantFlags`, 31 `reset`, the kit's new virtuals 37 `setMatrix`, 38
+   `setTarget`, 39 `update`) are converted. igTransform registers by hand (`gen` empty: the generator has no template
+   for the identity matrix default's stack temporaries; `arkRegisterInitialize` is the C form in igen's frame), carries
+   retail's `_mvm` field (`k_mvm`, not persistent), and holds its `_transformInput` as an `igSmartPointer<igObject>`
+   (igTransformSource is not converted and has no flat struct; the accessors take `igObject *`). `setMatrix` is
+   out of line (the kit's inline `_m = *matrix` copies word by word; retail tail-calls `igMatrix44f_Copy`). Retail's
+   out-of-line `getClassMeta` copy (0x19de30) stays a C function, as the other registrars' do.
 7. the game's `be*` classes last.
 
 ## Known differences and gaps

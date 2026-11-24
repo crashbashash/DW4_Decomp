@@ -141,9 +141,15 @@ int igTransform_ExtendBound(int arg0, void *arg1, long long time) {
     return 1;
 }
 
-void Gap__Core__igObject__vfunc_37(void *self, int arg1) {
-    char *base = (char *)self;
-    V_1b2750 *c = *(V_1b2750 **)(base + 104);
-    if (c != 0) c->vX(base + 0x20, arg1);
+namespace Gap {
+namespace Sg {
+
+void igTransform::update(long long time)
+{
+    if (_transformInput != 0) {
+        ((V_1b2750 *)(_transformInput.p))->vX(_m.m, time);
+    }
+}
+}
 }
 

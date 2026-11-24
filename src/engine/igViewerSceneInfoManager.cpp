@@ -569,7 +569,7 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
     SharedViewerOptions *options;
     bool useSceneUpVector;
     bool upVectorUnset;
-    if (((Gap::Core::igObject *)info)->isOfType(igSceneInfo_GetMetaObject()) != 0) {
+    if (((Gap::Core::igObject *)info)->isOfType(Gap::Sg::igSceneInfo::getClassTypeSafe()) != 0) {
         if (info->_sceneGraph == 0) {
             return 0;
         }
@@ -583,10 +583,10 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
         g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
         options = g_sharedViewerOptions;
         if (info != 0 && info->_animationBegin == 0 && info->_animationEnd == 0) {
-            igSceneInfo_ComputeAnimationRange(info);
+            ((Gap::Sg::igSceneInfo *)info)->updateAnimationTime();
         }
         if (info->_cameras == 0) {
-            igSceneInfo_CollectCameras(info);
+            ((Gap::Sg::igSceneInfo *)info)->updateCameraList();
         }
         ((Gap::Sg::igGroup *)(((igViewerParameters *)self->_parameters)->_scene))->appendChild((Gap::Sg::igNode *)info->_sceneGraph);
         igNotifyEvent sceneChanged((Gap::Core::igMetaField *)g_igViewerParameters_sceneMetaField);

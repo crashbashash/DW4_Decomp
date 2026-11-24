@@ -27,8 +27,8 @@ CallbackArray *beCopyModelCtrl2_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCopyModelCtrl2_metaObject,
-        igTransform_Register,
-        igTransform_GetPublishedMetaObject,
+        Gap::Sg::igTransform::arkRegisterInternal,
+        Gap::Sg::igTransform::getClassMeta,
         beCopyModelCtrl2_GetMetaObjectFunction,
         "beCopyModelCtrl2",
         0x70, /* instance size */

@@ -1495,7 +1495,7 @@ void igMovieInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMovieInfo_Register);
 }
 
-static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, Gap::Gfx::igImage::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Core::igObject::arkRegister, 0 };
+static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, Gap::Sg::igSceneInfo::arkRegister, Gap::Gfx::igImage::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igMovieInfo_Register(void) {
     AdxMovieLibrary_MarkRegistered();
@@ -1657,7 +1657,7 @@ void igMovieInfo_InitFields(void) {
     ((Gap::Core::igEnumMetaField *)stateField)->setDefault(1);
     stateField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieStateMetaEnum;
     sceneInfoField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xF);
-    sceneInfoField->_metaObject = (int)igSceneInfo_GetOrCreateMetaObject();
+    sceneInfoField->_metaObject = (int)Gap::Sg::igSceneInfo::getClassTypeLazy();
     sceneInfoField->_persistent = 0;
     runtimeImageField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x10);
     runtimeImageField->_metaObject = (int)Gap::Gfx::igImage::getClassTypeLazy();

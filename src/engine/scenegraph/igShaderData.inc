@@ -82,21 +82,3 @@ igSmartPointer<igObject> *igSmartPointer_igMatrix44fList_Destruct(igSmartPointer
     return self;
 }
 
-struct R **igSmartPointer_igModelViewMatrixAttrList_Destruct(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-

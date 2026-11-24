@@ -35,7 +35,7 @@ void beMovieInfoData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMovieInfoData_Register);
 }
 
-static igMetaObjectCallback g_beMovieInfoData_callbackList[] = { igSceneInfo_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMovieInfoData_callbackList[] = { Gap::Sg::igSceneInfo::arkRegister, 0 };
 
 CallbackArray *beMovieInfoData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -89,7 +89,7 @@ void beMovieInfoData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMovieInfoData_ctorTable, 3);
     sceneInfo = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)sceneInfo)->_metaObject = (int)igSceneInfo_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sceneInfo)->_metaObject = (int)Gap::Sg::igSceneInfo::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beMovieInfoData_fieldTable, g_beMovieInfoData_fieldHandles, g_beMovieInfoData_fieldOffsets, base);
 }
 

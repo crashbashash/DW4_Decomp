@@ -1,6 +1,11 @@
+namespace Gap {
+namespace Sg {
+
 /* Second copy of the slot 8 forwarder. */
-void igIntersectTraversal_userDestruct(igObject *self)
+void igIntersectTraversal::userDestruct()
 {
-    Gap__Core__igObject__userDestruct(self);
+    igTraversal::userDestruct();
+}
+}
 }
 

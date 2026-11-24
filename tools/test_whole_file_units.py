@@ -538,6 +538,16 @@ class Regenerate(unittest.TestCase):
         row = whole_file_rows.stable_row(new, old, "owner", syms, {}.get)
         self.assertEqual(row["externals"], {"far": "0x00400000"})
 
+    def test_a_datum_the_file_came_to_define_is_dropped(self):
+        # a function a vtable of the file names, linked from retail as data and now defined in the file
+        old = {"whole_file": True, "emitted": {"b": "0x00100010"},
+               "data": {"g_kept": "0x00300000", "slot": "0x00100020"}}
+        new = {"whole_file": True, "emitted": {"b": "0x00100010", "slot": "0x00100020"},
+               "data": {"g_kept": "0x00300000"}}
+        syms = {"g_kept": ("UND", 0, 0), "slot": (1, 0, 8)}
+        row = whole_file_rows.stable_row(new, old, "owner", syms, {}.get)
+        self.assertEqual(row["data"], {"g_kept": "0x00300000"})
+
     def test_a_caller_row_keeps_its_order_and_the_names_that_bind_without_it(self):
         # a unit whose code changed only at call sites: the old row's aliases and stale names that still bind stay
         # where they were, and the names the compile reads that bind without a row stay out

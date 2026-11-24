@@ -34,7 +34,7 @@ void beChangePosTransformInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beChangePosTransformInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beChangePosTransformInfoRam_callbackList[] = { igTransform_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beChangePosTransformInfoRam_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *beChangePosTransformInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -80,7 +80,7 @@ void beChangePosTransformInfoRam_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beChangePosTransformInfoRam_ctorTable, 1);
     transform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)transform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transform)->_metaObject = (int)Gap::Sg::igTransform::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beChangePosTransformInfoRam_fieldTable, g_beChangePosTransformInfoRam_fieldHandles, g_beChangePosTransformInfoRam_fieldOffsets, base);
 }
 

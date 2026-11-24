@@ -1,35 +1,33 @@
-void FUN_001c4590(int arg0) {
-    igFrustCullTraversal_RegisterClassFunction(((int)DAT_00562760[0]), arg0);
+namespace Gap {
+namespace Sg {
+
+void igFrustCullTraversal::registerClass(igMetaObject *meta) {
+    _registerClass(travProcs, meta);
 }
 
-void FUN_001c45a0(void) {
-    *(int *)0x562760 = (int)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
+void igFrustCullTraversal::userRegister() {
+    travProcs = igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
-void FUN_001c45d0(void) {
-    void *temp_a0;
-
-    temp_a0 = *(void **)0x562760;
-    if (temp_a0 != 0) {
-        *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
-        if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
+void igFrustCullTraversal::userUnregister() {
+    igObject::release(travProcs);
 }
 
-void Gap__Sg__igFrustCullTraversal__vfunc_31(igFrustCullTraversal *self) {
-    Gap__Sg__igCommonTraversal__vfunc_31((A_1b6e20 *)self);
-    self->_curMVMat = 0;
-    self->_curProjectionMat = 0;
+void igFrustCullTraversal::reset()
+{
+    igCommonTraversal::reset();
+    _curMVMat = 0;
+    _curProjectionMat = 0;
 }
 
-void igFrustCullTraversal_userConstruct(O_1c4650 *arg0, int arg1) {
+void igFrustCullTraversal::userConstruct(int flag) {
+    /* matching construct: the receiver is a named local and the table's reference is counted by hand */
+    O_1c4650 *arg0 = (O_1c4650 *)this;
     R_1c4650 *s0;
     R_1c4650 *a0;
-    igCommonTraversal_userConstruct((igCommonTraversal *)arg0, arg1);
-    if (arg1 == 0) {
-        s0 = DAT_00562760[0];
+    igCommonTraversal::userConstruct(flag);
+    if (flag == 0) {
+        s0 = (R_1c4650 *)travProcs;
         if (s0 != 0) {
             s0->references = s0->references + 1;
         }
@@ -37,7 +35,7 @@ void igFrustCullTraversal_userConstruct(O_1c4650 *arg0, int arg1) {
         if (a0 != 0) {
             a0->references = a0->references - 1;
             if (((unsigned long long)(long long)a0->references & 0x7fffffULL) == 0) {
-                igObject_Destroy((igObject *)a0);
+                igObject_Destroy((::igObject *)a0);
             }
         }
         arg0->ref = s0;
@@ -46,24 +44,27 @@ void igFrustCullTraversal_userConstruct(O_1c4650 *arg0, int arg1) {
     }
 }
 
-void igFrustCullTraversal_RegisterClassFunction(int arg0, int arg1) {
+void igFrustCullTraversal::_registerClass(igTraversalFunctionList *arg0, igMetaObject *arg1) {
     Gap::Sg::igCommonTraversal::_registerClass((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igFrustCullTraversal_TraverseNode);
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igPlanarShadowShader_GetMetaObject()))) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igPlanarShadowShader::getClassTypeSafe()))) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igFrustCullTraversal_TraversePlanarShadowShader);
     }
 }
 
-void Gap__Sg__igFrustCullTraversal__vfunc_24(igCommonTraversal *self, int arg1) {
-    ((Gap::Sg::igCommonTraversal *)self)->igCommonTraversal::end((Gap::Sg::igNode *)(igNode *)arg1);
+void igFrustCullTraversal::end(igNode *root)
+{
+    igCommonTraversal::end(root);
 }
 
-void FUN_001c47a0(void *arg0, int arg1, int arg2) {
-    igMatrix44f_Multiply((float *)((char *)arg0 + 0x1DC), (const float *)arg1, (const float *)arg2);
-    *(int *)((char *)(arg0) + 540) = arg1;
-    *(int *)((char *)(arg0) + 544) = arg2;
+void igFrustCullTraversal::computeCompositeMatrix(const igMatrix44f *mat, const igMatrix44f *proj) {
+    igMatrix44f_Multiply((float *)&_compMat, (const float *)mat, (const float *)proj);
+    _curMVMat = (int)mat;
+    _curProjectionMat = (int)proj;
+}
+}
 }
 
 /* Classifies a box against the view frustum: the box corners are transformed to clip space and their
@@ -251,7 +252,7 @@ int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
         same = o->_lastView == view;
     }
     if (!same) {
-        FUN_001c47a0((void *)o, (int)(world), (int)(view));
+        ((Gap::Sg::igFrustCullTraversal *)o)->computeCompositeMatrix((igMatrix44f const *)world, (igMatrix44f const *)view);
     }
     return FUN_001c47f0(o->_frustum, b->_min, b->_max);
 }
@@ -353,8 +354,13 @@ int igFrustCullTraversal_TraversePlanarShadowShader(void *arg0, TraversalNodeVie
     return Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get(arg1->_id)((::igTraversal *)arg0, (::igObject *)arg1);
 }
 
-int igFrustCullTraversal_SetOuterFrustCullScale(igFrustCullTraversal *self, float scale) {
-    if (scale < self->_outerScissorWindowScale && !(scale < 1.0f)) { self->_outerFrustCullScale = scale; DAT_0048da28[0] = 1.0f / scale; return 1; } return 0;
+namespace Gap {
+namespace Sg {
+
+bool igFrustCullTraversal::setOuterFrustCullScale(float scale) {
+    if (scale < _outerScissorWindowScale && !(scale < 1.0f)) { _outerFrustCullScale = scale; DAT_0048da28[0] = 1.0f / scale; return 1; } return 0;
+}
+}
 }
 
 int igFrustCullTraversal_ClassifyBox(const float *boxMin, const float *boxMax, const float *matrix) {

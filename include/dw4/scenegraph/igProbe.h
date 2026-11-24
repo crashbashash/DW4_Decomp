@@ -8,9 +8,6 @@ struct igProbe;
 extern "C" {
 #endif
 
-struct igProbe *igProbe_Create(int allocator);
-void igProbe_EnsureRegistered(void);
-struct igMetaObject *igProbe_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

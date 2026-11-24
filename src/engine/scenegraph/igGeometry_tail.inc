@@ -1,4 +1,9 @@
-int FUN_001ceab0(HitTraversal *self, HitNode *node) {
+namespace Gap {
+namespace Sg {
+
+int igIntersectTraversal::intersect(igNode *traversedNode) {
+    HitTraversal *self = (HitTraversal *)this;
+    HitNode *node = (HitNode *)traversedNode;
     HitReport volumeReport;
     HitReport segmentReport;
     HitMatrix inverse;
@@ -128,6 +133,8 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
     }
     return 0;
 }
+}
+}
 
 void FUN_001cf950(int **arg0, int *arg1) {
     int *a;
@@ -157,7 +164,7 @@ int igIntersectTraversal_TraverseGroup(A_1cf990 *arg0, B_1cf990 *arg1) {
     }
     if (n == 0) return 0;
     ((Gap::Core::igObjectList *)arg0->f36)->append((Gap::Core::igObject *)arg1);
-    r = FUN_001ceab0((HitTraversal *)arg0, (HitNode *)arg1);
+    r = ((Gap::Sg::igIntersectTraversal *)arg0)->intersect((Gap::Sg::igNode *)arg1);
     if (r == 0) {
         r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     }
@@ -193,7 +200,7 @@ int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *
     }
     node->setContext(self->context());
     ((Gap::Core::igObjectList *)self->nodes)->append((Gap::Core::igObject *)node);
-    result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
+    result = ((Gap::Sg::igIntersectTraversal *)self)->intersect((Gap::Sg::igNode *)node);
     if (result == 0) {
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->matrices, node->transform);
         result = igTraversal_TraverseChildren((igTraversal *)(self), (igNode *)node);
@@ -220,10 +227,6 @@ int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *
         s->data[s->count] = 0;
     }
     return passStop(result);
-}
-
-igMetaObject *igTransform_GetMeta(void) {
-    return g_igTransform_metaObject;
 }
 
 void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix *parent, int context) {

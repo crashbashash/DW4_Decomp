@@ -27,15 +27,6 @@ void *igSkin::retrieveVTablePointer()
 }
 }
 
-igSmartPointer<igObject> *igSmartPointer_igAABox_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
 namespace Gap {
 namespace Sg {
 

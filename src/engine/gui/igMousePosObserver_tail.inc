@@ -15,7 +15,7 @@ void igMousePosObserver_resetFields(MousePosObserverView *self, int flags) {
     ObserverIntListView *list;
     int top;
     Gap__Core__igObject__resetFields((igObject *)self, flags);
-    igSmartPointer<ObserverEventView> event((ObserverEventView *)igProbe_Create((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<ObserverEventView> event((ObserverEventView *)Gap::Sg::igProbe::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
     created = event.get();
     ((Gap::Core::igObjectList *)created->a)->append((Gap::Core::igObject *)self->f20);
     list = created->list;
@@ -95,7 +95,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
     if (b->_rootComponent != 0) {
         float x, y;
         igObject *t;
-        igIntersectTraversal_ResetStacks((igIntersectTraversal *)((void *)a->_intersectTraversal));
+        ((Gap::Sg::igIntersectTraversal *)((void *)a->_intersectTraversal))->reset();
         x = b->_mousePosition[0];
         y = b->_mousePosition[1];
         v2[0] = x; v2[1] = y; v2[2] = -10.0f;

@@ -5348,6 +5348,7 @@
 001d8c10	igShaderInfo_FindObjectReference	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001d8cf0	Gap__Sg__igShaderInfo__vfunc_24	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001d8d50	igShaderProcessor_Configure	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
+001d8d70	igShaderProcessor_Shade	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001d9080	igShaderProcessor_Update	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001d9090	FUN_001d9090	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)
 001d9200	igSkeleton_Update	match	DEFERRED duplicate 0x1510a0 __ct__11igMatrix44fFv 40B (compared under the profile of its retail unit)

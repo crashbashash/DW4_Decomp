@@ -19,15 +19,15 @@ void beCopyTransform_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCopyTransform_Register);
 }
 
-static igMetaObjectCallback g_beCopyTransform_callbackList[] = { igTransform_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCopyTransform_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *beCopyTransform_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCopyTransform_metaObject,
-        igTransform_Register,
-        igTransform_GetPublishedMetaObject,
+        Gap::Sg::igTransform::arkRegisterInternal,
+        Gap::Sg::igTransform::getClassMeta,
         beCopyTransform_GetMetaObjectFunction,
         "beCopyTransform",
         0x70, /* instance size */
@@ -65,7 +65,7 @@ void beCopyTransform_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCopyTransform_ctorTable, 1);
     srcTransform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)srcTransform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)srcTransform)->_metaObject = (int)Gap::Sg::igTransform::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beCopyTransform_fieldTable, g_beCopyTransform_fieldHandles, g_beCopyTransform_fieldOffsets, base);
 }
 

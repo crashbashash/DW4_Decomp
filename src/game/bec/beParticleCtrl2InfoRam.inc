@@ -53,7 +53,7 @@ void beParticleCtrl2InfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beParticleCtrl2InfoRam_Register);
 }
 
-static igMetaObjectCallback g_beParticleCtrl2InfoRam_callbackList[] = { igTransform_EnsureRegistered, ParticleTimer_EnsureRegistered, beParticleCtrl2InfoWork_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beParticleCtrl2InfoRam_callbackList[] = { Gap::Sg::igTransform::arkRegister, ParticleTimer_EnsureRegistered, beParticleCtrl2InfoWork_EnsureRegistered, 0 };
 
 CallbackArray *beParticleCtrl2InfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -109,7 +109,7 @@ void beParticleCtrl2InfoRam_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beParticleCtrl2InfoRam_ctorTable, 3);
     transform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)transform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transform)->_metaObject = (int)Gap::Sg::igTransform::getClassTypeLazy();
     particleTimer = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)particleTimer)->_metaObject = (int)ParticleTimer_GetOrCreateMetaObject();
     work = (void *)(igMetaObject_GetFieldAt(meta, base + 2));

@@ -1,27 +1,22 @@
-void FUN_001ce710(void) {
-    *(int *)0x562790 = (int)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
+namespace Gap {
+namespace Sg {
+
+void igIntersectTraversal::userRegister() {
+    travProcs = igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
-void igIntersectTraversal_UserUnregister(void) {
-    void *temp_a0;
-
-    temp_a0 = *(void **)0x562790;
-    if (temp_a0 != 0) {
-        *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
-        if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
+void igIntersectTraversal::userUnregister() {
+    igObject::release(travProcs);
 }
 
-void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
-    igTraversal_RegisterClassFunction(arg0, arg1);
+void igIntersectTraversal::_registerClass(igTraversalFunctionList *arg0, igMetaObject *arg1) {
+    igTraversal::_registerClass(arg0, arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igGeometry::getClassTypeSafe()))) != 0) {
             Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igIntersectTraversal_TraverseGeometry);
             return;
         }
-        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igTransform_GetMetaObject()))) != 0) {
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igTransform::getClassTypeSafe()))) != 0) {
             Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igIntersectTraversal_TraverseTransform);
             return;
         }
@@ -33,14 +28,14 @@ void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
     }
 }
 
-void igIntersectTraversal_resetFields(beHitLandModelTraversal *arg0, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    *(igSmartPointer<igVolumeList> *)&arg0->_volumes = FUN_0018f760(((Gap::Core::igObject *)arg0)->getMemoryPool());
-    igIntersectTraversal_ResetStacks((igIntersectTraversal *)arg0);
+void igIntersectTraversal::resetFields(int flags) {
+    igObject::resetFields(flags);
+    _volumes = FUN_0018f760(getMemoryPool());
+    reset();
 }
 
-void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
-    TraversalMatrixState *self = (TraversalMatrixState *)traversal;
+void igIntersectTraversal::reset() {
+    TraversalMatrixState *self = (TraversalMatrixState *)this;
     ReleasableList *o;
     int cnt;
     int idx;
@@ -64,7 +59,7 @@ void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
         if (p != 0) {
             p->rc = p->rc - 1;
             if (((unsigned long long)((long long)p->rc << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)p);
+                igObject_Destroy((::igObject *)p);
             }
         }
     }
@@ -75,13 +70,15 @@ void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
     o->n = 0;
 }
 
-void Gap__Bec__beHitLandModelTraversal__vfunc_21(void *self, int arg1)
+void igIntersectTraversal::begin(igNode *root)
 {
-    Gap__Sg__igTraversal__vfunc_23(self, arg1);
+    igTraversal::begin(root);
 }
 
-void Gap__Bec__beHitLandModelTraversal__vfunc_22(void *self, int arg1)
+void igIntersectTraversal::end(igNode *root)
 {
-    Gap__Sg__igTraversal__vfunc_24(self, arg1);
+    igTraversal::end(root);
+}
+}
 }
 

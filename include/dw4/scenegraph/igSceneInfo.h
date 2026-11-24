@@ -10,16 +10,8 @@ struct igSceneInfo;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igSceneInfo_metaObject;
-void igSceneInfo_CollectCameras(struct igSceneInfo *info);
-void igSceneInfo_ComputeAnimationRange(struct igSceneInfo *info);
-struct igSceneInfo *igSceneInfo_CreateInstance(int allocator);
 void *igSceneInfo_Destroy(struct igSceneInfo *self, short flags);
-struct igMetaObject *igSceneInfo_GetMetaObject(void);
-struct igMetaObject *igSceneInfo_GetOrCreateMetaObject(void);
-struct CallbackArray *igSceneInfo_Register(void);
 /* Replaces the held scene graph, retaining the new one and releasing the old. */
-void igSceneInfo_SetSceneGraph(struct igSceneInfo *self, struct igNode *sceneGraph);
 
 #ifdef __cplusplus
 }

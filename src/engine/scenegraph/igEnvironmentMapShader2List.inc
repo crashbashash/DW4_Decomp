@@ -28,7 +28,7 @@ void igEnvironmentMapShader2List_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEnvironmentMapShader2List_Register);
 }
 
-static igMetaObjectCallback g_igEnvironmentMapShader2List_callbackList[] = { igEnvironmentMapShader2_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igEnvironmentMapShader2List_callbackList[] = { Gap::Sg::igEnvironmentMapShader2::arkRegister, 0 };
 
 CallbackArray *igEnvironmentMapShader2List_Register(void) {
     SceneGraphLibrary_MarkRegistered();

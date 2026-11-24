@@ -175,7 +175,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_probe;
         IG_OBJECT_RELEASE(old);
-        self->_probe = (int)igProbe_Create(allocator);
+        self->_probe = (int)Gap::Sg::igProbe::_instantiateFromPool((igMemoryPoolView *)allocator);
     }
     info = (beHitLandModelInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beHitLandModel_GetMessageEnum(), (const char *)work->_message)) {
@@ -813,7 +813,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
             }
             ((int *)faces->_data)[n] = 0;
         }
-        igIntersectTraversal_ResetStacks((igIntersectTraversal *)self->_hitTraversal);
+        ((Gap::Sg::igIntersectTraversal *)self->_hitTraversal)->reset();
         ((beHitLandModelTraversal *)self->_hitTraversal)->_mode = 0;
         {
             beHitLandModelTraversal *traversal = (beHitLandModelTraversal *)self->_hitTraversal;

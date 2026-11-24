@@ -28,7 +28,7 @@ void igTransformStack_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTransformStack_Register);
 }
 
-static igMetaObjectCallback g_igTransformStack_callbackList[] = { igTransform_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTransformStack_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *igTransformStack_Register(void) {
     SceneGraphLibrary_MarkRegistered();

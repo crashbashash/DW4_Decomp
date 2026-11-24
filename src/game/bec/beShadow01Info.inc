@@ -49,7 +49,7 @@ void beShadow01Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beShadow01Info_Register);
 }
 
-static igMetaObjectCallback g_beShadow01Info_callbackList[] = { Gap::Sg::igNode::arkRegister, igProjectiveShadowShader_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beShadow01Info_callbackList[] = { Gap::Sg::igNode::arkRegister, Gap::Sg::igProjectiveShadowShader::arkRegister, 0 };
 
 CallbackArray *beShadow01Info_Register(void) {
     BecLibrary_MarkRegistered();

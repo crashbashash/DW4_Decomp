@@ -71,8 +71,9 @@ void igLightSet::arkRegisterInitialize()
 }
 }
 
+/* Retail's out-of-line copy of the inline getClassMeta, here for the registrars that name it in other units. */
 igMetaObject *igTransform_GetPublishedMetaObject(void) {
-    return g_igTransform_metaObject;
+    return Gap::Sg::igTransform::getClassMeta();
 }
 
 igMetaObject *g_igAnimationSequence_metaObject;

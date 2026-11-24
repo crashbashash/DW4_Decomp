@@ -42,7 +42,7 @@ void beHitLandDelivInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandDelivInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beHitLandDelivInfoRam_callbackList[] = { igTransform_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beHitLandDelivInfoRam_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *beHitLandDelivInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -126,7 +126,7 @@ void beHitLandDelivInfoRam_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandDelivInfoRam_ctorTable, 9);
     transform = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)transform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)transform)->_metaObject = (int)Gap::Sg::igTransform::getClassTypeLazy();
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(3.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, 3 + base)))->setDefault(4.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, 4 + base)))->setDefault(4.0f);

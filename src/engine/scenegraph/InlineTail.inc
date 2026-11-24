@@ -206,40 +206,34 @@ void FUN_001e2d60(IgForwardTarget_1e2d60 *o) { o->slot23(); }
 
 void FUN_001e2d70(IgForwardTarget_1e2d70 *o) { o->slot25(); }
 
-void igTransform_SetMatrix(igTransform *self, const float *matrix) {
-    igMatrix44f_Copy(self->_m, matrix);
+namespace Gap {
+namespace Sg {
+
+void igTransform::setMatrix(const igMatrix44f *matrix)
+{
+    igMatrix44f_Copy(_m.m, matrix->m);
+}
+}
 }
 
 /* Slot 36, shared by igTransform descendants: store the igTransform::_target field (+96). */
-void Gap__Core__igObject__vfunc_36(igTransform *self, int target)
-{
-    self->_target = target;
-}
 
 int igSorter_GetMeta(void) {
     return ((int)g_igSorter_metaObject);
 }
 
-igMetaObject *igSceneInfo_GetMeta(void) {
-    return g_igSceneInfo_metaObject;
-}
+namespace Gap {
+namespace Sg {
 
-void igPlanarShadowShader_Reset(Shader *arg0) {
-    arg0->f80->clear();
-    arg0->f84->clear();
-    arg0->f88->clear();
-    Rel_1e2ec0::go(arg0->f92);
-    arg0->f92 = 0;
-    Rel_1e2ec0::go(arg0->f96);
-    arg0->f96 = 0;
+void igPlanarShadowShader::reset()
+{
+    _mats->removeAll();
+    _geoms->removeAll();
+    _blendmats->removeAll();
+    _savedBounds = 0;
+    _unused = 0;
 }
-
-igMetaObject *igIntersectTraversal_GetMeta(void) {
-    return g_igIntersectTraversal_metaObject;
 }
-
-int igFrustCullTraversal_GetMeta(void) {
-    return ((int)g_igFrustCullTraversal_metaObject);
 }
 
 igMetaObject *igEnbayaTransformSource_GetMeta(void) {
@@ -317,10 +311,6 @@ int igCompressedAnimationSequenceQS_evaluateRotation(void **arg0, int arg1) {
 
 igMetaObject *igCompressedAnimationSequenceQS_GetMeta(void) {
     return g_igCompressedAnimationSequenceQS_metaObject;
-}
-
-int igCompileTraversal_GetMeta(void) {
-    return ((int)g_igCompileTraversal_metaObject);
 }
 
 igMetaObject *igAttrStackManager_GetMeta(void) {
@@ -504,10 +494,6 @@ igMetaObject *igEnvironmentMapShader2List_GetMeta(void) {
     return g_igEnvironmentMapShader2List_metaObject;
 }
 
-igMetaObject *igProbe_GetMeta(void) {
-    return g_igProbe_metaObject;
-}
-
 igMetaObject *igAnimation_GetMeta(void) {
     return g_igAnimation_metaObject;
 }
@@ -518,10 +504,6 @@ int igModelViewMatrixBoneSelect_GetMeta(void) {
 
 igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObject(void) {
     return g_igModelViewMatrixBoneSelectListSg_metaObject;
-}
-
-igMetaObject *igOverrideAttrSet_GetMeta(void) {
-    return g_igOverrideAttrSet_metaObject;
 }
 
 igMetaObject *igLightStateAttrPool_GetMeta(void) {
@@ -601,7 +583,7 @@ igMetaObject *igNonRefCountedAttrStackManagerList_GetElementMeta(void) {
 }
 
 igMetaObject *igNonRefCountedTransformList_GetElementMeta(void) {
-    return g_igTransform_metaObject;
+    return Gap::Sg::igTransform::getClassMeta();
 }
 
 int igDoubleList_GetElementSize(void) {
@@ -663,7 +645,7 @@ igMetaObject *igAnimationCombinerBoneInfoList_GetElementMeta(void) {
 }
 
 igMetaObject *igEnvironmentMapShader2List_GetElementMeta(void) {
-    return g_igEnvironmentMapShader2_metaObject;
+    return Gap::Sg::igEnvironmentMapShader2::getClassMeta();
 }
 
 igMetaObject *igAnimationList_GetElementMeta(void) {
@@ -700,7 +682,7 @@ igMetaObject *igAttrStackList_GetElementMeta(void) {
 }
 
 igMetaObject *igTransformList_GetElementMeta(void) {
-    return g_igTransform_metaObject;
+    return Gap::Sg::igTransform::getClassMeta();
 }
 
 void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self) {

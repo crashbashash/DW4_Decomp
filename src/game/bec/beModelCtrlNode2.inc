@@ -44,8 +44,8 @@ CallbackArray *beModelCtrlNode2_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlNode2_metaObject,
-        igTransform_Register,
-        igTransform_GetPublishedMetaObject,
+        Gap::Sg::igTransform::arkRegisterInternal,
+        Gap::Sg::igTransform::getClassMeta,
         beModelCtrlNode2_GetMetaObject,
         "beModelCtrlNode2",
         0x90, /* instance size */

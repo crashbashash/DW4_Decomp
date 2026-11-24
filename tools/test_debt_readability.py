@@ -128,15 +128,15 @@ class Publishing(unittest.TestCase):
 
 class FreeMethods(unittest.TestCase):
     def test_class_named_functions_of_cpp_units_count(self):
-        syms = [(0x100, 16, "igTransform_Update"), (0x110, 8, "igTransform_GetMeta"), (0x120, 4, "p2SetViewport"),
-                (0x130, 4, "Gap__Sg__igTransform__vfunc_21"), (0x140, 4, "igTransform_Helper"),
-                (0x150, 4, "FUN_00100150"), (0x160, 4, "__dt__11igTransformFv")]
-        paths = {"igTransform_Update": "src/engine/sg/Sg.cpp", "igTransform_GetMeta": "src/engine/sg/Sg.cpp",
-                 "p2SetViewport": "src/engine/p2gs.c", "Gap__Sg__igTransform__vfunc_21": "src/engine/sg/Sg.cpp",
-                 "igTransform_Helper": "src/engine/p2gs.c", "FUN_00100150": "src/engine/sg/Sg.cpp",
-                 "__dt__11igTransformFv": "src/engine/sg/Sg.cpp"}
+        syms = [(0x100, 16, "igTransformSource_Update"), (0x110, 8, "igTransformSource_GetMeta"), (0x120, 4, "p2SetViewport"),
+                (0x130, 4, "Gap__Sg__igTransformSource__vfunc_21"), (0x140, 4, "igTransformSource_Helper"),
+                (0x150, 4, "FUN_00100150"), (0x160, 4, "__dt__17igTransformSourceFv")]
+        paths = {"igTransformSource_Update": "src/engine/sg/Sg.cpp", "igTransformSource_GetMeta": "src/engine/sg/Sg.cpp",
+                 "p2SetViewport": "src/engine/p2gs.c", "Gap__Sg__igTransformSource__vfunc_21": "src/engine/sg/Sg.cpp",
+                 "igTransformSource_Helper": "src/engine/p2gs.c", "FUN_00100150": "src/engine/sg/Sg.cpp",
+                 "__dt__17igTransformSourceFv": "src/engine/sg/Sg.cpp"}
         # free functions only in C++ units, named for a known class; slot-named virtuals apart
-        self.assertEqual(progress.method_shaped(syms, paths, {"igTransform"}), (2, 24, 1))
+        self.assertEqual(progress.method_shaped(syms, paths, {"igTransformSource"}), (2, 24, 1))
 
     def test_source_accuracy_counts_the_stand_ins(self):
         root = tempfile.mkdtemp()

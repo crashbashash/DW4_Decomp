@@ -166,15 +166,6 @@ igSmartPointer<igObject> *igSmartPointer_igDisplayListAttr_Destruct(igSmartPoint
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igGeometry_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
 igSmartPointer<igObject> *igSmartPointer_igRenderPackage_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
@@ -182,12 +173,6 @@ igSmartPointer<igObject> *igSmartPointer_igRenderPackage_Destruct(igSmartPointer
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
-}
-
-int *igSmartPointer_igGeometry_Construct(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
 }
 
 int *igSmartPointer_igRenderPackage_Construct(int *p)

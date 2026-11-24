@@ -41,7 +41,7 @@ void igCollisionGroup_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCollisionGroup_Register);
 }
 
-static igMetaObjectCallback g_igCollisionGroup_callbackList[] = { igTransform_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCollisionGroup_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
 
 CallbackArray *igCollisionGroup_Register(void) {
     CollisionLibrary_MarkRegistered();
@@ -114,7 +114,7 @@ void igCollisionGroup_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCollisionGroup_ctorTable, 8);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igTransform_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(Gap::Sg::igTransform::getClassTypeLazy());
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCollisionGroup_fieldTable, g_igCollisionGroup_fieldHandles, g_igCollisionGroup_fieldOffsets, temp_s2);
 }
 

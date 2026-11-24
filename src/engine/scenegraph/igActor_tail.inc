@@ -617,7 +617,7 @@ int FUN_001ba260(igCommonTraversal *self, MultiPassShaderView *shader) {
 int igCommonTraversal_TraversePlanarShadowShader(int a0, int arg1) {
     S_1ba650 *arg0 = (S_1ba650 *)a0;
     FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
-    FUN_001d3e20((igPlanarShadowShader *)arg1, (igCommonTraversal *)arg0);
+    ((Gap::Sg::igPlanarShadowShader *)arg1)->shade((Gap::Sg::igCommonTraversal *)arg0);
     FUN_001b1100((struct A_1b1100 *)arg0->f52, (struct B_1b1100 *)arg0->f232);
     return 0;
 }

@@ -1,230 +1,105 @@
-igSceneInfo *igSceneInfo_CreateInstance(int allocator) {
-    igSceneInfo_EnsureRegistered();
-    return (igSceneInfo *)igMetaObject_CreateInstance((igMetaObject *)g_igSceneInfo_metaObject, (igMemoryPoolView *)allocator);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igSceneInfo_metaObject;
-igMetaField *g_igSceneInfo_sceneGraphMetaField;
-igMetaField *g_igSceneInfo_texturesMetaField;
-igMetaField *g_igSceneInfo_camerasMetaField;
-igMetaField *g_igSceneInfo_animationBeginMetaField;
-igMetaField *g_igSceneInfo_animationEndMetaField;
-igMetaField *g_igSceneInfo_upVectorMetaField;
-igMetaField *g_igSceneInfo_sceneGraphListMetaField;
-
-igMetaObject *igSceneInfo_GetOrCreateMetaObject(void) {
-    if (g_igSceneInfo_metaObject == 0) {
-        g_igSceneInfo_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igSceneInfo_metaObject;
-}
-
-igMetaObject *igSceneInfo_GetMetaObject(void)
+igSceneInfo *igSceneInfo::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igSceneInfo_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igSceneInfo_EnsureRegistered();
-    return g_igSceneInfo_metaObject;
+    arkRegister();
+    return (igSceneInfo *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igSceneInfo_GetVTable(void) {
-    struct Obj_19af80 obj;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.w2 = 0;
-    obj.vt = &g_igSceneInfo_vtable[0];
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w15 = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igSceneInfo_vtable[0];
-    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w15, -1);
-    igSmartPointer_igGraphPathList_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    igSmartPointer_igTextureList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
-    igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
-    igInfo_Destroy((igInfo *)&obj, 0);
-    return t;
-}
+igMetaObject *igSceneInfo::_Meta;
+igMetaField *igSceneInfo::k_sceneGraph;
+igMetaField *igSceneInfo::k_textures;
+igMetaField *igSceneInfo::k_cameras;
+igMetaField *igSceneInfo::k_animationBegin;
+igMetaField *igSceneInfo::k_animationEnd;
+igMetaField *igSceneInfo::k_upVector;
+igMetaField *igSceneInfo::k_sceneGraphList;
 
-void *igSceneInfo_Destroy(igSceneInfo *arg0, short arg1) {
-    igObject *p;
-    int rc;
-    int *hd;
-
-    if (arg0 != 0) {
-        arg0->_vtable = (int)  &g_igSceneInfo_vtable[0];
-        if (&arg0->_sceneGraphList) {
-            p = (igObject *)arg0->_sceneGraphList;
-            if (p != 0) {
-                rc = p->_refCount - 1;
-                p->_refCount = rc;
-                if (((unsigned long long) ((long long) (int) p->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (&arg0->_cameras) {
-            p = (igObject *)arg0->_cameras;
-            if (p != 0) {
-                rc = p->_refCount - 1;
-                p->_refCount = rc;
-                if (((unsigned long long) ((long long) (int) p->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (&arg0->_textures) {
-            p = (igObject *)arg0->_textures;
-            if (p != 0) {
-                rc = p->_refCount - 1;
-                p->_refCount = rc;
-                if (((unsigned long long) ((long long) (int) p->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (&arg0->_sceneGraph) {
-            p = (igObject *)arg0->_sceneGraph;
-            if (p != 0) {
-                rc = p->_refCount - 1;
-                p->_refCount = rc;
-                if (((unsigned long long) ((long long) (int) p->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (arg0 != 0) {
-            arg0->_vtable = (int)  &g_igInfo_vtable[0];
-            if (arg0 != 0) {
-                arg0->_vtable = (int)  &g_igNamedObject_vtable[0];
-                if (&arg0->_name) {
-                    p = (igObject *)arg0->_name;
-                    if (p != 0) {
-                        hd = (int *)((char *)p - 8);
-                        rc = *(int *)((char *)p - 4) - 1;
-                        *(int *)((char *)p - 4) = rc;
-                        if (rc == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-                        }
-                    }
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
-igSmartPointer<igObject> *igSmartPointer_igGraphPathList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
-void igSceneInfo_EnsureRegistered(void)
+igMetaObject *igSceneInfo::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit((CallbackArray * (*)())igSceneInfo_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igSceneInfo_callbackList[] = { Gap::Sg::igNode::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Sg::igGraphPathList::arkRegister, Gap::Sg::igNodeList::arkRegister, 0 };
+igMetaObject *igSceneInfo::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igSceneInfo_Register(void) {
+void *igSceneInfo::retrieveVTablePointer()
+{
+    igSceneInfo temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igSceneInfo::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igSceneInfo::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igNode::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Sg::igGraphPathList::arkRegister, Gap::Sg::igNodeList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igSceneInfo_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igInfo::arkRegisterInternal,
-        igInfo_GetPublishedMetaObject,
-        igSceneInfo_GetMetaObjectFunction,
+        Gap::Core::igInfo::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igSceneInfo",
-        0x40, /* instance size */
-        igSceneInfo_GetVTable,
-        &igSceneInfo_InitFields,
-        0, /* extra callback item */
-        g_igSceneInfo_callbackList /* callback list */
+        sizeof(igSceneInfo),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igSceneInfo_GetMetaObjectFunction(void) {
-    igSceneInfo_GetMetaObject();
+void igSceneInfo::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_sceneGraph", "_textures", "_cameras", "_animationBegin", "_animationEnd", "_upVector", "_sceneGraphList" };
+    static igMetaField **enumStorage[] = { &k_sceneGraph, &k_textures, &k_cameras, &k_animationBegin, &k_animationEnd, &k_upVector, &k_sceneGraphList };
+    static int offsets[] = { 20, 24, 28, 32, 40, 48, 60 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Attrs::igTextureList::getClassTypeLazy();
+        metaField->_construct = 1;
+        metaField->_deepCopyMethod = 0;
+        metaField->_shallowCopyMethod = 2;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Sg::igGraphPathList::getClassTypeLazy();
+        metaField->_construct = 1;
+        metaField->_deepCopyMethod = 0;
+        metaField->_shallowCopyMethod = 2;
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(igVec3f(0.0f, 1.0f, 0.0f));
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igSceneInfo_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igSceneInfo_fieldTable[] = {
-    "_sceneGraph",
-    "_textures",
-    "_cameras",
-    "_animationBegin",
-    "_animationEnd",
-    "_upVector",
-    "_sceneGraphList",
-};
-static igMetaField **g_igSceneInfo_fieldHandles[] = {
-    &g_igSceneInfo_sceneGraphMetaField,
-    &g_igSceneInfo_texturesMetaField,
-    &g_igSceneInfo_camerasMetaField,
-    &g_igSceneInfo_animationBeginMetaField,
-    &g_igSceneInfo_animationEndMetaField,
-    &g_igSceneInfo_upVectorMetaField,
-    &g_igSceneInfo_sceneGraphListMetaField,
-};
-static int g_igSceneInfo_fieldOffsets[] = {
-    20,
-    24,
-    28,
-    32,
-    40,
-    48,
-    60,
-};
-
-void igSceneInfo_InitFields(void) {
-    struct V3 v;
-    int temp_s1;
-    void *temp_a0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igSceneInfo_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSceneInfo_ctorTable, 7);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igTextureList::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    ((igMetaField *)temp_s2_2)->_deepCopyMethod = 0;
-    ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 2;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Sg::igGraphPathList::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    ((igMetaField *)temp_s2_3)->_deepCopyMethod = 0;
-    ((igMetaField *)temp_s2_3)->_shallowCopyMethod = 2;
-    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)));
-    v.x = 0;
-    v.y = 0x3F800000;
-    v.z = 0;
-    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)&v);
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSceneInfo_fieldTable, g_igSceneInfo_fieldHandles, g_igSceneInfo_fieldOffsets, temp_s1);
+}
 }
 

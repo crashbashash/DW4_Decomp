@@ -46,7 +46,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
     igNode *node = (igNode *)nodeHandle;
     igAABox *cached = (igAABox *)node->_bound;
     if (cached != 0) {
-        if (((Gap::Core::igObject *)node)->isOfType(g_igPlanarShadowShader_metaObject) != 0) return 0;
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igPlanarShadowShader::getClassMeta()) != 0) return 0;
         igVolume_ExtendBy((void **)bound, (void **)cached);
         return 1;
     }
@@ -71,7 +71,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
             ok = 0;
             igGeometry_ExtendBound((int)uncachedBox.get(), node);
         }
-    } else if (((Gap::Core::igObject *)node)->isOfType(g_igTransform_metaObject) != 0) {
+    } else if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igTransform::getClassMeta()) != 0) {
         igTransform *transform = (igTransform *)node;
         int input = transform->_transformInput;
         if (transform->_target == 0) {
@@ -96,7 +96,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
                 igTransform_ExtendBound((int)box.get(), node, time);
             }
         }
-    } else if (((Gap::Core::igObject *)node)->isOfType(g_igPlanarShadowShader_metaObject) != 0) {
+    } else if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igPlanarShadowShader::getClassMeta()) != 0) {
         igAABox *shadowBox = box;
         if (shadowBox->_min[0] <= shadowBox->_max[0] && ok) {
             (igSmartPointer<igAABox> &)node->_bound = shadowBox;

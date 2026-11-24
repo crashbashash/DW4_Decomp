@@ -1,61 +1,53 @@
-void FUN_001bb1f0(int arg0) {
-    igCompileTraversal_RegisterClassFunction(((int)DAT_00562648[0]), arg0);
+namespace Gap {
+namespace Sg {
+
+void igCompileTraversal::registerClass(igMetaObject *arg0) {
+    int tpl = (int)DAT_00562648[0];
+    _registerClass((igTraversalFunctionList *)(igTraversalFunctionList *)tpl, arg0);
 }
 
-void FUN_001bb200(void) {
+void igCompileTraversal::userRegister() {
     *(int *)0x562648 = (int)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
-void FUN_001bb230(void) {
+void igCompileTraversal::userUnregister() {
     void *temp_a0;
 
     temp_a0 = *(void **)0x562648;
     if (temp_a0 != 0) {
         *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
         if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
+            igObject_Destroy((::igObject *)temp_a0);
         }
     }
 }
 
-void igCompileTraversal_userConstruct(C_1bb280 *arg0, int arg1) {
-    Q *t;
-    Q *s;
-
-    igCommonTraversal_userConstruct((igCommonTraversal *)arg0, arg1);
-    if (arg1 == 0) {
-        s = DAT_00562648[0];
-        if (s != 0) {
-            s->f4 += 1;
-        }
-        t = arg0->f28;
-        if (t != 0) {
-            t->f4 -= 1;
-            if ((t->f4 & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)t);
-            }
-        }
-        arg0->f28 = s;
+void igCompileTraversal::userConstruct(int flag)
+{
+    igCommonTraversal::userConstruct(flag);
+    if (flag == 0) {
+        cacheTravProcs();
     }
 }
 
-void Gap__Sg__igCompileTraversal__vfunc_31(char *p) {
-    clearEntries(*(RefCountedEntryList **)(p + 472));
-    clearEntries(*(RefCountedEntryList **)(p + 476));
-    *(int *)(*(char **)(p + 492) + 8) = 0;
-    clearEntries(*(RefCountedEntryList **)(p + 504));
-    p[484] = 0;
-    p[496] = 0;
+void igCompileTraversal::reset() {
+    clearEntries((RefCountedEntryList *)_mvmList.get());
+    clearEntries((RefCountedEntryList *)_xformInfoList.get());
+    *(int *)((char *)_transformList.get() + 8) = 0;
+    clearEntries((RefCountedEntryList *)_bmpaList.get());
+    _containsShader = false;
+    _isSkin = false;
 }
 
-void igCompileTraversal_userDestruct(void **self) {
-    igCommonTraversal_userDestruct((igObject *)self);
-    ((igCompileTraversalVSlots *)(self))->slot31();
+void igCompileTraversal::userDestruct()
+{
+    igCommonTraversal::userDestruct();
+    reset();
 }
 
-void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
+void igCompileTraversal::_registerClass(igTraversalFunctionList *arg0, igMetaObject *arg1) {
     Gap::Sg::igCommonTraversal::_registerClass((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1);
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igProjectiveShadowShader_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igProjectiveShadowShader::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseProjectiveShadowShader);
         return;
     }
@@ -63,7 +55,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcd90);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igEnvironmentMapShader2_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igEnvironmentMapShader2::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseEnvironmentMapShader2);
         return;
     }
@@ -79,7 +71,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcdc0);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igPlanarShadowShader_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igPlanarShadowShader::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraversePlanarShadowShader);
         return;
     }
@@ -95,7 +87,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseJointTransform);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igTransform_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igTransform::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseTransform);
         return;
     }
@@ -120,15 +112,15 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
     }
 }
 
-void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
-    int a1 = self->_vc;
+void igCompileTraversal::begin(igNode *arg1) {
+    int a1 = (int)_vc.get();
     if (a1 != 0) {
-        L0 *stack = (L0 *)self->_attrStack;
+        L0 *stack = (L0 *)_attrStack.get();
         ((VC104 *)(stack->f16->f16[stack->f68[Gap::Attrs::igClearAttr::getClassMeta()->_id]]->f20))->vX(a1, (int)stack);
     }
     {
-    igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool())));
-    igSmartPointer<T_1bb880> info((T_1bb880 *)((void *)FUN_001a3590((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool(((Gap::Core::igObject *)this)->getMemoryPool())));
+    igSmartPointer<T_1bb880> info((T_1bb880 *)((void *)FUN_001a3590((int)((Gap::Core::igObject *)this)->getMemoryPool())));
     T_1bb880 **slot = &info->f12;
     T_1bb880 *old = *slot;
     if (old != 0) {
@@ -140,28 +132,31 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
     *slot = 0;
     info->f8 = -1;
     info->f32 = 0;
-    self->_currentBoneIndex = 1;
+    _currentBoneIndex = 1;
     int identity[16];
     igMatrix44f_SetIdentity((float *)identity);
-    ((Gap::Sg::igCommonTraversal *)((int)self))->setViewMatrix((const igMatrix44f *)identity);
-    matrix->setMatrix((int)&self->_viewMat);
-    ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)matrix.p);
-    ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
-    FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)matrix.p);
+    ((Gap::Sg::igCommonTraversal *)((int)(::igCompileTraversal *)this))->setViewMatrix((const igMatrix44f *)identity);
+    matrix->setMatrix((int)&_viewMat);
+    ((Gap::Core::igObjectList *)_mvmList)->append((Gap::Core::igObject *)matrix.p);
+    ((Gap::Core::igObjectList *)_xformInfoList.get())->append((Gap::Core::igObject *)info.p);
+    FUN_001b1030((igAttrStackManager *)_attrStack.get(), (::igAttr *)matrix.p);
     }
-    if (self->_userTimeState != 0) {
-        ((VC128L *)self)->vX(self->_timeLong);
+    if (_userTimeState != 0) {
+        ((VC128L *)this)->vX(_timeLong);
     }
-    Gap__Sg__igTraversal__vfunc_23((void *)self, arg1);
+    igTraversal::begin(arg1);
 }
 
-void Gap__Sg__igCompileTraversal__vfunc_24(igCompileTraversal *arg0, int arg1) {
-    FUN_001b73d0((S_1b73d0 *)arg0);
-    FUN_001d9bb0((void *)arg0->_sorter, arg0->_attrStack);
-    if (arg0->_userTimeState != 0) {
-        ((DW4VC_132_0 *)(((char *)(arg0) + 0)))->vX();
+void igCompileTraversal::end(igNode *arg1) {
+    FUN_001b73d0((S_1b73d0 *)this);
+    ::igCompileTraversal *flat = (::igCompileTraversal *)this;
+    FUN_001d9bb0((void *)flat->_sorter, flat->_attrStack);
+    if (_userTimeState != 0) {
+        ((DW4VC_132_0 *)(((char *)((::igCompileTraversal *)this) + 0)))->vX();
     }
-    Gap__Sg__igTraversal__vfunc_24((void *)arg0, arg1);
+    igTraversal::end(arg1);
+}
+}
 }
 
 int igCompileTraversal_TraverseTransform(int arg0, int arg1) {

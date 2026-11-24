@@ -1,20 +1,24 @@
-void igTransform_userConstruct(igTransform *self, int flag) {
-    igNode_userConstruct((void **)self, flag);  /* takes (self, flag) straight from a0/a1 */
+namespace Gap {
+namespace Sg {
+
+void igTransform::userConstruct(int flag)
+{
+    igGroup::userConstruct(flag);
     if (flag == 0) {
-        ((DW4VC_112_2 *)(self))->vX((int)(2), (int)(1));
+        setFlags(HAS_TRANSFORM, true);
     }
 }
 
-int igTransform_IsTransformable(igTransform *arg0) {
-    void **temp_a0;
-
-    if (((DW4VC_92_0 *)(((char *)(arg0) + 0)))->vX() > 1) {
-        return 0;
+bool igTransform::isTransformable() const
+{
+    if (getParentCount() > 1) {
+        return false;
     }
-    temp_a0 = (void **)(arg0->_transformInput);
-    if (temp_a0 == 0) {
-        return 1;
+    if (_transformInput == 0) {
+        return true;
     }
-    return ((DW4VC_116_0 *)(temp_a0))->vX();
+    return ((DW4VC_116_0 *)(_transformInput.p))->vX();
+}
+}
 }
 

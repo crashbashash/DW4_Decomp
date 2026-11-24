@@ -1,61 +1,56 @@
-igMetaObject *g_igOverrideAttrSet_metaObject;
+namespace Gap {
+namespace Sg {
+
+igMetaObject *igOverrideAttrSet::_Meta;
+}
+}
 
 igMetaObject *igOverrideAttrSet_GetOrCreateMetaObject(void) {
-    if (g_igOverrideAttrSet_metaObject == 0) {
+    if (Gap::Sg::igOverrideAttrSet::getClassMeta() == 0) {
         g_igOverrideAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
-    return g_igOverrideAttrSet_metaObject;
+    return Gap::Sg::igOverrideAttrSet::getClassMeta();
 }
 
-igMetaObject *igOverrideAttrSet_GetMetaObject(void)
+namespace Gap {
+namespace Sg {
+
+igMetaObject *igOverrideAttrSet::getClassTypeSafe()
 {
-    igMetaObject *g = g_igOverrideAttrSet_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igOverrideAttrSet_EnsureRegistered();
-    return g_igOverrideAttrSet_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igOverrideAttrSet_GetVTable(void) {
-    struct F f;
-    int temp_s0;
-
-    igObject_InitHeader((igObject *)&f);
-    f.w[1] = 0;
-    f.w[2] = 0;
-    f.w[3] = 0;
-    f.w[6] = 0;
-    f.w[7] = 0;
-    f.vt = &g_igOverrideAttrSet_vtable[0];
-    temp_s0 = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
-    f.vt = &g_igOverrideAttrSet_vtable[0];
-    FUN_0019c0e0((struct S_19c0e0 *)&f, 0);
-    return temp_s0;
-}
-
-void igOverrideAttrSet_EnsureRegistered(void)
+void *igOverrideAttrSet::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igOverrideAttrSet_Register);
+    igOverrideAttrSet temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igOverrideAttrSet_Register(void) {
+void igOverrideAttrSet::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igOverrideAttrSet::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igOverrideAttrSet_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igAttrSet::arkRegisterInternal,
         Gap::Sg::igAttrSet::getClassMeta,
-        igOverrideAttrSet_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igOverrideAttrSet",
-        0x28, /* instance size */
-        igOverrideAttrSet_GetVTable,
+        sizeof(igOverrideAttrSet),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igOverrideAttrSet_GetMetaObjectFunction(void) {
-    igOverrideAttrSet_GetMetaObject();
+}
 }
 
 igSmartPointer<igObject> *igSmartPointer_igMetaObject_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

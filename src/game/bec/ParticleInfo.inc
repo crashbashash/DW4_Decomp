@@ -120,8 +120,8 @@ CallbackArray *ParticleInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_ParticleInfo_metaObject,
-        igSceneInfo_Register,
-        igSceneInfo_GetPublishedMetaObject,
+        Gap::Sg::igSceneInfo::arkRegisterInternal,
+        Gap::Sg::igSceneInfo::getClassMeta,
         ParticleInfo_GetMetaObjectFunction,
         "ParticleInfo",
         0x400, /* instance size */
@@ -135,10 +135,6 @@ CallbackArray *ParticleInfo_Register(void) {
 void ParticleInfo_GetMetaObjectFunction(void)
 {
     ParticleInfo_GetMetaObject();
-}
-
-igMetaObject *igSceneInfo_GetPublishedMetaObject(void) {
-    return g_igSceneInfo_metaObject;
 }
 
 static FieldFactory g_ParticleInfo_ctorTable[] = {

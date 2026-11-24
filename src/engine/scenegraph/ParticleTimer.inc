@@ -246,7 +246,7 @@ void igGraphPath::getTransformMatrix(int arg1, igMatrix44f *arg2, long long arg3
     igMatrix44f_SetIdentity((float *)arg2);
     for (i = 0; i < arg1; i++) {
         e = (EE *)((OO *)this)->list->items[i];
-        if (igMetaObject_IsOfType((igMetaObject *)(((DW4VC_88_0 *)(e))->vX()), g_igTransform_metaObject) != 0) {
+        if (igMetaObject_IsOfType((igMetaObject *)(((DW4VC_88_0 *)(e))->vX()), Gap::Sg::igTransform::getClassMeta()) != 0) {
             if (e->f96 == 0) {
                 ((DW4VC_156_2 *)(e))->vX(arg3);
                 igMatrix44f_PreMultiply((float *)arg2, (const float *)((char *)e + 0x20));

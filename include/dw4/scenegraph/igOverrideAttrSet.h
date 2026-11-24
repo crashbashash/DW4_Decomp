@@ -7,7 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igOverrideAttrSet_EnsureRegistered(void);
 struct igMetaObject *igOverrideAttrSet_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus

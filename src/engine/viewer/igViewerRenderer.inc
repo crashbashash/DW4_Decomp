@@ -240,7 +240,7 @@ void igViewerRenderer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerRenderer_Register);
 }
 
-static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igCullFaceAttr::arkRegister, Gap::Attrs::igAlphaStateAttr::arkRegister, Gap::Attrs::igShadeModelAttr::arkRegister, Gap::Attrs::igPolygonModeAttr::arkRegister, Gap::Attrs::igLightingStateAttr::arkRegister, Gap::Attrs::igLightAttr::arkRegister, Gap::Attrs::igLightStateAttr::arkRegister, Gap::Sg::igAttrSet::arkRegister, igOverrideAttrSet_EnsureRegistered, igTransform_EnsureRegistered, Gap::Sg::igLightSet::arkRegister, Gap::Attrs::igLightList::arkRegister, Gap::Attrs::igLightStateAttrList::arkRegister, Gap::Sg::igCommonTraversal::arkRegister, Gap::Attrs::igDisplayListAttr::arkRegister, igDisableExt_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igCullFaceAttr::arkRegister, Gap::Attrs::igAlphaStateAttr::arkRegister, Gap::Attrs::igShadeModelAttr::arkRegister, Gap::Attrs::igPolygonModeAttr::arkRegister, Gap::Attrs::igLightingStateAttr::arkRegister, Gap::Attrs::igLightAttr::arkRegister, Gap::Attrs::igLightStateAttr::arkRegister, Gap::Sg::igAttrSet::arkRegister, Gap::Sg::igOverrideAttrSet::arkRegister, Gap::Sg::igTransform::arkRegister, Gap::Sg::igLightSet::arkRegister, Gap::Attrs::igLightList::arkRegister, Gap::Attrs::igLightStateAttrList::arkRegister, Gap::Sg::igCommonTraversal::arkRegister, Gap::Attrs::igDisplayListAttr::arkRegister, igDisableExt_EnsureRegistered, 0 };
 
 CallbackArray *igViewerRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -408,7 +408,7 @@ void igViewerRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igOverrideAttrSet_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)(igTransform_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)(Gap::Sg::igTransform::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)Gap::Sg::igLightSet::getClassTypeLazy();

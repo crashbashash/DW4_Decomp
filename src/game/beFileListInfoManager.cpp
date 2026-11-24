@@ -240,10 +240,10 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                     if (meta == info->GetMeta()) {
                         igInsightCore_AddInfo((igInsightCore *)self->_insight, (igObject *)info);
                     } else {
-                        meta = g_igSceneInfo_metaObject;
+                        meta = Gap::Sg::igSceneInfo::getClassMeta();
                         if (meta == info->GetMeta()) {
                             igSceneInfo *scene;
-                            if (info != 0 && ((Gap::Core::igObject *)info)->isOfType(g_igSceneInfo_metaObject) != 0) {
+                            if (info != 0 && ((Gap::Core::igObject *)info)->isOfType(Gap::Sg::igSceneInfo::getClassMeta()) != 0) {
                                 scene = (igSceneInfo *)info;
                             } else {
                                 scene = 0;
@@ -265,7 +265,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                             j = 0;
                             if (j < ((igInfoList *)self->_readInfoList)->_count) {
                                 do {
-                                    igMetaObject *sceneMeta = g_igSceneInfo_metaObject;
+                                    igMetaObject *sceneMeta = Gap::Sg::igSceneInfo::getClassMeta();
                                     if (sceneMeta == info->GetMeta()) {
                                         readIndex = j;
                                         break;

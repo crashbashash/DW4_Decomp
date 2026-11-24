@@ -249,7 +249,7 @@ static inline int NextPowerOfTwo(int n) {
 }
 
 static inline igSceneInfo *AsSceneInfo(igObject *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igSceneInfo_metaObject)) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(Gap::Sg::igSceneInfo::getClassMeta())) {
         return (igSceneInfo *)object;
     }
     return 0;
@@ -734,7 +734,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             ((Gap::Core::igNamedObject *)camera.p)->setName(Movie_camera);
             camera->_nearPlane = 0.0f;
             camera->_farPlane = 1.2f;
-            igSmartPointer<igTransformDispatchView> transform((igTransformDispatchView *)igTransform_CreateInstance(MovieAllocator(self)));
+            igSmartPointer<igTransformDispatchView> transform((igTransformDispatchView *)Gap::Sg::igTransform::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
             ((Gap::Core::igNamedObject *)transform.p)->setName(Default_primitive_camera);
             transform->SetMatrix(view.m);
             ((Gap::Sg::igGroup *)transform.p)->appendChild((Gap::Sg::igNode *)camera.p);
@@ -744,11 +744,11 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 sceneInfo.release();
-                sceneInfo.p = igSceneInfo_CreateInstance(allocator);
+                sceneInfo.p = (igSceneInfo *)Gap::Sg::igSceneInfo::_instantiateFromPool((igMemoryPoolView *)allocator);
             }
             ((Gap::Core::igNamedObject *)sceneInfo.p)->setName(name);
             (igSmartPointer<igAttrSet> &)sceneInfo->_sceneGraph = root;
-            igSceneInfo_CollectCameras(sceneInfo.p);
+            ((Gap::Sg::igSceneInfo *)sceneInfo.p)->updateCameraList();
             igInsightCore_AddInfo((igInsightCore *)self->_insight, sceneInfo.p);
             (igSmartPointer<igSceneInfo> &)movie->_sceneInfo = sceneInfo;
         }
