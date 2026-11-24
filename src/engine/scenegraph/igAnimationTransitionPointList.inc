@@ -1,53 +1,52 @@
-igMetaObject *g_igAnimationTransitionPointList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationTransitionPointList_GetOrCreateMetaObject(void) {
-    if (g_igAnimationTransitionPointList_metaObject == 0) {
-        g_igAnimationTransitionPointList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationTransitionPointList_metaObject;
-}
+igMetaObject *igAnimationTransitionPointList::_Meta;
 
-igMetaObject *igAnimationTransitionPointList_GetMetaObject(void)
+igMetaObject *igAnimationTransitionPointList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationTransitionPointList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationTransitionPointList_EnsureRegistered();
-    return g_igAnimationTransitionPointList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAnimationTransitionPointList_GetVTable(void) {
-    struct Obj_1a98d0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igAnimationTransitionPointList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAnimationTransitionPointList_EnsureRegistered(void)
+igMetaObject *igAnimationTransitionPointList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationTransitionPointList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationTransitionPointList_callbackList[] = { igAnimationTransitionPoint_EnsureRegistered, 0 };
+void *igAnimationTransitionPointList::retrieveVTablePointer()
+{
+    igAnimationTransitionPointList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAnimationTransitionPointList_Register(void) {
+void igAnimationTransitionPointList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationTransitionPointList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationTransitionPoint::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationTransitionPointList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAnimationTransitionPointList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationTransitionPointList",
-        0x14, /* instance size */
-        igAnimationTransitionPointList_GetVTable,
+        sizeof(igAnimationTransitionPointList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAnimationTransitionPointList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAnimationTransitionPointList_GetMetaObjectFunction(void) {
-    igAnimationTransitionPointList_GetMetaObject();
+}
 }
 

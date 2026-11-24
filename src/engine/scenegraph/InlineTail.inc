@@ -262,14 +262,6 @@ igMetaObject *igCompressedAnimationSequenceQS_GetMeta(void) {
     return g_igCompressedAnimationSequenceQS_metaObject;
 }
 
-int igAnimationState_GetMeta(void) {
-    return ((int)g_igAnimationState_metaObject);
-}
-
-igMetaObject *igAnimationCombiner_GetMeta(void) {
-    return g_igAnimationCombiner_metaObject;
-}
-
 unsigned char igAnimationCombiner_GetHierarchyUpdated(igAnimationCombiner *self) {
     return self->_hierarchyUpdated;
 }
@@ -306,61 +298,8 @@ igMetaObject *igActorInfo_GetMeta(void) {
     return g_igActorInfo_metaObject;
 }
 
-igMetaObject *igAnimationTransitionParams_GetMeta(void) {
-    return g_igAnimationTransitionParams_metaObject;
-}
-
-igMetaObject *igAnimationTransitionPoint_GetMeta(void) {
-    return g_igAnimationTransitionPoint_metaObject;
-}
-
-igMetaObject *igAnimationTransitionPointList_GetMeta(void) {
-    return g_igAnimationTransitionPointList_metaObject;
-}
-
-igMetaObject *igAnimationTransitionDefinition_GetMeta(void) {
-    return g_igAnimationTransitionDefinition_metaObject;
-}
-
-igMetaObject *igAnimationTransitionDefinitionList_GetMeta(void) {
-    return g_igAnimationTransitionDefinitionList_metaObject;
-}
-
-/* Returns the metaobject slot of igAnimationSystem, not of the binding list. */
-int FUN_001e35e0(void) {
-    return ((int)g_igAnimationSystem_metaObject);
-}
-
 int FUN_001e35f0(igAnimationBindingList *self) {
     return self->_capacity != 0;
-}
-
-int igAnimationCombinerList_GetMeta(void) {
-    return ((int)g_igAnimationCombinerList_metaObject);
-}
-
-igMetaObject *igAnimationCombinerBoneInfo_GetMeta(void) {
-    return g_igAnimationCombinerBoneInfo_metaObject;
-}
-
-igMetaObject *igAnimationCombinerBoneInfoList_GetMeta(void) {
-    return g_igAnimationCombinerBoneInfoList_metaObject;
-}
-
-igMetaObject *igAnimationCombinerBoneInfoListList_GetMeta(void) {
-    return g_igAnimationCombinerBoneInfoListList_metaObject;
-}
-
-igMetaObject *igAnimationCombinerBoneInfoPool_GetMeta(void) {
-    return g_igAnimationCombinerBoneInfoPool_metaObject;
-}
-
-igMetaObject *igAnimationStateList_GetMeta(void) {
-    return g_igAnimationStateList_metaObject;
-}
-
-igMetaObject *igAnimationStatePool_GetMeta(void) {
-    return g_igAnimationStatePool_metaObject;
 }
 
 int igBitMask_GetMeta(void) {
@@ -446,31 +385,6 @@ int FUN_001e3ab0(igIntList *list, int *value) {
 /* Returns the metaobject slot of the element class igActor, not of the list. */
 int igActorList_GetElementMeta(void) {
     return ((int)g_igActor_metaObject);
-}
-
-/* Returns the metaobject slot of the element class igAnimationCombiner, not of the list. */
-igMetaObject *igAnimationCombinerList_GetElementMeta(void) {
-    return g_igAnimationCombiner_metaObject;
-}
-
-igMetaObject *igAnimationStateList_GetElementMeta(void) {
-    return g_igAnimationState_metaObject;
-}
-
-igMetaObject *igAnimationCombinerBoneInfoListList_GetElementMeta(void) {
-    return g_igAnimationCombinerBoneInfoList_metaObject;
-}
-
-igMetaObject *igAnimationCombinerBoneInfoList_GetElementMeta(void) {
-    return g_igAnimationCombinerBoneInfo_metaObject;
-}
-
-igMetaObject *igAnimationTransitionDefinitionList_GetElementMeta(void) {
-    return g_igAnimationTransitionDefinition_metaObject;
-}
-
-igMetaObject *igAnimationTransitionPointList_GetElementMeta(void) {
-    return g_igAnimationTransitionPoint_metaObject;
 }
 
 int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)

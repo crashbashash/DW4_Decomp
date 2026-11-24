@@ -387,7 +387,9 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             pushed = (igAttr *)timeAttr;
             stack->append(pushed);
             igAttrStackManager_MarkStackChanged(attrs, (igAttrStack *)stack, index);
-            result = PopSubtree(traversal, attrs, *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex], igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node));
+            result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
+            ((Gap::Sg::igAttrStackManager *)attrs)->fastPopAttr(*timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex]);
+            ((igCommonTraversalDispatchView *)traversal)->popTime();
         }
     } else {
         firstChild = ((void **)((igObjectList *)((beMeterCtrlNode *)data)->_childList)->_data)[0];

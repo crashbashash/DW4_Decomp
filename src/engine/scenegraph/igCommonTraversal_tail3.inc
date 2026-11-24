@@ -142,10 +142,7 @@ namespace Sg {
 void igCommonTraversal::begin(igNode *root) {
     /* matching construct: the receiver is a named local, the allocation of retail's parameter */
     igCommonTraversalOps *t = (igCommonTraversalOps *)this;
-    ::igClearAttr *attr;
     AttrManagerView *m;
-    AttrSlotList *list;
-    int unit;
     igMetaObject *meta;
     int vc = t->_vc;
     if (vc != 0) {
@@ -162,14 +159,7 @@ void igCommonTraversal::begin(igNode *root) {
         t->setTime(t->_timeLong);
     }
     ((long long *)t->_defaultTimeAttr)[2] = t->getTime();
-    m = t->_attrStack;
-    attr = t->_defaultTimeAttr;
-    list = (AttrSlotList *)m->_attrStacks;
-    unit = attr->_cachedAttrIndex;
-    unit = attr->_cachedUnitID + m->_firstUnit[unit];
-    list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
-    list->append(attr);
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)m, (::igAttrStack *)list, unit);
+    _attrStack->fastPushAttr((Gap::Attrs::igAttr *)t->_defaultTimeAttr);
     igTraversal::begin(root);
 }
 }
@@ -197,24 +187,11 @@ namespace Gap {
 namespace Sg {
 
 void igCommonTraversal::end(igNode *arg1) {
-    Mgr *m;
-    int idx;
-    Ent_1b7630 *e;
-    int v;
-    int last;
     FUN_001b73d0((S_1b73d0 *)this);
     if (_userTimeState != 0) {
         popTime();
     }
-    m = (Mgr *)_attrStack.get();
-    idx = _defaultTimeAttr->_cachedUnitID + m->idx[_defaultTimeAttr->_cachedAttrIndex];
-    e = m->tab->ents[idx];
-    last = e->count - 1; v = e->items[last];
-    if (e->fn != 0) {
-        e->fn(v, m->arg);
-    }
-    e->count = e->count - 1;
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)m, (::igAttrStack *)e, idx);
+    _attrStack->fastPopAttr((Gap::Attrs::igAttr *)_defaultTimeAttr);
     igTraversal::end(arg1);
 }
 }
@@ -420,22 +397,6 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     return igCommonTraversal_TraverseGeometry((igCommonTraversal *)arg0, (igGeometry *)arg1);
 }
 
-static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *attr) {
-    int n;
-    AttrObjectStack *stack;
-    int slot;
-    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    igObject *pushed = (igObject *)attr;
-    n = stack->getCount();
-    if (n < stack->_capacity) {
-        stack->_count = stack->_count + 1;
-    } else {
-        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
-    }
-    stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (::igAttrStack *)stack, slot);
-}
 static inline void setTransformMvm(TransformView *transform, MatrixAttrView *attr) {
     if (attr != 0) {
         attr->_refCount = attr->_refCount + 1;
@@ -472,7 +433,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         } else {
             attr->setMatrix(self->_m);
         }
-        pushMatrixAttr(manager, attr);
+        ((Gap::Sg::igAttrStackManager *)manager)->fastPushAttr((Gap::Attrs::igAttr *)attr);
         setTransformMvm(self, attr);
         return attr->_m;
     case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
@@ -490,7 +451,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         } else {
             attr->setMatrix(self->_m);
         }
-        pushMatrixAttr(manager, attr);
+        ((Gap::Sg::igAttrStackManager *)manager)->fastPushAttr((Gap::Attrs::igAttr *)attr);
         setTransformMvm(self, attr);
         return (float *)((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset);
     default:
@@ -506,7 +467,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         } else {
             attr->setMatrix(self->_m);
         }
-        pushMatrixAttr(manager, attr);
+        ((Gap::Sg::igAttrStackManager *)manager)->fastPushAttr((Gap::Attrs::igAttr *)attr);
         setTransformMvm(self, attr);
         return (float *)((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset);
     }
@@ -516,11 +477,8 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
     int target;
     int result;
     igAttrStackManager *manager;
-    int slot;
     int unit;
     igMetaObject *meta;
-    AttrObjectStack *stack;
-    void (*pop)(igObject *, int);
     manager = (igAttrStackManager *)traversal->_attrStack;
     target = self->_target;
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
@@ -538,20 +496,7 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
         meta = Gap::Attrs::igVertexBlendMatrixAttr::getClassMeta();
         break;
     }
-    slot = unit + ((int *)manager->_attrStackIndexTable)[meta->_id];
-    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    {
-        int last = stack->_count - 1;
-        igObject **data = stack->_data;
-        igObject *top;
-        pop = stack->_popProc;
-        top = data[last];
-        if (pop != 0) {
-            pop(top, manager->_popProcData);
-        }
-    }
-    stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (::igAttrStack *)stack, slot);
+    ((Gap::Sg::igAttrStackManager *)manager)->fastPopAttr(meta, unit);
     if (result == 2) {
         return 2;
     }

@@ -40,7 +40,7 @@ void igAnimationDatabase::arkRegister()
 
 CallbackArray *igAnimationDatabase::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igSkeletonList::arkRegister, Gap::Sg::igAnimationList::arkRegister, Gap::Sg::igSkinList::arkRegister, Gap::Sg::igAppearanceList::arkRegister, igAnimationCombinerList_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igSkeletonList::arkRegister, Gap::Sg::igAnimationList::arkRegister, Gap::Sg::igSkinList::arkRegister, Gap::Sg::igAppearanceList::arkRegister, Gap::Sg::igAnimationCombinerList::arkRegister, 0 };
 
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -90,7 +90,7 @@ void igAnimationDatabase::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
-        metaField->_metaObject = (int)igAnimationCombinerList_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Sg::igAnimationCombinerList::getClassTypeLazy();
         metaField->_construct = 1;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);

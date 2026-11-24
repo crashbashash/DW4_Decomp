@@ -263,9 +263,9 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igAnimation::arkRegister();
     Gap::Sg::igAnimationBindingList::arkRegister();
     Gap::Sg::igAnimationTrackList::arkRegister();
-    igAnimationTransitionDefinitionList_EnsureRegistered();
-    igAnimationCombinerBoneInfoPool_RunStaticInit();
-    igAnimationStatePool_RunStaticInit();
+    Gap::Sg::igAnimationTransitionDefinitionList::arkRegister();
+    Gap::Sg::igAnimationCombinerBoneInfoPool::arkRegister();
+    Gap::Sg::igAnimationStatePool::arkRegister();
     Gap::Sg::igIniShaderFactory::arkRegister();
     igEnbayaContextPool_RunStaticInit();
     Gap::Gfx::igClut::arkRegister();
@@ -305,11 +305,11 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igAnimationDatabase::arkRegister();
     Gap::Sg::igAnimationList::arkRegister();
     Gap::Sg::igAppearanceList::arkRegister();
-    igAnimationCombinerList_EnsureRegistered();
-    igAnimationCombiner_EnsureRegistered();
-    igAnimationCombinerBoneInfoListList_EnsureRegistered();
-    igAnimationCombinerBoneInfoList_EnsureRegistered();
-    igAnimationStateList_EnsureRegistered();
+    Gap::Sg::igAnimationCombinerList::arkRegister();
+    Gap::Sg::igAnimationCombiner::arkRegister();
+    Gap::Sg::igAnimationCombinerBoneInfoListList::arkRegister();
+    Gap::Sg::igAnimationCombinerBoneInfoList::arkRegister();
+    Gap::Sg::igAnimationStateList::arkRegister();
     Gap::Sg::igAnimationModifierList::arkRegister();
     igEnbayaTransformSource_EnsureRegistered();
     igEnbayaAnimationSource_EnsureRegistered();
@@ -389,11 +389,11 @@ extern "C" int main(int argc, char **argv) {
     g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create(allocator);
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
     ReleaseObject((igObject **)&g_igAnimationCombinerBoneInfoPool_instance.p);
-    g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create(allocator);
+    g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)Gap::Sg::igAnimationCombinerBoneInfoPool::_instantiateFromPool((igMemoryPoolView *)allocator);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
     ReleaseObject((igObject **)&g_igAnimationStatePool_instance.p);
-    g_igAnimationStatePool_instance.p = igAnimationStatePool_Create(allocator);
+    g_igAnimationStatePool_instance.p = (igAnimationStatePool *)Gap::Sg::igAnimationStatePool::_instantiateFromPool((igMemoryPoolView *)allocator);
     Blk app;
     GameMain_SetViewerFileLists(&app, args.stringList, args.intList);
     AcquireSharedOptions();
@@ -781,11 +781,11 @@ void GameMain_ClearScene(Blk *app) {
     g_igEnbayaContextPool_instance.p = igEnbayaContextPool_Create((int)allocator);
     { igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator(); allocator = g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0); }
     RELEASE_SHIFTED(g_igAnimationCombinerBoneInfoPool_instance.p);
-    g_igAnimationCombinerBoneInfoPool_instance.p = igAnimationCombinerBoneInfoPool_Create((int)allocator);
+    g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)Gap::Sg::igAnimationCombinerBoneInfoPool::_instantiateFromPool(allocator);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
     { igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator(); allocator = g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0); }
     RELEASE_SHIFTED(g_igAnimationStatePool_instance.p);
-    g_igAnimationStatePool_instance.p = igAnimationStatePool_Create((int)allocator);
+    g_igAnimationStatePool_instance.p = (igAnimationStatePool *)Gap::Sg::igAnimationStatePool::_instantiateFromPool(allocator);
     { igMemoryPoolView *current = (igMemoryPoolView *)Memory_GetCurrentAllocator(); userPool = g_useOwnerAllocator != 0 ? current : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
     if (userPool != 0) {
         userPool->Trim(0);

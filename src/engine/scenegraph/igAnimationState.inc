@@ -4,13 +4,18 @@ static const char *g_igAnimationState_statusNames[] = {
 static int g_igAnimationState_statusValues[] = {
     0, 1, 2, 3,
 };
-igMetaEnum *g_igAnimationState_statusMetaEnum;
+namespace Gap {
+namespace Sg {
 
-igMetaEnum *FUN_001a6a90(void) {
-    if (g_igAnimationState_statusMetaEnum == 0) {
-        g_igAnimationState_statusMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Status", g_igAnimationState_statusNames, g_igAnimationState_statusValues, 4);
+igMetaEnum *igAnimationState::Status_Meta;
+
+igMetaEnum *igAnimationState::getStatusMetaEnum() {
+    if (Status_Meta == 0) {
+        Status_Meta = Gap::Core::igMetaEnum::createMetaEnum("Status", g_igAnimationState_statusNames, g_igAnimationState_statusValues, 4);
     }
-    return g_igAnimationState_statusMetaEnum;
+    return Status_Meta;
+}
+}
 }
 
 static const char *g_igAnimationState_transitionModeNames[] = {
@@ -20,13 +25,18 @@ static const char *g_igAnimationState_transitionModeNames[] = {
 static int g_igAnimationState_transitionModeValues[] = {
     0, 1, 2, 3, 4, 5,
 };
-igMetaEnum *g_igAnimationState_transitionModeMetaEnum;
+namespace Gap {
+namespace Sg {
 
-igMetaEnum *FUN_001a6af0(void) {
-    if (g_igAnimationState_transitionModeMetaEnum == 0) {
-        g_igAnimationState_transitionModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("TransitionMode", g_igAnimationState_transitionModeNames, g_igAnimationState_transitionModeValues, 6);
+igMetaEnum *igAnimationState::TransitionMode_Meta;
+
+igMetaEnum *igAnimationState::getTransitionModeMetaEnum() {
+    if (TransitionMode_Meta == 0) {
+        TransitionMode_Meta = Gap::Core::igMetaEnum::createMetaEnum("TransitionMode", g_igAnimationState_transitionModeNames, g_igAnimationState_transitionModeValues, 6);
     }
-    return g_igAnimationState_transitionModeMetaEnum;
+    return TransitionMode_Meta;
+}
+}
 }
 
 static const char *g_igAnimationState_combineModeNames[] = {
@@ -35,260 +45,135 @@ static const char *g_igAnimationState_combineModeNames[] = {
 static int g_igAnimationState_combineModeValues[] = {
     0, 1, 2,
 };
-igMetaEnum *g_igAnimationState_combineModeMetaEnum;
+namespace Gap {
+namespace Sg {
 
-igMetaEnum *FUN_001a6b50(void) {
-    if (g_igAnimationState_combineModeMetaEnum == 0) {
-        g_igAnimationState_combineModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CombineMode", g_igAnimationState_combineModeNames, g_igAnimationState_combineModeValues, 3);
+igMetaEnum *igAnimationState::CombineMode_Meta;
+
+igMetaEnum *igAnimationState::getCombineModeMetaEnum() {
+    if (CombineMode_Meta == 0) {
+        CombineMode_Meta = Gap::Core::igMetaEnum::createMetaEnum("CombineMode", g_igAnimationState_combineModeNames, g_igAnimationState_combineModeValues, 3);
     }
-    return g_igAnimationState_combineModeMetaEnum;
+    return CombineMode_Meta;
+}
+}
 }
 
 void FUN_001a6bb0(int arg0) {
-    igAnimationState_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igAnimationState_metaObject, (igMemoryPoolView *)arg0);
+    Gap::Sg::igAnimationState::arkRegister();
+    igMetaObject_CreateInstance((igMetaObject *)Gap::Sg::igAnimationState::getClassMeta(), (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *igAnimationState_GetOrCreateMetaObject(void) {
-    if (g_igAnimationState_metaObject == 0) {
-        g_igAnimationState_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationState_metaObject;
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationState_GetMetaObject(void)
+igMetaObject *igAnimationState::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationState_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationState_EnsureRegistered();
-    return g_igAnimationState_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAnimationState_GetVTable(void) {
-    union U_1a6c90 u;
-    int temp_s2;
-    S_ref *q3;
-    S_ref *q2;
-    S_ref *q1;
-    
-    
-    igObject_InitHeader((igObject *)u.b);
-    u.w[0] = (int)(&g_igAnimationState_vtable[0]);
-    q1 = (S_ref *)&u.b[8];
-    *(int *)q1 = 0;
-    q2 = (S_ref *)&u.b[24];
-    *(int *)q2 = 0;
-    q3 = (S_ref *)&u.b[120];
-    *(int *)q3 = 0;
-    temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.w[0] = (int)(&g_igAnimationState_vtable[0]);
-    if (q3 != 0) {
-        q3 = *(S_ref **)q3;
-        if (q3 != 0) {
-            q3->f4 = (int)((int) (q3->f4 - 1));
-            if (((unsigned long long) ((long long) q3->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q3);
-            }
-        }
-    }
-    if (q2 != 0) {
-        q2 = *(S_ref **)q2;
-        if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q2);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    return temp_s2;
-}
-
-void igAnimationState_EnsureRegistered(void)
+igMetaObject *igAnimationState::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationState_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationState_callbackList[] = { Gap::Sg::igAnimation::arkRegister, 0 };
+void *igAnimationState::retrieveVTablePointer()
+{
+    igAnimationState temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAnimationState_Register(void) {
+void igAnimationState::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationState::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimation::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationState_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igAnimationState_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationState",
-        0xA0, /* instance size */
-        igAnimationState_GetVTable,
-        &igAnimationState_InitFields,
-        0, /* extra callback item */
-        g_igAnimationState_callbackList /* callback list */
+        sizeof(igAnimationState),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igAnimationState_GetMetaObjectFunction(void) {
-    igAnimationState_GetMetaObject();
+void igAnimationState::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igUnsignedLongMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool };
+    static const char *names[] = { "_animation", "_combineMode", "_transitionMode", "_status", "_baseState", "_new", "_currentBlendRatio", "_localTime", "_baseTransitionTime", "_timeScale", "_timeBias", "_blendStartTime", "_blendStartRatio", "_blendRatioRange", "_blendDuration", "_animationStartTime", "_cachedCycleTime", "_cachedCycleNumber", "_cycleMatchTargetState", "_isCycleMatchTarget", "_cycleMatchDisable", "_manualCycleMatch", "_cycleMatchBaseDuration", "_cycleMatchDurationRange", "_cycleMatchTargetDuration", "_timeRequested" };
+    static igMetaField **enumStorage[] = { &k_animation, &k_combineMode, &k_transitionMode, &k_status, &k_baseState, &k_new, &k_currentBlendRatio, &k_localTime, &k_baseTransitionTime, &k_timeScale, &k_timeBias, &k_blendStartTime, &k_blendStartRatio, &k_blendRatioRange, &k_blendDuration, &k_animationStartTime, &k_cachedCycleTime, &k_cachedCycleNumber, &k_cycleMatchTargetState, &k_isCycleMatchTarget, &k_cycleMatchDisable, &k_manualCycleMatch, &k_cycleMatchBaseDuration, &k_cycleMatchDurationRange, &k_cycleMatchTargetDuration, &k_timeRequested };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 72, 80, 84, 88, 96, 104, 112, 120, 124, 125, 126, 128, 136, 144, 152 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 26);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igAnimation::getClassTypeLazy();
+        metaField->_resetMethod = 2;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Sg::igAnimationState::getCombineModeMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Sg::igAnimationState::getTransitionModeMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Sg::igAnimationState::getStatusMetaEnum;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)getClassTypeLazy();
+        metaField->_resetMethod = 2;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(1);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igLongMetaField *metaField = (igLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 16);
+        metaField->_persistent = 0;
+    }
+    {
+        igUnsignedLongMetaField *metaField = (igUnsignedLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 17);
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 18);
+        metaField->_metaObject = (int)getClassTypeLazy();
+        metaField->_resetMethod = 2;
+    }
+    {
+        igLongMetaField *metaField = (igLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 25);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igAnimationState_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igUnsignedLongMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-};
-static const char *g_igAnimationState_fieldTable[] = {
-    "_animation",
-    "_combineMode",
-    "_transitionMode",
-    "_status",
-    "_baseState",
-    "_new",
-    "_currentBlendRatio",
-    "_localTime",
-    "_baseTransitionTime",
-    "_timeScale",
-    "_timeBias",
-    "_blendStartTime",
-    "_blendStartRatio",
-    "_blendRatioRange",
-    "_blendDuration",
-    "_animationStartTime",
-    "_cachedCycleTime",
-    "_cachedCycleNumber",
-    "_cycleMatchTargetState",
-    "_isCycleMatchTarget",
-    "_cycleMatchDisable",
-    "_manualCycleMatch",
-    "_cycleMatchBaseDuration",
-    "_cycleMatchDurationRange",
-    "_cycleMatchTargetDuration",
-    "_timeRequested",
-};
-static igMetaField **g_igAnimationState_fieldHandles[] = {
-    &g_igAnimationState_animationMetaField,
-    &g_igAnimationState_combineModeMetaField,
-    &g_igAnimationState_transitionModeMetaField,
-    &g_igAnimationState_statusMetaField,
-    &g_igAnimationState_baseStateMetaField,
-    &g_igAnimationState_newMetaField,
-    &g_igAnimationState_currentBlendRatioMetaField,
-    &g_igAnimationState_localTimeMetaField,
-    &g_igAnimationState_baseTransitionTimeMetaField,
-    &g_igAnimationState_timeScaleMetaField,
-    &g_igAnimationState_timeBiasMetaField,
-    &g_igAnimationState_blendStartTimeMetaField,
-    &g_igAnimationState_blendStartRatioMetaField,
-    &g_igAnimationState_blendRatioRangeMetaField,
-    &g_igAnimationState_blendDurationMetaField,
-    &g_igAnimationState_animationStartTimeMetaField,
-    &g_igAnimationState_cachedCycleTimeMetaField,
-    &g_igAnimationState_cachedCycleNumberMetaField,
-    &g_igAnimationState_cycleMatchTargetStateMetaField,
-    &g_igAnimationState_isCycleMatchTargetMetaField,
-    &g_igAnimationState_cycleMatchDisableMetaField,
-    &g_igAnimationState_manualCycleMatchMetaField,
-    &g_igAnimationState_cycleMatchBaseDurationMetaField,
-    &g_igAnimationState_cycleMatchDurationRangeMetaField,
-    &g_igAnimationState_cycleMatchTargetDurationMetaField,
-    &g_igAnimationState_timeRequestedMetaField,
-};
-static int g_igAnimationState_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    40,
-    48,
-    56,
-    64,
-    72,
-    80,
-    84,
-    88,
-    96,
-    104,
-    112,
-    120,
-    124,
-    125,
-    126,
-    128,
-    136,
-    144,
-    152,
-};
-
-void igAnimationState_InitFields(void) {
-    int temp_s1;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_v0;
-    void *temp_v0_2;
-    void *temp_v0_3;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igAnimationState_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationState_ctorTable, 0x1A);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Sg::igAnimation::getClassTypeLazy();
-    ((igMetaField *)temp_s2)->_resetMethod = 2;
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001a6b50);
-    temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((Gap::Core::igEnumMetaField *)temp_v0_2)->setDefault(0);
-    ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_001a6af0);
-    temp_v0_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
-    ((Gap::Core::igEnumMetaField *)temp_v0_3)->setDefault(0);
-    ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_001a6a90);
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igAnimationState_GetOrCreateMetaObject();
-    ((igMetaField *)temp_s2_2)->_resetMethod = 2;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)))->setDefault(1);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)))->setDefault(1.0f);
-    ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10)))->_persistent = 0;
-    ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)))->_persistent = 0;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igAnimationState_GetOrCreateMetaObject();
-    ((igMetaField *)temp_s2_3)->_resetMethod = 2;
-    ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19)))->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationState_fieldTable, g_igAnimationState_fieldHandles, g_igAnimationState_fieldOffsets, temp_s1);
+}
 }
 

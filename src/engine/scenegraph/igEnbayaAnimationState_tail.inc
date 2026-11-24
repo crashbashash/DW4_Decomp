@@ -9,14 +9,14 @@ void FUN_001c0f00(int mode) {
             list->clear();
         }
         if (mode != 0) {
-            DAT_00562728[0] = ((Meta *)((void *)igAnimationState_GetMetaObject()))->f60;
-            Meta *m2 = (Meta *)igAnimationState_GetMetaObject();
+            DAT_00562728[0] = ((Meta *)((void *)Gap::Sg::igAnimationState::getClassTypeSafe()))->f60;
+            Meta *m2 = (Meta *)Gap::Sg::igAnimationState::getClassTypeSafe();
             m2->f60 = (void *)igEnbayaAnimationState_GetPublishedMetaObject;
             int a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
             g_igEnbayaContextPool_instance.release();
             g_igEnbayaContextPool_instance.p = (igEnbayaContextPool *)igEnbayaContextPool_Create(a);
         } else {
-            ((Meta *)((void *)igAnimationState_GetMetaObject()))->f60 = DAT_00562728[0];
+            ((Meta *)((void *)Gap::Sg::igAnimationState::getClassTypeSafe()))->f60 = DAT_00562728[0];
             g_igEnbayaContextPool_instance.clear();
         }
         if (g_igAnimationStatePool_instance.p != 0) ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)g_igAnimationStatePool_instance.p))->setCount(saved);

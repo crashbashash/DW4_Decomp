@@ -37,8 +37,6 @@ igMetaObject *ParticleArray_GetMeta(void);
 igMetaObject *ParticleTimer_GetMeta(void);
 }
 
-typedef void (*igAttrPopProc)(igObject *attr, int data, void *proc);
-
 /* Interpolation of one particle attribute over the particle's life (IG_GFX_PARTICLE_COORD). */
 enum igGfxParticleCoord {
     IG_GFX_PARTICLE_COORD_NONE,
@@ -173,12 +171,6 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     igTDataList<igTimeAttr *> *stack;
     int stackIndex;
     int result;
-    int popIndex;
-    igAttrStack *popStack;
-    igAttrPopProc pop;
-    igObject *top;
-    int topIndex;
-    igObject **attrs;
     short *attrIndex;
     short *unitID;
 
@@ -210,17 +202,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     stack->append(attr);
     igAttrStackManager_MarkStackChanged(stacks, (igAttrStack *)stack, stackIndex);
     result = igCommonTraversal_TraverseGeometry(traversal, (igGeometry *)timer);
-    popIndex = *unitID + ((int *)stacks->_attrStackIndexTable)[*attrIndex];
-    popStack = ((igAttrStack **)((igAttrStackList *)stacks->_attrStacks)->_data)[popIndex];
-    topIndex = popStack->_count - 1;
-    attrs = (igObject **)popStack->_data;
-    pop = (igAttrPopProc)popStack->_popProc;
-    top = attrs[topIndex];
-    if (pop != 0) {
-        pop(top, stacks->_popProcData, (void *)pop);
-    }
-    popStack->_count = popStack->_count - 1;
-    igAttrStackManager_MarkStackChanged(stacks, popStack, popIndex);
+    ((Gap::Sg::igAttrStackManager *)stacks)->fastPopAttr(*unitID + ((int *)stacks->_attrStackIndexTable)[*attrIndex]);
     ((igCommonTraversalDispatchView *)traversal)->popTime();
     return result;
 }

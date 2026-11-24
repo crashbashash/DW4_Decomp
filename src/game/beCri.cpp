@@ -170,7 +170,9 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     ((igTDataList<igTimeAttr *> *)stack)->append(timeAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, timeIndex);
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
-    PopAttr(attrs, *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex]);
+    ((Gap::Sg::igAttrStackManager *)attrs)->fastPopAttr(*timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex]);
+    /* matching construct: the second pop stays open-coded; with the kit's fastPopAttr for both pops the
+     * second one's instructions are scheduled differently. */
     PopAttr(attrs, *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex]);
     ((igCommonTraversalDispatchView *)traversal)->popTime();
     if (result == 2) {
@@ -230,7 +232,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     ((igTDataList<Gap::Attrs::igModelViewMatrixAttr *> *)stack)->append(matrixAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
-    PopAttr(attrs, *unitID + ((int *)attrs->_attrStackIndexTable)[*attrIndex]);
+    ((Gap::Sg::igAttrStackManager *)attrs)->fastPopAttr(*unitID + ((int *)attrs->_attrStackIndexTable)[*attrIndex]);
     if (result == 2) {
         return 2;
     }

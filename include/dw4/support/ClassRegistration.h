@@ -44,14 +44,6 @@ void igParticleAttr_EnsureRegistered(void);
 /* SceneGraph */
 void igActorList_EnsureRegistered(void);
 void igActor_EnsureRegistered(void);
-void igAnimationCombinerBoneInfoListList_EnsureRegistered(void);
-void igAnimationCombinerBoneInfoList_EnsureRegistered(void);
-void igAnimationCombinerBoneInfoPool_RunStaticInit(void);
-void igAnimationCombinerList_EnsureRegistered(void);
-void igAnimationCombiner_EnsureRegistered(void);
-void igAnimationStateList_EnsureRegistered(void);
-void igAnimationStatePool_RunStaticInit(void);
-void igAnimationTransitionDefinitionList_EnsureRegistered(void);
 void igBitMask_EnsureRegistered(void);
 void igBlendMatrixSelect_EnsureRegistered(void);
 void igCompressedAnimationSequenceQS_EnsureRegistered(void);

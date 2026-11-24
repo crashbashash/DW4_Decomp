@@ -525,57 +525,10 @@ struct MultiPassShaderView {
 };
 struct PassDataEntry { char _pad0[12]; int _type; };
 
-static inline void pushPassAttr(igAttrStackManager *manager, igAttr *attr) {
-    int slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    AttrObjectStack *stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    igObject *pushed = attr;
-    int n = stack->getCount();
-    if (n < stack->_capacity) {
-        stack->_count = stack->_count + 1;
-    } else {
-        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
-    }
-    stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
-}
-
-static inline void pushTraversalAttr(igCommonTraversal *self, igAttr *attr) {
-    /* matching construct: declaration-order search — the order of these locals */
-    int n;
-    igAttrStackManager *manager;
-    AttrObjectStack *stack;
-    int slot;
-    igObject *pushed;
-    manager = (igAttrStackManager *)self->_attrStack;
-    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    pushed = attr;
-    n = stack->getCount();
-    if (n < stack->_capacity) {
-        stack->_count = stack->_count + 1;
-    } else {
-        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
-    }
-    stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
-}
-
-static inline void popPassAttr(igAttrStackManager *manager, igAttr *attr) {
-    int slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    AttrObjectStack *stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    igObject *top = stack->get(stack->_count - 1);
-    void (*pop)(igObject *, int) = stack->_popProc;
-    if (pop != 0) {
-        pop(top, manager->_popProcData);
-    }
-    stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
-}
-
 /* Multi-pass shader traversal: picks the technique once (falls back to 2 when a pass from the third on
  * has type 1, 2 or 4), then traverses the children once per pass with that pass's attributes pushed. */
 int FUN_001ba260(igCommonTraversal *self, MultiPassShaderView *shader) {
-    igAttrStackManager *manager = (igAttrStackManager *)self->_attrStack;
+    Gap::Sg::igAttrStackManager *manager = (Gap::Sg::igAttrStackManager *)self->_attrStack;
     if (!shader->_compiled) {
         shader->_technique = ((CapabilityQueryView *)self->_capabilityManager)->query(22);
         int i;
@@ -593,23 +546,23 @@ int FUN_001ba260(igCommonTraversal *self, MultiPassShaderView *shader) {
     }
     int passCount = shader->_passes->_count;
     if (passCount > 1) {
-        pushTraversalAttr(self, (igAttr *)self->_matrixOptimization);
+        ((Gap::Sg::igCommonTraversal *)self)->_attrStack->fastPushAttr((Gap::Attrs::igAttr *)self->_matrixOptimization);
     }
     FUN_001dc500((A_1dc500 *)self->_sorter, 0, 0);
     for (int pass = 0; pass < passCount; pass++) {
         igTDataList<igAttr *> *attrs = shader->_passes->_data[pass];
         igAttr **data = attrs->_data;
         for (int i = 0; i < attrs->_count; i++) {
-            pushPassAttr(manager, data[i]);
+            manager->fastPushAttr((Gap::Attrs::igAttr *)data[i]);
         }
         igTraversal_TraverseChildren((igTraversal *)self, (igNode *)shader);
         for (int i = attrs->_count - 1; i >= 0; i--) {
-            popPassAttr(manager, data[i]);
+            manager->fastPopAttr((Gap::Attrs::igAttr *)data[i]);
         }
     }
     FUN_001dc610((igSorter *)self->_sorter);
     if (passCount > 1) {
-        popPassAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_matrixOptimization);
+        ((Gap::Sg::igAttrStackManager *)self->_attrStack)->fastPopAttr((Gap::Attrs::igAttr *)self->_matrixOptimization);
     }
     return 0;
 }
@@ -628,39 +581,9 @@ int igCommonTraversal_TraverseProjectiveShadowShader(char *arg0, struct S_1d6190
 }
 
 int igCommonTraversal_TraverseSelfShadowShader(igCommonTraversal *self, igProjectiveShadowShader *shader) {
-    igObject *pushed;
-    int n;
-    igAttrStackManager *manager;
-    AttrObjectStack *stack;
-    int slot;
-    igAttr *attr;
-    igObject *top;
-
-    attr = (igAttr *)self->_matrixOptimization;
-    manager = (igAttrStackManager *)self->_attrStack;
-    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    pushed = attr;
-    n = stack->getCount();
-    if (n < stack->_capacity) {
-        stack->_count = stack->_count + 1;
-    } else {
-        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
-    }
-    stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
+    ((Gap::Sg::igCommonTraversal *)self)->_attrStack->fastPushAttr((Gap::Attrs::igAttr *)self->_matrixOptimization);
     FUN_001d7b70((S0_1d7b70 *)shader, (S1_1d7b70 *)self);
-    attr = (igAttr *)self->_matrixOptimization;
-    manager = (igAttrStackManager *)self->_attrStack;
-    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    n = stack->_count - 1;
-    top = stack->_data[n];
-    if (stack->_popProc != 0) {
-        stack->_popProc(top, manager->_popProcData);
-    }
-    stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);
+    ((Gap::Sg::igAttrStackManager *)self->_attrStack)->fastPopAttr((Gap::Attrs::igAttr *)self->_matrixOptimization);
     return 0;
 }
 

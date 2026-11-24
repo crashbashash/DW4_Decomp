@@ -14,20 +14,25 @@ void igAnimationState_UpdateLocalTime(igAnimationState *s, long long t) {
     s->_localTime = r;
 }
 
-void Gap__Sg__igAnimationState__vfunc_23(void) {
+namespace Gap {
+namespace Sg {
+
+void igAnimationState::activate() {
 
 }
 
-void Gap__Sg__igAnimationState__vfunc_24(void) {
+void igAnimationState::deactivate() {
 
 }
 
-void Gap__Sg__igAnimationState__vfunc_25(void) {
+void igAnimationState::preVisit() {
 
 }
 
-void Gap__Sg__igAnimationState__vfunc_26(void) {
+void igAnimationState::postVisit() {
 
+}
+}
 }
 
 int FUN_001af620(igAppearanceView *a, void *t) {

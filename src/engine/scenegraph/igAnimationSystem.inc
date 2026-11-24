@@ -1,72 +1,64 @@
-igMetaObject *g_igAnimationSystem_metaObject;
-igMetaField *g_igAnimationSystem_animHierarchyMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationSystem_GetOrCreateMetaObject(void) {
-    if (g_igAnimationSystem_metaObject == 0) {
-        g_igAnimationSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationSystem_metaObject;
-}
+igMetaObject *igAnimationSystem::_Meta;
+igMetaField *igAnimationSystem::k_animHierarchy;
 
-igMetaObject *igAnimationSystem_GetMetaObject(void)
+igMetaObject *igAnimationSystem::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationSystem_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationSystem_EnsureRegistered();
-    return g_igAnimationSystem_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igAnimationSystem_EnsureRegistered(void)
+igMetaObject *igAnimationSystem::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationSystem_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationSystem_callbackList[] = { Gap::Sg::igAnimationHierarchy::arkRegister, 0 };
+void igAnimationSystem::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igAnimationSystem_Register(void) {
+CallbackArray *igAnimationSystem::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationHierarchy::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igAnimationSystem_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igAnimationSystem_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationSystem",
-        0x10, /* instance size */
+        sizeof(igAnimationSystem),
         0,
-        &igAnimationSystem_InitFields,
-        0, /* extra callback item */
-        g_igAnimationSystem_callbackList /* callback list */
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igAnimationSystem_GetMetaObjectFunction(void) {
-    igAnimationSystem_GetMetaObject();
+void igAnimationSystem::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_animHierarchy" };
+    static igMetaField **enumStorage[] = { &k_animHierarchy };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igAnimationHierarchy::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igAnimationSystem_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igAnimationSystem_fieldTable[] = {
-    "_animHierarchy",
-};
-static igMetaField **g_igAnimationSystem_fieldHandles[] = {
-    &g_igAnimationSystem_animHierarchyMetaField,
-};
-static int g_igAnimationSystem_fieldOffsets[] = {
-    12,
-};
-
-void igAnimationSystem_InitFields(void) {
-    int base;
-    void *animHierarchyField;
-    void *meta;
-
-    meta = (void *)g_igAnimationSystem_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationSystem_ctorTable, 1);
-    animHierarchyField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)animHierarchyField)->_metaObject = (int)Gap::Sg::igAnimationHierarchy::getClassTypeLazy();
-    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationSystem_fieldTable, g_igAnimationSystem_fieldHandles, g_igAnimationSystem_fieldOffsets, base);
+}
 }
 

@@ -4136,6 +4136,12 @@ igAttrStack	static igMetaField *k_lastIncrementalFlushedAttr;
 igAttrStack	static igMetaField *k_hasChangedFromRoot;
 igAttrStack	static igMetaField *k_lastFlushedAttr;
 igAttrStack	static igMetaField *k_cachedRenderPackage;
+igAttrStack	inline igAttr *getTop() const { const int last = _count - 1; igAttr **data = (igAttr **)_data; return data[last]; }
+igAttrStack	inline int pushItem(igObject *const &item) { const int count = (const int &)_count; if (count < _capacity) { _count++; } else { resizeAndSetCount(count + 1, sizeof(igObject *)); } ((igObject **)_data)[count] = item; return count; }
+igAttrStack	inline int push(const igAttr *object) { return pushItem((igObject *const &)object); }
+igAttrStack	inline void pop() { _count--; }
+igAttrStack	inline void pushOverride(const igAttr *override) { if (_cachedOverride < 0) { _cachedOverride = _count; } push(override); }
+igAttrStack	inline void popOverride() { pop(); if (_count == _cachedOverride) { _cachedOverride = -1; } }
 igAttrStackList	IG_OBJECT_DEFINE(igAttrStackList)
 igTransformSource	IG_ABSTRACT_OBJECT_DEFINE(igTransformSource)
 igTransformSource	public: virtual bool getMatrix(igMatrix44f &matrix, long long time) = 0;
@@ -4371,6 +4377,23 @@ igAttrStackManager	void popLightState(igLightStateAttr *ls, bool override = fals
 igAttrStackManager	void pushOverride(const igAttr *override);
 igAttrStackManager	void popOverride(const igAttr *override);
 igAttrStackManager	private: static void _classDestructor();
+igAttrStackManager	public: inline int getAttrHandle(const igMetaObject *meta) const { return _attrStackIndexTable[meta->_id]; }
+igAttrStackManager	inline int getAttrHandle(const igMetaObject *meta, int unitID) const { return getAttrHandle(meta) + unitID; }
+igAttrStackManager	inline int getAttrHandle(const igAttr *attr, int unitID) const { return _attrStackIndexTable[attr->getAttrIndex()] + unitID; }
+igAttrStackManager	inline int getAttrHandle(const igAttr *attr) const { return getAttrHandle(attr, attr->getUnitID()); }
+igAttrStackManager	inline igAttrStack *getStack(int attrHandle) const { return _attrStacks->get(attrHandle); }
+igAttrStackManager	inline void fastPushAttr(const igAttr *attribute) { const int attrHandle = getAttrHandle(attribute); fastPushAttr(attribute, attrHandle); }
+igAttrStackManager	inline void fastPushAttr(const igAttr *attribute, int attrHandle) { igAttrStack *attrStack = getStack(attrHandle); attrStack->push(attribute); updateAttrUpdateList(attrStack, attrHandle); }
+igAttrStackManager	inline void fastPopAttr(const igAttr *attribute) { int attrHandle = getAttrHandle(attribute); fastPopAttr(attribute, attrHandle); }
+igAttrStackManager	inline void fastPopAttr(const igAttr *attribute, int attrHandle) { fastPopAttr(attrHandle); }
+igAttrStackManager	inline void fastPopAttr(const igMetaObject *meta) { int attrHandle = getAttrHandle(meta); fastPopAttr(attrHandle); }
+igAttrStackManager	inline void fastPopAttr(const igMetaObject *meta, int unitID) { int attrHandle = getAttrHandle(meta, unitID); fastPopAttr(attrHandle); }
+igAttrStackManager	inline void fastPopAttr(int attrHandle) { igAttrStack *attrStack = getStack(attrHandle); igAttr *popped = attrStack->getTop(); if (attrStack->_popProc) { ((void (*)(igAttr *, void *))attrStack->_popProc)(popped, _popProcData); } attrStack->pop(); updateAttrUpdateList(attrStack, attrHandle); }
+igAttrStackManager	inline void fastPushOverride(const igAttr *override) { const int attrHandle = getAttrHandle(override); fastPushOverride(override, attrHandle); }
+igAttrStackManager	inline void fastPushOverride(const igAttr *override, int attrHandle) { igAttrStack *attrStack = getStack(attrHandle); attrStack->pushOverride(override); updateAttrUpdateList(attrStack, attrHandle); }
+igAttrStackManager	inline void fastPopOverride(const igAttr *override) { int attrHandle = getAttrHandle(override); fastPopOverride(override, attrHandle); }
+igAttrStackManager	inline void fastPopOverride(const igAttr *override, int attrHandle) { igAttrStack *attrStack = getStack(attrHandle); igAttr *popped = attrStack->getTop(); if (attrStack->_popProc && (popped == override)) { ((void (*)(igAttr *, void *))attrStack->_popProc)(popped, _popProcData); } attrStack->popOverride(); updateAttrUpdateList(attrStack, attrHandle); }
+igAttrStackManager	private: void updateAttrUpdateList(igAttrStack *attrStack, int attrHandle);
 igNonRefCountedAttrStackManagerList	IG_OBJECT_DEFINE(igNonRefCountedAttrStackManagerList)
 igTransformRecorder	IG_OBJECT_DEFINE(igTransformRecorder)
 igTransformRecorder	private: static igMetaField *k_m;
@@ -4447,3 +4470,125 @@ igAnimationDatabase	inline void setCombinerList(igAnimationCombinerList *combine
 igAnimationDatabase	inline igAnimationCombinerList *getCombinerList() const { return _combinerList; }
 igAnimationDatabase	virtual bool attemptResolve(igDirectory *parentDir, void *ref);
 igAnimationDatabase	virtual void *resolve(const char *key);
+igAnimationState	IG_OBJECT_DEFINE(igAnimationState)
+igAnimationState	public: enum CombineMode { kOverride, kBlend, kTween };
+igAnimationState	static igMetaEnum *getCombineModeMetaEnum();
+igAnimationState	private: static igMetaEnum *CombineMode_Meta;
+igAnimationState	public: enum TransitionMode { kEaseIn, kEaseInReplace, kEaseOut, kManual, kNone, kEaseInReplaceAll };
+igAnimationState	static igMetaEnum *getTransitionModeMetaEnum();
+igAnimationState	private: static igMetaEnum *TransitionMode_Meta;
+igAnimationState	public: enum Status { kPlaying, kPaused, kAwaitingTransitionPoint, kFinished };
+igAnimationState	static igMetaEnum *getStatusMetaEnum();
+igAnimationState	private: static igMetaEnum *Status_Meta;
+igAnimationState	protected: static igMetaField *k_animation;
+igAnimationState	static igMetaField *k_combineMode;
+igAnimationState	static igMetaField *k_transitionMode;
+igAnimationState	static igMetaField *k_status;
+igAnimationState	static igMetaField *k_baseState;
+igAnimationState	static igMetaField *k_new;
+igAnimationState	static igMetaField *k_currentBlendRatio;
+igAnimationState	static igMetaField *k_localTime;
+igAnimationState	static igMetaField *k_baseTransitionTime;
+igAnimationState	static igMetaField *k_timeScale;
+igAnimationState	static igMetaField *k_timeBias;
+igAnimationState	static igMetaField *k_blendStartTime;
+igAnimationState	static igMetaField *k_blendStartRatio;
+igAnimationState	static igMetaField *k_blendRatioRange;
+igAnimationState	static igMetaField *k_blendDuration;
+igAnimationState	static igMetaField *k_animationStartTime;
+igAnimationState	static igMetaField *k_cachedCycleTime;
+igAnimationState	static igMetaField *k_cachedCycleNumber;
+igAnimationState	static igMetaField *k_cycleMatchTargetState;
+igAnimationState	static igMetaField *k_isCycleMatchTarget;
+igAnimationState	static igMetaField *k_cycleMatchDisable;
+igAnimationState	static igMetaField *k_manualCycleMatch;
+igAnimationState	static igMetaField *k_cycleMatchBaseDuration;
+igAnimationState	static igMetaField *k_cycleMatchDurationRange;
+igAnimationState	static igMetaField *k_cycleMatchTargetDuration;
+igAnimationState	static igMetaField *k_timeRequested;
+igAnimationState	public: virtual void activate();
+igAnimationState	virtual void deactivate();
+igAnimationState	virtual void preVisit();
+igAnimationState	virtual void postVisit();
+igAnimationStateList	IG_OBJECT_DEFINE(igAnimationStateList)
+igAnimationStatePool	IG_OBJECT_DEFINE(igAnimationStatePool)
+igAnimationSystem	IG_ABSTRACT_OBJECT_DEFINE(igAnimationSystem)
+igAnimationSystem	protected: static igMetaField *k_animHierarchy;
+igAnimationCombinerBoneInfo	IG_OBJECT_DEFINE(igAnimationCombinerBoneInfo)
+igAnimationCombinerBoneInfo	public: static igMetaField *k_lastKeyframe;
+igAnimationCombinerBoneInfo	protected: static igMetaField *k_animationState;
+igAnimationCombinerBoneInfo	static igMetaField *k_transformSource;
+igAnimationCombinerBoneInfo	static igMetaField *k_constantQuaternion;
+igAnimationCombinerBoneInfo	static igMetaField *k_constantTranslation;
+igAnimationCombinerBoneInfo	static igMetaField *k_priority;
+igAnimationCombinerBoneInfo	static igMetaField *k_useAnimationTranslation;
+igAnimationCombinerBoneInfo	static igMetaField *k_reflect;
+igAnimationCombinerBoneInfo	public: inline void setAnimationState(igAnimationState *animationStateParam) { _animationState = animationStateParam; }
+igAnimationCombinerBoneInfo	inline void setTransformSource(igTransformSource *transformSourceParam) { _transformSource = transformSourceParam; }
+igAnimationCombinerBoneInfo	inline const igTransformSource *getTransformSource() const { return _transformSource; }
+igAnimationCombinerBoneInfo	inline void setPriority(int priorityParam) { _priority = priorityParam; }
+igAnimationCombinerBoneInfo	inline int getPriority() const { return _priority; }
+igAnimationCombinerBoneInfo	inline void setLastKeyframe(int lastKeyframeParam) { _lastKeyframe = lastKeyframeParam; }
+igAnimationCombinerBoneInfo	inline int getLastKeyframe() const { return _lastKeyframe; }
+igAnimationCombinerBoneInfo	inline void setReflect(int reflectParam) { _reflect = reflectParam; }
+igAnimationCombinerBoneInfo	inline int getReflect() const { return _reflect; }
+igAnimationCombinerBoneInfo	inline igAnimationState *getAnimationState() { return _animationState; }
+igAnimationCombinerBoneInfoList	IG_OBJECT_DEFINE(igAnimationCombinerBoneInfoList)
+igAnimationCombinerBoneInfoListList	IG_OBJECT_DEFINE(igAnimationCombinerBoneInfoListList)
+igAnimationCombinerBoneInfoPool	IG_OBJECT_DEFINE(igAnimationCombinerBoneInfoPool)
+igAnimationCombiner	IG_OBJECT_DEFINE(igAnimationCombiner)
+igAnimationCombiner	private: static igMetaField *k_animationStateTime;
+igAnimationCombiner	static igMetaField *k_lastCleanStatesTime;
+igAnimationCombiner	static igMetaField *k_cleanStatesTimeThreshold;
+igAnimationCombiner	static igMetaField *k_cleanStatesTransitionMargin;
+igAnimationCombiner	protected: static igMetaField *k_boneInfoListList;
+igAnimationCombiner	static igMetaField *k_boneInfoListBase;
+igAnimationCombiner	static igMetaField *k_animationStateList;
+igAnimationCombiner	static igMetaField *k_resultQuaternionArray;
+igAnimationCombiner	static igMetaField *k_animationCacheMatrixArray;
+igAnimationCombiner	static igMetaField *k_cacheTime;
+igAnimationCombiner	static igMetaField *k_cacheValid;
+igAnimationCombiner	static igMetaField *k_hierarchyUpdated;
+igAnimationCombiner	static igMetaField *k_boneMatrixArray;
+igAnimationCombiner	static igMetaField *k_blendMatrixArray;
+igAnimationCombiner	public: inline void setCacheTime(long long cacheTimeParam) { _cacheTime = cacheTimeParam; }
+igAnimationCombiner	inline long long getCacheTime() const { return _cacheTime; }
+igAnimationCombiner	inline void setAnimationStateTime(long long animationStateTimeParam) { _animationStateTime = animationStateTimeParam; }
+igAnimationCombiner	inline void setCleanStatesTimeThreshold(long long cleanStatesTimeThresholdParam) { _cleanStatesTimeThreshold = cleanStatesTimeThresholdParam; }
+igAnimationCombiner	inline long long getCleanStatesTimeThreshold() const { return _cleanStatesTimeThreshold; }
+igAnimationCombiner	inline void setCleanStatesTransitionMargin(long long cleanStatesTransitionMarginParam) { _cleanStatesTransitionMargin = cleanStatesTransitionMarginParam; }
+igAnimationCombiner	inline long long getCleanStatesTransitionMargin() const { return _cleanStatesTransitionMargin; }
+igAnimationCombiner	virtual void userPostLoad();
+igAnimationCombiner	virtual void userDestruct();
+igAnimationCombinerList	IG_OBJECT_DEFINE(igAnimationCombinerList)
+igAnimationTransitionParams	IG_OBJECT_DEFINE(igAnimationTransitionParams)
+igAnimationTransitionParams	protected: static igMetaField *k_startRatio;
+igAnimationTransitionParams	static igMetaField *k_endRatio;
+igAnimationTransitionParams	static igMetaField *k_duration;
+igAnimationTransitionParams	static igMetaField *k_targetStartTime;
+igAnimationTransitionParams	public: inline void setStartRatio(float startRatioParam) { _startRatio = startRatioParam; }
+igAnimationTransitionParams	inline float getStartRatio() const { return _startRatio; }
+igAnimationTransitionParams	inline void setEndRatio(float endRatioParam) { _endRatio = endRatioParam; }
+igAnimationTransitionParams	inline float getEndRatio() const { return _endRatio; }
+igAnimationTransitionParams	inline void setDuration(long long durationParam) { _duration = durationParam; }
+igAnimationTransitionParams	inline long long getDuration() const { return _duration; }
+igAnimationTransitionParams	inline void setTargetStartTime(long long targetStartTimeParam) { _targetStartTime = targetStartTimeParam; }
+igAnimationTransitionParams	inline long long getTargetStartTime() const { return _targetStartTime; }
+igAnimationTransitionPoint	IG_OBJECT_DEFINE(igAnimationTransitionPoint)
+igAnimationTransitionPoint	protected: static igMetaField *k_transitionTime;
+igAnimationTransitionPoint	static igMetaField *k_transitionParams;
+igAnimationTransitionPoint	public: inline void setTransitionTime(long long transitionTimeParam) { _transitionTime = transitionTimeParam; }
+igAnimationTransitionPoint	inline long long getTransitionTime() const { return _transitionTime; }
+igAnimationTransitionPoint	inline void setTransitionParams(igAnimationTransitionParams *transitionParamsParam) { _transitionParams = transitionParamsParam; }
+igAnimationTransitionPoint	inline igAnimationTransitionParams *getTransitionParams() const { return _transitionParams; }
+igAnimationTransitionPointList	IG_OBJECT_DEFINE(igAnimationTransitionPointList)
+igAnimationTransitionDefinition	IG_OBJECT_DEFINE(igAnimationTransitionDefinition)
+igAnimationTransitionDefinition	protected: static igMetaField *k_baseAnimation;
+igAnimationTransitionDefinition	static igMetaField *k_transitionPointList;
+igAnimationTransitionDefinition	static igMetaField *k_params;
+igAnimationTransitionDefinition	public: inline const igAnimationTransitionPointList *getTransitionPointList() const { return _transitionPointList; }
+igAnimationTransitionDefinition	inline const igAnimationTransitionParams *getParams() const { return _params; }
+igAnimationTransitionDefinition	inline igAnimation *getBaseAnimation() const { return _baseAnimation; }
+igAnimationTransitionDefinition	inline void setTransitionParams(igAnimationTransitionParams *params) { _params = params; }
+igAnimationTransitionDefinition	inline igAnimationTransitionParams *getTransitionParams() { return _params; }
+igAnimationTransitionDefinitionList	IG_OBJECT_DEFINE(igAnimationTransitionDefinitionList)

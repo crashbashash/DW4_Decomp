@@ -202,7 +202,7 @@ void igEnvironmentMapShader2::destroyAttrs() {
 
 void igEnvironmentMapShader2::shade(igCommonTraversal *ct) {
     EnvTraversalView *t = (EnvTraversalView *)ct;
-    EnvAttrStack *s = t->_attrStack;
+    igAttrStackManager *s = ct->_attrStack;
     int n;
     int i;
     if (!_configured) configure((igCapabilityManager *)t->_arg32);
@@ -217,11 +217,11 @@ void igEnvironmentMapShader2::shade(igCommonTraversal *ct) {
         EnvAttrList *p = ((EnvListList *)_attrPushLists.get())->_data[i];
         int m = p->_count;
         int j;
-        for (j = 0; j < m; j++) pushEnvAttr(s, p->_data[j]);
+        for (j = 0; j < m; j++) s->fastPushOverride((igAttr *)p->_data[j]);
         igTraversal_TraverseChildren((::igTraversal *)t, (::igNode *)this);
         {
             EnvAttrList *q = ((EnvListList *)_attrPopLists.get())->_data[i];
-            for (j = q->_count - 1; j >= 0; j--) popEnvAttr(s, q->_data[j]);
+            for (j = q->_count - 1; j >= 0; j--) s->fastPopOverride((igAttr *)q->_data[j]);
         }
     }
     if (_useRenderPackage) FUN_001dc610((::igSorter *)t->_context);

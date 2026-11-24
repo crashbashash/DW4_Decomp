@@ -26,11 +26,11 @@ char g_cleanCombinerStates;
 void FUN_001abca0(void) {
     int allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimationCombinerBoneInfoPool_instance.release();
-    g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)igAnimationCombinerBoneInfoPool_Create(allocator);
+    g_igAnimationCombinerBoneInfoPool_instance.p = (igAnimationCombinerBoneInfoPool *)Gap::Sg::igAnimationCombinerBoneInfoPool::_instantiateFromPool((igMemoryPoolView *)allocator);
     g_igAnimationCombinerBoneInfoPool_instance->_resetMode = 0;
     allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimationStatePool_instance.release();
-    g_igAnimationStatePool_instance.p = (igAnimationStatePool *)igAnimationStatePool_Create(allocator);
+    g_igAnimationStatePool_instance.p = (igAnimationStatePool *)Gap::Sg::igAnimationStatePool::_instantiateFromPool((igMemoryPoolView *)allocator);
     allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimation_instance.release();
     g_igAnimation_instance.p = (igAnimation *)Gap::Sg::igAnimation::_instantiateFromPool((igMemoryPoolView *)allocator);

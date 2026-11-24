@@ -1,46 +1,45 @@
-igMetaObject *g_igAnimationCombinerBoneInfoList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationCombinerBoneInfoList_GetMetaObject(void)
+igMetaObject *igAnimationCombinerBoneInfoList::_Meta;
+
+igMetaObject *igAnimationCombinerBoneInfoList::getClassTypeSafe()
 {
-    igMetaObject *g = g_igAnimationCombinerBoneInfoList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationCombinerBoneInfoList_EnsureRegistered();
-    return g_igAnimationCombinerBoneInfoList_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igAnimationCombinerBoneInfoList_GetVTable(void) {
-    struct Obj_1a7fe0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igAnimationCombinerBoneInfoList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAnimationCombinerBoneInfoList_EnsureRegistered(void)
+void *igAnimationCombinerBoneInfoList::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igAnimationCombinerBoneInfoList_Register);
+    igAnimationCombinerBoneInfoList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igAnimationCombinerBoneInfoList_callbackList[] = { igAnimationCombinerBoneInfo_EnsureRegistered, 0 };
+void igAnimationCombinerBoneInfoList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igAnimationCombinerBoneInfoList_Register(void) {
+CallbackArray *igAnimationCombinerBoneInfoList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationCombinerBoneInfo::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationCombinerBoneInfoList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAnimationCombinerBoneInfoList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationCombinerBoneInfoList",
-        0x14, /* instance size */
-        igAnimationCombinerBoneInfoList_GetVTable,
+        sizeof(igAnimationCombinerBoneInfoList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAnimationCombinerBoneInfoList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAnimationCombinerBoneInfoList_GetMetaObjectFunction(void) {
-    igAnimationCombinerBoneInfoList_GetMetaObject();
+}
 }
 

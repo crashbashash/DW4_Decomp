@@ -78,7 +78,7 @@ void igActor_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igActor_Register);
 }
 
-static igMetaObjectCallback g_igActor_callbackList[] = { igAnimationSystem_EnsureRegistered, Gap::Sg::igAppearance::arkRegister, Gap::Sg::igAnimationDatabase::arkRegister, Gap::Sg::igAnimationModifierList::arkRegister, 0 };
+static igMetaObjectCallback g_igActor_callbackList[] = { Gap::Sg::igAnimationSystem::arkRegister, Gap::Sg::igAppearance::arkRegister, Gap::Sg::igAnimationDatabase::arkRegister, Gap::Sg::igAnimationModifierList::arkRegister, 0 };
 
 CallbackArray *igActor_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -181,7 +181,7 @@ void igActor_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActor_ctorTable, 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAnimationSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Sg::igAnimationSystem::getClassTypeLazy();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
     ((igMemoryRefMetaField *)temp_s2_2)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igRefMetaField *)temp_s2_2)->_destruct = 1;

@@ -257,39 +257,6 @@ int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
     return FUN_001c47f0(o->_frustum, b->_min, b->_max);
 }
 
-static inline void pushCullAttr(igFrustCullTraversal *self, igAttr *attr) {
-    /* matching construct: declaration-order search — the order of these locals */
-    int n;
-    igAttrStackManager *manager;
-    AttrObjectStack *stack;
-    int slot;
-    igObject *pushed;
-    manager = (igAttrStackManager *)self->_attrStack;
-    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    pushed = attr;
-    n = stack->getCount();
-    if (n < stack->_capacity) {
-        stack->_count = stack->_count + 1;
-    } else {
-        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
-    }
-    stack->set(n, &pushed);
-    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
-}
-
-static inline void popCullAttr(igAttrStackManager *manager, igAttr *attr) {
-    int slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
-    AttrObjectStack *stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
-    igObject *top = stack->get(stack->_count - 1);
-    void (*pop)(igObject *, int) = stack->_popProc;
-    if (pop != 0) {
-        pop(top, manager->_popProcData);
-    }
-    stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
-}
-
 int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
     int status;
     switch (result) {
@@ -297,12 +264,12 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
         return 0;
     case 5:
     case 1: {
-        pushCullAttr(self, (igAttr *)self->_cd);
+        ((Gap::Sg::igFrustCullTraversal *)self)->_attrStack->fastPushAttr((Gap::Attrs::igAttr *)self->_cd);
         igObject *saved = (igObject *)self->_travProcs;
         ((igSmartPointer<igObject> &)self->_travProcs) = (igObject *)Gap::Sg::igCommonTraversal::_getTraversalFunctions();
         status = Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get((unsigned)node->_handle)((::igTraversal *)self, (::igObject *)node);
         ((igSmartPointer<igObject> &)self->_travProcs) = saved;
-        popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
+        ((Gap::Sg::igAttrStackManager *)self->_attrStack)->fastPopAttr((Gap::Attrs::igAttr *)self->_cd);
         if (status == 2) {
             return 2;
         }
@@ -314,9 +281,9 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
         }
         return 0;
     case 4:
-        pushCullAttr(self, (igAttr *)self->_cd);
+        ((Gap::Sg::igFrustCullTraversal *)self)->_attrStack->fastPushAttr((Gap::Attrs::igAttr *)self->_cd);
         status = Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get((unsigned)node->_handle)((::igTraversal *)self, (::igObject *)node);
-        popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
+        ((Gap::Sg::igAttrStackManager *)self->_attrStack)->fastPopAttr((Gap::Attrs::igAttr *)self->_cd);
         if (status == 2) {
             return 2;
         }

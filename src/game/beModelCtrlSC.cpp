@@ -163,7 +163,8 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
         ((Gap::Sg::igAttrStackManager *)mgr)->popOverride((Gap::Attrs::igAttr *)*(int *)(((igAttrList *)node->_overrideAttrList)->_data + lo));
         lo -= 4;
     }
-    PopAttr(mgr, *timeUnitID + ((int *)mgr->_attrStackIndexTable)[*timeAttrIndex]);
+    ((Gap::Sg::igAttrStackManager *)mgr)->fastPopAttr(*timeUnitID + ((int *)mgr->_attrStackIndexTable)[*timeAttrIndex]);
+    /* matching construct: the second pop stays open-coded; the kit's fastPopAttr here lengthens the body. */
     PopAttr(mgr, *matUnitID + ((int *)mgr->_attrStackIndexTable)[*matAttrIndex]);
     ((igCommonTraversalDispatchView *)trav)->popTime();
     if (result == 2) return 2;

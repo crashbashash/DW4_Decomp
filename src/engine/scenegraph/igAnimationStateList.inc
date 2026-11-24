@@ -1,52 +1,52 @@
-igMetaObject *g_igAnimationStateList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationStateList_GetOrCreateMetaObject(void) {
-    if (g_igAnimationStateList_metaObject == 0) {
-        g_igAnimationStateList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationStateList_metaObject;
-}
+igMetaObject *igAnimationStateList::_Meta;
 
-igMetaObject *igAnimationStateList_GetMetaObject(void)
+igMetaObject *igAnimationStateList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationStateList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationStateList_EnsureRegistered();
-    return g_igAnimationStateList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAnimationStateList_GetVTable(void) {
-    int obj[8];
-    igObject_InitHeader((igObject *)obj);
-    obj[0] = (int)&g_igAnimationStateList_vtable[0];
-    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAnimationStateList_EnsureRegistered(void)
+igMetaObject *igAnimationStateList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationStateList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationStateList_callbackList[] = { igAnimationState_EnsureRegistered, 0 };
+void *igAnimationStateList::retrieveVTablePointer()
+{
+    igAnimationStateList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAnimationStateList_Register(void) {
+void igAnimationStateList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationStateList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationState::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationStateList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAnimationStateList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationStateList",
-        0x14, /* instance size */
-        igAnimationStateList_GetVTable,
+        sizeof(igAnimationStateList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAnimationStateList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAnimationStateList_GetMetaObjectFunction(void) {
-    igAnimationStateList_GetMetaObject();
+}
 }
 

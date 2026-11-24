@@ -6,7 +6,6 @@
 #include "dw4/scenegraph/igObjectPool.h"
 #include "dw4/attrs/igTimeAttr.h"
 #include "dw4/scenegraph/igTraversal.h"
-typedef void (*AttrPopProc)(void *attr, int data);
 /* The attribute list of one stack: count and storage of the pushed attributes. */
 typedef igTDataList<igAttr *> AttrList;
 /* matching construct: the 4-byte reference fields (_attrStack, _timePool, _attrStacks, _data, _popProc, ...) are viewed through pointer casts; no layout effect */
@@ -23,12 +22,6 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     igAttrStack *stack;
     int index;
     int result;
-    int popIndex;
-    igAttrStack *top;
-    AttrPopProc pop;
-    void *popped;
-    int last;
-    void **entries;
     short *timeAttrIndex;
     short *timeUnitID;
 
@@ -63,17 +56,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     ((AttrList *)stack)->set(count, &pushed);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
-    popIndex = *timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex];
-    top = ((igAttrStack **)((igAttrStackList *)attrs->_attrStacks)->_data)[popIndex];
-    last = top->_count - 1;
-    entries = (void **)top->_data;
-    pop = (AttrPopProc)top->_popProc;
-    popped = entries[last];
-    if (pop != 0) {
-        pop(popped, attrs->_popProcData);
-    }
-    top->_count = top->_count - 1;
-    igAttrStackManager_MarkStackChanged(attrs, top, popIndex);
+    ((Gap::Sg::igAttrStackManager *)attrs)->fastPopAttr(*timeUnitID + ((int *)attrs->_attrStackIndexTable)[*timeAttrIndex]);
     ((igCommonTraversalDispatchView *)traversal)->popTime();
     if (result == 2) {
         return 2;

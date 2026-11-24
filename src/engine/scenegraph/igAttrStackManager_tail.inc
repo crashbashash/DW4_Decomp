@@ -297,9 +297,9 @@ void igAttrStackManager::pushLightState(igLightStateAttr *ls, bool override) {
         ((igTDataList<igLightStateAttr *> *)_attrDefaults.get())->_data[slot]->setState(false);
     }
     if (override) {
-        fastPushOverride((::igAttrStackManager *)this, (::igObject *)ls, slot);
+        fastPushOverride(ls, slot);
     } else {
-        fastPushAttr((::igAttrStackManager *)this, (::igObject *)ls, slot);
+        fastPushAttr(ls, slot);
     }
 }
 
@@ -353,7 +353,7 @@ void igAttrStackManager::popLightState(igLightStateAttr *ls, bool override) {
         if (stack->_count == stack->_cachedOverride) {
             stack->_cachedOverride = -1;
         }
-        igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+        updateAttrUpdateList((igAttrStack *)stack, slot);
     } else {
         ::igObject *top;
         void (*pop)(::igObject *, int);
@@ -364,7 +364,7 @@ void igAttrStackManager::popLightState(igLightStateAttr *ls, bool override) {
             pop(top, (int)_popProcData);
         }
         stack->_count = stack->_count - 1;
-        igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+        updateAttrUpdateList((igAttrStack *)stack, slot);
     }
 }
 
@@ -418,7 +418,7 @@ void igAttrStackManager::pushAttr(const igAttr *attribute) {
     slot = attribute->_cachedUnitID + _attrStackIndexTable[slot];
     stack = (AttrObjectStack *)stack->_data[slot];
     stack->append((::igObject *)attribute);
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+    updateAttrUpdateList((igAttrStack *)stack, slot);
 }
 
 void igAttrStackManager::popAttr(const igAttr *attribute) {
@@ -435,7 +435,7 @@ void igAttrStackManager::popAttr(const igAttr *attribute) {
         pop(top, _popProcData);
     }
     stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+    updateAttrUpdateList(stack, slot);
 }
 
 void igAttrStackManager::popAttr(igMetaObject *meta) {
@@ -452,7 +452,7 @@ void igAttrStackManager::popAttr(igMetaObject *meta) {
         pop(top, _popProcData);
     }
     stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+    updateAttrUpdateList(stack, slot);
 }
 
 void igAttrStackManager::popAttr(igMetaObject *meta, int unitID) {
@@ -469,7 +469,7 @@ void igAttrStackManager::popAttr(igMetaObject *meta, int unitID) {
         pop(top, _popProcData);
     }
     stack->_count = stack->_count - 1;
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+    updateAttrUpdateList(stack, slot);
 }
 
 void igAttrStackManager::pushOverride(const igAttr *override) {
@@ -482,7 +482,7 @@ void igAttrStackManager::pushOverride(const igAttr *override) {
         stack->_cachedOverride = stack->_count;
     }
     stack->append((::igObject *)override);
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
+    updateAttrUpdateList((igAttrStack *)stack, slot);
 }
 
 void igAttrStackManager::popOverride(const igAttr *override) {
@@ -502,44 +502,38 @@ void igAttrStackManager::popOverride(const igAttr *override) {
     if (stack->_count == stack->_cachedOverride) {
         stack->_cachedOverride = -1;
     }
-    igAttrStackManager_MarkStackChanged((::igAttrStackManager *)this, (::igAttrStack *)stack, slot);
-}
-}
+    updateAttrUpdateList((igAttrStack *)stack, slot);
 }
 
-void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStack *stack, int index) {
-    int c1;
-    int c2;
-    struct L_1b1490 *l1;
-    struct L_1b1490 *l2;
-
-    if (stack->_hasChangedFromLastIncrementalFlush == 0) {
-        l1 = (struct L_1b1490 *)manager->_attrIncrementalUpdateList;
-        c1 = l1->n;
-        if (c1 < l1->cap) {
-            l1->n = n_of_1b1490(l1) + 1;
+/* Records a changed stack: its handle goes on the incremental and the root update lists once each until they
+ * are flushed, and the manager is marked changed. */
+void igAttrStackManager::updateAttrUpdateList(igAttrStack *attrStack, int attrHandle) {
+    /* matching construct: the lists' append written out with the count read through a reference (the kit's
+     * append numbers the list after the count and swaps their saved registers). */
+    if (!attrStack->_hasChangedFromLastIncrementalFlush) {
+        igIntList *updates = _attrIncrementalUpdateList;
+        const int count = (const int &)updates->_count;
+        if (count < updates->_capacity) {
+            updates->_count++;
         } else {
-            ((Gap::Core::igDataList *)l1)->resizeAndSetCount(c1 + 1, 4);
+            updates->resizeAndSetCount(count + 1, sizeof(int));
         }
-        l1->arr[c1] = index;
-        stack->_hasChangedFromLastIncrementalFlush = 1U;
+        ((int *)updates->_data)[count] = attrHandle;
+        attrStack->_hasChangedFromLastIncrementalFlush = true;
     }
-    if (stack->_hasChangedFromRoot == 0) {
-        l2 = (struct L_1b1490 *)manager->_attrRootUpdateList;
-        c2 = l2->n;
-        if (c2 < l2->cap) {
-            l2->n = n_of_1b1490(l2) + 1;
+    if (!attrStack->_hasChangedFromRoot) {
+        igIntList *updates = _attrRootUpdateList;
+        const int count = (const int &)updates->_count;
+        if (count < updates->_capacity) {
+            updates->_count++;
         } else {
-            ((Gap::Core::igDataList *)l2)->resizeAndSetCount(c2 + 1, 4);
+            updates->resizeAndSetCount(count + 1, sizeof(int));
         }
-        l2->arr[c2] = index;
-        stack->_hasChangedFromRoot = 1U;
+        ((int *)updates->_data)[count] = attrHandle;
+        attrStack->_hasChangedFromRoot = true;
     }
-    manager->_stackChanged = 1;
+    _stackChanged = true;
 }
-
-namespace Gap {
-namespace Sg {
 
 /* Turns the billboard to face the camera: `matrix` gets the billboard's rotation for its mode and the
  * model-view position moved by the billboard's origin. */

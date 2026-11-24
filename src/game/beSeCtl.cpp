@@ -26,17 +26,6 @@ struct AttrStackOps {
         return ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[((int *)mgr->_attrStackIndexTable)[index]];
     }
 };
-struct AttrList : igTDataList<igAttr *> {
-    void append(igAttr *value) {
-        int n = count();
-        if (n < _capacity)
-            _count = _count + 1;
-        else
-            ((Gap::Core::igDataList *)this)->resizeAndSetCount(n + 1, 4);
-        igAttr *const *p = &value;
-        _data[n] = *p;
-    }
-};
 extern "C" int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav);
 extern "C" void beSeCtl_Prepare(beSeCtl *self);
 extern "C" char ACTION_BROADCAST_3[];
@@ -83,41 +72,17 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
     if (node->_isResetTime)
         ((igCommonTraversalDispatchView *)trav)->pushTime(time);
     if (node->_isResetTime) {
-        /* push timeAttr on the attribute stack of its class (stack = index table[attr id] + attr unit) */
-        int idx = timeAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[timeAttr->_cachedAttrIndex];
-        igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
-        ((AttrList *)st)->append((igAttr *)timeAttr);
-        igAttrStackManager_MarkStackChanged(mgr, st, idx);
+        ((Gap::Sg::igAttrStackManager *)mgr)->fastPushAttr((Gap::Attrs::igAttr *)timeAttr);
     }
     if (node->_isResetRotAndScale) {
-        int idx = matAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[matAttr->_cachedAttrIndex];
-        igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
-        ((AttrList *)st)->append((igAttr *)matAttr);
-        igAttrStackManager_MarkStackChanged(mgr, st, idx);
+        ((Gap::Sg::igAttrStackManager *)mgr)->fastPushAttr((Gap::Attrs::igAttr *)matAttr);
     }
     int r = igTraversal_TraverseChildren((igTraversal *)trav, (igNode *)node);
     if (node->_isResetRotAndScale) {
-        /* pop matAttr: run the stack's pop procedure on the top attribute, then shrink */
-        int idx = matAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[matAttr->_cachedAttrIndex];
-        igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
-        int last = st->_count - 1;
-        igAttr *top = ((igAttr **)st->_data)[last];
-        void (*popProc)(igAttr *, int) = (void (*)(igAttr *, int))st->_popProc;
-        if (popProc)
-            popProc(top, mgr->_popProcData);
-        st->_count = st->_count - 1;
-        igAttrStackManager_MarkStackChanged(mgr, st, idx);
+        ((Gap::Sg::igAttrStackManager *)mgr)->fastPopAttr((Gap::Attrs::igAttr *)matAttr);
     }
     if (node->_isResetTime) {
-        int idx = timeAttr->_cachedUnitID + ((int *)mgr->_attrStackIndexTable)[timeAttr->_cachedAttrIndex];
-        igAttrStack *st = ((igAttrStack **)((igAttrStackList *)mgr->_attrStacks)->_data)[idx];
-        int last = st->_count - 1;
-        igAttr *top = ((igAttr **)st->_data)[last];
-        void (*popProc)(igAttr *, int) = (void (*)(igAttr *, int))st->_popProc;
-        if (popProc)
-            popProc(top, mgr->_popProcData);
-        st->_count = st->_count - 1;
-        igAttrStackManager_MarkStackChanged(mgr, st, idx);
+        ((Gap::Sg::igAttrStackManager *)mgr)->fastPopAttr((Gap::Attrs::igAttr *)timeAttr);
     }
     if (node->_isResetTime)
         ((igCommonTraversalDispatchView *)trav)->popTime();

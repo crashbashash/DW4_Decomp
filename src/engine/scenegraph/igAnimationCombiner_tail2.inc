@@ -1,4 +1,10 @@
-void igAnimationCombiner_UserPostLoad(CombinerView *c) {
+namespace Gap {
+namespace Sg {
+
+/* The body reads the object through a view of its fields: through the typed members (or `this`) the compiler hoists
+   the field addresses and numbers the loads differently. */
+void igAnimationCombiner::userPostLoad() {
+    CombinerView *c = (CombinerView *)this;
     int result1;
     int result2;
     int bones;
@@ -9,7 +15,7 @@ void igAnimationCombiner_UserPostLoad(CombinerView *c) {
         BoneInfoRow *row = c->_boneInfoListList->_data[i];
         int j;
         for (j = 0; j < row->_count; j++) {
-            igAnimationCombinerBoneInfo *info = row->_data[j];
+            ::igAnimationCombinerBoneInfo *info = row->_data[j];
             if (info->_transformSource != 0 && !info->_useAnimationTranslation) {
                 float *t = c->_animHierarchy->_translations + i * 3;
                 float y;
@@ -31,7 +37,7 @@ void igAnimationCombiner_UserPostLoad(CombinerView *c) {
             if (c->_boneMatrixArray == 0) {
                 float *m;
                 int k;
-                igMetaField_AllocateArray(&result1, (igMemoryRefMetaField *)g_igAnimationCombiner_boneMatrixArrayMetaField, c, boneCount, ((Gap::Core::igObject *)c)->getMemoryPool());
+                igMetaField_AllocateArray(&result1, (::igMemoryRefMetaField *)Gap::Sg::igAnimationCombiner::k_boneMatrixArray, c, boneCount, ((Gap::Core::igObject *)c)->getMemoryPool());
                 m = c->_boneMatrixArray;
                 for (k = 0; k < boneCount; k++) {
                     igMatrix44f_SetIdentity(m);
@@ -41,7 +47,7 @@ void igAnimationCombiner_UserPostLoad(CombinerView *c) {
             if (blendCount != 0 && c->_blendMatrixArray == 0) {
                 float *m;
                 int k;
-                igMetaField_AllocateArray(&result2, (igMemoryRefMetaField *)g_igAnimationCombiner_blendMatrixArrayMetaField, c, blendCount, ((Gap::Core::igObject *)c)->getMemoryPool());
+                igMetaField_AllocateArray(&result2, (::igMemoryRefMetaField *)Gap::Sg::igAnimationCombiner::k_blendMatrixArray, c, blendCount, ((Gap::Core::igObject *)c)->getMemoryPool());
                 m = c->_blendMatrixArray;
                 for (k = 0; k < blendCount; k++) {
                     igMatrix44f_SetIdentity(m);
@@ -50,6 +56,8 @@ void igAnimationCombiner_UserPostLoad(CombinerView *c) {
             }
         }
     }
+}
+}
 }
 
 void FUN_001ad5c0(A_1ad5c0 *arg0, It *arg1, int arg2) {
@@ -205,7 +213,7 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
             track = anim->_trackList->_data[t];
         }
         if (track != 0) {
-            b = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)igAnimationCombinerBoneInfo_Create);
+            b = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)Gap::Sg::igAnimationCombinerBoneInfo::_instantiateFromPool);
             source = track->_source;
             if (source != 0) {
                 int useT = useTranslation(anim, binding->_boneMap[i]);
@@ -471,11 +479,16 @@ int igAnimationCombiner_AddAnimationBlend(igAnimationCombiner *combiner, igAnima
     return r;
 }
 
-void igAnimationCombiner_userDestruct(void **arg0) {
-    if (((DW4VC_92_0 *)(arg0))->vX() != 0) {
-        igAnimationCombiner_RemoveAllStates((igAnimationCombiner *)arg0);
-        Gap__Core__igObject__userDestruct((igObject *)arg0);
+namespace Gap {
+namespace Sg {
+
+void igAnimationCombiner::userDestruct() {
+    if (((DW4VC_92_0 *)((void * *)this))->vX() != 0) {
+        igAnimationCombiner_RemoveAllStates((::igAnimationCombiner *)this);
+        Gap__Core__igObject__userDestruct((::igObject *)this);
     }
+}
+}
 }
 
 int igAnimationCombiner_Configured(igAnimationCombiner *self) {
@@ -526,7 +539,7 @@ int igAnimationCombiner_ResetToPose(igAnimationCombiner *combiner, igAnimationCo
     state->_blendStartTime = 0;
     ((Gap::Core::igObjectList *)c->_animationStateList)->append((Gap::Core::igObject *)state);
     for (i = 0; i < bones; i++) {
-        CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)igAnimationCombinerBoneInfo_Create);
+        CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)Gap::Sg::igAnimationCombinerBoneInfo::_instantiateFromPool);
         float *m;
         float tx, ty, tz;
         CombinerQuat q;

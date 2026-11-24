@@ -298,3 +298,18 @@ igAnimationList	Sg	igTObjectList<igAnimation>
 igAnimationBinding	Sg
 igAnimationBindingList	Sg	igTObjectList<igAnimationBinding>
 igAnimationDatabase	Sg
+igAnimationState	Sg
+igAnimationStateList	Sg	igTObjectList<igAnimationState>
+igAnimationStatePool	Sg
+igAnimationSystem	Sg
+igAnimationCombinerBoneInfo	Sg
+igAnimationCombinerBoneInfoList	Sg	igTObjectList<igAnimationCombinerBoneInfo>
+igAnimationCombinerBoneInfoListList	Sg	igTObjectList<igAnimationCombinerBoneInfoList>
+igAnimationCombinerBoneInfoPool	Sg
+igAnimationCombiner	Sg
+igAnimationCombinerList	Sg	igTObjectList<igAnimationCombiner>
+igAnimationTransitionParams	Sg
+igAnimationTransitionPoint	Sg
+igAnimationTransitionPointList	Sg	igTObjectList<igAnimationTransitionPoint>
+igAnimationTransitionDefinition	Sg
+igAnimationTransitionDefinitionList	Sg	igTObjectList<igAnimationTransitionDefinition>

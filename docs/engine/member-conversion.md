@@ -799,8 +799,17 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    rows: the present row had it stripped. `userConstruct` open-codes the list append (byte-only, commented).
    `igAttrStackManager` and `igNonRefCountedAttrStackManagerList` are converted (spec scratch/SgSorter/specs/manager.py;
    the kit's names for push/pop, the light-state members, flush, setup and registration). `MarkStackChanged`
-   (0x1b1490, the kit's private `updateAttrUpdateList`) stays a free function for now, as do the open-coded fast
-   push/pop helpers its other callers use. Several bodies keep byte-only shapes, each commented: the push members
+   (0x1b1490) is the kit's private `updateAttrUpdateList`, its two list appends written out (byte-only, commented).
+   `igAttrStack` and the manager declare the kit's public inlines (`getTop`/`push`/`pop`/`pushOverride`/`popOverride`,
+   `getAttrHandle`/`getStack`/`fastPushAttr`/`fastPopAttr`/`fastPushOverride`/`fastPopOverride`); `igAttrStack::pushItem`
+   reads the count as `(const int &)_count` (byte-only: the kit's `getCount()` swaps the count's and the stack's
+   saved registers). `pushLightState`, the shader `shade`s, the traversal `begin`/`end`, `igTransform`'s matrix push
+   and pop, the frustum cull, the multi-pass and self-shadow shaders and the game's beSeCtl use them, as do the pops of
+   ParticleArray, beNodeAnim, beCri, beModelCtrl and beModelCtrlSC. Still open-coded after three tries each, calling
+   the C name `igAttrStackManager_MarkStackChanged` (the symbols.txt name of 0x1b1490): `traverseAttrSet`,
+   `traverseOverrideAttrSet`, the cartoon shader, the game's append-shaped pushes and one pop each in
+   beCopyModelCtrl2, beMeterCtrlNode and beModelCtrlNode2 (register order, frame slots or scheduling). While they
+   remain, `updateAttrUpdateList` must stay reachable from C. Several bodies keep byte-only shapes, each commented: the push members
    hold the stack list and then the stack in one variable, and the light-state members read three smart-pointer
    fields through the pointer word (`.p`) or through view casts, because `operator->` numbers the load later and
    swaps saved registers.
@@ -809,9 +818,19 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igAnimationTrack`, `igAnimation`, `igAnimationBinding` (its first field is DW4's `_hierarchy`, not the kit's
    `_skeleton`), their `igTObjectList` lists, and `igAnimationDatabase` (retail's FindObjectReference is the kit's
    `attemptResolve`, slot 24 `resolve`; the body uses the typed members, as a local alias shifts register
-   allocation). Specs in scratch/SgAnim5/specs. Next: igAnimationState and its list and pool (the first attempt
-   failed conversion, cause unseen), igAnimationCombiner, igAnimationSystem, igAnimationTransition*, igActor*,
-   igBlendMatrixSelect, igModelViewMatrixBoneSelect, igBitMask, igEnbaya*, igCompressed*.
+   allocation). Specs in scratch/SgAnim5/specs.
+   `igAnimationState` (the three enums' static meta getters, assigned without a cast: the member is
+   `Gap::Core::igMetaEnum *`), `igAnimationSystem` (DW4's one field is `_animHierarchy`, the kit's `_skeleton`),
+   `igAnimationCombiner` (`_hierarchyUpdated` is the kit's `_skeletonUpdated`), `igAnimationCombinerBoneInfo`
+   (`_useAnimationTranslation` where the kit has `_animationDrivenChannels`, no `_constantScale`),
+   `igAnimationTransitionParams`/`Point`/`Definition`, and their lists and pools are converted (specs in
+   scratch/SgAnim6/specs). The combiner's `userPostLoad` and `userDestruct` are members (retail names them through
+   the vtable, so compiler_names binds the slot; a C copy would read as igObject's); its other functions stay free
+   until the system's pure virtuals are declared. `userPostLoad` reads through a `CombinerView` alias: through
+   `this` the compiler hoists the field addresses. A list's leftover C `<List>_GetElementMeta`, the C
+   `igSmartPointer_<X>_Destruct` copies and the C copies of igAnimationSystem's destructor and `getMeta` go
+   before the 0x194380 row is regenerated. Next: igActor*, igBlendMatrixSelect,
+   igModelViewMatrixBoneSelect, igBitMask, igEnbaya*, igCompressed*.
 7. the game's `be*` classes last.
 
 ## Known differences and gaps

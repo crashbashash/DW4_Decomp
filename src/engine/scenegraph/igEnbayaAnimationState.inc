@@ -70,8 +70,8 @@ CallbackArray *igEnbayaAnimationState_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnbayaAnimationState_metaObject,
-        igAnimationState_Register,
-        igAnimationState_GetPublishedMetaObject,
+        Gap::Sg::igAnimationState::arkRegisterInternal,
+        Gap::Sg::igAnimationState::getClassMeta,
         igEnbayaAnimationState_GetMetaObjectFunction,
         "igEnbayaAnimationState",
         sizeof(igEnbayaAnimationState),                   /* Instance size. */
@@ -86,36 +86,37 @@ void igEnbayaAnimationState_GetMetaObjectFunction(void) {
     igEnbayaAnimationState_GetMetaObject();
 }
 
-igMetaObject *g_igAnimationState_metaObject;
-igMetaField *g_igAnimationState_animationMetaField;
-igMetaField *g_igAnimationState_combineModeMetaField;
-igMetaField *g_igAnimationState_transitionModeMetaField;
-igMetaField *g_igAnimationState_statusMetaField;
-igMetaField *g_igAnimationState_baseStateMetaField;
-igMetaField *g_igAnimationState_newMetaField;
-igMetaField *g_igAnimationState_currentBlendRatioMetaField;
-igMetaField *g_igAnimationState_localTimeMetaField;
-igMetaField *g_igAnimationState_baseTransitionTimeMetaField;
-igMetaField *g_igAnimationState_timeScaleMetaField;
-igMetaField *g_igAnimationState_timeBiasMetaField;
-igMetaField *g_igAnimationState_blendStartTimeMetaField;
-igMetaField *g_igAnimationState_blendStartRatioMetaField;
-igMetaField *g_igAnimationState_blendRatioRangeMetaField;
-igMetaField *g_igAnimationState_blendDurationMetaField;
-igMetaField *g_igAnimationState_animationStartTimeMetaField;
-igMetaField *g_igAnimationState_cachedCycleTimeMetaField;
-igMetaField *g_igAnimationState_cachedCycleNumberMetaField;
-igMetaField *g_igAnimationState_cycleMatchTargetStateMetaField;
-igMetaField *g_igAnimationState_isCycleMatchTargetMetaField;
-igMetaField *g_igAnimationState_cycleMatchDisableMetaField;
-igMetaField *g_igAnimationState_manualCycleMatchMetaField;
-igMetaField *g_igAnimationState_cycleMatchBaseDurationMetaField;
-igMetaField *g_igAnimationState_cycleMatchDurationRangeMetaField;
-igMetaField *g_igAnimationState_cycleMatchTargetDurationMetaField;
-igMetaField *g_igAnimationState_timeRequestedMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationState_GetPublishedMetaObject(void) {
-    return g_igAnimationState_metaObject;
+igMetaObject *igAnimationState::_Meta;
+igMetaField *igAnimationState::k_animation;
+igMetaField *igAnimationState::k_combineMode;
+igMetaField *igAnimationState::k_transitionMode;
+igMetaField *igAnimationState::k_status;
+igMetaField *igAnimationState::k_baseState;
+igMetaField *igAnimationState::k_new;
+igMetaField *igAnimationState::k_currentBlendRatio;
+igMetaField *igAnimationState::k_localTime;
+igMetaField *igAnimationState::k_baseTransitionTime;
+igMetaField *igAnimationState::k_timeScale;
+igMetaField *igAnimationState::k_timeBias;
+igMetaField *igAnimationState::k_blendStartTime;
+igMetaField *igAnimationState::k_blendStartRatio;
+igMetaField *igAnimationState::k_blendRatioRange;
+igMetaField *igAnimationState::k_blendDuration;
+igMetaField *igAnimationState::k_animationStartTime;
+igMetaField *igAnimationState::k_cachedCycleTime;
+igMetaField *igAnimationState::k_cachedCycleNumber;
+igMetaField *igAnimationState::k_cycleMatchTargetState;
+igMetaField *igAnimationState::k_isCycleMatchTarget;
+igMetaField *igAnimationState::k_cycleMatchDisable;
+igMetaField *igAnimationState::k_manualCycleMatch;
+igMetaField *igAnimationState::k_cycleMatchBaseDuration;
+igMetaField *igAnimationState::k_cycleMatchDurationRange;
+igMetaField *igAnimationState::k_cycleMatchTargetDuration;
+igMetaField *igAnimationState::k_timeRequested;
+}
 }
 
 static FieldFactory g_igEnbayaAnimationState_ctorTable[] = {
