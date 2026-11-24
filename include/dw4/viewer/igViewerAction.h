@@ -8,7 +8,6 @@ struct igViewerAction;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igViewerAction_metaObject;
 struct igViewerAction *igViewerAction_Create(int allocator);
 
 #ifdef __cplusplus

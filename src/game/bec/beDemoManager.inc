@@ -67,7 +67,7 @@ void beDemoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDemoManager_Register);
 }
 
-static igMetaObjectCallback g_beDemoManager_callbackList[] = { beMessenger_EnsureRegistered, beLua_EnsureRegistered, beDemoManagerWork_EnsureRegistered, beDemoManagerWorkList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beDemoManager_callbackList[] = { beMessenger_EnsureRegistered, beLua_EnsureRegistered, Gap::Bec::beDemoManagerWork::arkRegister, Gap::Bec::beDemoManagerWorkList::arkRegister, 0 };
 
 CallbackArray *beDemoManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -146,9 +146,9 @@ void beDemoManager_InitFields(void) {
     ((igObjectRefMetaField *)lua)->_metaObject = (int)beLua_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)lua)->_refCounted = 0;
     buildData = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)buildData)->_metaObject = (int)beDemoManagerWork_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)buildData)->_metaObject = (int)Gap::Bec::beDemoManagerWork::getClassTypeLazy();
     activeDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)activeDataList)->_metaObject = (int)beDemoManagerWorkList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)activeDataList)->_metaObject = (int)Gap::Bec::beDemoManagerWorkList::getClassTypeLazy();
     ((igRefMetaField *)activeDataList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDemoManager_fieldTable, g_beDemoManager_fieldHandles, g_beDemoManager_fieldOffsets, base);
 }

@@ -46,7 +46,7 @@ void beCriAudio_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCriAudio_Register);
 }
 
-static igMetaObjectCallback g_beCriAudio_callbackList[] = { igAdxAudio_EnsureRegistered, beCriSndf_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCriAudio_callbackList[] = { igAdxAudio_EnsureRegistered, Gap::Bec::beCriSndf::arkRegister, 0 };
 
 CallbackArray *beCriAudio_Register(void) {
     BecLibrary_MarkRegistered();
@@ -107,7 +107,7 @@ void beCriAudio_InitFields(void) {
     adxt = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)adxt)->_metaObject = (int)igAdxAudio_GetOrCreateMetaObject();
     sndf = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)sndf)->_metaObject = (int)beCriSndf_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)sndf)->_metaObject = (int)Gap::Bec::beCriSndf::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beCriAudio_fieldTable, g_beCriAudio_fieldHandles, g_beCriAudio_fieldOffsets, base);
 }
 

@@ -53,7 +53,7 @@ int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     bool found;
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-    igSmartPointer<igObject> locator(beFileChkObj_Create(allocator));
+    igSmartPointer<igObject> locator((igObject *)Gap::Bec::beFileChkObj::_instantiateFromPool((igMemoryPoolView *)allocator));
     if (beFileChkObj_FileExists((beFileChkObj *)locator.p, fileName) == 0) {
         return 2;
     }

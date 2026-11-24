@@ -6,27 +6,32 @@ void ViewerLibrary_MarkRegistered(void) {
     }
 }
 
-igMetaObject *g_igViewerStatisticsManager_metaObject;
-igMetaField *g_igViewerStatisticsManager_itemsMetaField;
-igMetaField *g_igViewerStatisticsManager_visualContextMetaField;
-igMetaField *g_igViewerStatisticsManager_guiFactoryMetaField;
-igMetaField *g_igViewerStatisticsManager_menuMetaField;
-igMetaField *g_igViewerStatisticsManager_boxComponentMetaField;
-igMetaField *g_igViewerStatisticsManager_stringMetaField;
-igMetaField *g_igViewerStatisticsManager_recordStatisticMaximumMetaField;
-igMetaField *g_igViewerStatisticsManager_attrMetaObjectsMetaField;
-igMetaField *g_igViewerStatisticsManager_extraSgStatisticsMetaField;
-igMetaField *g_igViewerStatisticsManager_attrCountMetaField;
-igMetaField *g_igViewerStatisticsManager_displayListAttrCountMetaField;
-igMetaField *g_igViewerStatisticsManager_textureAttrCountMetaField;
-igMetaField *g_igViewerStatisticsManager_geometryAttrCountMetaField;
-igMetaField *g_igViewerStatisticsManager_geometrySetAttrCountMetaField;
-igMetaField *g_igViewerStatisticsManager_mvmAttrCountMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igViewerStatisticsManager_GetOrCreateMetaObject(void) {
-    if (g_igViewerStatisticsManager_metaObject == 0) {
-        g_igViewerStatisticsManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igViewerStatisticsManager_metaObject;
+igMetaObject *igViewerStatisticsManager::_Meta;
+igMetaField *igViewerStatisticsManager::k_items;
+igMetaField *igViewerStatisticsManager::k_visualContext;
+igMetaField *igViewerStatisticsManager::k_guiFactory;
+igMetaField *igViewerStatisticsManager::k_menu;
+igMetaField *igViewerStatisticsManager::k_boxComponent;
+igMetaField *igViewerStatisticsManager::k_string;
+igMetaField *igViewerStatisticsManager::k_recordStatisticMaximum;
+igMetaField *igViewerStatisticsManager::k_attrMetaObjects;
+igMetaField *igViewerStatisticsManager::k_extraSgStatistics;
+igMetaField *igViewerStatisticsManager::k_attrCount;
+igMetaField *igViewerStatisticsManager::k_displayListAttrCount;
+igMetaField *igViewerStatisticsManager::k_textureAttrCount;
+igMetaField *igViewerStatisticsManager::k_geometryAttrCount;
+igMetaField *igViewerStatisticsManager::k_geometrySetAttrCount;
+igMetaField *igViewerStatisticsManager::k_mvmAttrCount;
+
+igMetaObject *igViewerStatisticsManager::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+}
 }
 

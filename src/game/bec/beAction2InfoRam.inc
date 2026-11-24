@@ -47,7 +47,7 @@ void beAction2InfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beAction2InfoRam_Register);
 }
 
-static igMetaObjectCallback g_beAction2InfoRam_callbackList[] = { beModelCtrlNode2_EnsureRegistered, Gap::Sg::igAppearanceList::arkRegister, igActorList_EnsureRegistered, beAction2InfoWork_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beAction2InfoRam_callbackList[] = { beModelCtrlNode2_EnsureRegistered, Gap::Sg::igAppearanceList::arkRegister, igActorList_EnsureRegistered, Gap::Bec::beAction2InfoWork::arkRegister, 0 };
 
 CallbackArray *beAction2InfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -116,7 +116,7 @@ void beAction2InfoRam_InitFields(void) {
     ((igObjectRefMetaField *)actorList)->_metaObject = (int)igActorList_GetOrCreateMetaObject();
     ((igRefMetaField *)actorList)->_construct = 1;
     work = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
-    ((igObjectRefMetaField *)work)->_metaObject = (int)beAction2InfoWork_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)work)->_metaObject = (int)Gap::Bec::beAction2InfoWork::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_beAction2InfoRam_fieldTable, g_beAction2InfoRam_fieldHandles, g_beAction2InfoRam_fieldOffsets, base);
 }
 

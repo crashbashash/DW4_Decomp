@@ -32,7 +32,7 @@ void beSaveUtilInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSaveUtilInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beSaveUtilInfoRam_callbackList[] = { beSvDeliver_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSaveUtilInfoRam_callbackList[] = { Gap::Bec::beSvDeliver::arkRegister, 0 };
 
 CallbackArray *beSaveUtilInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -82,7 +82,7 @@ void beSaveUtilInfoRam_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSaveUtilInfoRam_ctorTable, 2);
     deliver = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)deliver)->_metaObject = (int)beSvDeliver_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)deliver)->_metaObject = (int)Gap::Bec::beSvDeliver::getClassTypeLazy();
     ((igRefMetaField *)deliver)->_construct = 1;
     igMetaObject_NameFields(meta, g_beSaveUtilInfoRam_fieldTable, g_beSaveUtilInfoRam_fieldHandles, g_beSaveUtilInfoRam_fieldOffsets, base);
 }

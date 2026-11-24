@@ -1,90 +1,68 @@
-igMetaObject *g_beHitLandResultData_metaObject;
-igMetaField *g_beHitLandResultData_infoNameMetaField;
-igMetaField *g_beHitLandResultData_ramNoMetaField;
+namespace Gap {
+namespace Bec {
 
-beHitLandResultData *beHitLandResultData_Create(int allocator) {
-    beHitLandResultData_EnsureRegistered();
-    return (beHitLandResultData *)igMetaObject_CreateInstance(g_beHitLandResultData_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beHitLandResultData::_Meta;
+igMetaField *beHitLandResultData::k_infoName;
+igMetaField *beHitLandResultData::k_ramNo;
 
-void *beHitLandResultData_GetMetaObject(void) {
-    unsigned char b;
-    if (g_beHitLandResultData_metaObject != 0) {
-        b = (g_beHitLandResultData_metaObject->_validity & 4) != 0;
-        if (b != 0) goto done;
-    }
-    beHitLandResultData_EnsureRegistered();
-done:
-    return g_beHitLandResultData_metaObject;
-}
-
-int beHitLandResultData_GetVTable(void) {
-    beHitLandResultData obj;
-    int vtable;
-    char **infoNameSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beHitLandResultData_vtable[0];
-    infoNameSlot = (char **)&obj._infoName;
-    *infoNameSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beHitLandResultData_vtable[0];
-    igStringRef_Release(infoNameSlot);
-    return vtable;
-}
-
-void beHitLandResultData_EnsureRegistered(void)
+beHitLandResultData *beHitLandResultData::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beHitLandResultData_Register);
+    arkRegister();
+    return (beHitLandResultData *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beHitLandResultData_Register(void) {
+igMetaObject *beHitLandResultData::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beHitLandResultData::retrieveVTablePointer()
+{
+    beHitLandResultData temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beHitLandResultData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beHitLandResultData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beHitLandResultData_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beHitLandResultData_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beHitLandResultData",
-        0x58, /* instance size */
-        beHitLandResultData_GetVTable,
-        beHitLandResultData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beHitLandResultData),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beHitLandResultData_GetMetaObjectFunction(void)
+void beHitLandResultData::arkRegisterInitialize()
 {
-    beHitLandResultData_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_infoName", "_ramNo" };
+    static igMetaField **enumStorage[] = { &k_infoName, &k_ramNo };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault("");
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beHitLandResultData_ctorTable[] = {
-    igStringMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_beHitLandResultData_fieldTable[] = {
-    "_infoName",
-    "_ramNo",
-};
-static igMetaField **g_beHitLandResultData_fieldHandles[] = {
-    &g_beHitLandResultData_infoNameMetaField,
-    &g_beHitLandResultData_ramNoMetaField,
-};
-static int g_beHitLandResultData_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void beHitLandResultData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beHitLandResultData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beHitLandResultData_ctorTable, 2);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault("");
-    igMetaObject_NameFields(meta, g_beHitLandResultData_fieldTable, g_beHitLandResultData_fieldHandles, g_beHitLandResultData_fieldOffsets, base);
+}
 }
 

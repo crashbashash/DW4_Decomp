@@ -112,7 +112,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
     int n = l->_count;
     if (n != 0 && i >= 0 && i < n) ((igObject **)l->_data)[i] = cur;
 }
-#define GROUP(field, CNT, factory, Ref, T) { \
+#define GROUP(field, CNT, factory, allocArg, Ref, T) { \
     igObjectList *list = (igObjectList *)self->field; \
     if (list->_count < (CNT) + 1) ((Gap::Core::igDataList *)list)->setCapacity(CNT, 4); \
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->field))->setCount(CNT); \
@@ -120,7 +120,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
     for (i = 0; i < (CNT); i += 1) { \
         int alloc; \
         ALLOC(alloc, self) \
-        Ref slot((T *)factory(alloc)); \
+        Ref slot((T *)factory(allocArg alloc)); \
         storeAt(self->field, i, slot); \
     } }
 
@@ -130,15 +130,15 @@ void beMessenger_InitializeMemory(beMessenger *self)
 
     ALLOC(alloc0, self)
     {
-        ObjectRef argData((igObject *)beMessengerArgData_Create(alloc0));
+        ObjectRef argData((igObject *)Gap::Bec::beMessengerArgData::_instantiateFromPool((igMemoryPoolView *)alloc0));
         igObject *cur0 = argData.p;
         RETAIN_REF(cur0)
         RELEASE_REF((igObject *)self->_argData)
         self->_argData = (int)cur0;
     }
-    GROUP(_workStack, 0x40, beMessengerWork_Create, WorkRef, igObject)
-    GROUP(_delayStack, 0x20, beMessengerDelay_Create, igSmartPointer<beMessengerDelay>, beMessengerDelay)
-    GROUP(_pushPopStack, 4, beMessengerArgData_Create, ObjectRef, igObject)
+    GROUP(_workStack, 0x40, Gap::Bec::beMessengerWork::_instantiateFromPool, (igMemoryPoolView *), WorkRef, igObject)
+    GROUP(_delayStack, 0x20, Gap::Bec::beMessengerDelay::_instantiateFromPool, (igMemoryPoolView *), igSmartPointer<beMessengerDelay>, beMessengerDelay)
+    GROUP(_pushPopStack, 4, Gap::Bec::beMessengerArgData::_instantiateFromPool, (igMemoryPoolView *), ObjectRef, igObject)
     self->_pushPopCount = 0;
     self->_isMemoryAssign = 1;
 }
@@ -851,7 +851,7 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RELEASE_REF(row.p)
-        row.p = beMessengerDelay_Create(allocator);
+        row.p = (beMessengerDelay *)Gap::Bec::beMessengerDelay::_instantiateFromPool((igMemoryPoolView *)allocator);
         ((Gap::Core::igObjectList *)self->_delayStack)->append((Gap::Core::igObject *)row.p);
     }
     SET_STRING(_groupName, group)

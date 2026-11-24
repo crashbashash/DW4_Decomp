@@ -1,108 +1,74 @@
-igMetaObject *g_beModelCtrlInfoAI_metaObject;
-igMetaField *g_beModelCtrlInfoAI_seqNameMetaField;
-igMetaField *g_beModelCtrlInfoAI_mapNoMetaField;
-igMetaField *g_beModelCtrlInfoAI_worldPosMetaField;
-igMetaField *g_beModelCtrlInfoAI_hStatusMetaField;
-igMetaField *g_beModelCtrlInfoAI_hCountMetaField;
+namespace Gap {
+namespace Bec {
 
-beModelCtrlInfoAI *beModelCtrlInfoAI_Create(int allocator) {
-    beModelCtrlInfoAI_EnsureRegistered();
-    return (beModelCtrlInfoAI *)igMetaObject_CreateInstance(g_beModelCtrlInfoAI_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beModelCtrlInfoAI::_Meta;
+igMetaField *beModelCtrlInfoAI::k_seqName;
+igMetaField *beModelCtrlInfoAI::k_mapNo;
+igMetaField *beModelCtrlInfoAI::k_worldPos;
+igMetaField *beModelCtrlInfoAI::k_hStatus;
+igMetaField *beModelCtrlInfoAI::k_hCount;
 
-igMetaObject *beModelCtrlInfoAI_GetOrCreateMetaObject(void) {
-    if (g_beModelCtrlInfoAI_metaObject == 0) {
-        g_beModelCtrlInfoAI_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beModelCtrlInfoAI_metaObject;
-}
-
-void *beModelCtrlInfoAI_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlInfoAI_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlInfoAI_EnsureRegistered();
-    }
-    return g_beModelCtrlInfoAI_metaObject;
-}
-
-int beModelCtrlInfoAI_GetVTable(void) {
-    beModelCtrlInfoAI obj;
-    int vtable;
-    char **seqNameSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
-    seqNameSlot = (char **)&obj._seqName;
-    *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
-    igStringRef_Release(seqNameSlot);
-    return vtable;
-}
-
-void beModelCtrlInfoAI_EnsureRegistered(void)
+beModelCtrlInfoAI *beModelCtrlInfoAI::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beModelCtrlInfoAI_Register);
+    arkRegister();
+    return (beModelCtrlInfoAI *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beModelCtrlInfoAI_Register(void) {
+igMetaObject *beModelCtrlInfoAI::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+
+igMetaObject *beModelCtrlInfoAI::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beModelCtrlInfoAI::retrieveVTablePointer()
+{
+    beModelCtrlInfoAI temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlInfoAI::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlInfoAI::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlInfoAI_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlInfoAI_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlInfoAI",
-        0x24, /* instance size */
-        beModelCtrlInfoAI_GetVTable,
-        beModelCtrlInfoAI_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlInfoAI),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlInfoAI_GetMetaObjectFunction(void)
+void beModelCtrlInfoAI::arkRegisterInitialize()
 {
-    beModelCtrlInfoAI_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_seqName", "_mapNo", "_worldPos", "_hStatus", "_hCount" };
+    static igMetaField **enumStorage[] = { &k_seqName, &k_mapNo, &k_worldPos, &k_hStatus, &k_hCount };
+    static int offsets[] = { 8, 12, 16, 28, 32 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlInfoAI_ctorTable[] = {
-    igStringMetaField_Create,
-    igIntMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_beModelCtrlInfoAI_fieldTable[] = {
-    "_seqName",
-    "_mapNo",
-    "_worldPos",
-    "_hStatus",
-    "_hCount",
-};
-static igMetaField **g_beModelCtrlInfoAI_fieldHandles[] = {
-    &g_beModelCtrlInfoAI_seqNameMetaField,
-    &g_beModelCtrlInfoAI_mapNoMetaField,
-    &g_beModelCtrlInfoAI_worldPosMetaField,
-    &g_beModelCtrlInfoAI_hStatusMetaField,
-    &g_beModelCtrlInfoAI_hCountMetaField,
-};
-static int g_beModelCtrlInfoAI_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    28,
-    32,
-};
-
-void beModelCtrlInfoAI_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlInfoAI_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlInfoAI_ctorTable, 5);
-    igMetaObject_NameFields(meta, g_beModelCtrlInfoAI_fieldTable, g_beModelCtrlInfoAI_fieldHandles, g_beModelCtrlInfoAI_fieldOffsets, base);
+}
 }
 

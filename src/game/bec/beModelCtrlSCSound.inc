@@ -43,8 +43,8 @@ CallbackArray *beModelCtrlSCSound_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlSCSound_metaObject,
-        beModelCtrlSubComBase_Register,
-        beModelCtrlSubComBase_GetPublishedMetaObject,
+        Gap::Bec::beModelCtrlSubComBase::arkRegisterInternal,
+        Gap::Bec::beModelCtrlSubComBase::getClassMeta,
         beModelCtrlSCSound_GetMetaObjectFunction,
         "beModelCtrlSCSound",
         0x20, /* instance size */
@@ -58,10 +58,6 @@ CallbackArray *beModelCtrlSCSound_Register(void) {
 void beModelCtrlSCSound_GetMetaObjectFunction(void)
 {
     beModelCtrlSCSound_GetMetaObject();
-}
-
-igMetaObject *beModelCtrlSubComBase_GetPublishedMetaObject(void) {
-    return g_beModelCtrlSubComBase_metaObject;
 }
 
 static FieldFactory g_beModelCtrlSCSound_ctorTable[] = {

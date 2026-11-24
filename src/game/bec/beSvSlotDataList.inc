@@ -1,54 +1,52 @@
-igMetaObject *g_beSvSlotDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beSvSlotDataList_GetOrCreateMetaObject(void) {
-    if (g_beSvSlotDataList_metaObject == 0) {
-        g_beSvSlotDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beSvSlotDataList_metaObject;
-}
+igMetaObject *beSvSlotDataList::_Meta;
 
-void *beSvSlotDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beSvSlotDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beSvSlotDataList_EnsureRegistered();
-    }
-    return g_beSvSlotDataList_metaObject;
-}
-
-int beSvSlotDataList_GetVTable(void) {
-    beSvSlotDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSvSlotDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beSvSlotDataList_EnsureRegistered(void)
+igMetaObject *beSvSlotDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beSvSlotDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beSvSlotDataList_callbackList[] = { beSvSlotData_EnsureRegistered, 0 };
+igMetaObject *beSvSlotDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beSvSlotDataList_Register(void) {
+void *beSvSlotDataList::retrieveVTablePointer()
+{
+    beSvSlotDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSvSlotDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSvSlotDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beSvSlotData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSvSlotDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beSvSlotDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSvSlotDataList",
-        0x14, /* instance size */
-        beSvSlotDataList_GetVTable,
+        sizeof(beSvSlotDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beSvSlotDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beSvSlotDataList_GetMetaObjectFunction(void)
-{
-    beSvSlotDataList_GetMetaObject();
+}
 }
 

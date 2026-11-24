@@ -1,87 +1,70 @@
-igMetaObject *g_beFileChkObj_metaObject;
-igMetaField *g_beFileChkObj_fdMetaField;
+namespace Gap {
+namespace Bec {
 
-beFileChkObj *beFileChkObj_Create(int allocator) {
-    beFileChkObj_EnsureRegistered();
-    return (beFileChkObj *)igMetaObject_CreateInstance(g_beFileChkObj_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beFileChkObj::_Meta;
+igMetaField *beFileChkObj::k_fd;
 
-void *beFileChkObj_GetMetaObject(void) {
-    igMetaObject *g = g_beFileChkObj_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beFileChkObj_EnsureRegistered();
-    }
-    return g_beFileChkObj_metaObject;
-}
-
-int beFileChkObj_GetVTable(void) {
-    beFileChkObj obj;
-    int vtable;
-    igObject **fdSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beFileChkObj_vtable[0];
-    fdSlot = (igObject **)&obj._fd;
-    *fdSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beFileChkObj_vtable[0];
-    igObjectRef_Release(fdSlot);
-    return vtable;
-}
-
-void beFileChkObj_EnsureRegistered(void)
+beFileChkObj *beFileChkObj::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beFileChkObj_Register);
+    arkRegister();
+    return (beFileChkObj *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-static igMetaObjectCallback g_beFileChkObj_callbackList[] = { Gap::Core::igFile::arkRegister, 0 };
+igMetaObject *beFileChkObj::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beFileChkObj_Register(void) {
+void *beFileChkObj::retrieveVTablePointer()
+{
+    beFileChkObj temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beFileChkObj::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beFileChkObj::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igFile::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beFileChkObj_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beFileChkObj_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beFileChkObj",
-        0xc, /* instance size */
-        beFileChkObj_GetVTable,
-        beFileChkObj_InitFields,
-        0, /* extra callback item */
-        g_beFileChkObj_callbackList /* callback list */
+        sizeof(beFileChkObj),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beFileChkObj_GetMetaObjectFunction(void)
+void beFileChkObj::arkRegisterInitialize()
 {
-    beFileChkObj_GetMetaObject();
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_fd" };
+    static igMetaField **enumStorage[] = { &k_fd };
+    static int offsets[] = { 8 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beFileChkObj_ctorTable[] = {
-    igObjectRefMetaField_Create,
-};
-static const char *g_beFileChkObj_fieldTable[] = {
-    "_fd",
-};
-static igMetaField **g_beFileChkObj_fieldHandles[] = {
-    &g_beFileChkObj_fdMetaField,
-};
-static int g_beFileChkObj_fieldOffsets[] = {
-    8,
-};
-
-void beFileChkObj_InitFields(void) {
-    int base;
-    void *fd;
-    igMetaObject *meta;
-
-    meta = g_beFileChkObj_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beFileChkObj_ctorTable, 1);
-    fd = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)fd)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
-    ((igRefMetaField *)fd)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beFileChkObj_fieldTable, g_beFileChkObj_fieldHandles, g_beFileChkObj_fieldOffsets, base);
+}
 }
 

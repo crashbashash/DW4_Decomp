@@ -913,7 +913,7 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
     if (self->_hitdataCount >= ((igObjectList *)self->_hitdataList)->_count) {
         void *alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
         alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create((int)alloc));
+        igSmartPointer<beHitLandResultData> created((beHitLandResultData *)Gap::Bec::beHitLandResultData::_instantiateFromPool((igMemoryPoolView *)alloc));
         ((Gap::Core::igObjectList *)self->_hitdataList)->append((Gap::Core::igObject *)created.get());
     }
     Vec3f_TransformDirection(hit->normal.vec, (const float *)&hit->normal[0], (const float *)hit->matrix);

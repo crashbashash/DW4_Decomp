@@ -67,7 +67,7 @@ struct StringRef {
 ViewerSetup::ViewerSetup(igObject *w)
     : core((InsightCore *)igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(igViewerSceneInfoManager_Create(0), AdoptReference()),
       actors(igActorManager_Create(0), AdoptReference()), dataPump(igViewerDataPumpManager_Create(0), AdoptReference()), showLogo(1),
-      logo(igLogoRenderer_Create(0), AdoptReference()), window(w, kRetainReference) {
+      logo((igObject *)Gap::Viewer::igLogoRenderer::_instantiateFromPool(0), AdoptReference()), window(w, kRetainReference) {
     igObject *next = window.p;
     if (next != 0) {
         InsightCore *c = core.p;
@@ -177,33 +177,33 @@ void igViewManager_SynchronizeParameters(igViewManager *manager, igViewerParamet
     igSmartPointer<Gap::Gui::igFieldSynchronizer> synchronizer;
 
     createSynchronizer(synchronizer, AdoptReference());
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_viewMatrixMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_viewMatrix);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_ratioMetaField);
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_ratioMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_ratio);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_ratio);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_hfovMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_hfov);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_hfov);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_nearPlaneMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_nearPlane);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_nearPlane);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_farPlaneMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_farPlane);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_farPlane);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 
     createSynchronizer(synchronizer, AdoptReference());
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)g_igViewModel_drawTimeMetaField);
-    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)g_igViewerParameters_drawTimeMetaField);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)manager->_viewModel, (Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_drawTime);
+    synchronizer->appendModelAndField((Gap::Gui::igModel *)parameters, (Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_drawTime);
     ((Gap::Core::igObjectList *)manager->_synchronizers)->append((Gap::Core::igObject *)synchronizer.get());
 }
 
@@ -230,11 +230,11 @@ void igViewMode_Update(void) {
 }
 
 void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVector) {
-    igViewModel *model;
+    Gap::Viewer::igViewModel *model;
 
-    model = (igViewModel *)manager->_viewModel;
+    model = (Gap::Viewer::igViewModel *)manager->_viewModel;
     model->_sceneUpVector.set(upVector);
-    igNotifyEvent event((Gap::Core::igMetaField *)g_igViewModel_sceneUpVectorMetaField);
+    igNotifyEvent event((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_sceneUpVector);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(event);
 }
 
@@ -287,16 +287,16 @@ void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
         size = 1.0f;
     }
     size *= 1.5f;
-    up.set(((igViewModel *)manager->_viewModel)->_sceneUpVector);
+    up.set(((Gap::Viewer::igViewModel *)manager->_viewModel)->_sceneUpVector);
     eye[0] = up[2];
     eye[1] = up[0];
     eye[2] = up[1];
     eye *= size;
     eye += center;
     igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, eye.vec, center.vec, up.vec);
-    igNotifyEvent event((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+    igNotifyEvent event((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(event);
-    ((igViewModel *)manager->_viewModel)->_selectedCenter = center;
+    ((Gap::Viewer::igViewModel *)manager->_viewModel)->_selectedCenter = center;
     ((igViewModel *)manager->_viewModel)->_selectedLength = size;
 }
 
@@ -320,12 +320,12 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
         ((igViewModel *)manager->_viewModel)->_nearPlane = options->defaultNearPlane;
         ((igViewModel *)manager->_viewModel)->_farPlane = options->defaultFarPlane;
     }
-    igNotifyEvent nearChanged((Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
+    igNotifyEvent nearChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_nearPlane);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(nearChanged);
-    igNotifyEvent farChanged((Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
+    igNotifyEvent farChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_farPlane);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(farChanged);
     ((igViewModel *)manager->_viewModel)->_hfov = options->horizontalFieldOfView;
-    igNotifyEvent hfovChanged((Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
+    igNotifyEvent hfovChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_hfov);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(hfovChanged);
     if (g_sharedViewerOptions != 0) {
         if (--g_sharedViewerOptions->useCount <= 0) {
@@ -343,12 +343,12 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
 /* Looks at the selection's centre: from the current eye, or (`resetEye`) from one and a half selection
  * lengths across the scene's up vector. */
 void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
-    igVec3f center(((igViewModel *)manager->_viewModel)->_selectedCenter);
+    igVec3f center(((Gap::Viewer::igViewModel *)manager->_viewModel)->_selectedCenter);
     igVec3f eye;
     igVec3f up;
 
     if (resetEye) {
-        up.set(((igViewModel *)manager->_viewModel)->_sceneUpVector);
+        up.set(((Gap::Viewer::igViewModel *)manager->_viewModel)->_sceneUpVector);
         float distance = 1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength;
         eye[0] = up[2];
         eye[1] = up[0];
@@ -357,30 +357,30 @@ void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
         eye.add(center);
         igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, eye.vec, center.vec, up.vec);
     } else {
-        igViewModel *model = (igViewModel *)manager->_viewModel;
-        igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position.vec, center.vec, model->_viewUpVector.vec);
+        Gap::Viewer::igViewModel *model = (Gap::Viewer::igViewModel *)manager->_viewModel;
+        igMatrix44f_MakeLookAt(model->_viewMatrix.m, model->_position.vec, center.vec, model->_viewUpVector.vec);
     }
-    igNotifyEvent event((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+    igNotifyEvent event((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(event);
 }
 
 /* Moves the eye along its line to the selection's centre until the selection fills the view. */
 void igViewManager_FitSelection(igViewManager *manager) {
-    igVec3f center(((igViewModel *)manager->_viewModel)->_selectedCenter);
+    igVec3f center(((Gap::Viewer::igViewModel *)manager->_viewModel)->_selectedCenter);
     igVec3f eye;
 
-    eye.set(((igViewModel *)manager->_viewModel)->_position);
+    eye.set(((Gap::Viewer::igViewModel *)manager->_viewModel)->_position);
     eye -= center;
     float distance = sqrtf(eye.length2());
     if (distance == 0.0) {
-        eye.set(((igViewModel *)manager->_viewModel)->_direction);
+        eye.set(((Gap::Viewer::igViewModel *)manager->_viewModel)->_direction);
         distance = 1.0f;
     }
     eye.scale(1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength / distance);
     eye += center;
-    igViewModel *model = (igViewModel *)manager->_viewModel;
-    igMatrix44f_MakeLookAt(model->_viewMatrix, eye.vec, center.vec, model->_viewUpVector.vec);
-    igNotifyEvent event((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+    Gap::Viewer::igViewModel *model = (Gap::Viewer::igViewModel *)manager->_viewModel;
+    igMatrix44f_MakeLookAt(model->_viewMatrix.m, eye.vec, center.vec, model->_viewUpVector.vec);
+    igNotifyEvent event((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
     ((Gap::Gui::igModel *)manager->_viewModel)->notifyAllViews(event);
 }
 
@@ -438,7 +438,7 @@ int igViewManager_WindowResizeEvent(igViewManager *self, int width, int height)
 {
 
     ((igViewModel *)self->_viewModel)->_ratio = (float)width / (float)height;
-    igNotifyEvent event((Gap::Core::igMetaField *)g_igViewModel_ratioMetaField);
+    igNotifyEvent event((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_ratio);
     ((Gap::Gui::igModel *)self->_viewModel)->notifyAllViews(event);
     return 0;
 }

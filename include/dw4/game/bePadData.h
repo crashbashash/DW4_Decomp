@@ -8,10 +8,8 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct bePadData *bePadData_Create(int allocator);
 void bePadData_UpdateButtons(struct bePadData *pad, int buttons);
 
-extern struct igMetaObject *g_bePadData_metaObject;
 
 #ifdef __cplusplus
 }

@@ -1,139 +1,85 @@
-igMetaObject *g_beGeneraterInfoWork_metaObject;
-igMetaField *g_beGeneraterInfoWork_isSystemFreezeMetaField;
-igMetaField *g_beGeneraterInfoWork_isFreezeMetaField;
-igMetaField *g_beGeneraterInfoWork_playerCountMetaField;
-igMetaField *g_beGeneraterInfoWork_nokoriKazuMetaField;
-igMetaField *g_beGeneraterInfoWork_enemyRamListMetaField;
-igMetaField *g_beGeneraterInfoWork_genePointMetaField;
-igMetaField *g_beGeneraterInfoWork_geneEnemyNameMetaField;
-igMetaField *g_beGeneraterInfoWork_geneEnemyRecNoMetaField;
-igMetaField *g_beGeneraterInfoWork_geneEnemyMHpMetaField;
+namespace Gap {
+namespace Bec {
 
-beGeneraterInfoWork *beGeneraterInfoWork_Create(int allocator) {
-    beGeneraterInfoWork_EnsureRegistered();
-    return (beGeneraterInfoWork *)igMetaObject_CreateInstance(g_beGeneraterInfoWork_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beGeneraterInfoWork::_Meta;
+igMetaField *beGeneraterInfoWork::k_isSystemFreeze;
+igMetaField *beGeneraterInfoWork::k_isFreeze;
+igMetaField *beGeneraterInfoWork::k_playerCount;
+igMetaField *beGeneraterInfoWork::k_nokoriKazu;
+igMetaField *beGeneraterInfoWork::k_enemyRamList;
+igMetaField *beGeneraterInfoWork::k_genePoint;
+igMetaField *beGeneraterInfoWork::k_geneEnemyName;
+igMetaField *beGeneraterInfoWork::k_geneEnemyRecNo;
+igMetaField *beGeneraterInfoWork::k_geneEnemyMHp;
 
-igMetaObject *beGeneraterInfoWork_GetOrCreateMetaObject(void) {
-    if (g_beGeneraterInfoWork_metaObject == 0) {
-        g_beGeneraterInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beGeneraterInfoWork_metaObject;
-}
-
-igMetaObject *beGeneraterInfoWork_GetMetaObject(void)
+beGeneraterInfoWork *beGeneraterInfoWork::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_beGeneraterInfoWork_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beGeneraterInfoWork_EnsureRegistered();
-    return g_beGeneraterInfoWork_metaObject;
+    arkRegister();
+    return (beGeneraterInfoWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int beGeneraterInfoWork_GetVTable(void) {
-    beGeneraterInfoWork obj;
-    int vtable;
-    char **geneEnemyNameSlot;
-    igObject **enemyRamListSlot;
-
-    igObject_InitHeader(&obj);
-    enemyRamListSlot = (igObject **)&obj._enemyRamList;
-    geneEnemyNameSlot = (char **)&obj._geneEnemyName;
-    obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
-    *enemyRamListSlot = 0;
-    *geneEnemyNameSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
-    igStringRef_Release(geneEnemyNameSlot);
-    igObjectRef_Release(enemyRamListSlot);
-    return vtable;
-}
-
-void beGeneraterInfoWork_EnsureRegistered(void)
+igMetaObject *beGeneraterInfoWork::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beGeneraterInfoWork_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beGeneraterInfoWork_callbackList[] = { beBaseInfoRamList_EnsureRegistered, 0 };
+igMetaObject *beGeneraterInfoWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beGeneraterInfoWork_Register(void) {
+void *beGeneraterInfoWork::retrieveVTablePointer()
+{
+    beGeneraterInfoWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beGeneraterInfoWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beGeneraterInfoWork::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { beBaseInfoRamList_EnsureRegistered, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beGeneraterInfoWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beGeneraterInfoWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beGeneraterInfoWork",
-        0x28, /* instance size */
-        beGeneraterInfoWork_GetVTable,
-        beGeneraterInfoWork_InitFields,
-        0, /* extra callback item */
-        g_beGeneraterInfoWork_callbackList /* callback list */
+        sizeof(beGeneraterInfoWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beGeneraterInfoWork_GetMetaObjectFunction(void)
+void beGeneraterInfoWork::arkRegisterInitialize()
 {
-    beGeneraterInfoWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igStringMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_isSystemFreeze", "_isFreeze", "_playerCount", "_nokoriKazu", "_enemyRamList", "_genePoint", "_geneEnemyName", "_geneEnemyRecNo", "_geneEnemyMHp" };
+    static igMetaField **enumStorage[] = { &k_isSystemFreeze, &k_isFreeze, &k_playerCount, &k_nokoriKazu, &k_enemyRamList, &k_genePoint, &k_geneEnemyName, &k_geneEnemyRecNo, &k_geneEnemyMHp };
+    static int offsets[] = { 8, 9, 12, 16, 20, 24, 28, 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 9);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beGeneraterInfoWork_ctorTable[] = {
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igStringMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_beGeneraterInfoWork_fieldTable[] = {
-    "_isSystemFreeze",
-    "_isFreeze",
-    "_playerCount",
-    "_nokoriKazu",
-    "_enemyRamList",
-    "_genePoint",
-    "_geneEnemyName",
-    "_geneEnemyRecNo",
-    "_geneEnemyMHp",
-};
-static igMetaField **g_beGeneraterInfoWork_fieldHandles[] = {
-    &g_beGeneraterInfoWork_isSystemFreezeMetaField,
-    &g_beGeneraterInfoWork_isFreezeMetaField,
-    &g_beGeneraterInfoWork_playerCountMetaField,
-    &g_beGeneraterInfoWork_nokoriKazuMetaField,
-    &g_beGeneraterInfoWork_enemyRamListMetaField,
-    &g_beGeneraterInfoWork_genePointMetaField,
-    &g_beGeneraterInfoWork_geneEnemyNameMetaField,
-    &g_beGeneraterInfoWork_geneEnemyRecNoMetaField,
-    &g_beGeneraterInfoWork_geneEnemyMHpMetaField,
-};
-static int g_beGeneraterInfoWork_fieldOffsets[] = {
-    8,
-    9,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-};
-
-void beGeneraterInfoWork_InitFields(void) {
-    int base;
-    void *enemyRamList;
-    igMetaObject *meta;
-
-    meta = g_beGeneraterInfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beGeneraterInfoWork_ctorTable, 9);
-    enemyRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)enemyRamList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
-    ((igRefMetaField *)enemyRamList)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beGeneraterInfoWork_fieldTable, g_beGeneraterInfoWork_fieldHandles, g_beGeneraterInfoWork_fieldOffsets, base);
+}
 }
 

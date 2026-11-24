@@ -83,7 +83,7 @@ void beFont_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFont_Register);
 }
 
-static igMetaObjectCallback g_beFont_callbackList[] = { Gap::Sg::igAttrSet::arkRegister, beFontImageList_EnsureRegistered, beFontGeomAttrPairList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFont_callbackList[] = { Gap::Sg::igAttrSet::arkRegister, beFontImageList_EnsureRegistered, Gap::Bec::beFontGeomAttrPairList::arkRegister, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *beFont_Register(void) {
     BecLibrary_MarkRegistered();
@@ -175,7 +175,7 @@ void beFont_InitFields(void) {
     ((igObjectRefMetaField *)fonts)->_metaObject = (int)beFontImageList_GetOrCreateMetaObject();
     ((igRefMetaField *)fonts)->_construct = 1;
     gaPairList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
-    ((igObjectRefMetaField *)gaPairList)->_metaObject = (int)beFontGeomAttrPairList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)gaPairList)->_metaObject = (int)Gap::Bec::beFontGeomAttrPairList::getClassTypeLazy();
     ((igRefMetaField *)gaPairList)->_construct = 1;
     lineFeedList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     ((igObjectRefMetaField *)lineFeedList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();

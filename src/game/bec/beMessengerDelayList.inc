@@ -1,55 +1,52 @@
-igMetaObject *g_beMessengerDelayList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beMessengerDelayList_GetOrCreateMetaObject(void) {
-    if (g_beMessengerDelayList_metaObject == 0) {
-        g_beMessengerDelayList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beMessengerDelayList_metaObject;
-}
+igMetaObject *beMessengerDelayList::_Meta;
 
-igMetaObject *beMessengerDelayList_GetMetaObject(void)
+igMetaObject *beMessengerDelayList::getClassTypeLazy()
 {
-    igMetaObject *g = g_beMessengerDelayList_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beMessengerDelayList_EnsureRegistered();
-    return g_beMessengerDelayList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int beMessengerDelayList_GetVTable(void) {
-    beMessengerDelayList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beMessengerDelayList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beMessengerDelayList_EnsureRegistered(void)
+igMetaObject *beMessengerDelayList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beMessengerDelayList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beMessengerDelayList_callbackList[] = { beMessengerDelay_EnsureRegistered, 0 };
+void *beMessengerDelayList::retrieveVTablePointer()
+{
+    beMessengerDelayList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beMessengerDelayList_Register(void) {
+void beMessengerDelayList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beMessengerDelayList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beMessengerDelay::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beMessengerDelayList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beMessengerDelayList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beMessengerDelayList",
-        0x14, /* instance size */
-        beMessengerDelayList_GetVTable,
+        sizeof(beMessengerDelayList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beMessengerDelayList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beMessengerDelayList_GetMetaObjectFunction(void)
-{
-    beMessengerDelayList_GetMetaObject();
+}
 }
 

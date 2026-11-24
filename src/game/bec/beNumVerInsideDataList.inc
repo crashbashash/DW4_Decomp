@@ -1,54 +1,52 @@
-igMetaObject *g_beNumVerInsideDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beNumVerInsideDataList_GetOrCreateMetaObject(void) {
-    if (g_beNumVerInsideDataList_metaObject == 0) {
-        g_beNumVerInsideDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beNumVerInsideDataList_metaObject;
-}
+igMetaObject *beNumVerInsideDataList::_Meta;
 
-void *beNumVerInsideDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beNumVerInsideDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beNumVerInsideDataList_EnsureRegistered();
-    }
-    return g_beNumVerInsideDataList_metaObject;
-}
-
-int beNumVerInsideDataList_GetVTable(void) {
-    beNumVerInsideDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beNumVerInsideDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beNumVerInsideDataList_EnsureRegistered(void)
+igMetaObject *beNumVerInsideDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beNumVerInsideDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beNumVerInsideDataList_callbackList[] = { beNumVerInsideData_EnsureRegistered, 0 };
+igMetaObject *beNumVerInsideDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beNumVerInsideDataList_Register(void) {
+void *beNumVerInsideDataList::retrieveVTablePointer()
+{
+    beNumVerInsideDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beNumVerInsideDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beNumVerInsideDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beNumVerInsideData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beNumVerInsideDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beNumVerInsideDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beNumVerInsideDataList",
-        0x14, /* instance size */
-        beNumVerInsideDataList_GetVTable,
+        sizeof(beNumVerInsideDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beNumVerInsideDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beNumVerInsideDataList_GetMetaObjectFunction(void)
-{
-    beNumVerInsideDataList_GetMetaObject();
+}
 }
 

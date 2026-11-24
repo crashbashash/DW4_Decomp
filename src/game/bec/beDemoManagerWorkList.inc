@@ -1,54 +1,52 @@
-igMetaObject *g_beDemoManagerWorkList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beDemoManagerWorkList_GetOrCreateMetaObject(void) {
-    if (g_beDemoManagerWorkList_metaObject == 0) {
-        g_beDemoManagerWorkList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beDemoManagerWorkList_metaObject;
-}
+igMetaObject *beDemoManagerWorkList::_Meta;
 
-void *beDemoManagerWorkList_GetMetaObject(void) {
-    igMetaObject *g = g_beDemoManagerWorkList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beDemoManagerWorkList_EnsureRegistered();
-    }
-    return g_beDemoManagerWorkList_metaObject;
-}
-
-int beDemoManagerWorkList_GetVTable(void) {
-    beDemoManagerWorkList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beDemoManagerWorkList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beDemoManagerWorkList_EnsureRegistered(void)
+igMetaObject *beDemoManagerWorkList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beDemoManagerWorkList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beDemoManagerWorkList_callbackList[] = { beDemoManagerWork_EnsureRegistered, 0 };
+igMetaObject *beDemoManagerWorkList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beDemoManagerWorkList_Register(void) {
+void *beDemoManagerWorkList::retrieveVTablePointer()
+{
+    beDemoManagerWorkList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beDemoManagerWorkList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beDemoManagerWorkList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beDemoManagerWork::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beDemoManagerWorkList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beDemoManagerWorkList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beDemoManagerWorkList",
-        0x14, /* instance size */
-        beDemoManagerWorkList_GetVTable,
+        sizeof(beDemoManagerWorkList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beDemoManagerWorkList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beDemoManagerWorkList_GetMetaObjectFunction(void)
-{
-    beDemoManagerWorkList_GetMetaObject();
+}
 }
 

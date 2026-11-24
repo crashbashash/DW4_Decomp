@@ -384,15 +384,15 @@
 0x0044b260	0x0044b860	ndmw_beNDMWMdlMapCursor	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	on	-	whole file
 0x0044b860	0x004583f0	alchemy-gui_GuiLibrary	b52	-O4,s -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
 0x004583f0	0x00458674	viewer_ViewerInlineCopies	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	on	-	whole file
-0x00458680	0x0045e9a0	viewer_ViewerRegistration	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x0045e9a0	0x0045e9f0	viewer_igLogoRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x0045e9f0	0x0045ea40	viewer_igNormalsRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x0045ea40	0x0045ec90	viewer_igViewerDataPumpManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x0045ec90	0x0045f200	viewer_igViewerGuiFactory	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x0045f200	0x00460f90	viewer_igViewerRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x00460f90	0x00463560	viewer_igViewerSceneInfoManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc -str readonly	off	-	whole file
-0x00463560	0x00464f90	viewer_igViewManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x00464f90	0x00466d00	viewer_beCameraMode	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x00466d00	0x004670d0	viewer_igActorManager	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
-0x004670d0	0x00467120	viewer_igBoundingBoxRenderer	b52	-O4,p -sdatathreshold 2 -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x00458680	0x0045e9a0	viewer_ViewerRegistration	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x0045e9a0	0x0045e9f0	viewer_igLogoRenderer	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x0045e9f0	0x0045ea40	viewer_igNormalsRenderer	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x0045ea40	0x0045ec90	viewer_igViewerDataPumpManager	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x0045ec90	0x0045f200	viewer_igViewerGuiFactory	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x0045f200	0x00460f90	viewer_igViewerRenderer	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x00460f90	0x00463560	viewer_igViewerSceneInfoManager	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc -str readonly	off	-	whole file
+0x00463560	0x00464f90	viewer_igViewManager	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x00464f90	0x00466d00	viewer_beCameraMode	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x00466d00	0x004670d0	viewer_igActorManager	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
+0x004670d0	0x00467120	viewer_igBoundingBoxRenderer	b52	-O4,p -sdatathreshold 2 -RTTI off -inline level=8,bottomup -Iinclude -I. -I- -Isrc/third_party/libc	off	-	whole file
 0x00485158	0x00485180	sony_libsdr_sdr_cb	ee-gcc-2.9	-O2 -G0 -ffunction-sections -Iinclude -Isrc/third_party/libc	off	-	whole file

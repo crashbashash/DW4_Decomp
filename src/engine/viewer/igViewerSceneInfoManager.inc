@@ -204,19 +204,6 @@ struct R **FUN_004597e0(struct R **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_00459860(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
 void **FUN_004598e0(void **arg0, int arg1) {
     int *o;
 
@@ -443,7 +430,7 @@ void igViewerSceneInfoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerSceneInfoManager_Register);
 }
 
-static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { igViewerSceneInfoManagerController_EnsureRegistered, igViewerParameters_EnsureRegistered, igViewerRenderer_EnsureRegistered, igBoundingBoxRenderer_EnsureRegistered, igNormalsRenderer_EnsureRegistered, Gap::Insight::igFlushRenderer::arkRegister, igGuiSystem_RunStaticInit, igViewerGuiFactory_EnsureRegistered, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, igStatisticsItem_EnsureRegistered, Gap::Gui::igHotKeyEventReceiver::arkRegister, igViewManager_EnsureRegistered, igViewerStatisticsManager_EnsureRegistered, igGuiComponentList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, Gap::Gui::igRadioGroup::arkRegister, Gap::Attrs::igTextureList::arkRegister, igViewerModeChangeMessage_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { Gap::Viewer::igViewerSceneInfoManagerController::arkRegister, Gap::Viewer::igViewerParameters::arkRegister, igViewerRenderer_EnsureRegistered, Gap::Viewer::igBoundingBoxRenderer::arkRegister, Gap::Viewer::igNormalsRenderer::arkRegister, Gap::Insight::igFlushRenderer::arkRegister, igGuiSystem_RunStaticInit, Gap::Viewer::igViewerGuiFactory::arkRegister, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, Gap::Viewer::igStatisticsItem::arkRegister, Gap::Gui::igHotKeyEventReceiver::arkRegister, igViewManager_EnsureRegistered, Gap::Viewer::igViewerStatisticsManager::arkRegister, igGuiComponentList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, Gap::Gui::igRadioGroup::arkRegister, Gap::Attrs::igTextureList::arkRegister, igViewerModeChangeMessage_EnsureRegistered, 0 };
 
 CallbackArray *igViewerSceneInfoManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
@@ -707,19 +694,19 @@ void FUN_00459ee0(void) {
         igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = (int)igViewerSceneInfoManagerController_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0) + 56) = (int)Gap::Viewer::igViewerSceneInfoManagerController::getClassTypeLazy();
     *(char *)((char *)(temp_s0) + 52) = 1;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 1));
-    *(int *)((char *)(temp_s0_2) + 56) = (int)igViewerParameters_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_2) + 56) = (int)Gap::Viewer::igViewerParameters::getClassTypeLazy();
     *(char *)((char *)(temp_s0_2) + 52) = 1;
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 2));
     *(int *)((char *)(temp_s0_3) + 56) = (int)igViewerRenderer_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_3) + 52) = 1;
     temp_s0_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 3));
-    *(int *)((char *)(temp_s0_4) + 56) = (int)igBoundingBoxRenderer_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_4) + 56) = (int)Gap::Viewer::igBoundingBoxRenderer::getClassTypeLazy();
     *(char *)((char *)(temp_s0_4) + 52) = 1;
     temp_s0_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 4));
-    *(int *)((char *)(temp_s0_5) + 56) = (int)igNormalsRenderer_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_5) + 56) = (int)Gap::Viewer::igNormalsRenderer::getClassTypeLazy();
     *(char *)((char *)(temp_s0_5) + 52) = 1;
     temp_s0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 5));
     *(int *)((char *)(temp_s0_6) + 56) = (int)Gap::Insight::igFlushRenderer::getClassTypeLazy();
@@ -729,7 +716,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_7) + 56) = (int)igGuiSystem_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_7) + 52) = 1;
     temp_s0_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 8));
-    *(int *)((char *)(temp_s0_8) + 56) = (int)igViewerGuiFactory_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_8) + 56) = (int)Gap::Viewer::igViewerGuiFactory::getClassTypeLazy();
     *(char *)((char *)(temp_s0_8) + 52) = 1;
     temp_s0_9 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 9));
     *(int *)((char *)(temp_s0_9) + 56) = (int)igBoxComponent_GetOrCreateMetaObject();
@@ -764,13 +751,13 @@ void FUN_00459ee0(void) {
     temp_s0_24 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x18));
     *(int *)((char *)(temp_s0_24) + 56) = (int)igBoxComponent_GetOrCreateMetaObject();
     temp_s0_25 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x19));
-    *(int *)((char *)(temp_s0_25) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_25) + 56) = (int)Gap::Viewer::igStatisticsItem::getClassTypeLazy();
     temp_s0_26 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1A));
-    *(int *)((char *)(temp_s0_26) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_26) + 56) = (int)Gap::Viewer::igStatisticsItem::getClassTypeLazy();
     temp_s0_27 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1B));
-    *(int *)((char *)(temp_s0_27) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_27) + 56) = (int)Gap::Viewer::igStatisticsItem::getClassTypeLazy();
     temp_s0_28 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1C));
-    *(int *)((char *)(temp_s0_28) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_28) + 56) = (int)Gap::Viewer::igStatisticsItem::getClassTypeLazy();
     temp_s0_29 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1D));
     *(int *)((char *)(temp_s0_29) + 56) = (int)Gap::Gui::igHotKeyEventReceiver::getClassTypeLazy();
     *(char *)((char *)(temp_s0_29) + 52) = 1;
@@ -778,7 +765,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_30) + 56) = (int)igViewManager_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_30) + 52) = 1;
     temp_s0_31 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1F));
-    *(int *)((char *)(temp_s0_31) + 56) = (int)igViewerStatisticsManager_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_31) + 56) = (int)Gap::Viewer::igViewerStatisticsManager::getClassTypeLazy();
     *(char *)((char *)(temp_s0_31) + 52) = 1;
     temp_s0_32 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x20));
     *(int *)((char *)(temp_s0_32) + 56) = (int)igGuiComponentList_GetOrCreateMetaObject();

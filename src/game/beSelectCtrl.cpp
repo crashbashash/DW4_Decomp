@@ -401,7 +401,7 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
         ENTER_STATE(ram, STATE_OPEN)
         PICK_ALLOCATOR(allocator, self)
         {
-            WorkRef newWork(beSelectCtrlInfoWork_Create(allocator));
+            WorkRef newWork((beSelectCtrlInfoWork *)Gap::Bec::beSelectCtrlInfoWork::_instantiateFromPool((igMemoryPoolView *)allocator));
             held = (igObject *)newWork.p;
             if (held != 0) held->_refCount = (int)held->_refCount + 1;
             RELEASE(igObject, data->_work)

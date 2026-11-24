@@ -14,15 +14,6 @@ int beTransformSync_GetVTable(void) {
     return *(int *)((char *)&transform + g_objectSystem->vtableProbeOffset);
 }
 
-igSmartPointer<igObject> *igSmartPointer_igTransformList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (delete_storage > 0) operator delete(self);
-    }
-    return self;
-}
-
 void beTransformSync_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beTransformSync_Register);

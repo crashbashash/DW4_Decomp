@@ -920,7 +920,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             beAction2InfoWork *created;
             allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             { beAction2InfoWork *held = workRef.p; IG_OBJECT_RELEASE(held); }
-            workRef.p = (beAction2InfoWork *)beAction2InfoWork_CreateInstance((int)allocator);
+            workRef.p = (beAction2InfoWork *)Gap::Bec::beAction2InfoWork::_instantiateFromPool((igMemoryPoolView *)allocator);
             created = workRef.p;
             if (created != 0) created->_refCount = created->_refCount + 1;
             { igObject *held = (igObject *)ram->_work; IG_OBJECT_RELEASE(held); }

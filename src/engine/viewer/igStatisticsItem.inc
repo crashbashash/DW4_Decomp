@@ -1,199 +1,112 @@
-igMetaObject *g_igStatisticsItem_metaObject;
-igMetaField *g_igStatisticsItem_valueMetaField;
-igMetaField *g_igStatisticsItem_maximumValueMetaField;
-igMetaField *g_igStatisticsItem_useMultiplierMetaField;
-igMetaField *g_igStatisticsItem_textMetaField;
-igMetaField *g_igStatisticsItem_numberFormatMetaField;
-igMetaField *g_igStatisticsItem_visibleMetaField;
-igMetaField *g_igStatisticsItem_displayComponentMetaField;
-igMetaField *g_igStatisticsItem_aspectMetaField;
-igMetaField *g_igStatisticsItem_textElementMetaField;
-igMetaField *g_igStatisticsItem_managerMetaField;
-igMetaField *g_igStatisticsItem_statIdMetaField;
-igMetaField *g_igStatisticsItem_otherIdMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igStatisticsItem_GetOrCreateMetaObject(void) {
-    if (g_igStatisticsItem_metaObject == 0) {
-        g_igStatisticsItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igStatisticsItem_metaObject;
-}
+igMetaObject *igStatisticsItem::_Meta;
+igMetaField *igStatisticsItem::k_value;
+igMetaField *igStatisticsItem::k_maximumValue;
+igMetaField *igStatisticsItem::k_useMultiplier;
+igMetaField *igStatisticsItem::k_text;
+igMetaField *igStatisticsItem::k_numberFormat;
+igMetaField *igStatisticsItem::k_visible;
+igMetaField *igStatisticsItem::k_displayComponent;
+igMetaField *igStatisticsItem::k_aspect;
+igMetaField *igStatisticsItem::k_textElement;
+igMetaField *igStatisticsItem::k_manager;
+igMetaField *igStatisticsItem::k_statId;
+igMetaField *igStatisticsItem::k_otherId;
 
-void *igStatisticsItem_GetMetaObject(void) {
-    unsigned char b;
-    if (((void *)g_igStatisticsItem_metaObject) != 0) {
-        b = (*(int *)((char *)(((void *)g_igStatisticsItem_metaObject)) + 36) & 4) != 0;
-        if (b != 0) goto done;
-    }
-    igStatisticsItem_EnsureRegistered();
-done:
-    return ((void *)g_igStatisticsItem_metaObject);
-}
-
-int igStatisticsItem_GetVTable(void) {
-    struct Obj_458cf0 obj;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igStatisticsItem_vtable[0];
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w9 = 0;
-    obj.w10 = 0;
-    obj.w11 = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igStatisticsItem_vtable[0];
-    FUN_00458e40((ObjectRefWord *)&obj.w11, -1);
-    FUN_00458dc0((void **)&obj.w10, -1);
-    igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
-    igStringRef_Destruct((igStringRef *)&obj.w7, -1);
-    igStringRef_Destruct((igStringRef *)&obj.w6, -1);
-    return t;
-}
-
-void **FUN_00458dc0(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *FUN_00458e40(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-void igStatisticsItem_EnsureRegistered(void)
+igMetaObject *igStatisticsItem::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igStatisticsItem_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igStatisticsItem_callbackList[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, igViewerStatisticsManager_EnsureRegistered, 0 };
+igMetaObject *igStatisticsItem::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igStatisticsItem_Register(void) {
+void *igStatisticsItem::retrieveVTablePointer()
+{
+    igStatisticsItem temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igStatisticsItem::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igStatisticsItem::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, Gap::Viewer::igViewerStatisticsManager::arkRegister, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igStatisticsItem_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igView::arkRegisterInternal,
         Gap::Gui::igView::getClassMeta,
-        igStatisticsItem_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igStatisticsItem",
-        0x3C, /* instance size */
-        igStatisticsItem_GetVTable,
-        &igStatisticsItem_InitFields,
-        0, /* extra callback item */
-        g_igStatisticsItem_callbackList /* callback list */
+        sizeof(igStatisticsItem),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igStatisticsItem_GetMetaObjectFunction(void) {
-    igStatisticsItem_GetMetaObject();
+void igStatisticsItem::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igBoolMetaField_Create, igStringMetaField_Create, igStringMetaField_Create, igBoolMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igEnumMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_value", "_maximumValue", "_useMultiplier", "_text", "_numberFormat", "_visible", "_displayComponent", "_aspect", "_textElement", "_manager", "_statId", "_otherId" };
+    static igMetaField **enumStorage[] = { &k_value, &k_maximumValue, &k_useMultiplier, &k_text, &k_numberFormat, &k_visible, &k_displayComponent, &k_aspect, &k_textElement, &k_manager, &k_statId, &k_otherId };
+    static int offsets[] = { 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 12);
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(-1.0f);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_metaObject = (int)igDefaultAspect_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+        metaField->_metaObject = (int)igTextElement_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+        metaField->_metaObject = (int)Gap::Viewer::igViewerStatisticsManager::getClassTypeLazy();
+        metaField->_refCounted = 0;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);
+        metaField->setDefault(-1);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_STATISTIC_GetMetaEnum;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igStatisticsItem_ctorTable[] = {
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igBoolMetaField_Create,
-    igStringMetaField_Create,
-    igStringMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igEnumMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_igStatisticsItem_fieldTable[] = {
-    "_value",
-    "_maximumValue",
-    "_useMultiplier",
-    "_text",
-    "_numberFormat",
-    "_visible",
-    "_displayComponent",
-    "_aspect",
-    "_textElement",
-    "_manager",
-    "_statId",
-    "_otherId",
-};
-static igMetaField **g_igStatisticsItem_fieldHandles[] = {
-    &g_igStatisticsItem_valueMetaField,
-    &g_igStatisticsItem_maximumValueMetaField,
-    &g_igStatisticsItem_useMultiplierMetaField,
-    &g_igStatisticsItem_textMetaField,
-    &g_igStatisticsItem_numberFormatMetaField,
-    &g_igStatisticsItem_visibleMetaField,
-    &g_igStatisticsItem_displayComponentMetaField,
-    &g_igStatisticsItem_aspectMetaField,
-    &g_igStatisticsItem_textElementMetaField,
-    &g_igStatisticsItem_managerMetaField,
-    &g_igStatisticsItem_statIdMetaField,
-    &g_igStatisticsItem_otherIdMetaField,
-};
-static int g_igStatisticsItem_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-    44,
-    48,
-    52,
-    56,
-};
-
-
-void igStatisticsItem_InitFields(void) {
-    igEnumMetaField *temp_v0;
-    igObjectRefMetaField *temp_s2;
-    igObjectRefMetaField *temp_s2_2;
-    igObjectRefMetaField *temp_s2_3;
-    igObjectRefMetaField *temp_s2_4;
-    void *temp_s1;
-    int temp_s0;
-
-    temp_s1 = g_igStatisticsItem_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igStatisticsItem_ctorTable, 0xC);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)))->setDefault(0.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)))->setDefault(-1.0f);
-    temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
-    temp_s2->_metaObject = (int)(igGuiComponent_GetOrCreateMetaObject());
-    temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
-    temp_s2_2->_metaObject = (int)igDefaultAspect_GetOrCreateMetaObject();
-    temp_s2_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8));
-    temp_s2_3->_metaObject = (int)igTextElement_GetOrCreateMetaObject();
-    temp_s2_3->_construct = 1;
-    temp_s2_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));
-    temp_s2_4->_metaObject = (int)igViewerStatisticsManager_GetOrCreateMetaObject();
-    temp_s2_4->_refCounted = 0;
-    temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(-1);
-    temp_v0->_getMetaEnumFunction = (int)(&IG_GFX_STATISTIC_GetMetaEnum);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB)))->setDefault(-1);
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
+}
 }
 

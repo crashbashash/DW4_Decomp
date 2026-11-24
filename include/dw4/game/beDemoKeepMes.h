@@ -7,7 +7,6 @@ struct beDemoKeepMes;
 extern "C" {
 #endif
 
-struct beDemoKeepMes *beDemoKeepMes_CreateInstance(int allocator);
 
 #ifdef __cplusplus
 }

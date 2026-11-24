@@ -63,11 +63,6 @@ igMetaObject *beAction2InfoRam_GetMeta(void)
     return g_beAction2InfoRam_metaObject;
 }
 
-igMetaObject *beAction2InfoWork_GetMeta(void)
-{
-    return g_beAction2InfoWork_metaObject;
-}
-
 igMetaObject *beActionStarterDataList_GetMeta(void)
 {
     return g_beActionStarterDataList_metaObject;
@@ -138,16 +133,6 @@ igMetaObject *beCameraCtrlInfoRamShake_GetMeta(void)
     return g_beCameraCtrlInfoRamShake_metaObject;
 }
 
-igMetaObject *beCameraBoxData_GetMeta(void)
-{
-    return g_beCameraBoxData_metaObject;
-}
-
-igMetaObject *beCameraDemoData_GetMeta(void)
-{
-    return g_beCameraDemoData_metaObject;
-}
-
 igMetaObject *beCameraCtrlInfo_GetMeta(void)
 {
     return g_beCameraCtrlInfo_metaObject;
@@ -173,11 +158,6 @@ igMetaObject *beCopyTransform_GetMeta(void)
     return g_beCopyTransform_metaObject;
 }
 
-igMetaObject *beCountry_GetMeta(void)
-{
-    return g_beCountry_metaObject;
-}
-
 igMetaObject *beCriAcxData_GetMeta(void)
 {
     return g_beCriAcxData_metaObject;
@@ -191,19 +171,9 @@ void beBinDataObject_userDestruct(beBinDataObject *self) {
     Gap__Core__igObject__userDestruct(self);
 }
 
-igMetaObject *beCriSndf_GetMeta(void)
-{
-    return g_beCriSndf_metaObject;
-}
-
 igMetaObject *beCriAudio_GetMeta(void)
 {
     return g_beCriAudio_metaObject;
-}
-
-igMetaObject *beCriFxXbData_GetMeta(void)
-{
-    return g_beCriFxXbData_metaObject;
 }
 
 igMetaObject *beCriFxInfo_GetMeta(void)
@@ -226,21 +196,9 @@ igMetaObject *beCriSfpData_GetMeta(void)
     return g_beCriSfpData_metaObject;
 }
 
-igMetaObject *beCriVolume_GetMeta(void)
-{
-    return g_beCriVolume_metaObject;
-}
-
 igMetaObject *beDBManagerInfo_GetMeta(void)
 {
     return g_beDBManagerInfo_metaObject;
-}
-
-igMetaObject *beDataBase_GetMeta(void) { return g_beDataBase_metaObject; }
-
-igMetaObject *beDataBaseList_GetMeta(void)
-{
-    return g_beDataBaseList_metaObject;
 }
 
 igMetaObject *beDataObjInt_GetMeta(void)
@@ -293,49 +251,9 @@ igMetaObject *beDataObjListList_GetMeta(void)
     return g_beDataObjListList_metaObject;
 }
 
-igMetaObject *beDemoKeepMes_GetMeta(void)
-{
-    return g_beDemoKeepMes_metaObject;
-}
-
-igMetaObject *beDemoKeepMesList_GetMeta(void)
-{
-    return g_beDemoKeepMesList_metaObject;
-}
-
-igMetaObject *beDemoManagerWork_GetMeta(void)
-{
-    return g_beDemoManagerWork_metaObject;
-}
-
-igMetaObject *beDemoManagerWorkList_GetMeta(void)
-{
-    return g_beDemoManagerWorkList_metaObject;
-}
-
-igMetaObject *beFileChkObj_GetMeta(void)
-{
-    return g_beFileChkObj_metaObject;
-}
-
-igMetaObject *beFile_GetMeta(void)
-{
-    return g_beFile_metaObject;
-}
-
 igMetaObject *beFileListInfo_GetMeta(void)
 {
     return g_beFileListInfo_metaObject;
-}
-
-igMetaObject *beFontGeomAttrPair_GetMeta(void)
-{
-    return g_beFontGeomAttrPair_metaObject;
-}
-
-igMetaObject *beFontGeomAttrPairList_GetMeta(void)
-{
-    return g_beFontGeomAttrPairList_metaObject;
 }
 
 igMetaObject *beFontImage_GetMeta(void)
@@ -388,16 +306,6 @@ igMetaObject *beGeneraterItemDataList_GetMeta(void)
     return g_beGeneraterItemDataList_metaObject;
 }
 
-igMetaObject *beGeneraterPlayerData_GetMeta(void)
-{
-    return g_beGeneraterPlayerData_metaObject;
-}
-
-igMetaObject *beGeneraterPlayerDataList_GetMeta(void)
-{
-    return g_beGeneraterPlayerDataList_metaObject;
-}
-
 igMetaObject *beGeneraterData_GetMeta(void)
 {
     return g_beGeneraterData_metaObject;
@@ -418,11 +326,6 @@ igMetaObject *beGeneraterInfoRam_GetMeta(void)
     return g_beGeneraterInfoRam_metaObject;
 }
 
-igMetaObject *beGeneraterInfoWork_GetMeta(void)
-{
-    return g_beGeneraterInfoWork_metaObject;
-}
-
 igMetaObject *beGroupKeep_GetMeta(void)
 {
     return g_beGroupKeep_metaObject;
@@ -441,16 +344,6 @@ igMetaObject *beHitLandDelivInfo_GetMeta(void)
 igMetaObject *beHitLandDelivInfoRam_GetMeta(void)
 {
     return g_beHitLandDelivInfoRam_metaObject;
-}
-
-igMetaObject *beHitLandResultData_GetMeta(void)
-{
-    return g_beHitLandResultData_metaObject;
-}
-
-igMetaObject *beHitLandResultDataList_GetMeta(void)
-{
-    return g_beHitLandResultDataList_metaObject;
 }
 
 igMetaObject *beHitLandModelTraversal_GetMeta(void)
@@ -498,25 +391,20 @@ igMetaObject *beLightCtrlInfo_GetMeta(void)
     return g_beLightCtrlInfo_metaObject;
 }
 
-igMetaObject *igLightSetList_GetMeta(void)
-{
-    return g_igLightSetList_metaObject;
-}
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beLuaDataObject_GetMeta(void)
-{
-    return g_beLuaDataObject_metaObject;
-}
-
-void beLuaDataObject_userDestruct(beLuaDataObject *self) {
+void beLuaDataObject::userDestruct() {
     int buffer;
 
-    buffer = self->_data;
+    buffer = _data;
     if (buffer != 0) {
         Memory_FreeBuffer((void *)buffer);
     }
-    self->_data = 0;
-    Gap__Core__igObject__userDestruct(self);
+    _data = 0;
+    Gap__Core__igObject__userDestruct((::beLuaDataObject *)this);
+}
+}
 }
 
 igMetaObject *beLuaDataObjectist_GetMeta(void)
@@ -549,16 +437,6 @@ igMetaObject *beMatCtrlDataList_GetMeta(void)
     return g_beMatCtrlDataList_metaObject;
 }
 
-igMetaObject *beMatCtrlSearch_GetMeta(void)
-{
-    return g_beMatCtrlSearch_metaObject;
-}
-
-igMetaObject *beMatCtrlSearchList_GetMeta(void)
-{
-    return g_beMatCtrlSearchList_metaObject;
-}
-
 igMetaObject *beMatCtrlInfo_GetMeta(void)
 {
     return g_beMatCtrlInfo_metaObject;
@@ -569,31 +447,6 @@ igMetaObject *beMatCtrlInfoRam_GetMeta(void)
     return g_beMatCtrlInfoRam_metaObject;
 }
 
-igMetaObject *beMatCtrlInfoWork_GetMeta(void)
-{
-    return g_beMatCtrlInfoWork_metaObject;
-}
-
-igMetaObject *beMessengerArgData_GetMeta(void)
-{
-    return g_beMessengerArgData_metaObject;
-}
-
-igMetaObject *beMessengerArgDataList_GetMeta(void)
-{
-    return g_beMessengerArgDataList_metaObject;
-}
-
-igMetaObject *beMessengerDelay_GetMeta(void)
-{
-    return g_beMessengerDelay_metaObject;
-}
-
-igMetaObject *beMessengerDelayList_GetMeta(void)
-{
-    return g_beMessengerDelayList_metaObject;
-}
-
 igMetaObject *beMessengerGroup_GetMeta(void)
 {
     return g_beMessengerGroup_metaObject;
@@ -602,16 +455,6 @@ igMetaObject *beMessengerGroup_GetMeta(void)
 igMetaObject *beMessengerGroupList_GetMeta(void)
 {
     return g_beMessengerGroupList_metaObject;
-}
-
-igMetaObject *beMessengerWork_GetMetaObject_Virtual(void)
-{
-    return g_beMessengerWork_metaObject;
-}
-
-igMetaObject *beMessengerWorkList_GetMeta(void)
-{
-    return g_beMessengerWorkList_metaObject;
 }
 
 igMetaObject *beMeterCtrlOneData_GetMeta(void)
@@ -779,26 +622,6 @@ igMetaObject *beModelCtrlInfoList_GetMeta(void)
     return g_beModelCtrlInfoList_metaObject;
 }
 
-igMetaObject *beModelCtrlMoveObject_GetMeta(void)
-{
-    return g_beModelCtrlMoveObject_metaObject;
-}
-
-igMetaObject *beModelCtrlMoveObjectList_GetMeta(void)
-{
-    return g_beModelCtrlMoveObjectList_metaObject;
-}
-
-igMetaObject *beModelCtrlInfoHitBody_GetMeta(void)
-{
-    return g_beModelCtrlInfoHitBody_metaObject;
-}
-
-igMetaObject *beModelCtrlInfoAI_GetMeta(void)
-{
-    return g_beModelCtrlInfoAI_metaObject;
-}
-
 igMetaObject *beModelCtrlInfoRideOn_GetMeta(void)
 {
     return g_beModelCtrlInfoRideOn_metaObject;
@@ -825,11 +648,6 @@ int beModelCtrlSubComBase_Update(void)
 
 void beModelCtrlSCHitBox_Stop(void)
 {
-}
-
-igMetaObject *beModelCtrlSubCom_GetMeta(void)
-{
-    return g_beModelCtrlSubCom_metaObject;
 }
 
 igMetaObject *beMovieInfoData_GetMeta(void)
@@ -862,67 +680,43 @@ igMetaObject *beNumberCtrlInfoList_GetMeta(void)
     return g_beNumberCtrlInfoList_metaObject;
 }
 
-igMetaObject *beNumVerInsideData_GetMeta(void)
-{
-    return g_beNumVerInsideData_metaObject;
-}
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beNumVerInsideDataList_GetMeta(void)
-{
-    return g_beNumVerInsideDataList_metaObject;
-}
-
-igMetaObject *beNumVerData_GetMeta(void)
-{
-    return g_beNumVerData_metaObject;
-}
-
-void beNumVerData_userConstruct(beNumVerData *self, int flag) {
+void beNumVerData::userConstruct(int flag) {
     int i;
     void *allocator;
-    Gap__Core__igObject__userConstruct((igObject *)self);
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+    Gap__Core__igObject__userConstruct((::igObject *)this);
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
         i = 0;
         do {
-            allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
+            allocator = ((Gap::Core::igObject *)this)->getMemoryPool();
             allocator = (g_useOwnerAllocator != 0) ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             {
-                igSmartPointer<beNumVerInsideData> item((beNumVerInsideData *)beNumVerInsideData_Create((int)allocator));
-                ((Gap::Core::igObjectList *)self->_verDataList)->append((Gap::Core::igObject *)item.p);
+                igSmartPointer< ::beNumVerInsideData> item((::beNumVerInsideData *)Gap::Bec::beNumVerInsideData::_instantiateFromPool((igMemoryPoolView *)allocator));
+                ((Gap::Core::igObjectList *)_verDataList)->append((Gap::Core::igObject *)item.p);
             }
             i += 1;
         } while (i < 6);
     }
 }
-
-static inline int beNumVerDataList_GetCount(const beNumVerDataList *list) { return list->_count; }
-
-void beNumVerData_userDestruct(beNumVerData *self) {
-    beNumVerDataList *list = (beNumVerDataList *)self->_verDataList;
-    int releaseCount;
-    int releaseIndex;
-    int clearCount;
-    int clearIndex;
-
-    if (beNumVerDataList_GetCount(list) > 0) {
-        releaseCount = list->_count;
-        for (releaseIndex = 0; releaseIndex < releaseCount; releaseIndex++) {
-            igObject::release(((igObject **)list->_data)[releaseIndex]);
-        }
-        clearCount = list->_count;
-        for (clearIndex = 0; clearIndex < clearCount; clearIndex++) {
-            ((int *)list->_data)[clearIndex] = 0;
-        }
-        list->_count = 0;
-    }
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    Gap__Core__igObject__userDestruct(self);
+}
 }
 
-igMetaObject *beNumVerDataList_GetMeta(void)
-{
-    return g_beNumVerDataList_metaObject;
+namespace Gap {
+namespace Bec {
+
+void beNumVerData::userDestruct() {
+    igObjectList *list = (igObjectList *)(beNumVerInsideDataList *)_verDataList;
+
+    if (list->getCount() > 0) {
+        list->removeAll();
+    }
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct((::beNumVerData *)this);
+}
+}
 }
 
 igMetaObject *beNumberCtrlInfoRam_GetMeta(void)
@@ -930,29 +724,14 @@ igMetaObject *beNumberCtrlInfoRam_GetMeta(void)
     return g_beNumberCtrlInfoRam_metaObject;
 }
 
-igMetaObject *beNumberCtrlInfoWork_GetMeta(void)
-{
-    return g_beNumberCtrlInfoWork_metaObject;
-}
-
 igMetaObject *beOptInfo_GetMeta(void)
 {
     return g_beOptInfo_metaObject;
 }
 
-igMetaObject *bePadDataList_GetMeta(void)
-{
-    return g_bePadDataList_metaObject;
-}
-
 igMetaObject *beParticleCtrl2Info_GetMeta(void)
 {
     return g_beParticleCtrl2Info_metaObject;
-}
-
-igMetaObject *beParticleCtrl2InfoWork_GetMeta(void)
-{
-    return g_beParticleCtrl2InfoWork_metaObject;
 }
 
 igMetaObject *beParticleCtrl2InfoRam_GetMeta(void)
@@ -970,143 +749,88 @@ igMetaObject *beResetNode_GetMeta(void)
     return g_beResetNode_metaObject;
 }
 
-igMetaObject *beSvDeliver_GetMeta(void)
-{
-    return g_beSvDeliver_metaObject;
+namespace Gap {
+namespace Bec {
+
+void beSaveDataDeliver::userConstruct(int flag) {
+    Gap__Core__igObject__userConstruct((::igObject *)this);
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
 }
 
-igMetaObject *beSaveDataDeliver_GetMeta(void)
-{
-    return g_beSaveDataDeliver_metaObject;
-}
-
-void beSaveDataDeliver_userConstruct(beSaveDataDeliver *self) {
-    Gap__Core__igObject__userConstruct((igObject *)self);
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-}
-
-void beSaveDataDeliver_userDestruct(beSaveDataDeliver *self) {
+void beSaveDataDeliver::userDestruct() {
     int data;
 
-    data = self->_data;
+    data = _data;
     if (data != 0) {
         Memory_FreeBuffer((void *)data);
     }
-    self->_data = 0;
-    self->_size = 0;
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    Gap__Core__igObject__userDestruct(self);
+    _data = 0;
+    _size = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct((::beSaveDataDeliver *)this);
 }
 
-igMetaObject *beSvSlotXbox_GetMeta(void)
-{
-    return g_beSvSlotXbox_metaObject;
+void beSvPlatDataGC::userConstruct(int flag) {
+    Gap__Core__igObject__userConstruct((::igObject *)this);
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
 }
 
-igMetaObject *beSvSlotGC_GetMeta(void)
-{
-    return g_beSvSlotGC_metaObject;
-}
-
-igMetaObject *beSvSlotPS2_GetMeta(void)
-{
-    return g_beSvSlotPS2_metaObject;
-}
-
-igMetaObject *beSvSlotDataList_GetMeta(void)
-{
-    return g_beSvSlotDataList_metaObject;
-}
-
-igMetaObject *beSvPlatDataGC_GetMeta(void)
-{
-    return g_beSvPlatDataGC_metaObject;
-}
-
-void beSvPlatDataGC_userConstruct(beSvPlatDataGC *self) {
-    Gap__Core__igObject__userConstruct((igObject *)self);
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-}
-
-void beSvPlatDataGC_userDestruct(beSvPlatDataGC *self) {
-    if (self->_banTplData != 0) {
-        Memory_FreeBuffer((void *)self->_banTplData);
+void beSvPlatDataGC::userDestruct() {
+    if (_banTplData != 0) {
+        Memory_FreeBuffer((void *)_banTplData);
     }
-    if (self->_iconTplData != 0) {
-        Memory_FreeBuffer((void *)self->_iconTplData);
+    if (_iconTplData != 0) {
+        Memory_FreeBuffer((void *)_iconTplData);
     }
-    self->_banTplData = 0;
-    self->_iconTplData = 0;
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    Gap__Core__igObject__userDestruct(self);
+    _banTplData = 0;
+    _iconTplData = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct((::beSvPlatDataGC *)this);
 }
 
-igMetaObject *beSvPs2McImage128k_GetMeta(void)
-{
-    return g_beSvPs2McImage128k_metaObject;
-}
-
-void beSvPs2McImage128k_userConstruct(beSvPs2McImage128k *self, int flag) {
-    Gap__Core__igObject__userConstruct((igObject *)self);
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+void beSvPs2McImage128k::userConstruct(int flag) {
+    Gap__Core__igObject__userConstruct((::igObject *)this);
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
-        self->_data = (int)Memory_AllocateDefaultBuffer(0x20000);
+        _data = (int)Memory_AllocateDefaultBuffer(0x20000);
     }
 }
 
-void beSvPs2McImage128k_userDestruct(beSvPs2McImage128k *self) {
-    if (self->_data != 0) {
-        Memory_FreeBuffer((void *)self->_data);
+void beSvPs2McImage128k::userDestruct() {
+    if (_data != 0) {
+        Memory_FreeBuffer((void *)_data);
     }
-    self->_data = 0;
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    Gap__Core__igObject__userDestruct(self);
+    _data = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct((::beSvPs2McImage128k *)this);
 }
 
-igMetaObject *beSvPlatDataPS2_GetMeta(void)
-{
-    return g_beSvPlatDataPS2_metaObject;
-}
-
-igMetaObject *beXboxImage24k_GetMeta(void)
-{
-    return g_beXboxImage24k_metaObject;
-}
-
-void beXboxImage24k_userConstruct(beXboxImage24k *self, int flag) {
-    Gap__Core__igObject__userConstruct((igObject *)self);
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
+void beXboxImage24k::userConstruct(int flag) {
+    Gap__Core__igObject__userConstruct((::igObject *)this);
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
-        self->_data = (int)Memory_AllocateDefaultBuffer(0x6000);
-        self->_dataSize = 0x6000;
+        _data = (int)Memory_AllocateDefaultBuffer(0x6000);
+        _dataSize = 0x6000;
     }
 }
 
-void beXboxImage24k_userDestruct(beXboxImage24k *self) {
+void beXboxImage24k::userDestruct() {
     int data;
 
-    data = self->_data;
+    data = _data;
     if (data != 0) {
         Memory_FreeBuffer((void *)data);
     }
-    self->_data = 0;
-    igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    Gap__Core__igObject__userDestruct(self);
+    _data = 0;
+    igMetaObject_CountInstances(((igObjectDispatchView *)this)->GetMeta(), 1);
+    Gap__Core__igObject__userDestruct((::beXboxImage24k *)this);
+}
+}
 }
 
 igMetaObject *beSvPlatDataXbox_GetMeta(void)
 {
     return g_beSvPlatDataXbox_metaObject;
-}
-
-igMetaObject *beSvPlatDataPC_GetMeta(void)
-{
-    return g_beSvPlatDataPC_metaObject;
-}
-
-igMetaObject *beSvPlatBaseData_GetMeta(void)
-{
-    return g_beSvPlatBaseData_metaObject;
 }
 
 igMetaObject *beSaveUtilInfo_GetMeta(void)
@@ -1139,11 +863,6 @@ igMetaObject *beSeInfo_GetMeta(void)
     return g_beSeInfo_metaObject;
 }
 
-igMetaObject *beSelectCtrlInfoWork_GetMeta(void)
-{
-    return g_beSelectCtrlInfoWork_metaObject;
-}
-
 igMetaObject *beSelectCtrlInfoRamData_GetMeta(void)
 {
     return g_beSelectCtrlInfoRamData_metaObject;
@@ -1162,16 +881,6 @@ igMetaObject *beShadow01Info_GetMeta(void)
 igMetaObject *beShadow01InfoList_GetMeta(void)
 {
     return g_beShadow01InfoList_metaObject;
-}
-
-igMetaObject *bePlaySE_GetMeta(void)
-{
-    return g_bePlaySE_metaObject;
-}
-
-igMetaObject *bePlaySEList_GetMeta(void)
-{
-    return g_bePlaySEList_metaObject;
 }
 
 igMetaObject *beSoundData_GetMeta(void)
@@ -1224,16 +933,6 @@ igMetaObject *beTextureCtrlInfoList_GetMeta(void)
     return g_beTextureCtrlInfoList_metaObject;
 }
 
-igMetaObject *beTimerData_GetMeta(void)
-{
-    return g_beTimerData_metaObject;
-}
-
-igMetaObject *beTimerDataList_GetMeta(void)
-{
-    return g_beTimerDataList_metaObject;
-}
-
 igMetaObject *beTransformSync_GetMeta(void)
 {
     return g_beTransformSync_metaObject;
@@ -1258,29 +957,9 @@ void beTransformSync_SetMatrix(beTransformSync *self, const float *matrix) {
     }
 }
 
-igMetaObject *beUnicode_GetMeta(void)
-{
-    return g_beUnicode_metaObject;
-}
-
 igMetaObject *beWaterPlainInfo_GetMeta(void)
 {
     return g_beWaterPlainInfo_metaObject;
-}
-
-igMetaObject *beWaterMoveData_GetMeta(void)
-{
-    return g_beWaterMoveData_metaObject;
-}
-
-igMetaObject *beWaterMoveDataList_GetMeta(void)
-{
-    return g_beWaterMoveDataList_metaObject;
-}
-
-igMetaObject *beWaterMove_GetMeta(void)
-{
-    return g_beWaterMove_metaObject;
 }
 
 igMetaObject *beWaterPlainInfoRam_GetMeta(void)
@@ -1291,11 +970,6 @@ igMetaObject *beWaterPlainInfoRam_GetMeta(void)
 igMetaObject *igModelViewMatrixBoneSelectList_GetMeta(void)
 {
     return g_igModelViewMatrixBoneSelectListBec_metaObject;
-}
-
-igMetaObject *igAppearanceListList_GetMeta(void)
-{
-    return g_igAppearanceListList_metaObject;
 }
 
 igMetaObject *beWeaponAttachData_GetMeta(void)
@@ -1363,29 +1037,9 @@ igMetaObject *beCriHandleList_GetElementMeta(void)
     return g_beCriHandle_metaObject;
 }
 
-igMetaObject *beDataBaseList_GetElementMeta(void)
-{
-    return g_beDataBase_metaObject;
-}
-
 igMetaObject *beDataObjListList_GetElementMeta(void)
 {
     return g_beDataObjList_metaObject;
-}
-
-igMetaObject *beDemoManagerWorkList_GetElementMeta(void)
-{
-    return g_beDemoManagerWork_metaObject;
-}
-
-igMetaObject *beDemoKeepMesList_GetElementMeta(void)
-{
-    return g_beDemoKeepMes_metaObject;
-}
-
-igMetaObject *beFontGeomAttrPairList_GetElementMeta(void)
-{
-    return g_beFontGeomAttrPair_metaObject;
 }
 
 igMetaObject *beUnicodeObjList_GetElementMeta(void)
@@ -1403,11 +1057,6 @@ igMetaObject *beGeneraterDataList_GetElementMeta(void)
     return g_beGeneraterData_metaObject;
 }
 
-igMetaObject *beGeneraterPlayerDataList_GetElementMeta(void)
-{
-    return g_beGeneraterPlayerData_metaObject;
-}
-
 igMetaObject *beGeneraterItemDataList_GetElementMeta(void)
 {
     return g_beGeneraterItemData_metaObject;
@@ -1423,19 +1072,9 @@ igMetaObject *beGroupKeepList_GetElementMeta(void)
     return g_beGroupKeep_metaObject;
 }
 
-igMetaObject *beHitLandResultDataList_GetElementMeta(void)
-{
-    return g_beHitLandResultData_metaObject;
-}
-
 igMetaObject *beLayerGroupList_GetElementMeta(void)
 {
     return g_beLayerGroup_metaObject;
-}
-
-igMetaObject *igLightSetList_GetElementMeta(void)
-{
-    return Gap::Sg::igLightSet::getClassMeta();
 }
 
 igMetaObject *beLuaDataList_GetElementMeta(void)
@@ -1445,12 +1084,7 @@ igMetaObject *beLuaDataList_GetElementMeta(void)
 
 igMetaObject *beLuaDataObjectist_GetElementMeta(void)
 {
-    return g_beLuaDataObject_metaObject;
-}
-
-igMetaObject *beMatCtrlSearchList_GetElementMeta(void)
-{
-    return g_beMatCtrlSearch_metaObject;
+    return Gap::Bec::beLuaDataObject::getClassMeta();
 }
 
 igMetaObject *beMatCtrlDataList_GetElementMeta(void)
@@ -1483,34 +1117,9 @@ igMetaObject *beModelCtrlDataList_GetElementMeta(void)
     return g_beModelCtrlData_metaObject;
 }
 
-igMetaObject *beModelCtrlMoveObjectList_GetElementMeta(void)
-{
-    return g_beModelCtrlMoveObject_metaObject;
-}
-
 igMetaObject *beNumberCtrlInfoList_GetElementMeta(void)
 {
     return g_beNumberCtrlInfo_metaObject;
-}
-
-igMetaObject *beNumVerDataList_GetElementMeta(void)
-{
-    return g_beNumVerData_metaObject;
-}
-
-igMetaObject *beNumVerInsideDataList_GetElementMeta(void)
-{
-    return g_beNumVerInsideData_metaObject;
-}
-
-igMetaObject *beSvSlotDataList_GetElementMeta(void)
-{
-    return g_beSvSlotData_metaObject;
-}
-
-igMetaObject *bePadDataList_GetElementMeta(void)
-{
-    return g_bePadData_metaObject;
 }
 
 igMetaObject *beSeDataList_GetElementMeta(void)
@@ -1523,24 +1132,9 @@ igMetaObject *beShadow01InfoList_GetElementMeta(void)
     return g_beShadow01Info_metaObject;
 }
 
-igMetaObject *bePlaySEList_GetElementMeta(void)
-{
-    return g_bePlaySE_metaObject;
-}
-
 igMetaObject *beTextureCtrlInfoList_GetElementMeta(void)
 {
     return g_beTextureCtrlInfo_metaObject;
-}
-
-igMetaObject *beTimerDataList_GetElementMeta(void)
-{
-    return g_beTimerData_metaObject;
-}
-
-igMetaObject *beWaterMoveDataList_GetElementMeta(void)
-{
-    return g_beWaterMoveData_metaObject;
 }
 
 igMetaObject *beWeaponAttachDataList_GetElementMeta(void)
@@ -1548,34 +1142,14 @@ igMetaObject *beWeaponAttachDataList_GetElementMeta(void)
     return g_beWeaponAttachData_metaObject;
 }
 
-igMetaObject *igAppearanceListList_GetElementMeta(void)
-{
-    return Gap::Sg::igAppearanceList::getClassMeta();
-}
-
 igMetaObject *beBaseInfoManagerList_GetElementMeta(void)
 {
     return g_beBaseInfoManager_metaObject;
 }
 
-igMetaObject *beMessengerWorkList_GetElementMeta(void)
-{
-    return g_beMessengerWork_metaObject;
-}
-
 igMetaObject *beMessengerGroupList_GetElementMeta(void)
 {
     return g_beMessengerGroup_metaObject;
-}
-
-igMetaObject *beMessengerDelayList_GetElementMeta(void)
-{
-    return g_beMessengerDelay_metaObject;
-}
-
-igMetaObject *beMessengerArgDataList_GetElementMeta(void)
-{
-    return g_beMessengerArgData_metaObject;
 }
 
 igMetaObject *beWeaponSeqDataList_GetElementMeta(void)

@@ -1,51 +1,52 @@
-igMetaObject *g_bePlaySEList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *bePlaySEList_GetOrCreateMetaObject(void) {
-    if (g_bePlaySEList_metaObject == 0) {
-        g_bePlaySEList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_bePlaySEList_metaObject;
-}
+igMetaObject *bePlaySEList::_Meta;
 
-igMetaObject *bePlaySEList_GetMetaObject(void) {
-    if (g_bePlaySEList_metaObject == 0 || !isValid(g_bePlaySEList_metaObject)) bePlaySEList_EnsureRegistered();
-    return g_bePlaySEList_metaObject;
-}
-
-int bePlaySEList_GetVTable(void) {
-    bePlaySEList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_bePlaySEList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void bePlaySEList_EnsureRegistered(void)
+igMetaObject *bePlaySEList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(bePlaySEList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_bePlaySEList_callbackList[] = { bePlaySE_EnsureRegistered, 0 };
+igMetaObject *bePlaySEList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *bePlaySEList_Register(void) {
+void *bePlaySEList::retrieveVTablePointer()
+{
+    bePlaySEList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void bePlaySEList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *bePlaySEList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::bePlaySE::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_bePlaySEList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        bePlaySEList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "bePlaySEList",
-        0x14, /* instance size */
-        bePlaySEList_GetVTable,
+        sizeof(bePlaySEList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_bePlaySEList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void bePlaySEList_GetMetaObjectFunction(void)
-{
-    bePlaySEList_GetMetaObject();
+}
 }
 

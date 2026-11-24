@@ -1,47 +1,45 @@
-igMetaObject *g_beDataBaseList_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beDataBaseList_GetMetaObject(void) {
-    igMetaObject *g = g_beDataBaseList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beDataBaseList_EnsureRegistered();
-    }
-    return g_beDataBaseList_metaObject;
-}
+igMetaObject *beDataBaseList::_Meta;
 
-int beDataBaseList_GetVTable(void) {
-    beDataBaseList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beDataBaseList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beDataBaseList_EnsureRegistered(void)
+igMetaObject *beDataBaseList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beDataBaseList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beDataBaseList_callbackList[] = { beDataBase_EnsureRegistered, 0 };
+void *beDataBaseList::retrieveVTablePointer()
+{
+    beDataBaseList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beDataBaseList_Register(void) {
+void beDataBaseList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beDataBaseList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beDataBase::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beDataBaseList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beDataBaseList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beDataBaseList",
-        0x14, /* instance size */
-        beDataBaseList_GetVTable,
+        sizeof(beDataBaseList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beDataBaseList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beDataBaseList_GetMetaObjectFunction(void)
-{
-    beDataBaseList_GetMetaObject();
+}
 }
 

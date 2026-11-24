@@ -1,131 +1,75 @@
-igMetaObject *g_beCriFxXbData_metaObject;
-igMetaField *g_beCriFxXbData_lRoomMetaField;
-igMetaField *g_beCriFxXbData_lRoomHFMetaField;
-igMetaField *g_beCriFxXbData_flRoomRolloffFactorMetaField;
-igMetaField *g_beCriFxXbData_flDecayTimeMetaField;
-igMetaField *g_beCriFxXbData_flDecayHFRatioMetaField;
-igMetaField *g_beCriFxXbData_lReflectionsMetaField;
-igMetaField *g_beCriFxXbData_flReflectionsDelayMetaField;
-igMetaField *g_beCriFxXbData_lReverbMetaField;
-igMetaField *g_beCriFxXbData_flReverbDelayMetaField;
-igMetaField *g_beCriFxXbData_flDiffusionMetaField;
-igMetaField *g_beCriFxXbData_flDensityMetaField;
-igMetaField *g_beCriFxXbData_flHFReferenceMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beCriFxXbData_GetOrCreateMetaObject(void) {
-    if (g_beCriFxXbData_metaObject == 0) {
-        g_beCriFxXbData_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beCriFxXbData_metaObject;
-}
+igMetaObject *beCriFxXbData::_Meta;
+igMetaField *beCriFxXbData::k_lRoom;
+igMetaField *beCriFxXbData::k_lRoomHF;
+igMetaField *beCriFxXbData::k_flRoomRolloffFactor;
+igMetaField *beCriFxXbData::k_flDecayTime;
+igMetaField *beCriFxXbData::k_flDecayHFRatio;
+igMetaField *beCriFxXbData::k_lReflections;
+igMetaField *beCriFxXbData::k_flReflectionsDelay;
+igMetaField *beCriFxXbData::k_lReverb;
+igMetaField *beCriFxXbData::k_flReverbDelay;
+igMetaField *beCriFxXbData::k_flDiffusion;
+igMetaField *beCriFxXbData::k_flDensity;
+igMetaField *beCriFxXbData::k_flHFReference;
 
-void *beCriFxXbData_GetMetaObject(void) {
-    igMetaObject *g = g_beCriFxXbData_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beCriFxXbData_EnsureRegistered();
-    }
-    return g_beCriFxXbData_metaObject;
-}
-
-int beCriFxXbData_GetVTable(void) {
-    beCriFxXbData obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beCriFxXbData_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beCriFxXbData_EnsureRegistered(void)
+igMetaObject *beCriFxXbData::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beCriFxXbData_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *beCriFxXbData_Register(void) {
+igMetaObject *beCriFxXbData::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beCriFxXbData::retrieveVTablePointer()
+{
+    beCriFxXbData temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beCriFxXbData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beCriFxXbData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beCriFxXbData_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beCriFxXbData_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beCriFxXbData",
-        0x38, /* instance size */
-        beCriFxXbData_GetVTable,
-        beCriFxXbData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beCriFxXbData),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beCriFxXbData_GetMetaObjectFunction(void)
+void beCriFxXbData::arkRegisterInitialize()
 {
-    beCriFxXbData_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_lRoom", "_lRoomHF", "_flRoomRolloffFactor", "_flDecayTime", "_flDecayHFRatio", "_lReflections", "_flReflectionsDelay", "_lReverb", "_flReverbDelay", "_flDiffusion", "_flDensity", "_flHFReference" };
+    static igMetaField **enumStorage[] = { &k_lRoom, &k_lRoomHF, &k_flRoomRolloffFactor, &k_flDecayTime, &k_flDecayHFRatio, &k_lReflections, &k_flReflectionsDelay, &k_lReverb, &k_flReverbDelay, &k_flDiffusion, &k_flDensity, &k_flHFReference };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 12);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beCriFxXbData_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beCriFxXbData_fieldTable[] = {
-    "_lRoom",
-    "_lRoomHF",
-    "_flRoomRolloffFactor",
-    "_flDecayTime",
-    "_flDecayHFRatio",
-    "_lReflections",
-    "_flReflectionsDelay",
-    "_lReverb",
-    "_flReverbDelay",
-    "_flDiffusion",
-    "_flDensity",
-    "_flHFReference",
-};
-static igMetaField **g_beCriFxXbData_fieldHandles[] = {
-    &g_beCriFxXbData_lRoomMetaField,
-    &g_beCriFxXbData_lRoomHFMetaField,
-    &g_beCriFxXbData_flRoomRolloffFactorMetaField,
-    &g_beCriFxXbData_flDecayTimeMetaField,
-    &g_beCriFxXbData_flDecayHFRatioMetaField,
-    &g_beCriFxXbData_lReflectionsMetaField,
-    &g_beCriFxXbData_flReflectionsDelayMetaField,
-    &g_beCriFxXbData_lReverbMetaField,
-    &g_beCriFxXbData_flReverbDelayMetaField,
-    &g_beCriFxXbData_flDiffusionMetaField,
-    &g_beCriFxXbData_flDensityMetaField,
-    &g_beCriFxXbData_flHFReferenceMetaField,
-};
-static int g_beCriFxXbData_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-    44,
-    48,
-    52,
-};
-
-void beCriFxXbData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beCriFxXbData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beCriFxXbData_ctorTable, 0xC);
-    igMetaObject_NameFields(meta, g_beCriFxXbData_fieldTable, g_beCriFxXbData_fieldHandles, g_beCriFxXbData_fieldOffsets, base);
+}
 }
 

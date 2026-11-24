@@ -349,3 +349,85 @@ igInfoManagerList	Insight	igTObjectList<igInfoManager>
 igViewportResizedMessage	Insight
 igInfoManagerOrderedList	Insight	igTDependencyOrderedList<igInfoManager>
 igSerialScheduler	Insight
+igStatisticsItem	Viewer
+igStatisticsItemList	Viewer	igTObjectList<igStatisticsItem>
+igViewerStatisticsManager	Viewer
+igViewModel	Viewer
+igViewerParameters	Viewer
+igActorManagerParams	Viewer
+igBoundingBoxRenderer	Viewer
+igNormalsRenderer	Viewer
+igLogoRenderer	Viewer
+igViewerAction	Viewer
+igViewerSceneInfoManagerController	Viewer
+igViewerGuiFactory	Viewer
+beTimerData	Bec
+beTimerDataList	Bec	igTObjectList<beTimerData>
+bePlaySE	Bec
+bePlaySEList	Bec	igTObjectList<bePlaySE>
+beWaterMoveData	Bec
+beWaterMoveDataList	Bec	igTObjectList<beWaterMoveData>
+beNumVerInsideData	Bec
+beNumVerInsideDataList	Bec	igTObjectList<beNumVerInsideData>
+beDemoKeepMes	Bec
+beDemoKeepMesList	Bec	igTObjectList<beDemoKeepMes>
+beMessengerDelay	Bec
+beMessengerDelayList	Bec	igTObjectList<beMessengerDelay>
+beHitLandResultData	Bec
+beHitLandResultDataList	Bec	igTObjectList<beHitLandResultData>
+beCriVolume	Bec
+beCountry	Bec
+beCriSndf	Bec
+beNumberCtrlInfoWork	Bec
+beCriFxXbData	Bec
+beModelCtrlMoveObject	Bec
+beModelCtrlMoveObjectList	Bec	igTObjectList<beModelCtrlMoveObject>
+beModelCtrlInfoAI	Bec
+beDemoManagerWork	Bec
+beDemoManagerWorkList	Bec	igTObjectList<beDemoManagerWork>
+beWaterMove	Bec
+beMessengerWork	Bec
+beMessengerWorkList	Bec	igTObjectList<beMessengerWork>
+beMatCtrlSearch	Bec
+beMatCtrlSearchList	Bec	igTObjectList<beMatCtrlSearch>
+beGeneraterPlayerData	Bec
+beGeneraterPlayerDataList	Bec	igTObjectList<beGeneraterPlayerData>
+beMatCtrlInfoWork	Bec
+beGeneraterInfoWork	Bec
+beCameraDemoData	Bec
+beFontGeomAttrPair	Bec
+beFontGeomAttrPairList	Bec	igTObjectList<beFontGeomAttrPair>
+beMessengerArgData	Bec
+beMessengerArgDataList	Bec	igTObjectList<beMessengerArgData>
+beSelectCtrlInfoWork	Bec
+beCameraBoxData	Bec
+beParticleCtrl2InfoWork	Bec
+beFileChkObj	Bec
+beModelCtrlInfoHitBody	Bec
+beDataBase	Bec
+beDataBaseList	Bec	igTObjectList<beDataBase>
+beAction2InfoWork	Bec
+bePadData	Bec
+beNumVerData	Bec
+beSaveDataDeliver	Bec
+beLuaDataObject	Bec
+beModelCtrlSubCom	Bec
+beSvPs2McImage128k	Bec
+beXboxImage24k	Bec
+beSvSlotData	Bec
+beNumVerDataList	Bec	igTObjectList<beNumVerData>
+bePadDataList	Bec	igTObjectList<bePadData>
+beFile	Bec
+beUnicode	Bec
+beSvSlotDataList	Bec	igTObjectList<beSvSlotData>
+beSvPlatBaseData	Bec
+beSvDeliver	Bec
+beSvPlatDataGC	Bec
+beSvPlatDataPS2	Bec
+beSvSlotGC	Bec
+beSvSlotPS2	Bec
+beSvSlotXbox	Bec
+beSvPlatDataPC	Bec
+beModelCtrlSubComBase	Bec
+igAppearanceListList	Bec	igTObjectList<igAppearanceList>
+igLightSetList	Bec	igTObjectList<igLightSet>

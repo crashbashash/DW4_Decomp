@@ -18,7 +18,7 @@ void beLuaDataObjectist_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLuaDataObjectist_Register);
 }
 
-static igMetaObjectCallback g_beLuaDataObjectist_callbackList[] = { beLuaDataObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLuaDataObjectist_callbackList[] = { Gap::Bec::beLuaDataObject::arkRegister, 0 };
 
 CallbackArray *beLuaDataObjectist_Register(void) {
     BecLibrary_MarkRegistered();

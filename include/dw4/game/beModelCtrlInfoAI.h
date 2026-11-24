@@ -7,7 +7,6 @@ struct beModelCtrlInfoAI;
 extern "C" {
 #endif
 
-struct beModelCtrlInfoAI *beModelCtrlInfoAI_Create(int allocator);
 
 #ifdef __cplusplus
 }

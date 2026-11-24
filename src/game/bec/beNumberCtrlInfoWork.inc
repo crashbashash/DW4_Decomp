@@ -1,94 +1,84 @@
-igMetaObject *g_beNumberCtrlInfoWork_metaObject;
-igMetaField *g_beNumberCtrlInfoWork_dispNumMetaField;
-igMetaField *g_beNumberCtrlInfoWork_realNumMetaField;
-igMetaField *g_beNumberCtrlInfoWork_changeNumMetaField;
+namespace Gap {
+namespace Bec {
 
-beNumberCtrlInfoWork *beNumberCtrlInfoWork_Create(int allocator) {
-    beNumberCtrlInfoWork_EnsureRegistered();
-    return (beNumberCtrlInfoWork *)igMetaObject_CreateInstance(g_beNumberCtrlInfoWork_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beNumberCtrlInfoWork::_Meta;
+igMetaField *beNumberCtrlInfoWork::k_dispNum;
+igMetaField *beNumberCtrlInfoWork::k_realNum;
+igMetaField *beNumberCtrlInfoWork::k_changeNum;
 
-igMetaObject *beNumberCtrlInfoWork_GetOrCreateMetaObject(void) {
-    if (g_beNumberCtrlInfoWork_metaObject == 0) {
-        g_beNumberCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beNumberCtrlInfoWork_metaObject;
-}
-
-igMetaObject *beNumberCtrlInfoWork_GetMetaObject(void) {
-    igMetaObject *g = g_beNumberCtrlInfoWork_metaObject;
-    int t;
-    if (!g || !(t = (g->_validity & 4) != 0))
-        beNumberCtrlInfoWork_EnsureRegistered();
-    return g_beNumberCtrlInfoWork_metaObject;
-}
-
-int beNumberCtrlInfoWork_GetVTable(void) {
-    beNumberCtrlInfoWork obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beNumberCtrlInfoWork_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beNumberCtrlInfoWork_EnsureRegistered(void)
+beNumberCtrlInfoWork *beNumberCtrlInfoWork::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beNumberCtrlInfoWork_Register);
+    arkRegister();
+    return (beNumberCtrlInfoWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beNumberCtrlInfoWork_Register(void) {
+igMetaObject *beNumberCtrlInfoWork::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+
+igMetaObject *beNumberCtrlInfoWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beNumberCtrlInfoWork::retrieveVTablePointer()
+{
+    beNumberCtrlInfoWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beNumberCtrlInfoWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beNumberCtrlInfoWork::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beNumberCtrlInfoWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beNumberCtrlInfoWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beNumberCtrlInfoWork",
-        0x14, /* instance size */
-        beNumberCtrlInfoWork_GetVTable,
-        beNumberCtrlInfoWork_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beNumberCtrlInfoWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beNumberCtrlInfoWork_GetMetaObjectFunction(void)
+void beNumberCtrlInfoWork::arkRegisterInitialize()
 {
-    beNumberCtrlInfoWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_dispNum", "_realNum", "_changeNum" };
+    static igMetaField **enumStorage[] = { &k_dispNum, &k_realNum, &k_changeNum };
+    static int offsets[] = { 8, 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beNumberCtrlInfoWork_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_beNumberCtrlInfoWork_fieldTable[] = {
-    "_dispNum",
-    "_realNum",
-    "_changeNum",
-};
-static igMetaField **g_beNumberCtrlInfoWork_fieldHandles[] = {
-    &g_beNumberCtrlInfoWork_dispNumMetaField,
-    &g_beNumberCtrlInfoWork_realNumMetaField,
-    &g_beNumberCtrlInfoWork_changeNumMetaField,
-};
-static int g_beNumberCtrlInfoWork_fieldOffsets[] = {
-    8,
-    12,
-    16,
-};
-
-void beNumberCtrlInfoWork_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beNumberCtrlInfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beNumberCtrlInfoWork_ctorTable, 3);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
-    igMetaObject_NameFields(meta, g_beNumberCtrlInfoWork_fieldTable, g_beNumberCtrlInfoWork_fieldHandles, g_beNumberCtrlInfoWork_fieldOffsets, base);
+}
 }
 

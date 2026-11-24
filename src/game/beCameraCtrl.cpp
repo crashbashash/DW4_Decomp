@@ -135,13 +135,13 @@ void beCameraCtrl_Prepare(beCameraCtrl *self) {
 
 int beCameraCtrl_IsBoxCamera(beCameraCtrl *self, beCameraCtrlInfo *info) {
     igObjectDispatchView *data = (igObjectDispatchView *)info->_data;
-    igMetaObject *boxMeta = g_beCameraBoxData_metaObject;
+    igMetaObject *boxMeta = Gap::Bec::beCameraBoxData::getClassMeta();
     return boxMeta == data->GetMeta();
 }
 
 int beCameraCtrl_IsDemoCamera(beCameraCtrl *self, beCameraCtrlInfo *info) {
     igObjectDispatchView *data = (igObjectDispatchView *)info->_data;
-    igMetaObject *demoMeta = g_beCameraDemoData_metaObject;
+    igMetaObject *demoMeta = Gap::Bec::beCameraDemoData::getClassMeta();
     return demoMeta == data->GetMeta();
 }
 

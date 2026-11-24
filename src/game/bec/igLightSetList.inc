@@ -1,57 +1,52 @@
-igMetaObject *g_igLightSetList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *igLightSetList_GetOrCreateMetaObject(void) {
-    if (g_igLightSetList_metaObject == 0) {
-        g_igLightSetList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igLightSetList_metaObject;
-}
+igMetaObject *igLightSetList::_Meta;
 
-void *igLightSetList_GetMetaObject(void) {
-    bool ok;
-    if (g_igLightSetList_metaObject == 0) goto make;
-    ok = !!(g_igLightSetList_metaObject->_validity & 4);
-    if (ok != false) goto done;
-make:
-    igLightSetList_EnsureRegistered();
-done:;
-    return g_igLightSetList_metaObject;
-}
-
-int igLightSetList_GetVTable(void) {
-    igLightSetList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_igLightSetList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igLightSetList_EnsureRegistered(void)
+igMetaObject *igLightSetList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igLightSetList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igLightSetList_callbackList[] = { Gap::Sg::igLightSet::arkRegister, 0 };
+igMetaObject *igLightSetList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igLightSetList_Register(void) {
+void *igLightSetList::retrieveVTablePointer()
+{
+    igLightSetList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igLightSetList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igLightSetList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igLightSet::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igLightSetList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igLightSetList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igLightSetList",
-        0x14, /* instance size */
-        igLightSetList_GetVTable,
+        sizeof(igLightSetList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igLightSetList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igLightSetList_GetMetaObjectFunction(void)
-{
-    igLightSetList_GetMetaObject();
+}
 }
 

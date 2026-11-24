@@ -63,7 +63,7 @@ void beNumberCtrlInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNumberCtrlInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beNumberCtrlInfoRam_callbackList[] = { Gap::Sg::igGeometry::arkRegister, beNumVerDataList_EnsureRegistered, beNumberCtrlInfoWork_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNumberCtrlInfoRam_callbackList[] = { Gap::Sg::igGeometry::arkRegister, Gap::Bec::beNumVerDataList::arkRegister, Gap::Bec::beNumberCtrlInfoWork::arkRegister, 0 };
 
 CallbackArray *beNumberCtrlInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -134,10 +134,10 @@ void beNumberCtrlInfoRam_InitFields(void) {
     ((igObjectRefMetaField *)geometry)->_metaObject = (int)Gap::Sg::igGeometry::getClassTypeLazy();
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0.09375f);
     numList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)numList)->_metaObject = (int)beNumVerDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)numList)->_metaObject = (int)Gap::Bec::beNumVerDataList::getClassTypeLazy();
     ((igRefMetaField *)numList)->_construct = 1;
     work = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)work)->_metaObject = (int)beNumberCtrlInfoWork_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)work)->_metaObject = (int)Gap::Bec::beNumberCtrlInfoWork::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beNumberCtrlInfoRam_fieldTable, g_beNumberCtrlInfoRam_fieldHandles, g_beNumberCtrlInfoRam_fieldOffsets, base);
 }
 

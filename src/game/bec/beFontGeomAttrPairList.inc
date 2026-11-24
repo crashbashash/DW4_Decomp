@@ -1,54 +1,52 @@
-igMetaObject *g_beFontGeomAttrPairList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beFontGeomAttrPairList_GetOrCreateMetaObject(void) {
-    if (g_beFontGeomAttrPairList_metaObject == 0) {
-        g_beFontGeomAttrPairList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beFontGeomAttrPairList_metaObject;
-}
+igMetaObject *beFontGeomAttrPairList::_Meta;
 
-void *beFontGeomAttrPairList_GetMetaObject(void) {
-    igMetaObject *g = g_beFontGeomAttrPairList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beFontGeomAttrPairList_EnsureRegistered();
-    }
-    return g_beFontGeomAttrPairList_metaObject;
-}
-
-int beFontGeomAttrPairList_GetVTable(void) {
-    beFontGeomAttrPairList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beFontGeomAttrPairList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beFontGeomAttrPairList_EnsureRegistered(void)
+igMetaObject *beFontGeomAttrPairList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beFontGeomAttrPairList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beFontGeomAttrPairList_callbackList[] = { beFontGeomAttrPair_EnsureRegistered, 0 };
+igMetaObject *beFontGeomAttrPairList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beFontGeomAttrPairList_Register(void) {
+void *beFontGeomAttrPairList::retrieveVTablePointer()
+{
+    beFontGeomAttrPairList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beFontGeomAttrPairList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beFontGeomAttrPairList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beFontGeomAttrPair::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beFontGeomAttrPairList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beFontGeomAttrPairList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beFontGeomAttrPairList",
-        0x14, /* instance size */
-        beFontGeomAttrPairList_GetVTable,
+        sizeof(beFontGeomAttrPairList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beFontGeomAttrPairList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beFontGeomAttrPairList_GetMetaObjectFunction(void)
-{
-    beFontGeomAttrPairList_GetMetaObject();
+}
 }
 

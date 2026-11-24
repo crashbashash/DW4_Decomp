@@ -81,7 +81,7 @@ void beWaterPlainInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWaterPlainInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { Gap::Gfx::igVertexArray::arkRegister, Gap::Core::igFloatList::arkRegister, Gap::Core::igIntList::arkRegister, igFloatListList_EnsureRegistered, beWaterMove_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { Gap::Gfx::igVertexArray::arkRegister, Gap::Core::igFloatList::arkRegister, Gap::Core::igIntList::arkRegister, igFloatListList_EnsureRegistered, Gap::Bec::beWaterMove::arkRegister, 0 };
 
 CallbackArray *beWaterPlainInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -246,7 +246,7 @@ void beWaterPlainInfoRam_InitFields(void) {
     ((igObjectRefMetaField *)gridLists)->_metaObject = (int)igFloatListList_GetOrCreateMetaObject();
     ((igRefMetaField *)gridLists)->_construct = 1;
     waterMove = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1A));
-    ((igObjectRefMetaField *)waterMove)->_metaObject = (int)beWaterMove_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)waterMove)->_metaObject = (int)Gap::Bec::beWaterMove::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_beWaterPlainInfoRam_fieldTable, g_beWaterPlainInfoRam_fieldHandles, g_beWaterPlainInfoRam_fieldOffsets, base);
 }
 

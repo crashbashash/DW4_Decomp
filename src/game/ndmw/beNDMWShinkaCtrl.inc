@@ -55,7 +55,7 @@ void beNDMWShinkaCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShinkaCtrl_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShinkaCtrl_callbackList[] = { beMessenger_EnsureRegistered, beNDMWGameRam_EnsureRegistered, beDataObjList_EnsureRegistered, beDataBase_EnsureRegistered, beNDMWShinkaObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShinkaCtrl_callbackList[] = { beMessenger_EnsureRegistered, beNDMWGameRam_EnsureRegistered, beDataObjList_EnsureRegistered, Gap::Bec::beDataBase::arkRegister, beNDMWShinkaObjectList_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWShinkaCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -133,7 +133,7 @@ void beNDMWShinkaCtrl_InitFields(void) {
     playerParameter = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)playerParameter)->_metaObject = (int)beDataObjList_GetOrCreateMetaObject();
     dBShinka = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)dBShinka)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBShinka)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     list = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
     ((igObjectRefMetaField *)list)->_metaObject = (int)beNDMWShinkaObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)list)->_construct = 1;

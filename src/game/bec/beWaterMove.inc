@@ -1,109 +1,75 @@
-igMetaObject *g_beWaterMove_metaObject;
-igMetaField *g_beWaterMove_baseTimeMetaField;
-igMetaField *g_beWaterMove_elapseTimeMetaField;
-igMetaField *g_beWaterMove_maxTimeMetaField;
-igMetaField *g_beWaterMove_targetDataMetaField;
-igMetaField *g_beWaterMove_dataListMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beWaterMove_GetOrCreateMetaObject(void) {
-    if (g_beWaterMove_metaObject == 0) {
-        g_beWaterMove_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beWaterMove_metaObject;
-}
+igMetaObject *beWaterMove::_Meta;
+igMetaField *beWaterMove::k_baseTime;
+igMetaField *beWaterMove::k_elapseTime;
+igMetaField *beWaterMove::k_maxTime;
+igMetaField *beWaterMove::k_targetData;
+igMetaField *beWaterMove::k_dataList;
 
-void *beWaterMove_GetMetaObject(void) {
-    igMetaObject *g = g_beWaterMove_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beWaterMove_EnsureRegistered();
-    }
-    return g_beWaterMove_metaObject;
-}
-
-int beWaterMove_GetVTable(void) {
-    beWaterMove obj;
-    int vtable;
-    igObject **dataListSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beWaterMove_vtable[0];
-    dataListSlot = (igObject **)&obj._dataList;
-    *dataListSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beWaterMove_vtable[0];
-    igObjectRef_Release(dataListSlot);
-    return vtable;
-}
-
-void beWaterMove_EnsureRegistered(void)
+igMetaObject *beWaterMove::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beWaterMove_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beWaterMove_callbackList[] = { beWaterMoveDataList_EnsureRegistered, 0 };
+igMetaObject *beWaterMove::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beWaterMove_Register(void) {
+void *beWaterMove::retrieveVTablePointer()
+{
+    beWaterMove temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beWaterMove::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beWaterMove::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beWaterMoveDataList::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beWaterMove_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beWaterMove_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beWaterMove",
-        0x28, /* instance size */
-        beWaterMove_GetVTable,
-        beWaterMove_InitFields,
-        0, /* extra callback item */
-        g_beWaterMove_callbackList /* callback list */
+        sizeof(beWaterMove),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beWaterMove_GetMetaObjectFunction(void)
+void beWaterMove::arkRegisterInitialize()
 {
-    beWaterMove_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_baseTime", "_elapseTime", "_maxTime", "_targetData", "_dataList" };
+    static igMetaField **enumStorage[] = { &k_baseTime, &k_elapseTime, &k_maxTime, &k_targetData, &k_dataList };
+    static int offsets[] = { 8, 16, 24, 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Bec::beWaterMoveDataList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beWaterMove_ctorTable[] = {
-    igLongMetaField_Create,
-    igLongMetaField_Create,
-    igLongMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beWaterMove_fieldTable[] = {
-    "_baseTime",
-    "_elapseTime",
-    "_maxTime",
-    "_targetData",
-    "_dataList",
-};
-static igMetaField **g_beWaterMove_fieldHandles[] = {
-    &g_beWaterMove_baseTimeMetaField,
-    &g_beWaterMove_elapseTimeMetaField,
-    &g_beWaterMove_maxTimeMetaField,
-    &g_beWaterMove_targetDataMetaField,
-    &g_beWaterMove_dataListMetaField,
-};
-static int g_beWaterMove_fieldOffsets[] = {
-    8,
-    16,
-    24,
-    32,
-    36,
-};
-
-void beWaterMove_InitFields(void) {
-    int base;
-    void *dataList;
-    igMetaObject *meta;
-
-    meta = g_beWaterMove_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beWaterMove_ctorTable, 5);
-    dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beWaterMoveDataList_GetOrCreateMetaObject();
-    ((igRefMetaField *)dataList)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beWaterMove_fieldTable, g_beWaterMove_fieldHandles, g_beWaterMove_fieldOffsets, base);
+}
 }
 

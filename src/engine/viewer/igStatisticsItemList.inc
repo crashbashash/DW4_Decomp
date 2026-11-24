@@ -1,53 +1,52 @@
-igMetaObject *g_igStatisticsItemList_metaObject;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igStatisticsItemList_GetOrCreateMetaObject(void) {
-    if (g_igStatisticsItemList_metaObject == 0) {
-        g_igStatisticsItemList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igStatisticsItemList_metaObject;
-}
+igMetaObject *igStatisticsItemList::_Meta;
 
-void *igStatisticsItemList_GetMetaObject(void) {
-    igMetaObject *g = g_igStatisticsItemList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        igStatisticsItemList_EnsureRegistered();
-    }
-    return g_igStatisticsItemList_metaObject;
-}
-
-int igStatisticsItemList_GetVTable(void) {
-    struct Obj_458b80 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igStatisticsItemList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igStatisticsItemList_EnsureRegistered(void)
+igMetaObject *igStatisticsItemList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igStatisticsItemList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igStatisticsItemList_callbackList[] = { igStatisticsItem_EnsureRegistered, 0 };
+igMetaObject *igStatisticsItemList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igStatisticsItemList_Register(void) {
+void *igStatisticsItemList::retrieveVTablePointer()
+{
+    igStatisticsItemList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igStatisticsItemList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igStatisticsItemList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Viewer::igStatisticsItem::arkRegister, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igStatisticsItemList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igStatisticsItemList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igStatisticsItemList",
-        0x14, /* instance size */
-        igStatisticsItemList_GetVTable,
+        sizeof(igStatisticsItemList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igStatisticsItemList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igStatisticsItemList_GetMetaObjectFunction(void) {
-    igStatisticsItemList_GetMetaObject();
+}
 }
 

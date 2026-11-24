@@ -1298,21 +1298,23 @@ def stripped_bodies(obj, headers, syms, group, sections, image, by_va, by_name=N
     return out
 
 
-def dead_data(obj, headers, syms, bodies, declared):
+def dead_data(obj, headers, syms, bodies, declared, opaque=()):
     """Data sections of a whole-file unit that no placed body or declared datum reaches.
 
     The retail linker dropped them with the functions that used them. They are never linked,
     and a datum a placed body does reach stays allocated, so it must be declared or the object
-    is rejected.
+    is rejected. An `opaque` section (a duplicate built under another profile) reaches nothing:
+    the retail copy is the twin's compile, and so are its data.
     """
     live = set(bodies) | set(declared)
-    work = list(live)
+    work = [section for section in live if section not in opaque]
     while work:
         for _s, _offset, _k, symbol, _a in object_relocs(obj, target_section=work.pop()):
             target = syms.get(symbol, (None,))[0]
             if isinstance(target, int) and target not in live:
                 live.add(target)
-                work.append(target)
+                if target not in opaque:
+                    work.append(target)
     return {i for i, (_name, h) in enumerate(headers)
             if h[2] & 2 and not h[2] & 4 and h[5] and i not in live}
 
@@ -1749,9 +1751,13 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         exc_sections = {name: pair for name, pair in exc_all.items() if name not in stripped}
         dropped = set(stripped.values()) | {i for name in stripped for i in exc_all.get(name, ())
                                             if i is not None}
-        # a placed member's exception record and table point at it, not the other way round
+        # a placed member's exception record and table point at it, not the other way round; a duplicate
+        # deferred to another profile keeps no datum of this object (its data are the twin's, as in
+        # whole_file_rows.reach)
         exc_live = {i for pair in exc_sections.values() for i in pair if i is not None}
-        dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live | initializer_sections)
+        twin_bodies = {section for name, (_address, section, _size) in records.items() if name in deferred}
+        dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live | initializer_sections,
+                          twin_bodies)
                 if group.whole_file else set())
         dropped |= dead
         if group.whole_file:
@@ -2085,7 +2091,11 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                         # the twin's call reaches the unit's copy, at its retail address
                         return records[symbol][0]
                     if symbol in syms and isinstance(syms[symbol][0], int):
-                        return address + syms[symbol][1] if syms[symbol][0] == section else None
+                        if syms[symbol][0] == section:
+                            return address + syms[symbol][1]
+                        # a datum of the twin's own compile that another unit's row binds (a base class's
+                        # vtable), which the unit's walk leaves to the twin (whole_file_rows.reach)
+                        return compiler_names.load(symbols).get(symbol, (None,))[0]
                     try:
                         return sym_address(symbol, by_name, symbols)
                     except SymbolError as error:

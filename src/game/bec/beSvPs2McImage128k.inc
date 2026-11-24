@@ -1,77 +1,62 @@
-igMetaObject *g_beSvPs2McImage128k_metaObject;
-igMetaField *g_beSvPs2McImage128k_dataSizeMetaField;
-igMetaField *g_beSvPs2McImage128k_dataMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beSvPs2McImage128k_GetMetaObject(void) {
-    igMetaObject *g = g_beSvPs2McImage128k_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beSvPs2McImage128k_EnsureRegistered();
-    }
-    return g_beSvPs2McImage128k_metaObject;
-}
+igMetaObject *beSvPs2McImage128k::_Meta;
+igMetaField *beSvPs2McImage128k::k_dataSize;
+igMetaField *beSvPs2McImage128k::k_data;
 
-int beSvPs2McImage128k_GetVTable(void) {
-    beSvPs2McImage128k obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSvPs2McImage128k_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beSvPs2McImage128k_EnsureRegistered(void)
+igMetaObject *beSvPs2McImage128k::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beSvPs2McImage128k_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beSvPs2McImage128k_Register(void) {
+void *beSvPs2McImage128k::retrieveVTablePointer()
+{
+    beSvPs2McImage128k temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSvPs2McImage128k::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSvPs2McImage128k::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSvPs2McImage128k_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beSvPs2McImage128k_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSvPs2McImage128k",
-        0x10, /* instance size */
-        beSvPs2McImage128k_GetVTable,
-        beSvPs2McImage128k_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beSvPs2McImage128k),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beSvPs2McImage128k_GetMetaObjectFunction(void)
+void beSvPs2McImage128k::arkRegisterInitialize()
 {
-    beSvPs2McImage128k_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igMemoryRefMetaField_Create };
+    static const char *names[] = { "_dataSize", "_data" };
+    static igMetaField **enumStorage[] = { &k_dataSize, &k_data };
+    static int offsets[] = { 12, 8 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beSvPs2McImage128k_ctorTable[] = {
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-};
-static const char *g_beSvPs2McImage128k_fieldTable[] = {
-    "_dataSize",
-    "_data",
-};
-static igMetaField **g_beSvPs2McImage128k_fieldHandles[] = {
-    &g_beSvPs2McImage128k_dataSizeMetaField,
-    &g_beSvPs2McImage128k_dataMetaField,
-};
-static int g_beSvPs2McImage128k_fieldOffsets[] = {
-    12,
-    8,
-};
-
-void beSvPs2McImage128k_InitFields(void) {
-    int base;
-    void *data;
-    igMetaObject *meta;
-
-    meta = g_beSvPs2McImage128k_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSvPs2McImage128k_ctorTable, 2);
-    data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    igMetaObject_NameFields(meta, g_beSvPs2McImage128k_fieldTable, g_beSvPs2McImage128k_fieldHandles, g_beSvPs2McImage128k_fieldOffsets, base);
+}
 }
 

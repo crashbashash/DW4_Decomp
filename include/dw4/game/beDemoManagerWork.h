@@ -7,7 +7,6 @@ struct beDemoManagerWork;
 extern "C" {
 #endif
 
-struct beDemoManagerWork *beDemoManagerWork_CreateInstance(int allocator);
 
 #ifdef __cplusplus
 }

@@ -1,182 +1,116 @@
-igMetaObject *g_igViewModel_metaObject;
-igMetaField *g_igViewModel_viewMatrixMetaField;
-igMetaField *g_igViewModel_ratioMetaField;
-igMetaField *g_igViewModel_hfovMetaField;
-igMetaField *g_igViewModel_nearPlaneMetaField;
-igMetaField *g_igViewModel_farPlaneMetaField;
-igMetaField *g_igViewModel_positionMetaField;
-igMetaField *g_igViewModel_directionMetaField;
-igMetaField *g_igViewModel_viewUpVectorMetaField;
-igMetaField *g_igViewModel_viewLeftVectorMetaField;
-igMetaField *g_igViewModel_sceneUpVectorMetaField;
-igMetaField *g_igViewModel_drawTimeMetaField;
-igMetaField *g_igViewModel_selectedCenterMetaField;
-igMetaField *g_igViewModel_selectedLengthMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igViewModel_GetOrCreateMetaObject(void) {
-    if (g_igViewModel_metaObject == 0) {
-        g_igViewModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igViewModel_metaObject;
-}
+igMetaObject *igViewModel::_Meta;
+igMetaField *igViewModel::k_viewMatrix;
+igMetaField *igViewModel::k_ratio;
+igMetaField *igViewModel::k_hfov;
+igMetaField *igViewModel::k_nearPlane;
+igMetaField *igViewModel::k_farPlane;
+igMetaField *igViewModel::k_position;
+igMetaField *igViewModel::k_direction;
+igMetaField *igViewModel::k_viewUpVector;
+igMetaField *igViewModel::k_viewLeftVector;
+igMetaField *igViewModel::k_sceneUpVector;
+igMetaField *igViewModel::k_drawTime;
+igMetaField *igViewModel::k_selectedCenter;
+igMetaField *igViewModel::k_selectedLength;
 
-void *igViewModel_GetMetaObject(void) {
-    igMetaObject *g = g_igViewModel_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        igViewModel_EnsureRegistered();
-    }
-    return g_igViewModel_metaObject;
-}
-
-int igViewModel_GetVTable(void) {
-    union U_45d510 u;
-    int r;
-    int *v1;
-    int *a1;
-    int v0;
-    char *p38;
-    igObject_InitHeader((igObject *)u.b);
-    p38 = &u.b[8];
-    *(int *)p38 = 0;
-    u.vt = (int)&g_igViewModel_vtable[0];
-    igMatrix44f_SetIdentity((float *)&u.b[12]);
-    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igModel_vtable[0];
-    if (p38 != 0) {
-        v1 = *(int **)p38;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)v1);
-            }
-        }
-    }
-    return r;
-}
-
-void igViewModel_EnsureRegistered(void)
+igMetaObject *igViewModel::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igViewModel_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igViewModel_Register(void) {
+igMetaObject *igViewModel::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igViewModel::retrieveVTablePointer()
+{
+    igViewModel temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igViewModel::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewModel::arkRegisterInternal()
+{
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewModel_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igModel::arkRegisterInternal,
         Gap::Gui::igModel::getClassMeta,
-        igViewModel_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewModel",
-        0xB0, /* instance size */
-        igViewModel_GetVTable,
-        &igViewModel_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igViewModel),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igViewModel_GetMetaObjectFunction(void) {
-    igViewModel_GetMetaObject();
+void igViewModel::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_viewMatrix", "_ratio", "_hfov", "_nearPlane", "_farPlane", "_position", "_direction", "_viewUpVector", "_viewLeftVector", "_sceneUpVector", "_drawTime", "_selectedCenter", "_selectedLength" };
+    static igMetaField **enumStorage[] = { &k_viewMatrix, &k_ratio, &k_hfov, &k_nearPlane, &k_farPlane, &k_position, &k_direction, &k_viewUpVector, &k_viewLeftVector, &k_sceneUpVector, &k_drawTime, &k_selectedCenter, &k_selectedLength };
+    static int offsets[] = { 12, 76, 80, 84, 88, 92, 104, 116, 128, 140, 152, 160, 172 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 13);
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(45.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(1000.0f);
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 1.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->setDefault(igVec3f(0.0f, 1.0f, 0.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+        metaField->setDefault(igVec3f(1.0f, 0.0f, 0.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+        metaField->setDefault(igVec3f(0.0f, 1.0f, 0.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewModel_ctorTable[] = {
-    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    igLongMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    igFloatMetaField_Create,
-};
-static const char *g_igViewModel_fieldTable[] = {
-    "_viewMatrix",
-    "_ratio",
-    "_hfov",
-    "_nearPlane",
-    "_farPlane",
-    "_position",
-    "_direction",
-    "_viewUpVector",
-    "_viewLeftVector",
-    "_sceneUpVector",
-    "_drawTime",
-    "_selectedCenter",
-    "_selectedLength",
-};
-static igMetaField **g_igViewModel_fieldHandles[] = {
-    &g_igViewModel_viewMatrixMetaField,
-    &g_igViewModel_ratioMetaField,
-    &g_igViewModel_hfovMetaField,
-    &g_igViewModel_nearPlaneMetaField,
-    &g_igViewModel_farPlaneMetaField,
-    &g_igViewModel_positionMetaField,
-    &g_igViewModel_directionMetaField,
-    &g_igViewModel_viewUpVectorMetaField,
-    &g_igViewModel_viewLeftVectorMetaField,
-    &g_igViewModel_sceneUpVectorMetaField,
-    &g_igViewModel_drawTimeMetaField,
-    &g_igViewModel_selectedCenterMetaField,
-    &g_igViewModel_selectedLengthMetaField,
-};
-static int g_igViewModel_fieldOffsets[] = {
-    12,
-    76,
-    80,
-    84,
-    88,
-    92,
-    104,
-    116,
-    128,
-    140,
-    152,
-    160,
-    172,
-};
-
-void igViewModel_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
-    void *temp_a1, *temp_a2, *temp_a3, *temp_a4, *temp_a5, *temp_a6;
-    float v1[4];
-    float v2[4];
-    float v3[4];
-    float v4[4];
-    float v5[4];
-    float v6[4];
-
-    temp_s0 = g_igViewModel_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewModel_ctorTable, 0xD);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)))->setDefault(1.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)))->setDefault(45.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)))->setDefault(1.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)))->setDefault(1000.0f);
-    temp_a1 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5);
-    v1[0] = 0.0f; v1[1] = 0.0f; v1[2] = 0.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a1)->setDefault(*(const igVec3f *)v1);
-    temp_a2 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6);
-    v2[0] = 0.0f; v2[1] = 0.0f; v2[2] = 1.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a2)->setDefault(*(const igVec3f *)v2);
-    temp_a3 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7);
-    v3[0] = 0.0f; v3[1] = 1.0f; v3[2] = 0.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a3)->setDefault(*(const igVec3f *)v3);
-    temp_a4 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8);
-    v4[0] = 1.0f; v4[1] = 0.0f; v4[2] = 0.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a4)->setDefault(*(const igVec3f *)v4);
-    temp_a5 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9);
-    v5[0] = 0.0f; v5[1] = 1.0f; v5[2] = 0.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a5)->setDefault(*(const igVec3f *)v5);
-    temp_a6 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB);
-    v6[0] = 0.0f; v6[1] = 0.0f; v6[2] = 0.0f;
-    ((Gap::Math::igVec3fMetaField *)temp_a6)->setDefault(*(const igVec3f *)v6);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewModel_fieldTable, g_igViewModel_fieldHandles, g_igViewModel_fieldOffsets, temp_s1);
+}
 }
 

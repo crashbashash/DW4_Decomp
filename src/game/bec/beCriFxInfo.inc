@@ -50,7 +50,7 @@ void beCriFxInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCriFxInfo_Register);
 }
 
-static igMetaObjectCallback g_beCriFxInfo_callbackList[] = { beCriFxXbData_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCriFxInfo_callbackList[] = { Gap::Bec::beCriFxXbData::arkRegister, 0 };
 
 CallbackArray *beCriFxInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -111,7 +111,7 @@ void beCriFxInfo_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(-1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
     xbFxParam = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)xbFxParam)->_metaObject = (int)beCriFxXbData_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)xbFxParam)->_metaObject = (int)Gap::Bec::beCriFxXbData::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beCriFxInfo_fieldTable, g_beCriFxInfo_fieldHandles, g_beCriFxInfo_fieldOffsets, base);
 }
 

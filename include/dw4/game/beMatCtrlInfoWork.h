@@ -7,7 +7,6 @@ struct beMatCtrlInfoWork;
 extern "C" {
 #endif
 
-struct beMatCtrlInfoWork *beMatCtrlInfoWork_Create(int allocator);
 
 #ifdef __cplusplus
 }

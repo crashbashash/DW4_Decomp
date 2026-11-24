@@ -196,7 +196,7 @@ void beNDMWGameRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWGameRam_Register);
 }
 
-static igMetaObjectCallback g_beNDMWGameRam_callbackList[] = { beDataBase_EnsureRegistered, beDataObjList_EnsureRegistered, beDataObjListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWGameRam_callbackList[] = { Gap::Bec::beDataBase::arkRegister, beDataObjList_EnsureRegistered, beDataObjListList_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWGameRam_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -293,21 +293,21 @@ void beNDMWGameRam_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWGameRam_ctorTable, 0xB);
     dBShinka = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
-    ((igObjectRefMetaField *)dBShinka)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBShinka)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBPcTech = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    ((igObjectRefMetaField *)dBPcTech)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBPcTech)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBWeapon = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
-    ((igObjectRefMetaField *)dBWeapon)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBWeapon)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBArmor1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
-    ((igObjectRefMetaField *)dBArmor1)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBArmor1)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBArmor2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
-    ((igObjectRefMetaField *)dBArmor2)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBArmor2)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBAbChip = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
-    ((igObjectRefMetaField *)dBAbChip)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBAbChip)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBEnemy = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
-    ((igObjectRefMetaField *)dBEnemy)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBEnemy)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     dBEneatk = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
-    ((igObjectRefMetaField *)dBEneatk)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dBEneatk)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     commonDataList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8));
     ((igObjectRefMetaField *)commonDataList)->_metaObject = (int)beDataObjList_GetOrCreateMetaObject();
     playerDataListList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));

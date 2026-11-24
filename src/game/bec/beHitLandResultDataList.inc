@@ -1,56 +1,52 @@
-igMetaObject *g_beHitLandResultDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beHitLandResultDataList_GetOrCreateMetaObject(void) {
-    if (g_beHitLandResultDataList_metaObject == 0) {
-        g_beHitLandResultDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beHitLandResultDataList_metaObject;
-}
+igMetaObject *beHitLandResultDataList::_Meta;
 
-void *beHitLandResultDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beHitLandResultDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beHitLandResultDataList_EnsureRegistered();
-    }
-    return g_beHitLandResultDataList_metaObject;
-}
-
-int beHitLandResultDataList_GetVTable(void) {
-    beHitLandResultDataList obj;
-    int off;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beHitLandResultDataList_vtable[0];
-    off = g_objectSystem->vtableProbeOffset;
-    return *(int *)((char *)&obj + off);
-}
-
-void beHitLandResultDataList_EnsureRegistered(void)
+igMetaObject *beHitLandResultDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beHitLandResultDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beHitLandResultDataList_callbackList[] = { beHitLandResultData_EnsureRegistered, 0 };
+igMetaObject *beHitLandResultDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beHitLandResultDataList_Register(void) {
+void *beHitLandResultDataList::retrieveVTablePointer()
+{
+    beHitLandResultDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beHitLandResultDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beHitLandResultDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beHitLandResultData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beHitLandResultDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beHitLandResultDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beHitLandResultDataList",
-        0x14, /* instance size */
-        beHitLandResultDataList_GetVTable,
+        sizeof(beHitLandResultDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beHitLandResultDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beHitLandResultDataList_GetMetaObjectFunction(void)
-{
-    beHitLandResultDataList_GetMetaObject();
+}
 }
 

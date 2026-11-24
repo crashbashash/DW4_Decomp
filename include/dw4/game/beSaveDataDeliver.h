@@ -9,9 +9,7 @@ extern "C" {
 #endif
 
 void beSaveDataDeliver_AllocateData(struct beSaveDataDeliver *deliver, int size);
-void beSaveDataDeliver_EnsureRegistered(void);
 void beSaveDataDeliver_FreeData(struct beSaveDataDeliver *deliver);
-struct igMetaObject *beSaveDataDeliver_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -7,7 +7,6 @@ struct beModelCtrlInfoHitBody;
 extern "C" {
 #endif
 
-struct beModelCtrlInfoHitBody *beModelCtrlInfoHitBody_Create(int allocator);
 
 #ifdef __cplusplus
 }

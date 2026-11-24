@@ -1,104 +1,69 @@
-igMetaObject *g_beCriVolume_metaObject;
-igMetaField *g_beCriVolume_isExecMetaField;
-igMetaField *g_beCriVolume_maxMetaField;
-igMetaField *g_beCriVolume_currentMetaField;
-igMetaField *g_beCriVolume_staMetaField;
-igMetaField *g_beCriVolume_endMetaField;
-igMetaField *g_beCriVolume_unitMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beCriVolume_GetOrCreateMetaObject(void) {
-    if (g_beCriVolume_metaObject == 0) {
-        g_beCriVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beCriVolume_metaObject;
-}
+igMetaObject *beCriVolume::_Meta;
+igMetaField *beCriVolume::k_isExec;
+igMetaField *beCriVolume::k_max;
+igMetaField *beCriVolume::k_current;
+igMetaField *beCriVolume::k_sta;
+igMetaField *beCriVolume::k_end;
+igMetaField *beCriVolume::k_unit;
 
-igMetaObject *beCriVolume_GetMetaObject(void) {
-    igMetaObject *g = g_beCriVolume_metaObject;
-    if (g != 0) {
-        int b = !!(g->_validity & 4);
-        if (b) goto done;
-    }
-    beCriVolume_EnsureRegistered();
-done:
-    return g_beCriVolume_metaObject;
-}
-
-int beCriVolume_GetVTable(void) {
-    beCriVolume obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beCriVolume_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beCriVolume_EnsureRegistered(void)
+igMetaObject *beCriVolume::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beCriVolume_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *beCriVolume_Register(void) {
+igMetaObject *beCriVolume::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beCriVolume::retrieveVTablePointer()
+{
+    beCriVolume temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beCriVolume::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beCriVolume::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beCriVolume_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beCriVolume_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beCriVolume",
-        0x20, /* instance size */
-        beCriVolume_GetVTable,
-        beCriVolume_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beCriVolume),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beCriVolume_GetMetaObjectFunction(void)
+void beCriVolume::arkRegisterInitialize()
 {
-    beCriVolume_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_isExec", "_max", "_current", "_sta", "_end", "_unit" };
+    static igMetaField **enumStorage[] = { &k_isExec, &k_max, &k_current, &k_sta, &k_end, &k_unit };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 6);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beCriVolume_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beCriVolume_fieldTable[] = {
-    "_isExec",
-    "_max",
-    "_current",
-    "_sta",
-    "_end",
-    "_unit",
-};
-static igMetaField **g_beCriVolume_fieldHandles[] = {
-    &g_beCriVolume_isExecMetaField,
-    &g_beCriVolume_maxMetaField,
-    &g_beCriVolume_currentMetaField,
-    &g_beCriVolume_staMetaField,
-    &g_beCriVolume_endMetaField,
-    &g_beCriVolume_unitMetaField,
-};
-static int g_beCriVolume_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-};
-
-void beCriVolume_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beCriVolume_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beCriVolume_ctorTable, 6);
-    igMetaObject_NameFields(meta, g_beCriVolume_fieldTable, g_beCriVolume_fieldHandles, g_beCriVolume_fieldOffsets, base);
+}
 }
 

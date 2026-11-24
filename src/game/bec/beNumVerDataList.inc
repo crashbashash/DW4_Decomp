@@ -1,51 +1,52 @@
-igMetaObject *g_beNumVerDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beNumVerDataList_GetOrCreateMetaObject(void) {
-    if (g_beNumVerDataList_metaObject == 0) {
-        g_beNumVerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beNumVerDataList_metaObject;
-}
+igMetaObject *beNumVerDataList::_Meta;
 
-igMetaObject *beNumVerDataList_GetMetaObject(void) {
-    if (g_beNumVerDataList_metaObject == 0 || !isValid(g_beNumVerDataList_metaObject)) beNumVerDataList_EnsureRegistered();
-    return g_beNumVerDataList_metaObject;
-}
-
-int beNumVerDataList_GetVTable(void) {
-    beNumVerDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beNumVerDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beNumVerDataList_EnsureRegistered(void)
+igMetaObject *beNumVerDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beNumVerDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beNumVerDataList_callbackList[] = { beNumVerData_EnsureRegistered, 0 };
+igMetaObject *beNumVerDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beNumVerDataList_Register(void) {
+void *beNumVerDataList::retrieveVTablePointer()
+{
+    beNumVerDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beNumVerDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beNumVerDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beNumVerData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beNumVerDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beNumVerDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beNumVerDataList",
-        0x14, /* instance size */
-        beNumVerDataList_GetVTable,
+        sizeof(beNumVerDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beNumVerDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beNumVerDataList_GetMetaObjectFunction(void)
-{
-    beNumVerDataList_GetMetaObject();
+}
 }
 

@@ -309,7 +309,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
             beMessenger_AppendLong((beMessenger *)self->_messenger, handle);
             if (handle > 0) {
                 allocator = AllocatorFor(self);
-                igSmartPointer<bePlaySE> row(bePlaySE_CreateInstance((int)allocator));
+                igSmartPointer<Gap::Bec::bePlaySE> row(Gap::Bec::bePlaySE::_instantiateFromPool((igMemoryPoolView *)allocator));
                 row->_id = index;
                 row->_time = now + EFFECT_REPEAT_HOLD;
                 ((Gap::Core::igObjectList *)self->_playSEs)->append((Gap::Core::igObject *)row.p);

@@ -7,7 +7,6 @@ struct beMessengerWork;
 extern "C" {
 #endif
 
-struct beMessengerWork *beMessengerWork_Create(int allocator);
 
 #ifdef __cplusplus
 }

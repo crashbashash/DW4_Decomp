@@ -1,54 +1,52 @@
-igMetaObject *g_beGeneraterPlayerDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beGeneraterPlayerDataList_GetOrCreateMetaObject(void) {
-    if (g_beGeneraterPlayerDataList_metaObject == 0) {
-        g_beGeneraterPlayerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beGeneraterPlayerDataList_metaObject;
-}
+igMetaObject *beGeneraterPlayerDataList::_Meta;
 
-void *beGeneraterPlayerDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beGeneraterPlayerDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beGeneraterPlayerDataList_EnsureRegistered();
-    }
-    return g_beGeneraterPlayerDataList_metaObject;
-}
-
-int beGeneraterPlayerDataList_GetVTable(void) {
-    beGeneraterPlayerDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beGeneraterPlayerDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beGeneraterPlayerDataList_EnsureRegistered(void)
+igMetaObject *beGeneraterPlayerDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beGeneraterPlayerDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beGeneraterPlayerDataList_callbackList[] = { beGeneraterPlayerData_EnsureRegistered, 0 };
+igMetaObject *beGeneraterPlayerDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beGeneraterPlayerDataList_Register(void) {
+void *beGeneraterPlayerDataList::retrieveVTablePointer()
+{
+    beGeneraterPlayerDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beGeneraterPlayerDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beGeneraterPlayerDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beGeneraterPlayerData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beGeneraterPlayerDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beGeneraterPlayerDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beGeneraterPlayerDataList",
-        0x14, /* instance size */
-        beGeneraterPlayerDataList_GetVTable,
+        sizeof(beGeneraterPlayerDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beGeneraterPlayerDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beGeneraterPlayerDataList_GetMetaObjectFunction(void)
-{
-    beGeneraterPlayerDataList_GetMetaObject();
+}
 }
 

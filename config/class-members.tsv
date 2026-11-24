@@ -4856,3 +4856,508 @@ igSerialScheduler	virtual bool isScheduled(igInfoManager *manager);
 igSerialScheduler	virtual void appendDependency(const void *before, const void *after);
 igSerialScheduler	virtual void removeDependency(const void *before, const void *after);
 igSerialScheduler	virtual void removeAllDependencies(const void *object);
+igStatisticsItem	IG_OBJECT_DEFINE(igStatisticsItem)
+igStatisticsItem	private: static igMetaField *k_value;
+igStatisticsItem	static igMetaField *k_maximumValue;
+igStatisticsItem	static igMetaField *k_useMultiplier;
+igStatisticsItem	static igMetaField *k_text;
+igStatisticsItem	static igMetaField *k_numberFormat;
+igStatisticsItem	static igMetaField *k_visible;
+igStatisticsItem	static igMetaField *k_displayComponent;
+igStatisticsItem	static igMetaField *k_aspect;
+igStatisticsItem	static igMetaField *k_textElement;
+igStatisticsItem	static igMetaField *k_manager;
+igStatisticsItem	static igMetaField *k_statId;
+igStatisticsItem	static igMetaField *k_otherId;
+igStatisticsItem	public: virtual int isCompatible(igModel *model) { return model->isOfType(Gap::Gui::igOnOffModel::getClassTypeSafe()); }
+igStatisticsItem	virtual void notify(const igNotifyEvent &event);
+igStatisticsItemList	IG_OBJECT_DEFINE(igStatisticsItemList)
+igViewerStatisticsManager	IG_OBJECT_DEFINE(igViewerStatisticsManager)
+igViewerStatisticsManager	private: static igMetaField *k_items;
+igViewerStatisticsManager	static igMetaField *k_visualContext;
+igViewerStatisticsManager	static igMetaField *k_guiFactory;
+igViewerStatisticsManager	static igMetaField *k_menu;
+igViewerStatisticsManager	static igMetaField *k_boxComponent;
+igViewerStatisticsManager	static igMetaField *k_string;
+igViewerStatisticsManager	static igMetaField *k_recordStatisticMaximum;
+igViewerStatisticsManager	static igMetaField *k_attrMetaObjects;
+igViewerStatisticsManager	static igMetaField *k_extraSgStatistics;
+igViewerStatisticsManager	static igMetaField *k_attrCount;
+igViewerStatisticsManager	static igMetaField *k_displayListAttrCount;
+igViewerStatisticsManager	static igMetaField *k_textureAttrCount;
+igViewerStatisticsManager	static igMetaField *k_geometryAttrCount;
+igViewerStatisticsManager	static igMetaField *k_geometrySetAttrCount;
+igViewerStatisticsManager	static igMetaField *k_mvmAttrCount;
+igViewerStatisticsManager	public: virtual void constructFields(int flag);
+igViewerStatisticsManager	virtual void destructFields();
+igViewerStatisticsManager	virtual float getStatisticValue(int which);
+igViewerStatisticsManager	virtual float getStatisticValue(int group, int which);
+igViewerStatisticsManager	virtual float getStatisticMaximumValue(int which);
+igViewerStatisticsManager	virtual float getStatisticMaximumValue(int group, int which);
+igViewerStatisticsManager	virtual void setStatisticMaximumValue(int which, float maximum);
+igViewModel	IG_OBJECT_DEFINE(igViewModel)
+igViewModel	public: static igMetaField *k_viewMatrix;
+igViewModel	static igMetaField *k_ratio;
+igViewModel	static igMetaField *k_hfov;
+igViewModel	static igMetaField *k_nearPlane;
+igViewModel	static igMetaField *k_farPlane;
+igViewModel	static igMetaField *k_position;
+igViewModel	static igMetaField *k_direction;
+igViewModel	static igMetaField *k_viewUpVector;
+igViewModel	static igMetaField *k_viewLeftVector;
+igViewModel	static igMetaField *k_sceneUpVector;
+igViewModel	static igMetaField *k_drawTime;
+igViewModel	static igMetaField *k_selectedCenter;
+igViewModel	static igMetaField *k_selectedLength;
+igViewerParameters	IG_OBJECT_DEFINE(igViewerParameters)
+igViewerParameters	public: static igMetaField *k_scene;
+igViewerParameters	static igMetaField *k_upVector;
+igViewerParameters	static igMetaField *k_ratio;
+igViewerParameters	static igMetaField *k_hfov;
+igViewerParameters	static igMetaField *k_nearPlane;
+igViewerParameters	static igMetaField *k_farPlane;
+igViewerParameters	static igMetaField *k_projectionMatrix;
+igViewerParameters	static igMetaField *k_viewMatrix;
+igViewerParameters	static igMetaField *k_drawTime;
+igViewerParameters	static igMetaField *k_sortTexture;
+igViewerParameters	static igMetaField *k_sortTransparent;
+igViewerParameters	static igMetaField *k_sortTransparentDistance;
+igViewerParameters	static igMetaField *k_transparencyMode;
+igViewerParameters	static igMetaField *k_useSceneLights;
+igViewerParameters	static igMetaField *k_useHeadLight;
+igViewerParameters	static igMetaField *k_useHeadLightSpecular;
+igViewerParameters	static igMetaField *k_alphaTest;
+igViewerParameters	static igMetaField *k_alphaTestForce;
+igViewerParameters	static igMetaField *k_backFaceCulling;
+igViewerParameters	static igMetaField *k_backFaceCullingForce;
+igViewerParameters	static igMetaField *k_wireframe;
+igViewerParameters	static igMetaField *k_wireframeForce;
+igViewerParameters	static igMetaField *k_flatShading;
+igViewerParameters	static igMetaField *k_flatShadingForce;
+igViewerParameters	static igMetaField *k_disables;
+igViewerParameters	static igMetaField *k_showGui;
+igViewerParameters	static igMetaField *k_showBoundingBox;
+igViewerParameters	static igMetaField *k_showNormals;
+igViewerParameters	static igMetaField *k_flushFrames;
+igViewerParameters	static igMetaField *k_operationMode;
+igViewerParameters	static igMetaField *k_firstCameraMode;
+igViewerParameters	static igMetaField *k_cameras;
+igViewerParameters	static igMetaField *k_beginTime;
+igViewerParameters	static igMetaField *k_endTime;
+igViewerParameters	static igMetaField *k_selectedObject;
+igViewerParameters	static igMetaField *k_timeOperation;
+igViewerParameters	static igMetaField *k_loopMode;
+igViewerParameters	static igMetaField *k_speed;
+igViewerParameters	static igMetaField *k_cursorPosition;
+igActorManagerParams	IG_OBJECT_DEFINE(igActorManagerParams)
+igActorManagerParams	public: static igMetaField *k_skelOnly;
+igActorManagerParams	static igMetaField *k_skelAndSkin;
+igBoundingBoxRenderer	IG_OBJECT_DEFINE(igBoundingBoxRenderer)
+igBoundingBoxRenderer	private: static igMetaField *k_parameters;
+igBoundingBoxRenderer	static igMetaField *k_displayList;
+igBoundingBoxRenderer	static igMetaField *k_attrList;
+igBoundingBoxRenderer	static igMetaField *k_modelViewAttr;
+igBoundingBoxRenderer	static igMetaField *k_box;
+igBoundingBoxRenderer	static igMetaField *k_border;
+igBoundingBoxRenderer	static igMetaField *k_path;
+igBoundingBoxRenderer	static igMetaField *k_draw;
+igBoundingBoxRenderer	public: virtual void traverse();
+igBoundingBoxRenderer	virtual void initializeDrawing();
+igBoundingBoxRenderer	virtual void terminateDrawing();
+igBoundingBoxRenderer	virtual void draw();
+igNormalsRenderer	IG_OBJECT_DEFINE(igNormalsRenderer)
+igNormalsRenderer	private: static igMetaField *k_parameters;
+igNormalsRenderer	static igMetaField *k_attrList;
+igNormalsRenderer	static igMetaField *k_defaultAttrList;
+igNormalsRenderer	static igMetaField *k_modelViewAttr;
+igNormalsRenderer	static igMetaField *k_colorAttr;
+igNormalsRenderer	static igMetaField *k_normals;
+igNormalsRenderer	static igMetaField *k_invalidStoredNormals;
+igNormalsRenderer	static igMetaField *k_path;
+igNormalsRenderer	static igMetaField *k_draw;
+igNormalsRenderer	public: virtual void traverse();
+igNormalsRenderer	virtual void initializeDrawing();
+igNormalsRenderer	virtual void terminateDrawing();
+igNormalsRenderer	virtual void draw();
+igLogoRenderer	IG_OBJECT_DEFINE(igLogoRenderer)
+igLogoRenderer	private: static igMetaField *k_time;
+igLogoRenderer	static igMetaField *k_geometryAttr;
+igLogoRenderer	static igMetaField *k_colorAttr;
+igLogoRenderer	static igMetaField *k_attrList;
+igLogoRenderer	public: virtual void traverse();
+igLogoRenderer	virtual void initializeDrawing();
+igLogoRenderer	virtual void terminateDrawing();
+igLogoRenderer	virtual void draw();
+igViewerAction	IG_OBJECT_DEFINE(igViewerAction)
+igViewerAction	public: static igMetaField *k_ref;
+igViewerAction	static igMetaField *k_function;
+igViewerAction	virtual void doIt();
+igViewerSceneInfoManagerController	IG_OBJECT_DEFINE(igViewerSceneInfoManagerController)
+igViewerSceneInfoManagerController	public: static igMetaField *k_application;
+igViewerSceneInfoManagerController	static igMetaField *k_viewerRenderer;
+igViewerSceneInfoManagerController	public: virtual int isCompatible(igModel *model) { return model->isOfType(Gap::Viewer::igViewerParameters::getClassTypeSafe()); }
+igViewerSceneInfoManagerController	virtual void notify(const igNotifyEvent &event);
+igViewerGuiFactory	IG_OBJECT_DEFINE(igViewerGuiFactory)
+igViewerGuiFactory	public: static igMetaField *k_menuBackColor;
+igViewerGuiFactory	static igMetaField *k_menuItemForeColor;
+igViewerGuiFactory	static igMetaField *k_menuMarkColor;
+igViewerGuiFactory	static igMetaField *k_iconBackColor;
+igViewerGuiFactory	static igMetaField *k_bigIconColor;
+igViewerGuiFactory	static igMetaField *k_bigIconHighlightColor;
+igViewerGuiFactory	static igMetaField *k_smallIconOnOffColor;
+igViewerGuiFactory	static igMetaField *k_font;
+igViewerGuiFactory	public: virtual void resetFields(int flag);
+beTimerData	IG_OBJECT_DEFINE(beTimerData)
+beTimerData	private: static igMetaField *k_startTime;
+beTimerData	static igMetaField *k_resetCondition;
+beTimerData	static igMetaField *k_callLuaFile;
+beTimerData	static igMetaField *k_downTimer;
+beTimerDataList	IG_OBJECT_DEFINE(beTimerDataList)
+bePlaySE	IG_OBJECT_DEFINE(bePlaySE)
+bePlaySE	private: static igMetaField *k_id;
+bePlaySE	static igMetaField *k_time;
+bePlaySEList	IG_OBJECT_DEFINE(bePlaySEList)
+beWaterMoveData	IG_OBJECT_DEFINE(beWaterMoveData)
+beWaterMoveData	private: static igMetaField *k_time;
+beWaterMoveData	static igMetaField *k_power;
+beWaterMoveData	static igMetaField *k_posList;
+beWaterMoveDataList	IG_OBJECT_DEFINE(beWaterMoveDataList)
+beNumVerInsideData	IG_OBJECT_DEFINE(beNumVerInsideData)
+beNumVerInsideData	private: static igMetaField *k_index;
+beNumVerInsideData	static igMetaField *k_kind;
+beNumVerInsideDataList	IG_OBJECT_DEFINE(beNumVerInsideDataList)
+beDemoKeepMes	IG_OBJECT_DEFINE(beDemoKeepMes)
+beDemoKeepMes	private: static igMetaField *k_kind;
+beDemoKeepMes	static igMetaField *k_sendTime;
+beDemoKeepMes	static igMetaField *k_groupName;
+beDemoKeepMes	static igMetaField *k_infoName;
+beDemoKeepMes	static igMetaField *k_ramNo;
+beDemoKeepMes	static igMetaField *k_message;
+beDemoKeepMes	static igMetaField *k_mesParam;
+beDemoKeepMesList	IG_OBJECT_DEFINE(beDemoKeepMesList)
+beMessengerDelay	IG_OBJECT_DEFINE(beMessengerDelay)
+beMessengerDelay	private: static igMetaField *k_isUse;
+beMessengerDelay	static igMetaField *k_sendTime;
+beMessengerDelay	static igMetaField *k_groupName;
+beMessengerDelay	static igMetaField *k_infoName;
+beMessengerDelay	static igMetaField *k_ramNo;
+beMessengerDelay	static igMetaField *k_message;
+beMessengerDelay	static igMetaField *k_argData;
+beMessengerDelayList	IG_OBJECT_DEFINE(beMessengerDelayList)
+beHitLandResultData	IG_OBJECT_DEFINE(beHitLandResultData)
+beHitLandResultData	private: static igMetaField *k_infoName;
+beHitLandResultData	static igMetaField *k_ramNo;
+beHitLandResultDataList	IG_OBJECT_DEFINE(beHitLandResultDataList)
+beCriVolume	IG_OBJECT_DEFINE(beCriVolume)
+beCriVolume	private: static igMetaField *k_isExec;
+beCriVolume	static igMetaField *k_max;
+beCriVolume	static igMetaField *k_current;
+beCriVolume	static igMetaField *k_sta;
+beCriVolume	static igMetaField *k_end;
+beCriVolume	static igMetaField *k_unit;
+beCountry	IG_OBJECT_DEFINE(beCountry)
+beCriSndf	IG_OBJECT_DEFINE(beCriSndf)
+beCriSndf	private: static igMetaField *k_req;
+beCriSndf	static igMetaField *k_seq;
+beCriSndf	static igMetaField *k_isPlaying;
+beNumberCtrlInfoWork	IG_OBJECT_DEFINE(beNumberCtrlInfoWork)
+beNumberCtrlInfoWork	private: static igMetaField *k_dispNum;
+beNumberCtrlInfoWork	static igMetaField *k_realNum;
+beNumberCtrlInfoWork	static igMetaField *k_changeNum;
+beCriFxXbData	IG_OBJECT_DEFINE(beCriFxXbData)
+beCriFxXbData	private: static igMetaField *k_lRoom;
+beCriFxXbData	static igMetaField *k_lRoomHF;
+beCriFxXbData	static igMetaField *k_flRoomRolloffFactor;
+beCriFxXbData	static igMetaField *k_flDecayTime;
+beCriFxXbData	static igMetaField *k_flDecayHFRatio;
+beCriFxXbData	static igMetaField *k_lReflections;
+beCriFxXbData	static igMetaField *k_flReflectionsDelay;
+beCriFxXbData	static igMetaField *k_lReverb;
+beCriFxXbData	static igMetaField *k_flReverbDelay;
+beCriFxXbData	static igMetaField *k_flDiffusion;
+beCriFxXbData	static igMetaField *k_flDensity;
+beCriFxXbData	static igMetaField *k_flHFReference;
+beModelCtrlMoveObject	IG_OBJECT_DEFINE(beModelCtrlMoveObject)
+beModelCtrlMoveObject	private: static igMetaField *k_isRun;
+beModelCtrlMoveObject	static igMetaField *k_endTime;
+beModelCtrlMoveObject	static igMetaField *k_mode;
+beModelCtrlMoveObject	static igMetaField *k_value;
+beModelCtrlMoveObject	static igMetaField *k_acc;
+beModelCtrlMoveObject	static igMetaField *k_speed;
+beModelCtrlMoveObject	static igMetaField *k_isSeqStop;
+beModelCtrlMoveObject	static igMetaField *k_stopValue;
+beModelCtrlMoveObject	static igMetaField *k_stopFrame;
+beModelCtrlMoveObjectList	IG_OBJECT_DEFINE(beModelCtrlMoveObjectList)
+beModelCtrlInfoAI	IG_OBJECT_DEFINE(beModelCtrlInfoAI)
+beModelCtrlInfoAI	private: static igMetaField *k_seqName;
+beModelCtrlInfoAI	static igMetaField *k_mapNo;
+beModelCtrlInfoAI	static igMetaField *k_worldPos;
+beModelCtrlInfoAI	static igMetaField *k_hStatus;
+beModelCtrlInfoAI	static igMetaField *k_hCount;
+beDemoManagerWork	IG_OBJECT_DEFINE(beDemoManagerWork)
+beDemoManagerWork	private: static igMetaField *k_advancec;
+beDemoManagerWork	static igMetaField *k_keepMesList;
+beDemoManagerWorkList	IG_OBJECT_DEFINE(beDemoManagerWorkList)
+beWaterMove	IG_OBJECT_DEFINE(beWaterMove)
+beWaterMove	private: static igMetaField *k_baseTime;
+beWaterMove	static igMetaField *k_elapseTime;
+beWaterMove	static igMetaField *k_maxTime;
+beWaterMove	static igMetaField *k_targetData;
+beWaterMove	static igMetaField *k_dataList;
+beMessengerWork	IG_OBJECT_DEFINE(beMessengerWork)
+beMessengerWork	private: static igMetaField *k_groupName;
+beMessengerWork	static igMetaField *k_infoName;
+beMessengerWork	static igMetaField *k_ramNo;
+beMessengerWork	static igMetaField *k_message;
+beMessengerWork	static igMetaField *k_findRamNoList;
+beMessengerWork	static igMetaField *k_findRamList;
+beMessengerWorkList	IG_OBJECT_DEFINE(beMessengerWorkList)
+beMatCtrlSearch	IG_OBJECT_DEFINE(beMatCtrlSearch)
+beMatCtrlSearch	private: static igMetaField *k_minX;
+beMatCtrlSearch	static igMetaField *k_maxX;
+beMatCtrlSearch	static igMetaField *k_matNO;
+beMatCtrlSearch	static igMetaField *k_parent;
+beMatCtrlSearch	static igMetaField *k_memberList;
+beMatCtrlSearchList	IG_OBJECT_DEFINE(beMatCtrlSearchList)
+beGeneraterPlayerData	IG_OBJECT_DEFINE(beGeneraterPlayerData)
+beGeneraterPlayerData	private: static igMetaField *k_geneCount;
+beGeneraterPlayerData	static igMetaField *k_geneMaxCount;
+beGeneraterPlayerData	static igMetaField *k_itemDataList;
+beGeneraterPlayerData	static igMetaField *k_itemLastDataList;
+beGeneraterPlayerDataList	IG_OBJECT_DEFINE(beGeneraterPlayerDataList)
+beMatCtrlInfoWork	IG_OBJECT_DEFINE(beMatCtrlInfoWork)
+beMatCtrlInfoWork	private: static igMetaField *k_runFlagList;
+beMatCtrlInfoWork	static igMetaField *k_matOnPlLists;
+beGeneraterInfoWork	IG_OBJECT_DEFINE(beGeneraterInfoWork)
+beGeneraterInfoWork	private: static igMetaField *k_isSystemFreeze;
+beGeneraterInfoWork	static igMetaField *k_isFreeze;
+beGeneraterInfoWork	static igMetaField *k_playerCount;
+beGeneraterInfoWork	static igMetaField *k_nokoriKazu;
+beGeneraterInfoWork	static igMetaField *k_enemyRamList;
+beGeneraterInfoWork	static igMetaField *k_genePoint;
+beGeneraterInfoWork	static igMetaField *k_geneEnemyName;
+beGeneraterInfoWork	static igMetaField *k_geneEnemyRecNo;
+beGeneraterInfoWork	static igMetaField *k_geneEnemyMHp;
+beCameraDemoData	IG_OBJECT_DEFINE(beCameraDemoData)
+beCameraDemoData	private: static igMetaField *k_cameraPath;
+beCameraDemoData	static igMetaField *k_endTime;
+beCameraDemoData	static igMetaField *k_totalSec;
+beFontGeomAttrPair	IG_OBJECT_DEFINE(beFontGeomAttrPair)
+beFontGeomAttrPair	private: static igMetaField *k_category;
+beFontGeomAttrPair	static igMetaField *k_panel;
+beFontGeomAttrPair	static igMetaField *k_geomAttrs;
+beFontGeomAttrPairList	IG_OBJECT_DEFINE(beFontGeomAttrPairList)
+beMessengerArgData	IG_OBJECT_DEFINE(beMessengerArgData)
+beMessengerArgData	private: static igMetaField *k_isRunCheck;
+beMessengerArgData	static igMetaField *k_debugString;
+beMessengerArgData	static igMetaField *k_boolList;
+beMessengerArgData	static igMetaField *k_intList;
+beMessengerArgData	static igMetaField *k_floatList;
+beMessengerArgData	static igMetaField *k_longList;
+beMessengerArgData	static igMetaField *k_vec3fList;
+beMessengerArgData	static igMetaField *k_matrix44fList;
+beMessengerArgData	static igMetaField *k_objectList;
+beMessengerArgData	static igMetaField *k_stringList;
+beMessengerArgDataList	IG_OBJECT_DEFINE(beMessengerArgDataList)
+beSelectCtrlInfoWork	IG_OBJECT_DEFINE(beSelectCtrlInfoWork)
+beSelectCtrlInfoWork	private: static igMetaField *k_offsetPos;
+beSelectCtrlInfoWork	static igMetaField *k_selectMax;
+beSelectCtrlInfoWork	static igMetaField *k_isCancel;
+beSelectCtrlInfoWork	static igMetaField *k_svSeqName;
+beSelectCtrlInfoWork	static igMetaField *k_decideList;
+beCameraBoxData	IG_OBJECT_DEFINE(beCameraBoxData)
+beCameraBoxData	private: static igMetaField *k_switch;
+beCameraBoxData	static igMetaField *k_geometryList;
+beCameraBoxData	static igMetaField *k_transformList;
+beCameraBoxData	static igMetaField *k_eyePosList;
+beCameraBoxData	static igMetaField *k_intPosList;
+beParticleCtrl2InfoWork	IG_OBJECT_DEFINE(beParticleCtrl2InfoWork)
+beParticleCtrl2InfoWork	private: static igMetaField *k_positionLockNode;
+beParticleCtrl2InfoWork	static igMetaField *k_positionLockOffset;
+beFileChkObj	IG_OBJECT_DEFINE(beFileChkObj)
+beFileChkObj	private: static igMetaField *k_fd;
+beModelCtrlInfoHitBody	IG_OBJECT_DEFINE(beModelCtrlInfoHitBody)
+beModelCtrlInfoHitBody	private: static igMetaField *k_isFirst;
+beModelCtrlInfoHitBody	static igMetaField *k_calcTime;
+beModelCtrlInfoHitBody	static igMetaField *k_count;
+beModelCtrlInfoHitBody	static igMetaField *k_orgAABoxList;
+beModelCtrlInfoHitBody	static igMetaField *k_AABoxMinList;
+beModelCtrlInfoHitBody	static igMetaField *k_AABoxMaxList;
+beModelCtrlInfoHitBody	static igMetaField *k_AABoxList;
+beDataBase	IG_OBJECT_DEFINE(beDataBase)
+beDataBase	private: static igMetaField *k_charOffsetList;
+beDataBase	static igMetaField *k_charData;
+beDataBase	static igMetaField *k_shortOffsetList;
+beDataBase	static igMetaField *k_shortData;
+beDataBase	static igMetaField *k_intOffsetList;
+beDataBase	static igMetaField *k_intData;
+beDataBase	static igMetaField *k_floatOffsetList;
+beDataBase	static igMetaField *k_floatData;
+beDataBase	static igMetaField *k_boolOffsetList;
+beDataBase	static igMetaField *k_boolData;
+beDataBase	static igMetaField *k_stringOffsetList;
+beDataBase	static igMetaField *k_stringData;
+beDataBaseList	IG_OBJECT_DEFINE(beDataBaseList)
+beAction2InfoWork	IG_OBJECT_DEFINE(beAction2InfoWork)
+beAction2InfoWork	private: static igMetaField *k_comData;
+beAction2InfoWork	static igMetaField *k_comIndex;
+beAction2InfoWork	static igMetaField *k_isNoHokan;
+beAction2InfoWork	static igMetaField *k_isMotion;
+beAction2InfoWork	static igMetaField *k_motionSt0;
+beAction2InfoWork	static igMetaField *k_motionIsEnd;
+beAction2InfoWork	static igMetaField *k_jointSt0;
+beAction2InfoWork	static igMetaField *k_jointStartTimeL;
+beAction2InfoWork	static igMetaField *k_jointEndTimeL;
+beAction2InfoWork	static igMetaField *k_jointIsEnd;
+beAction2InfoWork	static igMetaField *k_fadeSt0;
+beAction2InfoWork	static igMetaField *k_fadeLimitValue;
+beAction2InfoWork	static igMetaField *k_fadeAddValue;
+beAction2InfoWork	static igMetaField *k_fadeValue;
+beAction2InfoWork	static igMetaField *k_waitSt0;
+beAction2InfoWork	static igMetaField *k_flashSt0;
+beAction2InfoWork	static igMetaField *k_isFreeze;
+beAction2InfoWork	static igMetaField *k_colorAttr;
+beAction2InfoWork	static igMetaField *k_blendStateAttr;
+beAction2InfoWork	static igMetaField *k_textureStateAttr;
+beAction2InfoWork	static igMetaField *k_lightingStateAttr;
+bePadData	IG_OBJECT_DEFINE(bePadData)
+bePadData	private: static igMetaField *k_isConnect;
+bePadData	static igMetaField *k_LStick;
+bePadData	static igMetaField *k_RStick;
+bePadData	static igMetaField *k_lTrg;
+bePadData	static igMetaField *k_lRpt;
+bePadData	static igMetaField *k_lStk;
+bePadData	static igMetaField *k_lLast;
+bePadData	static igMetaField *k_lTime;
+bePadData	static igMetaField *k_rTrg;
+bePadData	static igMetaField *k_rRpt;
+bePadData	static igMetaField *k_rStk;
+bePadData	static igMetaField *k_rLast;
+bePadData	static igMetaField *k_rTime;
+bePadData	static igMetaField *k_button;
+bePadData	static igMetaField *k_trigger;
+bePadData	static igMetaField *k_repeat;
+bePadData	static igMetaField *k_last;
+bePadData	static igMetaField *k_rptime;
+bePadData	static igMetaField *k_enaLen;
+bePadData	static igMetaField *k_adAngle;
+bePadData	static igMetaField *k_1sttime;
+bePadData	static igMetaField *k_2ndtime;
+bePadData	virtual void userConstruct(int flag);
+bePadData	virtual void userDestruct();
+beNumVerData	IG_OBJECT_DEFINE(beNumVerData)
+beNumVerData	private: static igMetaField *k_disp;
+beNumVerData	static igMetaField *k_verDataList;
+beNumVerData	virtual void userConstruct(int flag);
+beNumVerData	virtual void userDestruct();
+beSaveDataDeliver	IG_OBJECT_DEFINE(beSaveDataDeliver)
+beSaveDataDeliver	private: static igMetaField *k_size;
+beSaveDataDeliver	static igMetaField *k_data;
+beSaveDataDeliver	virtual void userConstruct(int flag);
+beSaveDataDeliver	virtual void userDestruct();
+beLuaDataObject	IG_OBJECT_DEFINE(beLuaDataObject)
+beLuaDataObject	private: static igMetaField *k_dataSize;
+beLuaDataObject	static igMetaField *k_data;
+beLuaDataObject	virtual void userDestruct();
+beModelCtrlSubCom	IG_OBJECT_DEFINE(beModelCtrlSubCom)
+beModelCtrlSubCom	private: static igMetaField *k_comList;
+beSvPs2McImage128k	IG_OBJECT_DEFINE(beSvPs2McImage128k)
+beSvPs2McImage128k	private: static igMetaField *k_dataSize;
+beSvPs2McImage128k	static igMetaField *k_data;
+beSvPs2McImage128k	virtual void userConstruct(int flag);
+beSvPs2McImage128k	virtual void userDestruct();
+beXboxImage24k	IG_OBJECT_DEFINE(beXboxImage24k)
+beXboxImage24k	private: static igMetaField *k_dataSize;
+beXboxImage24k	static igMetaField *k_data;
+beXboxImage24k	virtual void userConstruct(int flag);
+beXboxImage24k	virtual void userDestruct();
+beSvSlotData	IG_OBJECT_DEFINE(beSvSlotData)
+beSvSlotData	private: static igMetaField *k_isConnect;
+beSvSlotData	static igMetaField *k_isFormat;
+beSvSlotData	static igMetaField *k_freeSize;
+beSvSlotData	static igMetaField *k_useSize;
+beSvSlotData	static igMetaField *k_totalSize;
+beNumVerDataList	IG_OBJECT_DEFINE(beNumVerDataList)
+bePadDataList	IG_OBJECT_DEFINE(bePadDataList)
+beFile	IG_OBJECT_DEFINE(beFile)
+beUnicode	IG_OBJECT_DEFINE(beUnicode)
+beSvSlotDataList	IG_OBJECT_DEFINE(beSvSlotDataList)
+beSvPlatBaseData	IG_OBJECT_DEFINE(beSvPlatBaseData)
+beSvPlatBaseData	private: static igMetaField *k_connectMax;
+beSvPlatBaseData	static igMetaField *k_slotList;
+beSvPlatBaseData	static igMetaField *k_dataSize;
+beSvPlatBaseData	static igMetaField *k_memNeed;
+beSvDeliver	IG_OBJECT_DEFINE(beSvDeliver)
+beSvDeliver	private: static igMetaField *k_actConnect;
+beSvDeliver	static igMetaField *k_targetConnect;
+beSvDeliver	static igMetaField *k_saveVer;
+beSvDeliver	static igMetaField *k_result;
+beSvDeliver	static igMetaField *k_operate;
+beSvDeliver	static igMetaField *k_memCapa;
+beSvDeliver	static igMetaField *k_fileCapa;
+beSvDeliver	static igMetaField *k_useMtap;
+beSvDeliver	static igMetaField *k_chgUseMtap;
+beSvDeliver	static igMetaField *k_isMemCapaOK;
+beSvDeliver	static igMetaField *k_isfileCapaOK;
+beSvDeliver	static igMetaField *k_isEndOperat;
+beSvDeliver	static igMetaField *k_freeSizeList;
+beSvDeliver	static igMetaField *k_freeFileList;
+beSvDeliver	static igMetaField *k_formatList;
+beSvDeliver	static igMetaField *k_totalSizeList;
+beSvDeliver	static igMetaField *k_gameData;
+beSvDeliver	static igMetaField *k_platformData;
+beSvPlatDataGC	IG_OBJECT_DEFINE(beSvPlatDataGC)
+beSvPlatDataGC	private: static igMetaField *k_connectMax;
+beSvPlatDataGC	static igMetaField *k_fileName;
+beSvPlatDataGC	static igMetaField *k_imageSize;
+beSvPlatDataGC	static igMetaField *k_dataOffSet;
+beSvPlatDataGC	static igMetaField *k_bannerType;
+beSvPlatDataGC	static igMetaField *k_iconType;
+beSvPlatDataGC	static igMetaField *k_iconKaz;
+beSvPlatDataGC	static igMetaField *k_iconSpeed;
+beSvPlatDataGC	static igMetaField *k_iconLoopType;
+beSvPlatDataGC	static igMetaField *k_banTplSize;
+beSvPlatDataGC	static igMetaField *k_banTplData;
+beSvPlatDataGC	static igMetaField *k_iconTplSize;
+beSvPlatDataGC	static igMetaField *k_iconTplData;
+beSvPlatDataGC	static igMetaField *k_comment;
+beSvPlatDataGC	virtual void userConstruct(int flag);
+beSvPlatDataGC	virtual void userDestruct();
+beSvPlatDataPS2	IG_OBJECT_DEFINE(beSvPlatDataPS2)
+beSvPlatDataPS2	private: static igMetaField *k_connectMax;
+beSvPlatDataPS2	static igMetaField *k_dirName;
+beSvPlatDataPS2	static igMetaField *k_title;
+beSvPlatDataPS2	static igMetaField *k_offsLF;
+beSvPlatDataPS2	static igMetaField *k_transRate;
+beSvPlatDataPS2	static igMetaField *k_bgColor0;
+beSvPlatDataPS2	static igMetaField *k_bgColor1;
+beSvPlatDataPS2	static igMetaField *k_bgColor2;
+beSvPlatDataPS2	static igMetaField *k_bgColor3;
+beSvPlatDataPS2	static igMetaField *k_lightDir0;
+beSvPlatDataPS2	static igMetaField *k_lightDir1;
+beSvPlatDataPS2	static igMetaField *k_lightDir2;
+beSvPlatDataPS2	static igMetaField *k_lightColor0;
+beSvPlatDataPS2	static igMetaField *k_lightColor1;
+beSvPlatDataPS2	static igMetaField *k_lightColor2;
+beSvPlatDataPS2	static igMetaField *k_ambient;
+beSvPlatDataPS2	static igMetaField *k_fnameIcon0;
+beSvPlatDataPS2	static igMetaField *k_fnameIcon1;
+beSvPlatDataPS2	static igMetaField *k_fnameIcon2;
+beSvPlatDataPS2	static igMetaField *k_saveDataSize;
+beSvPlatDataPS2	static igMetaField *k_dataOffSet;
+beSvPlatDataPS2	static igMetaField *k_iconCount;
+beSvPlatDataPS2	static igMetaField *k_image;
+beSvSlotGC	IG_OBJECT_DEFINE(beSvSlotGC)
+beSvSlotPS2	IG_OBJECT_DEFINE(beSvSlotPS2)
+beSvSlotXbox	IG_OBJECT_DEFINE(beSvSlotXbox)
+beSvSlotXbox	private: static igMetaField *k_name;
+beSvSlotXbox	static igMetaField *k_totalBytes;
+beSvSlotXbox	static igMetaField *k_freeBytes;
+beSvSlotXbox	static igMetaField *k_useBytes;
+beSvPlatDataPC	IG_OBJECT_DEFINE(beSvPlatDataPC)
+beModelCtrlSubComBase	IG_OBJECT_DEFINE(beModelCtrlSubComBase)
+beModelCtrlSubComBase	private: static igMetaField *k_isOneSet;
+beModelCtrlSubComBase	static igMetaField *k_runFrame;
+beModelCtrlSubComBase	static igMetaField *k_startFrame;
+igAppearanceListList	IG_OBJECT_DEFINE(igAppearanceListList)
+igLightSetList	IG_OBJECT_DEFINE(igLightSetList)

@@ -1,99 +1,78 @@
-igMetaObject *g_beDemoManagerWork_metaObject;
-igMetaField *g_beDemoManagerWork_advancecMetaField;
-igMetaField *g_beDemoManagerWork_keepMesListMetaField;
+namespace Gap {
+namespace Bec {
 
-beDemoManagerWork *beDemoManagerWork_CreateInstance(int allocator) {
-    beDemoManagerWork_EnsureRegistered();
-    return (beDemoManagerWork *)igMetaObject_CreateInstance(g_beDemoManagerWork_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beDemoManagerWork::_Meta;
+igMetaField *beDemoManagerWork::k_advancec;
+igMetaField *beDemoManagerWork::k_keepMesList;
 
-igMetaObject *beDemoManagerWork_GetOrCreateMetaObject(void) {
-    if (g_beDemoManagerWork_metaObject == 0) {
-        g_beDemoManagerWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beDemoManagerWork_metaObject;
-}
-
-void *beDemoManagerWork_GetMetaObject(void) {
-    igMetaObject *g = g_beDemoManagerWork_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beDemoManagerWork_EnsureRegistered();
-    }
-    return g_beDemoManagerWork_metaObject;
-}
-
-int beDemoManagerWork_GetVTable(void) {
-    beDemoManagerWork obj;
-    int vtable;
-    igObject **keepMesListSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
-    keepMesListSlot = (igObject **)&obj._keepMesList;
-    *keepMesListSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
-    igObjectRef_Release(keepMesListSlot);
-    return vtable;
-}
-
-void beDemoManagerWork_EnsureRegistered(void)
+beDemoManagerWork *beDemoManagerWork::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beDemoManagerWork_Register);
+    arkRegister();
+    return (beDemoManagerWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-static igMetaObjectCallback g_beDemoManagerWork_callbackList[] = { beDemoKeepMesList_EnsureRegistered, 0 };
+igMetaObject *beDemoManagerWork::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
 
-CallbackArray *beDemoManagerWork_Register(void) {
+igMetaObject *beDemoManagerWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beDemoManagerWork::retrieveVTablePointer()
+{
+    beDemoManagerWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beDemoManagerWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beDemoManagerWork::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beDemoKeepMesList::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beDemoManagerWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beDemoManagerWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beDemoManagerWork",
-        0x10, /* instance size */
-        beDemoManagerWork_GetVTable,
-        beDemoManagerWork_InitFields,
-        0, /* extra callback item */
-        g_beDemoManagerWork_callbackList /* callback list */
+        sizeof(beDemoManagerWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beDemoManagerWork_GetMetaObjectFunction(void)
+void beDemoManagerWork::arkRegisterInitialize()
 {
-    beDemoManagerWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_advancec", "_keepMesList" };
+    static igMetaField **enumStorage[] = { &k_advancec, &k_keepMesList };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Bec::beDemoKeepMesList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beDemoManagerWork_ctorTable[] = {
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beDemoManagerWork_fieldTable[] = {
-    "_advancec",
-    "_keepMesList",
-};
-static igMetaField **g_beDemoManagerWork_fieldHandles[] = {
-    &g_beDemoManagerWork_advancecMetaField,
-    &g_beDemoManagerWork_keepMesListMetaField,
-};
-static int g_beDemoManagerWork_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void beDemoManagerWork_InitFields(void) {
-    int base;
-    void *keepMesList;
-    igMetaObject *meta;
-
-    meta = g_beDemoManagerWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beDemoManagerWork_ctorTable, 2);
-    keepMesList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)keepMesList)->_metaObject = (int)beDemoKeepMesList_GetOrCreateMetaObject();
-    ((igRefMetaField *)keepMesList)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beDemoManagerWork_fieldTable, g_beDemoManagerWork_fieldHandles, g_beDemoManagerWork_fieldOffsets, base);
+}
 }
 

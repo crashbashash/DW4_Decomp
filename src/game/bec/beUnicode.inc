@@ -1,45 +1,43 @@
-igMetaObject *g_beUnicode_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beUnicode_GetMetaObject(void) {
-    igMetaObject *g = g_beUnicode_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beUnicode_EnsureRegistered();
-    }
-    return g_beUnicode_metaObject;
-}
+igMetaObject *beUnicode::_Meta;
 
-int beUnicode_GetVTable(void) {
-    beUnicode obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beUnicode_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beUnicode_EnsureRegistered(void)
+igMetaObject *beUnicode::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beUnicode_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beUnicode_Register(void) {
+void *beUnicode::retrieveVTablePointer()
+{
+    beUnicode temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beUnicode::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beUnicode::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beUnicode_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beUnicode_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beUnicode",
-        8, /* instance size */
-        beUnicode_GetVTable,
+        sizeof(beUnicode),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beUnicode_GetMetaObjectFunction(void)
-{
-    beUnicode_GetMetaObject();
+}
 }
 

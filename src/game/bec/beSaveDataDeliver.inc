@@ -1,87 +1,69 @@
-igMetaObject *g_beSaveDataDeliver_metaObject;
-igMetaField *g_beSaveDataDeliver_sizeMetaField;
-igMetaField *g_beSaveDataDeliver_dataMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beSaveDataDeliver_GetOrCreateMetaObject(void) {
-    if (g_beSaveDataDeliver_metaObject == 0) {
-        g_beSaveDataDeliver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beSaveDataDeliver_metaObject;
-}
+igMetaObject *beSaveDataDeliver::_Meta;
+igMetaField *beSaveDataDeliver::k_size;
+igMetaField *beSaveDataDeliver::k_data;
 
-igMetaObject *beSaveDataDeliver_GetMetaObject(void) {
-    igMetaObject *g = g_beSaveDataDeliver_metaObject;
-    if (g != 0) {
-        int b = !!(g->_validity & 4);
-        if (b) goto done;
-    }
-    beSaveDataDeliver_EnsureRegistered();
-done:
-    return g_beSaveDataDeliver_metaObject;
-}
-
-int beSaveDataDeliver_GetVTable(void) {
-    beSaveDataDeliver obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSaveDataDeliver_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beSaveDataDeliver_EnsureRegistered(void)
+igMetaObject *beSaveDataDeliver::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beSaveDataDeliver_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *beSaveDataDeliver_Register(void) {
+igMetaObject *beSaveDataDeliver::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beSaveDataDeliver::retrieveVTablePointer()
+{
+    beSaveDataDeliver temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSaveDataDeliver::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSaveDataDeliver::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSaveDataDeliver_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beSaveDataDeliver_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSaveDataDeliver",
-        0x10, /* instance size */
-        beSaveDataDeliver_GetVTable,
-        beSaveDataDeliver_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beSaveDataDeliver),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beSaveDataDeliver_GetMetaObjectFunction(void)
+void beSaveDataDeliver::arkRegisterInitialize()
 {
-    beSaveDataDeliver_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igMemoryRefMetaField_Create };
+    static const char *names[] = { "_size", "_data" };
+    static igMetaField **enumStorage[] = { &k_size, &k_data };
+    static int offsets[] = { 12, 8 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beSaveDataDeliver_ctorTable[] = {
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-};
-static const char *g_beSaveDataDeliver_fieldTable[] = {
-    "_size",
-    "_data",
-};
-static igMetaField **g_beSaveDataDeliver_fieldHandles[] = {
-    &g_beSaveDataDeliver_sizeMetaField,
-    &g_beSaveDataDeliver_dataMetaField,
-};
-static int g_beSaveDataDeliver_fieldOffsets[] = {
-    12,
-    8,
-};
-
-void beSaveDataDeliver_InitFields(void) {
-    int base;
-    void *data;
-    igMetaObject *meta;
-
-    meta = g_beSaveDataDeliver_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSaveDataDeliver_ctorTable, 2);
-    data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    igMetaObject_NameFields(meta, g_beSaveDataDeliver_fieldTable, g_beSaveDataDeliver_fieldHandles, g_beSaveDataDeliver_fieldOffsets, base);
+}
 }
 

@@ -1,92 +1,64 @@
-igMetaObject *g_beSvSlotXbox_metaObject;
-igMetaField *g_beSvSlotXbox_nameMetaField;
-igMetaField *g_beSvSlotXbox_totalBytesMetaField;
-igMetaField *g_beSvSlotXbox_freeBytesMetaField;
-igMetaField *g_beSvSlotXbox_useBytesMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beSvSlotXbox_GetMetaObject(void) {
-    igMetaObject *g = g_beSvSlotXbox_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beSvSlotXbox_EnsureRegistered();
-    }
-    return g_beSvSlotXbox_metaObject;
-}
+igMetaObject *beSvSlotXbox::_Meta;
+igMetaField *beSvSlotXbox::k_name;
+igMetaField *beSvSlotXbox::k_totalBytes;
+igMetaField *beSvSlotXbox::k_freeBytes;
+igMetaField *beSvSlotXbox::k_useBytes;
 
-int beSvSlotXbox_GetVTable(void) {
-    beSvSlotXbox obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSvSlotXbox_vtable[0];
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beSvSlotXbox_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beSvSlotXbox_EnsureRegistered(void)
+igMetaObject *beSvSlotXbox::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beSvSlotXbox_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beSvSlotXbox_Register(void) {
+void *beSvSlotXbox::retrieveVTablePointer()
+{
+    beSvSlotXbox temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSvSlotXbox::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSvSlotXbox::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSvSlotXbox_metaObject,
-        beSvSlotData_Register,
-        beSvSlotData_GetPublishedMetaObject,
-        beSvSlotXbox_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Bec::beSvSlotData::arkRegisterInternal,
+        Gap::Bec::beSvSlotData::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSvSlotXbox",
-        0x38, /* instance size */
-        beSvSlotXbox_GetVTable,
-        beSvSlotXbox_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beSvSlotXbox),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beSvSlotXbox_GetMetaObjectFunction(void)
+void beSvSlotXbox::arkRegisterInitialize()
 {
-    beSvSlotXbox_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igUnsignedLongMetaField_Create, igUnsignedLongMetaField_Create, igUnsignedLongMetaField_Create };
+    static const char *names[] = { "_name", "_totalBytes", "_freeBytes", "_useBytes" };
+    static igMetaField **enumStorage[] = { &k_name, &k_totalBytes, &k_freeBytes, &k_useBytes };
+    static int offsets[] = { 24, 32, 40, 48 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault("");
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beSvSlotXbox_ctorTable[] = {
-    igStringMetaField_Create,
-    igUnsignedLongMetaField_Create,
-    igUnsignedLongMetaField_Create,
-    igUnsignedLongMetaField_Create,
-};
-static const char *g_beSvSlotXbox_fieldTable[] = {
-    "_name",
-    "_totalBytes",
-    "_freeBytes",
-    "_useBytes",
-};
-static igMetaField **g_beSvSlotXbox_fieldHandles[] = {
-    &g_beSvSlotXbox_nameMetaField,
-    &g_beSvSlotXbox_totalBytesMetaField,
-    &g_beSvSlotXbox_freeBytesMetaField,
-    &g_beSvSlotXbox_useBytesMetaField,
-};
-static int g_beSvSlotXbox_fieldOffsets[] = {
-    24,
-    32,
-    40,
-    48,
-};
-
-void beSvSlotXbox_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beSvSlotXbox_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSvSlotXbox_ctorTable, 4);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault("");
-    igMetaObject_NameFields(meta, g_beSvSlotXbox_fieldTable, g_beSvSlotXbox_fieldHandles, g_beSvSlotXbox_fieldOffsets, base);
+}
 }
 

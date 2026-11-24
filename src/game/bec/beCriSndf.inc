@@ -1,93 +1,72 @@
-igMetaObject *g_beCriSndf_metaObject;
-igMetaField *g_beCriSndf_reqMetaField;
-igMetaField *g_beCriSndf_seqMetaField;
-igMetaField *g_beCriSndf_isPlayingMetaField;
+namespace Gap {
+namespace Bec {
 
-beCriSndf *beCriSndf_Create(int allocator) {
-    beCriSndf_EnsureRegistered();
-    return (beCriSndf *)igMetaObject_CreateInstance(g_beCriSndf_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beCriSndf::_Meta;
+igMetaField *beCriSndf::k_req;
+igMetaField *beCriSndf::k_seq;
+igMetaField *beCriSndf::k_isPlaying;
 
-igMetaObject *beCriSndf_GetOrCreateMetaObject(void) {
-    if (g_beCriSndf_metaObject == 0) {
-        g_beCriSndf_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beCriSndf_metaObject;
-}
-
-void *beCriSndf_GetMetaObject(void) {
-    igMetaObject *g = g_beCriSndf_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beCriSndf_EnsureRegistered();
-    }
-    return g_beCriSndf_metaObject;
-}
-
-int beCriSndf_GetVTable(void) {
-    beCriSndf obj;
-    int off;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beCriSndf_vtable[0];
-    off = g_objectSystem->vtableProbeOffset;
-    return *(int *)((char *)&obj + off);
-}
-
-void beCriSndf_EnsureRegistered(void)
+beCriSndf *beCriSndf::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beCriSndf_Register);
+    arkRegister();
+    return (beCriSndf *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beCriSndf_Register(void) {
+igMetaObject *beCriSndf::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+
+igMetaObject *beCriSndf::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beCriSndf::retrieveVTablePointer()
+{
+    beCriSndf temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beCriSndf::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beCriSndf::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beCriSndf_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beCriSndf_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beCriSndf",
-        0x20, /* instance size */
-        beCriSndf_GetVTable,
-        beCriSndf_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beCriSndf),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beCriSndf_GetMetaObjectFunction(void)
+void beCriSndf::arkRegisterInitialize()
 {
-    beCriSndf_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igBoolMetaField_Create };
+    static const char *names[] = { "_req", "_seq", "_isPlaying" };
+    static igMetaField **enumStorage[] = { &k_req, &k_seq, &k_isPlaying };
+    static int offsets[] = { 8, 16, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beCriSndf_ctorTable[] = {
-    igIntMetaField_Create,
-    igLongMetaField_Create,
-    igBoolMetaField_Create,
-};
-static const char *g_beCriSndf_fieldTable[] = {
-    "_req",
-    "_seq",
-    "_isPlaying",
-};
-static igMetaField **g_beCriSndf_fieldHandles[] = {
-    &g_beCriSndf_reqMetaField,
-    &g_beCriSndf_seqMetaField,
-    &g_beCriSndf_isPlayingMetaField,
-};
-static int g_beCriSndf_fieldOffsets[] = {
-    8,
-    16,
-    24,
-};
-
-void beCriSndf_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beCriSndf_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beCriSndf_ctorTable, 3);
-    igMetaObject_NameFields(meta, g_beCriSndf_fieldTable, g_beCriSndf_fieldHandles, g_beCriSndf_fieldOffsets, base);
+}
 }
 

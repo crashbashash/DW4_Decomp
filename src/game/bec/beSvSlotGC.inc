@@ -1,45 +1,43 @@
-igMetaObject *g_beSvSlotGC_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beSvSlotGC_GetMetaObject(void) {
-    igMetaObject *g = g_beSvSlotGC_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beSvSlotGC_EnsureRegistered();
-    }
-    return g_beSvSlotGC_metaObject;
-}
+igMetaObject *beSvSlotGC::_Meta;
 
-int beSvSlotGC_GetVTable(void) {
-    beSvSlotGC obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSvSlotGC_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beSvSlotGC_EnsureRegistered(void)
+igMetaObject *beSvSlotGC::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beSvSlotGC_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beSvSlotGC_Register(void) {
+void *beSvSlotGC::retrieveVTablePointer()
+{
+    beSvSlotGC temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSvSlotGC::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSvSlotGC::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSvSlotGC_metaObject,
-        beSvSlotData_Register,
-        beSvSlotData_GetPublishedMetaObject,
-        beSvSlotGC_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Bec::beSvSlotData::arkRegisterInternal,
+        Gap::Bec::beSvSlotData::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSvSlotGC",
-        0x18, /* instance size */
-        beSvSlotGC_GetVTable,
+        sizeof(beSvSlotGC),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beSvSlotGC_GetMetaObjectFunction(void)
-{
-    beSvSlotGC_GetMetaObject();
+}
 }
 

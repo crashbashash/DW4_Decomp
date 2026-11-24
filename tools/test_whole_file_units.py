@@ -966,6 +966,24 @@ class ProfileTwin(unittest.TestCase):
                          dict(unitobjects.group_for(self.OWNER).externals))
 
 
+class TwinKeepsNoDatum(unittest.TestCase):
+    """A member calls a duplicate deferred to another profile (a base class's inline destructor), which
+    stores the base vtable, which names an inline virtual the row strips: the twin's data are the twin
+    compile's, so the owner object keeps neither, as whole_file_rows.reach leaves them."""
+    RELOCS = {1: [(1, 0, 4, "twin", 0)], 2: [(2, 0, 5, "vtable", 0)], 3: [(3, 0, 2, "getMeta", 0)], 4: []}
+    SYMS = {"member": (1, 0, 8), "twin": (2, 0, 8), "vtable": (3, 0, 8), "getMeta": (4, 0, 8)}
+    HEADERS = [("", (0, 0, 0, 0, 0, 0))] + [(label, (1, 0, flags, 0, 0, 8)) for label, flags in
+                                            ((".text", 6), (".text", 6), (".vtables", 2), (".text", 6))]
+
+    def dead(self, opaque):
+        with mock.patch.object(verify, "object_relocs", lambda _obj, target_section: self.RELOCS[target_section]):
+            return verify.dead_data("unit.o", self.HEADERS, self.SYMS, {1, 2}, set(), opaque)
+
+    def test_the_twin_keeps_the_vtable_only_when_it_is_the_units_own(self):
+        self.assertEqual(self.dead(()), set())
+        self.assertEqual(self.dead({2}), {3})
+
+
 class TableExternals(unittest.TestCase):
     """beTransformSync_GetVTable: retail's exception table names the igNodeView destructor
     (0x195a90) as the cleanup of its base subobject, and no member calls it. The rows must still

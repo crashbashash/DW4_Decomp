@@ -8,45 +8,6 @@ struct igMetaField;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igViewerParameters_metaObject;
-extern struct igMetaField *g_igViewerParameters_showGuiMetaField;
-extern struct igMetaField *g_igViewerParameters_showBoundingBoxMetaField;
-extern struct igMetaField *g_igViewerParameters_showNormalsMetaField;
-extern struct igMetaField *g_igViewerParameters_flushFramesMetaField;
-extern struct igMetaField *g_igViewerParameters_selectedObjectMetaField;
-extern struct igMetaField *g_igViewerParameters_sceneMetaField;
-extern struct igMetaField *g_igViewerParameters_upVectorMetaField;
-extern struct igMetaField *g_igViewerParameters_ratioMetaField;
-extern struct igMetaField *g_igViewerParameters_hfovMetaField;
-extern struct igMetaField *g_igViewerParameters_nearPlaneMetaField;
-extern struct igMetaField *g_igViewerParameters_projectionMatrixMetaField;
-extern struct igMetaField *g_igViewerParameters_farPlaneMetaField;
-extern struct igMetaField *g_igViewerParameters_viewMatrixMetaField;
-extern struct igMetaField *g_igViewerParameters_drawTimeMetaField;
-extern struct igMetaField *g_igViewerParameters_sortTextureMetaField;
-extern struct igMetaField *g_igViewerParameters_sortTransparentMetaField;
-extern struct igMetaField *g_igViewerParameters_sortTransparentDistanceMetaField;
-extern struct igMetaField *g_igViewerParameters_transparencyModeMetaField;
-extern struct igMetaField *g_igViewerParameters_useSceneLightsMetaField;
-extern struct igMetaField *g_igViewerParameters_useHeadLightMetaField;
-extern struct igMetaField *g_igViewerParameters_useHeadLightSpecularMetaField;
-extern struct igMetaField *g_igViewerParameters_alphaTestMetaField;
-extern struct igMetaField *g_igViewerParameters_alphaTestForceMetaField;
-extern struct igMetaField *g_igViewerParameters_backFaceCullingMetaField;
-extern struct igMetaField *g_igViewerParameters_backFaceCullingForceMetaField;
-extern struct igMetaField *g_igViewerParameters_wireframeMetaField;
-extern struct igMetaField *g_igViewerParameters_wireframeForceMetaField;
-extern struct igMetaField *g_igViewerParameters_flatShadingMetaField;
-extern struct igMetaField *g_igViewerParameters_flatShadingForceMetaField;
-extern struct igMetaField *g_igViewerParameters_disablesMetaField;
-extern struct igMetaField *g_igViewerParameters_operationModeMetaField;
-extern struct igMetaField *g_igViewerParameters_camerasMetaField;
-extern struct igMetaField *g_igViewerParameters_beginTimeMetaField;
-extern struct igMetaField *g_igViewerParameters_endTimeMetaField;
-extern struct igMetaField *g_igViewerParameters_timeOperationMetaField;
-extern struct igMetaField *g_igViewerParameters_speedMetaField;
-void igViewerParameters_EnsureRegistered(void);
-struct igMetaObject *igViewerParameters_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

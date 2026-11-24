@@ -269,7 +269,7 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
     compiler-emitted members share their actual owner's source path. The kernel
     patches' sources (tools/kpatch.py) are not image units and stay out.
     """
-    out, shared, members, statics, plain = {}, set(), set(), set(), set()
+    out, shared, members, statics, plain, qualified = {}, set(), set(), set(), set(), {}
     for root, dirs, files in os.walk(src_dir):
         if kpatch.is_patch_source(root):
             dirs[:] = []
@@ -295,8 +295,11 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                     continue
                 # a member is read under its bare name (`void *igObject::malloc(int) const`); the C
                 # function of that name (newlib's malloc) is the symbol, so it keeps the name
-                member = _s != _e and re.search(r"::\s*%s\s*\(" % re.escape(name),
-                                                text[_s:text.find("{", _s)]) is not None
+                head = text[_s:text.find("{", _s)] if _s != _e else ""
+                member = _s != _e and re.search(r"::\s*%s\s*\(" % re.escape(name), head) is not None
+                owner_class = re.search(r"([A-Za-z_]\w*)\s*::\s*%s\s*\(" % re.escape(name), head) if member else None
+                if owner_class:
+                    qualified.setdefault("%s::%s" % (owner_class.group(1), name), set()).add(path)
                 if out.get(name, path) != path and member != (name in members):
                     if member:
                         continue
@@ -322,6 +325,11 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                 out[name] = path
     for name in shared:
         del out[name]
+    # a member is filed under `Class::method` too: a file of members alone (its bare names shared with every
+    # class defining one) is found by that key from its row's mangled owner (unitobjects.augment_sources)
+    for key, where in qualified.items():
+        if len(where) == 1 and key not in out:
+            out[key] = where.pop()
     return unitobjects.augment_sources(out, symbols, unit_objects, overridable=statics - plain)
 
 

@@ -1,72 +1,57 @@
-igMetaObject *g_beModelCtrlSubComBase_metaObject;
-igMetaField *g_beModelCtrlSubComBase_isOneSetMetaField;
-igMetaField *g_beModelCtrlSubComBase_runFrameMetaField;
-igMetaField *g_beModelCtrlSubComBase_startFrameMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlSubComBase_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlSubComBase_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlSubComBase_EnsureRegistered();
-    }
-    return g_beModelCtrlSubComBase_metaObject;
-}
+igMetaObject *beModelCtrlSubComBase::_Meta;
+igMetaField *beModelCtrlSubComBase::k_isOneSet;
+igMetaField *beModelCtrlSubComBase::k_runFrame;
+igMetaField *beModelCtrlSubComBase::k_startFrame;
 
-void beModelCtrlSubComBase_EnsureRegistered(void)
+igMetaObject *beModelCtrlSubComBase::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlSubComBase_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlSubComBase_Register(void) {
+void beModelCtrlSubComBase::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlSubComBase::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_beModelCtrlSubComBase_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlSubComBase_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlSubComBase",
-        0x14, /* instance size */
+        sizeof(beModelCtrlSubComBase),
         0,
-        beModelCtrlSubComBase_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlSubComBase_GetMetaObjectFunction(void)
+void beModelCtrlSubComBase::arkRegisterInitialize()
 {
-    beModelCtrlSubComBase_GetMetaObject();
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_isOneSet", "_runFrame", "_startFrame" };
+    static igMetaField **enumStorage[] = { &k_isOneSet, &k_runFrame, &k_startFrame };
+    static int offsets[] = { 8, 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(0.0f);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlSubComBase_ctorTable[] = {
-    igBoolMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beModelCtrlSubComBase_fieldTable[] = {
-    "_isOneSet",
-    "_runFrame",
-    "_startFrame",
-};
-static igMetaField **g_beModelCtrlSubComBase_fieldHandles[] = {
-    &g_beModelCtrlSubComBase_isOneSetMetaField,
-    &g_beModelCtrlSubComBase_runFrameMetaField,
-    &g_beModelCtrlSubComBase_startFrameMetaField,
-};
-static int g_beModelCtrlSubComBase_fieldOffsets[] = {
-    8,
-    12,
-    16,
-};
-
-void beModelCtrlSubComBase_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlSubComBase_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlSubComBase_ctorTable, 3);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0.0f);
-    igMetaObject_NameFields(meta, g_beModelCtrlSubComBase_fieldTable, g_beModelCtrlSubComBase_fieldHandles, g_beModelCtrlSubComBase_fieldOffsets, base);
+}
 }
 

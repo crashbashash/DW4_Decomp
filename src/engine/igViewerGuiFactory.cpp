@@ -8,18 +8,6 @@ struct ViewerAction : public igObject {
     igViewerFunction _function;
 };
 
-/* igViewerGuiFactory with its object references typed (dw4/support/reflected.h types them as words). */
-struct GuiFactory : public igObject {
-    igBasicColorChanger *_menuBackColor;
-    igBasicColorChanger *_menuItemForeColor;
-    igBasicColorChanger *_menuMarkColor;
-    igBasicColorChanger *_iconBackColor;
-    igBasicColorChanger *_bigIconColor;
-    igBasicColorChanger *_bigIconHighlightColor;
-    igBasicColorChanger *_smallIconOnOffColor;
-    igObject *_font;
-};
-
 #include "dw4/maths/igVec3f.h"
 #include "dw4/maths/igMath.h"
 
@@ -199,45 +187,47 @@ extern "C" igSmartPointer<igObject> igViewerGuiFactory_CreateEmpty(igViewerGuiFa
     return igSmartPointer<igObject>(0, kRetainReference);
 }
 
-/* The default colour of each state (highlighted, on, disabled) of every colour changer the factory hands out. */
-extern "C" void Gap__Viewer__igViewerGuiFactory__resetFields(GuiFactory *self) {
-    igBasicColorChanger_SetColor(self->_menuBackColor, 0, 0, 0, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_menuBackColor, 0, 1, 0, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_menuBackColor, 1, 0, 0, &g_viewerGuiStyle.highlightBackColor);
-    igBasicColorChanger_SetColor(self->_menuBackColor, 1, 1, 0, &g_viewerGuiStyle.highlightBackColor);
-    igBasicColorChanger_SetColor(self->_menuBackColor, 0, 0, 1, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_menuItemForeColor, 0, 0, 0, &g_viewerGuiStyle.textColor);
-    igBasicColorChanger_SetColor(self->_menuItemForeColor, 0, 1, 0, &g_viewerGuiStyle.textColor);
-    igBasicColorChanger_SetColor(self->_menuItemForeColor, 1, 0, 0, &g_viewerGuiStyle.highlightTextColor);
-    igBasicColorChanger_SetColor(self->_menuItemForeColor, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igBasicColorChanger_SetColor(self->_menuItemForeColor, 0, 0, 1, &g_viewerGuiStyle.disabledTextColor);
-    igOnOffColorChanger_SetColor(self->_menuMarkColor, 0, 0, 0, &g_viewerGuiStyle.clearColor);
-    igOnOffColorChanger_SetColor(self->_menuMarkColor, 1, 0, 0, &g_viewerGuiStyle.clearColor);
-    igOnOffColorChanger_SetColor(self->_menuMarkColor, 0, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igOnOffColorChanger_SetColor(self->_menuMarkColor, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igOnOffColorChanger_SetColor(self->_menuMarkColor, 0, 0, 1, &g_viewerGuiStyle.clearColor);
-    igBasicColorChanger_SetColor(self->_iconBackColor, 0, 0, 0, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_iconBackColor, 1, 0, 0, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_iconBackColor, 0, 1, 0, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_iconBackColor, 1, 1, 0, &g_viewerGuiStyle.backColor);
-    igBasicColorChanger_SetColor(self->_iconBackColor, 0, 0, 1, &g_viewerGuiStyle.backColor);
-    igOnOffColorChanger_SetColor(self->_bigIconColor, 0, 0, 0, &g_viewerGuiStyle.textColor);
-    igOnOffColorChanger_SetColor(self->_bigIconColor, 1, 0, 0, &g_viewerGuiStyle.textColor);
-    igOnOffColorChanger_SetColor(self->_bigIconColor, 0, 1, 0, &g_viewerGuiStyle.textColor);
-    igOnOffColorChanger_SetColor(self->_bigIconColor, 1, 1, 0, &g_viewerGuiStyle.textColor);
-    igOnOffColorChanger_SetColor(self->_bigIconColor, 0, 0, 1, &g_viewerGuiStyle.textColor);
-    igOnOffColorChanger_SetColor(self->_bigIconHighlightColor, 0, 0, 0, &g_viewerGuiStyle.clearColor);
-    igOnOffColorChanger_SetColor(self->_bigIconHighlightColor, 1, 0, 0, &g_viewerGuiStyle.highlightTextColor);
-    igOnOffColorChanger_SetColor(self->_bigIconHighlightColor, 0, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igOnOffColorChanger_SetColor(self->_bigIconHighlightColor, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igOnOffColorChanger_SetColor(self->_bigIconHighlightColor, 0, 0, 1, &g_viewerGuiStyle.clearColor);
-    igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 0, 0, 0, &g_viewerGuiStyle.textColor);
-    igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 0, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 1, 0, 0, &g_viewerGuiStyle.highlightTextColor);
-    igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
-    igOnOffColorChanger_SetColor(self->_smallIconOnOffColor, 0, 0, 1, &g_viewerGuiStyle.disabledTextColor);
-}
+namespace Gap {
+namespace Viewer {
 
-extern "C" igMetaObject *igViewerGuiFactory_GetMeta(void) {
-    return g_igViewerGuiFactory_metaObject;
+/* The default colour of each state (highlighted, on, disabled) of every colour changer the factory hands out. */
+void igViewerGuiFactory::resetFields(int flag)
+{
+    igBasicColorChanger_SetColor(_menuBackColor, 0, 0, 0, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_menuBackColor, 0, 1, 0, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_menuBackColor, 1, 0, 0, &g_viewerGuiStyle.highlightBackColor);
+    igBasicColorChanger_SetColor(_menuBackColor, 1, 1, 0, &g_viewerGuiStyle.highlightBackColor);
+    igBasicColorChanger_SetColor(_menuBackColor, 0, 0, 1, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_menuItemForeColor, 0, 0, 0, &g_viewerGuiStyle.textColor);
+    igBasicColorChanger_SetColor(_menuItemForeColor, 0, 1, 0, &g_viewerGuiStyle.textColor);
+    igBasicColorChanger_SetColor(_menuItemForeColor, 1, 0, 0, &g_viewerGuiStyle.highlightTextColor);
+    igBasicColorChanger_SetColor(_menuItemForeColor, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igBasicColorChanger_SetColor(_menuItemForeColor, 0, 0, 1, &g_viewerGuiStyle.disabledTextColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_menuMarkColor.p, 0, 0, 0, &g_viewerGuiStyle.clearColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_menuMarkColor.p, 1, 0, 0, &g_viewerGuiStyle.clearColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_menuMarkColor.p, 0, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_menuMarkColor.p, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_menuMarkColor.p, 0, 0, 1, &g_viewerGuiStyle.clearColor);
+    igBasicColorChanger_SetColor(_iconBackColor, 0, 0, 0, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_iconBackColor, 1, 0, 0, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_iconBackColor, 0, 1, 0, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_iconBackColor, 1, 1, 0, &g_viewerGuiStyle.backColor);
+    igBasicColorChanger_SetColor(_iconBackColor, 0, 0, 1, &g_viewerGuiStyle.backColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconColor.p, 0, 0, 0, &g_viewerGuiStyle.textColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconColor.p, 1, 0, 0, &g_viewerGuiStyle.textColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconColor.p, 0, 1, 0, &g_viewerGuiStyle.textColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconColor.p, 1, 1, 0, &g_viewerGuiStyle.textColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconColor.p, 0, 0, 1, &g_viewerGuiStyle.textColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconHighlightColor.p, 0, 0, 0, &g_viewerGuiStyle.clearColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconHighlightColor.p, 1, 0, 0, &g_viewerGuiStyle.highlightTextColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconHighlightColor.p, 0, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconHighlightColor.p, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_bigIconHighlightColor.p, 0, 0, 1, &g_viewerGuiStyle.clearColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_smallIconOnOffColor.p, 0, 0, 0, &g_viewerGuiStyle.textColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_smallIconOnOffColor.p, 0, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_smallIconOnOffColor.p, 1, 0, 0, &g_viewerGuiStyle.highlightTextColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_smallIconOnOffColor.p, 1, 1, 0, &g_viewerGuiStyle.selectedColor);
+    igOnOffColorChanger_SetColor((igBasicColorChanger *)_smallIconOnOffColor.p, 0, 0, 1, &g_viewerGuiStyle.disabledTextColor);
+}
+}
 }

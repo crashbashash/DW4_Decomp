@@ -1,145 +1,102 @@
-igMetaObject *g_beModelCtrlInfoHitBody_metaObject;
-igMetaField *g_beModelCtrlInfoHitBody_isFirstMetaField;
-igMetaField *g_beModelCtrlInfoHitBody_calcTimeMetaField;
-igMetaField *g_beModelCtrlInfoHitBody_countMetaField;
-igMetaField *g_beModelCtrlInfoHitBody_orgAABoxListMetaField;
-igMetaField *g_beModelCtrlInfoHitBody_AABoxMinListMetaField;
-igMetaField *g_beModelCtrlInfoHitBody_AABoxMaxListMetaField;
-igMetaField *g_beModelCtrlInfoHitBody_AABoxListMetaField;
+namespace Gap {
+namespace Bec {
 
-beModelCtrlInfoHitBody *beModelCtrlInfoHitBody_Create(int allocator) {
-    beModelCtrlInfoHitBody_EnsureRegistered();
-    return (beModelCtrlInfoHitBody *)igMetaObject_CreateInstance(g_beModelCtrlInfoHitBody_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beModelCtrlInfoHitBody::_Meta;
+igMetaField *beModelCtrlInfoHitBody::k_isFirst;
+igMetaField *beModelCtrlInfoHitBody::k_calcTime;
+igMetaField *beModelCtrlInfoHitBody::k_count;
+igMetaField *beModelCtrlInfoHitBody::k_orgAABoxList;
+igMetaField *beModelCtrlInfoHitBody::k_AABoxMinList;
+igMetaField *beModelCtrlInfoHitBody::k_AABoxMaxList;
+igMetaField *beModelCtrlInfoHitBody::k_AABoxList;
 
-igMetaObject *beModelCtrlInfoHitBody_GetOrCreateMetaObject(void) {
-    if (g_beModelCtrlInfoHitBody_metaObject == 0) {
-        g_beModelCtrlInfoHitBody_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beModelCtrlInfoHitBody_metaObject;
-}
-
-void *beModelCtrlInfoHitBody_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlInfoHitBody_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlInfoHitBody_EnsureRegistered();
-    }
-    return g_beModelCtrlInfoHitBody_metaObject;
-}
-
-int beModelCtrlInfoHitBody_GetVTable(void) {
-    beModelCtrlInfoHitBody obj;
-    int vtable;
-    igObject **AABoxListSlot;
-    igObject **AABoxMaxListSlot;
-    igObject **AABoxMinListSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beModelCtrlInfoHitBody_vtable[0];
-    AABoxMinListSlot = (igObject **)&obj._AABoxMinList;
-    *AABoxMinListSlot = 0;
-    AABoxMaxListSlot = (igObject **)&obj._AABoxMaxList;
-    *AABoxMaxListSlot = 0;
-    AABoxListSlot = (igObject **)&obj._AABoxList;
-    *AABoxListSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beModelCtrlInfoHitBody_vtable[0];
-    igObjectRef_Release(AABoxListSlot);
-    igObjectRef_Release(AABoxMaxListSlot);
-    igObjectRef_Release(AABoxMinListSlot);
-    return vtable;
-}
-
-void beModelCtrlInfoHitBody_EnsureRegistered(void)
+beModelCtrlInfoHitBody *beModelCtrlInfoHitBody::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beModelCtrlInfoHitBody_Register);
+    arkRegister();
+    return (beModelCtrlInfoHitBody *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoHitBody_callbackList[] = { igAABoxList_EnsureRegistered, igVec3fList_EnsureRegistered, 0 };
+igMetaObject *beModelCtrlInfoHitBody::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
 
-CallbackArray *beModelCtrlInfoHitBody_Register(void) {
+igMetaObject *beModelCtrlInfoHitBody::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beModelCtrlInfoHitBody::retrieveVTablePointer()
+{
+    beModelCtrlInfoHitBody temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlInfoHitBody::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlInfoHitBody::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igAABoxList_EnsureRegistered, igVec3fList_EnsureRegistered, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlInfoHitBody_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlInfoHitBody_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlInfoHitBody",
-        0x30, /* instance size */
-        beModelCtrlInfoHitBody_GetVTable,
-        beModelCtrlInfoHitBody_InitFields,
-        0, /* extra callback item */
-        g_beModelCtrlInfoHitBody_callbackList /* callback list */
+        sizeof(beModelCtrlInfoHitBody),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beModelCtrlInfoHitBody_GetMetaObjectFunction(void)
+void beModelCtrlInfoHitBody::arkRegisterInitialize()
 {
-    beModelCtrlInfoHitBody_GetMetaObject();
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_isFirst", "_calcTime", "_count", "_orgAABoxList", "_AABoxMinList", "_AABoxMaxList", "_AABoxList" };
+    static igMetaField **enumStorage[] = { &k_isFirst, &k_calcTime, &k_count, &k_orgAABoxList, &k_AABoxMinList, &k_AABoxMaxList, &k_AABoxList };
+    static int offsets[] = { 8, 16, 24, 28, 32, 36, 40 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
+        metaField->_refCounted = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlInfoHitBody_ctorTable[] = {
-    igBoolMetaField_Create,
-    igLongMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beModelCtrlInfoHitBody_fieldTable[] = {
-    "_isFirst",
-    "_calcTime",
-    "_count",
-    "_orgAABoxList",
-    "_AABoxMinList",
-    "_AABoxMaxList",
-    "_AABoxList",
-};
-static igMetaField **g_beModelCtrlInfoHitBody_fieldHandles[] = {
-    &g_beModelCtrlInfoHitBody_isFirstMetaField,
-    &g_beModelCtrlInfoHitBody_calcTimeMetaField,
-    &g_beModelCtrlInfoHitBody_countMetaField,
-    &g_beModelCtrlInfoHitBody_orgAABoxListMetaField,
-    &g_beModelCtrlInfoHitBody_AABoxMinListMetaField,
-    &g_beModelCtrlInfoHitBody_AABoxMaxListMetaField,
-    &g_beModelCtrlInfoHitBody_AABoxListMetaField,
-};
-static int g_beModelCtrlInfoHitBody_fieldOffsets[] = {
-    8,
-    16,
-    24,
-    28,
-    32,
-    36,
-    40,
-};
-
-void beModelCtrlInfoHitBody_InitFields(void) {
-    int base;
-    void *orgAABoxList;
-    void *AABoxMinList;
-    void *AABoxMaxList;
-    void *AABoxList;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlInfoHitBody_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlInfoHitBody_ctorTable, 7);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
-    orgAABoxList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)orgAABoxList)->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)orgAABoxList)->_refCounted = 0;
-    AABoxMinList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)AABoxMinList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
-    ((igRefMetaField *)AABoxMinList)->_construct = 1;
-    AABoxMaxList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)AABoxMaxList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
-    ((igRefMetaField *)AABoxMaxList)->_construct = 1;
-    AABoxList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)AABoxList)->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
-    ((igRefMetaField *)AABoxList)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beModelCtrlInfoHitBody_fieldTable, g_beModelCtrlInfoHitBody_fieldHandles, g_beModelCtrlInfoHitBody_fieldOffsets, base);
+}
 }
 

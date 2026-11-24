@@ -1,45 +1,43 @@
-igMetaObject *g_beCountry_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beCountry_GetMetaObject(void) {
-    igMetaObject *g = g_beCountry_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beCountry_EnsureRegistered();
-    }
-    return g_beCountry_metaObject;
-}
+igMetaObject *beCountry::_Meta;
 
-int beCountry_GetVTable(void) {
-    beCountry obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beCountry_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beCountry_EnsureRegistered(void)
+igMetaObject *beCountry::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beCountry_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beCountry_Register(void) {
+void *beCountry::retrieveVTablePointer()
+{
+    beCountry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beCountry::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beCountry::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beCountry_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beCountry_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beCountry",
-        8, /* instance size */
-        beCountry_GetVTable,
+        sizeof(beCountry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beCountry_GetMetaObjectFunction(void)
-{
-    beCountry_GetMetaObject();
+}
 }
 

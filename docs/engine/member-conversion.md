@@ -831,7 +831,64 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igSmartPointer_<X>_Destruct` copies and the C copies of igAnimationSystem's destructor and `getMeta` go
    before the 0x194380 row is regenerated. Next: igActor*, igBlendMatrixSelect,
    igModelViewMatrixBoneSelect, igBitMask, igEnbaya*, igCompressed*.
-7. the game's `be*` classes last.
+   Viewer (`Gap::Viewer`, igViewer in the kit; classconv's `LIBRARY_DIRS` lists its registration fragments and the
+   method units that sit apart in src/engine). Viewer units build with `-RTTI off` like the other Alchemy libraries
+   (retail's viewer vtables have zero type words), except the holder-destructor unit 0x4583f0. Retail emits a viewer
+   class's vtable in the unit defining its key function, and the kit's inline virtuals (`getMeta`, `isCompatible`)
+   beside it, so the class's first non-inline virtual is defined in that unit (igViewerSceneInfoManager.cpp for the
+   statistics classes). Converted: `igStatisticsItem` (an `igView`; `isCompatible` the kit's inline, `notify` empty),
+   `igStatisticsItemList` (DW4's `_items` list type, no igStatisticsItemListList) and `igViewerStatisticsManager`
+   (DW4's `_items` for the kit's `_itemsList`; the statistic selectors are `int` where the kit has its
+   VIEWER_STATISTICS and IG_STATISTIC_GROUP enums; its seven empty slots are the kit's). Specs in scratch/ViewerLib/specs.
+   `igViewModel`, `igViewerParameters` and `igActorManagerParams` follow (registration only; the matrices are typed
+   `igMatrix44f`, so their probes initialise them to identity as retail's do). Code that needs a converted viewer
+   class's `igVec3f` members or its matrix as a class casts to `Gap::Viewer::<class>`; the flat struct keeps raw
+   floats (`.m` passes a typed matrix to the C math functions).
+7. the game's `be*` classes last. Started with the leaf data rows and their lists (sixteen classes: nine rows,
+   `beTimerData`, `bePlaySE`, `beWaterMoveData`, `beNumVerInsideData`, `beDemoKeepMes`, `beMessengerDelay`,
+   `beHitLandResultData`, `beCriVolume` and `beCountry`, and seven of their lists). The patterns for Bec:
+   - **Namespace and layout.** `Gap::Bec` (retail's RTTI; `lib="Bec"` in the spec, `classconv.LIBRARY_DIRS` maps it
+     to `src/game/bec`). The unit is still `BecLibrary.cpp`, one `.inc` fragment per class, so a converted class's
+     `.inc` becomes the generated `namespace Gap { namespace Bec {` block; `BecLibrary.h` keeps the C-name
+     prototypes the unconverted classes still call, and `LibraryFront.inc`'s registration calls the members.
+   - **Spec form.** No kit header exists for the game's classes, so a data class is `IG_OBJECT_DEFINE(<class>)`, a
+     `private:` run of `static igMetaField *k_<field>;` handles named for the registered fields (the generator's
+     `--members` lists them; a field of a base such as `igNamedObject::_name` is the base's), `typed` rows for
+     string fields (`igStringRef`) and object references (`igSmartPointer<flat struct>`), and `gen` the boilerplate;
+     no accessors (only kit-declared or vtable-proven members), so the C code keeps reading the flat fields. A list
+     is `igTObjectList<element>` over `igObjectList` with `keep=["GetElementMeta"]`. A class whose factory the
+     code names (`beDemoKeepMes_CreateInstance`, `bePlaySE_CreateInstance`) maps it to `_instantiateFromPool`, a
+     `<Class>_Create` is mapped by the `create` flag; a class the code reaches only through another's
+     registration also gets `getClassTypeLazy`. The class's own game methods (`beCriVolume_StartFade`,
+     `beMessengerDelay_Clear`) stay free functions until a batch names them as members. Specs are written with the
+     shared `data_class`/`obj_list` helpers.
+   - **Before regenerating.** Delete the list's leftover C `<List>_GetElementMeta` and its prototype, and keep
+     `igSmartPointer_<X>_Destruct` copies out of the unit once the class is typed (a field typed
+     `igSmartPointer<beMessengerArgData>` made the template's destructor a second body at the same start; the
+     C copy's body went, its prototype stayed for the unconverted `beMessenger_GetVTable` that calls it by that
+     name). A stand-in with an inline destructor of the same shape as `igStringRef`'s (`ModelNameField`) goes for
+     `igStringRef`, or the rows read two names at one start.
+   - **Callers.** `<Class>_Create(int)` becomes `Gap::Bec::<Class>::_instantiateFromPool((igMemoryPoolView *)alloc)`,
+     returning the Gap class: a flat `igSmartPointer<beX>` takes it through a `(beX *)` cast, or the pointer is
+     `igSmartPointer<Gap::Bec::beX>` (bePlaySE; its destructor name then spells the Gap class).
+   - **Open: `igNamedObject` bases.** Converting `beSeData` and `beWeaponSeqData` (parent `igNamedObject`) stopped
+     `whole_file_rows.py` for the Bec unit (`struct.error`: the object emits `__vt__igNamedObject` and its RTTI record
+     where retail's unit does not), so the `igNamedObject`-derived rows wait for that; the igObject-derived ones are done.
+   - **Second pass (thirty more: `beCriSndf`, `beNumberCtrlInfoWork`, `beCriFxXbData`, `beModelCtrlMoveObject`,
+     `beModelCtrlInfoAI`, `beDemoManagerWork`, `beWaterMove`, `beMessengerWork`, `beMatCtrlSearch`,
+     `beGeneraterPlayerData`, `beMatCtrlInfoWork`, `beGeneraterInfoWork`, `beCameraDemoData`, `beFontGeomAttrPair`,
+     `beMessengerArgData`, `beSelectCtrlInfoWork`, `beCameraBoxData`, `beParticleCtrl2InfoWork`, `beFileChkObj`,
+     `beModelCtrlInfoHitBody`, `beDataBase`, `beAction2InfoWork` and eight of their lists).** The rows' field kinds and
+     the element class of each object reference come from the class's own `.inc` (the `ctorTable`, and the
+     `_metaObject` InitFields stamps), so a spec is `string` fields to `igStringRef` and each counted reference to
+     `igSmartPointer<element>` (flat name for a class not converted yet). Three things stop a row:
+     a reference InitFields stamps `_refCounted = 0` is a raw pointer and stays untyped (`beMatCtrlSearch::_parent`
+     released nothing in retail's probe); a class whose vtable has its own `<Class>_userDestruct` (`bePadData`,
+     `beNumVerData`, `beSaveDataDeliver`, `beLuaDataObject`, `beBinDataObject`, `beSvPlatDataGC`) must declare that
+     override first, so it waits; and every `igSmartPointer_<X>_Destruct` C copy of an element now typed in a row
+     (`igTransformList`, `igSwitch`, `beAction2Data`, `beBaseInfoRamList`) goes, prototype kept. A `WorkRef`/flat
+     `igSmartPointer<beX>` caller takes `(beX *)` before `_instantiateFromPool`; a `GROUP` macro allocation argument
+     is `(igMemoryPoolView *)`; a flat `float[3]` field read where the Gap class says `igVec3f` is `*(igVec3f *)`.
 
 ## Known differences and gaps
 

@@ -7,7 +7,6 @@ struct beSelectCtrlInfoWork;
 extern "C" {
 #endif
 
-struct beSelectCtrlInfoWork *beSelectCtrlInfoWork_Create(int allocator);
 
 #ifdef __cplusplus
 }

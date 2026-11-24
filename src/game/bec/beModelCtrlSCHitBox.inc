@@ -34,8 +34,8 @@ CallbackArray *beModelCtrlSCHitBox_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlSCHitBox_metaObject,
-        beModelCtrlSubComBase_Register,
-        beModelCtrlSubComBase_GetPublishedMetaObject,
+        Gap::Bec::beModelCtrlSubComBase::arkRegisterInternal,
+        Gap::Bec::beModelCtrlSubComBase::getClassMeta,
         beModelCtrlSCHitBox_GetMetaObjectFunction,
         "beModelCtrlSCHitBox",
         0x3c, /* instance size */

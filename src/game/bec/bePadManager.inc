@@ -67,7 +67,7 @@ void bePadManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(bePadManager_Register);
 }
 
-static igMetaObjectCallback g_bePadManager_callbackList[] = { beSystem_EnsureRegistered, bePadDataList_EnsureRegistered, beKeyboardReceiver_EnsureRegistered, 0 };
+static igMetaObjectCallback g_bePadManager_callbackList[] = { beSystem_EnsureRegistered, Gap::Bec::bePadDataList::arkRegister, beKeyboardReceiver_EnsureRegistered, 0 };
 
 CallbackArray *bePadManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -133,7 +133,7 @@ void bePadManager_InitFields(void) {
     system = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)system)->_metaObject = (int)beSystem_GetOrCreateMetaObject();
     padList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)padList)->_metaObject = (int)bePadDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)padList)->_metaObject = (int)Gap::Bec::bePadDataList::getClassTypeLazy();
     ((igRefMetaField *)padList)->_construct = 1;
     kbReceiver = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)kbReceiver)->_metaObject = (int)beKeyboardReceiver_GetOrCreateMetaObject();

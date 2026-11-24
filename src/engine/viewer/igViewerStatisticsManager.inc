@@ -1,183 +1,92 @@
-void *igViewerStatisticsManager_GetMetaObject(void) {
-    igMetaObject *g = g_igViewerStatisticsManager_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        igViewerStatisticsManager_EnsureRegistered();
-    }
-    return g_igViewerStatisticsManager_metaObject;
-}
+namespace Gap {
+namespace Viewer {
 
-int igViewerStatisticsManager_GetVTable(void) {
-    struct Obj obj;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igViewerStatisticsManager_vtable[0];
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w9 = 0;
-    obj.w10 = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igViewerStatisticsManager_vtable[0];
-    igSmartPointer_igMetaFieldList_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);
-    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
-    igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
-    GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
-    igSmartPointer_igViewerGuiFactory_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
-    igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
-    FUN_00458860((ObjectRefWord *)&obj.w2, -1);
-    return t;
-}
-
-/* Deleting destructor; the deletion flag is a signed short. */
-ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-void igViewerStatisticsManager_EnsureRegistered(void)
+igMetaObject *igViewerStatisticsManager::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igViewerStatisticsManager_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igViewerStatisticsManager_callbackList[] = { igStatisticsItemList_EnsureRegistered, Gap::Gfx::igVisualContext::arkRegister, igViewerGuiFactory_EnsureRegistered, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
+void *igViewerStatisticsManager::retrieveVTablePointer()
+{
+    igViewerStatisticsManager temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igViewerStatisticsManager_Register(void) {
+void igViewerStatisticsManager::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewerStatisticsManager::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Viewer::igStatisticsItemList::arkRegister, Gap::Gfx::igVisualContext::arkRegister, Gap::Viewer::igViewerGuiFactory::arkRegister, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewerStatisticsManager_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igViewerStatisticsManager_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewerStatisticsManager",
-        0x48, /* instance size */
-        igViewerStatisticsManager_GetVTable,
-        &igViewerStatisticsManager_InitFields,
-        0, /* extra callback item */
-        g_igViewerStatisticsManager_callbackList /* callback list */
+        sizeof(igViewerStatisticsManager),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igViewerStatisticsManager_GetMetaObjectFunction(void) {
-    igViewerStatisticsManager_GetMetaObject();
+void igViewerStatisticsManager::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_items", "_visualContext", "_guiFactory", "_menu", "_boxComponent", "_string", "_recordStatisticMaximum", "_attrMetaObjects", "_extraSgStatistics", "_attrCount", "_displayListAttrCount", "_textureAttrCount", "_geometryAttrCount", "_geometrySetAttrCount", "_mvmAttrCount" };
+    static igMetaField **enumStorage[] = { &k_items, &k_visualContext, &k_guiFactory, &k_menu, &k_boxComponent, &k_string, &k_recordStatisticMaximum, &k_attrMetaObjects, &k_extraSgStatistics, &k_attrCount, &k_displayListAttrCount, &k_textureAttrCount, &k_geometryAttrCount, &k_geometrySetAttrCount, &k_mvmAttrCount };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 15);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Viewer::igStatisticsItemList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Gfx::igVisualContext::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Viewer::igViewerGuiFactory::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+        metaField->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewerStatisticsManager_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_igViewerStatisticsManager_fieldTable[] = {
-    "_items",
-    "_visualContext",
-    "_guiFactory",
-    "_menu",
-    "_boxComponent",
-    "_string",
-    "_recordStatisticMaximum",
-    "_attrMetaObjects",
-    "_extraSgStatistics",
-    "_attrCount",
-    "_displayListAttrCount",
-    "_textureAttrCount",
-    "_geometryAttrCount",
-    "_geometrySetAttrCount",
-    "_mvmAttrCount",
-};
-static igMetaField **g_igViewerStatisticsManager_fieldHandles[] = {
-    &g_igViewerStatisticsManager_itemsMetaField,
-    &g_igViewerStatisticsManager_visualContextMetaField,
-    &g_igViewerStatisticsManager_guiFactoryMetaField,
-    &g_igViewerStatisticsManager_menuMetaField,
-    &g_igViewerStatisticsManager_boxComponentMetaField,
-    &g_igViewerStatisticsManager_stringMetaField,
-    &g_igViewerStatisticsManager_recordStatisticMaximumMetaField,
-    &g_igViewerStatisticsManager_attrMetaObjectsMetaField,
-    &g_igViewerStatisticsManager_extraSgStatisticsMetaField,
-    &g_igViewerStatisticsManager_attrCountMetaField,
-    &g_igViewerStatisticsManager_displayListAttrCountMetaField,
-    &g_igViewerStatisticsManager_textureAttrCountMetaField,
-    &g_igViewerStatisticsManager_geometryAttrCountMetaField,
-    &g_igViewerStatisticsManager_geometrySetAttrCountMetaField,
-    &g_igViewerStatisticsManager_mvmAttrCountMetaField,
-};
-static int g_igViewerStatisticsManager_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-    44,
-    48,
-    52,
-    56,
-    60,
-    64,
-};
-
-void igViewerStatisticsManager_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s2_8;
-    void *temp_s1;
-
-    temp_s1 = g_igViewerStatisticsManager_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igViewerStatisticsManager_ctorTable, 0xF);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igStatisticsItemList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)(Gap::Gfx::igVisualContext::getClassTypeLazy());
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igViewerGuiFactory_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)(igBoxComponent_GetOrCreateMetaObject());
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)(igBoxComponent_GetOrCreateMetaObject());
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igMetaObjectList_GetOrCreateMetaObject());
-    ((igRefMetaField *)temp_s2_7)->_construct = 1;
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igViewerStatisticsManager_fieldTable, g_igViewerStatisticsManager_fieldHandles, g_igViewerStatisticsManager_fieldOffsets, temp_s0);
+}
 }
 

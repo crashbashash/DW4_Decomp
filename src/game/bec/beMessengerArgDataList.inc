@@ -1,57 +1,52 @@
-igMetaObject *g_beMessengerArgDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beMessengerArgDataList_GetOrCreateMetaObject(void) {
-    if (g_beMessengerArgDataList_metaObject == 0) {
-        g_beMessengerArgDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beMessengerArgDataList_metaObject;
-}
+igMetaObject *beMessengerArgDataList::_Meta;
 
-igMetaObject *beMessengerArgDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beMessengerArgDataList_metaObject;
-    if (g != 0) {
-        int b = !!(g->_validity & 4);
-        if (b) goto done;
-    }
-    beMessengerArgDataList_EnsureRegistered();
-done:
-    return g_beMessengerArgDataList_metaObject;
-}
-
-int beMessengerArgDataList_GetVTable(void) {
-    beMessengerArgDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beMessengerArgDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beMessengerArgDataList_EnsureRegistered(void)
+igMetaObject *beMessengerArgDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beMessengerArgDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beMessengerArgDataList_callbackList[] = { beMessengerArgData_EnsureRegistered, 0 };
+igMetaObject *beMessengerArgDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beMessengerArgDataList_Register(void) {
+void *beMessengerArgDataList::retrieveVTablePointer()
+{
+    beMessengerArgDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beMessengerArgDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beMessengerArgDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beMessengerArgData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beMessengerArgDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beMessengerArgDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beMessengerArgDataList",
-        0x14, /* instance size */
-        beMessengerArgDataList_GetVTable,
+        sizeof(beMessengerArgDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beMessengerArgDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beMessengerArgDataList_GetMetaObjectFunction(void)
-{
-    beMessengerArgDataList_GetMetaObject();
+}
 }
 

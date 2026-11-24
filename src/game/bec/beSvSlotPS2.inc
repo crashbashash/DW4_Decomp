@@ -1,49 +1,43 @@
-igMetaObject *g_beSvSlotPS2_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beSvSlotPS2_GetMetaObject(void) {
-    igMetaObject *g = g_beSvSlotPS2_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beSvSlotPS2_EnsureRegistered();
-    }
-    return g_beSvSlotPS2_metaObject;
-}
+igMetaObject *beSvSlotPS2::_Meta;
 
-int beSvSlotPS2_GetVTable(void) {
-    beSvSlotPS2 obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSvSlotPS2_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beSvSlotPS2_EnsureRegistered(void)
+igMetaObject *beSvSlotPS2::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beSvSlotPS2_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beSvSlotPS2_Register(void) {
+void *beSvSlotPS2::retrieveVTablePointer()
+{
+    beSvSlotPS2 temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSvSlotPS2::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSvSlotPS2::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSvSlotPS2_metaObject,
-        beSvSlotData_Register,
-        beSvSlotData_GetPublishedMetaObject,
-        beSvSlotPS2_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Bec::beSvSlotData::arkRegisterInternal,
+        Gap::Bec::beSvSlotData::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSvSlotPS2",
-        0x18, /* instance size */
-        beSvSlotPS2_GetVTable,
+        sizeof(beSvSlotPS2),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beSvSlotPS2_GetMetaObjectFunction(void)
-{
-    beSvSlotPS2_GetMetaObject();
 }
-
-igMetaObject *beSvSlotData_GetPublishedMetaObject(void) {
-    return g_beSvSlotData_metaObject;
 }
 

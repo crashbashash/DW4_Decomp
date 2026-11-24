@@ -1,119 +1,85 @@
-igMetaObject *g_beSelectCtrlInfoWork_metaObject;
-igMetaField *g_beSelectCtrlInfoWork_offsetPosMetaField;
-igMetaField *g_beSelectCtrlInfoWork_selectMaxMetaField;
-igMetaField *g_beSelectCtrlInfoWork_isCancelMetaField;
-igMetaField *g_beSelectCtrlInfoWork_svSeqNameMetaField;
-igMetaField *g_beSelectCtrlInfoWork_decideListMetaField;
+namespace Gap {
+namespace Bec {
 
-beSelectCtrlInfoWork *beSelectCtrlInfoWork_Create(int allocator) {
-    beSelectCtrlInfoWork_EnsureRegistered();
-    return (beSelectCtrlInfoWork *)igMetaObject_CreateInstance(g_beSelectCtrlInfoWork_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beSelectCtrlInfoWork::_Meta;
+igMetaField *beSelectCtrlInfoWork::k_offsetPos;
+igMetaField *beSelectCtrlInfoWork::k_selectMax;
+igMetaField *beSelectCtrlInfoWork::k_isCancel;
+igMetaField *beSelectCtrlInfoWork::k_svSeqName;
+igMetaField *beSelectCtrlInfoWork::k_decideList;
 
-igMetaObject *beSelectCtrlInfoWork_GetOrCreateMetaObject(void) {
-    if (g_beSelectCtrlInfoWork_metaObject == 0) {
-        g_beSelectCtrlInfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beSelectCtrlInfoWork_metaObject;
-}
-
-void *beSelectCtrlInfoWork_GetMetaObject(void) {
-    igMetaObject *g = g_beSelectCtrlInfoWork_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beSelectCtrlInfoWork_EnsureRegistered();
-    }
-    return g_beSelectCtrlInfoWork_metaObject;
-}
-
-int beSelectCtrlInfoWork_GetVTable(void) {
-    beSelectCtrlInfoWork obj;
-    int vtable;
-    igObject **decideListSlot;
-    char **svSeqNameSlot;
-
-    igObject_InitHeader(&obj);
-    svSeqNameSlot = (char **)&obj._svSeqName;
-    decideListSlot = (igObject **)&obj._decideList;
-    obj._vtable = (int)&g_beSelectCtrlInfoWork_vtable[0];
-    *svSeqNameSlot = 0;
-    *decideListSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beSelectCtrlInfoWork_vtable[0];
-    igObjectRef_Release(decideListSlot);
-    igStringRef_Release(svSeqNameSlot);
-    return vtable;
-}
-
-void beSelectCtrlInfoWork_EnsureRegistered(void)
+beSelectCtrlInfoWork *beSelectCtrlInfoWork::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beSelectCtrlInfoWork_Register);
+    arkRegister();
+    return (beSelectCtrlInfoWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-static igMetaObjectCallback g_beSelectCtrlInfoWork_callbackList[] = { Gap::Core::igBoolList::arkRegister, 0 };
+igMetaObject *beSelectCtrlInfoWork::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
 
-CallbackArray *beSelectCtrlInfoWork_Register(void) {
+igMetaObject *beSelectCtrlInfoWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beSelectCtrlInfoWork::retrieveVTablePointer()
+{
+    beSelectCtrlInfoWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSelectCtrlInfoWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSelectCtrlInfoWork::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igBoolList::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSelectCtrlInfoWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beSelectCtrlInfoWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSelectCtrlInfoWork",
-        0x24, /* instance size */
-        beSelectCtrlInfoWork_GetVTable,
-        beSelectCtrlInfoWork_InitFields,
-        0, /* extra callback item */
-        g_beSelectCtrlInfoWork_callbackList /* callback list */
+        sizeof(beSelectCtrlInfoWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beSelectCtrlInfoWork_GetMetaObjectFunction(void)
+void beSelectCtrlInfoWork::arkRegisterInitialize()
 {
-    beSelectCtrlInfoWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igBoolMetaField_Create, igStringMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_offsetPos", "_selectMax", "_isCancel", "_svSeqName", "_decideList" };
+    static igMetaField **enumStorage[] = { &k_offsetPos, &k_selectMax, &k_isCancel, &k_svSeqName, &k_decideList };
+    static int offsets[] = { 8, 20, 24, 28, 32 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beSelectCtrlInfoWork_ctorTable[] = {
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igStringMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beSelectCtrlInfoWork_fieldTable[] = {
-    "_offsetPos",
-    "_selectMax",
-    "_isCancel",
-    "_svSeqName",
-    "_decideList",
-};
-static igMetaField **g_beSelectCtrlInfoWork_fieldHandles[] = {
-    &g_beSelectCtrlInfoWork_offsetPosMetaField,
-    &g_beSelectCtrlInfoWork_selectMaxMetaField,
-    &g_beSelectCtrlInfoWork_isCancelMetaField,
-    &g_beSelectCtrlInfoWork_svSeqNameMetaField,
-    &g_beSelectCtrlInfoWork_decideListMetaField,
-};
-static int g_beSelectCtrlInfoWork_fieldOffsets[] = {
-    8,
-    20,
-    24,
-    28,
-    32,
-};
-
-void beSelectCtrlInfoWork_InitFields(void) {
-    int base;
-    void *decideList;
-    igMetaObject *meta;
-
-    meta = g_beSelectCtrlInfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSelectCtrlInfoWork_ctorTable, 5);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
-    decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)decideList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
-    igMetaObject_NameFields(meta, g_beSelectCtrlInfoWork_fieldTable, g_beSelectCtrlInfoWork_fieldHandles, g_beSelectCtrlInfoWork_fieldOffsets, base);
+}
 }
 
 igMetaEnum *g_beSelectCtrlInfoWork_msgActionMetaEnum;

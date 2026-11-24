@@ -7,7 +7,6 @@ struct bePlaySE;
 extern "C" {
 #endif
 
-struct bePlaySE *bePlaySE_CreateInstance(int allocator);
 
 #ifdef __cplusplus
 }

@@ -334,7 +334,7 @@ void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram)
         if (playerCount == 0) {
             return;
         }
-        igSmartPointer<beGeneraterInfoWork> created(beGeneraterInfoWork_Create(allocatorFor(self)));
+        igSmartPointer<beGeneraterInfoWork> created((beGeneraterInfoWork *)Gap::Bec::beGeneraterInfoWork::_instantiateFromPool((igMemoryPoolView *)allocatorFor(self)));
         created->_playerCount = playerCount;
         (igSmartPointer<beGeneraterInfoWork> &)geneRam->_work = created;
         setGeneEnemy(self, created, enemyRecNo(geneRam));

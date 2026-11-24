@@ -51,15 +51,6 @@ int beMessenger_GetVTable(void) {
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beMessengerArgData_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if ((short)delete_storage > 0) operator delete(self);
-    }
-    return self;
-}
-
 igSmartPointer<igObject> *igSmartPointer_beMessengerGroupList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
@@ -101,7 +92,7 @@ void beMessenger_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMessenger_Register);
 }
 
-static igMetaObjectCallback g_beMessenger_callbackList[] = { beMessengerArgData_EnsureRegistered, beMessengerGroupList_EnsureRegistered, beMessengerWorkList_EnsureRegistered, beMessengerDelayList_EnsureRegistered, beMessengerArgDataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMessenger_callbackList[] = { Gap::Bec::beMessengerArgData::arkRegister, beMessengerGroupList_EnsureRegistered, Gap::Bec::beMessengerWorkList::arkRegister, Gap::Bec::beMessengerDelayList::arkRegister, Gap::Bec::beMessengerArgDataList::arkRegister, 0 };
 
 CallbackArray *beMessenger_Register(void) {
     BecLibrary_MarkRegistered();
@@ -179,18 +170,18 @@ void beMessenger_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beMessenger_ctorTable, 8);
     argData = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
-    ((igObjectRefMetaField *)argData)->_metaObject = (int)beMessengerArgData_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)argData)->_metaObject = (int)Gap::Bec::beMessengerArgData::getClassTypeLazy();
     groupList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)groupList)->_metaObject = (int)beMessengerGroupList_GetOrCreateMetaObject();
     ((igRefMetaField *)groupList)->_construct = 1;
     workStack = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
-    ((igObjectRefMetaField *)workStack)->_metaObject = (int)beMessengerWorkList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)workStack)->_metaObject = (int)Gap::Bec::beMessengerWorkList::getClassTypeLazy();
     ((igRefMetaField *)workStack)->_construct = 1;
     delayStack = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
-    ((igObjectRefMetaField *)delayStack)->_metaObject = (int)beMessengerDelayList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)delayStack)->_metaObject = (int)Gap::Bec::beMessengerDelayList::getClassTypeLazy();
     ((igRefMetaField *)delayStack)->_construct = 1;
     pushPopStack = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
-    ((igObjectRefMetaField *)pushPopStack)->_metaObject = (int)beMessengerArgDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)pushPopStack)->_metaObject = (int)Gap::Bec::beMessengerArgDataList::getClassTypeLazy();
     ((igRefMetaField *)pushPopStack)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_beMessenger_fieldTable, g_beMessenger_fieldHandles, g_beMessenger_fieldOffsets, base);
 }

@@ -1,54 +1,52 @@
-igMetaObject *g_bePadDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *bePadDataList_GetOrCreateMetaObject(void) {
-    if (g_bePadDataList_metaObject == 0) {
-        g_bePadDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_bePadDataList_metaObject;
-}
+igMetaObject *bePadDataList::_Meta;
 
-void *bePadDataList_GetMetaObject(void) {
-    igMetaObject *g = g_bePadDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        bePadDataList_EnsureRegistered();
-    }
-    return g_bePadDataList_metaObject;
-}
-
-int bePadDataList_GetVTable(void) {
-    bePadDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_bePadDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void bePadDataList_EnsureRegistered(void)
+igMetaObject *bePadDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(bePadDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_bePadDataList_callbackList[] = { bePadData_EnsureRegistered, 0 };
+igMetaObject *bePadDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *bePadDataList_Register(void) {
+void *bePadDataList::retrieveVTablePointer()
+{
+    bePadDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void bePadDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *bePadDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::bePadData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_bePadDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        bePadDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "bePadDataList",
-        0x14, /* instance size */
-        bePadDataList_GetVTable,
+        sizeof(bePadDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_bePadDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void bePadDataList_GetMetaObjectFunction(void)
-{
-    bePadDataList_GetMetaObject();
+}
 }
 

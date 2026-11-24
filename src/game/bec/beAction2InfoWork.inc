@@ -1,229 +1,117 @@
-igMetaObject *g_beAction2InfoWork_metaObject;
-igMetaField *g_beAction2InfoWork_comDataMetaField;
-igMetaField *g_beAction2InfoWork_comIndexMetaField;
-igMetaField *g_beAction2InfoWork_isNoHokanMetaField;
-igMetaField *g_beAction2InfoWork_isMotionMetaField;
-igMetaField *g_beAction2InfoWork_motionSt0MetaField;
-igMetaField *g_beAction2InfoWork_motionIsEndMetaField;
-igMetaField *g_beAction2InfoWork_jointSt0MetaField;
-igMetaField *g_beAction2InfoWork_jointStartTimeLMetaField;
-igMetaField *g_beAction2InfoWork_jointEndTimeLMetaField;
-igMetaField *g_beAction2InfoWork_jointIsEndMetaField;
-igMetaField *g_beAction2InfoWork_fadeSt0MetaField;
-igMetaField *g_beAction2InfoWork_fadeLimitValueMetaField;
-igMetaField *g_beAction2InfoWork_fadeAddValueMetaField;
-igMetaField *g_beAction2InfoWork_fadeValueMetaField;
-igMetaField *g_beAction2InfoWork_waitSt0MetaField;
-igMetaField *g_beAction2InfoWork_flashSt0MetaField;
-igMetaField *g_beAction2InfoWork_isFreezeMetaField;
-igMetaField *g_beAction2InfoWork_colorAttrMetaField;
-igMetaField *g_beAction2InfoWork_blendStateAttrMetaField;
-igMetaField *g_beAction2InfoWork_textureStateAttrMetaField;
-igMetaField *g_beAction2InfoWork_lightingStateAttrMetaField;
+namespace Gap {
+namespace Bec {
 
-beAction2InfoWork *beAction2InfoWork_CreateInstance(int allocator) {
-    beAction2InfoWork_EnsureRegistered();
-    return (beAction2InfoWork *)igMetaObject_CreateInstance(g_beAction2InfoWork_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beAction2InfoWork::_Meta;
+igMetaField *beAction2InfoWork::k_comData;
+igMetaField *beAction2InfoWork::k_comIndex;
+igMetaField *beAction2InfoWork::k_isNoHokan;
+igMetaField *beAction2InfoWork::k_isMotion;
+igMetaField *beAction2InfoWork::k_motionSt0;
+igMetaField *beAction2InfoWork::k_motionIsEnd;
+igMetaField *beAction2InfoWork::k_jointSt0;
+igMetaField *beAction2InfoWork::k_jointStartTimeL;
+igMetaField *beAction2InfoWork::k_jointEndTimeL;
+igMetaField *beAction2InfoWork::k_jointIsEnd;
+igMetaField *beAction2InfoWork::k_fadeSt0;
+igMetaField *beAction2InfoWork::k_fadeLimitValue;
+igMetaField *beAction2InfoWork::k_fadeAddValue;
+igMetaField *beAction2InfoWork::k_fadeValue;
+igMetaField *beAction2InfoWork::k_waitSt0;
+igMetaField *beAction2InfoWork::k_flashSt0;
+igMetaField *beAction2InfoWork::k_isFreeze;
+igMetaField *beAction2InfoWork::k_colorAttr;
+igMetaField *beAction2InfoWork::k_blendStateAttr;
+igMetaField *beAction2InfoWork::k_textureStateAttr;
+igMetaField *beAction2InfoWork::k_lightingStateAttr;
 
-igMetaObject *beAction2InfoWork_GetOrCreateMetaObject(void) {
-    if (g_beAction2InfoWork_metaObject == 0) {
-        g_beAction2InfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beAction2InfoWork_metaObject;
-}
-
-igMetaObject *beAction2InfoWork_GetMetaObject(void)
+beAction2InfoWork *beAction2InfoWork::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_beAction2InfoWork_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beAction2InfoWork_EnsureRegistered();
-    return g_beAction2InfoWork_metaObject;
+    arkRegister();
+    return (beAction2InfoWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int beAction2InfoWork_GetVTable(void) {
-    beAction2InfoWork obj;
-    int vtable;
-    char *textureStateAttrSlot;
-    char *blendStateAttrSlot;
-    char *colorAttrSlot;
-    char *comDataSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beAction2InfoWork_vtable[0];
-    comDataSlot = (char *)&obj._comData;
-    *(int *)comDataSlot = 0;
-    colorAttrSlot = (char *)&obj._colorAttr;
-    *(int *)colorAttrSlot = 0;
-    blendStateAttrSlot = (char *)&obj._blendStateAttr;
-    *(int *)blendStateAttrSlot = 0;
-    textureStateAttrSlot = (char *)&obj._textureStateAttr;
-    *(int *)textureStateAttrSlot = 0;
-    obj._lightingStateAttr = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beAction2InfoWork_vtable[0];
-    igSmartPointer_igLightingStateAttr_Destruct((igSmartPointer<igObject> *)&obj._lightingStateAttr, -1);
-    igSmartPointer_igTextureStateAttr_Destruct(textureStateAttrSlot, -1);
-    igSmartPointer_igBlendStateAttr_Destruct((igSmartPointer<igObject> *)blendStateAttrSlot, -1);
-    igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)colorAttrSlot, -1);
-    igSmartPointer_beAction2Data_Destruct((igSmartPointer<igObject> *)comDataSlot, (short)(-1));
-    return vtable;
-}
-
-igSmartPointer<igObject> *igSmartPointer_beAction2Data_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (delete_storage > 0) operator delete(self);
-    }
-    return self;
-}
-
-void beAction2InfoWork_EnsureRegistered(void)
+igMetaObject *beAction2InfoWork::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beAction2InfoWork_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beAction2InfoWork_callbackList[] = { beAction2Data_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igBlendStateAttr::arkRegister, Gap::Attrs::igTextureStateAttr::arkRegister, Gap::Attrs::igLightingStateAttr::arkRegister, 0 };
+igMetaObject *beAction2InfoWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beAction2InfoWork_Register(void) {
+void *beAction2InfoWork::retrieveVTablePointer()
+{
+    beAction2InfoWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
+}
+
+namespace Gap {
+namespace Bec {
+
+void beAction2InfoWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beAction2InfoWork::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { beAction2Data_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igBlendStateAttr::arkRegister, Gap::Attrs::igTextureStateAttr::arkRegister, Gap::Attrs::igLightingStateAttr::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beAction2InfoWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beAction2InfoWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beAction2InfoWork",
-        0x60, /* instance size */
-        beAction2InfoWork_GetVTable,
-        beAction2InfoWork_InitFields,
-        0, /* extra callback item */
-        g_beAction2InfoWork_callbackList /* callback list */
+        sizeof(beAction2InfoWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beAction2InfoWork_GetMetaObjectFunction(void)
+void beAction2InfoWork::arkRegisterInitialize()
 {
-    beAction2InfoWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igBoolMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_comData", "_comIndex", "_isNoHokan", "_isMotion", "_motionSt0", "_motionIsEnd", "_jointSt0", "_jointStartTimeL", "_jointEndTimeL", "_jointIsEnd", "_fadeSt0", "_fadeLimitValue", "_fadeAddValue", "_fadeValue", "_waitSt0", "_flashSt0", "_isFreeze", "_colorAttr", "_blendStateAttr", "_textureStateAttr", "_lightingStateAttr" };
+    static igMetaField **enumStorage[] = { &k_comData, &k_comIndex, &k_isNoHokan, &k_isMotion, &k_motionSt0, &k_motionIsEnd, &k_jointSt0, &k_jointStartTimeL, &k_jointEndTimeL, &k_jointIsEnd, &k_fadeSt0, &k_fadeLimitValue, &k_fadeAddValue, &k_fadeValue, &k_waitSt0, &k_flashSt0, &k_isFreeze, &k_colorAttr, &k_blendStateAttr, &k_textureStateAttr, &k_lightingStateAttr };
+    static int offsets[] = { 8, 12, 16, 17, 20, 24, 28, 32, 40, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 21);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)beAction2Data_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 17);
+        metaField->_metaObject = (int)Gap::Attrs::igColorAttr::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 18);
+        metaField->_metaObject = (int)Gap::Attrs::igBlendStateAttr::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 19);
+        metaField->_metaObject = (int)Gap::Attrs::igTextureStateAttr::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 20);
+        metaField->_metaObject = (int)Gap::Attrs::igLightingStateAttr::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beAction2InfoWork_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igLongMetaField_Create,
-    igLongMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beAction2InfoWork_fieldTable[] = {
-    "_comData",
-    "_comIndex",
-    "_isNoHokan",
-    "_isMotion",
-    "_motionSt0",
-    "_motionIsEnd",
-    "_jointSt0",
-    "_jointStartTimeL",
-    "_jointEndTimeL",
-    "_jointIsEnd",
-    "_fadeSt0",
-    "_fadeLimitValue",
-    "_fadeAddValue",
-    "_fadeValue",
-    "_waitSt0",
-    "_flashSt0",
-    "_isFreeze",
-    "_colorAttr",
-    "_blendStateAttr",
-    "_textureStateAttr",
-    "_lightingStateAttr",
-};
-static igMetaField **g_beAction2InfoWork_fieldHandles[] = {
-    &g_beAction2InfoWork_comDataMetaField,
-    &g_beAction2InfoWork_comIndexMetaField,
-    &g_beAction2InfoWork_isNoHokanMetaField,
-    &g_beAction2InfoWork_isMotionMetaField,
-    &g_beAction2InfoWork_motionSt0MetaField,
-    &g_beAction2InfoWork_motionIsEndMetaField,
-    &g_beAction2InfoWork_jointSt0MetaField,
-    &g_beAction2InfoWork_jointStartTimeLMetaField,
-    &g_beAction2InfoWork_jointEndTimeLMetaField,
-    &g_beAction2InfoWork_jointIsEndMetaField,
-    &g_beAction2InfoWork_fadeSt0MetaField,
-    &g_beAction2InfoWork_fadeLimitValueMetaField,
-    &g_beAction2InfoWork_fadeAddValueMetaField,
-    &g_beAction2InfoWork_fadeValueMetaField,
-    &g_beAction2InfoWork_waitSt0MetaField,
-    &g_beAction2InfoWork_flashSt0MetaField,
-    &g_beAction2InfoWork_isFreezeMetaField,
-    &g_beAction2InfoWork_colorAttrMetaField,
-    &g_beAction2InfoWork_blendStateAttrMetaField,
-    &g_beAction2InfoWork_textureStateAttrMetaField,
-    &g_beAction2InfoWork_lightingStateAttrMetaField,
-};
-static int g_beAction2InfoWork_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    17,
-    20,
-    24,
-    28,
-    32,
-    40,
-    48,
-    52,
-    56,
-    60,
-    64,
-    68,
-    72,
-    76,
-    80,
-    84,
-    88,
-    92,
-};
-
-void beAction2InfoWork_InitFields(void) {
-    int base;
-    void *comData;
-    void *colorAttr;
-    void *blendStateAttr;
-    void *textureStateAttr;
-    void *lightingStateAttr;
-    igMetaObject *meta;
-
-    meta = g_beAction2InfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beAction2InfoWork_ctorTable, 0x15);
-    comData = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)comData)->_metaObject = (int)beAction2Data_GetOrCreateMetaObject();
-    colorAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
-    ((igObjectRefMetaField *)colorAttr)->_metaObject = (int)Gap::Attrs::igColorAttr::getClassTypeLazy();
-    blendStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x12));
-    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = (int)Gap::Attrs::igBlendStateAttr::getClassTypeLazy();
-    textureStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
-    ((igObjectRefMetaField *)textureStateAttr)->_metaObject = (int)Gap::Attrs::igTextureStateAttr::getClassTypeLazy();
-    lightingStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x14));
-    ((igObjectRefMetaField *)lightingStateAttr)->_metaObject = (int)Gap::Attrs::igLightingStateAttr::getClassTypeLazy();
-    igMetaObject_NameFields(meta, g_beAction2InfoWork_fieldTable, g_beAction2InfoWork_fieldHandles, g_beAction2InfoWork_fieldOffsets, base);
+}
 }
 

@@ -1,212 +1,113 @@
-igMetaObject *g_igViewerGuiFactory_metaObject;
-igMetaField *g_igViewerGuiFactory_menuBackColorMetaField;
-igMetaField *g_igViewerGuiFactory_menuItemForeColorMetaField;
-igMetaField *g_igViewerGuiFactory_menuMarkColorMetaField;
-igMetaField *g_igViewerGuiFactory_iconBackColorMetaField;
-igMetaField *g_igViewerGuiFactory_bigIconColorMetaField;
-igMetaField *g_igViewerGuiFactory_bigIconHighlightColorMetaField;
-igMetaField *g_igViewerGuiFactory_smallIconOnOffColorMetaField;
-igMetaField *g_igViewerGuiFactory_fontMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igViewerGuiFactory_GetOrCreateMetaObject(void) {
-    if (g_igViewerGuiFactory_metaObject == 0) {
-        g_igViewerGuiFactory_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igViewerGuiFactory_metaObject;
-}
+igMetaObject *igViewerGuiFactory::_Meta;
+igMetaField *igViewerGuiFactory::k_menuBackColor;
+igMetaField *igViewerGuiFactory::k_menuItemForeColor;
+igMetaField *igViewerGuiFactory::k_menuMarkColor;
+igMetaField *igViewerGuiFactory::k_iconBackColor;
+igMetaField *igViewerGuiFactory::k_bigIconColor;
+igMetaField *igViewerGuiFactory::k_bigIconHighlightColor;
+igMetaField *igViewerGuiFactory::k_smallIconOnOffColor;
+igMetaField *igViewerGuiFactory::k_font;
 
-igMetaObject *igViewerGuiFactory_GetMetaObject(void)
+igMetaObject *igViewerGuiFactory::getClassTypeLazy()
 {
-    igMetaObject *g = ((igMetaObject *)g_igViewerGuiFactory_metaObject);
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        igViewerGuiFactory_EnsureRegistered();
-    return ((igMetaObject *)g_igViewerGuiFactory_metaObject);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igViewerGuiFactory_GetVTable(void) {
-    struct Obj_45b970 obj;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igViewerGuiFactory_vtable[0];
-    obj.w2 = 0;
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w8 = 0;
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igViewerGuiFactory_vtable[0];
-    FUN_0045bb90((void **)&obj.w9, -1);
-    FUN_0045bb10((Ref **)&obj.w8, -1);
-    FUN_0045bb10((Ref **)&obj.w7, -1);
-    FUN_0045bb10((Ref **)&obj.w6, -1);
-    FUN_0045ba90((void **)&obj.w5, -1);
-    FUN_0045bb10((Ref **)&obj.w4, -1);
-    FUN_0045ba90((void **)&obj.w3, -1);
-    FUN_0045ba90((void **)&obj.w2, -1);
-    return t;
-}
-
-void **FUN_0045ba90(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_0045bb10(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
-        }
-        if (flag > 0) operator delete(self);
-    }
-    return (void **)self;
-}
-
-void **FUN_0045bb90(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void igViewerGuiFactory_EnsureRegistered(void)
+igMetaObject *igViewerGuiFactory::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igViewerGuiFactory_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igViewerGuiFactory_callbackList[] = { igBasicColorChanger_RunStaticInit, igOnOffColorChanger_RunStaticInit, igBitmapFont_RunStaticInit, 0 };
+void *igViewerGuiFactory::retrieveVTablePointer()
+{
+    igViewerGuiFactory temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igViewerGuiFactory_Register(void) {
+void igViewerGuiFactory::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewerGuiFactory::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igBasicColorChanger_RunStaticInit, igOnOffColorChanger_RunStaticInit, igBitmapFont_RunStaticInit, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewerGuiFactory_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igViewerGuiFactory_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewerGuiFactory",
-        0x28, /* instance size */
-        igViewerGuiFactory_GetVTable,
-        &igViewerGuiFactory_InitFields,
-        0, /* extra callback item */
-        g_igViewerGuiFactory_callbackList /* callback list */
+        sizeof(igViewerGuiFactory),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igViewerGuiFactory_GetMetaObjectFunction(void) {
-    igViewerGuiFactory_GetMetaObject();
+void igViewerGuiFactory::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_menuBackColor", "_menuItemForeColor", "_menuMarkColor", "_iconBackColor", "_bigIconColor", "_bigIconHighlightColor", "_smallIconOnOffColor", "_font" };
+    static igMetaField **enumStorage[] = { &k_menuBackColor, &k_menuItemForeColor, &k_menuMarkColor, &k_iconBackColor, &k_bigIconColor, &k_bigIconHighlightColor, &k_smallIconOnOffColor, &k_font };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 8);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igBasicColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)igBasicColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)igBasicColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_metaObject = (int)igBitmapFont_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewerGuiFactory_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_igViewerGuiFactory_fieldTable[] = {
-    "_menuBackColor",
-    "_menuItemForeColor",
-    "_menuMarkColor",
-    "_iconBackColor",
-    "_bigIconColor",
-    "_bigIconHighlightColor",
-    "_smallIconOnOffColor",
-    "_font",
-};
-static igMetaField **g_igViewerGuiFactory_fieldHandles[] = {
-    &g_igViewerGuiFactory_menuBackColorMetaField,
-    &g_igViewerGuiFactory_menuItemForeColorMetaField,
-    &g_igViewerGuiFactory_menuMarkColorMetaField,
-    &g_igViewerGuiFactory_iconBackColorMetaField,
-    &g_igViewerGuiFactory_bigIconColorMetaField,
-    &g_igViewerGuiFactory_bigIconHighlightColorMetaField,
-    &g_igViewerGuiFactory_smallIconOnOffColorMetaField,
-    &g_igViewerGuiFactory_fontMetaField,
-};
-static int g_igViewerGuiFactory_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-};
-
-void igViewerGuiFactory_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s2_8;
-    int temp_s1;
-    void *temp_s0;
-
-    temp_s0 = g_igViewerGuiFactory_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerGuiFactory_ctorTable, 8);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igBasicColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igBasicColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igBasicColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_6)->_construct = 1;
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igOnOffColorChanger_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_7)->_construct = 1;
-    temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igBitmapFont_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerGuiFactory_fieldTable, g_igViewerGuiFactory_fieldHandles, g_igViewerGuiFactory_fieldOffsets, temp_s1);
+}
 }
 

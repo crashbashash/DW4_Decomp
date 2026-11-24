@@ -1,45 +1,43 @@
-igMetaObject *g_beFile_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beFile_GetMetaObject(void) {
-    igMetaObject *g = g_beFile_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beFile_EnsureRegistered();
-    }
-    return g_beFile_metaObject;
-}
+igMetaObject *beFile::_Meta;
 
-int beFile_GetVTable(void) {
-    beFile obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beFile_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beFile_EnsureRegistered(void)
+igMetaObject *beFile::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beFile_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beFile_Register(void) {
+void *beFile::retrieveVTablePointer()
+{
+    beFile temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beFile::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beFile::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beFile_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beFile_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beFile",
-        8, /* instance size */
-        beFile_GetVTable,
+        sizeof(beFile),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beFile_GetMetaObjectFunction(void)
-{
-    beFile_GetMetaObject();
+}
 }
 

@@ -7,7 +7,6 @@ struct beCriSndf;
 extern "C" {
 #endif
 
-struct beCriSndf *beCriSndf_Create(int allocator);
 
 #ifdef __cplusplus
 }

@@ -7,7 +7,6 @@ struct beAction2InfoWork;
 extern "C" {
 #endif
 
-struct beAction2InfoWork *beAction2InfoWork_CreateInstance(int allocator);
 
 #ifdef __cplusplus
 }

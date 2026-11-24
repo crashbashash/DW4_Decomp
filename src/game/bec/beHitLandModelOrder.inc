@@ -60,7 +60,7 @@ void beHitLandModelOrder_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandModelOrder_Register);
 }
 
-static igMetaObjectCallback g_beHitLandModelOrder_callbackList[] = { igRayList_EnsureRegistered, beHitLandResultDataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beHitLandModelOrder_callbackList[] = { igRayList_EnsureRegistered, Gap::Bec::beHitLandResultDataList::arkRegister, 0 };
 
 CallbackArray *beHitLandModelOrder_Register(void) {
     BecLibrary_MarkRegistered();
@@ -157,7 +157,7 @@ void beHitLandModelOrder_InitFields(void) {
     ((igObjectRefMetaField *)rayList)->_metaObject = (int)igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)rayList)->_construct = 1;
     hitdataList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)hitdataList)->_metaObject = (int)beHitLandResultDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hitdataList)->_metaObject = (int)Gap::Bec::beHitLandResultDataList::getClassTypeLazy();
     ((igRefMetaField *)hitdataList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beHitLandModelOrder_fieldTable, g_beHitLandModelOrder_fieldHandles, g_beHitLandModelOrder_fieldOffsets, base);
 }

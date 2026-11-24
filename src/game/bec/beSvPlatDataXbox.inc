@@ -38,15 +38,15 @@ void beSvPlatDataXbox_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvPlatDataXbox_Register);
 }
 
-static igMetaObjectCallback g_beSvPlatDataXbox_callbackList[] = { beXboxImage24k_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvPlatDataXbox_callbackList[] = { Gap::Bec::beXboxImage24k::arkRegister, 0 };
 
 CallbackArray *beSvPlatDataXbox_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSvPlatDataXbox_metaObject,
-        beSvPlatBaseData_Register,
-        beSvPlatBaseData_GetPublishedMetaObject,
+        Gap::Bec::beSvPlatBaseData::arkRegisterInternal,
+        Gap::Bec::beSvPlatBaseData::getClassMeta,
         beSvPlatDataXbox_GetMetaObjectFunction,
         "beSvPlatDataXbox",
         0x2c, /* instance size */
@@ -107,7 +107,7 @@ void beSvPlatDataXbox_InitFields(void) {
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->release();
     image = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    ((igObjectRefMetaField *)image)->_metaObject = (int)beXboxImage24k_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)image)->_metaObject = (int)Gap::Bec::beXboxImage24k::getClassTypeLazy();
     ((igRefMetaField *)image)->_construct = 1;
     dataOffSet = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3);
     ((igIntArrayMetaField *)dataOffSet)->_num = 2;

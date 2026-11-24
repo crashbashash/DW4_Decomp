@@ -41,14 +41,14 @@ void beCameraMode_OnAttach(beCameraMode *self) {
         farPlane = camera->_farPlane;
         nearPlane = camera->_nearPlane;
         model->_hfov = camera->_horizontalFieldOfView;
-        igNotifyEvent hfovChanged((Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
+        igNotifyEvent hfovChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_hfov);
         ((Gap::Gui::igModel *)model)->notifyAllViews(hfovChanged);
         model->_farPlane = farPlane;
-        igNotifyEvent farChanged((Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
+        igNotifyEvent farChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_farPlane);
         ((Gap::Gui::igModel *)model)->notifyAllViews(farChanged);
         nearPlane = (nearPlane == 0.0f) ? farPlane / 1000.0f : nearPlane;
         model->_nearPlane = nearPlane;
-        igNotifyEvent nearChanged((Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
+        igNotifyEvent nearChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_nearPlane);
         ((Gap::Gui::igModel *)model)->notifyAllViews(nearChanged);
     }
 }
@@ -84,7 +84,7 @@ void beCameraMode_Update(beCameraMode *self) {
         igMatrix44f_MakeEulerRotation(&matrix, a, b, c);
         igMatrix44f_SetTranslation(matrix.m, translation.v);
         igMatrix44f_InvertOrthonormal(model->_viewMatrix, matrix.m);
-        igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+        igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
         ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
 }

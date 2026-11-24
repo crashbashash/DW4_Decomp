@@ -1,81 +1,64 @@
-igMetaObject *g_bePlaySE_metaObject;
-igMetaField *g_bePlaySE_idMetaField;
-igMetaField *g_bePlaySE_timeMetaField;
+namespace Gap {
+namespace Bec {
 
-bePlaySE *bePlaySE_CreateInstance(int allocator) {
-    bePlaySE_EnsureRegistered();
-    return (bePlaySE *)igMetaObject_CreateInstance(g_bePlaySE_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *bePlaySE::_Meta;
+igMetaField *bePlaySE::k_id;
+igMetaField *bePlaySE::k_time;
 
-void *bePlaySE_GetMetaObject(void) {
-    igMetaObject *g = g_bePlaySE_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        bePlaySE_EnsureRegistered();
-    }
-    return g_bePlaySE_metaObject;
-}
-
-int bePlaySE_GetVTable(void) {
-    bePlaySE obj;
-    int off;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_bePlaySE_vtable[0];
-    off = g_objectSystem->vtableProbeOffset;
-    return *(int *)((char *)&obj + off);
-}
-
-void bePlaySE_EnsureRegistered(void)
+bePlaySE *bePlaySE::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(bePlaySE_Register);
+    arkRegister();
+    return (bePlaySE *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *bePlaySE_Register(void) {
+igMetaObject *bePlaySE::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *bePlaySE::retrieveVTablePointer()
+{
+    bePlaySE temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void bePlaySE::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *bePlaySE::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_bePlaySE_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        bePlaySE_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "bePlaySE",
-        0x18, /* instance size */
-        bePlaySE_GetVTable,
-        bePlaySE_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(bePlaySE),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void bePlaySE_GetMetaObjectFunction(void)
+void bePlaySE::arkRegisterInitialize()
 {
-    bePlaySE_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool };
+    static const char *names[] = { "_id", "_time" };
+    static igMetaField **enumStorage[] = { &k_id, &k_time };
+    static int offsets[] = { 8, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_bePlaySE_ctorTable[] = {
-    igIntMetaField_Create,
-    igLongMetaField_Create,
-};
-static const char *g_bePlaySE_fieldTable[] = {
-    "_id",
-    "_time",
-};
-static igMetaField **g_bePlaySE_fieldHandles[] = {
-    &g_bePlaySE_idMetaField,
-    &g_bePlaySE_timeMetaField,
-};
-static int g_bePlaySE_fieldOffsets[] = {
-    8,
-    16,
-};
-
-void bePlaySE_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_bePlaySE_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_bePlaySE_ctorTable, 2);
-    igMetaObject_NameFields(meta, g_bePlaySE_fieldTable, g_bePlaySE_fieldHandles, g_bePlaySE_fieldOffsets, base);
+}
 }
 

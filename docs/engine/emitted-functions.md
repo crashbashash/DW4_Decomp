@@ -65,7 +65,11 @@ unowned section.
   duplicate is only required to exist in the owner's object, and
   `verify_emitted_unit` then recompiles the **same source** with the duplicate's own
   profile and compares it exactly. No body is skipped without that second exact
-  comparison, and a profile that fails to compile or match rejects the unit.
+  comparison, and a profile that fails to compile or match rejects the unit. A twin's data
+  are the twin compile's too: the owner object keeps no datum only a twin reaches (a base
+  class's vtable its inline destructor stores), so the inline virtuals that vtable names
+  may be `stripped`, and the twin compile's reference to its own copy of such a datum reads
+  the address `config/SLUS-20836/compiler-names.tsv` binds.
 * **Switch tables.** The owner's `.rodata` sections are matched to the owner's
   entries in `config/SLUS-20836/jumptables.txt` (count and byte size), relocated against the
   member symbols and compared with the retail tables. Linking places them with the

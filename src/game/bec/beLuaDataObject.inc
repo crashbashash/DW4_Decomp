@@ -1,84 +1,69 @@
-igMetaObject *g_beLuaDataObject_metaObject;
-igMetaField *g_beLuaDataObject_dataSizeMetaField;
-igMetaField *g_beLuaDataObject_dataMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beLuaDataObject_GetOrCreateMetaObject(void) {
-    if (g_beLuaDataObject_metaObject == 0) {
-        g_beLuaDataObject_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beLuaDataObject_metaObject;
-}
+igMetaObject *beLuaDataObject::_Meta;
+igMetaField *beLuaDataObject::k_dataSize;
+igMetaField *beLuaDataObject::k_data;
 
-void *beLuaDataObject_GetMetaObject(void) {
-    igMetaObject *g = g_beLuaDataObject_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beLuaDataObject_EnsureRegistered();
-    }
-    return g_beLuaDataObject_metaObject;
-}
-
-int beLuaDataObject_GetVTable(void) {
-    beLuaDataObject obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beLuaDataObject_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beLuaDataObject_EnsureRegistered(void)
+igMetaObject *beLuaDataObject::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beLuaDataObject_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *beLuaDataObject_Register(void) {
+igMetaObject *beLuaDataObject::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beLuaDataObject::retrieveVTablePointer()
+{
+    beLuaDataObject temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beLuaDataObject::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beLuaDataObject::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beLuaDataObject_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beLuaDataObject_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beLuaDataObject",
-        0x10, /* instance size */
-        beLuaDataObject_GetVTable,
-        beLuaDataObject_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beLuaDataObject),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beLuaDataObject_GetMetaObjectFunction(void)
+void beLuaDataObject::arkRegisterInitialize()
 {
-    beLuaDataObject_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igMemoryRefMetaField_Create };
+    static const char *names[] = { "_dataSize", "_data" };
+    static igMetaField **enumStorage[] = { &k_dataSize, &k_data };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beLuaDataObject_ctorTable[] = {
-    igIntMetaField_Create,
-    igMemoryRefMetaField_Create,
-};
-static const char *g_beLuaDataObject_fieldTable[] = {
-    "_dataSize",
-    "_data",
-};
-static igMetaField **g_beLuaDataObject_fieldHandles[] = {
-    &g_beLuaDataObject_dataSizeMetaField,
-    &g_beLuaDataObject_dataMetaField,
-};
-static int g_beLuaDataObject_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void beLuaDataObject_InitFields(void) {
-    int base;
-    void *data;
-    igMetaObject *meta;
-
-    meta = g_beLuaDataObject_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beLuaDataObject_ctorTable, 2);
-    data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    igMetaObject_NameFields(meta, g_beLuaDataObject_fieldTable, g_beLuaDataObject_fieldHandles, g_beLuaDataObject_fieldOffsets, base);
+}
 }
 

@@ -1,322 +1,183 @@
-igMetaObject *g_igViewerParameters_metaObject;
-igMetaField *g_igViewerParameters_sceneMetaField;
-igMetaField *g_igViewerParameters_upVectorMetaField;
-igMetaField *g_igViewerParameters_ratioMetaField;
-igMetaField *g_igViewerParameters_hfovMetaField;
-igMetaField *g_igViewerParameters_nearPlaneMetaField;
-igMetaField *g_igViewerParameters_farPlaneMetaField;
-igMetaField *g_igViewerParameters_projectionMatrixMetaField;
-igMetaField *g_igViewerParameters_viewMatrixMetaField;
-igMetaField *g_igViewerParameters_drawTimeMetaField;
-igMetaField *g_igViewerParameters_sortTextureMetaField;
-igMetaField *g_igViewerParameters_sortTransparentMetaField;
-igMetaField *g_igViewerParameters_sortTransparentDistanceMetaField;
-igMetaField *g_igViewerParameters_transparencyModeMetaField;
-igMetaField *g_igViewerParameters_useSceneLightsMetaField;
-igMetaField *g_igViewerParameters_useHeadLightMetaField;
-igMetaField *g_igViewerParameters_useHeadLightSpecularMetaField;
-igMetaField *g_igViewerParameters_alphaTestMetaField;
-igMetaField *g_igViewerParameters_alphaTestForceMetaField;
-igMetaField *g_igViewerParameters_backFaceCullingMetaField;
-igMetaField *g_igViewerParameters_backFaceCullingForceMetaField;
-igMetaField *g_igViewerParameters_wireframeMetaField;
-igMetaField *g_igViewerParameters_wireframeForceMetaField;
-igMetaField *g_igViewerParameters_flatShadingMetaField;
-igMetaField *g_igViewerParameters_flatShadingForceMetaField;
-igMetaField *g_igViewerParameters_disablesMetaField;
-igMetaField *g_igViewerParameters_showGuiMetaField;
-igMetaField *g_igViewerParameters_showBoundingBoxMetaField;
-igMetaField *g_igViewerParameters_showNormalsMetaField;
-igMetaField *g_igViewerParameters_flushFramesMetaField;
-igMetaField *g_igViewerParameters_operationModeMetaField;
-igMetaField *g_igViewerParameters_firstCameraModeMetaField;
-igMetaField *g_igViewerParameters_camerasMetaField;
-igMetaField *g_igViewerParameters_beginTimeMetaField;
-igMetaField *g_igViewerParameters_endTimeMetaField;
-igMetaField *g_igViewerParameters_selectedObjectMetaField;
-igMetaField *g_igViewerParameters_timeOperationMetaField;
-igMetaField *g_igViewerParameters_loopModeMetaField;
-igMetaField *g_igViewerParameters_speedMetaField;
-igMetaField *g_igViewerParameters_cursorPositionMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igViewerParameters_GetOrCreateMetaObject(void) {
-    if (g_igViewerParameters_metaObject == 0) {
-        g_igViewerParameters_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igViewerParameters_metaObject;
-}
+igMetaObject *igViewerParameters::_Meta;
+igMetaField *igViewerParameters::k_scene;
+igMetaField *igViewerParameters::k_upVector;
+igMetaField *igViewerParameters::k_ratio;
+igMetaField *igViewerParameters::k_hfov;
+igMetaField *igViewerParameters::k_nearPlane;
+igMetaField *igViewerParameters::k_farPlane;
+igMetaField *igViewerParameters::k_projectionMatrix;
+igMetaField *igViewerParameters::k_viewMatrix;
+igMetaField *igViewerParameters::k_drawTime;
+igMetaField *igViewerParameters::k_sortTexture;
+igMetaField *igViewerParameters::k_sortTransparent;
+igMetaField *igViewerParameters::k_sortTransparentDistance;
+igMetaField *igViewerParameters::k_transparencyMode;
+igMetaField *igViewerParameters::k_useSceneLights;
+igMetaField *igViewerParameters::k_useHeadLight;
+igMetaField *igViewerParameters::k_useHeadLightSpecular;
+igMetaField *igViewerParameters::k_alphaTest;
+igMetaField *igViewerParameters::k_alphaTestForce;
+igMetaField *igViewerParameters::k_backFaceCulling;
+igMetaField *igViewerParameters::k_backFaceCullingForce;
+igMetaField *igViewerParameters::k_wireframe;
+igMetaField *igViewerParameters::k_wireframeForce;
+igMetaField *igViewerParameters::k_flatShading;
+igMetaField *igViewerParameters::k_flatShadingForce;
+igMetaField *igViewerParameters::k_disables;
+igMetaField *igViewerParameters::k_showGui;
+igMetaField *igViewerParameters::k_showBoundingBox;
+igMetaField *igViewerParameters::k_showNormals;
+igMetaField *igViewerParameters::k_flushFrames;
+igMetaField *igViewerParameters::k_operationMode;
+igMetaField *igViewerParameters::k_firstCameraMode;
+igMetaField *igViewerParameters::k_cameras;
+igMetaField *igViewerParameters::k_beginTime;
+igMetaField *igViewerParameters::k_endTime;
+igMetaField *igViewerParameters::k_selectedObject;
+igMetaField *igViewerParameters::k_timeOperation;
+igMetaField *igViewerParameters::k_loopMode;
+igMetaField *igViewerParameters::k_speed;
+igMetaField *igViewerParameters::k_cursorPosition;
 
-SigViewerParameters_GetMetaObject *igViewerParameters_GetMetaObject(void) {
-    if (((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject) == 0 || !((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject)->ok()) igViewerParameters_EnsureRegistered();
-    return ((SigViewerParameters_GetMetaObject *)g_igViewerParameters_metaObject);
-}
-
-int igViewerParameters_GetVTable(void) {
-    union U_45b4c0 u;
-    int temp_s1;
-    int pi = (int)u.b;
-    char *p;
-    igObject_InitHeader((igObject *)pi);
-    *(int *)&u.b[8] = 0;
-    u.vt = (int)&g_igViewerParameters_vtable[0];
-    p = &u.b[12];
-    *(int *)p = 0;
-    igMatrix44f_SetIdentity((float *)&u.b[44]);
-    igMatrix44f_SetIdentity((float *)(pi + 108));
-    *(int *)(pi + 204) = 0;
-    *(int *)(pi + 220) = 0;
-    *(int *)(pi + 240) = 0;
-    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&DAT_00542090[4];
-    igSmartPointer_igGraphPath_Destruct((igSmartPointer<igObject> *)&u.b[240], -1);
-    igSmartPointer_igGraphPathList_Destruct((igSmartPointer<igObject> *)&u.b[220], -1);
-    igSmartPointer_igBitMask_Destruct((igSmartPointer<igObject> *)&u.b[204], -1);
-    igSmartPointer_igGroup_Destruct((igSmartPointer<igObject> *)p, -1);
-    igModel_Destroy((igModel *)u.b, 0);
-    return temp_s1;
-}
-
-void igViewerParameters_EnsureRegistered(void)
+igMetaObject *igViewerParameters::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igViewerParameters_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igViewerParameters_callbackList[] = { Gap::Sg::igGroup::arkRegister, Gap::Core::igBitMask::arkRegister, Gap::Sg::igGraphPathList::arkRegister, Gap::Sg::igGraphPath::arkRegister, 0 };
+igMetaObject *igViewerParameters::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igViewerParameters_Register(void) {
+void *igViewerParameters::retrieveVTablePointer()
+{
+    igViewerParameters temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igViewerParameters::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewerParameters::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igGroup::arkRegister, Gap::Core::igBitMask::arkRegister, Gap::Sg::igGraphPathList::arkRegister, Gap::Sg::igGraphPath::arkRegister, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewerParameters_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igModel::arkRegisterInternal,
         Gap::Gui::igModel::getClassMeta,
-        thunk_igViewerParameters_GetMetaObject,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewerParameters",
-        0x108, /* instance size */
-        igViewerParameters_GetVTable,
-        &igViewerParameters_InitFields,
-        0, /* extra callback item */
-        g_igViewerParameters_callbackList /* callback list */
+        sizeof(igViewerParameters),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void thunk_igViewerParameters_GetMetaObject(void) {
-    igViewerParameters_GetMetaObject();
+void igViewerParameters::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool };
+    static const char *names[] = { "_scene", "_upVector", "_ratio", "_hfov", "_nearPlane", "_farPlane", "_projectionMatrix", "_viewMatrix", "_drawTime", "_sortTexture", "_sortTransparent", "_sortTransparentDistance", "_transparencyMode", "_useSceneLights", "_useHeadLight", "_useHeadLightSpecular", "_alphaTest", "_alphaTestForce", "_backFaceCulling", "_backFaceCullingForce", "_wireframe", "_wireframeForce", "_flatShading", "_flatShadingForce", "_disables", "_showGui", "_showBoundingBox", "_showNormals", "_flushFrames", "_operationMode", "_firstCameraMode", "_cameras", "_beginTime", "_endTime", "_selectedObject", "_timeOperation", "_loopMode", "_speed", "_cursorPosition" };
+    static igMetaField **enumStorage[] = { &k_scene, &k_upVector, &k_ratio, &k_hfov, &k_nearPlane, &k_farPlane, &k_projectionMatrix, &k_viewMatrix, &k_drawTime, &k_sortTexture, &k_sortTransparent, &k_sortTransparentDistance, &k_transparencyMode, &k_useSceneLights, &k_useHeadLight, &k_useHeadLightSpecular, &k_alphaTest, &k_alphaTestForce, &k_backFaceCulling, &k_backFaceCullingForce, &k_wireframe, &k_wireframeForce, &k_flatShading, &k_flatShadingForce, &k_disables, &k_showGui, &k_showBoundingBox, &k_showNormals, &k_flushFrames, &k_operationMode, &k_firstCameraMode, &k_cameras, &k_beginTime, &k_endTime, &k_selectedObject, &k_timeOperation, &k_loopMode, &k_speed, &k_cursorPosition };
+    static int offsets[] = { 12, 16, 28, 32, 36, 40, 44, 108, 176, 184, 185, 186, 188, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 204, 208, 209, 210, 211, 212, 216, 220, 224, 232, 240, 244, 248, 252, 256 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 39);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igGroup::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(igVec3f(0.0f, 1.0f, 0.0f));
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(45.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(1000.0f);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 12);
+        metaField->setDefault(0);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 16);
+        metaField->setDefault(1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 24);
+        metaField->_metaObject = (int)Gap::Core::igBitMask::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 25);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 26);
+        metaField->setDefault(1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 29);
+        metaField->setDefault(1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 30);
+        metaField->setDefault(4);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 31);
+        metaField->_metaObject = (int)Gap::Sg::igGraphPathList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 34);
+        metaField->_metaObject = (int)Gap::Sg::igGraphPath::getClassTypeLazy();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 35);
+        metaField->setDefault(1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 36);
+        metaField->setDefault(2);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 37);
+        metaField->setDefault(1.0f);
+    }
+    {
+        igVec2fMetaField *metaField = (igVec2fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 38);
+        metaField->setDefault(igVec2f(0.0f, 0.0f));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewerParameters_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
-    igLongMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igLongMetaField_Create,
-    igLongMetaField_Create,
-    igObjectRefMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-};
-static const char *g_igViewerParameters_fieldTable[] = {
-    "_scene",
-    "_upVector",
-    "_ratio",
-    "_hfov",
-    "_nearPlane",
-    "_farPlane",
-    "_projectionMatrix",
-    "_viewMatrix",
-    "_drawTime",
-    "_sortTexture",
-    "_sortTransparent",
-    "_sortTransparentDistance",
-    "_transparencyMode",
-    "_useSceneLights",
-    "_useHeadLight",
-    "_useHeadLightSpecular",
-    "_alphaTest",
-    "_alphaTestForce",
-    "_backFaceCulling",
-    "_backFaceCullingForce",
-    "_wireframe",
-    "_wireframeForce",
-    "_flatShading",
-    "_flatShadingForce",
-    "_disables",
-    "_showGui",
-    "_showBoundingBox",
-    "_showNormals",
-    "_flushFrames",
-    "_operationMode",
-    "_firstCameraMode",
-    "_cameras",
-    "_beginTime",
-    "_endTime",
-    "_selectedObject",
-    "_timeOperation",
-    "_loopMode",
-    "_speed",
-    "_cursorPosition",
-};
-static igMetaField **g_igViewerParameters_fieldHandles[] = {
-    &g_igViewerParameters_sceneMetaField,
-    &g_igViewerParameters_upVectorMetaField,
-    &g_igViewerParameters_ratioMetaField,
-    &g_igViewerParameters_hfovMetaField,
-    &g_igViewerParameters_nearPlaneMetaField,
-    &g_igViewerParameters_farPlaneMetaField,
-    &g_igViewerParameters_projectionMatrixMetaField,
-    &g_igViewerParameters_viewMatrixMetaField,
-    &g_igViewerParameters_drawTimeMetaField,
-    &g_igViewerParameters_sortTextureMetaField,
-    &g_igViewerParameters_sortTransparentMetaField,
-    &g_igViewerParameters_sortTransparentDistanceMetaField,
-    &g_igViewerParameters_transparencyModeMetaField,
-    &g_igViewerParameters_useSceneLightsMetaField,
-    &g_igViewerParameters_useHeadLightMetaField,
-    &g_igViewerParameters_useHeadLightSpecularMetaField,
-    &g_igViewerParameters_alphaTestMetaField,
-    &g_igViewerParameters_alphaTestForceMetaField,
-    &g_igViewerParameters_backFaceCullingMetaField,
-    &g_igViewerParameters_backFaceCullingForceMetaField,
-    &g_igViewerParameters_wireframeMetaField,
-    &g_igViewerParameters_wireframeForceMetaField,
-    &g_igViewerParameters_flatShadingMetaField,
-    &g_igViewerParameters_flatShadingForceMetaField,
-    &g_igViewerParameters_disablesMetaField,
-    &g_igViewerParameters_showGuiMetaField,
-    &g_igViewerParameters_showBoundingBoxMetaField,
-    &g_igViewerParameters_showNormalsMetaField,
-    &g_igViewerParameters_flushFramesMetaField,
-    &g_igViewerParameters_operationModeMetaField,
-    &g_igViewerParameters_firstCameraModeMetaField,
-    &g_igViewerParameters_camerasMetaField,
-    &g_igViewerParameters_beginTimeMetaField,
-    &g_igViewerParameters_endTimeMetaField,
-    &g_igViewerParameters_selectedObjectMetaField,
-    &g_igViewerParameters_timeOperationMetaField,
-    &g_igViewerParameters_loopModeMetaField,
-    &g_igViewerParameters_speedMetaField,
-    &g_igViewerParameters_cursorPositionMetaField,
-};
-static int g_igViewerParameters_fieldOffsets[] = {
-    12,
-    16,
-    28,
-    32,
-    36,
-    40,
-    44,
-    108,
-    176,
-    184,
-    185,
-    186,
-    188,
-    192,
-    193,
-    194,
-    195,
-    196,
-    197,
-    198,
-    199,
-    200,
-    201,
-    202,
-    204,
-    208,
-    209,
-    210,
-    211,
-    212,
-    216,
-    220,
-    224,
-    232,
-    240,
-    244,
-    248,
-    252,
-    256,
-};
-
-void igViewerParameters_InitFields(void) {
-    struct Fld *temp_s2_4;
-    struct Fld *temp_s2_3;
-    struct Fld *temp_s2_2;
-    struct Fld *temp_s2;
-    void *temp_a0_2;
-    void *temp_a0;
-    int temp_s1;
-    void *temp_s0;
-    int sp50[3];
-    int sp48[2];
-
-    temp_s0 = g_igViewerParameters_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerParameters_ctorTable, 0x27);
-    temp_s2 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
-    temp_s2->f56 = (int)(Gap::Sg::igGroup::getClassTypeLazy());
-    temp_s2->f52 = 1;
-    temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
-    sp50[0] = 0;
-    sp50[1] = 0x3F800000;
-    sp50[2] = 0;
-    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)sp50);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)))->setDefault(1.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)))->setDefault(45.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)))->setDefault(1.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)))->setDefault(1000.0f);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)))->setDefault(0);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10)))->setDefault(1);
-    temp_s2_2 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18);
-    temp_s2_2->f56 = (int)Gap::Core::igBitMask::getClassTypeLazy();
-    temp_s2_2->f52 = 1;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1A)))->setDefault(1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)))->setDefault(1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E)))->setDefault(4);
-    temp_s2_3 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F);
-    temp_s2_3->f56 = (int)Gap::Sg::igGraphPathList::getClassTypeLazy();
-    temp_s2_3->f52 = 1;
-    temp_s2_4 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22);
-    temp_s2_4->f56 = (int)(Gap::Sg::igGraphPath::getClassTypeLazy());
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x23)))->setDefault(1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x24)))->setDefault(2);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x25)))->setDefault(1.0f);
-    temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x26));
-    sp48[0] = 0;
-    sp48[1] = 0;
-    ((Gap::Math::igVec2fMetaField *)temp_a0_2)->setDefault(*(const igVec2f *)sp48);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerParameters_fieldTable, g_igViewerParameters_fieldHandles, g_igViewerParameters_fieldOffsets, temp_s1);
+}
 }
 

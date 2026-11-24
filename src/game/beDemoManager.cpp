@@ -62,7 +62,7 @@ static inline void ensureBuildData(beDemoManager *self) {
     if (self->_buildData == 0) {
         int allocator = allocatorFor(self);
         igObject::release((igObject *)self->_buildData);
-        self->_buildData = (int)beDemoManagerWork_CreateInstance(allocator);
+        self->_buildData = (int)Gap::Bec::beDemoManagerWork::_instantiateFromPool((igMemoryPoolView *)allocator);
         self->_turningOK = 0;
     }
 }
@@ -104,7 +104,7 @@ void beDemoManager_SwitchEnd(beDemoManager *self) {
         {
             work = (beDemoManagerWork *)self->_buildData;
             allocator = allocatorFor(self);
-            igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
+            igSmartPointer<beDemoKeepMes> mes((beDemoKeepMes *)Gap::Bec::beDemoKeepMes::_instantiateFromPool((igMemoryPoolView *)allocator));
             mes->_kind = DEMO_MES_SWITCH_END;
             ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
         }
@@ -118,7 +118,7 @@ void beDemoManager_Case(beDemoManager *self, int ramNo) {
     work = (beDemoManagerWork *)self->_buildData;
     if ((work != 0) && (self->_turningOK != 0)) {
         allocator = allocatorFor(self);
-        igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
+        igSmartPointer<beDemoKeepMes> mes((beDemoKeepMes *)Gap::Bec::beDemoKeepMes::_instantiateFromPool((igMemoryPoolView *)allocator));
         mes->_kind = DEMO_MES_CASE;
         mes->_ramNo = ramNo;
         ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
@@ -128,7 +128,7 @@ void beDemoManager_Case(beDemoManager *self, int ramNo) {
 void beDemoManager_AddKeepMes(beDemoManager *self, int kind, const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime) {
     beDemoManagerWork *work = buildData(self);
     int allocator = allocatorFor(self);
-    igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
+    igSmartPointer<beDemoKeepMes> mes((beDemoKeepMes *)Gap::Bec::beDemoKeepMes::_instantiateFromPool((igMemoryPoolView *)allocator));
     mes->_kind = kind;
     mes->_sendTime = sendTime;
     setKeepMesString(mes, &beDemoKeepMes::_groupName, group);
@@ -145,7 +145,7 @@ void beDemoManager_SetLua(beDemoManager *self, const char *chunk) {
     char *token;
     ensureBuildData(self);
     work = (beDemoManagerWork *)self->_buildData;
-    igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocatorFor(self)));
+    igSmartPointer<beDemoKeepMes> mes((beDemoKeepMes *)Gap::Bec::beDemoKeepMes::_instantiateFromPool((igMemoryPoolView *)allocatorFor(self)));
     mes->_kind = DEMO_MES_LUA;
     target = mes.p;
     token = StringPool_Intern((StringPool *)stringPool(), chunk);
@@ -156,7 +156,7 @@ void beDemoManager_SetLua(beDemoManager *self, const char *chunk) {
 
 void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo) {
     beDemoManagerWork *work = buildData(self);
-    igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocatorFor(self)));
+    igSmartPointer<beDemoKeepMes> mes((beDemoKeepMes *)Gap::Bec::beDemoKeepMes::_instantiateFromPool((igMemoryPoolView *)allocatorFor(self)));
     mes->_kind = DEMO_MES_MSGBOX;
     setKeepMesString(mes, &beDemoKeepMes::_mesParam, text);
     mes->_ramNo = ramNo;

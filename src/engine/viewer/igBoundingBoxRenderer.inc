@@ -1,155 +1,104 @@
-igMetaObject *g_igBoundingBoxRenderer_metaObject;
-igMetaField *g_igBoundingBoxRenderer_parametersMetaField;
-igMetaField *g_igBoundingBoxRenderer_displayListMetaField;
-igMetaField *g_igBoundingBoxRenderer_attrListMetaField;
-igMetaField *g_igBoundingBoxRenderer_modelViewAttrMetaField;
-igMetaField *g_igBoundingBoxRenderer_boxMetaField;
-igMetaField *g_igBoundingBoxRenderer_borderMetaField;
-igMetaField *g_igBoundingBoxRenderer_pathMetaField;
-igMetaField *g_igBoundingBoxRenderer_drawMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igBoundingBoxRenderer_GetOrCreateMetaObject(void) {
-    if (g_igBoundingBoxRenderer_metaObject == 0) {
-        g_igBoundingBoxRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igBoundingBoxRenderer_metaObject;
-}
+igMetaObject *igBoundingBoxRenderer::_Meta;
+igMetaField *igBoundingBoxRenderer::k_parameters;
+igMetaField *igBoundingBoxRenderer::k_displayList;
+igMetaField *igBoundingBoxRenderer::k_attrList;
+igMetaField *igBoundingBoxRenderer::k_modelViewAttr;
+igMetaField *igBoundingBoxRenderer::k_box;
+igMetaField *igBoundingBoxRenderer::k_border;
+igMetaField *igBoundingBoxRenderer::k_path;
+igMetaField *igBoundingBoxRenderer::k_draw;
 
-igMetaObject *igBoundingBoxRenderer_GetMetaObject(void)
+igMetaObject *igBoundingBoxRenderer::getClassTypeLazy()
 {
-    igMetaObject *g = ((igMetaObject *)g_igBoundingBoxRenderer_metaObject);
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        igBoundingBoxRenderer_EnsureRegistered();
-    return ((igMetaObject *)g_igBoundingBoxRenderer_metaObject);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igBoundingBoxRenderer_GetVTable(void) {
-    struct Obj_45df30 obj;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.w2 = 0;
-    obj.vt = &g_igBoundingBoxRenderer_vtable[0];
-    obj.w3 = 0;
-    obj.w4 = 0;
-    obj.w5 = 0;
-    obj.w6 = 0;
-    obj.w7 = 0;
-    obj.w8 = 0;
-    obj.w9 = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igBoundingBoxRenderer_vtable[0];
-    igSmartPointer_igGraphPath_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
-    igSmartPointer_igGeometryAttr_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
-    igSmartPointer_igGeometryAttr_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    igSmartPointer_igModelViewMatrixAttr_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
-    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
-    igSmartPointer_igDisplayListAttr_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
-    FUN_00459860((ObjectRefWord *)&obj.w3, -1);
-    igRenderer_Destroy((igRenderer *)&obj, 0);
-    return t;
-}
-
-void igBoundingBoxRenderer_EnsureRegistered(void)
+igMetaObject *igBoundingBoxRenderer::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igBoundingBoxRenderer_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igGeometryAttr::arkRegister, Gap::Sg::igGraphPath::arkRegister, 0 };
+void *igBoundingBoxRenderer::retrieveVTablePointer()
+{
+    igBoundingBoxRenderer temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igBoundingBoxRenderer_Register(void) {
+void igBoundingBoxRenderer::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igBoundingBoxRenderer::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Viewer::igViewerParameters::arkRegister, Gap::Attrs::igDisplayListAttr::arkRegister, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igGeometryAttr::arkRegister, Gap::Sg::igGraphPath::arkRegister, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igBoundingBoxRenderer_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igRenderer::arkRegisterInternal,
         Gap::Gui::igRenderer::getClassMeta,
-        igBoundingBoxRenderer_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igBoundingBoxRenderer",
-        0x2C, /* instance size */
-        igBoundingBoxRenderer_GetVTable,
-        &igBoundingBoxRenderer_InitFields,
-        0, /* extra callback item */
-        g_igBoundingBoxRenderer_callbackList /* callback list */
+        sizeof(igBoundingBoxRenderer),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igBoundingBoxRenderer_GetMetaObjectFunction(void) {
-    igBoundingBoxRenderer_GetMetaObject();
+void igBoundingBoxRenderer::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create };
+    static const char *names[] = { "_parameters", "_displayList", "_attrList", "_modelViewAttr", "_box", "_border", "_path", "_draw" };
+    static igMetaField **enumStorage[] = { &k_parameters, &k_displayList, &k_attrList, &k_modelViewAttr, &k_box, &k_border, &k_path, &k_draw };
+    static int offsets[] = { 12, 16, 20, 24, 28, 32, 36, 40 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 8);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Viewer::igViewerParameters::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Attrs::igDisplayListAttr::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)Gap::Attrs::igModelViewMatrixAttr::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)Gap::Sg::igGraphPath::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igBoundingBoxRenderer_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-    igBoolMetaField_Create,
-};
-static const char *g_igBoundingBoxRenderer_fieldTable[] = {
-    "_parameters",
-    "_displayList",
-    "_attrList",
-    "_modelViewAttr",
-    "_box",
-    "_border",
-    "_path",
-    "_draw",
-};
-static igMetaField **g_igBoundingBoxRenderer_fieldHandles[] = {
-    &g_igBoundingBoxRenderer_parametersMetaField,
-    &g_igBoundingBoxRenderer_displayListMetaField,
-    &g_igBoundingBoxRenderer_attrListMetaField,
-    &g_igBoundingBoxRenderer_modelViewAttrMetaField,
-    &g_igBoundingBoxRenderer_boxMetaField,
-    &g_igBoundingBoxRenderer_borderMetaField,
-    &g_igBoundingBoxRenderer_pathMetaField,
-    &g_igBoundingBoxRenderer_drawMetaField,
-};
-static int g_igBoundingBoxRenderer_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-};
-
-void igBoundingBoxRenderer_InitFields(void) {
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    void *temp_s2_7;
-    void *temp_s1;
-    int temp_s0;
-
-    temp_s1 = g_igBoundingBoxRenderer_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igBoundingBoxRenderer_ctorTable, 8);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igDisplayListAttr::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(Gap::Attrs::igAttrList::getClassTypeLazy());
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Attrs::igModelViewMatrixAttr::getClassTypeLazy();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
-    temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(Gap::Sg::igGraphPath::getClassTypeLazy());
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igBoundingBoxRenderer_fieldTable, g_igBoundingBoxRenderer_fieldHandles, g_igBoundingBoxRenderer_fieldOffsets, temp_s0);
+}
 }
 

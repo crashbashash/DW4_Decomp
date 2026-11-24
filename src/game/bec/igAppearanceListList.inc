@@ -1,58 +1,53 @@
-igMetaObject *g_igAppearanceListList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *igAppearanceListList_GetOrCreateMetaObject(void) {
-    if (g_igAppearanceListList_metaObject == 0) {
-        g_igAppearanceListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAppearanceListList_metaObject;
-}
+igMetaObject *igAppearanceListList::_Meta;
 
-igMetaObject *igAppearanceListList_GetMetaObject(void) {
-    igMetaObject *g = g_igAppearanceListList_metaObject;
-    if (g != 0) {
-        int b = !!(g->_validity & 4);
-        if (b) goto done;
-    }
-    igAppearanceListList_EnsureRegistered();
-done:
-    return g_igAppearanceListList_metaObject;
-}
-
-int igAppearanceListList_GetVTable(void) {
-    igAppearanceListList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_igAppearanceListList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAppearanceListList_EnsureRegistered(void)
+igMetaObject *igAppearanceListList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igAppearanceListList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAppearanceListList_callbackList[] = { Gap::Sg::igAppearanceList::arkRegister, 0 };
+igMetaObject *igAppearanceListList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igAppearanceListList_Register(void) {
+void *igAppearanceListList::retrieveVTablePointer()
+{
+    igAppearanceListList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igAppearanceListList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAppearanceListList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAppearanceList::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAppearanceListList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAppearanceListList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAppearanceListList",
-        0x14, /* instance size */
-        igAppearanceListList_GetVTable,
+        sizeof(igAppearanceListList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAppearanceListList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAppearanceListList_GetMetaObjectFunction(void)
-{
-    igAppearanceListList_GetMetaObject();
+}
 }
 
 igMetaObject *g_igModelViewMatrixBoneSelectListBec_metaObject;

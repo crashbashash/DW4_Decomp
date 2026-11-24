@@ -7,7 +7,6 @@ struct beHitLandResultData;
 extern "C" {
 #endif
 
-struct beHitLandResultData *beHitLandResultData_Create(int allocator);
 
 #ifdef __cplusplus
 }

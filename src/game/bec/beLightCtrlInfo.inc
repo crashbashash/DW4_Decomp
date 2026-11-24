@@ -40,7 +40,7 @@ void beLightCtrlInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLightCtrlInfo_Register);
 }
 
-static igMetaObjectCallback g_beLightCtrlInfo_callbackList[] = { igLightSetList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLightCtrlInfo_callbackList[] = { Gap::Bec::igLightSetList::arkRegister, 0 };
 
 CallbackArray *beLightCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -86,7 +86,7 @@ void beLightCtrlInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLightCtrlInfo_ctorTable, 1);
     lightSetList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)lightSetList)->_metaObject = (int)igLightSetList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lightSetList)->_metaObject = (int)Gap::Bec::igLightSetList::getClassTypeLazy();
     ((igRefMetaField *)lightSetList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beLightCtrlInfo_fieldTable, g_beLightCtrlInfo_fieldHandles, g_beLightCtrlInfo_fieldOffsets, base);
 }

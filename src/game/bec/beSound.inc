@@ -64,7 +64,7 @@ void beSound_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSound_Register);
 }
 
-static igMetaObjectCallback g_beSound_callbackList[] = { beCri_EnsureRegistered, bePlaySEList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSound_callbackList[] = { beCri_EnsureRegistered, Gap::Bec::bePlaySEList::arkRegister, 0 };
 
 CallbackArray *beSound_Register(void) {
     BecLibrary_MarkRegistered();
@@ -121,7 +121,7 @@ void beSound_InitFields(void) {
     cri = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)cri)->_metaObject = (int)beCri_GetOrCreateMetaObject();
     playSEs = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)playSEs)->_metaObject = (int)bePlaySEList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playSEs)->_metaObject = (int)Gap::Bec::bePlaySEList::getClassTypeLazy();
     ((igRefMetaField *)playSEs)->_construct = 1;
     igMetaObject_NameFields(meta, g_beSound_fieldTable, g_beSound_fieldHandles, g_beSound_fieldOffsets, base);
 }

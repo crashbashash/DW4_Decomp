@@ -1,94 +1,65 @@
-igMetaObject *g_beCameraDemoData_metaObject;
-igMetaField *g_beCameraDemoData_cameraPathMetaField;
-igMetaField *g_beCameraDemoData_endTimeMetaField;
-igMetaField *g_beCameraDemoData_totalSecMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beCameraDemoData_GetMetaObject(void) {
-    bool ok;
-    if (g_beCameraDemoData_metaObject == 0) goto make;
-    ok = !!(g_beCameraDemoData_metaObject->_validity & 4);
-    if (ok != false) goto done;
-make:
-    beCameraDemoData_EnsureRegistered();
-done:;
-    return g_beCameraDemoData_metaObject;
-}
+igMetaObject *beCameraDemoData::_Meta;
+igMetaField *beCameraDemoData::k_cameraPath;
+igMetaField *beCameraDemoData::k_endTime;
+igMetaField *beCameraDemoData::k_totalSec;
 
-int beCameraDemoData_GetVTable(void) {
-    beCameraDemoData obj;
-    int vtable;
-    igObject **cameraPathSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beCameraDemoData_vtable[0];
-    cameraPathSlot = (igObject **)&obj._cameraPath;
-    *cameraPathSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beCameraDemoData_vtable[0];
-    igObjectRef_Release(cameraPathSlot);
-    return vtable;
-}
-
-void beCameraDemoData_EnsureRegistered(void)
+igMetaObject *beCameraDemoData::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beCameraDemoData_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beCameraDemoData_callbackList[] = { Gap::Sg::igGraphPath::arkRegister, 0 };
+void *beCameraDemoData::retrieveVTablePointer()
+{
+    beCameraDemoData temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beCameraDemoData_Register(void) {
+void beCameraDemoData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beCameraDemoData::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igGraphPath::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beCameraDemoData_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beCameraDemoData_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beCameraDemoData",
-        0x20, /* instance size */
-        beCameraDemoData_GetVTable,
-        beCameraDemoData_InitFields,
-        0, /* extra callback item */
-        g_beCameraDemoData_callbackList /* callback list */
+        sizeof(beCameraDemoData),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beCameraDemoData_GetMetaObjectFunction(void)
+void beCameraDemoData::arkRegisterInitialize()
 {
-    beCameraDemoData_GetMetaObject();
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_cameraPath", "_endTime", "_totalSec" };
+    static igMetaField **enumStorage[] = { &k_cameraPath, &k_endTime, &k_totalSec };
+    static int offsets[] = { 8, 16, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igGraphPath::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beCameraDemoData_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igLongMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beCameraDemoData_fieldTable[] = {
-    "_cameraPath",
-    "_endTime",
-    "_totalSec",
-};
-static igMetaField **g_beCameraDemoData_fieldHandles[] = {
-    &g_beCameraDemoData_cameraPathMetaField,
-    &g_beCameraDemoData_endTimeMetaField,
-    &g_beCameraDemoData_totalSecMetaField,
-};
-static int g_beCameraDemoData_fieldOffsets[] = {
-    8,
-    16,
-    24,
-};
-
-void beCameraDemoData_InitFields(void) {
-    int base;
-    void *cameraPath;
-    igMetaObject *meta;
-
-    meta = g_beCameraDemoData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beCameraDemoData_ctorTable, 3);
-    cameraPath = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)Gap::Sg::igGraphPath::getClassTypeLazy();
-    igMetaObject_NameFields(meta, g_beCameraDemoData_fieldTable, g_beCameraDemoData_fieldHandles, g_beCameraDemoData_fieldOffsets, base);
+}
 }
 

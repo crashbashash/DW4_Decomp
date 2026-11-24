@@ -1,82 +1,55 @@
-igMetaObject *g_beSvSlotData_metaObject;
-igMetaField *g_beSvSlotData_isConnectMetaField;
-igMetaField *g_beSvSlotData_isFormatMetaField;
-igMetaField *g_beSvSlotData_freeSizeMetaField;
-igMetaField *g_beSvSlotData_useSizeMetaField;
-igMetaField *g_beSvSlotData_totalSizeMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beSvSlotData_GetMetaObject(void)
+igMetaObject *beSvSlotData::_Meta;
+igMetaField *beSvSlotData::k_isConnect;
+igMetaField *beSvSlotData::k_isFormat;
+igMetaField *beSvSlotData::k_freeSize;
+igMetaField *beSvSlotData::k_useSize;
+igMetaField *beSvSlotData::k_totalSize;
+
+igMetaObject *beSvSlotData::getClassTypeSafe()
 {
-    igMetaObject *g = g_beSvSlotData_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beSvSlotData_EnsureRegistered();
-    return g_beSvSlotData_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void beSvSlotData_EnsureRegistered(void)
+void beSvSlotData::arkRegister()
 {
-    igMetaObject_RunStaticInit(beSvSlotData_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *beSvSlotData_Register(void) {
+CallbackArray *beSvSlotData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_beSvSlotData_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beSvSlotData_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSvSlotData",
-        0x18, /* instance size */
+        sizeof(beSvSlotData),
         0,
-        beSvSlotData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beSvSlotData_GetMetaObjectFunction(void)
+void beSvSlotData::arkRegisterInitialize()
 {
-    beSvSlotData_GetMetaObject();
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igBoolMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_isConnect", "_isFormat", "_freeSize", "_useSize", "_totalSize" };
+    static igMetaField **enumStorage[] = { &k_isConnect, &k_isFormat, &k_freeSize, &k_useSize, &k_totalSize };
+    static int offsets[] = { 8, 9, 12, 16, 20 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beSvSlotData_ctorTable[] = {
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_beSvSlotData_fieldTable[] = {
-    "_isConnect",
-    "_isFormat",
-    "_freeSize",
-    "_useSize",
-    "_totalSize",
-};
-static igMetaField **g_beSvSlotData_fieldHandles[] = {
-    &g_beSvSlotData_isConnectMetaField,
-    &g_beSvSlotData_isFormatMetaField,
-    &g_beSvSlotData_freeSizeMetaField,
-    &g_beSvSlotData_useSizeMetaField,
-    &g_beSvSlotData_totalSizeMetaField,
-};
-static int g_beSvSlotData_fieldOffsets[] = {
-    8,
-    9,
-    12,
-    16,
-    20,
-};
-
-void beSvSlotData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beSvSlotData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSvSlotData_ctorTable, 5);
-    igMetaObject_NameFields(meta, g_beSvSlotData_fieldTable, g_beSvSlotData_fieldHandles, g_beSvSlotData_fieldOffsets, base);
+}
 }
 

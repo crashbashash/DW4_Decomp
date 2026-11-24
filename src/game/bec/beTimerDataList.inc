@@ -1,54 +1,52 @@
-igMetaObject *g_beTimerDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beTimerDataList_GetOrCreateMetaObject(void) {
-    if (g_beTimerDataList_metaObject == 0) {
-        g_beTimerDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beTimerDataList_metaObject;
-}
+igMetaObject *beTimerDataList::_Meta;
 
-void *beTimerDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beTimerDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beTimerDataList_EnsureRegistered();
-    }
-    return g_beTimerDataList_metaObject;
-}
-
-int beTimerDataList_GetVTable(void) {
-    beTimerDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beTimerDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beTimerDataList_EnsureRegistered(void)
+igMetaObject *beTimerDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beTimerDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beTimerDataList_callbackList[] = { beTimerData_EnsureRegistered, 0 };
+igMetaObject *beTimerDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beTimerDataList_Register(void) {
+void *beTimerDataList::retrieveVTablePointer()
+{
+    beTimerDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beTimerDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beTimerDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beTimerData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beTimerDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beTimerDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beTimerDataList",
-        0x14, /* instance size */
-        beTimerDataList_GetVTable,
+        sizeof(beTimerDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beTimerDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beTimerDataList_GetMetaObjectFunction(void)
-{
-    beTimerDataList_GetMetaObject();
+}
 }
 

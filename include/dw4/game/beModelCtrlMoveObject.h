@@ -7,7 +7,6 @@ struct beModelCtrlMoveObject;
 extern "C" {
 #endif
 
-struct beModelCtrlMoveObject *beModelCtrlMoveObject_Create(int allocator);
 
 #ifdef __cplusplus
 }

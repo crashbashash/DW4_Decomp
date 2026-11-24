@@ -39,7 +39,7 @@ void beWeaponAttachData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWeaponAttachData_Register);
 }
 
-static igMetaObjectCallback g_beWeaponAttachData_callbackList[] = { igModelViewMatrixBoneSelectListBec_EnsureRegistered, igAppearanceListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beWeaponAttachData_callbackList[] = { igModelViewMatrixBoneSelectListBec_EnsureRegistered, Gap::Bec::igAppearanceListList::arkRegister, 0 };
 
 CallbackArray *beWeaponAttachData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -93,7 +93,7 @@ void beWeaponAttachData_InitFields(void) {
     ((igObjectRefMetaField *)boneSelectList)->_metaObject = (int)igModelViewMatrixBoneSelectListBec_GetOrCreateMetaObject();
     ((igRefMetaField *)boneSelectList)->_construct = 1;
     appearanceListList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)appearanceListList)->_metaObject = (int)igAppearanceListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)appearanceListList)->_metaObject = (int)Gap::Bec::igAppearanceListList::getClassTypeLazy();
     ((igRefMetaField *)appearanceListList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beWeaponAttachData_fieldTable, g_beWeaponAttachData_fieldHandles, g_beWeaponAttachData_fieldOffsets, base);
 }

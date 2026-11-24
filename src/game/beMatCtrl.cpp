@@ -279,7 +279,7 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
             igObject::release((igObject *)ram->_work);
             ram->_work = 0;
             {
-                WorkRef created(beMatCtrlInfoWork_Create((int)OwnerAllocator(self)));
+                WorkRef created((beMatCtrlInfoWork *)Gap::Bec::beMatCtrlInfoWork::_instantiateFromPool((igMemoryPoolView *)OwnerAllocator(self)));
                 AssignRef(ram->_work, (igObject *)created.p);
                 work = (beMatCtrlInfoWork *)ram->_work;
             }

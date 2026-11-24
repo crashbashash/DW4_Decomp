@@ -50,7 +50,7 @@ void beTimer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beTimer_Register);
 }
 
-static igMetaObjectCallback g_beTimer_callbackList[] = { beSystem_EnsureRegistered, bePadManager_EnsureRegistered, beLua_EnsureRegistered, beTimerDataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beTimer_callbackList[] = { beSystem_EnsureRegistered, bePadManager_EnsureRegistered, beLua_EnsureRegistered, Gap::Bec::beTimerDataList::arkRegister, 0 };
 
 CallbackArray *beTimer_Register(void) {
     BecLibrary_MarkRegistered();
@@ -124,7 +124,7 @@ void beTimer_InitFields(void) {
     ((igObjectRefMetaField *)luaManager)->_metaObject = (int)beLua_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)luaManager)->_refCounted = 0;
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beTimerDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)Gap::Bec::beTimerDataList::getClassTypeLazy();
     ((igRefMetaField *)dataList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beTimer_fieldTable, g_beTimer_fieldHandles, g_beTimer_fieldOffsets, base);
 }

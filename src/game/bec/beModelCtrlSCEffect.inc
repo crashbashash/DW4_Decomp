@@ -49,8 +49,8 @@ CallbackArray *beModelCtrlSCEffect_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlSCEffect_metaObject,
-        beModelCtrlSubComBase_Register,
-        beModelCtrlSubComBase_GetPublishedMetaObject,
+        Gap::Bec::beModelCtrlSubComBase::arkRegisterInternal,
+        Gap::Bec::beModelCtrlSubComBase::getClassMeta,
         beModelCtrlSCEffect_GetMetaObjectFunction,
         "beModelCtrlSCEffect",
         0x3c, /* instance size */

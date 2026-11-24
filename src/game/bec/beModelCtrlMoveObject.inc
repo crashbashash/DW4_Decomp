@@ -1,118 +1,87 @@
-igMetaObject *g_beModelCtrlMoveObject_metaObject;
-igMetaField *g_beModelCtrlMoveObject_isRunMetaField;
-igMetaField *g_beModelCtrlMoveObject_endTimeMetaField;
-igMetaField *g_beModelCtrlMoveObject_modeMetaField;
-igMetaField *g_beModelCtrlMoveObject_valueMetaField;
-igMetaField *g_beModelCtrlMoveObject_accMetaField;
-igMetaField *g_beModelCtrlMoveObject_speedMetaField;
-igMetaField *g_beModelCtrlMoveObject_isSeqStopMetaField;
-igMetaField *g_beModelCtrlMoveObject_stopValueMetaField;
-igMetaField *g_beModelCtrlMoveObject_stopFrameMetaField;
+namespace Gap {
+namespace Bec {
 
-beModelCtrlMoveObject *beModelCtrlMoveObject_Create(int allocator) {
-    beModelCtrlMoveObject_EnsureRegistered();
-    return (beModelCtrlMoveObject *)igMetaObject_CreateInstance(g_beModelCtrlMoveObject_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beModelCtrlMoveObject::_Meta;
+igMetaField *beModelCtrlMoveObject::k_isRun;
+igMetaField *beModelCtrlMoveObject::k_endTime;
+igMetaField *beModelCtrlMoveObject::k_mode;
+igMetaField *beModelCtrlMoveObject::k_value;
+igMetaField *beModelCtrlMoveObject::k_acc;
+igMetaField *beModelCtrlMoveObject::k_speed;
+igMetaField *beModelCtrlMoveObject::k_isSeqStop;
+igMetaField *beModelCtrlMoveObject::k_stopValue;
+igMetaField *beModelCtrlMoveObject::k_stopFrame;
 
-igMetaObject *beModelCtrlMoveObject_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlMoveObject_metaObject;
-    int t;
-    if (!g || !(t = (g->_validity & 4) != 0))
-        beModelCtrlMoveObject_EnsureRegistered();
-    return g_beModelCtrlMoveObject_metaObject;
-}
-
-int beModelCtrlMoveObject_GetVTable(void) {
-    beModelCtrlMoveObject obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beModelCtrlMoveObject_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beModelCtrlMoveObject_EnsureRegistered(void)
+beModelCtrlMoveObject *beModelCtrlMoveObject::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beModelCtrlMoveObject_Register);
+    arkRegister();
+    return (beModelCtrlMoveObject *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beModelCtrlMoveObject_Register(void) {
+igMetaObject *beModelCtrlMoveObject::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beModelCtrlMoveObject::retrieveVTablePointer()
+{
+    beModelCtrlMoveObject temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlMoveObject::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlMoveObject::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlMoveObject_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beModelCtrlMoveObject_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlMoveObject",
-        0x2c, /* instance size */
-        beModelCtrlMoveObject_GetVTable,
-        beModelCtrlMoveObject_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlMoveObject),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlMoveObject_GetMetaObjectFunction(void)
+void beModelCtrlMoveObject::arkRegisterInitialize()
 {
-    beModelCtrlMoveObject_GetMetaObject();
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_isRun", "_endTime", "_mode", "_value", "_acc", "_speed", "_isSeqStop", "_stopValue", "_stopFrame" };
+    static igMetaField **enumStorage[] = { &k_isRun, &k_endTime, &k_mode, &k_value, &k_acc, &k_speed, &k_isSeqStop, &k_stopValue, &k_stopFrame };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 36, 40 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 9);
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(0.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(0.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(0.0f);
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(0.0f);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlMoveObject_ctorTable[] = {
-    igBoolMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igBoolMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beModelCtrlMoveObject_fieldTable[] = {
-    "_isRun",
-    "_endTime",
-    "_mode",
-    "_value",
-    "_acc",
-    "_speed",
-    "_isSeqStop",
-    "_stopValue",
-    "_stopFrame",
-};
-static igMetaField **g_beModelCtrlMoveObject_fieldHandles[] = {
-    &g_beModelCtrlMoveObject_isRunMetaField,
-    &g_beModelCtrlMoveObject_endTimeMetaField,
-    &g_beModelCtrlMoveObject_modeMetaField,
-    &g_beModelCtrlMoveObject_valueMetaField,
-    &g_beModelCtrlMoveObject_accMetaField,
-    &g_beModelCtrlMoveObject_speedMetaField,
-    &g_beModelCtrlMoveObject_isSeqStopMetaField,
-    &g_beModelCtrlMoveObject_stopValueMetaField,
-    &g_beModelCtrlMoveObject_stopFrameMetaField,
-};
-static int g_beModelCtrlMoveObject_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-};
-
-void beModelCtrlMoveObject_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlMoveObject_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlMoveObject_ctorTable, 9);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(0.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0.0f);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0.0f);
-    igMetaObject_NameFields(meta, g_beModelCtrlMoveObject_fieldTable, g_beModelCtrlMoveObject_fieldHandles, g_beModelCtrlMoveObject_fieldOffsets, base);
+}
 }
 

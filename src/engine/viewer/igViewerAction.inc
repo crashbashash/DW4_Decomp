@@ -1,88 +1,79 @@
-igMetaObject *g_igViewerAction_metaObject;
-igMetaField *g_igViewerAction_refMetaField;
-igMetaField *g_igViewerAction_functionMetaField;
+namespace Gap {
+namespace Viewer {
+
+igMetaObject *igViewerAction::_Meta;
+igMetaField *igViewerAction::k_ref;
+igMetaField *igViewerAction::k_function;
+}
+}
 
 igViewerAction *igViewerAction_Create(int allocator) {
-    igViewerAction_EnsureRegistered();
-    return (igViewerAction *)igMetaObject_CreateInstance(g_igViewerAction_metaObject, (igMemoryPoolView *)allocator);
+    Gap::Viewer::igViewerAction::arkRegister();
+    return (igViewerAction *)igMetaObject_CreateInstance(Gap::Viewer::igViewerAction::getClassMeta(), (igMemoryPoolView *)allocator);
 }
 
-void *igViewerAction_GetMetaObject(void) {
-    igMetaObject *g = g_igViewerAction_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        igViewerAction_EnsureRegistered();
-    }
-    return g_igViewerAction_metaObject;
-}
+namespace Gap {
+namespace Viewer {
 
-int igViewerAction_GetVTable(void) {
-    int tmp[8];
-    int off;
-    igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&g_igViewerAction_vtable[0];
-    off = g_objectSystem->vtableProbeOffset;
-    return *(int *)((char *)tmp + off);
-}
-
-void igViewerAction_EnsureRegistered(void)
+igMetaObject *igViewerAction::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igViewerAction_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igViewerAction_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, 0 };
+void *igViewerAction::retrieveVTablePointer()
+{
+    igViewerAction temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igViewerAction_Register(void) {
+void igViewerAction::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewerAction::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igViewerSceneInfoManager_EnsureRegistered, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewerAction_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igAction::arkRegisterInternal,
         Gap::Gui::igAction::getClassMeta,
-        igViewerAction_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewerAction",
-        0x18, /* instance size */
-        igViewerAction_GetVTable,
-        &igViewerAction_InitFields,
-        0, /* extra callback item */
-        g_igViewerAction_callbackList /* callback list */
+        sizeof(igViewerAction),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igViewerAction_GetMetaObjectFunction(void) {
-    igViewerAction_GetMetaObject();
+void igViewerAction::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igStructMetaField::_instantiateFromPool };
+    static const char *names[] = { "_ref", "_function" };
+    static igMetaField **enumStorage[] = { &k_ref, &k_function };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
+        metaField->_refCounted = 0;
+    }
+    {
+        igStructMetaField *metaField = (igStructMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_size = 12;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewerAction_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    igStructMetaField_Create,
-};
-static const char *g_igViewerAction_fieldTable[] = {
-    "_ref",
-    "_function",
-};
-static igMetaField **g_igViewerAction_fieldHandles[] = {
-    &g_igViewerAction_refMetaField,
-    &g_igViewerAction_functionMetaField,
-};
-static int g_igViewerAction_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void igViewerAction_InitFields(void) {
-    void *f2;
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = g_igViewerAction_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerAction_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 60) = 0;
-    f2 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1);
-    *(short *)((char *)f2 + 20) = 0xC;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerAction_fieldTable, g_igViewerAction_fieldHandles, g_igViewerAction_fieldOffsets, temp_s2);
+}
 }
 

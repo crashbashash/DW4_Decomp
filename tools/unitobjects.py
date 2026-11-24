@@ -288,6 +288,30 @@ def special_member(symbol):
     return "%s::%s%s" % (cls, "~" if m.group(1) == "dt" else "", cls)
 
 
+_MEMBER_MANGLED = re.compile(r"([A-Za-z][A-Za-z0-9_]*?)__(?=Q\d|\d)")
+
+
+def member_name(symbol):
+    """`Class::method` for MWCC's mangled name of an ordinary member function, else None: the key
+    tools/units.py also files a member definition under, since every class defining a method of that
+    name shares its bare one."""
+    m = _MEMBER_MANGLED.match(symbol or "")
+    if not m:
+        return None
+    at, count, cls = m.end(), 1, None
+    if symbol[at] == "Q":
+        count, at = int(symbol[at + 1]), at + 2
+    for _ in range(count):
+        length = re.match(r"\d+", symbol[at:])
+        if not length:
+            return None
+        at += length.end()
+        cls, at = symbol[at:at + int(length.group())], at + int(length.group())
+    if not cls or not re.fullmatch(r"[A-Za-z_]\w*", cls):
+        return None
+    return "%s::%s" % (cls, m.group(1))
+
+
 def data_only_units(path=None):
     """The data-only rows: files the retail linker kept data of and no function. No function
     definition reaches them, so the tools verify and link them from the row's `source`."""
@@ -310,6 +334,9 @@ def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None, o
             # defining its members
             places = ({index[special]} if special in index else set()) if special is not None else (
                 {index[symbol] for symbol, _ in group.emitted if symbol in index} if group.whole_file else set())
+            if not places and member_name(group.symbol) in index:
+                # an ordinary member owner of a file of members alone, under its `Class::method` key
+                places = {index[member_name(group.symbol)]}
             if len(places) != 1:
                 continue
             index[owner] = places.pop()

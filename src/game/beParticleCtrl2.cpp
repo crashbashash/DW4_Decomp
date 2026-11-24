@@ -94,7 +94,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             float matrix[16];
             igMatrix44f_SetIdentity(matrix);
             igMatrix44f_Copy(matrix, ((igTransform *)work->_positionLockNode)->_m);
-            igMatrix44f_TranslateLocal(matrix, work->_positionLockOffset);
+            igMatrix44f_TranslateLocal(matrix, *(igVec3f *)work->_positionLockOffset);
             ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         }
         switch (StateOf(ram)) {
@@ -189,13 +189,13 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                 } else {
                     a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 }
-                igSmartPointer<beParticleCtrl2InfoWork> lockWork((beParticleCtrl2InfoWork *)beParticleCtrl2InfoWork_Create(a));
+                igSmartPointer<beParticleCtrl2InfoWork> lockWork((beParticleCtrl2InfoWork *)Gap::Bec::beParticleCtrl2InfoWork::_instantiateFromPool((igMemoryPoolView *)a));
                 igObject *node = (igObject *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 beParticleCtrl2InfoWork *held = lockWork.p;
                 igObject::ref(node);
                 Rel::go((igObject *)held->_positionLockNode);
                 held->_positionLockNode = (int)node;
-                lockWork->_positionLockOffset = offset;
+                *(igVec3f *)lockWork->_positionLockOffset = offset;
                 held = lockWork.p;
                 igObject::ref(held);
                 Rel::go((igObject *)ram->_work);

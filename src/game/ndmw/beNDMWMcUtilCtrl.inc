@@ -64,7 +64,7 @@ void beNDMWMcUtilCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMcUtilCtrl_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMcUtilCtrl_callbackList[] = { beMessenger_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, beNDMWMcSlotList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWMcUtilCtrl_callbackList[] = { beMessenger_EnsureRegistered, Gap::Bec::beSaveDataDeliver::arkRegister, beNDMWMcSlotList_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWMcUtilCtrl_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -179,7 +179,7 @@ void beNDMWMcUtilCtrl_InitFields(void) {
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
     svData = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
-    ((igObjectRefMetaField *)svData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)svData)->_metaObject = (int)Gap::Bec::beSaveDataDeliver::getClassTypeLazy();
     ((igRefMetaField *)svData)->_construct = 1;
     slot = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)slot)->_metaObject = (int)beNDMWMcSlotList_GetOrCreateMetaObject();

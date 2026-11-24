@@ -1,98 +1,68 @@
-igMetaObject *g_beTimerData_metaObject;
-igMetaField *g_beTimerData_startTimeMetaField;
-igMetaField *g_beTimerData_resetConditionMetaField;
-igMetaField *g_beTimerData_callLuaFileMetaField;
-igMetaField *g_beTimerData_downTimerMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beTimerData_GetMetaObject(void)
+igMetaObject *beTimerData::_Meta;
+igMetaField *beTimerData::k_startTime;
+igMetaField *beTimerData::k_resetCondition;
+igMetaField *beTimerData::k_callLuaFile;
+igMetaField *beTimerData::k_downTimer;
+
+igMetaObject *beTimerData::getClassTypeSafe()
 {
-    igMetaObject *g = g_beTimerData_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beTimerData_EnsureRegistered();
-    return g_beTimerData_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int beTimerData_GetVTable(void) {
-    beTimerData obj;
-    int vtable;
-    char **resetConditionSlot;
-    char **callLuaFileSlot;
-
-    igObject_InitHeader(&obj);
-    callLuaFileSlot = (char **)&obj._callLuaFile;
-    resetConditionSlot = (char **)&obj._resetCondition;
-    obj._vtable = (int)&g_beTimerData_vtable[0];
-    *resetConditionSlot = 0;
-    *callLuaFileSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beTimerData_vtable[0];
-    igStringRef_Release(callLuaFileSlot);
-    igStringRef_Release(resetConditionSlot);
-    return vtable;
-}
-
-void beTimerData_EnsureRegistered(void)
+void *beTimerData::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(beTimerData_Register);
+    beTimerData temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *beTimerData_Register(void) {
+void beTimerData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beTimerData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beTimerData_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beTimerData_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beTimerData",
-        0x20, /* instance size */
-        beTimerData_GetVTable,
-        beTimerData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beTimerData),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beTimerData_GetMetaObjectFunction(void)
+void beTimerData::arkRegisterInitialize()
 {
-    beTimerData_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igStringMetaField_Create, igStringMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool };
+    static const char *names[] = { "_startTime", "_resetCondition", "_callLuaFile", "_downTimer" };
+    static igMetaField **enumStorage[] = { &k_startTime, &k_resetCondition, &k_callLuaFile, &k_downTimer };
+    static int offsets[] = { 8, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(0);
+    }
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(0);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beTimerData_ctorTable[] = {
-    igLongMetaField_Create,
-    igStringMetaField_Create,
-    igStringMetaField_Create,
-    igLongMetaField_Create,
-};
-static const char *g_beTimerData_fieldTable[] = {
-    "_startTime",
-    "_resetCondition",
-    "_callLuaFile",
-    "_downTimer",
-};
-static igMetaField **g_beTimerData_fieldHandles[] = {
-    &g_beTimerData_startTimeMetaField,
-    &g_beTimerData_resetConditionMetaField,
-    &g_beTimerData_callLuaFileMetaField,
-    &g_beTimerData_downTimerMetaField,
-};
-static int g_beTimerData_fieldOffsets[] = {
-    8,
-    16,
-    20,
-    24,
-};
-
-void beTimerData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beTimerData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beTimerData_ctorTable, 4);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(0);
-    igMetaObject_NameFields(meta, g_beTimerData_fieldTable, g_beTimerData_fieldHandles, g_beTimerData_fieldOffsets, base);
+}
 }
 

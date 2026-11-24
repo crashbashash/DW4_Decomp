@@ -1,55 +1,52 @@
-igMetaObject *g_beModelCtrlMoveObjectList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beModelCtrlMoveObjectList_GetOrCreateMetaObject(void) {
-    if (g_beModelCtrlMoveObjectList_metaObject == 0) {
-        g_beModelCtrlMoveObjectList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beModelCtrlMoveObjectList_metaObject;
-}
+igMetaObject *beModelCtrlMoveObjectList::_Meta;
 
-igMetaObject *beModelCtrlMoveObjectList_GetMetaObject(void)
+igMetaObject *beModelCtrlMoveObjectList::getClassTypeLazy()
 {
-    igMetaObject *g = g_beModelCtrlMoveObjectList_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beModelCtrlMoveObjectList_EnsureRegistered();
-    return g_beModelCtrlMoveObjectList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int beModelCtrlMoveObjectList_GetVTable(void) {
-    beModelCtrlMoveObjectList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beModelCtrlMoveObjectList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beModelCtrlMoveObjectList_EnsureRegistered(void)
+igMetaObject *beModelCtrlMoveObjectList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlMoveObjectList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beModelCtrlMoveObjectList_callbackList[] = { beModelCtrlMoveObject_EnsureRegistered, 0 };
+void *beModelCtrlMoveObjectList::retrieveVTablePointer()
+{
+    beModelCtrlMoveObjectList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beModelCtrlMoveObjectList_Register(void) {
+void beModelCtrlMoveObjectList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlMoveObjectList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beModelCtrlMoveObject::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlMoveObjectList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beModelCtrlMoveObjectList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlMoveObjectList",
-        0x14, /* instance size */
-        beModelCtrlMoveObjectList_GetVTable,
+        sizeof(beModelCtrlMoveObjectList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beModelCtrlMoveObjectList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beModelCtrlMoveObjectList_GetMetaObjectFunction(void)
-{
-    beModelCtrlMoveObjectList_GetMetaObject();
+}
 }
 

@@ -1394,22 +1394,22 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         igObject::release(old);
-        object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
+        object.p = (igObject *)Gap::Bec::beModelCtrlMoveObject::_instantiateFromPool((igMemoryPoolView *)allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         igObject::release(old);
-        object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
+        object.p = (igObject *)Gap::Bec::beModelCtrlMoveObject::_instantiateFromPool((igMemoryPoolView *)allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         igObject::release(old);
-        object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
+        object.p = (igObject *)Gap::Bec::beModelCtrlMoveObject::_instantiateFromPool((igMemoryPoolView *)allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         igObject::release(old);
-        object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
+        object.p = (igObject *)Gap::Bec::beModelCtrlMoveObject::_instantiateFromPool((igMemoryPoolView *)allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
     }
     meta = g_beModelCtrlMOVE_metaObject;
@@ -2462,7 +2462,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         if (((beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, AIM)) != 0 ||
             ((beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, AIH)) != 0) {
             ALLOCATOR(a, self)
-            ObjRef<0> r((igObject *)beModelCtrlInfoAI_Create(a));
+            ObjRef<0> r((igObject *)Gap::Bec::beModelCtrlInfoAI::_instantiateFromPool((igMemoryPoolView *)a));
             igObject *s = r.p;
             RETAIN(s)
             RELEASE(started->_aI)
@@ -2704,7 +2704,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             igObject *hitbody = (igObject *)work->_hitBody;
             if (hitbody == 0) {
                 ALLOCATOR(a, self)
-                ObjRef<1> r((igObject *)beModelCtrlInfoHitBody_Create(a));
+                ObjRef<1> r((igObject *)Gap::Bec::beModelCtrlInfoHitBody::_instantiateFromPool((igMemoryPoolView *)a));
                 igObject *s = r.p;
                 RETAIN(s)
                 RELEASE(work->_hitBody)

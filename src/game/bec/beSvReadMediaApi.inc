@@ -50,7 +50,7 @@ void beSvReadMediaApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvReadMediaApi_Register);
 }
 
-static igMetaObjectCallback g_beSvReadMediaApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
+static igMetaObjectCallback g_beSvReadMediaApi_callbackList[] = { Gap::Bec::beSvPlatBaseData::arkRegister, Gap::Bec::beSaveDataDeliver::arkRegister, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beSvReadMediaApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -115,13 +115,13 @@ void beSvReadMediaApi_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvReadMediaApi_ctorTable, 5);
     outputGamedata = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)outputGamedata)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)outputGamedata)->_metaObject = (int)Gap::Bec::beSvPlatBaseData::getClassTypeLazy();
     gameData = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)gameData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)gameData)->_metaObject = (int)Gap::Bec::beSaveDataDeliver::getClassTypeLazy();
     ((igObjectRefMetaField *)gameData)->_refCounted = 0;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(0x10);
     lodeData = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)lodeData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lodeData)->_metaObject = (int)Gap::Bec::beSaveDataDeliver::getClassTypeLazy();
     loadWorkList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)loadWorkList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)loadWorkList)->_construct = 1;

@@ -72,7 +72,7 @@ int beCriAudio_Setup(beCriAudio *self, int channels) {
         int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
         igObject::release((igObject *)self->_sndf);
-        self->_sndf = (int)beCriSndf_Create(allocator);
+        self->_sndf = (int)Gap::Bec::beCriSndf::_instantiateFromPool((igMemoryPoolView *)allocator);
         igObject::release((igObject *)self->_adxt);
         self->_adxt = 0;
         self->_audioType = kAudioSndf;

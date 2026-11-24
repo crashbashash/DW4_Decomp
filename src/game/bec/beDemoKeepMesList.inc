@@ -1,55 +1,52 @@
-igMetaObject *g_beDemoKeepMesList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beDemoKeepMesList_GetOrCreateMetaObject(void) {
-    if (g_beDemoKeepMesList_metaObject == 0) {
-        g_beDemoKeepMesList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beDemoKeepMesList_metaObject;
-}
+igMetaObject *beDemoKeepMesList::_Meta;
 
-igMetaObject *beDemoKeepMesList_GetMetaObject(void)
+igMetaObject *beDemoKeepMesList::getClassTypeLazy()
 {
-    igMetaObject *g = g_beDemoKeepMesList_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beDemoKeepMesList_EnsureRegistered();
-    return g_beDemoKeepMesList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int beDemoKeepMesList_GetVTable(void) {
-    beDemoKeepMesList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beDemoKeepMesList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beDemoKeepMesList_EnsureRegistered(void)
+igMetaObject *beDemoKeepMesList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beDemoKeepMesList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beDemoKeepMesList_callbackList[] = { beDemoKeepMes_EnsureRegistered, 0 };
+void *beDemoKeepMesList::retrieveVTablePointer()
+{
+    beDemoKeepMesList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beDemoKeepMesList_Register(void) {
+void beDemoKeepMesList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beDemoKeepMesList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beDemoKeepMes::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beDemoKeepMesList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beDemoKeepMesList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beDemoKeepMesList",
-        0x14, /* instance size */
-        beDemoKeepMesList_GetVTable,
+        sizeof(beDemoKeepMesList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beDemoKeepMesList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beDemoKeepMesList_GetMetaObjectFunction(void)
-{
-    beDemoKeepMesList_GetMetaObject();
+}
 }
 

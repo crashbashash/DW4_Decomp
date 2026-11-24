@@ -41,7 +41,7 @@ void beDBManagerInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDBManagerInfo_Register);
 }
 
-static igMetaObjectCallback g_beDBManagerInfo_callbackList[] = { beDataBase_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beDBManagerInfo_callbackList[] = { Gap::Bec::beDataBase::arkRegister, 0 };
 
 CallbackArray *beDBManagerInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -87,7 +87,7 @@ void beDBManagerInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDBManagerInfo_ctorTable, 1);
     dataBase = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)dataBase)->_metaObject = (int)beDataBase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dataBase)->_metaObject = (int)Gap::Bec::beDataBase::getClassTypeLazy();
     ((igRefMetaField *)dataBase)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDBManagerInfo_fieldTable, g_beDBManagerInfo_fieldHandles, g_beDBManagerInfo_fieldOffsets, base);
 }

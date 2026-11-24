@@ -1,57 +1,52 @@
-igMetaObject *g_beWaterMoveDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beWaterMoveDataList_GetOrCreateMetaObject(void) {
-    if (g_beWaterMoveDataList_metaObject == 0) {
-        g_beWaterMoveDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beWaterMoveDataList_metaObject;
-}
+igMetaObject *beWaterMoveDataList::_Meta;
 
-void *beWaterMoveDataList_GetMetaObject(void) {
-    bool ok;
-    if (g_beWaterMoveDataList_metaObject == 0) goto make;
-    ok = !!(g_beWaterMoveDataList_metaObject->_validity & 4);
-    if (ok != false) goto done;
-make:
-    beWaterMoveDataList_EnsureRegistered();
-done:;
-    return g_beWaterMoveDataList_metaObject;
-}
-
-int beWaterMoveDataList_GetVTable(void) {
-    beWaterMoveDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beWaterMoveDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beWaterMoveDataList_EnsureRegistered(void)
+igMetaObject *beWaterMoveDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beWaterMoveDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beWaterMoveDataList_callbackList[] = { beWaterMoveData_EnsureRegistered, 0 };
+igMetaObject *beWaterMoveDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beWaterMoveDataList_Register(void) {
+void *beWaterMoveDataList::retrieveVTablePointer()
+{
+    beWaterMoveDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beWaterMoveDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beWaterMoveDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beWaterMoveData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beWaterMoveDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beWaterMoveDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beWaterMoveDataList",
-        0x14, /* instance size */
-        beWaterMoveDataList_GetVTable,
+        sizeof(beWaterMoveDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beWaterMoveDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beWaterMoveDataList_GetMetaObjectFunction(void)
-{
-    beWaterMoveDataList_GetMetaObject();
+}
 }
 

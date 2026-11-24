@@ -47,7 +47,7 @@ void beSelectCtrlInfoRamData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSelectCtrlInfoRamData_Register);
 }
 
-static igMetaObjectCallback g_beSelectCtrlInfoRamData_callbackList[] = { beSelectCtrlInfoWork_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSelectCtrlInfoRamData_callbackList[] = { Gap::Bec::beSelectCtrlInfoWork::arkRegister, 0 };
 
 CallbackArray *beSelectCtrlInfoRamData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -115,7 +115,7 @@ void beSelectCtrlInfoRamData_InitFields(void) {
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->release();
     work = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
-    ((igObjectRefMetaField *)work)->_metaObject = (int)beSelectCtrlInfoWork_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)work)->_metaObject = (int)Gap::Bec::beSelectCtrlInfoWork::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_beSelectCtrlInfoRamData_fieldTable, g_beSelectCtrlInfoRamData_fieldHandles, g_beSelectCtrlInfoRamData_fieldOffsets, base);
 }
 

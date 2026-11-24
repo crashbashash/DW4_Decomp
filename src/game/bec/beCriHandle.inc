@@ -54,7 +54,7 @@ void beCriHandle_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCriHandle_Register);
 }
 
-static igMetaObjectCallback g_beCriHandle_callbackList[] = { beCriAudio_EnsureRegistered, beCriVolume_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCriHandle_callbackList[] = { beCriAudio_EnsureRegistered, Gap::Bec::beCriVolume::arkRegister, 0 };
 
 CallbackArray *beCriHandle_Register(void) {
     BecLibrary_MarkRegistered();
@@ -120,7 +120,7 @@ void beCriHandle_InitFields(void) {
     ((igObjectRefMetaField *)audio)->_metaObject = (int)beCriAudio_GetOrCreateMetaObject();
     ((igRefMetaField *)audio)->_construct = 1;
     volume = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)volume)->_metaObject = (int)beCriVolume_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)volume)->_metaObject = (int)Gap::Bec::beCriVolume::getClassTypeLazy();
     ((igRefMetaField *)volume)->_construct = 1;
     igMetaObject_NameFields(meta, g_beCriHandle_fieldTable, g_beCriHandle_fieldHandles, g_beCriHandle_fieldOffsets, base);
 }

@@ -37,7 +37,7 @@ void beLuaData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLuaData_Register);
 }
 
-static igMetaObjectCallback g_beLuaData_callbackList[] = { beLuaDataObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLuaData_callbackList[] = { Gap::Bec::beLuaDataObject::arkRegister, 0 };
 
 CallbackArray *beLuaData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -83,7 +83,7 @@ void beLuaData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLuaData_ctorTable, 1);
     dataObject = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)dataObject)->_metaObject = (int)beLuaDataObject_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dataObject)->_metaObject = (int)Gap::Bec::beLuaDataObject::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beLuaData_fieldTable, g_beLuaData_fieldHandles, g_beLuaData_fieldOffsets, base);
 }
 

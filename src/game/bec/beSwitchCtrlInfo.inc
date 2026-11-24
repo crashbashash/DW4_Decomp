@@ -26,15 +26,6 @@ int beSwitchCtrlInfo_GetVTable(void) {
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igSwitch_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if ((short)delete_storage > 0) operator delete(self);
-    }
-    return self;
-}
-
 void beSwitchCtrlInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSwitchCtrlInfo_Register);

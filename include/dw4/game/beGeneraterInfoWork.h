@@ -7,7 +7,6 @@ struct beGeneraterInfoWork;
 extern "C" {
 #endif
 
-struct beGeneraterInfoWork *beGeneraterInfoWork_Create(int allocator);
 
 #ifdef __cplusplus
 }

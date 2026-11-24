@@ -1,102 +1,65 @@
-igMetaObject *g_igActorManagerParams_metaObject;
-igMetaField *g_igActorManagerParams_skelOnlyMetaField;
-igMetaField *g_igActorManagerParams_skelAndSkinMetaField;
+namespace Gap {
+namespace Viewer {
 
-igMetaObject *igActorManagerParams_GetOrCreateMetaObject(void) {
-    if (g_igActorManagerParams_metaObject == 0) {
-        g_igActorManagerParams_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igActorManagerParams_metaObject;
-}
+igMetaObject *igActorManagerParams::_Meta;
+igMetaField *igActorManagerParams::k_skelOnly;
+igMetaField *igActorManagerParams::k_skelAndSkin;
 
-void *igActorManagerParams_GetMetaObject(void) {
-    igMetaObject *g = g_igActorManagerParams_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        igActorManagerParams_EnsureRegistered();
-    }
-    return g_igActorManagerParams_metaObject;
-}
-
-int igActorManagerParams_GetVTable(void) {
-    union U_45e790 u;
-    int s0;
-    char *ps;
-    int *v1;
-    int *a1;
-    int v0;
-    igObject_InitHeader((igObject *)u.b);
-    ps = &u.b[8];
-    *(int *)ps = 0;
-    u.vt = (int)&g_igModel_vtable[0];
-    u.vt = (int)&g_igActorManagerParams_vtable[0];
-    s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igModel_vtable[0];
-    if (ps != 0) {
-        v1 = *(int **)ps;
-        if (v1 != 0) {
-            v1[1] = v1[1] - 1;
-            if ((v1[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)v1);
-            }
-        }
-    }
-    return s0;
-}
-
-void igActorManagerParams_EnsureRegistered(void)
+igMetaObject *igActorManagerParams::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igActorManagerParams_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igActorManagerParams_Register(void) {
+igMetaObject *igActorManagerParams::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igActorManagerParams::retrieveVTablePointer()
+{
+    igActorManagerParams temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igActorManagerParams::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igActorManagerParams::arkRegisterInternal()
+{
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igActorManagerParams_metaObject,
+        false,
+        &_Meta,
         Gap::Gui::igModel::arkRegisterInternal,
         Gap::Gui::igModel::getClassMeta,
-        igActorManagerParams_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igActorManagerParams",
-        0x10, /* instance size */
-        igActorManagerParams_GetVTable,
-        &igActorManagerParams_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igActorManagerParams),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igActorManagerParams_GetMetaObjectFunction(void) {
-    igActorManagerParams_GetMetaObject();
+void igActorManagerParams::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igBoolMetaField_Create };
+    static const char *names[] = { "_skelOnly", "_skelAndSkin" };
+    static igMetaField **enumStorage[] = { &k_skelOnly, &k_skelAndSkin };
+    static int offsets[] = { 12, 13 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igActorManagerParams_ctorTable[] = {
-    igBoolMetaField_Create,
-    igBoolMetaField_Create,
-};
-static const char *g_igActorManagerParams_fieldTable[] = {
-    "_skelOnly",
-    "_skelAndSkin",
-};
-static igMetaField **g_igActorManagerParams_fieldHandles[] = {
-    &g_igActorManagerParams_skelOnlyMetaField,
-    &g_igActorManagerParams_skelAndSkinMetaField,
-};
-static int g_igActorManagerParams_fieldOffsets[] = {
-    12,
-    13,
-};
-
-void igActorManagerParams_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
-
-    temp_s0 = g_igActorManagerParams_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActorManagerParams_ctorTable, 2);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActorManagerParams_fieldTable, g_igActorManagerParams_fieldHandles, g_igActorManagerParams_fieldOffsets, temp_s1);
 }
-
-igMetaObject *igActorManagerParams_GetMeta(void) {
-    return g_igActorManagerParams_metaObject;
 }
 

@@ -46,7 +46,7 @@ void beMatCtrlInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMatCtrlInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beMatCtrlInfoRam_callbackList[] = { beMatCtrlInfoWork_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMatCtrlInfoRam_callbackList[] = { Gap::Bec::beMatCtrlInfoWork::arkRegister, 0 };
 
 CallbackArray *beMatCtrlInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -92,7 +92,7 @@ void beMatCtrlInfoRam_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlInfoRam_ctorTable, 1);
     work = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)work)->_metaObject = (int)beMatCtrlInfoWork_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)work)->_metaObject = (int)Gap::Bec::beMatCtrlInfoWork::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beMatCtrlInfoRam_fieldTable, g_beMatCtrlInfoRam_fieldHandles, g_beMatCtrlInfoRam_fieldOffsets, base);
 }
 

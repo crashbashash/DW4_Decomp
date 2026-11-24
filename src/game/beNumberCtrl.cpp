@@ -50,7 +50,7 @@ void beNumberCtrl_UpdateRam(beNumberCtrl *self, beNumberCtrlInfoRam *ram) {
     case 0:
     default:
         if (ram->_work == 0) {
-            igSmartPointer<beNumberCtrlInfoWork> created(beNumberCtrlInfoWork_Create(allocatorFor(self)));
+            igSmartPointer<beNumberCtrlInfoWork> created((beNumberCtrlInfoWork *)Gap::Bec::beNumberCtrlInfoWork::_instantiateFromPool((igMemoryPoolView *)allocatorFor(self)));
             setWork(ram, (igObject *)created.p);
         }
         ram->_st0 = ram->_st0 + 1;
@@ -200,7 +200,7 @@ int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMesse
         return 1;
     case kSetValue:
         if (counter == 0) {
-            igSmartPointer<beNumberCtrlInfoWork> created(beNumberCtrlInfoWork_Create(allocatorFor(self)));
+            igSmartPointer<beNumberCtrlInfoWork> created((beNumberCtrlInfoWork *)Gap::Bec::beNumberCtrlInfoWork::_instantiateFromPool((igMemoryPoolView *)allocatorFor(self)));
             setWork(ram, (igObject *)created.p);
             counter = created.p;
         }
@@ -215,7 +215,7 @@ int beNumberCtrl_OnMessage(beNumberCtrl *self, beNumberCtrlInfoRam *ram, beMesse
         return 1;
     case kAddValue:
         if (counter == 0) {
-            igSmartPointer<beNumberCtrlInfoWork> created(beNumberCtrlInfoWork_Create(allocatorFor(self)));
+            igSmartPointer<beNumberCtrlInfoWork> created((beNumberCtrlInfoWork *)Gap::Bec::beNumberCtrlInfoWork::_instantiateFromPool((igMemoryPoolView *)allocatorFor(self)));
             setWork(ram, (igObject *)created.p);
             counter = created.p;
         }

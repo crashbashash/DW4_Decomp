@@ -7,7 +7,6 @@ struct beParticleCtrl2InfoWork;
 extern "C" {
 #endif
 
-struct beParticleCtrl2InfoWork *beParticleCtrl2InfoWork_Create(int allocator);
 
 #ifdef __cplusplus
 }

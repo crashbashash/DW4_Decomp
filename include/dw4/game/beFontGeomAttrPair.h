@@ -7,7 +7,6 @@ struct beFontGeomAttrPair;
 extern "C" {
 #endif
 
-struct beFontGeomAttrPair *beFontGeomAttrPair_Create(int allocator);
 
 #ifdef __cplusplus
 }

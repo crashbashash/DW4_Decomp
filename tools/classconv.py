@@ -91,7 +91,15 @@ UNIT_OBJECTS = "config/SLUS-20836/unit-objects.json"
 LIBRARY_DIRS = {"Core": ("src/engine/core", "src/engine/datapump", "src/engine/scenegraph"), "Math": "src/engine/maths",
                 "Attrs": "src/engine/attrs",
                 "Gfx": "src/engine/gfx", "Sg": "src/engine/scenegraph", "Gui": "src/engine/gui",
-                "Insight": "src/engine/insight", "Viewer": "src/engine/viewer"}
+                "Insight": "src/engine/insight",
+                # the viewer's registration fragments, and its method units, which sit apart in src/engine
+                "Viewer": ("src/engine/viewer", "src/engine/ViewerInlineCopies.cpp", "src/engine/beCameraMode.cpp",
+                           "src/engine/igActorManager.cpp", "src/engine/igBoundingBoxRenderer.cpp",
+                           "src/engine/igLogoRenderer.cpp", "src/engine/igNormalsRenderer.cpp",
+                           "src/engine/igViewManager.cpp", "src/engine/igViewerDataPumpManager.c",
+                           "src/engine/igViewerGuiFactory.cpp", "src/engine/igViewerRenderer.cpp",
+                           "src/engine/igViewerSceneInfoManager.cpp"),
+                "Bec": "src/game/bec"}
 
 # the C names every reflected class shares, and the members they become
 COMMON = {"GetMetaObject": "getClassTypeSafe", "GetVTable": "retrieveVTablePointer", "EnsureRegistered": "arkRegister",
@@ -575,8 +583,9 @@ class Tree:
             raise ConvError("no source directory for library %s (classconv.LIBRARY_DIRS)" % lib)
         if isinstance(dirs, str):
             dirs = (dirs,)
-        return sorted(os.path.join(d, f) for d in dirs for f in os.listdir(self.path(d))
-                      if f.endswith((".inc", ".cpp", ".h")))
+        return sorted([d for d in dirs if os.path.isfile(self.path(d))] +
+                      [os.path.join(d, f) for d in dirs if os.path.isdir(self.path(d)) for f in os.listdir(self.path(d))
+                       if f.endswith((".inc", ".cpp", ".h"))])
 
     def files_naming(self, lib, word):
         return [p for p in self.files(lib) if word in self.read(p)]

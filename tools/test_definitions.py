@@ -100,6 +100,29 @@ class SpecialMembers(unittest.TestCase):
         self.assertEqual(index["FUN_00100000"], "src/x.cpp")
         self.assertEqual(index["FUN_00100040"], "src/x.cpp")
 
+    def test_an_ordinary_member_owner_is_found_by_its_class(self):
+        import json, os, tempfile, unitobjects
+        self.assertEqual(unitobjects.member_name("traverse__Q33Gap6Viewer14igLogoRendererFv"),
+                         "igLogoRenderer::traverse")
+        self.assertIsNone(unitobjects.member_name("trimCapacity__Q33Gap4Core34igTDataList<PQ33Gap4Core8igObject>Fv"))
+        self.assertIsNone(unitobjects.member_name("Gap__Viewer__igViewerAction__Execute"))
+        with tempfile.TemporaryDirectory() as tmp:
+            symbols = os.path.join(tmp, "symbols.txt")
+            rows = os.path.join(tmp, "unit-objects.json")
+            with open(symbols, "w") as fh:
+                fh.write("00100000 000008 igLogoRenderer_Traverse\n00100008 000008 igLogoRenderer_Render\n")
+            with open(rows, "w") as fh:
+                json.dump({"0x00100000": {"whole_file": True, "symbol": "traverse__14igLogoRendererFv",
+                                          "emitted": {"draw__14igLogoRendererFv": "0x00100008"}}}, fh)
+            unitobjects.load.cache_clear()
+            try:
+                # `traverse` and `draw` are shared with every renderer: only the qualified key is the file's
+                index = unitobjects.augment_sources({"igLogoRenderer::traverse": "src/r.cpp"}, symbols, rows)
+            finally:
+                unitobjects.load.cache_clear()
+        self.assertEqual(index["igLogoRenderer_Traverse"], "src/r.cpp")
+        self.assertEqual(index["igLogoRenderer_Render"], "src/r.cpp")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,119 +1,80 @@
-igMetaObject *g_beMessengerWork_metaObject;
-igMetaField *g_beMessengerWork_groupNameMetaField;
-igMetaField *g_beMessengerWork_infoNameMetaField;
-igMetaField *g_beMessengerWork_ramNoMetaField;
-igMetaField *g_beMessengerWork_messageMetaField;
-igMetaField *g_beMessengerWork_findRamNoListMetaField;
-igMetaField *g_beMessengerWork_findRamListMetaField;
+namespace Gap {
+namespace Bec {
 
-beMessengerWork *beMessengerWork_Create(int allocator) {
-    beMessengerWork_EnsureRegistered();
-    return (beMessengerWork *)igMetaObject_CreateInstance(g_beMessengerWork_metaObject, (igMemoryPoolView *)allocator);
+igMetaObject *beMessengerWork::_Meta;
+igMetaField *beMessengerWork::k_groupName;
+igMetaField *beMessengerWork::k_infoName;
+igMetaField *beMessengerWork::k_ramNo;
+igMetaField *beMessengerWork::k_message;
+igMetaField *beMessengerWork::k_findRamNoList;
+igMetaField *beMessengerWork::k_findRamList;
+
+beMessengerWork *beMessengerWork::_instantiateFromPool(igMemoryPoolView *pool)
+{
+    arkRegister();
+    return (beMessengerWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void *beMessengerWork_GetMetaObject(void) {
-    igMetaObject *g = g_beMessengerWork_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beMessengerWork_EnsureRegistered();
-    }
-    return g_beMessengerWork_metaObject;
+igMetaObject *beMessengerWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int beMessengerWork_GetVTable(void) {
-    beMessengerWork obj;
-    int vtable;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beMessengerWork_vtable[0];
-    obj._groupName = 0;
-    obj._infoName = 0;
-    obj._message = 0;
-    obj._findRamNoList = 0;
-    obj._findRamList = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beMessengerWork_vtable[0];
-    igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
-    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._findRamNoList, -1);
-    igStringRef_Destruct((igStringRef *)&obj._message, -1);
-    igStringRef_Destruct((igStringRef *)&obj._infoName, -1);
-    igStringRef_Destruct((igStringRef *)&obj._groupName, -1);
-    return vtable;
+void *beMessengerWork::retrieveVTablePointer()
+{
+    beMessengerWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-void beMessengerWork_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerWork_Register);}
+void beMessengerWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-static igMetaObjectCallback g_beMessengerWork_callbackList[] = { Gap::Core::igIntList::arkRegister, beBaseInfoRamList_EnsureRegistered, 0 };
+CallbackArray *beMessengerWork::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igIntList::arkRegister, beBaseInfoRamList_EnsureRegistered, 0 };
 
-CallbackArray *beMessengerWork_Register(void) {
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beMessengerWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beMessengerWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beMessengerWork",
-        0x20, /* instance size */
-        beMessengerWork_GetVTable,
-        beMessengerWork_InitFields,
-        0, /* extra callback item */
-        g_beMessengerWork_callbackList /* callback list */
+        sizeof(beMessengerWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beMessengerWork_GetMetaObjectFunction(void)
+void beMessengerWork::arkRegisterInitialize()
 {
-    beMessengerWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igStringMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igStringMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_groupName", "_infoName", "_ramNo", "_message", "_findRamNoList", "_findRamList" };
+    static igMetaField **enumStorage[] = { &k_groupName, &k_infoName, &k_ramNo, &k_message, &k_findRamNoList, &k_findRamList };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 6);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beMessengerWork_ctorTable[] = {
-    igStringMetaField_Create,
-    igStringMetaField_Create,
-    igIntMetaField_Create,
-    igStringMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beMessengerWork_fieldTable[] = {
-    "_groupName",
-    "_infoName",
-    "_ramNo",
-    "_message",
-    "_findRamNoList",
-    "_findRamList",
-};
-static igMetaField **g_beMessengerWork_fieldHandles[] = {
-    &g_beMessengerWork_groupNameMetaField,
-    &g_beMessengerWork_infoNameMetaField,
-    &g_beMessengerWork_ramNoMetaField,
-    &g_beMessengerWork_messageMetaField,
-    &g_beMessengerWork_findRamNoListMetaField,
-    &g_beMessengerWork_findRamListMetaField,
-};
-static int g_beMessengerWork_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-};
-
-void beMessengerWork_InitFields(void) {
-    int base;
-    void *findRamList;
-    void *findRamNoList;
-    igMetaObject *meta;
-
-    meta = g_beMessengerWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beMessengerWork_ctorTable, 6);
-    findRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)findRamNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
-    ((igRefMetaField *)findRamNoList)->_construct = 1;
-    findRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)findRamList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();
-    ((igRefMetaField *)findRamList)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beMessengerWork_fieldTable, g_beMessengerWork_fieldHandles, g_beMessengerWork_fieldOffsets, base);
+}
 }
 

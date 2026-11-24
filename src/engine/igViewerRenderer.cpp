@@ -258,7 +258,7 @@ void igViewerRenderer_ApplyOptions(igViewerRenderer *renderer) {
     } else {
         ((igViewerParameters *)renderer->_parameters)->_useSceneLights = options->useSceneLights;
     }
-    igNotifyEvent useSceneLightsChanged((Gap::Core::igMetaField *)g_igViewerParameters_useSceneLightsMetaField);
+    igNotifyEvent useSceneLightsChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_useSceneLights);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(useSceneLightsChanged);
     if (options->autoHeadLight != 0) {
         /* matching construct: respell sweep under C++ — the C int-valued !s1 */
@@ -268,46 +268,46 @@ void igViewerRenderer_ApplyOptions(igViewerRenderer *renderer) {
     }
     headLight = useHeadLight & 0xFF;
     ((igViewerParameters *)renderer->_parameters)->_useHeadLight = (headLight & ((!options->useHeadLightSpecular) & 0xFF)) != 0;
-    igNotifyEvent useHeadLightChanged((Gap::Core::igMetaField *)g_igViewerParameters_useHeadLightMetaField);
+    igNotifyEvent useHeadLightChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_useHeadLight);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(useHeadLightChanged);
     ((igViewerParameters *)renderer->_parameters)->_useHeadLightSpecular = (headLight & options->useHeadLightSpecular) != 0;
-    igNotifyEvent useHeadLightSpecularChanged((Gap::Core::igMetaField *)g_igViewerParameters_useHeadLightSpecularMetaField);
+    igNotifyEvent useHeadLightSpecularChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_useHeadLightSpecular);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(useHeadLightSpecularChanged);
     ((igViewerParameters *)renderer->_parameters)->_alphaTest = options->alphaTest;
-    igNotifyEvent alphaTestChanged((Gap::Core::igMetaField *)g_igViewerParameters_alphaTestMetaField);
+    igNotifyEvent alphaTestChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_alphaTest);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(alphaTestChanged);
     ((igViewerParameters *)renderer->_parameters)->_alphaTestForce = options->forceAlphaTest;
-    igNotifyEvent alphaTestForceChanged((Gap::Core::igMetaField *)g_igViewerParameters_alphaTestForceMetaField);
+    igNotifyEvent alphaTestForceChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_alphaTestForce);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(alphaTestForceChanged);
     ((igViewerParameters *)renderer->_parameters)->_backFaceCulling = options->backFaceCullingMode;
-    igNotifyEvent backFaceCullingChanged((Gap::Core::igMetaField *)g_igViewerParameters_backFaceCullingMetaField);
+    igNotifyEvent backFaceCullingChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_backFaceCulling);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(backFaceCullingChanged);
     ((igViewerParameters *)renderer->_parameters)->_backFaceCullingForce = options->forceBackFaceCulling;
-    igNotifyEvent backFaceCullingForceChanged((Gap::Core::igMetaField *)g_igViewerParameters_backFaceCullingForceMetaField);
+    igNotifyEvent backFaceCullingForceChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_backFaceCullingForce);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(backFaceCullingForceChanged);
     ((igViewerParameters *)renderer->_parameters)->_wireframe = options->wireframeMode;
-    igNotifyEvent wireframeChanged((Gap::Core::igMetaField *)g_igViewerParameters_wireframeMetaField);
+    igNotifyEvent wireframeChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_wireframe);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(wireframeChanged);
     ((igViewerParameters *)renderer->_parameters)->_wireframeForce = options->forceWireframe;
-    igNotifyEvent wireframeForceChanged((Gap::Core::igMetaField *)g_igViewerParameters_wireframeForceMetaField);
+    igNotifyEvent wireframeForceChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_wireframeForce);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(wireframeForceChanged);
     ((igViewerParameters *)renderer->_parameters)->_flatShading = 0;
-    igNotifyEvent flatShadingChanged((Gap::Core::igMetaField *)g_igViewerParameters_flatShadingMetaField);
+    igNotifyEvent flatShadingChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_flatShading);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(flatShadingChanged);
     ((igViewerParameters *)renderer->_parameters)->_flatShadingForce = 0;
-    igNotifyEvent flatShadingForceChanged((Gap::Core::igMetaField *)g_igViewerParameters_flatShadingForceMetaField);
+    igNotifyEvent flatShadingForceChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_flatShadingForce);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(flatShadingForceChanged);
     ((igViewerParameters *)renderer->_parameters)->_sortTexture = 0;
-    igNotifyEvent sortTextureChanged((Gap::Core::igMetaField *)g_igViewerParameters_sortTextureMetaField);
+    igNotifyEvent sortTextureChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_sortTexture);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(sortTextureChanged);
     ((igViewerParameters *)renderer->_parameters)->_sortTransparent = 1;
-    igNotifyEvent sortTransparentChanged((Gap::Core::igMetaField *)g_igViewerParameters_sortTransparentMetaField);
+    igNotifyEvent sortTransparentChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_sortTransparent);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(sortTransparentChanged);
     ((igViewerParameters *)renderer->_parameters)->_sortTransparentDistance = 0;
-    igNotifyEvent sortTransparentDistanceChanged((Gap::Core::igMetaField *)g_igViewerParameters_sortTransparentDistanceMetaField);
+    igNotifyEvent sortTransparentDistanceChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_sortTransparentDistance);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(sortTransparentDistanceChanged);
     ((igViewerParameters *)renderer->_parameters)->_transparencyMode = 0;
-    igNotifyEvent transparencyModeChanged((Gap::Core::igMetaField *)g_igViewerParameters_transparencyModeMetaField);
+    igNotifyEvent transparencyModeChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_transparencyMode);
     ((Gap::Gui::igModel *)renderer->_parameters)->notifyAllViews(transparencyModeChanged);
     if (g_sharedViewerOptions != 0) {
         if (--g_sharedViewerOptions->useCount <= 0) {
@@ -410,7 +410,7 @@ void igViewerRenderer_UpdateProjection(igViewerRenderer *self) {
     params = (igViewerParameters *)self->_parameters;
     ((Gap::Sg::igCommonTraversal *)self->_sceneTraversal)->setPerspective(params->_hfov, -1.0f, params->_ratio, params->_nearPlane, params->_farPlane);
     igMatrix44f_Copy(((igViewerParameters *)self->_parameters)->_projectionMatrix, ((igFrustCullTraversal *)self->_sceneTraversal)->_projMat);
-    igNotifyEvent projectionChanged((Gap::Core::igMetaField *)g_igViewerParameters_projectionMatrixMetaField);
+    igNotifyEvent projectionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_projectionMatrix);
     ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(projectionChanged);
 }
 

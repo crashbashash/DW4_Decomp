@@ -37,21 +37,12 @@ int beSvWriteMediaApi_GetVTable(void) {
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beSvPlatBaseData_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if ((short)delete_storage > 0) operator delete(self);
-    }
-    return self;
-}
-
 void beSvWriteMediaApi_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(beSvWriteMediaApi_Register);
 }
 
-static igMetaObjectCallback g_beSvWriteMediaApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveMemoryObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvWriteMediaApi_callbackList[] = { Gap::Bec::beSvPlatBaseData::arkRegister, beSaveMemoryObj_EnsureRegistered, 0 };
 
 CallbackArray *beSvWriteMediaApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -102,7 +93,7 @@ void beSvWriteMediaApi_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvWriteMediaApi_ctorTable, 2);
     nowGamedata = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)nowGamedata)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)nowGamedata)->_metaObject = (int)Gap::Bec::beSvPlatBaseData::getClassTypeLazy();
     saveWork = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)saveWork)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beSvWriteMediaApi_fieldTable, g_beSvWriteMediaApi_fieldHandles, g_beSvWriteMediaApi_fieldOffsets, base);

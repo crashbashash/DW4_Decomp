@@ -1,114 +1,81 @@
-igMetaObject *g_beMatCtrlSearch_metaObject;
-igMetaField *g_beMatCtrlSearch_minXMetaField;
-igMetaField *g_beMatCtrlSearch_maxXMetaField;
-igMetaField *g_beMatCtrlSearch_matNOMetaField;
-igMetaField *g_beMatCtrlSearch_parentMetaField;
-igMetaField *g_beMatCtrlSearch_memberListMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beMatCtrlSearch_GetOrCreateMetaObject(void) {
-    if (g_beMatCtrlSearch_metaObject == 0) {
-        g_beMatCtrlSearch_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beMatCtrlSearch_metaObject;
-}
+igMetaObject *beMatCtrlSearch::_Meta;
+igMetaField *beMatCtrlSearch::k_minX;
+igMetaField *beMatCtrlSearch::k_maxX;
+igMetaField *beMatCtrlSearch::k_matNO;
+igMetaField *beMatCtrlSearch::k_parent;
+igMetaField *beMatCtrlSearch::k_memberList;
 
-void *beMatCtrlSearch_GetMetaObject(void) {
-    igMetaObject *g = g_beMatCtrlSearch_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beMatCtrlSearch_EnsureRegistered();
-    }
-    return g_beMatCtrlSearch_metaObject;
-}
-
-int beMatCtrlSearch_GetVTable(void) {
-    beMatCtrlSearch obj;
-    int vtable;
-    igObject **memberListSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
-    memberListSlot = (igObject **)&obj._memberList;
-    *memberListSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
-    igObjectRef_Release(memberListSlot);
-    return vtable;
-}
-
-void beMatCtrlSearch_EnsureRegistered(void)
+igMetaObject *beMatCtrlSearch::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beMatCtrlSearch_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beMatCtrlSearch_callbackList[] = { beMatCtrlSearchList_EnsureRegistered, 0 };
+igMetaObject *beMatCtrlSearch::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beMatCtrlSearch_Register(void) {
+void *beMatCtrlSearch::retrieveVTablePointer()
+{
+    beMatCtrlSearch temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beMatCtrlSearch::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beMatCtrlSearch::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beMatCtrlSearchList::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beMatCtrlSearch_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beMatCtrlSearch_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beMatCtrlSearch",
-        0x1c, /* instance size */
-        beMatCtrlSearch_GetVTable,
-        beMatCtrlSearch_InitFields,
-        0, /* extra callback item */
-        g_beMatCtrlSearch_callbackList /* callback list */
+        sizeof(beMatCtrlSearch),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beMatCtrlSearch_GetMetaObjectFunction(void)
+void beMatCtrlSearch::arkRegisterInitialize()
 {
-    beMatCtrlSearch_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_minX", "_maxX", "_matNO", "_parent", "_memberList" };
+    static igMetaField **enumStorage[] = { &k_minX, &k_maxX, &k_matNO, &k_parent, &k_memberList };
+    static int offsets[] = { 8, 12, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)getClassTypeLazy();
+        metaField->_refCounted = 0;
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)Gap::Bec::beMatCtrlSearchList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beMatCtrlSearch_ctorTable[] = {
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igIntMetaField_Create,
-    igObjectRefMetaField_Create,
-    igObjectRefMetaField_Create,
-};
-static const char *g_beMatCtrlSearch_fieldTable[] = {
-    "_minX",
-    "_maxX",
-    "_matNO",
-    "_parent",
-    "_memberList",
-};
-static igMetaField **g_beMatCtrlSearch_fieldHandles[] = {
-    &g_beMatCtrlSearch_minXMetaField,
-    &g_beMatCtrlSearch_maxXMetaField,
-    &g_beMatCtrlSearch_matNOMetaField,
-    &g_beMatCtrlSearch_parentMetaField,
-    &g_beMatCtrlSearch_memberListMetaField,
-};
-static int g_beMatCtrlSearch_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-};
-
-void beMatCtrlSearch_InitFields(void) {
-    int base;
-    void *memberList;
-    void *parent;
-    igMetaObject *meta;
-
-    meta = g_beMatCtrlSearch_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beMatCtrlSearch_ctorTable, 5);
-    parent = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)parent)->_metaObject = (int)beMatCtrlSearch_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)parent)->_refCounted = 0;
-    ((igMetaField *)parent)->_persistent = 0;
-    memberList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)memberList)->_metaObject = (int)beMatCtrlSearchList_GetOrCreateMetaObject();
-    ((igRefMetaField *)memberList)->_construct = 1;
-    igMetaObject_NameFields(meta, g_beMatCtrlSearch_fieldTable, g_beMatCtrlSearch_fieldHandles, g_beMatCtrlSearch_fieldOffsets, base);
+}
 }
 

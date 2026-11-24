@@ -102,26 +102,31 @@ extern "C" void beLoadingNode_RegisterTraversalFunction(void)
     Gap::Sg::igTraversal::_setFunction(Gap::Sg::igCommonTraversal::_getTraversalFunctions(), meta, (igTraversalFunction *)beLoadingNode_TraversalFunction);
 }
 
-extern "C" void bePadData_userConstruct(bePadData *pad)
+namespace Gap {
+namespace Bec {
+
+void bePadData::userConstruct(int flag)
 {
-    Gap__Core__igObject__userConstruct((igObject *)pad);
+    Gap__Core__igObject__userConstruct((::igObject *)this);
     /* the dead zone is the length of the vector (0.4, 0) */
-    pad->_enaLen = 0.4f;
-    float x = pad->_enaLen;
+    _enaLen = 0.4f;
+    float x = _enaLen;
     float y = 0.0f;
     float xx = x * x;
-    pad->_enaLen = sqrtf(xx + y);
-    pad->_adAngle = 0.7853982f;
-    pad->_1sttime = 10;
-    pad->_2ndtime = 6;
-    pad->_lTime = 0; pad->_lLast = 0; pad->_lStk = 0; pad->_lRpt = 0; pad->_lTrg = 0;
-    pad->_rTime = 0; pad->_rLast = 0; pad->_rStk = 0; pad->_rRpt = 0; pad->_rTrg = 0;
-    pad->_rptime = 0; pad->_last = 0; pad->_repeat = 0; pad->_trigger = 0; pad->_button = 0;
+    _enaLen = sqrtf(xx + y);
+    _adAngle = 0.7853982f;
+    _1sttime = 10;
+    _2ndtime = 6;
+    _lTime = 0; _lLast = 0; _lStk = 0; _lRpt = 0; _lTrg = 0;
+    _rTime = 0; _rLast = 0; _rStk = 0; _rRpt = 0; _rTrg = 0;
+    _rptime = 0; _last = 0; _repeat = 0; _trigger = 0; _button = 0;
 }
 
-extern "C" void bePadData_userDestruct(bePadData *pad)
+void bePadData::userDestruct()
 {
-    Gap__Core__igObject__userDestruct((igObject *)pad);
+    Gap__Core__igObject__userDestruct((::igObject *)this);
+}
+}
 }
 
 /* Button edges and auto-repeat: the first repeat after _1sttime frames, then every _2ndtime. */
@@ -148,9 +153,9 @@ extern "C" void bePadData_UpdateButtons(bePadData *pad, int buttons)
 
 extern "C" void bePadData_UpdateLeftStick(bePadData *pad, igVec2f stick)
 {
-    pad->_LStick = stick;
+    *(igVec2f *)pad->_LStick = stick;
     pad->_lLast = pad->_lStk;
-    bePadData_StickDirections(pad, &pad->_lStk, pad->_LStick);
+    bePadData_StickDirections(pad, &pad->_lStk, *(igVec2f *)pad->_LStick);
     pad->_lTrg = pad->_lStk & (pad->_lLast ^ pad->_lStk);
     if ((pad->_lLast ^ pad->_lStk) != 0) {
         pad->_lRpt = pad->_lTrg;
@@ -167,9 +172,9 @@ extern "C" void bePadData_UpdateLeftStick(bePadData *pad, igVec2f stick)
 
 extern "C" void bePadData_UpdateRightStick(bePadData *pad, igVec2f stick)
 {
-    pad->_RStick = stick;
+    *(igVec2f *)pad->_RStick = stick;
     pad->_rLast = pad->_rStk;
-    bePadData_StickDirections(pad, &pad->_rStk, pad->_RStick);
+    bePadData_StickDirections(pad, &pad->_rStk, *(igVec2f *)pad->_RStick);
     int held = pad->_rStk;
     pad->_rTrg = held & (pad->_rLast ^ held);
     if ((pad->_rLast ^ pad->_rStk) != 0) {
@@ -214,7 +219,3 @@ extern "C" void bePadData_StickDirections(bePadData *pad, int *directions, igVec
     }
 }
 
-extern "C" igMetaObject *bePadData_GetMeta(void)
-{
-    return g_bePadData_metaObject;
-}

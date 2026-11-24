@@ -423,7 +423,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     void *allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
                     void *creator;
                     if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                    igSmartPointer<beFontGeomAttrPair> newPair(beFontGeomAttrPair_Create((int)creator));
+                    igSmartPointer<beFontGeomAttrPair> newPair((beFontGeomAttrPair *)Gap::Bec::beFontGeomAttrPair::_instantiateFromPool((igMemoryPoolView *)creator));
                     SET_POOLED_STRING(newPair.p, _category, category->_name)
                     SET_POOLED_STRING(newPair.p, _panel, panel->_name)
                     allocator = ((Gap::Core::igObject *)self)->getMemoryPool();

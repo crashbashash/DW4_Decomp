@@ -52,7 +52,7 @@ void beCameraCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCameraCtrl_Register);
 }
 
-static igMetaObjectCallback g_beCameraCtrl_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, igViewerParameters_EnsureRegistered, beCameraMode_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCameraCtrl_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, Gap::Viewer::igViewerParameters::arkRegister, beCameraMode_EnsureRegistered, 0 };
 
 CallbackArray *beCameraCtrl_Register(void) {
     BecLibrary_MarkRegistered();
@@ -151,7 +151,7 @@ void beCameraCtrl_InitFields(void) {
     ((igObjectRefMetaField *)viewerMang)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)viewerMang)->_refCounted = 0;
     viewerPara = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)viewerPara)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)viewerPara)->_metaObject = (int)Gap::Viewer::igViewerParameters::getClassTypeLazy();
     ((igObjectRefMetaField *)viewerPara)->_refCounted = 0;
     cameraMode = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)cameraMode)->_metaObject = (int)beCameraMode_GetOrCreateMetaObject();

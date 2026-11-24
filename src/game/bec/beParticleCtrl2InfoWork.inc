@@ -1,101 +1,77 @@
-igMetaObject *g_beParticleCtrl2InfoWork_metaObject;
-igMetaField *g_beParticleCtrl2InfoWork_positionLockNodeMetaField;
-igMetaField *g_beParticleCtrl2InfoWork_positionLockOffsetMetaField;
+namespace Gap {
+namespace Bec {
 
-beParticleCtrl2InfoWork *beParticleCtrl2InfoWork_Create(int allocator) {
-    beParticleCtrl2InfoWork_EnsureRegistered();
-    return (beParticleCtrl2InfoWork *)igMetaObject_CreateInstance(g_beParticleCtrl2InfoWork_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beParticleCtrl2InfoWork::_Meta;
+igMetaField *beParticleCtrl2InfoWork::k_positionLockNode;
+igMetaField *beParticleCtrl2InfoWork::k_positionLockOffset;
 
-igMetaObject *beParticleCtrl2InfoWork_GetOrCreateMetaObject(void) {
-    if (g_beParticleCtrl2InfoWork_metaObject == 0) {
-        g_beParticleCtrl2InfoWork_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beParticleCtrl2InfoWork_metaObject;
-}
-
-void *beParticleCtrl2InfoWork_GetMetaObject(void) {
-    unsigned char b;
-    if (g_beParticleCtrl2InfoWork_metaObject != 0) {
-        b = (g_beParticleCtrl2InfoWork_metaObject->_validity & 4) != 0;
-        if (b != 0) goto done;
-    }
-    beParticleCtrl2InfoWork_EnsureRegistered();
-done:
-    return g_beParticleCtrl2InfoWork_metaObject;
-}
-
-int beParticleCtrl2InfoWork_GetVTable(void) {
-    beParticleCtrl2InfoWork obj;
-    int vtable;
-    igObject **positionLockNodeSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
-    positionLockNodeSlot = (igObject **)&obj._positionLockNode;
-    *positionLockNodeSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
-    igObjectRef_Release(positionLockNodeSlot);
-    return vtable;
-}
-
-void beParticleCtrl2InfoWork_EnsureRegistered(void)
+beParticleCtrl2InfoWork *beParticleCtrl2InfoWork::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beParticleCtrl2InfoWork_Register);
+    arkRegister();
+    return (beParticleCtrl2InfoWork *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-static igMetaObjectCallback g_beParticleCtrl2InfoWork_callbackList[] = { beModelCtrlNode2_EnsureRegistered, 0 };
+igMetaObject *beParticleCtrl2InfoWork::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
 
-CallbackArray *beParticleCtrl2InfoWork_Register(void) {
+igMetaObject *beParticleCtrl2InfoWork::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beParticleCtrl2InfoWork::retrieveVTablePointer()
+{
+    beParticleCtrl2InfoWork temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beParticleCtrl2InfoWork::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beParticleCtrl2InfoWork::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { beModelCtrlNode2_EnsureRegistered, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beParticleCtrl2InfoWork_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        beParticleCtrl2InfoWork_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beParticleCtrl2InfoWork",
-        0x18, /* instance size */
-        beParticleCtrl2InfoWork_GetVTable,
-        beParticleCtrl2InfoWork_InitFields,
-        0, /* extra callback item */
-        g_beParticleCtrl2InfoWork_callbackList /* callback list */
+        sizeof(beParticleCtrl2InfoWork),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void beParticleCtrl2InfoWork_GetMetaObjectFunction(void)
+void beParticleCtrl2InfoWork::arkRegisterInitialize()
 {
-    beParticleCtrl2InfoWork_GetMetaObject();
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool };
+    static const char *names[] = { "_positionLockNode", "_positionLockOffset" };
+    static igMetaField **enumStorage[] = { &k_positionLockNode, &k_positionLockOffset };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beParticleCtrl2InfoWork_ctorTable[] = {
-    igObjectRefMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-};
-static const char *g_beParticleCtrl2InfoWork_fieldTable[] = {
-    "_positionLockNode",
-    "_positionLockOffset",
-};
-static igMetaField **g_beParticleCtrl2InfoWork_fieldHandles[] = {
-    &g_beParticleCtrl2InfoWork_positionLockNodeMetaField,
-    &g_beParticleCtrl2InfoWork_positionLockOffsetMetaField,
-};
-static int g_beParticleCtrl2InfoWork_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void beParticleCtrl2InfoWork_InitFields(void) {
-    int base;
-    void *positionLockNode;
-    igMetaObject *meta;
-
-    meta = g_beParticleCtrl2InfoWork_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beParticleCtrl2InfoWork_ctorTable, 2);
-    positionLockNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)positionLockNode)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
-    igMetaObject_NameFields(meta, g_beParticleCtrl2InfoWork_fieldTable, g_beParticleCtrl2InfoWork_fieldHandles, g_beParticleCtrl2InfoWork_fieldOffsets, base);
+}
 }
 

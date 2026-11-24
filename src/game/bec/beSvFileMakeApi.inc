@@ -39,7 +39,7 @@ void beSvFileMakeApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvFileMakeApi_Register);
 }
 
-static igMetaObjectCallback g_beSvFileMakeApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveMemoryObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvFileMakeApi_callbackList[] = { Gap::Bec::beSvPlatBaseData::arkRegister, beSaveMemoryObj_EnsureRegistered, 0 };
 
 CallbackArray *beSvFileMakeApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -90,7 +90,7 @@ void beSvFileMakeApi_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvFileMakeApi_ctorTable, 2);
     earlyGamedata = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)earlyGamedata)->_metaObject = (int)beSvPlatBaseData_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)earlyGamedata)->_metaObject = (int)Gap::Bec::beSvPlatBaseData::getClassTypeLazy();
     saveWork = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)saveWork)->_metaObject = (int)beSaveMemoryObj_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beSvFileMakeApi_fieldTable, g_beSvFileMakeApi_fieldHandles, g_beSvFileMakeApi_fieldOffsets, base);

@@ -32,15 +32,6 @@ int beWeaponInfo_GetVTable(void) {
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_beBaseInfoRamList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (delete_storage > 0) operator delete(self);
-    }
-    return self;
-}
-
 void *beBaseInfo_Destroy(beBaseInfo *self, short delete_storage) {
     if (self != 0) {
         self->_vtable = (int)&g_beBaseInfo_vtable[0];

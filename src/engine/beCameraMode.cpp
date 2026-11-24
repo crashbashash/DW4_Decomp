@@ -100,19 +100,19 @@ static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraph
 static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return (igGraphPath *)Gap::Sg::igGraphPath::_instantiateFromPool(0); }
 
 void igViewMode_IsCompatible(igViewMode *self, igObject *model) {
-    ((Gap::Core::igObject *)model)->isOfType(g_igViewModel_metaObject);
+    ((Gap::Core::igObject *)model)->isOfType(Gap::Viewer::igViewModel::getClassMeta());
 }
 
 void igViewMode_OnModelChange(igViewModeDispatchView *self, const igNotifyEvent &event) {
-    igMetaField *field = (igMetaField *)event._field;
+    Gap::Core::igMetaField *field = (Gap::Core::igMetaField *)event._field;
     int type;
-    if (field == g_igViewModel_viewMatrixMetaField) {
+    if (field == Gap::Viewer::igViewModel::k_viewMatrix) {
         igViewMode_UpdateInverseMatrix((igViewMode *)self);
         igViewMode_UpdateModelVectors((igViewMode *)self);
         return;
     }
-    if (field == g_igViewModel_positionMetaField || field == g_igViewModel_directionMetaField ||
-        field == g_igViewModel_viewUpVectorMetaField) {
+    if (field == Gap::Viewer::igViewModel::k_position || field == Gap::Viewer::igViewModel::k_direction ||
+        field == Gap::Viewer::igViewModel::k_viewUpVector) {
         igViewMode_UpdateViewMatrix((igViewMode *)self);
         return;
     }
@@ -148,16 +148,16 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     model->_position[0] = v[0];
     model->_position[1] = v[1];
     model->_position[2] = v[2];
-    igNotifyEvent positionChanged((Gap::Core::igMetaField *)g_igViewModel_positionMetaField, (Gap::Gui::igView *)self);
+    igNotifyEvent positionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_position, (Gap::Gui::igView *)self);
     ((Gap::Gui::igModel *)model)->notifyAllViews(positionChanged);
-    Vec3f_TransformDirection(model->_direction.vec, g_vec3ZAxis.vec, self->_inverseMatrix);
+    Vec3f_TransformDirection(&model->_direction[0], g_vec3ZAxis.vec, self->_inverseMatrix);
     model->_direction[0] = -model->_direction[0];
     model->_direction[1] = -model->_direction[1];
     model->_direction[2] = -model->_direction[2];
-    igNotifyEvent directionChanged((Gap::Core::igMetaField *)g_igViewModel_directionMetaField, (Gap::Gui::igView *)self);
+    igNotifyEvent directionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_direction, (Gap::Gui::igView *)self);
     ((Gap::Gui::igModel *)model)->notifyAllViews(directionChanged);
-    Vec3f_TransformDirection(model->_viewLeftVector.vec, g_vec3XAxis.vec, self->_inverseMatrix);
-    igNotifyEvent leftChanged((Gap::Core::igMetaField *)g_igViewModel_viewLeftVectorMetaField, (Gap::Gui::igView *)self);
+    Vec3f_TransformDirection(&model->_viewLeftVector[0], g_vec3XAxis.vec, self->_inverseMatrix);
+    igNotifyEvent leftChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewLeftVector, (Gap::Gui::igView *)self);
     ((Gap::Gui::igModel *)model)->notifyAllViews(leftChanged);
 }
 
@@ -172,7 +172,7 @@ void igViewMode_UpdateViewMatrix(igViewMode *self) {
     center[0] = center[0] + model->_direction[0];
     center[1] += model->_direction[1];
     center[2] += model->_direction[2];
-    igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position.vec, center, model->_viewUpVector.vec);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, &model->_position[0], center, &model->_viewUpVector[0]);
 }
 
 void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
@@ -214,14 +214,14 @@ void igCameraMode_OnAttach(igCameraMode *self) {
         farPlane = camera->_farPlane;
         nearPlane = camera->_nearPlane;
         model->_hfov = (float) camera->_horizontalFieldOfView;
-        igNotifyEvent hfovChanged((Gap::Core::igMetaField *)g_igViewModel_hfovMetaField);
+        igNotifyEvent hfovChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_hfov);
         ((Gap::Gui::igModel *)model)->notifyAllViews(hfovChanged);
         model->_farPlane = farPlane;
-        igNotifyEvent farChanged((Gap::Core::igMetaField *)g_igViewModel_farPlaneMetaField);
+        igNotifyEvent farChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_farPlane);
         ((Gap::Gui::igModel *)model)->notifyAllViews(farChanged);
         nearPlane = (nearPlane == 0.0f) ? farPlane / 1000.0f : nearPlane;
         model->_nearPlane = nearPlane;
-        igNotifyEvent nearChanged((Gap::Core::igMetaField *)g_igViewModel_nearPlaneMetaField);
+        igNotifyEvent nearChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_nearPlane);
         ((Gap::Gui::igModel *)model)->notifyAllViews(nearChanged);
     }
 }
@@ -241,7 +241,7 @@ void igCameraMode_Update(igCameraMode *self) {
         igMatrix44f_MakeEulerRotation(world, x, y, z);
         igMatrix44f_SetTranslation(world, translation);
         igMatrix44f_InvertOrthonormal(model->_viewMatrix, world);
-        igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+        igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
         ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
 }
@@ -349,7 +349,7 @@ void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
     pitch *= seconds;
     igViewModel *model = (igViewModel *)self->_model;
     igVec3f up;
-    Vec3f_TransformDirection((float *)&up, model->_sceneUpVector.vec, model->_viewMatrix);
+    Vec3f_TransformDirection((float *)&up, &model->_sceneUpVector[0], model->_viewMatrix);
     float scale = 1.0f / up.length();
     up[0] *= scale;
     up[1] *= scale;
@@ -365,7 +365,7 @@ void igFlyMode_ApplyAim(igFlyMode *self) {
         float pitch = 30.0f * (self->_mousePos[1] - self->_lastAim[1]);
         float head = 60.0f * (self->_mousePos[0] - self->_lastAim[0]);
         igVec3f up;
-        Vec3f_TransformDirection((float *)&up, model->_sceneUpVector.vec, model->_viewMatrix);
+        Vec3f_TransformDirection((float *)&up, &model->_sceneUpVector[0], model->_viewMatrix);
         float scale = 1.0f / up.length();
         up[0] *= scale;
         up[1] *= scale;
@@ -388,7 +388,7 @@ void igFlyMode_Update(igFlyMode *self, float seconds) {
         igFlyMode_ApplyAim(self);
     }
     igFlyMode_ApplyRotation(self, seconds);
-    igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+    igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
     ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
 }
 
@@ -587,7 +587,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
     self->_zoom *= 1.0f - 0.1f * (frames * self->_joystickT[1]);
     if (self->_active) {
         igVec3f center;
-        Vec3f_TransformProjective((float *)&center, model->_selectedCenter.vec, model->_viewMatrix);
+        Vec3f_TransformProjective((float *)&center, &model->_selectedCenter[0], model->_viewMatrix);
         center[0] = -center[0];
         center[1] = -center[1];
         center[2] = -center[2];
@@ -595,7 +595,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         if (self->_maya) {
             if (self->_head != 0.0f) {
                 igVec3f up;
-                Vec3f_TransformDirection((float *)&up, model->_sceneUpVector.vec, model->_viewMatrix);
+                Vec3f_TransformDirection((float *)&up, &model->_sceneUpVector[0], model->_viewMatrix);
                 float scale = 1.0f / up.length();
                 up[0] *= scale;
                 up[1] *= scale;
@@ -617,7 +617,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         center[2] += self->_translation[2];
         self->_distance = center.length();
         igMatrix44f_TranslateWorld(model->_viewMatrix, center);
-        igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewModel_viewMatrixMetaField);
+        igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
         ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
     self->_head = 0.0f;
@@ -672,7 +672,7 @@ void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
             object = (igObject *)*selected;
             igObject::release(object);
             *selected = 0;
-            igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewerParameters_selectedObjectMetaField);
+            igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_selectedObject);
             ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(changed);
         }
     }
@@ -768,7 +768,7 @@ void igPickMode_Pick(igPickMode *self) {
     previous = (igObject *)*selected;
     igObject::release(previous);
     *selected = (int)hitPath;
-    igNotifyEvent changed((Gap::Core::igMetaField *)g_igViewerParameters_selectedObjectMetaField);
+    igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_selectedObject);
     ((Gap::Gui::igModel *)((igViewerParameters *)self->_parameters))->notifyAllViews(changed);
 }
 

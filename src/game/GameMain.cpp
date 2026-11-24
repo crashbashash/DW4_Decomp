@@ -665,13 +665,13 @@ void GameMain_RunBenchmark(Blk *app) {
         ViewerSetup_ResetView(&app->viewer);
         parameters = (igViewerParameters *)((igViewerSceneInfoManager *)app->viewer.sceneInfo.p)->_parameters;
         parameters->_showGui = 0;
-        igNotifyEvent showGui((Gap::Core::igMetaField *)g_igViewerParameters_showGuiMetaField);
+        igNotifyEvent showGui((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_showGui);
         ((Gap::Gui::igModel *)parameters)->notifyAllViews(showGui);
         parameters->_showBoundingBox = 0;
-        igNotifyEvent showBoundingBox((Gap::Core::igMetaField *)g_igViewerParameters_showBoundingBoxMetaField);
+        igNotifyEvent showBoundingBox((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_showBoundingBox);
         ((Gap::Gui::igModel *)parameters)->notifyAllViews(showBoundingBox);
         parameters->_showNormals = 0;
-        igNotifyEvent showNormals((Gap::Core::igMetaField *)g_igViewerParameters_showNormalsMetaField);
+        igNotifyEvent showNormals((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_showNormals);
         ((Gap::Gui::igModel *)parameters)->notifyAllViews(showNormals);
         AcquireSharedOptions();
         skipFrames = g_sharedViewerOptions->benchmarkSkipFrames;
@@ -698,7 +698,7 @@ void GameMain_RunBenchmark(Blk *app) {
             } while (i < frames - 1);
         }
         parameters->_flushFrames = 1;
-        igNotifyEvent flushFrames((Gap::Core::igMetaField *)g_igViewerParameters_flushFramesMetaField);
+        igNotifyEvent flushFrames((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_flushFrames);
         ((Gap::Gui::igModel *)parameters)->notifyAllViews(flushFrames);
         ViewerSetup_RunFrame(&app->viewer);
         timer->Stop();
