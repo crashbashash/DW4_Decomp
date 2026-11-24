@@ -76,7 +76,7 @@ void igActorInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igActorInfo_Register);
 }
 
-static igMetaObjectCallback g_igActorInfo_callbackList[] = { igActor_EnsureRegistered, igActorList_EnsureRegistered, igAnimationDatabase_EnsureRegistered, igAnimationCombinerList_EnsureRegistered, Gap::Sg::igAppearanceList::arkRegister, 0 };
+static igMetaObjectCallback g_igActorInfo_callbackList[] = { igActor_EnsureRegistered, igActorList_EnsureRegistered, Gap::Sg::igAnimationDatabase::arkRegister, igAnimationCombinerList_EnsureRegistered, Gap::Sg::igAppearanceList::arkRegister, 0 };
 
 CallbackArray *igActorInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -146,7 +146,7 @@ void igActorInfo_InitFields(void) {
     ((igObjectRefMetaField *)actorListField)->_metaObject = (int)igActorList_GetOrCreateMetaObject();
     ((igRefMetaField *)actorListField)->_construct = 1;
     animationDatabaseField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)animationDatabaseField)->_metaObject = (int)igAnimationDatabase_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)animationDatabaseField)->_metaObject = (int)Gap::Sg::igAnimationDatabase::getClassTypeLazy();
     combinerListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     ((igObjectRefMetaField *)combinerListField)->_metaObject = (int)igAnimationCombinerList_GetOrCreateMetaObject();
     ((igRefMetaField *)combinerListField)->_construct = 1;

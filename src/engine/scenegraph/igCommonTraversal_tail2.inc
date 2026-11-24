@@ -765,7 +765,7 @@ void igCommonTraversal::_registerClass(igTraversalFunctionList *tpl, igMetaObjec
         t.e[26].meta = (int)Gap::Sg::igTransform::getClassMeta();
         t.e[27].meta = (int)Gap::Sg::igBillboard::getClassMeta();
         t.e[28].meta = (int)Gap::Sg::igSwitch::getClassMeta();
-        t.e[29].meta = (int)g_igTransformRecorder_metaObject;
+        t.e[29].meta = (int)Gap::Sg::igTransformRecorder::getClassMeta();
         t.e[30].meta = g_igTimeTransform_metaObject[0];
         t.e[31].meta = g_igCompiledGraph_metaObject[0];
         t.e[32].meta = (int)g_igModelViewMatrixBoneSelect_metaObject;

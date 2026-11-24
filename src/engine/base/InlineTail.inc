@@ -663,7 +663,7 @@ bool FUN_0022b820(int arg0, int arg1) {
     if (((Gap::Core::igObject *)arg1)->isOfType(Gap::Sg::igSceneInfo::getClassMeta()) != 0) {
         return FUN_0022bac0((void *)arg1, (void *)arg0);
     }
-    if (((Gap::Core::igObject *)arg1)->isOfType(g_igAnimationDatabase_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(Gap::Sg::igAnimationDatabase::getClassMeta()) != 0) {
         return FUN_0022b910((Own *)arg1, (V *)arg0);
     }
     return 0;
@@ -674,7 +674,7 @@ void FUN_0022b8a0(void **arg0, void *arg1) {
         ((DW4VC_132_1 *)(arg0))->vX((int)(*(int *)((char *)(arg1) + 20)));
         return;
     }
-    ((Gap::Core::igObject *)arg1)->isOfType(g_igAnimationDatabase_metaObject);
+    ((Gap::Core::igObject *)arg1)->isOfType(Gap::Sg::igAnimationDatabase::getClassMeta());
 }
 
 extern "C" bool FUN_0022b910(Own *arg0, V *arg1) {

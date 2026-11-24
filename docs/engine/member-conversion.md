@@ -804,6 +804,14 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    hold the stack list and then the stack in one variable, and the light-state members read three smart-pointer
    fields through the pointer word (`.p`) or through view casts, because `operator->` numbers the load later and
    swaps saved registers.
+   `igTransformRecorder` (`setMatrix`/`setMvmMatrix` out of line over `igMatrix44f_Copy`: the kit's inline copy
+   does not match) and `igTransformStack` (over the converted igNonRefCountedObjectStack) are converted, as are
+   `igAnimationTrack`, `igAnimation`, `igAnimationBinding` (its first field is DW4's `_hierarchy`, not the kit's
+   `_skeleton`), their `igTObjectList` lists, and `igAnimationDatabase` (retail's FindObjectReference is the kit's
+   `attemptResolve`, slot 24 `resolve`; the body uses the typed members, as a local alias shifts register
+   allocation). Specs in scratch/SgAnim5/specs. Next: igAnimationState and its list and pool (the first attempt
+   failed conversion, cause unseen), igAnimationCombiner, igAnimationSystem, igAnimationTransition*, igActor*,
+   igBlendMatrixSelect, igModelViewMatrixBoneSelect, igBitMask, igEnbaya*, igCompressed*.
 7. the game's `be*` classes last.
 
 ## Known differences and gaps

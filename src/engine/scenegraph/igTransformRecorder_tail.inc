@@ -1,9 +1,14 @@
-void Gap__Sg__igTransformRecorder__vfunc_38(igTransformRecorder *self, const float *matrix) {
-    igMatrix44f_Copy(self->_mvm, matrix);
+namespace Gap {
+namespace Sg {
+
+void igTransformRecorder::setMvmMatrix(const igMatrix44f *matrix) {
+    igMatrix44f_Copy(_mvm.m, matrix->m);
 }
 
-void Gap__Sg__igTransformRecorder__vfunc_37(igTransformRecorder *self, const float *matrix) {
-    igMatrix44f_Copy(self->_m, matrix);
+void igTransformRecorder::setMatrix(const igMatrix44f *matrix) {
+    igMatrix44f_Copy(_m.m, matrix->m);
+}
+}
 }
 
 int FUN_001baa10(RecorderTraversalView *o, TransformRecorderVisitor *v) {

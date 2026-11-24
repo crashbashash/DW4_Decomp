@@ -117,7 +117,7 @@ void igAnimationState_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationState_Register);
 }
 
-static igMetaObjectCallback g_igAnimationState_callbackList[] = { igAnimation_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationState_callbackList[] = { Gap::Sg::igAnimation::arkRegister, 0 };
 
 CallbackArray *igAnimationState_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -267,7 +267,7 @@ void igAnimationState_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationState_ctorTable, 0x1A);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAnimation_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Sg::igAnimation::getClassTypeLazy();
     ((igMetaField *)temp_s2)->_resetMethod = 2;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
     ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);

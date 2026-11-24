@@ -485,3 +485,18 @@ igAttrStackManager	_simpleLightMgr	bool
 igAttrStackManager	_stackChanged	bool
 igAttrStackManager	_lightDisableAttrPool	igSmartPointer<igLightStateAttrPool>
 igAttrStackManager	_attrStackIndexTable	int *
+igTransformRecorder	_m	igMatrix44f
+igTransformRecorder	_mvm	igMatrix44f
+igAnimationTrack	_source	igSmartPointer<igTransformSource>
+igAnimation	_bindingList	igSmartPointer<igAnimationBindingList>
+igAnimation	_trackList	igSmartPointer<igAnimationTrackList>
+igAnimation	_transitionList	igSmartPointer<igAnimationTransitionDefinitionList>
+igAnimation	_useAnimationTransBoolArray	igSmartPointer<igBitMask>
+igAnimationBinding	_hierarchy	igSmartPointer<igAnimationHierarchy>
+igAnimationBinding	_chainSwapList	igSmartPointer<igIntList>
+igAnimationBinding	_reflectTrack	igSmartPointer<igBitMask>
+igAnimationDatabase	_skeletonList	igSmartPointer<igSkeletonList>
+igAnimationDatabase	_animationList	igSmartPointer<igAnimationList>
+igAnimationDatabase	_skinList	igSmartPointer<igSkinList>
+igAnimationDatabase	_appearanceList	igSmartPointer<igAppearanceList>
+igAnimationDatabase	_combinerList	igSmartPointer<igAnimationCombinerList>

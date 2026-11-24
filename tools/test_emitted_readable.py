@@ -46,11 +46,11 @@ class DemangleMember(unittest.TestCase):
 class MethodShaped(unittest.TestCase):
     def test_a_function_defined_as_a_member_is_no_free_method(self):
         # igLuaState_RunString is defined as `Gap::Lua::igLuaState::runString` (its unit-objects.json name
-        # runString__Q33Gap3Lua10igLuaStateFPCc); igTransformRecorder_GetMetaObject is still a free function
-        syms = [(0x246620, 0x54, "igLuaState_RunString"), (0x195810, 0x48, "igTransformRecorder_GetMetaObject"),
+        # runString__Q33Gap3Lua10igLuaStateFPCc); igAttrStackManager_MarkStackChanged is still a free function
+        syms = [(0x246620, 0x54, "igLuaState_RunString"), (0x1b1490, 0xfc, "igAttrStackManager_MarkStackChanged"),
                 (0x13b900, 0x12c, "Gap__Attrs__igAttrDefaultManager__vfunc_23")]
         paths = {name: "src/engine/unit.cpp" for _va, _n, name in syms}
-        self.assertEqual(progress.method_shaped(syms, paths, {"igLuaState", "igTransformRecorder"}), (1, 0x48, 1))
+        self.assertEqual(progress.method_shaped(syms, paths, {"igLuaState", "igAttrStackManager"}), (1, 0xfc, 1))
 
     def test_member_class(self):
         self.assertEqual(progress.member_class("setVisualContext__10igRendererFP15igVisualContext"), "igRenderer")

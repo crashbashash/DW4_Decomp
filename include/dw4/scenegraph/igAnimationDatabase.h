@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igAnimationDatabase_metaObject;
-struct igMetaObject *igAnimationDatabase_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

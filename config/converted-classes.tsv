@@ -289,3 +289,12 @@ igHotKeyBindingList	Gui	igTObjectList<igHotKeyBinding>
 igSorter	Sg
 igAttrStackManager	Sg
 igNonRefCountedAttrStackManagerList	Sg	igTNonRefCountedObjectList<igAttrStackManager>
+igTransformRecorder	Sg
+igTransformStack	Sg
+igAnimationTrack	Sg
+igAnimationTrackList	Sg	igTObjectList<igAnimationTrack>
+igAnimation	Sg
+igAnimationList	Sg	igTObjectList<igAnimation>
+igAnimationBinding	Sg
+igAnimationBindingList	Sg	igTObjectList<igAnimationBinding>
+igAnimationDatabase	Sg

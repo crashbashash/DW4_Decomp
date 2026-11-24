@@ -1,53 +1,52 @@
-igMetaObject *g_igAnimationList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationList_GetOrCreateMetaObject(void) {
-    if (g_igAnimationList_metaObject == 0) {
-        g_igAnimationList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationList_metaObject;
-}
+igMetaObject *igAnimationList::_Meta;
 
-igMetaObject *igAnimationList_GetMetaObject(void)
+igMetaObject *igAnimationList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationList_EnsureRegistered();
-    return g_igAnimationList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAnimationList_GetVTable(void) {
-    struct Obj_1a9020 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igAnimationList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAnimationList_EnsureRegistered(void)
+igMetaObject *igAnimationList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationList_callbackList[] = { igAnimation_EnsureRegistered, 0 };
+void *igAnimationList::retrieveVTablePointer()
+{
+    igAnimationList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAnimationList_Register(void) {
+void igAnimationList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimation::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAnimationList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationList",
-        0x14, /* instance size */
-        igAnimationList_GetVTable,
+        sizeof(igAnimationList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAnimationList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAnimationList_GetMetaObjectFunction(void) {
-    igAnimationList_GetMetaObject();
+}
 }
 

@@ -4372,3 +4372,78 @@ igAttrStackManager	void pushOverride(const igAttr *override);
 igAttrStackManager	void popOverride(const igAttr *override);
 igAttrStackManager	private: static void _classDestructor();
 igNonRefCountedAttrStackManagerList	IG_OBJECT_DEFINE(igNonRefCountedAttrStackManagerList)
+igTransformRecorder	IG_OBJECT_DEFINE(igTransformRecorder)
+igTransformRecorder	private: static igMetaField *k_m;
+igTransformRecorder	static igMetaField *k_mvm;
+igTransformRecorder	public: virtual void setMatrix(const igMatrix44f *matrix);
+igTransformRecorder	virtual void setMvmMatrix(const igMatrix44f *matrix);
+igTransformRecorder	inline igMatrix44f *getMatrix() { return &_m; }
+igTransformRecorder	inline const igMatrix44f *getMatrix() const { return &_m; }
+igTransformRecorder	inline igMatrix44f *getMvm() { return &_mvm; }
+igTransformRecorder	inline const igMatrix44f *getMvm() const { return &_mvm; }
+igTransformStack	IG_OBJECT_DEFINE(igTransformStack)
+igAnimationTrack	IG_OBJECT_DEFINE(igAnimationTrack)
+igAnimationTrack	public: static igMetaField *k_source;
+igAnimationTrack	static igMetaField *k_constantQuaternion;
+igAnimationTrack	static igMetaField *k_constantTranslation;
+igAnimationTrack	inline void setSource(igTransformSource *sourceParam) { _source = sourceParam; }
+igAnimationTrack	inline igTransformSource *getSource() const { return _source; }
+igAnimationTrack	inline igVec4f *getConstantQuaternion() { return &_constantQuaternion; }
+igAnimationTrack	inline void setConstantQuaternion(igVec4f *quaternion) { _constantQuaternion = *quaternion; }
+igAnimationTrack	inline igVec3f *getConstantTranslation() { return &_constantTranslation; }
+igAnimationTrack	inline void setConstantTranslation(const igVec3f *translation) { _constantTranslation = *translation; }
+igAnimationTrackList	IG_OBJECT_DEFINE(igAnimationTrackList)
+igAnimation	IG_OBJECT_DEFINE(igAnimation)
+igAnimation	private: static igMetaField *k_priority;
+igAnimation	static igMetaField *k_bindingList;
+igAnimation	static igMetaField *k_trackList;
+igAnimation	static igMetaField *k_transitionList;
+igAnimation	static igMetaField *k_keyFrameTimeOffset;
+igAnimation	static igMetaField *k_startTime;
+igAnimation	static igMetaField *k_duration;
+igAnimation	static igMetaField *k_useAnimationTransBoolArray;
+igAnimation	public: inline void setPriority(int priorityParam) { _priority = priorityParam; }
+igAnimation	inline int getPriority() const { return _priority; }
+igAnimation	inline igAnimationBindingList *getBindingList() const { return _bindingList; }
+igAnimation	inline igAnimationTrackList *getTrackList() const { return _trackList; }
+igAnimation	inline igAnimationTransitionDefinitionList *getTransitionList() const { return _transitionList; }
+igAnimation	inline void setKeyFrameTimeOffset(long long keyFrameTimeOffsetParam) { _keyFrameTimeOffset = keyFrameTimeOffsetParam; }
+igAnimation	inline long long getKeyFrameTimeOffset() const { return _keyFrameTimeOffset; }
+igAnimation	inline void setStartTime(long long startTimeParam) { _startTime = startTimeParam; }
+igAnimation	inline long long getStartTime() const { return _startTime; }
+igAnimation	inline void setDuration(long long durationParam) { _duration = durationParam; }
+igAnimation	inline long long getDuration() const { return _duration; }
+igAnimation	inline void setUseAnimationTransBoolArray(igBitMask *useAnimationTransBoolArrayParam) { _useAnimationTransBoolArray = useAnimationTransBoolArrayParam; }
+igAnimation	inline igBitMask *getUseAnimationTransBoolArray() const { return _useAnimationTransBoolArray; }
+igAnimationList	IG_OBJECT_DEFINE(igAnimationList)
+igAnimationBinding	IG_OBJECT_DEFINE(igAnimationBinding)
+igAnimationBinding	protected: static igMetaField *k_hierarchy;
+igAnimationBinding	static igMetaField *k_boneTrackIdxArray;
+igAnimationBinding	static igMetaField *k_bindCount;
+igAnimationBinding	static igMetaField *k_chainSwapList;
+igAnimationBinding	static igMetaField *k_reflectTrack;
+igAnimationBinding	public: inline const int *getBoneTrackIdxArray() const { return (const int *)_boneTrackIdxArray; }
+igAnimationBinding	inline void setBindCount(int bindCountParam) { _bindCount = bindCountParam; }
+igAnimationBinding	inline int getBindCount() const { return _bindCount; }
+igAnimationBinding	inline const igIntList *getChainSwapList() const { return _chainSwapList; }
+igAnimationBinding	inline void setReflectTrack(igBitMask *reflectTrackParam) { _reflectTrack = reflectTrackParam; }
+igAnimationBinding	inline igBitMask *getReflectTrack() const { return _reflectTrack; }
+igAnimationBindingList	IG_OBJECT_DEFINE(igAnimationBindingList)
+igAnimationDatabase	IG_OBJECT_DEFINE(igAnimationDatabase)
+igAnimationDatabase	private: static igMetaField *k_skeletonList;
+igAnimationDatabase	static igMetaField *k_animationList;
+igAnimationDatabase	static igMetaField *k_skinList;
+igAnimationDatabase	static igMetaField *k_appearanceList;
+igAnimationDatabase	static igMetaField *k_combinerList;
+igAnimationDatabase	public: inline void setSkeletonList(igSkeletonList *skeletonListParam) { _skeletonList = skeletonListParam; }
+igAnimationDatabase	inline igSkeletonList *getSkeletonList() const { return _skeletonList; }
+igAnimationDatabase	inline void setAnimationList(igAnimationList *animationListParam) { _animationList = animationListParam; }
+igAnimationDatabase	inline igAnimationList *getAnimationList() const { return _animationList; }
+igAnimationDatabase	inline void setSkinList(igSkinList *skinListParam) { _skinList = skinListParam; }
+igAnimationDatabase	inline igSkinList *getSkinList() const { return _skinList; }
+igAnimationDatabase	inline void setAppearanceList(igAppearanceList *appearanceListParam) { _appearanceList = appearanceListParam; }
+igAnimationDatabase	inline igAppearanceList *getAppearanceList() const { return _appearanceList; }
+igAnimationDatabase	inline void setCombinerList(igAnimationCombinerList *combinerListParam) { _combinerList = combinerListParam; }
+igAnimationDatabase	inline igAnimationCombinerList *getCombinerList() const { return _combinerList; }
+igAnimationDatabase	virtual bool attemptResolve(igDirectory *parentDir, void *ref);
+igAnimationDatabase	virtual void *resolve(const char *key);

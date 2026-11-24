@@ -9,7 +9,6 @@ extern "C" {
 #endif
 
 extern struct igMetaField *g_igTransformRecorder_mMetaField;
-struct igMetaObject *igTransformRecorder_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

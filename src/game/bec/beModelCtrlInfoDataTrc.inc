@@ -42,7 +42,7 @@ void beModelCtrlInfoDataTrc_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoDataTrc_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoDataTrc_callbackList[] = { igTransformRecorder_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoDataTrc_callbackList[] = { Gap::Sg::igTransformRecorder::arkRegister, 0 };
 
 CallbackArray *beModelCtrlInfoDataTrc_Register(void) {
     BecLibrary_MarkRegistered();
@@ -98,7 +98,7 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->release();
     recorderNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)recorderNode)->_metaObject = (int)igTransformRecorder_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)recorderNode)->_metaObject = (int)Gap::Sg::igTransformRecorder::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beModelCtrlInfoDataTrc_fieldTable, g_beModelCtrlInfoDataTrc_fieldHandles, g_beModelCtrlInfoDataTrc_fieldOffsets, base);
 }
 

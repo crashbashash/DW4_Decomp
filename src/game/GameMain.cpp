@@ -260,9 +260,9 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igTraversalFunctionList::arkRegister();
     Gap::Sg::igShaderInfo::arkRegister();
     Gap::Sg::igShaderFactoryList::arkRegister();
-    igAnimation_EnsureRegistered();
-    igAnimationBindingList_EnsureRegistered();
-    igAnimationTrackList_EnsureRegistered();
+    Gap::Sg::igAnimation::arkRegister();
+    Gap::Sg::igAnimationBindingList::arkRegister();
+    Gap::Sg::igAnimationTrackList::arkRegister();
     igAnimationTransitionDefinitionList_EnsureRegistered();
     igAnimationCombinerBoneInfoPool_RunStaticInit();
     igAnimationStatePool_RunStaticInit();
@@ -298,12 +298,12 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igSkeleton::arkRegister();
     Gap::Sg::igSkeletonList::arkRegister();
     igModelViewMatrixBoneSelectListSg_EnsureRegistered();
-    igAnimationBinding_EnsureRegistered();
-    igAnimationTrack_EnsureRegistered();
+    Gap::Sg::igAnimationBinding::arkRegister();
+    Gap::Sg::igAnimationTrack::arkRegister();
     igActor_EnsureRegistered();
     Gap::Sg::igAppearance::arkRegister();
-    igAnimationDatabase_EnsureRegistered();
-    igAnimationList_EnsureRegistered();
+    Gap::Sg::igAnimationDatabase::arkRegister();
+    Gap::Sg::igAnimationList::arkRegister();
     Gap::Sg::igAppearanceList::arkRegister();
     igAnimationCombinerList_EnsureRegistered();
     igAnimationCombiner_EnsureRegistered();
@@ -355,7 +355,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igCompressedAnimationSequenceQS_EnsureRegistered();
     igModelViewMatrixBoneSelect_EnsureRegistered();
     igFloatListList_EnsureRegistered();
-    igTransformRecorder_EnsureRegistered();
+    Gap::Sg::igTransformRecorder::arkRegister();
     Gap::Sg::igLod::arkRegister();
     Gap::Sg::igCommonTraversal::arkRegister();
 }

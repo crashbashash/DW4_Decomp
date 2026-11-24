@@ -33,7 +33,7 @@ void FUN_001abca0(void) {
     g_igAnimationStatePool_instance.p = (igAnimationStatePool *)igAnimationStatePool_Create(allocator);
     allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimation_instance.release();
-    g_igAnimation_instance.p = (igAnimation *)FUN_001a90f0(allocator);
+    g_igAnimation_instance.p = (igAnimation *)Gap::Sg::igAnimation::_instantiateFromPool((igMemoryPoolView *)allocator);
     ((Gap::Core::igRegistry *)(*(int *)((char *)g_objectSystem + 56)))->getValue(7, "cleanCombinerStates", *(unsigned char *)&g_cleanCombinerStates, 0, 0);
 }
 

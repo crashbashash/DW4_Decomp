@@ -82,30 +82,3 @@ igMetaObject *igAnimationSequence_GetPublishedMetaObject(void) {
     return g_igAnimationSequence_metaObject;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igAnimationTransitionDefinitionList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
-igSmartPointer<igObject> *igSmartPointer_igAnimationTrackList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
-igSmartPointer<igObject> *igSmartPointer_igAnimationBindingList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-

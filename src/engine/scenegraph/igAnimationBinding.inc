@@ -1,149 +1,88 @@
-int FUN_001a8c30(int arg0) {
-    igAnimationBinding_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igAnimationBinding_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igAnimationBinding_metaObject;
-igMetaField *g_igAnimationBinding_hierarchyMetaField;
-igMetaField *g_igAnimationBinding_boneTrackIdxArrayMetaField;
-igMetaField *g_igAnimationBinding_bindCountMetaField;
-igMetaField *g_igAnimationBinding_chainSwapListMetaField;
-igMetaField *g_igAnimationBinding_reflectTrackMetaField;
-
-igMetaObject *igAnimationBinding_GetMetaObject(void)
+igAnimationBinding *igAnimationBinding::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igAnimationBinding_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationBinding_EnsureRegistered();
-    return g_igAnimationBinding_metaObject;
+    arkRegister();
+    return (igAnimationBinding *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igAnimationBinding_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    S_ref *q2;
+igMetaObject *igAnimationBinding::_Meta;
+igMetaField *igAnimationBinding::k_hierarchy;
+igMetaField *igAnimationBinding::k_boneTrackIdxArray;
+igMetaField *igAnimationBinding::k_bindCount;
+igMetaField *igAnimationBinding::k_chainSwapList;
+igMetaField *igAnimationBinding::k_reflectTrack;
 
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igAnimationBinding_vtable[0];
-    q2 = (S_ref *)&u.b[8];
-    *(int *)q2 = 0;
-    q1 = (S_ref *)&u.b[20];
-    *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[24];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igAnimationBinding_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    if (q2 != 0) {
-        q2 = *(S_ref **)q2;
-        if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q2);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igAnimationBinding_EnsureRegistered(void)
+igMetaObject *igAnimationBinding::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationBinding_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { Gap::Sg::igAnimationHierarchy::arkRegister, Gap::Core::igIntList::arkRegister, igBitMask_EnsureRegistered, 0 };
+void *igAnimationBinding::retrieveVTablePointer()
+{
+    igAnimationBinding temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAnimationBinding_Register(void) {
+void igAnimationBinding::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationBinding::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationHierarchy::arkRegister, Gap::Core::igIntList::arkRegister, igBitMask_EnsureRegistered, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationBinding_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igAnimationBinding_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationBinding",
-        0x1C, /* instance size */
-        igAnimationBinding_GetVTable,
-        &igAnimationBinding_InitFields,
-        0, /* extra callback item */
-        g_igAnimationBinding_callbackList /* callback list */
+        sizeof(igAnimationBinding),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igAnimationBinding_GetMetaObjectFunction(void) {
-    igAnimationBinding_GetMetaObject();
+void igAnimationBinding::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igMemoryRefMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_hierarchy", "_boneTrackIdxArray", "_bindCount", "_chainSwapList", "_reflectTrack" };
+    static igMetaField **enumStorage[] = { &k_hierarchy, &k_boneTrackIdxArray, &k_bindCount, &k_chainSwapList, &k_reflectTrack };
+    static int offsets[] = { 8, 12, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igAnimationHierarchy::getClassTypeLazy();
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igAnimationBinding_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igAnimationBinding_fieldTable[] = {
-    "_hierarchy",
-    "_boneTrackIdxArray",
-    "_bindCount",
-    "_chainSwapList",
-    "_reflectTrack",
-};
-static igMetaField **g_igAnimationBinding_fieldHandles[] = {
-    &g_igAnimationBinding_hierarchyMetaField,
-    &g_igAnimationBinding_boneTrackIdxArrayMetaField,
-    &g_igAnimationBinding_bindCountMetaField,
-    &g_igAnimationBinding_chainSwapListMetaField,
-    &g_igAnimationBinding_reflectTrackMetaField,
-};
-static int g_igAnimationBinding_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-};
-
-void igAnimationBinding_InitFields(void) {
-    int base;
-    void *reflectTrackField;
-    void *chainSwapListField;
-    void *boneTrackIdxArrayField;
-    void *hierarchyField;
-    void *meta;
-
-    meta = (void *)g_igAnimationBinding_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationBinding_ctorTable, 5);
-    hierarchyField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)hierarchyField)->_metaObject = (int)Gap::Sg::igAnimationHierarchy::getClassTypeLazy();
-    boneTrackIdxArrayField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
-    ((igRefMetaField *)boneTrackIdxArrayField)->_destruct = 1;
-    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnReset = 1;
-    chainSwapListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)chainSwapListField)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
-    reflectTrackField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
-    ((igObjectRefMetaField *)reflectTrackField)->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationBinding_fieldTable, g_igAnimationBinding_fieldHandles, g_igAnimationBinding_fieldOffsets, base);
+}
 }
 

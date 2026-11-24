@@ -1,53 +1,52 @@
-igMetaObject *g_igTransformStack_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igTransformStack_GetOrCreateMetaObject(void) {
-    if (g_igTransformStack_metaObject == 0) {
-        g_igTransformStack_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTransformStack_metaObject;
-}
+igMetaObject *igTransformStack::_Meta;
 
-igMetaObject *igTransformStack_GetMetaObject(void)
+igMetaObject *igTransformStack::getClassTypeLazy()
 {
-    igMetaObject *g = g_igTransformStack_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTransformStack_EnsureRegistered();
-    return g_igTransformStack_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igTransformStack_GetVTable(void) {
-    struct Obj_196080 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igTransformStack_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igTransformStack_EnsureRegistered(void)
+igMetaObject *igTransformStack::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igTransformStack_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igTransformStack_callbackList[] = { Gap::Sg::igTransform::arkRegister, 0 };
+void *igTransformStack::retrieveVTablePointer()
+{
+    igTransformStack temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igTransformStack_Register(void) {
+void igTransformStack::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTransformStack::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igTransform::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTransformStack_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNonRefCountedObjectStack::arkRegisterInternal,
         Gap::Core::igNonRefCountedObjectStack::getClassMeta,
-        igTransformStack_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTransformStack",
-        0x14, /* instance size */
-        igTransformStack_GetVTable,
+        sizeof(igTransformStack),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igTransformStack_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igTransformStack_GetMetaObjectFunction(void) {
-    igTransformStack_GetMetaObject();
+}
 }
 

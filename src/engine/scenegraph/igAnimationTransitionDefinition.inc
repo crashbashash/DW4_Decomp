@@ -53,7 +53,7 @@ void igAnimationTransitionDefinition_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationTransitionDefinition_Register);
 }
 
-static igMetaObjectCallback g_igAnimationTransitionDefinition_callbackList[] = { igAnimation_EnsureRegistered, igAnimationTransitionPointList_EnsureRegistered, igAnimationTransitionParams_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationTransitionDefinition_callbackList[] = { Gap::Sg::igAnimation::arkRegister, igAnimationTransitionPointList_EnsureRegistered, igAnimationTransitionParams_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationTransitionDefinition_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -108,7 +108,7 @@ void igAnimationTransitionDefinition_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationTransitionDefinition_ctorTable, 3);
     baseAnimationField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)baseAnimationField)->_metaObject = (int)igAnimation_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)baseAnimationField)->_metaObject = (int)Gap::Sg::igAnimation::getClassTypeLazy();
     ((igObjectRefMetaField *)baseAnimationField)->_refCounted = 0;
     transitionPointListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)transitionPointListField)->_metaObject = (int)igAnimationTransitionPointList_GetOrCreateMetaObject();

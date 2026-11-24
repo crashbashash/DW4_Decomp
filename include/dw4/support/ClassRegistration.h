@@ -44,21 +44,14 @@ void igParticleAttr_EnsureRegistered(void);
 /* SceneGraph */
 void igActorList_EnsureRegistered(void);
 void igActor_EnsureRegistered(void);
-void igAnimationBindingList_EnsureRegistered(void);
-void igAnimationBinding_EnsureRegistered(void);
 void igAnimationCombinerBoneInfoListList_EnsureRegistered(void);
 void igAnimationCombinerBoneInfoList_EnsureRegistered(void);
 void igAnimationCombinerBoneInfoPool_RunStaticInit(void);
 void igAnimationCombinerList_EnsureRegistered(void);
 void igAnimationCombiner_EnsureRegistered(void);
-void igAnimationDatabase_EnsureRegistered(void);
-void igAnimationList_EnsureRegistered(void);
 void igAnimationStateList_EnsureRegistered(void);
 void igAnimationStatePool_RunStaticInit(void);
-void igAnimationTrackList_EnsureRegistered(void);
-void igAnimationTrack_EnsureRegistered(void);
 void igAnimationTransitionDefinitionList_EnsureRegistered(void);
-void igAnimation_EnsureRegistered(void);
 void igBitMask_EnsureRegistered(void);
 void igBlendMatrixSelect_EnsureRegistered(void);
 void igCompressedAnimationSequenceQS_EnsureRegistered(void);
@@ -68,7 +61,6 @@ void igEnbayaContextPool_RunStaticInit(void);
 void igEnbayaTransformSource_EnsureRegistered(void);
 void igModelViewMatrixBoneSelectListSg_EnsureRegistered(void);
 void igModelViewMatrixBoneSelect_EnsureRegistered(void);
-void igTransformRecorder_EnsureRegistered(void);
 
 /* Libraries */
 void AdxMovieLibrary_RegisterClasses(void);

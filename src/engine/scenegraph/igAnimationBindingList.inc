@@ -1,53 +1,52 @@
-igMetaObject *g_igAnimationBindingList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationBindingList_GetOrCreateMetaObject(void) {
-    if (g_igAnimationBindingList_metaObject == 0) {
-        g_igAnimationBindingList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimationBindingList_metaObject;
-}
+igMetaObject *igAnimationBindingList::_Meta;
 
-igMetaObject *igAnimationBindingList_GetMetaObject(void)
+igMetaObject *igAnimationBindingList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAnimationBindingList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationBindingList_EnsureRegistered();
-    return g_igAnimationBindingList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAnimationBindingList_GetVTable(void) {
-    struct Obj_1a8b60 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igAnimationBindingList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAnimationBindingList_EnsureRegistered(void)
+igMetaObject *igAnimationBindingList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAnimationBindingList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimationBindingList_callbackList[] = { igAnimationBinding_EnsureRegistered, 0 };
+void *igAnimationBindingList::retrieveVTablePointer()
+{
+    igAnimationBindingList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAnimationBindingList_Register(void) {
+void igAnimationBindingList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimationBindingList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationBinding::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimationBindingList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAnimationBindingList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationBindingList",
-        0x14, /* instance size */
-        igAnimationBindingList_GetVTable,
+        sizeof(igAnimationBindingList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAnimationBindingList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAnimationBindingList_GetMetaObjectFunction(void) {
-    igAnimationBindingList_GetMetaObject();
+}
 }
 

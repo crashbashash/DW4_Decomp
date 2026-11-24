@@ -1,150 +1,98 @@
-int FUN_001a90f0(int arg0) {
-    igAnimation_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igAnimation_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igAnimation_metaObject;
-igMetaField *g_igAnimation_priorityMetaField;
-igMetaField *g_igAnimation_bindingListMetaField;
-igMetaField *g_igAnimation_trackListMetaField;
-igMetaField *g_igAnimation_transitionListMetaField;
-igMetaField *g_igAnimation_keyFrameTimeOffsetMetaField;
-igMetaField *g_igAnimation_startTimeMetaField;
-igMetaField *g_igAnimation_durationMetaField;
-igMetaField *g_igAnimation_useAnimationTransBoolArrayMetaField;
-
-igMetaObject *igAnimation_GetOrCreateMetaObject(void) {
-    if (g_igAnimation_metaObject == 0) {
-        g_igAnimation_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAnimation_metaObject;
-}
-
-igMetaObject *igAnimation_GetMetaObject(void)
+igAnimation *igAnimation::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igAnimation_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimation_EnsureRegistered();
-    return g_igAnimation_metaObject;
+    arkRegister();
+    return (igAnimation *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igAnimation_GetVTable(void) {
-    union U_1a91d0 u;
-    int temp_s;
-    char *p104;
-    char *p100;
-    char *p96;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igAnimation_vtable[0];
-    *(int *)&u.b[8] = 0;
-    p96 = &u.b[16];
-    *(int *)p96 = 0;
-    p100 = &u.b[20];
-    *(int *)p100 = 0;
-    p104 = &u.b[24];
-    *(int *)p104 = 0;
-    *(int *)&u.b[56] = 0;
-    temp_s = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igAnimation_vtable[0];
-    igSmartPointer_igBitMask_Destruct((igSmartPointer<igObject> *)&u.b[56], -1);
-    igSmartPointer_igAnimationTransitionDefinitionList_Destruct((igSmartPointer<igObject> *)p104, -1);
-    igSmartPointer_igAnimationTrackList_Destruct((igSmartPointer<igObject> *)p100, -1);
-    igSmartPointer_igAnimationBindingList_Destruct((igSmartPointer<igObject> *)p96, -1);
-    igNamedObject_Destroy((igNamedObject *)u.b, 0);
-    return temp_s;
-}
+igMetaObject *igAnimation::_Meta;
+igMetaField *igAnimation::k_priority;
+igMetaField *igAnimation::k_bindingList;
+igMetaField *igAnimation::k_trackList;
+igMetaField *igAnimation::k_transitionList;
+igMetaField *igAnimation::k_keyFrameTimeOffset;
+igMetaField *igAnimation::k_startTime;
+igMetaField *igAnimation::k_duration;
+igMetaField *igAnimation::k_useAnimationTransBoolArray;
 
-void igAnimation_EnsureRegistered(void)
+igMetaObject *igAnimation::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igAnimation_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAnimation_callbackList[] = { igAnimationBindingList_EnsureRegistered, igAnimationTrackList_EnsureRegistered, igAnimationTransitionDefinitionList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
+igMetaObject *igAnimation::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igAnimation_Register(void) {
+void *igAnimation::retrieveVTablePointer()
+{
+    igAnimation temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igAnimation::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAnimation::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAnimationBindingList::arkRegister, Gap::Sg::igAnimationTrackList::arkRegister, igAnimationTransitionDefinitionList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAnimation_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igAnimation_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimation",
-        0x40, /* instance size */
-        igAnimation_GetVTable,
-        &igAnimation_InitFields,
-        0, /* extra callback item */
-        g_igAnimation_callbackList /* callback list */
+        sizeof(igAnimation),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igAnimation_GetMetaObjectFunction(void) {
-    igAnimation_GetMetaObject();
+void igAnimation::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_priority", "_bindingList", "_trackList", "_transitionList", "_keyFrameTimeOffset", "_startTime", "_duration", "_useAnimationTransBoolArray" };
+    static igMetaField **enumStorage[] = { &k_priority, &k_bindingList, &k_trackList, &k_transitionList, &k_keyFrameTimeOffset, &k_startTime, &k_duration, &k_useAnimationTransBoolArray };
+    static int offsets[] = { 12, 16, 20, 24, 32, 40, 48, 56 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 8);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Sg::igAnimationBindingList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Sg::igAnimationTrackList::getClassTypeLazy();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_metaObject = (int)igAnimationTransitionDefinitionList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igAnimation_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igAnimation_fieldTable[] = {
-    "_priority",
-    "_bindingList",
-    "_trackList",
-    "_transitionList",
-    "_keyFrameTimeOffset",
-    "_startTime",
-    "_duration",
-    "_useAnimationTransBoolArray",
-};
-static igMetaField **g_igAnimation_fieldHandles[] = {
-    &g_igAnimation_priorityMetaField,
-    &g_igAnimation_bindingListMetaField,
-    &g_igAnimation_trackListMetaField,
-    &g_igAnimation_transitionListMetaField,
-    &g_igAnimation_keyFrameTimeOffsetMetaField,
-    &g_igAnimation_startTimeMetaField,
-    &g_igAnimation_durationMetaField,
-    &g_igAnimation_useAnimationTransBoolArrayMetaField,
-};
-static int g_igAnimation_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    32,
-    40,
-    48,
-    56,
-};
-
-void igAnimation_InitFields(void) {
-    int base;
-    void *bindingListField;
-    void *trackListField;
-    void *transitionListField;
-    void *useAnimationTransBoolArrayField;
-    void *meta;
-
-    meta = (void *)g_igAnimation_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimation_ctorTable, 8);
-    bindingListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)bindingListField)->_metaObject = (int)igAnimationBindingList_GetOrCreateMetaObject();
-    ((igRefMetaField *)bindingListField)->_construct = 1;
-    trackListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)trackListField)->_metaObject = (int)igAnimationTrackList_GetOrCreateMetaObject();
-    ((igRefMetaField *)trackListField)->_construct = 1;
-    transitionListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)transitionListField)->_metaObject = (int)igAnimationTransitionDefinitionList_GetOrCreateMetaObject();
-    ((igRefMetaField *)transitionListField)->_construct = 1;
-    useAnimationTransBoolArrayField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7)));
-    ((igObjectRefMetaField *)useAnimationTransBoolArrayField)->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimation_fieldTable, g_igAnimation_fieldHandles, g_igAnimation_fieldOffsets, base);
+}
 }
 
