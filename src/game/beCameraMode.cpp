@@ -8,11 +8,6 @@
 #include "dw4/viewer/igViewModel.h"
 
 extern "C" igMetaObject *beCameraMode_GetMeta(void);
-extern "C" void igViewMode_OnKeyEvent(void);
-extern "C" void igViewMode_OnMouseMove(void);
-extern "C" void igViewMode_OnMouseButton(void);
-extern "C" void igViewMode_OnStickEvent(void);
-extern "C" void igViewMode_OnButtonEvent(void);
 extern "C" void beCameraMode_OnDetach(beCameraMode *self);
 extern "C" void beCameraMode_OnAttach(beCameraMode *self);
 typedef struct CameraMatrix { float m[16]; } CameraMatrix;
@@ -94,28 +89,33 @@ igMetaObject *beCameraMode_GetMeta(void)
     return g_beCameraMode_metaObject;
 }
 
+namespace Gap {
+namespace Viewer {
+
 /* Slot 23: empty body. */
-void igViewMode_OnKeyEvent(void)
+void igViewMode::onKeyEvent(int key, int down)
 {
 }
 
 /* Slot 24: empty body. */
-void igViewMode_OnMouseMove(void)
+void igViewMode::onMouseMove(float x, float y)
 {
 }
 
 /* Slot 25: empty body. */
-void igViewMode_OnMouseButton(void)
+void igViewMode::onMouseButton(int button, int pressed)
 {
 }
 
 /* Slot 26: empty body. */
-void igViewMode_OnStickEvent(void)
+void igViewMode::onStickEvent(int unused, unsigned short stick, float x, float y)
 {
 }
 
 /* Slot 27: empty body. */
-void igViewMode_OnButtonEvent(void)
+void igViewMode::onButtonEvent(void *unused, int key, int down)
 {
+}
+}
 }
 

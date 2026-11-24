@@ -431,3 +431,11 @@ beSvPlatDataPC	Bec
 beModelCtrlSubComBase	Bec
 igAppearanceListList	Bec	igTObjectList<igAppearanceList>
 igLightSetList	Bec	igTObjectList<igLightSet>
+igViewMode	Viewer
+igCameraMode	Viewer
+igFlyMode	Viewer
+igRotateMode	Viewer
+igPickMode	Viewer
+igGuiComponent	Gui
+igGuiSystem	Gui
+igBoxComponent	Gui

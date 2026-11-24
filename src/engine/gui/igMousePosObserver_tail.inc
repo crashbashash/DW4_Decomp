@@ -40,10 +40,8 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
     type = msg->type;
     if (type == (int)Gap::Gui::igGuiSystemModel::k_mousePosition) {
         igVec3f v(model->_mousePosition[0], model->_mousePosition[1], 0.0f);
-        igVec3f p;
         Vec3f_TransformProjective((float *)&v, (const float *)&v, self->_inverseProjectionMatrix);
-        p = v;
-        FUN_00456b80((int *)self->_guiSystem, &p.vec[0]);
+        ((Gap::Gui::igGuiSystem *)self->_guiSystem)->updateMouseCursorPosition(v);
         FUN_00456050(self, model);
     } else if (type == (int)Gap::Gui::igGuiSystemModel::k_projectionMatrix) {
         igMatrix44f_Invert(self->_inverseProjectionMatrix, model->_projectionMatrix);
@@ -51,7 +49,7 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
         igObject *under;
         under = (igObject *)model->_componentUnderMouse;
         if ((igObject *)model->_focusedComponent != under) {
-            ((Gap::Gui::igGuiSystemModel *)model)->setFocusedComponent((igGuiComponent *)under);
+            ((Gap::Gui::igGuiSystemModel *)model)->setFocusedComponent((Gap::Gui::igGuiComponent *)under);
         }
         if (model->_mousePressed) {
             igObject::ref(under);
@@ -111,7 +109,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
         ((IntersectTraversalCalls *)a->_intersectTraversal)->v23(((igGuiComponent *)b->_rootComponent)->_node);
         g_activeMousePosObserver = 0;
         if (a->_hit != 0) {
-            s0 = (igObject *)FUN_00455510((A_455510 *)((void *)a->_hitPath));
+            s0 = (igObject *)Gap::Gui::igGuiComponent::getFromPath((Gap::Sg::igGraphPath *)((void *)a->_hitPath));
         }
     }
     igObject::ref(s0);

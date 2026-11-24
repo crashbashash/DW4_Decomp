@@ -1,170 +1,151 @@
-bool igGuiSystem_OnKeyEvent(Ob *arg0, int arg1, int arg2) {
-    if (arg0->f12->f160 == 0) {
+namespace Gap {
+namespace Gui {
+
+bool igGuiSystem::keyEvent(Display::igKey::KEY_VALUES key, bool status)
+{
+    if (!_model->_active)
         return false;
-    }
-    bool r = false;
-    switch (arg1) {
-    case 0x81:
-        if (arg2 != 0) {
-            FUN_00456eb0((Ctl *)arg0, 2);
-        }
-        r = true;
+    bool handled = false;
+    switch (key) {
+    case Display::igKey::UP_ARROW:
+        if (status)
+            move(IG_DIRECTION_UP);
+        handled = true;
         break;
-    case 0x83:
-        if (arg2 != 0) {
-            FUN_00456eb0((Ctl *)arg0, 3);
-        }
-        r = true;
+    case Display::igKey::DOWN_ARROW:
+        if (status)
+            move(IG_DIRECTION_DOWN);
+        handled = true;
         break;
-    case 0x80:
-        if (arg2 != 0) {
-            FUN_00456eb0((Ctl *)arg0, 0);
-        }
-        r = true;
+    case Display::igKey::LEFT_ARROW:
+        if (status)
+            move(IG_DIRECTION_LEFT);
+        handled = true;
         break;
-    case 0x82:
-        if (arg2 != 0) {
-            FUN_00456eb0((Ctl *)arg0, 1);
-        }
-        r = true;
+    case Display::igKey::RIGHT_ARROW:
+        if (status)
+            move(IG_DIRECTION_RIGHT);
+        handled = true;
         break;
-    case 0x9:
-        if (arg2 != 0) {
-            FUN_00456eb0((Ctl *)arg0, 4);
-        }
-        r = true;
+    case Display::igKey::TAB:
+        if (status)
+            move(IG_DIRECTION_NEXT);
+        handled = true;
         break;
-    case 0xD:
-    case 0x20:
-        if (arg2 != 0) {
-            FUN_004570a0(arg0);
-        }
-        r = true;
+    case Display::igKey::RETURN:
+    case Display::igKey::SPACE:
+        if (status)
+            pressFocusedComponent();
+        handled = true;
         break;
     default:
         break;
     }
-    return r;
+    return handled;
 }
 
-void FUN_004570a0(void *arg0) {
-    unsigned char temp_s1;
-    int temp_s0;
-    temp_s0 = *(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 168);
-    if (temp_s0 != 0) {
-        temp_s1 = FUN_00455620((void *)temp_s0) & 0xFF;
-        FUN_00455610((int *)temp_s0, !temp_s1);
-        FUN_00455610((int *)temp_s0, temp_s1);
+void igGuiSystem::pressFocusedComponent()
+{
+    igGuiComponent *component = _model->_focusedComponent;
+    if (component) {
+        unsigned char pushed = component->isPushed() & 0xFF;
+        component->setPushed(!pushed);
+        component->setPushed(pushed);
     }
 }
 
-int igGuiSystem_MouseMotionEvent(A_457100 *arg0, float fparg0, float fparg1) {
-    B_457100 *temp_v1;
-
-    temp_v1 = arg0->fc;
-    if (temp_v1->fa0 == 0) {
-        return 0;
-    }
-    temp_v1->f14 = fparg0;
-    temp_v1->f18 = fparg1;
-    igNotifyEvent s((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePosition);
-    ((Gap::Gui::igModel *)arg0->fc)->notifyAllViews(s);
-    return arg0->fc->fb0 != 0;
-}
-
-int igGuiSystem_WindowResizeEvent(int *self, int x, int y) {
-    float *f = (float *)self[3];
-    f[3] = (float)x;
-    f[4] = (float)y;
-    igNotifyEvent p((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_windowSize);
-    ((Gap::Gui::igModel *)((void *)self[3]))->notifyAllViews(p);
-    return 0;
-}
-
-int igGuiSystem_WindowCloseEvent(igGuiSystem *arg0) {
-
-    *(char *)((char *)(arg0->_model) + 180) = 1;
-    igNotifyEvent buf((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_windowCloseRequested);
-    ((Gap::Gui::igModel *)arg0->_model)->notifyAllViews(buf);
-    return 1;
-}
-
-int igGuiSystem_MouseButtonEvent(struct P_457220 *arg0, int arg1, char arg2) {
-    struct O_457220 *o;
-
-    o = arg0->o;
-    if (o->fa0 == 0) {
-        return 0;
-    }
-    if (arg1 != 0) {
-        return 0;
-    }
-    o->f1c = arg2;
-    igNotifyEvent sp((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePressed);
-    ((Gap::Gui::igModel *)arg0->o)->notifyAllViews(sp);
-    return arg0->o->fac != 0;
-}
-
-bool igGuiSystem_ControllerButtonEvent(igGuiSystem *system, int device, int key, int pressed) {
-    bool handled;
-
-    if (!((GuiModelView *)system->_model)->enabled) {
+bool igGuiSystem::mouseMotionEvent(float x, float y)
+{
+    igGuiSystemModel *model = _model;
+    if (!model->_active)
         return false;
-    }
-    handled = false;
-    switch (key) {
-    case 4:
-        if (pressed) {
-            FUN_00456eb0((Ctl *)system, 2);
-        }
+    model->_mousePosition[0] = x;
+    model->_mousePosition[1] = y;
+    igNotifyEvent event(igGuiSystemModel::k_mousePosition);
+    _model->notifyAllViews(event);
+    return _model->_pushedComponent != 0;
+}
+
+bool igGuiSystem::windowResizeEvent(int width, int height)
+{
+    igGuiSystemModel *model = _model;
+    model->_windowSize[0] = (float)width;
+    model->_windowSize[1] = (float)height;
+    igNotifyEvent event(igGuiSystemModel::k_windowSize);
+    _model->notifyAllViews(event);
+    return false;
+}
+
+bool igGuiSystem::windowCloseEvent()
+{
+    _model->_windowCloseRequested = true;
+    igNotifyEvent event(igGuiSystemModel::k_windowCloseRequested);
+    _model->notifyAllViews(event);
+    return true;
+}
+
+bool igGuiSystem::mouseButtonEvent(Display::igMouse::MOUSE_BUTTON button, bool status)
+{
+    igGuiSystemModel *model = _model;
+    if (!model->_active)
+        return false;
+    if (button != Display::igMouse::LEFT_BUTTON)
+        return false;
+    model->_mousePressed = status;
+    igNotifyEvent event(igGuiSystemModel::k_mousePressed);
+    _model->notifyAllViews(event);
+    return _model->_componentUnderMouse != 0;
+}
+
+bool igGuiSystem::controllerButtonEvent(int controllerNum, Display::igController::BUTTONS button, bool status)
+{
+    if (!_model->_active)
+        return false;
+    bool handled = false;
+    switch (button) {
+    case Display::igController::LEFT_PAD_UP_BUTTON:
+        if (status)
+            move(IG_DIRECTION_UP);
         handled = true;
         break;
-    case 6:
-        if (pressed) {
-            FUN_00456eb0((Ctl *)system, 3);
-        }
+    case Display::igController::LEFT_PAD_DOWN_BUTTON:
+        if (status)
+            move(IG_DIRECTION_DOWN);
         handled = true;
         break;
-    case 7:
-        if (pressed) {
-            FUN_00456eb0((Ctl *)system, 0);
-        }
+    case Display::igController::LEFT_PAD_LEFT_BUTTON:
+        if (status)
+            move(IG_DIRECTION_LEFT);
         handled = true;
         break;
-    case 5:
-        if (pressed) {
-            FUN_00456eb0((Ctl *)system, 1);
-        }
+    case Display::igController::LEFT_PAD_RIGHT_BUTTON:
+        if (status)
+            move(IG_DIRECTION_RIGHT);
         handled = true;
         break;
-    case 8:
-        if (pressed) {
-            FUN_00456eb0((Ctl *)system, 5);
-        }
+    case Display::igController::LOWER_LEFT_TRIGGER:
+        if (status)
+            move(IG_DIRECTION_PREV);
         handled = true;
         break;
-    case 9:
-        if (pressed) {
-            FUN_00456eb0((Ctl *)system, 4);
-        }
+    case Display::igController::LOWER_RIGHT_TRIGGER:
+        if (status)
+            move(IG_DIRECTION_NEXT);
         handled = true;
         break;
-    case 13:
-        if (pressed) {
-            FUN_004570a0(system);
-        }
+    case Display::igController::RIGHT_PAD_RIGHT_BUTTON:
+        if (status)
+            pressFocusedComponent();
         handled = true;
         break;
     }
     return handled;
 }
 
-int igGuiSystem_ControllerMotionEvent(void) {
-    return 0;
+bool igGuiSystem::controllerMotionEvent(int controllerNum, unsigned short joystick, float x, float y)
+{
+    return false;
 }
-
-namespace Gap {
-namespace Gui {
 
 void igHotKeyEventReceiver::appendHotKey(Display::igKey::KEY_VALUES key, igAction *action)
 {

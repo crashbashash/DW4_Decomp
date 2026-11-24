@@ -12,7 +12,6 @@
 #include "dw4/core/igResult.h"
 #include "dw4/scenegraph/igProbe.h"
 #include "dw4/scenegraph/igIntersectTraversal.h"
-#include "dw4/gui/igGuiSystem.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/viewer/igViewModel.h"
 #include "dw4/scenegraph/igCamera.h"
@@ -29,14 +28,6 @@ extern "C" {
 /* The pick mode whose intersect traversal is running, for its hit callback. */
 extern igPickMode *g_pickingMode[4];
 
-/* igViewMode's own virtual methods past igObject's: slots 29 and 30 are the start and stop every mode
- * overrides (igCameraMode_OnAttach, igCameraMode_OnDetach). ABI view only: never instantiated. */
-class igViewModeDispatchView : public igObjectDispatchView {
-public:
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
-    virtual void OnAttach();                                                /* slot 29 */
-    virtual void OnDetach();                                                /* slot 30 */
-};
 /* igIntersectTraversal's traversal entry (slot 23) and time setter (slot 25).
  * ABI view only: never instantiated. */
 class igIntersectTraversalDispatchView : public igObjectDispatchView {
@@ -50,15 +41,9 @@ public:
 /* What an intersect traversal hands its hit callback. */
 struct IntersectHit { char pad0[8]; int nodes; char pad12[8]; float distance; };
 
-void igViewMode_UpdateInverseMatrix(igViewMode *self);
-void igViewMode_UpdateModelVectors(igViewMode *self);
-void igViewMode_UpdateViewMatrix(igViewMode *self);
 void igFlyMode_AimingChanged(igFlyMode *self);
 void igFlyMode_ApplyTranslation(igFlyMode *self, float seconds);
-void igFlyMode_ApplyRotation(igFlyMode *self, float seconds);
-void igFlyMode_ApplyAim(igFlyMode *self);
 void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit);
-void igPickMode_Pick(igPickMode *self);
 
 static inline igObject *asCamera(igObject *o) {
     if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Sg::igCamera::getClassMeta()) != 0) {
@@ -83,89 +68,93 @@ static inline void setProbe(igPickMode *pickMode, const igSmartPointer<Gap::Sg::
     igObject *retained = (igObject *)probe.get();
     igIntersectTraversal *traversal = (igIntersectTraversal *)pickMode->_intersectTraversal;
     igObject *previous;
-    igObject::ref(retained);
+    ::igObject::ref(retained);
     previous = (igObject *)traversal->_probe;
-    igObject::release(previous);
+    ::igObject::release(previous);
     traversal->_probe = (int)retained;
 }
 
 static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraphPath> &path) {
     igGraphPath *held = path.get();
     igGraphPath *previous;
-    igObject::ref(held);
+    ::igObject::ref(held);
     previous = (igGraphPath *)pickMode->_hitPath;
-    igObject::release(previous);
+    ::igObject::release(previous);
     pickMode->_hitPath = (int)held;
 }
 static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return (igGraphPath *)Gap::Sg::igGraphPath::_instantiateFromPool(0); }
 
+/* Retail's igViewMode::isCompatible is a tail call into isOfType; a void body compiles to it. */
 void igViewMode_IsCompatible(igViewMode *self, igObject *model) {
     ((Gap::Core::igObject *)model)->isOfType(Gap::Viewer::igViewModel::getClassMeta());
 }
 
-void igViewMode_OnModelChange(igViewModeDispatchView *self, const igNotifyEvent &event) {
+namespace Gap {
+namespace Viewer {
+
+void igViewMode::notify(const igNotifyEvent &event) {
     Gap::Core::igMetaField *field = (Gap::Core::igMetaField *)event._field;
     int type;
     if (field == Gap::Viewer::igViewModel::k_viewMatrix) {
-        igViewMode_UpdateInverseMatrix((igViewMode *)self);
-        igViewMode_UpdateModelVectors((igViewMode *)self);
+        updateInverseMatrix();
+        updateModelVectors();
         return;
     }
     if (field == Gap::Viewer::igViewModel::k_position || field == Gap::Viewer::igViewModel::k_direction ||
         field == Gap::Viewer::igViewModel::k_viewUpVector) {
-        igViewMode_UpdateViewMatrix((igViewMode *)self);
+        updateViewMatrix();
         return;
     }
     type = event._eventType;
     if (type == igNotifyEvent::ATTACH) {
-        igViewMode_UpdateInverseMatrix((igViewMode *)self);
-        igViewMode_UpdateModelVectors((igViewMode *)self);
-        self->OnAttach();
+        updateInverseMatrix();
+        updateModelVectors();
+        onAttach();
     } else if (type == igNotifyEvent::DETACH) {
-        self->OnDetach();
+        onDetach();
     }
 }
 
-void igViewMode_OnDetach(void) {
+void igViewMode::onDetach() {
 
 }
 
-void igViewMode_OnAttach(void) {
+void igViewMode::onAttach() {
 
 }
 
-void igViewMode_UpdateInverseMatrix(igViewMode *self) {
+void igViewMode::updateInverseMatrix() {
 
-    igMatrix44f_Invert(self->_inverseMatrix, ((igViewModel *)self->_model)->_viewMatrix);
+    igMatrix44f_Invert(_inverseMatrix.m, ((::igViewModel *)_model)->_viewMatrix);
 }
 
-void igViewMode_UpdateModelVectors(igViewMode *self) {
+void igViewMode::updateModelVectors() {
     float v[3];
-    igViewModel *model;
+    ::igViewModel *model;
 
-    model = (igViewModel *)self->_model;
-    igMatrix44f_GetTranslation(self->_inverseMatrix, v);
+    model = (::igViewModel *)_model;
+    igMatrix44f_GetTranslation(_inverseMatrix.m, v);
     model->_position[0] = v[0];
     model->_position[1] = v[1];
     model->_position[2] = v[2];
-    igNotifyEvent positionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_position, (Gap::Gui::igView *)self);
+    igNotifyEvent positionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_position, (Gap::Gui::igView *)this);
     ((Gap::Gui::igModel *)model)->notifyAllViews(positionChanged);
-    Vec3f_TransformDirection(&model->_direction[0], g_vec3ZAxis.vec, self->_inverseMatrix);
+    Vec3f_TransformDirection(&model->_direction[0], g_vec3ZAxis.vec, _inverseMatrix.m);
     model->_direction[0] = -model->_direction[0];
     model->_direction[1] = -model->_direction[1];
     model->_direction[2] = -model->_direction[2];
-    igNotifyEvent directionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_direction, (Gap::Gui::igView *)self);
+    igNotifyEvent directionChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_direction, (Gap::Gui::igView *)this);
     ((Gap::Gui::igModel *)model)->notifyAllViews(directionChanged);
-    Vec3f_TransformDirection(&model->_viewLeftVector[0], g_vec3XAxis.vec, self->_inverseMatrix);
-    igNotifyEvent leftChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewLeftVector, (Gap::Gui::igView *)self);
+    Vec3f_TransformDirection(&model->_viewLeftVector[0], g_vec3XAxis.vec, _inverseMatrix.m);
+    igNotifyEvent leftChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewLeftVector, (Gap::Gui::igView *)this);
     ((Gap::Gui::igModel *)model)->notifyAllViews(leftChanged);
 }
 
-void igViewMode_UpdateViewMatrix(igViewMode *self) {
+void igViewMode::updateViewMatrix() {
     float center[3];
-    igViewModel *model;
+    ::igViewModel *model;
 
-    model = (igViewModel *)self->_model;
+    model = (::igViewModel *)_model;
     center[0] = model->_position[0];
     center[1] = model->_position[1];
     center[2] = model->_position[2];
@@ -175,42 +164,35 @@ void igViewMode_UpdateViewMatrix(igViewMode *self) {
     igMatrix44f_MakeLookAt(model->_viewMatrix, &model->_position[0], center, &model->_viewUpVector[0]);
 }
 
-void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
-    igObject *previous;
-    igObject *camera;
+void igCameraMode::setCameraPath(igObject *path) {
+    ::igObject *camera;
     if (path != 0) {
-        igObject::ref(path);
-        previous = (igObject *)self->_cameraPath;
-        igObject::release(previous);
-        self->_cameraPath = (int)path;
-        camera = (igObject *)((Gap::Sg::igGraphPath *)path)->getTop();
+        _cameraPath = (Gap::Sg::igGraphPath *)path;
+        camera = (::igObject *)((Gap::Sg::igGraphPath *)path)->getTop();
         camera = asCamera(camera);
-        igObject::ref(camera);
-        previous = (igObject *)self->_camera;
-        igObject::release(previous);
-        self->_camera = (int)camera;
+        _camera = (Gap::Sg::igCamera *)camera;
     }
 }
 
-void igCameraMode_OnDetach(igCameraMode *self) {
+void igCameraMode::onDetach() {
     igCameraDispatchView *camera;
 
-    camera = (igCameraDispatchView *)self->_camera;
+    camera = (igCameraDispatchView *)_camera.get();
     if (camera != 0) {
         camera->Deactivate();
     }
 }
 
-void igCameraMode_OnAttach(igCameraMode *self) {
+void igCameraMode::onAttach() {
     float farPlane;
     float nearPlane;
-    igCamera *camera;
-    igViewModel *model;
+    ::igCamera *camera;
+    ::igViewModel *model;
 
-    if (self->_camera != 0) {
-        ((igCameraDispatchView *)self->_camera)->Activate();
-        model = (igViewModel *)self->_model;
-        camera = (igCamera *)self->_camera;
+    if (_camera != 0) {
+        ((igCameraDispatchView *)_camera.get())->Activate();
+        model = (::igViewModel *)_model;
+        camera = (::igCamera *)_camera.get();
         farPlane = camera->_farPlane;
         nearPlane = camera->_nearPlane;
         model->_hfov = (float) camera->_horizontalFieldOfView;
@@ -226,15 +208,15 @@ void igCameraMode_OnAttach(igCameraMode *self) {
     }
 }
 
-void igCameraMode_Update(igCameraMode *self) {
+void igCameraMode::update(float seconds) {
     float x, y, z;
     float translation[4];
     float world[16];
-    igViewModel *model;
-    if (self->_camera != 0) {
+    ::igViewModel *model;
+    if (_camera != 0) {
         igMatrix44f_SetIdentity(world);
-        model = (igViewModel *)self->_model;
-        ((Gap::Sg::igGraphPath *)self->_cameraPath)->getTransformMatrixInclusive((igMatrix44f *)world, model->_drawTime);
+        model = (::igViewModel *)_model;
+        ((Gap::Sg::igGraphPath *)_cameraPath.get())->getTransformMatrixInclusive((igMatrix44f *)world, model->_drawTime);
         x = 0; y = 0; z = 0;
         igMatrix44f_GetEulerAngles(world, &x, &y, &z);
         igMatrix44f_GetTranslation(world, translation);
@@ -246,77 +228,80 @@ void igCameraMode_Update(igCameraMode *self) {
     }
 }
 
-void igFlyMode_OnKeyEvent(igFlyMode *self, int key, int down) {
+void igFlyMode::onKeyEvent(int key, int down) {
     float f;
     switch (key) {
     case 0x9C:
-        if (down) self->_speed *= 1.5f;
-        break;    case 0x9D:
-        if (down) self->_speed /= 1.5f;
+        if (down) _speed *= 1.5f;
+        break;
+    case 0x9D:
+        if (down) _speed /= 1.5f;
         break;
     case 0x98:
         if (down) f = 1.0f; else f = -1.0f;
-        self->_moveDirection[2] += f;
+        _moveDirection[2] += f;
         break;
     case 0x92:
         if (down) f = 1.0f; else f = -1.0f;
-        self->_moveDirection[2] -= f;
+        _moveDirection[2] -= f;
         break;
     case 0x88:
         if (down) f = 1.0f; else f = -1.0f;
-        self->_moveDirection[1] -= f;
+        _moveDirection[1] -= f;
         break;
     case 0x89:
         if (down) f = 1.0f; else f = -1.0f;
-        self->_moveDirection[1] += f;
+        _moveDirection[1] += f;
         break;
     case 0x94:
         if (down) f = 1.0f; else f = -1.0f;
-        self->_moveDirection[0] += f;
+        _moveDirection[0] += f;
         break;
     case 0x96:
         if (down) f = 1.0f; else f = -1.0f;
-        self->_moveDirection[0] -= f;
+        _moveDirection[0] -= f;
         break;
     case 0x5A:
-        if (down) self->_aiming = !self->_aiming;
-        igFlyMode_AimingChanged(self);
+        if (down) _aiming = !_aiming;
+        igFlyMode_AimingChanged((::igFlyMode *)this);
         break;
     }
 }
 
-void igFlyMode_OnMouseButton(igFlyMode *self, int button, int pressed) {
+void igFlyMode::onMouseButton(int button, int pressed) {
     switch (button) {
     case 0:
-        self->_moveDirection[2] += pressed ? 1.0f : -1.0f;
+        _moveDirection[2] += pressed ? 1.0f : -1.0f;
         break;
     case 1:
-        self->_moveDirection[2] -= pressed ? 1.0f : -1.0f;
+        _moveDirection[2] -= pressed ? 1.0f : -1.0f;
         break;
     case 2:
         if (pressed) {
-            self->_aiming = !self->_aiming;
-            igFlyMode_AimingChanged(self);
+            _aiming = !_aiming;
+            igFlyMode_AimingChanged((::igFlyMode *)this);
         }
         break;
     }
 }
 
-void igFlyMode_OnMouseMove(igFlyMode *self, float x, float y) {
-    self->_mousePos[0] = x;
-    self->_mousePos[1] = y;
+void igFlyMode::onMouseMove(float x, float y) {
+    _mousePos[0] = x;
+    _mousePos[1] = y;
 }
 
-void igFlyMode_OnStickEvent(igFlyMode *self, int unused, unsigned short axis, float x, float y)
+void igFlyMode::onStickEvent(int unused, unsigned short axis, float x, float y)
 {
     if (axis == 0) {
-        self->_joystickR[0] = x;
-        self->_joystickR[1] = y;
+        _joystickR[0] = x;
+        _joystickR[1] = y;
     } else if (axis == 1) {
-        self->_joystickT[0] = -x;
-        self->_joystickT[1] = 0.0f;
-        self->_joystickT[2] = y;
+        _joystickT[0] = -x;
+        _joystickT[1] = 0.0f;
+        _joystickT[2] = y;
     }
+}
+}
 }
 
 void igFlyMode_AimingChanged(igFlyMode *self)
@@ -325,29 +310,32 @@ void igFlyMode_AimingChanged(igFlyMode *self)
 
 static inline float toRadians(float degrees) { return 0.017453292f * degrees; }
 static inline void rotateRef(float *m, const igVec3f *axis, const float &angle) { igMatrix44f_PostRotateAxisAngle(m, axis->vec, angle); }
+namespace Gap {
+namespace Viewer {
+
 /* Turns the eye by the right stick, at most 120 degrees per second more than the last frame: about the
  * scene's up vector, then about the view's x axis. */
-void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
+void igFlyMode::applyRotation(float seconds) {
     float maxStep = 120.0f * seconds;
-    float head = self->_joystickR.vec[0];
-    float pitch = self->_joystickR.vec[1];
+    float head = _joystickR.vec[0];
+    float pitch = _joystickR.vec[1];
     head *= 60.0f;
     pitch *= 60.0f;
-    float dHead = head - self->_lastRotation.vec[0];
-    float dPitch = pitch - self->_lastRotation.vec[1];
+    float dHead = head - _lastRotation.vec[0];
+    float dPitch = pitch - _lastRotation.vec[1];
     float distance = sqrtf(dHead * dHead + dPitch * dPitch);
     if (!(distance <= maxStep)) {
         float limit = maxStep / distance;
         dHead *= limit;
         dPitch *= limit;
-        head = dHead + self->_lastRotation.vec[0];
-        pitch = dPitch + self->_lastRotation.vec[1];
+        head = dHead + _lastRotation.vec[0];
+        pitch = dPitch + _lastRotation.vec[1];
     }
-    self->_lastRotation.vec[0] = head;
-    self->_lastRotation.vec[1] = pitch;
+    _lastRotation.vec[0] = head;
+    _lastRotation.vec[1] = pitch;
     head *= seconds;
     pitch *= seconds;
-    igViewModel *model = (igViewModel *)self->_model;
+    ::igViewModel *model = (::igViewModel *)_model;
     igVec3f up;
     Vec3f_TransformDirection((float *)&up, &model->_sceneUpVector[0], model->_viewMatrix);
     float scale = 1.0f / up.length();
@@ -359,11 +347,11 @@ void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
 }
 
 /* While aiming, turns the eye by the mouse's movement since the last frame. */
-void igFlyMode_ApplyAim(igFlyMode *self) {
-    igViewModel *model = (igViewModel *)self->_model;
-    if (self->_lastAimValid) {
-        float pitch = 30.0f * (self->_mousePos[1] - self->_lastAim[1]);
-        float head = 60.0f * (self->_mousePos[0] - self->_lastAim[0]);
+void igFlyMode::applyAim() {
+    ::igViewModel *model = (::igViewModel *)_model;
+    if (_lastAimValid) {
+        float pitch = 30.0f * (_mousePos[1] - _lastAim[1]);
+        float head = 60.0f * (_mousePos[0] - _lastAim[0]);
         igVec3f up;
         Vec3f_TransformDirection((float *)&up, &model->_sceneUpVector[0], model->_viewMatrix);
         float scale = 1.0f / up.length();
@@ -374,58 +362,58 @@ void igFlyMode_ApplyAim(igFlyMode *self) {
         /* matching construct: the (float) cast on the negated pitch orders the pi/180 constant before it. */
         igMatrix44f_PostRotateAxisAngle(model->_viewMatrix, g_vec3XAxis.vec, toRadians((float)(-pitch)));
     }
-    self->_lastAim[0] = self->_mousePos[0];
-    self->_lastAim[1] = self->_mousePos[1];
-    self->_lastAimValid = 1;
+    _lastAim[0] = _mousePos[0];
+    _lastAim[1] = _mousePos[1];
+    _lastAimValid = 1;
 }
 
-void igFlyMode_Update(igFlyMode *self, float seconds) {
-    int model;
+void igFlyMode::update(float seconds) {
+    Gap::Gui::igModel *model;
 
-    model = self->_model;
-    igFlyMode_ApplyTranslation(self, seconds);
-    if (self->_aiming != 0) {
-        igFlyMode_ApplyAim(self);
+    model = _model;
+    igFlyMode_ApplyTranslation((::igFlyMode *)this, seconds);
+    if (_aiming != 0) {
+        applyAim();
     }
-    igFlyMode_ApplyRotation(self, seconds);
+    applyRotation(seconds);
     igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
     ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
 }
 
-void igFlyMode_OnAttach(igFlyMode *self) {
-    igViewModel *model;
+void igFlyMode::onAttach() {
+    ::igViewModel *model;
     float dx;
     float dy;
     float dz;
-    self->_aiming = 0;
-    self->_lastAim[0] = 0.0f;
-    self->_lastAim[1] = 0.0f;
-    self->_lastTranslation[0] = 0.0f;
-    self->_lastTranslation[1] = 0.0f;
-    self->_lastTranslation[2] = 0.0f;
-    self->_lastRotation[0] = 0.0f;
-    self->_lastRotation[1] = 0.0f;
-    self->_lastAimValid = 0;
-    model = (igViewModel *)self->_model;
+    _aiming = 0;
+    _lastAim[0] = 0.0f;
+    _lastAim[1] = 0.0f;
+    _lastTranslation[0] = 0.0f;
+    _lastTranslation[1] = 0.0f;
+    _lastTranslation[2] = 0.0f;
+    _lastRotation[0] = 0.0f;
+    _lastRotation[1] = 0.0f;
+    _lastAimValid = 0;
+    model = (::igViewModel *)_model;
     dx = model->_selectedCenter[0];
     dy = model->_selectedCenter[1];
     dz = model->_selectedCenter[2];
     dx -= model->_position[0];
     dy -= model->_position[1];
     dz -= model->_position[2];
-    self->_speed = 0.2f * sqrtf(dx * dx + dy * dy + dz * dz);
+    _speed = 0.2f * sqrtf(dx * dx + dy * dy + dz * dz);
 }
 
-void igFlyMode_OnDetach(igFlyMode *self) {
-    if (self->_aiming != 0) {
-        self->_aiming = 0;
-        igFlyMode_AimingChanged(self);
+void igFlyMode::onDetach() {
+    if (_aiming != 0) {
+        _aiming = 0;
+        igFlyMode_AimingChanged((::igFlyMode *)this);
     }
 }
 
-void igRotateMode_OnKeyEvent(igRotateMode *self, int key, char down) {
-    if ((self->_maya != 0) && ((key == 0xC8) || (key == 0xC9))) {
-        self->_active = down;
+void igRotateMode::onKeyEvent(int key, int down) {
+    if ((_maya != 0) && ((key == 0xC8) || (key == 0xC9))) {
+        _active = down;
     }
     if (key != 0xCA) {
         if (key == 0xCB) {
@@ -433,200 +421,197 @@ void igRotateMode_OnKeyEvent(igRotateMode *self, int key, char down) {
         }
     } else {
 constrain:
-        self->_constraint = down;
-        self->_constraintAxis = 0;
+        _constraint = down;
+        _constraintAxis = 0;
     }
 }
 
-void igRotateMode_OnMouseButton(igRotateMode *self, int button, char pressed) {
+void igRotateMode::onMouseButton(int button, int pressed) {
     switch (button) {
     case 0:
-        self->_leftMouseActive = pressed;
+        _leftMouseActive = pressed;
         break;
     case 2:
-        self->_middleMouseActive = pressed;
+        _middleMouseActive = pressed;
         break;
     case 1:
-        self->_rightMouseActive = pressed;
+        _rightMouseActive = pressed;
         break;
     }
-    self->_constraintAxis = 0;
+    _constraintAxis = 0;
 }
-
-/* igRotateMode's drag handlers past igViewMode's slots: slot 31 the default button layout, slot 32 Maya's.
- * ABI view only: never instantiated. */
-class igRotateModeDispatchView : public igViewModeDispatchView {
-public:
-    virtual void applyDrag(igVec2f *delta);                                 /* slot 31 */
-    virtual void applyMayaDrag(igVec2f *delta);                             /* slot 32 */
-};
+}
+}
 
 typedef struct FloatBits { unsigned int mantissa : 23; unsigned int exponent : 8; unsigned int sign : 1; } FloatBits;
 static inline float absf(float x) { ((FloatBits *)&x)->sign = 0; return x; }
 
+namespace Gap {
+namespace Viewer {
+
 /* While rotating, hands the mouse's movement since the last event to the drag handler; with the
  * constraint key held the drag keeps to the axis it first moved along. */
-void igRotateMode_OnMouseMove(igRotateMode *self, float x, float y) {
-    igViewModel *model = (igViewModel *)self->_model;
-    if (self->_active) {
+void igRotateMode::onMouseMove(float x, float y) {
+    ::igViewModel *model = (::igViewModel *)_model;
+    if (_active) {
         igVec2f delta;
         delta[0] = x;
         delta[1] = y;
-        delta[0] -= self->_lastMousePos[0];
-        delta[1] -= self->_lastMousePos[1];
-        if (self->_constraint) {
-            if (self->_constraintAxis == 0) {
+        delta[0] -= _lastMousePos[0];
+        delta[1] -= _lastMousePos[1];
+        if (_constraint) {
+            if (_constraintAxis == 0) {
                 if (!(absf(delta[0]) <= absf(delta[1]) * model->_ratio)) {
-                    self->_constraintAxis = 1;
+                    _constraintAxis = 1;
                 } else {
-                    self->_constraintAxis = 2;
+                    _constraintAxis = 2;
                 }
             }
-            if (self->_constraintAxis == 1) {
+            if (_constraintAxis == 1) {
                 delta[1] = 0.0f;
             } else {
                 delta[0] = 0.0f;
             }
         }
-        if (self->_maya) {
-            ((igRotateModeDispatchView *)self)->applyMayaDrag(&delta);
+        if (_maya) {
+            mouseMotionNormal((const float *)&delta);
         } else {
-            ((igRotateModeDispatchView *)self)->applyDrag(&delta);
+            applyDrag((const float *)&delta);
         }
     }
-    self->_lastMousePos[0] = x;
-    self->_lastMousePos[1] = y;
+    _lastMousePos[0] = x;
+    _lastMousePos[1] = y;
 }
 
 /* Applies a mouse drag of `delta` with the default button layout: the left button rotates, the
  * middle one pans and the right one rolls and zooms. */
-void Gap__Viewer__igRotateMode__ApplyDrag(igRotateMode *state, const float *delta) {
-    igViewModel *model = (igViewModel *)state->_model;
+void igRotateMode::applyDrag(const float *delta) {
+    ::igViewModel *model = (::igViewModel *)_model;
 
-    if (state->_leftMouseActive) {
+    if (_leftMouseActive) {
         const float pi = 3.1415927f;
-        state->_head += pi * delta[0];
-        state->_pitch += pi * delta[1];
+        _head += pi * delta[0];
+        _pitch += pi * delta[1];
     }
-    if (state->_middleMouseActive) {
-        setVec3(state->_translation.vec, delta[0], delta[1] / model->_ratio, 0.0f);
-        scaleVec3(state->_translation.vec, state->_distance / 2.0f);
+    if (_middleMouseActive) {
+        setVec3(_translation.vec, delta[0], delta[1] / model->_ratio, 0.0f);
+        scaleVec3(_translation.vec, _distance / 2.0f);
     }
-    if (state->_rightMouseActive) {
+    if (_rightMouseActive) {
         float dx = delta[0];
         float dy;
-        state->_roll += dx * 3.1415927f;
+        _roll += dx * 3.1415927f;
         dy = delta[1];
-        state->_zoom *= 1.0f + dy / 2.0f;
+        _zoom *= 1.0f + dy / 2.0f;
     }
 }
 
-void igRotateMode_MouseMotionNormal(igRotateMode *state, const float *delta) {
-    igViewModel *model = (igViewModel *)state->_model;
+void igRotateMode::mouseMotionNormal(const float *delta) {
+    ::igViewModel *model = (::igViewModel *)_model;
 
-    if (state->_leftMouseActive) {
-        if (state->_middleMouseActive) {
-            float d = delta[0]; state->_zoom *= 1.0f - d / 2.0f;
+    if (_leftMouseActive) {
+        if (_middleMouseActive) {
+            float d = delta[0]; _zoom *= 1.0f - d / 2.0f;
         } else {
             const float pi = 3.1415927f;
-            state->_head += pi * delta[0];
-            state->_pitch += pi * delta[1];
+            _head += pi * delta[0];
+            _pitch += pi * delta[1];
         }
-    } else if (state->_middleMouseActive) {
-        setVec3(state->_translation.vec, delta[0], delta[1] / model->_ratio, 0.0f);
-        scaleVec3(state->_translation.vec, state->_distance / 2.0f);
+    } else if (_middleMouseActive) {
+        setVec3(_translation.vec, delta[0], delta[1] / model->_ratio, 0.0f);
+        scaleVec3(_translation.vec, _distance / 2.0f);
     }
 }
 
-void igRotateMode_OnStickEvent(igRotateMode *self, int unused, int stick, float x, float y) {
-    int axis;
-    axis = stick & 0xFFFF;
-    if (axis == 0) {
-        self->_joystickR[0] = x;
-        self->_joystickR[1] = y;
-    } else if (axis == 1) {
-        self->_joystickT[0] = x;
-        self->_joystickT[1] = y;
+void igRotateMode::onStickEvent(int unused, unsigned short stick, float x, float y) {
+    if (stick == 0) {
+        _joystickR[0] = x;
+        _joystickR[1] = y;
+    } else if (stick == 1) {
+        _joystickT[0] = x;
+        _joystickT[1] = y;
     }
 }
 
-void igRotateMode_OnAttach(igRotateMode *state) {
-    igViewModel *model = (igViewModel *)state->_model;
+void igRotateMode::onAttach() {
+    ::igViewModel *model = (::igViewModel *)_model;
     float dx;
     float dy;
     float dz;
 
-    state->_constraint = 0;
-    state->_constraintAxis = 0;
-    state->_active = !state->_maya;
-    state->_head = 0.0f;
-    state->_roll = 0.0f;
-    state->_pitch = 0.0f;
-    state->_zoom = 1.0f;
-    state->_translation[0] = g_vec3Zero[0];
-    state->_translation[1] = g_vec3Zero[1];
-    state->_translation[2] = g_vec3Zero[2];
+    _constraint = 0;
+    _constraintAxis = 0;
+    _active = !_maya;
+    _head = 0.0f;
+    _roll = 0.0f;
+    _pitch = 0.0f;
+    _zoom = 1.0f;
+    _translation[0] = g_vec3Zero[0];
+    _translation[1] = g_vec3Zero[1];
+    _translation[2] = g_vec3Zero[2];
     dx = model->_selectedCenter[0];
     dy = model->_selectedCenter[1];
     dz = model->_selectedCenter[2];
     dx -= model->_position[0];
     dy -= model->_position[1];
     dz -= model->_position[2];
-    state->_distance = sqrtf(dx * dx + dy * dy + dz * dz);
+    _distance = sqrtf(dx * dx + dy * dy + dz * dz);
 }
 
 /* Applies the stick and the drags gathered since the last frame: turns the view about the selection's
  * centre, zooms towards it and pans, then starts the next frame's gathering from rest. */
-void igRotateMode_Update(igRotateMode *self, float seconds) {
-    igViewModel *model = (igViewModel *)self->_model;
+void igRotateMode::update(float seconds) {
+    ::igViewModel *model = (::igViewModel *)_model;
     float frames = 60.0f * seconds;
     float step = 0.1f * frames;
-    self->_head += step * self->_joystickR[0];
-    self->_pitch += step * self->_joystickR[1];
-    self->_roll += step * self->_joystickT[0];
-    self->_zoom *= 1.0f - 0.1f * (frames * self->_joystickT[1]);
-    if (self->_active) {
+    _head += step * _joystickR[0];
+    _pitch += step * _joystickR[1];
+    _roll += step * _joystickT[0];
+    _zoom *= 1.0f - 0.1f * (frames * _joystickT[1]);
+    if (_active) {
         igVec3f center;
         Vec3f_TransformProjective((float *)&center, &model->_selectedCenter[0], model->_viewMatrix);
         center[0] = -center[0];
         center[1] = -center[1];
         center[2] = -center[2];
         igMatrix44f_TranslateWorld(model->_viewMatrix, center);
-        if (self->_maya) {
-            if (self->_head != 0.0f) {
+        if (_maya) {
+            if (_head != 0.0f) {
                 igVec3f up;
                 Vec3f_TransformDirection((float *)&up, &model->_sceneUpVector[0], model->_viewMatrix);
                 float scale = 1.0f / up.length();
                 up[0] *= scale;
                 up[1] *= scale;
                 up[2] *= scale;
-                rotateRef(model->_viewMatrix, &up, self->_head);
+                rotateRef(model->_viewMatrix, &up, _head);
             }
-        } else if (self->_head != 0.0f) {
-            rotateRef(model->_viewMatrix, &g_vec3YAxis, self->_head);
+        } else if (_head != 0.0f) {
+            rotateRef(model->_viewMatrix, &g_vec3YAxis, _head);
         }
-        if (self->_pitch != 0.0f) {
-            rotateRef(model->_viewMatrix, &g_vec3XAxis, -self->_pitch);
+        if (_pitch != 0.0f) {
+            rotateRef(model->_viewMatrix, &g_vec3XAxis, -_pitch);
         }
-        if (self->_roll != 0.0f) {
-            rotateRef(model->_viewMatrix, &g_vec3ZAxis, self->_roll);
+        if (_roll != 0.0f) {
+            rotateRef(model->_viewMatrix, &g_vec3ZAxis, _roll);
         }
-        center.scale(-self->_zoom);
-        center[0] += self->_translation[0];
-        center[1] += self->_translation[1];
-        center[2] += self->_translation[2];
-        self->_distance = center.length();
+        center.scale(-_zoom);
+        center[0] += _translation[0];
+        center[1] += _translation[1];
+        center[2] += _translation[2];
+        _distance = center.length();
         igMatrix44f_TranslateWorld(model->_viewMatrix, center);
         igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewModel::k_viewMatrix);
         ((Gap::Gui::igModel *)model)->notifyAllViews(changed);
     }
-    self->_head = 0.0f;
-    self->_roll = 0.0f;
-    self->_pitch = 0.0f;
-    self->_zoom = 1.0f;
-    self->_translation[0] = g_vec3Zero[0];
-    self->_translation[1] = g_vec3Zero[1];
-    self->_translation[2] = g_vec3Zero[2];
+    _head = 0.0f;
+    _roll = 0.0f;
+    _pitch = 0.0f;
+    _zoom = 1.0f;
+    _translation[0] = g_vec3Zero[0];
+    _translation[1] = g_vec3Zero[1];
+    _translation[2] = g_vec3Zero[2];
+}
+}
 }
 
 int igPickMode_HitProc(int traversal, int data, int hit) {
@@ -636,12 +621,15 @@ int igPickMode_HitProc(int traversal, int data, int hit) {
     return 0;
 }
 
+namespace Gap {
+namespace Viewer {
+
 /* Moves the GUI mouse cursor by the joystick's deflection over `seconds` and tells the GUI model's
  * views that the mouse position changed. */
-void igPickMode_Update(igPickMode *pickMode, float seconds) {
-    igGuiSystemModel *model = (igGuiSystemModel *)((igGuiSystem *)pickMode->_guiSystem)->_model;
-    float dx = pickMode->_joystickT[0];
-    float dy = pickMode->_joystickT[1];
+void igPickMode::update(float seconds) {
+    ::igGuiSystemModel *model = (::igGuiSystemModel *)((igGuiSystem *)_guiSystem.get())->_model.get();
+    float dx = _joystickT[0];
+    float dy = _joystickT[1];
     bool moving = dx != g_vec2Zero[0] || dy != g_vec2Zero[1];
 
     if (moving) {
@@ -654,48 +642,48 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
     }
 }
 
-void igPickMode_OnStickEvent(igPickMode *self, int unused, int stick, float x, float y) {
-    if (!(stick & 0xFFFF)) {
-        self->_joystickT[0] = x;
-        self->_joystickT[1] = y;
+void igPickMode::onStickEvent(int unused, unsigned short stick, float x, float y) {
+    if (stick == 0) {
+        _joystickT[0] = x;
+        _joystickT[1] = y;
     }
 }
 
-void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
+void igPickMode::onMouseButton(int button, int pressed) {
     int *selected;
-    igObject *object;
+    ::igObject *object;
     if (pressed != 0) {
         if (button == 0) {
-            igPickMode_Pick(self);
+            pick();
         } else if (button == 1) {
-            selected = &((igViewerParameters *)self->_parameters)->_selectedObject;
-            object = (igObject *)*selected;
-            igObject::release(object);
+            selected = &((::igViewerParameters *)_parameters.get())->_selectedObject;
+            object = (::igObject *)*selected;
+            ::igObject::release(object);
             *selected = 0;
             igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_selectedObject);
-            ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(changed);
+            ((Gap::Gui::igModel *)_parameters.get())->notifyAllViews(changed);
         }
     }
 }
 
-void igPickMode_OnButtonEvent(igPickMode *self, void *unused, int key, int down) {
+void igPickMode::onButtonEvent(void *unused, int key, int down) {
     if ((key == 0xE) && (down != 0)) {
-        igPickMode_Pick(self);
+        pick();
     }
 }
 
-void igPickMode_OnAttach(igPickMode *pickMode) {
+void igPickMode::onAttach() {
     Gap::Sg::igProbe *created;
-    igIntList *faceTypes;
+    ::igIntList *faceTypes;
     int top;
-    igIntersectTraversal *traversal;
-    igObject *previous;
-    igObject *cursor;
-    igMatrix44f_Invert(pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
+    ::igIntersectTraversal *traversal;
+    ::igObject *previous;
+    ::igObject *cursor;
+    igMatrix44f_Invert(_inverseProjectionMatrix.m, ((::igViewerParameters *)_parameters.get())->_projectionMatrix);
     igSmartPointer<Gap::Sg::igProbe> probe(Gap::Sg::igProbe::_instantiateFromPool(0), AdoptReference());
     created = probe.get();
-    ((Gap::Core::igObjectList *)created->_rays.get())->append((Gap::Core::igObject *)pickMode->_ray);
-    faceTypes = (igIntList *)created->_intersectFaceType.get();
+    ((Gap::Core::igObjectList *)created->_rays.get())->append((Gap::Core::igObject *)_ray.get());
+    faceTypes = (::igIntList *)created->_intersectFaceType.get();
     top = count_of(faceTypes);
     if (top < faceTypes->_capacity) {
         faceTypes->_count = faceTypes->_count + 1;
@@ -703,29 +691,28 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
         ((Gap::Core::igDataList *)faceTypes)->resizeAndSetCount(top + 1, 4);
     }
     ((int *)faceTypes->_data)[top] = 2;
-    setProbe(pickMode, probe);
-    ((igIntersectTraversal *)pickMode->_intersectTraversal)->_mode = 0;
-    ((igIntersectTraversal *)pickMode->_intersectTraversal)->_mode = ((igIntersectTraversal *)pickMode->_intersectTraversal)->_mode | 4;
-    ((igIntersectTraversal *)pickMode->_intersectTraversal)->_hitProc = (int)&igPickMode_HitProc;
-    ((igIntersectTraversal *)pickMode->_intersectTraversal)->_userTimeState = 1;
-    if (pickMode->_guiSystem != 0) {
-        cursor = (igObject *)((igGuiSystem *)pickMode->_guiSystem)->_mouseCursor;
-        igObject::ref(cursor);
-        previous = (igObject *)pickMode->_savedCursor;
-        igObject::release(previous);
-        pickMode->_savedCursor = (int)cursor;
-        pickMode->_savedCursorState = ((igGuiSystem *)pickMode->_guiSystem)->_mouseCursorVisible;
-        igGuiSystem_SetMouseCursor((igGuiSystem *)pickMode->_guiSystem, (igMouseCursor *)pickMode->_cursor);
-        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)pickMode->_guiSystem, true);
+    setProbe((::igPickMode *)this, probe);
+    ((::igIntersectTraversal *)_intersectTraversal.get())->_mode = 0;
+    ((::igIntersectTraversal *)_intersectTraversal.get())->_mode = ((::igIntersectTraversal *)_intersectTraversal.get())->_mode | 4;
+    ((::igIntersectTraversal *)_intersectTraversal.get())->_hitProc = (int)&igPickMode_HitProc;
+    ((::igIntersectTraversal *)_intersectTraversal.get())->_userTimeState = 1;
+    if (_guiSystem != 0) {
+        cursor = (::igObject *)((igGuiSystem *)_guiSystem.get())->_mouseCursor.get();
+        _savedCursor = (Gap::Gui::igMouseCursor *)cursor;
+        _savedCursorState = ((igGuiSystem *)_guiSystem.get())->_mouseCursorVisible;
+        ((Gap::Gui::igGuiSystem *)_guiSystem.get())->setMouseCursor((Gap::Gui::igMouseCursor *)_cursor.get());
+        ((Gap::Gui::igGuiSystem *)_guiSystem.get())->showCursor(true);
     }
 }
 
-void igPickMode_OnDetach(igPickMode *self) {
-    if (self->_guiSystem != 0) {
-        igGuiSystem_SetMouseCursor((igGuiSystem *)self->_guiSystem, (igMouseCursor *)self->_savedCursor);
+void igPickMode::onDetach() {
+    if (_guiSystem != 0) {
+        ((Gap::Gui::igGuiSystem *)_guiSystem.get())->setMouseCursor((Gap::Gui::igMouseCursor *)_savedCursor.get());
         /* reflected.h spells the igBool _savedCursorState as unsigned char; showCursor takes the kit's igBool (bool). */
-        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)self->_guiSystem, *(bool *)&self->_savedCursorState);
+        ((Gap::Gui::igGuiSystem *)_guiSystem.get())->showCursor(*(bool *)&_savedCursorState);
     }
+}
+}
 }
 
 void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit) {
@@ -738,59 +725,62 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit) {
     }
 }
 
-void igPickMode_Pick(igPickMode *self) {
+namespace Gap {
+namespace Viewer {
+
+void igPickMode::pick() {
     float point[3];
-    igViewModel *model;
+    ::igViewModel *model;
     int *selected;
-    igObject *previous, *hitPath;
-    model = (igViewModel *)self->_model;
-    igGuiSystemModel *gui = (igGuiSystemModel *)((igGuiSystem *)self->_guiSystem)->_model;
+    ::igObject *previous, *hitPath;
+    model = (::igViewModel *)_model;
+    ::igGuiSystemModel *gui = (::igGuiSystemModel *)((igGuiSystem *)_guiSystem.get())->_model.get();
     float y = *(float *)&gui->_mousePosition[1];
     point[0] = *(float *)&gui->_mousePosition[0];
     point[1] = y;
     *(int *)&point[2] = 0x3F800000;
-    Vec3f_TransformProjective(point, point, self->_inverseProjectionMatrix);
-    igRay_SetFromPoints((igRay *)self->_ray, g_vec3Zero.vec, point);
-    igRay_Transform((igRay *)self->_ray, self->_inverseMatrix);
-    self->_impactLength = ((igRay *)self->_ray)->_len;
-    self->_hit = 0;
-    previous = (igObject *)self->_hitPath;
-    igObject::release(previous);
-    self->_hitPath = 0;
-    ((Gap::Sg::igIntersectTraversal *)((igIntersectTraversalDispatchView *)self->_intersectTraversal))->reset();
-    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->SetTimeAsLong(model->_drawTime);
-    g_pickingMode[0] = self;
-    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->Apply(((igViewerParameters *)self->_parameters)->_scene);
+    Vec3f_TransformProjective(point, point, _inverseProjectionMatrix.m);
+    igRay_SetFromPoints((igRay *)_ray.get(), g_vec3Zero.vec, point);
+    igRay_Transform((igRay *)_ray.get(), _inverseMatrix.m);
+    _impactLength = ((igRay *)_ray.get())->_len;
+    _hit = 0;
+    _hitPath.clear();
+    ((Gap::Sg::igIntersectTraversal *)((igIntersectTraversalDispatchView *)_intersectTraversal.get()))->reset();
+    ((igIntersectTraversalDispatchView *)_intersectTraversal.get())->SetTimeAsLong(model->_drawTime);
+    g_pickingMode[0] = (::igPickMode *)this;
+    ((igIntersectTraversalDispatchView *)_intersectTraversal.get())->Apply(((::igViewerParameters *)_parameters.get())->_scene);
     g_pickingMode[0] = 0;
-    selected = &((igViewerParameters *)self->_parameters)->_selectedObject;
-    hitPath = (igObject *)self->_hitPath;
-    igObject::ref(hitPath);
-    previous = (igObject *)*selected;
-    igObject::release(previous);
+    selected = &((::igViewerParameters *)_parameters.get())->_selectedObject;
+    hitPath = (::igObject *)_hitPath.get();
+    ::igObject::ref(hitPath);
+    previous = (::igObject *)*selected;
+    ::igObject::release(previous);
     *selected = (int)hitPath;
     igNotifyEvent changed((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_selectedObject);
-    ((Gap::Gui::igModel *)((igViewerParameters *)self->_parameters))->notifyAllViews(changed);
+    ((Gap::Gui::igModel *)((::igViewerParameters *)_parameters.get()))->notifyAllViews(changed);
+}
+}
 }
 
 /* Returns the metaobject handle of igPickMode, not of igViewManager. */
 igMetaObject *igPickMode_GetMeta(void) {
-    return g_igPickMode_metaObject;
+    return Gap::Viewer::igPickMode::getClassMeta();
 }
 
 igMetaObject *igRotateMode_GetMeta(void) {
-    return g_igRotateMode_metaObject;
+    return Gap::Viewer::igRotateMode::getClassMeta();
 }
 
 igMetaObject *igFlyMode_GetMeta(void) {
-    return g_igFlyMode_metaObject;
+    return Gap::Viewer::igFlyMode::getClassMeta();
 }
 
 int igCameraMode_GetMeta(void) {
-    return (int)g_igCameraMode_metaObject;
+    return (int)Gap::Viewer::igCameraMode::getClassMeta();
 }
 
 igMetaObject *igViewMode_GetMeta(void) {
-    return g_igViewMode_metaObject;
+    return Gap::Viewer::igViewMode::getClassMeta();
 }
 
 }

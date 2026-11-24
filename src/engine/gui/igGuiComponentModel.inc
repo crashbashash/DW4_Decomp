@@ -37,7 +37,7 @@ void igGuiComponentModel::arkRegister()
 
 CallbackArray *igGuiComponentModel::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igGuiComponent_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igGuiComponent::arkRegister, 0 };
 
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -72,7 +72,7 @@ void igGuiComponentModel::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 7);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
         metaField->_refCounted = 0;
     }
     {

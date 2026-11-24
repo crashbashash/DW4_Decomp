@@ -225,8 +225,13 @@ void igViewManager_SetFrameTime(igViewManager *manager, long long frameTime) {
     int units = frameTime / 0x40000; ((igViewModeDispatchView *)manager->_viewMode)->Update(262144.0f * (1e-9f * units));
 }
 
-void igViewMode_Update(void) {
+namespace Gap {
+namespace Viewer {
 
+void igViewMode::update(float seconds) {
+
+}
+}
 }
 
 void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVector) {

@@ -375,5 +375,13 @@ class MemberDeclarations(unittest.TestCase):
         self.assertIn("Widget::k_count", why["k_count"])
 
 
+class FunctionMacros(unittest.TestCase):
+    def test_a_call_of_another_arity_is_no_invocation(self):
+        macros = declarations.function_macros(["#define unlink(a, b, c) _unlink_r(a, b, c)\n"])
+        text = "void unlink(); x = unlink(p, q, r);"
+        self.assertEqual(declarations.expand_function_macros(text, macros),
+                         "void unlink(); x =  _unlink_r(p, q, r) ;")
+
+
 if __name__ == "__main__":
     unittest.main()

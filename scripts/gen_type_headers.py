@@ -117,7 +117,7 @@ KIT_VECTOR = {
 # kit's igSimpleShader has no registered class.
 FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
                  "igComponentEditInfo2", "igPsx2TextureRecord", "igPsx2ClutRecord", "p2Light", "p2Material",
-                 "StatisticsCapture", "igSimpleShaderDispatchView")
+                 "StatisticsCapture", "igSimpleShaderDispatchView", "igWindow")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
 # `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, igVertexComponentFilter, the mask
@@ -405,7 +405,7 @@ def converted_classes(converted, parent, layouts, members, bases=None):
     instead; the template's header, `include/dw4/<library>/<template>.h`, is read just before the first such
     class, once the parent it derives from is declared. A class holding an `igSmartPointer<Class>` of another
     converted class is declared after it, so the inline reference counting its setters instantiate sees the
-    complete class."""
+    complete class, and so is one whose inline member body names another converted class's static."""
     bases = bases or {}
     order, seen, visiting = [], set(), set()
 
@@ -428,6 +428,13 @@ def converted_classes(converted, parent, layouts, members, bases=None):
             for held in re.findall(r"\bigSmartPointer<(\w+)>", line):
                 if held in converted and held in layouts and held not in visiting:
                     visit(held)
+        for decl in members.get(cls, []):
+            if "{" in decl:
+                # an inline body naming another converted class's static (`Gap::Viewer::igViewModel::getClassTypeSafe()`)
+                # reads that class complete
+                for named in re.findall(r"\bGap::\w+::(\w+)::", decl[decl.index("{"):]):
+                    if named in converted and named in layouts and named != cls and named not in visiting:
+                        visit(named)
         visiting.discard(cls)
         if cls in seen:  # a held class's visit (an ownership cycle) placed it already
             return

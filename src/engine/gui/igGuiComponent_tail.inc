@@ -1,69 +1,87 @@
-void igGuiComponent_resetFields(igGuiComponent *self, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)self, flags);
-    *(int *)((char *)(self->_node) + 32) = (int)(self);
+namespace Gap {
+namespace Gui {
+
+void igGuiComponent::resetFields(int persistent)
+{
+    igObject::resetFields(persistent);
+    _node->_component = (int)this;
 }
 
-void FUN_00455470(A_455470 *arg0) {
-    C *temp_a0;
-
-    if (arg0->f20 != 0) {
-        temp_a0 = arg0->f14;
-        if (temp_a0 != 0) {
-            ((Gap::Gui::igView *)temp_a0)->setModel(0);
-            arg0->f14->f0c = 0;
+void igGuiComponent::unlink()
+{
+    if (_linked) {
+        if (_aspect) {
+            ((igView *)_aspect.p)->setModel(0);
+            _aspect->_node = 0;
         }
-        ((Gap::Gui::igView *)arg0->f0c)->setModel(0);
-        arg0->f10->f20 = 0;
-        arg0->f20 = 0;
+        ((igView *)_controller.p)->setModel(0);
+        _model->setComponent(0);
+        _linked = false;
     }
 }
 
-void igGuiComponent_userDestruct(igGuiComponent *self) {
-    Gap__Core__igObject__userDestruct((igObject *)self);
-    if (self->_linked != 0) {
-        FUN_00455470((A_455470 *)self);
-    }
+void igGuiComponent::userDestruct()
+{
+    igObject::userDestruct();
+    if (_linked)
+        unlink();
 }
 
-int FUN_00455510(A_455510 *arg0) {
-    int n = ((Gap::Sg::igGraphPath *)arg0)->getDepth();
-    int i;
-    O_455510 *o;
-    if (n <= 0) return 0;
-    i = n - 1;
-    while (i >= 0) {
-        o = O_455510::cast(arg0->b->arr[i]);
-        if (o != 0) return o->v;
-        i--;
+/* Byte-only: the node test is an inline returning from inside its `if`. Written as a conditional expression
+   in getFromPath, the compiler inverts the isOfType branch and the depth test's delay slot no longer takes
+   the index's first value (one instruction longer). */
+static inline igGuiComponentNode *asComponentNode(igObject *object)
+{
+    if (object != 0 && object->isOfType(g_igGuiComponentNode_metaObject))
+        return (igGuiComponentNode *)object;
+    return 0;
+}
+
+igGuiComponent *igGuiComponent::getFromPath(igGraphPath *gp)
+{
+    int depth = gp->getDepth();
+    if (depth <= 0)
+        return 0;
+    for (int i = depth - 1; i >= 0; i--) {
+        igGuiComponentNode *node = asComponentNode(gp->_path->get(i));
+        if (node != 0)
+            return (igGuiComponent *)node->_component;
     }
     return 0;
 }
 
-void *FUN_004555c0(igGuiComponentView *self, void *component, void *context)
+igGuiComponent *igGuiComponent::getNextChild(igGuiComponent *child, IG_DIRECTION direction)
 {
-    return self->_controller->vfunc_23(component, context);
+    return (igGuiComponent *)((igGuiComponentControllerView *)_controller.p)->vfunc_23(child, (void *)direction);
 }
 
-int FUN_004555e0(void *arg0) {
-    return *(unsigned char *)((char *)(*(int *)((char *)(arg0) + 16)) + 12);
-}
-
-void FUN_004555f0(int *p, unsigned char value)
+/* Retail's callers test the result unmasked: an int, not the kit's igBool. */
+int igGuiComponent::isEnabled()
 {
-    ((Gap::Gui::igGuiComponentModel *)(*(int *)((char *)p + 16)))->setHasFocus(value);
+    return _model->_enabled;
 }
 
-void FUN_00455600(int *p, unsigned char value)
+/* The three setters pass the model's unsigned char flag on: retail's callers do not normalise it. */
+void igGuiComponent::setHasFocus(unsigned char hasFocus)
 {
-    ((Gap::Gui::igGuiComponentModel *)(*(int *)((char *)p + 16)))->setMouseOver(value);
+    _model->setHasFocus(hasFocus);
 }
 
-void FUN_00455610(int *p, unsigned char value)
+void igGuiComponent::setMouseOver(unsigned char mouseOver)
 {
-    ((Gap::Gui::igGuiComponentModel *)(*(int *)((char *)p + 16)))->setPushed(value);
+    _model->setMouseOver(mouseOver);
 }
 
-unsigned char FUN_00455620(void *arg0) {
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 15);
+void igGuiComponent::setPushed(unsigned char pushed)
+{
+    _model->setPushed(pushed);
+}
+
+/* Retail's callers mask the result: the model's unsigned char flag. */
+unsigned char igGuiComponent::isPushed()
+{
+    return _model->_pushed;
+}
+}
 }
 

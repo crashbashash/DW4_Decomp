@@ -42,7 +42,7 @@ void igStatisticsItem::arkRegister()
 
 CallbackArray *igStatisticsItem::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, Gap::Viewer::igViewerStatisticsManager::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igGuiComponent::arkRegister, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, Gap::Viewer::igViewerStatisticsManager::arkRegister, 0 };
 
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -80,7 +80,7 @@ void igStatisticsItem::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
-        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);

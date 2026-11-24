@@ -41,7 +41,7 @@ void igGuiSystemModel::arkRegister()
 
 CallbackArray *igGuiSystemModel::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igGuiComponent_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gui::igGuiComponent::arkRegister, 0 };
 
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -83,19 +83,19 @@ void igGuiSystemModel::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
-        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
-        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
-        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
-        metaField->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }

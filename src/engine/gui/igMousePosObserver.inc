@@ -77,7 +77,7 @@ void igMousePosObserver_RunStaticInit(void)
     igMetaObject_RunStaticInit(igMousePosObserver_Register);
 }
 
-static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { igGuiSystem_RunStaticInit, Gap::Sg::igIntersectTraversal::arkRegister, igRay_EnsureRegistered, Gap::Sg::igGraphPath::arkRegister, 0 };
+static igMetaObjectCallback g_igMousePosObserver_callbackList[] = { Gap::Gui::igGuiSystem::arkRegister, Gap::Sg::igIntersectTraversal::arkRegister, igRay_EnsureRegistered, Gap::Sg::igGraphPath::arkRegister, 0 };
 
 CallbackArray *igMousePosObserver_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -149,7 +149,7 @@ void igMousePosObserver_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igMousePosObserver_ctorTable, 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igGuiSystem_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Gui::igGuiSystem::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Sg::igIntersectTraversal::getClassTypeLazy();

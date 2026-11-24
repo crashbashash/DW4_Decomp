@@ -163,7 +163,6 @@
 #include "dw4/game/beSystem.h"
 #include "dw4/audio/igAdxAfsFileList.h"
 #include "dw4/core/igBoolList.h"
-#include "dw4/gui/igBoxComponent.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/gui/igGuiComponent.h"
 #include "dw4/core/igInfo.h"

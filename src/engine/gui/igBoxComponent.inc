@@ -1,63 +1,50 @@
-igMetaObject *g_igBoxComponent_metaObject;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igBoxComponent_GetOrCreateMetaObject(void) {
-    if (g_igBoxComponent_metaObject == 0) {
-        g_igBoxComponent_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igBoxComponent_metaObject;
-}
+igMetaObject *igBoxComponent::_Meta;
 
-igMetaObject *igBoxComponent_GetMetaObject(void)
+igMetaObject *igBoxComponent::getClassTypeLazy()
 {
-    igMetaObject *g = g_igBoxComponent_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igBoxComponent_RunStaticInit();
-    return g_igBoxComponent_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igBoxComponent_GetVTable(void) {
-    struct F f;
-    int temp_s0;
-
-    igObject_InitHeader((igObject *)&f);
-    f.w[2] = 0;
-    f.w[3] = 0;
-    f.w[4] = 0;
-    f.w[6] = 0;
-    f.vt = &g_igBoxComponent_vtable[0];
-    temp_s0 = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
-    f.vt = &g_igBoxComponent_vtable[0];
-    FUN_00450090((O_450090 *)&f, 0);
-    return temp_s0;
-}
-
-void igBoxComponent_RunStaticInit(void)
+igMetaObject *igBoxComponent::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igBoxComponent_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igBoxComponent_Register(void) {
+void *igBoxComponent::retrieveVTablePointer()
+{
+    igBoxComponent temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igBoxComponent::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igBoxComponent::arkRegisterInternal()
+{
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igBoxComponent_metaObject,
-        igGuiComponent_Register,
-        igGuiComponent_GetPublishedMetaObject,
-        thunk_igBoxComponent_GetMetaObject,
+        false,
+        &_Meta,
+        Gap::Gui::igGuiComponent::arkRegisterInternal,
+        Gap::Gui::igGuiComponent::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igBoxComponent",
-        0x24, /* instance size */
-        igBoxComponent_GetVTable,
+        sizeof(igBoxComponent),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void thunk_igBoxComponent_GetMetaObject(void) {
-    igBoxComponent_GetMetaObject();
 }
-
-igMetaObject *igGuiComponent_GetPublishedMetaObject(void) {
-    return g_igGuiComponent_metaObject;
 }
 

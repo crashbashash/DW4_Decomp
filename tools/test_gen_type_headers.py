@@ -63,6 +63,15 @@ class Access(unittest.TestCase):
                                    "    static int *k_visualContext;", "public:",
                                    "    void setVisualContext(int *context);"])
 
+    def test_a_class_whose_inline_body_names_another_class_follows_it(self):
+        members = {"igObject": ["virtual void destruct();"],
+                   "igRenderer": ["int isFor() { return Gap::Gui::igWindow::getClassTypeSafe(); }"]}
+        layouts = dict(LAYOUTS, igWindow=(0x2, 1, "sizeof 12", 12, [(8, 4, "    int _x;")]))
+        out = gth.converted_classes({"igObject": "Core", "igRenderer": "Gui", "igWindow": "Gui"},
+                                    {"igRenderer": "igObject", "igWindow": "igObject"}, layouts, members)
+        self.assertLess(out.index("class igWindow : public Gap::Core::igObject {"),
+                        out.index("class igRenderer : public Gap::Core::igObject {"))
+
     def test_a_table_without_labels_writes_one_public_section(self):
         members = {"igObject": ["igObject();", "virtual void destruct();"]}
         out = gth.converted_classes({"igObject": "Core"}, {}, LAYOUTS, members)

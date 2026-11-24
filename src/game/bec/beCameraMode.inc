@@ -61,8 +61,8 @@ CallbackArray *beCameraMode_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCameraMode_metaObject,
-        igViewMode_Register,
-        igViewMode_GetPublishedMetaObject,
+        Gap::Viewer::igViewMode::arkRegisterInternal,
+        Gap::Viewer::igViewMode::getClassMeta,
         beCameraMode_GetMetaObjectFunction,
         "beCameraMode",
         0x78, /* instance size */
@@ -76,10 +76,6 @@ CallbackArray *beCameraMode_Register(void) {
 void beCameraMode_GetMetaObjectFunction(void)
 {
     beCameraMode_GetMetaObject();
-}
-
-igMetaObject *igViewMode_GetPublishedMetaObject(void) {
-    return g_igViewMode_metaObject;
 }
 
 static FieldFactory g_beCameraMode_ctorTable[] = {

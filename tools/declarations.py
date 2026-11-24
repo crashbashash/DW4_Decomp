@@ -659,7 +659,9 @@ def function_macros(texts):
 
 def expand_function_macros(text, macros):
     """`text` with each invocation of a function-like macro in `macros` replaced by its body (arguments
-    substituted), until none is left."""
+    substituted), until none is left. A call whose argument count is not the macro's is no invocation: the
+    preprocessor would reject it, so it names something else (newlib's three-argument `unlink` macro beside
+    igGuiComponent's `unlink()`)."""
     if not macros:
         return text
     pattern = re.compile(r"\b(%s)\s*\(" % "|".join(re.escape(n) for n in sorted(macros, key=len, reverse=True)))
@@ -671,6 +673,10 @@ def expand_function_macros(text, macros):
             close = _close(text, m.end() - 1)
             params, body = macros[m.group(1)]
             args = [a.strip() for a in _split_top(text[m.end():close])]
+            if args == [""] and not params:
+                args = []
+            if len(args) != len(params) and "..." not in params:
+                continue
             sub = dict(zip(params, args))
             out.append(text[at:m.start()])
             out.append(" %s " % _WORD.sub(lambda w: sub.get(w.group(0), w.group(0)), body))

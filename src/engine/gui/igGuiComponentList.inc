@@ -28,7 +28,7 @@ void igGuiComponentList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGuiComponentList_Register);
 }
 
-static igMetaObjectCallback g_igGuiComponentList_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGuiComponentList_callbackList[] = { Gap::Gui::igGuiComponent::arkRegister, 0 };
 
 CallbackArray *igGuiComponentList_Register(void) {
     GuiLibrary_MarkRegistered();

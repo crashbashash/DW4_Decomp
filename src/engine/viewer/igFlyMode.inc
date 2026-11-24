@@ -1,191 +1,107 @@
-igMetaObject *g_igFlyMode_metaObject;
-igMetaField *g_igFlyMode_moveDirectionMetaField;
-igMetaField *g_igFlyMode_joystickTMetaField;
-igMetaField *g_igFlyMode_joystickRMetaField;
-igMetaField *g_igFlyMode_lastTranslationMetaField;
-igMetaField *g_igFlyMode_lastRotationMetaField;
-igMetaField *g_igFlyMode_speedMetaField;
-igMetaField *g_igFlyMode_aimingMetaField;
-igMetaField *g_igFlyMode_windowMetaField;
-igMetaField *g_igFlyMode_mousePosMetaField;
-igMetaField *g_igFlyMode_lastAimMetaField;
-igMetaField *g_igFlyMode_lastAimValidMetaField;
+namespace Gap {
+namespace Viewer {
 
-igFlyMode *igFlyMode_Create(int allocator) {
-    igFlyMode_EnsureRegistered();
-    return (igFlyMode *)igMetaObject_CreateInstance(g_igFlyMode_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igFlyMode::_Meta;
+igMetaField *igFlyMode::k_moveDirection;
+igMetaField *igFlyMode::k_joystickT;
+igMetaField *igFlyMode::k_joystickR;
+igMetaField *igFlyMode::k_lastTranslation;
+igMetaField *igFlyMode::k_lastRotation;
+igMetaField *igFlyMode::k_speed;
+igMetaField *igFlyMode::k_aiming;
+igMetaField *igFlyMode::k_window;
+igMetaField *igFlyMode::k_mousePos;
+igMetaField *igFlyMode::k_lastAim;
+igMetaField *igFlyMode::k_lastAimValid;
 
-igMetaObject *igFlyMode_GetMetaObject(void) {
-    igMetaObject *g = g_igFlyMode_metaObject;
-    if (g != 0) {
-        int b = !!(g->_validity & 4);
-        if (b) goto done;
-    }
-    igFlyMode_EnsureRegistered();
-done:
-    return g_igFlyMode_metaObject;
-}
-
-int igFlyMode_GetVTable(void) {
-    struct Obj_45c970 o;
-    int r;
-    int *t;
-    igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igViewMode_vtable[0];
-    igMatrix44f_SetIdentity((float *)o.sub);
-    o.vt = &g_igFlyMode_vtable[0];
-    o.ref = 0;
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igFlyMode_vtable[0];
-    if (&o.ref != 0) {
-        t = o.ref;
-        if (t != 0) {
-            t[1] = t[1] - 1;
-            if ((t[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)t);
-            }
-        }
-    }
-    return r;
-}
-
-void igFlyMode_EnsureRegistered(void)
+igFlyMode *igFlyMode::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(igFlyMode_Register);
+    arkRegister();
+    return (igFlyMode *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-static igMetaObjectCallback g_igFlyMode_callbackList[] = { igWindow_EnsureRegistered, 0 };
+igMetaObject *igFlyMode::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igFlyMode_Register(void) {
+void *igFlyMode::retrieveVTablePointer()
+{
+    igFlyMode temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igFlyMode::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igFlyMode::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igWindow_EnsureRegistered, 0 };
+
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igFlyMode_metaObject,
-        igViewMode_Register,
-        igViewMode_GetPublishedMetaObject,
-        igFlyMode_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Viewer::igViewMode::arkRegisterInternal,
+        Gap::Viewer::igViewMode::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFlyMode",
-        0xA0, /* instance size */
-        igFlyMode_GetVTable,
-        &igFlyMode_InitFields,
-        0, /* extra callback item */
-        g_igFlyMode_callbackList /* callback list */
+        sizeof(igFlyMode),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igFlyMode_GetMetaObjectFunction(void) {
-    igFlyMode_GetMetaObject();
+void igFlyMode::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igBoolMetaField_Create, igObjectRefMetaField_Create, (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool, igBoolMetaField_Create };
+    static const char *names[] = { "_moveDirection", "_joystickT", "_joystickR", "_lastTranslation", "_lastRotation", "_speed", "_aiming", "_window", "_mousePos", "_lastAim", "_lastAimValid" };
+    static igMetaField **enumStorage[] = { &k_moveDirection, &k_joystickT, &k_joystickR, &k_lastTranslation, &k_lastRotation, &k_speed, &k_aiming, &k_window, &k_mousePos, &k_lastAim, &k_lastAimValid };
+    static int offsets[] = { 76, 88, 100, 108, 120, 128, 132, 136, 140, 148, 156 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 11);
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igVec2fMetaField *metaField = (igVec2fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(igVec2f(0.0f, 0.0f));
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igVec2fMetaField *metaField = (igVec2fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(igVec2f(0.0f, 0.0f));
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_metaObject = (int)igWindow_GetOrCreateMetaObject();
+    }
+    {
+        igVec2fMetaField *metaField = (igVec2fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+        metaField->setDefault(igVec2f(0.0f, 0.0f));
+    }
+    {
+        igVec2fMetaField *metaField = (igVec2fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+        metaField->setDefault(igVec2f(0.0f, 0.0f));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igFlyMode_ctorTable[] = {
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-    igFloatMetaField_Create,
-    igBoolMetaField_Create,
-    igObjectRefMetaField_Create,
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
-    igBoolMetaField_Create,
-};
-static const char *g_igFlyMode_fieldTable[] = {
-    "_moveDirection",
-    "_joystickT",
-    "_joystickR",
-    "_lastTranslation",
-    "_lastRotation",
-    "_speed",
-    "_aiming",
-    "_window",
-    "_mousePos",
-    "_lastAim",
-    "_lastAimValid",
-};
-static igMetaField **g_igFlyMode_fieldHandles[] = {
-    &g_igFlyMode_moveDirectionMetaField,
-    &g_igFlyMode_joystickTMetaField,
-    &g_igFlyMode_joystickRMetaField,
-    &g_igFlyMode_lastTranslationMetaField,
-    &g_igFlyMode_lastRotationMetaField,
-    &g_igFlyMode_speedMetaField,
-    &g_igFlyMode_aimingMetaField,
-    &g_igFlyMode_windowMetaField,
-    &g_igFlyMode_mousePosMetaField,
-    &g_igFlyMode_lastAimMetaField,
-    &g_igFlyMode_lastAimValidMetaField,
-};
-static int g_igFlyMode_fieldOffsets[] = {
-    76,
-    88,
-    100,
-    108,
-    120,
-    128,
-    132,
-    136,
-    140,
-    148,
-    156,
-};
-
-void igFlyMode_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_a0_7;
-    void *temp_a0_6;
-    void *temp_a0_5;
-    void *temp_a0_4;
-    void *temp_a0_3;
-    void *temp_a0_2;
-    void *temp_a0;
-    void *temp_s0;
-    struct V3 a;
-    struct V3 b;
-    struct V2 c;
-    struct V3 d;
-    struct V2 e;
-    struct V2 f;
-    struct V2 g;
-
-    temp_s0 = g_igFlyMode_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igFlyMode_ctorTable, 0xB);
-    temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    a.x = 0;
-    a.y = 0;
-    a.z = 0;
-    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)&a);
-    temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    b.x = 0;
-    b.y = 0;
-    b.z = 0;
-    ((Gap::Math::igVec3fMetaField *)temp_a0_2)->setDefault(*(const igVec3f *)&b);
-    temp_a0_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    c.x = 0;
-    c.y = 0;
-    ((Gap::Math::igVec2fMetaField *)temp_a0_3)->setDefault(*(const igVec2f *)&c);
-    temp_a0_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
-    d.x = 0;
-    d.y = 0;
-    d.z = 0;
-    ((Gap::Math::igVec3fMetaField *)temp_a0_4)->setDefault(*(const igVec3f *)&d);
-    temp_a0_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4));
-    e.x = 0;
-    e.y = 0;
-    ((Gap::Math::igVec2fMetaField *)temp_a0_5)->setDefault(*(const igVec2f *)&e);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7));
-    *(int *)((char *)(temp_s1) + 56) = (int)igWindow_GetOrCreateMetaObject();
-    temp_a0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8));
-    f.x = 0;
-    f.y = 0;
-    ((Gap::Math::igVec2fMetaField *)temp_a0_6)->setDefault(*(const igVec2f *)&f);
-    temp_a0_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9));
-    g.x = 0;
-    g.y = 0;
-    ((Gap::Math::igVec2fMetaField *)temp_a0_7)->setDefault(*(const igVec2f *)&g);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFlyMode_fieldTable, g_igFlyMode_fieldHandles, g_igFlyMode_fieldOffsets, temp_s2);
+}
 }
 

@@ -45,15 +45,12 @@ class igMemoryPoolView;
 #include "dw4/maths/igRay.h"
 extern "C" void igViewerModeChangeMessage_EnsureRegistered(void);
 extern "C" void igViewerRenderer_EnsureRegistered(void);
-extern "C" void igViewMode_EnsureRegistered(void);
 extern "C" void igViewManager_EnsureRegistered(void);
 #include "dw4/gui/igBasicColorChanger.h"
 #include "dw4/gui/igBitmapFont.h"
-#include "dw4/gui/igBoxComponent.h"
 #include "dw4/gui/igDefaultAspect.h"
 #include "dw4/gui/igGuiComponentList.h"
 #include "dw4/gui/igGuiComponent.h"
-#include "dw4/gui/igGuiSystem.h"
 #include "dw4/core/igMetaFieldList.h"
 #include "dw4/core/igPointerList.h"
 #include "dw4/core/igMetaObjectList.h"
@@ -188,50 +185,17 @@ extern "C" CallbackArray *igViewerDataPumpManager_Register(void);
 extern "C" void igViewerDataPumpManager_GetMetaObjectFunction(void);
 extern "C" int text_Viewer_data_pump_manager[4];
 extern "C" void FUN_0045c040(void);
-extern "C" void *igPickMode_GetMetaObject(void);
 struct Obj_45c200 { int *vt; int w[44]; };
 extern "C" ObjectRefWord* FUN_0044ee80(ObjectRefWord*, int);
-extern "C" int g_igPickMode_vtable[4];
-extern "C" int igPickMode_GetVTable(void);
-extern "C" void igPickMode_EnsureRegistered(void);
-extern "C" CallbackArray *igPickMode_Register(void);
-extern "C" void igPickMode_GetMetaObjectFunction(void);
-extern "C" void igPickMode_InitFields(void);
 extern "C" igMetaEnum *FUN_0045c540(void);
 struct S_45c5e0 { char p[36]; unsigned f; };
-extern "C" void *igRotateMode_GetMetaObject(void);
-extern "C" int g_igRotateMode_vtable[4];
 union U_45c630 { int vt; char b[160]; };
-extern "C" int igRotateMode_GetVTable(void);
-extern "C" void igRotateMode_EnsureRegistered(void);
-extern "C" CallbackArray *igRotateMode_Register(void);
-extern "C" void igRotateMode_GetMetaObjectFunction(void);
-extern "C" void igRotateMode_InitFields(void);
-extern "C" igMetaObject *igFlyMode_GetMetaObject(void);
 struct Obj_45c970 { int *vt; char p4[8]; int sub[4]; char pad[108]; int *ref; char pe[20]; };
-extern "C" int g_igFlyMode_vtable[4];
-extern "C" int igFlyMode_GetVTable(void);
-extern "C" void igFlyMode_EnsureRegistered(void);
-extern "C" CallbackArray *igFlyMode_Register(void);
-extern "C" void igFlyMode_GetMetaObjectFunction(void);
 struct V2 { int x; int y; };
 struct V3 { int x; int y; int z; };
-extern "C" void igFlyMode_InitFields(void);
-extern "C" igMetaObject *igCameraMode_GetMetaObject(void);
-extern "C" int g_igCameraMode_vtable[4];
 union U_45ccd0 { int vt; int w[21]; char b[84]; };
-extern "C" int igCameraMode_GetVTable(void);
-extern "C" void igCameraMode_EnsureRegistered(void);
-extern "C" CallbackArray *igCameraMode_Register(void);
-extern "C" void igCameraMode_GetMetaObjectFunction(void);
 #include "dw4/scenegraph/igCamera.h"
-extern "C" void igCameraMode_InitFields(void);
-extern "C" igMetaObject *igViewMode_GetOrCreateMetaObject(void);
-extern "C" void *igViewMode_GetMetaObject(void);
 struct W { int *vt; int f[19]; };
-extern "C" int igViewMode_GetVTable(void);
-extern "C" void igViewMode_GetMetaObjectFunction(void);
-extern "C" void igViewMode_InitFields(void);
 extern "C" igMetaObject *igViewManager_GetOrCreateMetaObject(void);
 extern "C" void *igViewManager_GetMetaObject(void);
 extern "C" int g_igViewManager_vtable[4];

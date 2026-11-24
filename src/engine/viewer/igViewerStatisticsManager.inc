@@ -21,7 +21,7 @@ void igViewerStatisticsManager::arkRegister()
 
 CallbackArray *igViewerStatisticsManager::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Viewer::igStatisticsItemList::arkRegister, Gap::Gfx::igVisualContext::arkRegister, Gap::Viewer::igViewerGuiFactory::arkRegister, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Viewer::igStatisticsItemList::arkRegister, Gap::Gfx::igVisualContext::arkRegister, Gap::Viewer::igViewerGuiFactory::arkRegister, Gap::Gui::igBoxComponent::arkRegister, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
 
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -64,11 +64,11 @@ void igViewerStatisticsManager::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
-        metaField->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igBoxComponent::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
-        metaField->_metaObject = (int)igBoxComponent_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gui::igBoxComponent::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);

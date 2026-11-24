@@ -753,7 +753,20 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    The component and radio-group classes are converted too (`igGuiComponentModel`, `igOnOffModel`,
    `igRadioGroupModel`, `igRadioGroup`, `igRadioGroupSelectedObserver`, `igOnOffValueObserver` and its list; spec
    `scratch/GuiLib/specs/radio.py`). `igView::isCompatible` returns `int`: retail's overrides do not normalise
-   `isOfType`'s result. Next in the Gui, Insight and Viewer libraries: the windows, managers and the viewer classes.
+   `isOfType`'s result. `igGuiComponent` is converted (alchemy-kit_202309 igGui/igGuiComponent.h; spec
+   `scratch/GuiSystem/specs/component.py`): the kit's userResetFields/userRelease are DW4's `resetFields`/
+   `userDestruct`, the controller, aspect and node stay flat; `isEnabled` returns `int` and `isPushed` and the
+   three setters take the model's `unsigned char`, as retail's callers test and pass them unnormalised.
+   `getFromPath` tests the node through an inline returning from its `if` (byte-only). Gui compiles its
+   destructor (0x450090, which igBoxComponent's C code still calls by its old name) and the four smart-pointer
+   destructors after it. `igGuiSystem` is converted over `igEventReceiver` (alchemy-kit_202309 igGui/igGuiSystem.h;
+   spec `scratch/GuiSystem/specs/system.py`): its seven event handlers, `setRootComponent`, `setMouseCursor`,
+   `showCursor`, `resetFields` (the kit's userResetFields), `move`, `pressFocusedComponent`, `getNextComponent` and
+   `updateMouseCursorPosition`, which is public while its caller, the kit's friend igMousePosObserver, is C. The
+   renderer stays flat (resetFields counts its references by hand) and the observers are created by their C
+   constructors. Gui compiles the destructor and its six smart-pointer destructors; igGuiSystemRenderer's C still
+   calls the model's by its old name. Next in the Gui, Insight and Viewer libraries: the windows, managers and the
+   viewer classes.
 6. the scene graph's node hierarchy (spec scratch/SgNodes/specs/node.py): `Gap::Sg::igNode` (alchemy-kit_202309
    igSg/igNode.h; slots 21 `getParentCount` ... 32 `removeParent` in retail's order, DW4's `userConstruct`/`userDestruct`
    standing for the kit's userInstantiate/userRelease, `_bound` an `igSmartPointer<igVolume>` over a flat `igVolume`

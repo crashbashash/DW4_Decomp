@@ -691,3 +691,29 @@ beSvPlatDataPS2	_fnameIcon1	igStringRef
 beSvPlatDataPS2	_fnameIcon2	igStringRef
 beSvPlatDataPS2	_image	igSmartPointer<igObjectList>
 beSvSlotXbox	_name	igStringRef
+igViewMode	_inverseMatrix	igMatrix44f
+igCameraMode	_cameraPath	igSmartPointer<igGraphPath>
+igCameraMode	_camera	igSmartPointer<igCamera>
+igFlyMode	_window	igSmartPointer<igWindow>
+igPickMode	_parameters	igSmartPointer<igViewerParameters>
+igPickMode	_guiSystem	igSmartPointer<igGuiSystem>
+igPickMode	_cursor	igSmartPointer<igMouseCursor>
+igPickMode	_savedCursor	igSmartPointer<igMouseCursor>
+igPickMode	_intersectTraversal	igSmartPointer<igIntersectTraversal>
+igPickMode	_ray	igSmartPointer<igRay>
+igPickMode	_hitPath	igSmartPointer<igGraphPath>
+igPickMode	_inverseProjectionMatrix	igMatrix44f
+igGuiComponent	_guiSystem	igGuiSystem *
+igGuiComponent	_controller	igSmartPointer<igGuiComponentController>
+igGuiComponent	_model	igSmartPointer<igGuiComponentModel>
+igGuiComponent	_aspect	igSmartPointer<igGuiComponentAspect>
+igGuiComponent	_parent	igGuiComponent *
+igGuiComponent	_node	igSmartPointer<igGuiComponentNode>
+igGuiComponent	_linked	bool
+igGuiSystem	_renderer	igSmartPointer<igGuiSystemRenderer>
+igGuiSystem	_model	igSmartPointer<igGuiSystemModel>
+igGuiSystem	_viewList	igSmartPointer<igViewList>
+igGuiSystem	_root	igSmartPointer<igAttrSet>
+igGuiSystem	_mouseCursor	igSmartPointer<igMouseCursor>
+igGuiSystem	_mouseCursorTransform	igSmartPointer<igTransform>
+igGuiSystem	_mouseCursorVisible	bool

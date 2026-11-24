@@ -73,7 +73,7 @@ void igViewManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewManager_Register);
 }
 
-static igMetaObjectCallback g_igViewManager_callbackList[] = { igViewMode_EnsureRegistered, Gap::Viewer::igViewModel::arkRegister, Gap::Core::igObjectList::arkRegister, 0 };
+static igMetaObjectCallback g_igViewManager_callbackList[] = { Gap::Viewer::igViewMode::arkRegister, Gap::Viewer::igViewModel::arkRegister, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *igViewManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -132,7 +132,7 @@ void igViewManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewManager_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igViewMode_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Viewer::igViewMode::getClassTypeLazy();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Viewer::igViewModel::getClassTypeLazy();

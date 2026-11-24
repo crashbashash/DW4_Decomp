@@ -5361,3 +5361,147 @@ beModelCtrlSubComBase	static igMetaField *k_runFrame;
 beModelCtrlSubComBase	static igMetaField *k_startFrame;
 igAppearanceListList	IG_OBJECT_DEFINE(igAppearanceListList)
 igLightSetList	IG_OBJECT_DEFINE(igLightSetList)
+igViewMode	IG_OBJECT_DEFINE(igViewMode)
+igViewMode	public: static igMetaField *k_inverseMatrix;
+igViewMode	public: virtual int isCompatible(igModel *model) { return model->isOfType(Gap::Viewer::igViewModel::getClassTypeSafe()); }
+igViewMode	virtual void notify(const igNotifyEvent &event);
+igViewMode	virtual void onKeyEvent(int key, int down);
+igViewMode	virtual void onMouseMove(float x, float y);
+igViewMode	virtual void onMouseButton(int button, int pressed);
+igViewMode	virtual void onStickEvent(int unused, unsigned short stick, float x, float y);
+igViewMode	virtual void onButtonEvent(void *unused, int key, int down);
+igViewMode	virtual void update(float seconds);
+igViewMode	virtual void onAttach();
+igViewMode	virtual void onDetach();
+igViewMode	void updateInverseMatrix();
+igViewMode	void updateModelVectors();
+igViewMode	void updateViewMatrix();
+igCameraMode	IG_OBJECT_DEFINE(igCameraMode)
+igCameraMode	public: static igMetaField *k_cameraPath;
+igCameraMode	static igMetaField *k_camera;
+igCameraMode	public: virtual void update(float seconds);
+igCameraMode	virtual void onAttach();
+igCameraMode	virtual void onDetach();
+igCameraMode	void setCameraPath(igObject *path);
+igFlyMode	IG_OBJECT_DEFINE(igFlyMode)
+igFlyMode	public: static igMetaField *k_moveDirection;
+igFlyMode	static igMetaField *k_joystickT;
+igFlyMode	static igMetaField *k_joystickR;
+igFlyMode	static igMetaField *k_lastTranslation;
+igFlyMode	static igMetaField *k_lastRotation;
+igFlyMode	static igMetaField *k_speed;
+igFlyMode	static igMetaField *k_aiming;
+igFlyMode	static igMetaField *k_window;
+igFlyMode	static igMetaField *k_mousePos;
+igFlyMode	static igMetaField *k_lastAim;
+igFlyMode	static igMetaField *k_lastAimValid;
+igFlyMode	public: virtual void onKeyEvent(int key, int down);
+igFlyMode	virtual void onMouseMove(float x, float y);
+igFlyMode	virtual void onMouseButton(int button, int pressed);
+igFlyMode	virtual void onStickEvent(int unused, unsigned short stick, float x, float y);
+igFlyMode	virtual void update(float seconds);
+igFlyMode	virtual void onAttach();
+igFlyMode	virtual void onDetach();
+igFlyMode	void applyRotation(float seconds);
+igFlyMode	void applyAim();
+igRotateMode	IG_OBJECT_DEFINE(igRotateMode)
+igRotateMode	public: static igMetaField *k_distance;
+igRotateMode	static igMetaField *k_lastMousePos;
+igRotateMode	static igMetaField *k_leftMouseActive;
+igRotateMode	static igMetaField *k_middleMouseActive;
+igRotateMode	static igMetaField *k_rightMouseActive;
+igRotateMode	static igMetaField *k_joystickT;
+igRotateMode	static igMetaField *k_joystickR;
+igRotateMode	static igMetaField *k_constraint;
+igRotateMode	static igMetaField *k_constraintAxis;
+igRotateMode	static igMetaField *k_active;
+igRotateMode	static igMetaField *k_maya;
+igRotateMode	static igMetaField *k_head;
+igRotateMode	static igMetaField *k_roll;
+igRotateMode	static igMetaField *k_pitch;
+igRotateMode	static igMetaField *k_zoom;
+igRotateMode	static igMetaField *k_translation;
+igRotateMode	public: virtual void onKeyEvent(int key, int down);
+igRotateMode	virtual void onMouseMove(float x, float y);
+igRotateMode	virtual void onMouseButton(int button, int pressed);
+igRotateMode	virtual void onStickEvent(int unused, unsigned short stick, float x, float y);
+igRotateMode	virtual void update(float seconds);
+igRotateMode	virtual void onAttach();
+igRotateMode	virtual void applyDrag(const float *delta);
+igRotateMode	virtual void mouseMotionNormal(const float *delta);
+igPickMode	IG_OBJECT_DEFINE(igPickMode)
+igPickMode	public: static igMetaField *k_parameters;
+igPickMode	static igMetaField *k_guiSystem;
+igPickMode	static igMetaField *k_cursor;
+igPickMode	static igMetaField *k_savedCursor;
+igPickMode	static igMetaField *k_savedCursorState;
+igPickMode	static igMetaField *k_intersectTraversal;
+igPickMode	static igMetaField *k_ray;
+igPickMode	static igMetaField *k_impactLength;
+igPickMode	static igMetaField *k_hit;
+igPickMode	static igMetaField *k_hitPath;
+igPickMode	static igMetaField *k_inverseProjectionMatrix;
+igPickMode	static igMetaField *k_joystickT;
+igPickMode	public: virtual void onMouseButton(int button, int pressed);
+igPickMode	virtual void onStickEvent(int unused, unsigned short stick, float x, float y);
+igPickMode	virtual void onButtonEvent(void *unused, int key, int down);
+igPickMode	virtual void update(float seconds);
+igPickMode	virtual void onAttach();
+igPickMode	virtual void onDetach();
+igPickMode	void pick();
+igGuiComponent	IG_OBJECT_DEFINE(igGuiComponent)
+igGuiComponent	private: static igMetaField *k_guiSystem;
+igGuiComponent	protected: static igMetaField *k_controller;
+igGuiComponent	static igMetaField *k_model;
+igGuiComponent	static igMetaField *k_aspect;
+igGuiComponent	static igMetaField *k_parent;
+igGuiComponent	static igMetaField *k_node;
+igGuiComponent	static igMetaField *k_linked;
+igGuiComponent	public: inline igGuiComponentController *getController() const { return _controller; }
+igGuiComponent	inline igGuiComponentModel *getModel() const { return _model; }
+igGuiComponent	inline igGuiComponentAspect *getAspect() const { return _aspect; }
+igGuiComponent	inline void setParent(igGuiComponent *parentParam) { _parent = parentParam; }
+igGuiComponent	inline igGuiComponent *getParent() const { return _parent; }
+igGuiComponent	inline void setGuiSystem(igGuiSystem *guiSystemParam) { _guiSystem = guiSystemParam; }
+igGuiComponent	inline igGuiComponentNode *getNode() const { return _node; }
+igGuiComponent	inline bool isLinked() { return _linked; }
+igGuiComponent	void unlink();
+igGuiComponent	igGuiComponent *getNextChild(igGuiComponent *child, IG_DIRECTION direction);
+igGuiComponent	int isEnabled();
+igGuiComponent	void setHasFocus(unsigned char hasFocus);
+igGuiComponent	void setMouseOver(unsigned char mouseOver);
+igGuiComponent	void setPushed(unsigned char pushed);
+igGuiComponent	unsigned char isPushed();
+igGuiComponent	static igGuiComponent *getFromPath(igGraphPath *gp);
+igGuiComponent	virtual void resetFields(int persistent);
+igGuiComponent	virtual void userDestruct();
+igGuiSystem	IG_OBJECT_DEFINE(igGuiSystem)
+igGuiSystem	private: static igMetaField *k_renderer;
+igGuiSystem	static igMetaField *k_model;
+igGuiSystem	static igMetaField *k_viewList;
+igGuiSystem	static igMetaField *k_root;
+igGuiSystem	static igMetaField *k_mouseCursor;
+igGuiSystem	static igMetaField *k_mouseCursorTransform;
+igGuiSystem	static igMetaField *k_mouseCursorVisible;
+igGuiSystem	public: inline igGuiSystemRenderer *getRenderer() const { return _renderer; }
+igGuiSystem	inline igGuiSystemModel *getModel() const { return _model; }
+igGuiSystem	inline igMouseCursor *getMouseCursor() const { return _mouseCursor; }
+igGuiSystem	inline bool getMouseCursorVisible() const { return _mouseCursorVisible; }
+igGuiSystem	virtual bool keyEvent(Display::igKey::KEY_VALUES key, bool status);
+igGuiSystem	virtual bool mouseMotionEvent(float x, float y);
+igGuiSystem	virtual bool mouseButtonEvent(Display::igMouse::MOUSE_BUTTON button, bool status);
+igGuiSystem	virtual bool controllerMotionEvent(int controllerNum, unsigned short joystick, float x, float y);
+igGuiSystem	virtual bool controllerButtonEvent(int controllerNum, Display::igController::BUTTONS button, bool status);
+igGuiSystem	virtual bool windowResizeEvent(int width, int height);
+igGuiSystem	virtual bool windowCloseEvent();
+igGuiSystem	void setRootComponent(igGuiComponent *component);
+igGuiSystem	void setMouseCursor(igMouseCursor *cursor);
+igGuiSystem	void showCursor(bool visible);
+igGuiSystem	inline bool closeRequested() { return _model->_windowCloseRequested; }
+igGuiSystem	inline void setFocusedComponent(igGuiComponent *component) { _model->setFocusedComponent(component); }
+igGuiSystem	void updateMouseCursorPosition(igVec3f position);
+igGuiSystem	protected: virtual void resetFields(int persistent);
+igGuiSystem	void move(IG_DIRECTION direction);
+igGuiSystem	void pressFocusedComponent();
+igGuiSystem	igGuiComponent *getNextComponent(igGuiComponent *component, IG_DIRECTION direction);
+igBoxComponent	IG_OBJECT_DEFINE(igBoxComponent)

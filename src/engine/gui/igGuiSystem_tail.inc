@@ -1,116 +1,87 @@
-static inline void set(R_456780 *&field, R_456780 *value) {
+/* The renderer is still flat: resetFields counts its scene and model references by hand. */
+static inline void setReference(int &field, ::igObject *value)
+{
     igObject::ref(value);
-    R_456780 *old = field;
+    ::igObject *old = (::igObject *)field;
     igObject::release(old);
-    field = value;
-}
-
-void igGuiSystem_resetFields(A_456780 *self, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)self, flags);
-    igSmartPointer<R_456780> first(0);
-    int allocator = (int)(((Gap::Core::igObject *)self)->getMemoryPool());
-    first.release();
-    first.p = (R_456780 *)igWindowSizeObserver_Create(allocator);
-    ((Gap::Gui::igView *)(first.get()))->setModel((Gap::Gui::igModel *)self->f12);
-    ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(first.get()));
-    igSmartPointer<R_456780> second((R_456780 *)igMousePosObserver_Create((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
-    second.get()->wc = (int)self;
-    ((Gap::Gui::igView *)(second.get()))->setModel((Gap::Gui::igModel *)self->f12);
-    ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(second.get()));
-    allocator = (int)(((Gap::Core::igObject *)self)->getMemoryPool());
-    first.release();
-    first.p = (R_456780 *)igActiveComponentsObserver_Create(allocator);
-    ((Gap::Gui::igView *)(first.get()))->setModel((Gap::Gui::igModel *)self->f12);
-    ((Gap::Core::igObjectList *)self->f16)->append((Gap::Core::igObject *)(first.get()));
-    ((Gap::Sg::igGroup *)self->f20)->appendChild((Gap::Sg::igNode *)self->f28);
-    R_456780 *value = self->f20;
-    X_456780 *x = self->f8;
-    set(x->f12, value);
-    value = (R_456780 *)self->f12;
-    x = self->f8;
-    set(x->f16, value);
-}
-
-void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, bool visible) {
-    T_4569c0 *temp_a0;
-    gui->_mouseCursorVisible = visible;
-    if (visible) {
-        temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
-        temp_a0->f24 = 1.0f;
-        temp_a0->f28 = 1.0f;
-        temp_a0->f32 = 1.0f;
-        temp_a0->f36 = 1.0f;
-        temp_a0->vX();
-        return;
-    }
-    temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
-    temp_a0->f24 = g_vec4Zero[0];
-    temp_a0->f28 = g_vec4Zero[1];
-    temp_a0->f32 = g_vec4Zero[2];
-    temp_a0->f36 = g_vec4Zero[3];
-    temp_a0->vX();
-}
-
-void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor) {
-    A_456a60 *arg0 = (A_456a60 *)gui;
-    R_456a60 *arg1 = (R_456a60 *)cursor;
-    int var_v0;
-    Rc_456a60 *temp_a0;
-    P_456a60 *temp_a1;
-    Q *temp_v0;
-
-    if (arg1 != 0) {
-        ((Rc_456a60 *)arg1)->rc = ((Rc_456a60 *)arg1)->rc + 1;
-    }
-    temp_a0 = arg0->f24;
-    if (temp_a0 != 0) {
-        temp_a0->rc = temp_a0->rc - 1;
-        if (((unsigned long long)((long long)temp_a0->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->f24 = (Rc_456a60 *)arg1;
-    temp_a1 = arg0->f28;
-    temp_v0 = temp_a1->f28;
-    if (temp_v0 != 0) {
-        var_v0 = temp_v0->f8;
-    } else {
-        var_v0 = 0;
-    }
-    if (var_v0 > 0) {
-        ((Gap::Sg::igGroup *)temp_a1)->removeChild(0);
-    }
-    if (arg1 != 0) {
-        ((Gap::Sg::igGroup *)arg0->f28)->appendChild((Gap::Sg::igNode *)arg1->f8->f8);
-    }
-    igGuiSystem_SetMouseCursorVisible(gui, arg0->f32);
-    igNotifyEvent sp30((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_mousePosition);
-    ((Gap::Gui::igModel *)arg0->f12)->notifyAllViews(sp30);
-}
-
-void FUN_00456b80(int *arg0, float *arg1) {
-    float m[16];
-    struct P_456b80 *p;
-    float fx;
-    float fy;
-    float z;
-
-    p = (struct P_456b80 *)arg0[6];
-    if (p != 0) {
-        fx = p->x;
-        fy = p->y;
-        z = 0.0f;
-        igMatrix44f_SetIdentity(m);
-        arg1[0] = arg1[0] - fx;
-        arg1[1] = arg1[1] - fy;
-        arg1[2] = arg1[2] - z;
-        igMatrix44f_SetTranslation(m, arg1);
-        ((Obj_456b80 *)arg0[7])->vX(m);
-    }
+    field = (int)value;
 }
 
 namespace Gap {
 namespace Gui {
+
+void igGuiSystem::resetFields(int persistent)
+{
+    igEventReceiver::resetFields(persistent);
+    /* The observers are created by their flat C constructors, each adopted by the smart pointer (released, then
+       its word set) as the kit's `observer = igXObserver::_instantiateFromPool(pool)` compiles. */
+    igSmartPointer<igView> observer(0);
+    int pool = (int)getMemoryPool();
+    observer.release();
+    observer.p = (igView *)igWindowSizeObserver_Create(pool);
+    observer->setModel(_model);
+    _viewList->append(observer);
+    igSmartPointer<igView> mousePos((igView *)igMousePosObserver_Create((int)getMemoryPool()));
+    ((::igMousePosObserver *)mousePos.get())->_guiSystem = (int)this;
+    mousePos->setModel(_model);
+    _viewList->append(mousePos);
+    pool = (int)getMemoryPool();
+    observer.release();
+    observer.p = (igView *)igActiveComponentsObserver_Create(pool);
+    observer->setModel(_model);
+    _viewList->append(observer);
+    _root->appendChild(_mouseCursorTransform);
+    /* Byte-only: each value is read before the renderer is. */
+    ::igObject *value = (::igObject *)_root.p;
+    ::igGuiSystemRenderer *renderer = (::igGuiSystemRenderer *)_renderer.p;
+    setReference(renderer->_root, value);
+    value = (::igObject *)_model.p;
+    renderer = (::igGuiSystemRenderer *)_renderer.p;
+    setReference(renderer->_model, value);
+}
+
+void igGuiSystem::showCursor(bool visible)
+{
+    _mouseCursorVisible = visible;
+    if (visible) {
+        igGeometryElement *element = _mouseCursor->getGeometryElement();
+        element->_color[0] = 1.0f;
+        element->_color[1] = 1.0f;
+        element->_color[2] = 1.0f;
+        element->_color[3] = 1.0f;
+        element->updateColor();
+        return;
+    }
+    _mouseCursor->getGeometryElement()->setColor(g_vec4Zero);
+}
+
+void igGuiSystem::setMouseCursor(igMouseCursor *cursor)
+{
+    _mouseCursor = cursor;
+    if (_mouseCursorTransform->getChildCount() > 0)
+        _mouseCursorTransform->removeChild(0);
+    if (cursor)
+        _mouseCursorTransform->appendChild(cursor->getGeometryElement()->getGeometry());
+    showCursor(_mouseCursorVisible);
+    igNotifyEvent event(igGuiSystemModel::k_mousePosition);
+    _model->notifyAllViews(event);
+}
+
+void igGuiSystem::updateMouseCursorPosition(igVec3f position)
+{
+    igMouseCursor *cursor = _mouseCursor;
+    if (cursor) {
+        float offsetX = cursor->_offset[0];
+        float offsetY = cursor->_offset[1];
+        float offsetZ = 0.0f;
+        igMatrix44f matrix;
+        position.vec[0] = position.vec[0] - offsetX;
+        position.vec[1] = position.vec[1] - offsetY;
+        position.vec[2] = position.vec[2] - offsetZ;
+        igMatrix44f_SetTranslation(matrix.m, position.vec);
+        _mouseCursorTransform->setMatrix(&matrix);
+    }
+}
 
 void igGuiSystemModel::setFocusedComponent(igGuiComponent *component)
 {
@@ -118,73 +89,60 @@ void igGuiSystemModel::setFocusedComponent(igGuiComponent *component)
     igNotifyEvent event(k_focusedComponent);
     notifyAllViews(event);
 }
-}
-}
 
-void igGuiSystem_SetRootComponent(igGuiSystem *gui, igGuiComponent *root) {
-    W *arg0 = (W *)gui;
-    T_456cc0 *arg1 = (T_456cc0 *)root;
-    T_456cc0 **p; T_456cc0 *old; int v; LL *l;
-    if (arg0->f12->f164 != 0) { arg0->f12->f164->f8 = 0; }
-    p = &arg0->f12->f164;
-    if (arg1 != 0) { arg1->references = arg1->references + 1; }
-    old = *p;
-    if (old != 0) {
-        --old->references;
-        if (((unsigned long long)(long long)old->references & 0x7fffffULL) == 0) { igObject_Destroy((igObject *)old); }
-    }
-    *p = arg1;
-    igNotifyEvent sp40((Gap::Core::igMetaField *)Gap::Gui::igGuiSystemModel::k_rootComponent);
-    ((Gap::Gui::igModel *)arg0->f12)->notifyAllViews(sp40);
-    l = arg0->f20->f28;
-    if (l != 0) { v = l->f8; } else { v = 0; }
-    if (v > 1) {
-        ((Gap::Sg::igGroup *)arg0->f20)->removeChild(0);
-    }
-    if (arg1 != 0) { arg0->f20->v140(0, arg1->f28); }
-    if (arg1 != 0) { arg1->f8 = (int)arg0; }
+void igGuiSystem::setRootComponent(igGuiComponent *component)
+{
+    if (_model->_rootComponent)
+        _model->_rootComponent->setGuiSystem(0);
+    _model->_rootComponent = component;
+    igNotifyEvent event(igGuiSystemModel::k_rootComponent);
+    _model->notifyAllViews(event);
+    if (_root->getChildCount() > 1)
+        _root->removeChild(0);
+    if (component)
+        _root->insertChild(0, (Sg::igNode *)component->getNode());
+    if (component)
+        component->setGuiSystem(this);
 }
 
-void *FUN_00456e10(struct O_456e10 *arg0, struct N_456e10 *arg1, int arg2) {
-    struct N_456e10 *temp_s0;
-    void *var_v0;
-
-    if (arg1 != 0) {
+igGuiComponent *igGuiSystem::getNextComponent(igGuiComponent *component, IG_DIRECTION direction)
+{
+    igGuiComponent *next;
+    if (component != 0) {
         while (1) {
-            temp_s0 = arg1->f24;
-            if (temp_s0 == 0) {
+            igGuiComponent *parent = component->getParent();
+            if (parent == 0)
                 return 0;
-            }
-            var_v0 = FUN_004555c0((igGuiComponentView *)temp_s0, (void *)arg1, (void *)arg2);
-            arg1 = temp_s0;
-            if (var_v0 != 0) {
+            next = parent->getNextChild(component, direction);
+            component = parent;
+            if (next != 0)
                 break;
-            }
         }
     } else {
-        var_v0 = arg0->f12->f164;
+        next = _model->_rootComponent;
     }
-    while (var_v0 != 0) {
-        arg1 = (struct N_456e10 *)var_v0;
-        var_v0 = FUN_004555c0((igGuiComponentView *)var_v0, (void *)0, (void *)arg2);
+    while (next != 0) {
+        component = next;
+        next = next->getNextChild(0, direction);
     }
-    return arg1;
+    return component;
 }
 
-void FUN_00456eb0(Ctl *arg0, int arg1) {
-    Item2 *s0;
-    int ok;
-    ok = 0;
-    s0 = arg0->f12->f168;
-    if (s0 != 0) {
-        ok = s0->f12->test() & 0xFF;
-    }
-    if (ok == 0) {
+void igGuiSystem::move(IG_DIRECTION direction)
+{
+    igGuiComponent *component = _model->_focusedComponent;
+    int keepsFocus = 0;
+    if (component != 0)
+        keepsFocus = ((Item_456eb0 *)component->getController())->test() & 0xFF;
+    if (keepsFocus == 0) {
         do {
-            s0 = (Item2 *)FUN_00456e10((O_456e10 *)arg0, (N_456e10 *)s0, arg1);
-            if (s0 == arg0->f12->f168 || s0 == 0) break;
-        } while ((FUN_004555e0(s0) != 0) ^ 1);
+            component = getNextComponent(component, direction);
+            if (component == _model->_focusedComponent || component == 0)
+                break;
+        } while ((component->isEnabled() != 0) ^ 1);
     }
-    ((Gap::Gui::igGuiSystemModel *)arg0->f12)->setFocusedComponent((igGuiComponent *)s0);
+    _model->setFocusedComponent(component);
+}
+}
 }
 

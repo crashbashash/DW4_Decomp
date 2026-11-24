@@ -36,7 +36,7 @@ void igGuiComponentNode_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiComponentNode_Register);
 }
 
-static igMetaObjectCallback g_igGuiComponentNode_callbackList[] = { igGuiComponent_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGuiComponentNode_callbackList[] = { Gap::Gui::igGuiComponent::arkRegister, 0 };
 
 CallbackArray *igGuiComponentNode_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -81,7 +81,7 @@ void igGuiComponentNode_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGuiComponentNode_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igGuiComponent_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiComponentNode_fieldTable, g_igGuiComponentNode_fieldHandles, g_igGuiComponentNode_fieldOffsets, temp_s2);
 }

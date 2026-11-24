@@ -137,19 +137,19 @@ void igViewerSceneInfoManager_OnSceneClipped(igViewerSceneInfoManager *self);
 struct Tag { };
 static inline igPickMode *createPickMode() {
     Tag tag = Tag();
-    return igPickMode_Create(0);
+    return (igPickMode *)Gap::Viewer::igPickMode::_instantiateFromPool(0);
 }
 static inline igFlyMode *createFlyMode() {
     Tag tag = Tag();
-    return igFlyMode_Create(0);
+    return (igFlyMode *)Gap::Viewer::igFlyMode::_instantiateFromPool(0);
 }
 static inline igRotateMode *createRotateMode() {
     Tag tag = Tag();
-    return igRotateMode_Create(0);
+    return (igRotateMode *)Gap::Viewer::igRotateMode::_instantiateFromPool(0);
 }
 static inline igCameraMode *createCameraMode() {
     Tag tag = Tag();
-    return igCameraMode_Create(0);
+    return (igCameraMode *)Gap::Viewer::igCameraMode::_instantiateFromPool(0);
 }
 static inline void setCursor(const igSmartPointer<igPickMode> &ref, const igSmartPointer<igObject> &cursor) {
     igObject *value = cursor.p;
@@ -389,7 +389,6 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
 }
 
 void igViewerSceneInfoManager_OnActivate(void);
-#include "dw4/gui/igGuiSystem.h"
 #include "dw4/insight/igViewportResizedMessage.h"
 #include "dw4/insight/igMessenger.h"
 
@@ -447,7 +446,7 @@ struct MessageReceiver : igObject {
  * viewport-resize receiver, and the renderers themselves; the GUI starts hidden. */
 void igViewerSceneInfoManager_Activate(igViewerSceneInfoManager *self) {
     igViewerSceneInfoManager_OnActivate();
-    igGuiSystem_SetRootComponent((igGuiSystem *)self->_gui, (igGuiComponent *)self->_rootComponent);
+    ((Gap::Gui::igGuiSystem *)self->_gui)->setRootComponent((Gap::Gui::igGuiComponent *)self->_rootComponent);
     int dispatcher = ((igInsightCore *)self->_insight)->_dispatcher;
     igEventDispatcher_AddReceiverOrder((igEventDispatcher *)dispatcher, (igObject *)(((igInsightCore *)self->_insight)->_windowResizeReceiver), (igObject *)self->_gui);
     igEventDispatcher_AddReceiverOrder((igEventDispatcher *)dispatcher, (igObject *)self->_gui, (igObject *)self->_hotKeyReceiver);
@@ -916,7 +915,7 @@ void igViewerSceneInfoManager_ApplyOperationMode(igViewerSceneInfoManager *self)
         if (mode >= first) {
                 first = mode - first;
             igSmartPointer<igCameraMode> camera(createCameraMode());
-            igCameraMode_SetCameraPath(camera.p, (igObject *)(((int *)((igObjectList *)((igViewerParameters *)self->_parameters)->_cameras)->_data)[first]));
+            ((Gap::Viewer::igCameraMode *)camera.p)->setCameraPath((Gap::Core::igObject *)(((int *)((igObjectList *)((igViewerParameters *)self->_parameters)->_cameras)->_data)[first]));
             igViewManager_SetViewMode((igViewManager *)self->_viewManager, (igViewMode *)camera.p);
             self->_clippingCheckFrame = ((igInsightCore *)self->_insight)->_frames + 1;
         }

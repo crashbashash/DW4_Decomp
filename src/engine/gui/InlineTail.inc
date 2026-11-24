@@ -15,10 +15,6 @@ int igTextElement_GetMeta(void) {
     return (int)g_igTextElement_metaObject;
 }
 
-igMetaObject *igGuiSystem_GetMeta(void) {
-    return g_igGuiSystem_metaObject;
-}
-
 igMetaObject *igGuiSystemRenderer_GetMeta(void) {
     return g_igGuiSystemRenderer_metaObject;
 }
@@ -53,10 +49,6 @@ igMetaObject *igGuiComponentNode_GetMeta(void) {
 
 int igGuiComponentController_GetMeta(void) {
     return (int)g_igGuiComponentController_metaObject;
-}
-
-igMetaObject *igGuiComponent_GetMeta(void) {
-    return g_igGuiComponent_metaObject;
 }
 
 igMetaObject *igEventDispatcher_GetMeta(void) {
@@ -99,10 +91,6 @@ int igCharMetricsList_GetMeta(void) {
     return (int)g_igCharMetricsList_metaObject;
 }
 
-igMetaObject *igBoxComponent_GetMeta(void) {
-    return g_igBoxComponent_metaObject;
-}
-
 igMetaObject *igDefaultAspectElement_GetMeta(void) {
     return g_igDefaultAspectElement_metaObject;
 }
@@ -133,7 +121,7 @@ igMetaObject *igDefaultAspectElementList_GetElementMeta(void) {
 }
 
 igMetaObject *igGuiComponentList_GetElementMeta(void) {
-    return g_igGuiComponent_metaObject;
+    return Gap::Gui::igGuiComponent::getClassMeta();
 }
 
 void igCharMetricsList_TrimCapacity(igCharMetricsList *self) {
