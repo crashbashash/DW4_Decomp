@@ -387,10 +387,10 @@ int beMatCtrl_OnMessage(beMatCtrl *self, beMatCtrlInfoRam *ram, beMessengerWork 
     beMatCtrlInfo *info = (beMatCtrlInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beMatCtrl_GetMessageEnum(), (const char *)message->_message)) {
     case MESSAGE_SHOWMAT:
-        igSwitch_EnableAllChildren((igSwitch *)info->_switchgraph);
+        ((Gap::Sg::igSwitch *)info->_switchgraph)->activateAllChildren();
         break;
     case MESSAGE_HIDEMAT:
-        igSwitch_DisableAllChildren((igSwitch *)info->_switchgraph);
+        ((Gap::Sg::igSwitch *)info->_switchgraph)->deactivateAllChildren();
         break;
     case MESSAGE_SHOW_LUACALL:
         self->_isLuaCallDisp = 1;

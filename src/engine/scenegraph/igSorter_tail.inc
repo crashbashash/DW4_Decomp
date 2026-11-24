@@ -628,63 +628,51 @@ void FUN_001dc610(igSorter *sorter) {
     }
 }
 
-void igSwitch_EnableChild(igSwitch *self, unsigned int arg1) {
-    int *temp_a1;
-    int temp_a2_2;
-    unsigned int temp_a3;
-    void *temp_a2;
-    int nv;
+namespace Gap {
+namespace Sg {
 
-    temp_a2 = (void *)(self->_childMask);
-    temp_a3 = arg1 >> 5;
-    temp_a1 = (int *)(*(int *)((char *)(temp_a2) + 16) + (temp_a3 * 4));
-    temp_a2_2 = *(int *)((char *)(temp_a2) + 8);
-    nv = (1 << (arg1 & 0x1F)) | *temp_a1;
-    if ((temp_a2_2 != 0) && ((int) temp_a3 >= 0) && ((int) temp_a3 < temp_a2_2)) {
-        *temp_a1 = nv;
+void igSwitch::activateChild(unsigned int index)
+{
+    /* igBitMask's inline bit setter, open-coded (the class is still flat): the word is read before its index is checked */
+    ::igBitMask *mask = _childMask;
+    unsigned int word = index >> 5;
+    int *slot = (int *)(mask->_data + word * 4);
+    int count = mask->_count;
+    int value = (1 << (index & 0x1F)) | *slot;
+    if (count != 0 && (int)word >= 0 && (int)word < count) {
+        *slot = value;
     }
 }
 
-void igSwitch_EnableAllChildren(igSwitch *sw) {
-    igBitMask_SetAll((igBitMask *)sw->_childMask);
+void igSwitch::activateAllChildren()
+{
+    igBitMask_SetAll(_childMask);
 }
 
-void igSwitch_DisableChild(igSwitch *self, unsigned int arg1) {
-    int *temp_a1;
-    int temp_a2_2;
-    unsigned int temp_a3;
-    void *temp_a2;
-    int v;
-
-    temp_a2 = (void *)(self->_childMask);
-    temp_a3 = arg1 >> 5;
-    temp_a1 = (int *)(*(int *)((char *)(temp_a2) + 16) + (temp_a3 * 4));
-    temp_a2_2 = *(int *)((char *)(temp_a2) + 8);
-    v = ~(1 << (arg1 & 0x1F)) & *temp_a1;
-    if ((temp_a2_2 != 0) && ((int) temp_a3 >= 0) && ((int) temp_a3 < temp_a2_2)) {
-        *temp_a1 = v;
+void igSwitch::deactivateChild(unsigned int index)
+{
+    /* igBitMask's inline bit clearer, open-coded (the class is still flat) */
+    ::igBitMask *mask = _childMask;
+    unsigned int word = index >> 5;
+    int *slot = (int *)(mask->_data + word * 4);
+    int count = mask->_count;
+    int value = ~(1 << (index & 0x1F)) & *slot;
+    if (count != 0 && (int)word >= 0 && (int)word < count) {
+        *slot = value;
     }
 }
 
-void igSwitch_DisableAllChildren(igSwitch *sw) {
-    igBitMask_ClearAll((igBitMask *)sw->_childMask);
+void igSwitch::deactivateAllChildren()
+{
+    igBitMask_ClearAll(_childMask);
 }
 
-int igSwitch_AppendChild(igSwitch *sw, igNode *child) {
-    int temp_s0;
-    int var_a1;
-    int a0v;
-    void *temp_v0;
-
-    temp_s0 = ((Gap::Sg::igGroup *)sw)->appendChild((Gap::Sg::igNode *)child);
-    temp_v0 = (void *)(*(int *)((char *)(sw) + 28));
-    a0v = *(int *)((char *)(sw) + 32);
-    if (temp_v0 != 0) {
-        var_a1 = *(int *)((char *)(temp_v0) + 8);
-    } else {
-        var_a1 = 0;
-    }
-    igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
-    return temp_s0;
+int igSwitch::appendChild(igNode *child)
+{
+    int index = igGroup::appendChild(child);
+    igBitMask_SetBitCount(_childMask, getChildCount());
+    return index;
+}
+}
 }
 

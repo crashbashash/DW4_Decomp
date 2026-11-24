@@ -189,9 +189,9 @@ int igCommonTraversal_TraverseBillboard(C_1b8f20 *arg0, D *arg1) {
     if (n == 0) v = 0; else v = *(int *)((char *)a->data + (n - 1) * 4);
     if (v != 0) {
         igMatrix44f_Multiply((float *)sp40, (const float *)(v + 12), (const float *)s0);
-        FUN_001b1aa0((igBillboard *)arg1, (float *)sp80, (const float *)sp40, (const float *)s0);
+        ((Gap::Sg::igBillboard *)arg1)->computeTransform((igMatrix44f *)sp80, (const igMatrix44f *)sp40, (const igMatrix44f *)s0);
     } else {
-        FUN_001b1aa0((igBillboard *)arg1, (float *)sp80, (const float *)&g_matrix44Identity, (const float *)s0);
+        ((Gap::Sg::igBillboard *)arg1)->computeTransform((igMatrix44f *)sp80, (const igMatrix44f *)&g_matrix44Identity, (const igMatrix44f *)s0);
     }
     lb = arg0->l72;
     if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool));

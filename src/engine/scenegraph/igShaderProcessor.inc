@@ -1,48 +1,49 @@
-int FUN_00198b60(int arg0) {
-    igShaderProcessor_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance((igMetaObject *)g_igShaderProcessor_metaObject, (igMemoryPoolView *)arg0);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igShaderProcessor_metaObject;
-
-igMetaObject *igShaderProcessor_GetMetaObject(void)
+igShaderProcessor *igShaderProcessor::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igShaderProcessor_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igShaderProcessor_EnsureRegistered();
-    return g_igShaderProcessor_metaObject;
+    arkRegister();
+    return (igShaderProcessor *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igShaderProcessor_GetVTable(void) {
-    struct Obj_198bf0 obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igShaderProcessor_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
+igMetaObject *igShaderProcessor::_Meta;
 
-void igShaderProcessor_EnsureRegistered(void)
+igMetaObject *igShaderProcessor::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igShaderProcessor_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igShaderProcessor_Register(void) {
+void *igShaderProcessor::retrieveVTablePointer()
+{
+    igShaderProcessor temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igShaderProcessor::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igShaderProcessor::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igShaderProcessor_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igShaderProcessor_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igShaderProcessor",
-        8, /* instance size */
-        igShaderProcessor_GetVTable,
+        sizeof(igShaderProcessor),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igShaderProcessor_GetMetaObjectFunction(void) {
-    igShaderProcessor_GetMetaObject();
+}
 }
 

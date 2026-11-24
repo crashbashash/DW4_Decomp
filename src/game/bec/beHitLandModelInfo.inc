@@ -35,7 +35,7 @@ void beHitLandModelInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beHitLandModelInfo_Register);
 }
 
-static igMetaObjectCallback g_beHitLandModelInfo_callbackList[] = { igSwitch_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
+static igMetaObjectCallback g_beHitLandModelInfo_callbackList[] = { Gap::Sg::igSwitch::arkRegister, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beHitLandModelInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -95,9 +95,9 @@ void beHitLandModelInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandModelInfo_ctorTable, 4);
     switchgraph = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchgraph)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchgraph)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     checkSwitch = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)checkSwitch)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)checkSwitch)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     nameList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)nameList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beHitLandModelInfo_fieldTable, g_beHitLandModelInfo_fieldHandles, g_beHitLandModelInfo_fieldOffsets, base);

@@ -34,7 +34,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (((Gap::Core::igObject *)node)->isOfType((igMetaObject *)g_igGeometry_metaObject) != 0 || ((Gap::Core::igObject *)node)->isOfType(((igMetaObject **)g_igCompiledGraph_metaObject)[0]) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType((igMetaObject *)Gap::Sg::igGeometry::getClassMeta()) != 0 || ((Gap::Core::igObject *)node)->isOfType(((igMetaObject **)g_igCompiledGraph_metaObject)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;
@@ -66,7 +66,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 4) {
-        if (((Gap::Core::igObject *)node)->isOfType(g_igGeometry_metaObject) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGeometry::getClassMeta()) != 0) {
             HitMatrix *matrix;
             unsigned int attrCount;
             unsigned int segmentCount;
@@ -224,10 +224,6 @@ int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *
 
 igMetaObject *igTransform_GetMeta(void) {
     return g_igTransform_metaObject;
-}
-
-int igGeometry_GetMeta(void) {
-    return ((int)g_igGeometry_metaObject);
 }
 
 void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix *parent, int context) {

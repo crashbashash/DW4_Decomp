@@ -112,7 +112,7 @@ void igAnimationDatabase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationDatabase_Register);
 }
 
-static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { Gap::Sg::igSkeletonList::arkRegister, igAnimationList_EnsureRegistered, Gap::Sg::igSkinList::arkRegister, igAppearanceList_EnsureRegistered, igAnimationCombinerList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationDatabase_callbackList[] = { Gap::Sg::igSkeletonList::arkRegister, igAnimationList_EnsureRegistered, Gap::Sg::igSkinList::arkRegister, Gap::Sg::igAppearanceList::arkRegister, igAnimationCombinerList_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationDatabase_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -186,7 +186,7 @@ void igAnimationDatabase_InitFields(void) {
     ((igObjectRefMetaField *)skinListField)->_metaObject = (int)Gap::Sg::igSkinList::getClassTypeLazy();
     ((igRefMetaField *)skinListField)->_construct = 1;
     appearanceListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)appearanceListField)->_metaObject = (int)igAppearanceList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)appearanceListField)->_metaObject = (int)Gap::Sg::igAppearanceList::getClassTypeLazy();
     ((igRefMetaField *)appearanceListField)->_construct = 1;
     combinerListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
     ((igObjectRefMetaField *)combinerListField)->_metaObject = (int)igAnimationCombinerList_GetOrCreateMetaObject();

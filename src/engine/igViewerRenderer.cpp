@@ -100,7 +100,7 @@ int igViewerRenderer_ObjectsTraverseNodeSelect(igTraversal *traversal, igNode *n
     if (node->_flags & 1) {
         kind = (int *)g_igTransform_metaObject;
         if ((int *)((igObjectDispatchView *)node)->GetMeta() == kind
-            || (kind = (int *)g_igLightSet_metaObject, (int *)((igObjectDispatchView *)node)->GetMeta() == kind)) return 0;
+            || (kind = (int *)Gap::Sg::igLightSet::getClassMeta(), (int *)((igObjectDispatchView *)node)->GetMeta() == kind)) return 0;
         if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGroup::getClassMeta()) != 0) return 2;
     }
     return 1;
@@ -408,7 +408,7 @@ void igViewerRenderer_ViewportResized(igViewerRenderer *self) {
 void igViewerRenderer_UpdateProjection(igViewerRenderer *self) {
     igViewerParameters *params;
     params = (igViewerParameters *)self->_parameters;
-    igCommonTraversal_SetPerspective((void *)self->_sceneTraversal, params->_hfov, -1.0f, params->_ratio, params->_nearPlane, params->_farPlane);
+    ((Gap::Sg::igCommonTraversal *)self->_sceneTraversal)->setPerspective(params->_hfov, -1.0f, params->_ratio, params->_nearPlane, params->_farPlane);
     igMatrix44f_Copy(((igViewerParameters *)self->_parameters)->_projectionMatrix, ((igFrustCullTraversal *)self->_sceneTraversal)->_projMat);
     igNotifyEvent projectionChanged((Gap::Core::igMetaField *)g_igViewerParameters_projectionMatrixMetaField);
     ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(projectionChanged);
@@ -418,8 +418,8 @@ void igViewerRenderer_UpdateViewMatrix(igViewerRenderer *self) {
     float viewMatrix[16];
 
     igMatrix44f_Copy(viewMatrix, ((igViewerParameters *)self->_parameters)->_viewMatrix);
-    igCommonTraversal_SetViewMatrix(self->_sceneTraversal, (int *)viewMatrix);
-    igCommonTraversal_SetViewMatrix(self->_lightTraversal, (int *)viewMatrix);
+    ((Gap::Sg::igCommonTraversal *)self->_sceneTraversal)->setViewMatrix((const igMatrix44f *)viewMatrix);
+    ((Gap::Sg::igCommonTraversal *)self->_lightTraversal)->setViewMatrix((const igMatrix44f *)viewMatrix);
     ((igTransformDispatchView *)self->_headlightTransform)->SetMatrix(((igFrustCullTraversal *)self->_sceneTraversal)->_viewMatInv);
 }
 
@@ -500,7 +500,7 @@ void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node) {
                     offset += 4;
                 } while (i < count);
             }
-        } else if (((Gap::Core::igObject *)node)->isOfType(g_igLightSet_metaObject) != 0) {
+        } else if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igLightSet::getClassMeta()) != 0) {
             count = ((igObjectList *)node->_childList)->_count;
             i = 0;
             if (0 < count) {

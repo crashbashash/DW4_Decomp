@@ -224,12 +224,6 @@ int *igSmartPointer_igEnvironmentMapShader2List_Construct(int *p)
     return p;
 }
 
-int *FUN_001a2c50(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
-
 int *igSmartPointer_igCompiledTransformList_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;

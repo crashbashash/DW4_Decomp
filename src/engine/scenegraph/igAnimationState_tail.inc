@@ -55,11 +55,16 @@ int FUN_001af620(igAppearanceView *a, void *t) {
     return result;
 }
 
-void igAppearance_AttachGraph(igAppearance *appearance, igNode *graph) {
-    ((Gap::Core::igObjectList *)appearance->_attachedGraphs)->append((Gap::Core::igObject *)graph);
+namespace Gap {
+namespace Sg {
+
+void igAppearance::attachGraph(igNode *graph) {
+    ((Gap::Core::igObjectList *)_attachedGraphs.p)->append((Gap::Core::igObject *)graph);
 }
 
-int igAppearance_DetachGraph(igAppearance *appearance, igNode *graph) {
-    return ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)appearance->_attachedGraphs))->removeAllByValue((Gap::Core::igObject *)graph, 0) > 0;
+bool igAppearance::detachGraph(igNode *graph) {
+    return ((Gap::Core::igObjectList *)((igTDataList< ::igObject *> *)_attachedGraphs.p))->removeAllByValue((Gap::Core::igObject *)graph, 0) > 0;
+}
+}
 }
 

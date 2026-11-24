@@ -42,8 +42,8 @@ CallbackArray *igOverrideAttrSet_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igOverrideAttrSet_metaObject,
-        igAttrSet_Register,
-        igAttrSet_GetPublishedMetaObject,
+        Gap::Sg::igAttrSet::arkRegisterInternal,
+        Gap::Sg::igAttrSet::getClassMeta,
         igOverrideAttrSet_GetMetaObjectFunction,
         "igOverrideAttrSet",
         0x28, /* instance size */

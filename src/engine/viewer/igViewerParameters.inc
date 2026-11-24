@@ -81,7 +81,7 @@ void igViewerParameters_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerParameters_Register);
 }
 
-static igMetaObjectCallback g_igViewerParameters_callbackList[] = { Gap::Sg::igGroup::arkRegister, igBitMask_EnsureRegistered, igGraphPathList_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerParameters_callbackList[] = { Gap::Sg::igGroup::arkRegister, igBitMask_EnsureRegistered, Gap::Sg::igGraphPathList::arkRegister, Gap::Sg::igGraphPath::arkRegister, 0 };
 
 CallbackArray *igViewerParameters_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -306,10 +306,10 @@ void igViewerParameters_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)))->setDefault(1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E)))->setDefault(4);
     temp_s2_3 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F);
-    temp_s2_3->f56 = (int)igGraphPathList_GetOrCreateMetaObject();
+    temp_s2_3->f56 = (int)Gap::Sg::igGraphPathList::getClassTypeLazy();
     temp_s2_3->f52 = 1;
     temp_s2_4 = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22);
-    temp_s2_4->f56 = (int)(igGraphPath_GetOrCreateMetaObject());
+    temp_s2_4->f56 = (int)(Gap::Sg::igGraphPath::getClassTypeLazy());
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x23)))->setDefault(1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x24)))->setDefault(2);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x25)))->setDefault(1.0f);

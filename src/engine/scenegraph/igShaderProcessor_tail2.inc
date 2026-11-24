@@ -1,9 +1,16 @@
-int igShaderProcessor_Configure(void *arg0, void *arg1) {
-    return *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg1) + 36)) + 8)) + 8) > 0;
+namespace Gap {
+namespace Sg {
+
+bool igShaderProcessor::configure(igSimpleShaderDispatchView *shader, igCapabilityManager *capabilityManager)
+{
+    return shader->_shaderData->getPassCount() > 0;
 }
 
-void igShaderProcessor_Update(void) {
+void igShaderProcessor::update(igSimpleShaderDispatchView *shader, igCommonTraversal *ct)
+{
 
+}
+}
 }
 
 void FUN_001d9090(SkeletonBitOwnerView *o, int index, int value) {

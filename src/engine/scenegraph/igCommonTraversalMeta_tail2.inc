@@ -1,10 +1,15 @@
-void FUN_001a44d0(void) {
-    igCommonTraversal_UserRegister();
-    igMetaObject_AddRegistrationCallback((int)igCommonTraversal_RegisterClass);
+namespace Gap {
+namespace Sg {
+
+void igCommonTraversal::arkRegisterUser() {
+    userRegister();
+    igMetaObject_AddRegistrationCallback((int)registerClass);
+}
+}
 }
 
 void thunk_igCommonTraversal_UserUnregister(void) {
-    igCommonTraversal_UserUnregister();
+    Gap::Sg::igCommonTraversal::userUnregister();
 }
 
 int *igSmartPointer_igMetaObjectList_Construct(int *p)

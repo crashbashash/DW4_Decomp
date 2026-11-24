@@ -22,14 +22,14 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
             }
             for (i = 0; i < count; i++) {
                 child = node->children->data[i];
-                FUN_001c5870((void *)path, i);
+                ((Gap::Sg::igGraphPath *)path)->pushNode(i);
                 FUN_001d6410(collector, (TraversedNode *)child, path);
-                FUN_001c58c0((T_1c58c0 *)path);
+                ((Gap::Sg::igGraphPath *)path)->popNode();
             }
         }
-        if (((Gap::Core::igObject *)node)->isOfType(g_igCamera_metaObject) != 0) {
-            igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create((int)((Gap::Core::igObject *)collector)->getMemoryPool())));
-            FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igCamera::getClassMeta()) != 0) {
+            igSmartPointer<PathEntry> entry(((PathEntry *)Gap::Sg::igGraphPath::_instantiateFromPool(((Gap::Core::igObject *)collector)->getMemoryPool())));
+            ((Gap::Sg::igGraphPath *)entry.p)->configure((Gap::Sg::igGraphPath *)path);
             ((Gap::Core::igObjectList *)collector->children)->append((Gap::Core::igObject *)entry.p);
         }
     }
@@ -46,15 +46,15 @@ igSmartPointer<igObject> *igSmartPointer_igGraphPath_Destruct(igSmartPointer<igO
 
 void igSceneInfo_CollectCameras(igSceneInfo *info) {
     O_1d65e0 *self = (O_1d65e0 *)info;
-    igObject *created = ((igObject *)FUN_0019f480((int)((Gap::Core::igObject *)self)->getMemoryPool()));
+    igObject *created = ((igObject *)Gap::Sg::igGraphPathList::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
     igObject::ref(created);
     igObject *previous = self->f28;
     igObject::release(previous);
     self->f28 = created;
     igObject *held = self->f28;
     held->release();
-    igSmartPointer<igObject> second(((igObject *)igGraphPath_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())));
-    FUN_001c5730((int *)(second.get()), (igObject *)self->f20);
+    igSmartPointer<igObject> second(((igObject *)Gap::Sg::igGraphPath::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool())));
+    ((Gap::Sg::igGraphPath *)(second.get()))->configure((Gap::Sg::igNode *)self->f20);
     FUN_001d6410((TraversedNode *)self, (TraversedNode *)self->f20, (void *)(second.get()));
 }
 
@@ -371,10 +371,10 @@ void FUN_001d7910(void) {
     int n;
     int j;
     void **m;
-    ((Gap::Core::igObject *)DAT_005628e0[0])->copy((Gap::Core::igObject *)g_igCommonTraversal_travProcs, 1);
-    ((Gap::Core::igObject *)DAT_005628e8[0])->copy((Gap::Core::igObject *)g_igCommonTraversal_travProcs, 1);
+    ((Gap::Core::igObject *)DAT_005628e0[0])->copy((Gap::Core::igObject *)Gap::Sg::igCommonTraversal::_getTraversalFunctions(), 1);
+    ((Gap::Core::igObject *)DAT_005628e8[0])->copy((Gap::Core::igObject *)Gap::Sg::igCommonTraversal::_getTraversalFunctions(), 1);
     clearBytes((char *)metas, 28);
-    metas[0] = ((void *)g_igLightStateSet_metaObject);
+    metas[0] = ((void *)Gap::Sg::igLightStateSet::getClassMeta());
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);
     metas[2] = ((void *)g_igMultiTextureShader_metaObject[0]);
     metas[3] = ((void *)g_igCartoonShader_metaObject[0]);
@@ -440,8 +440,8 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         arg0->b32 = 1;
     }
     FUN_001d7630((void *)arg0, (float *)((char *)arg1 + 164));
-    temp_s4 = g_igCommonTraversal_travProcs;
-    g_igCommonTraversal_travProcs = DAT_005628e0[0];
+    temp_s4 = (igTDataList<igTraversalFunctionPtr> *)Gap::Sg::igCommonTraversal::_getTraversalFunctions();
+    Gap::Sg::igCommonTraversal::_setTraversalFunctions((Gap::Sg::igTraversalFunctionList *)DAT_005628e0[0]);
     if (arg0->b140 != 0) {
         temp_s2 = arg1->f52;
         FUN_001dc500((A_1dc500 *)arg1->f68, 0, 1);
@@ -474,7 +474,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2, (igAttr *)arg0->f148);
         FUN_001dc610((igSorter *)arg1->f68);
     }
-    g_igCommonTraversal_travProcs = DAT_005628e8[0];
+    Gap::Sg::igCommonTraversal::_setTraversalFunctions((Gap::Sg::igTraversalFunctionList *)DAT_005628e8[0]);
     temp_s3 = arg1->f52;
     FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
     temp_v0 = arg0->f28;
@@ -501,8 +501,8 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629b0)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629a8)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c8)[0]);
-    temp_s2_3 = g_igCommonTraversal_travProcs;
-    g_igCommonTraversal_travProcs = DAT_005628e0[0];
+    temp_s2_3 = (igTDataList<igTraversalFunctionPtr> *)Gap::Sg::igCommonTraversal::_getTraversalFunctions();
+    Gap::Sg::igCommonTraversal::_setTraversalFunctions((Gap::Sg::igTraversalFunctionList *)DAT_005628e0[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562908)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562938)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)arg0->f156);
@@ -551,9 +551,9 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005628f8)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562998)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c0)[0]);
-    g_igCommonTraversal_travProcs = temp_s2_3;
+    Gap::Sg::igCommonTraversal::_setTraversalFunctions((Gap::Sg::igTraversalFunctionList *)temp_s2_3);
     FUN_001dc610((igSorter *)arg1->f68);
-    g_igCommonTraversal_travProcs = temp_s4;
+    Gap::Sg::igCommonTraversal::_setTraversalFunctions((Gap::Sg::igTraversalFunctionList *)temp_s4);
 }
 
 char g_disableBumpDotProduct;

@@ -216,36 +216,8 @@ void Gap__Core__igObject__vfunc_36(igTransform *self, int target)
     self->_target = target;
 }
 
-int igShaderProcessor_ConfigureRequired(void) {
-    return 0;
-}
-
-int igSwitch_GetMeta(void) {
-    return ((int)g_igSwitch_metaObject);
-}
-
-int igSwitch_IsChildrenOrdered(void) {
-    return 1;
-}
-
 int igSorter_GetMeta(void) {
     return ((int)g_igSorter_metaObject);
-}
-
-igMetaObject *igShaderInfo_GetMeta(void) {
-    return g_igShaderInfo_metaObject;
-}
-
-igMetaObject *igShaderFactory_GetMeta(void) {
-    return g_igShaderFactory_metaObject;
-}
-
-void igShaderFactory_PreloadFileCache(void) {
-
-}
-
-igMetaObject *igShaderData_GetMeta(void) {
-    return g_igShaderData_metaObject;
 }
 
 igMetaObject *igSceneInfo_GetMeta(void) {
@@ -262,76 +234,12 @@ void igPlanarShadowShader_Reset(Shader *arg0) {
     arg0->f96 = 0;
 }
 
-void Gap__Bec__ParticleTimer__vfunc_36(ParticleTimer *a0, int a1)
-{
-    a0->_trigger = a1;
-}
-
-int igGeometry_IsChildrenOrdered(void)
-{
-    return 1;
-}
-
-igMetaObject *igLod_GetMeta(void) {
-    return g_igLod_metaObject;
-}
-
-int igLod_IsChildrenOrdered(void) {
-    return 1;
-}
-
-int Gap__Sg__igLod__vfunc_37(igLod *arg0) {
-    if (arg0->_lastRange == 0) {
-        return -1;
-    }
-    return arg0->_lastIndex;
-}
-
-int igLightStateSet_GetMeta(void) {
-    return ((int)g_igLightStateSet_metaObject);
-}
-
-int igLightSet_GetMeta(void) {
-    return ((int)g_igLightSet_metaObject);
-}
-
 igMetaObject *igIntersectTraversal_GetMeta(void) {
     return g_igIntersectTraversal_metaObject;
 }
 
-igMetaObject *igIniShaderFactory_GetMeta(void) {
-    return g_igIniShaderFactory_metaObject;
-}
-
 int igFrustCullTraversal_GetMeta(void) {
     return ((int)g_igFrustCullTraversal_metaObject);
-}
-
-void Gap__Sg__igCommonTraversal__vfunc_29(S0_1e31f0 *arg0, S1_1e31f0 *arg1) {
-    S_temp_a0_1e31f0 *temp_a0;
-    if (arg1 != 0) {
-        arg1->f4 = (int)((int) (arg1->f4 + 1));
-    }
-    temp_a0 = (S_temp_a0_1e31f0 *)(arg0->f44);
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->f44 = (int)(arg1);
-}
-
-void Gap__Sg__igCommonTraversal__vfunc_27(igCommonTraversal *self, long long arg1) {
-    T_1e3270 *t;
-
-    t = (T_1e3270 *)self->_timeStack;
-    if (n_of_1e3270(t) == 0) {
-        self->_timeBuffered = 0;
-        self->_timeLong = arg1;
-    } else {
-        *(long long *)(t->arr + t->n * 8 - 8) = arg1;
-    }
 }
 
 igMetaObject *igEnbayaTransformSource_GetMeta(void) {
@@ -415,20 +323,8 @@ int igCompileTraversal_GetMeta(void) {
     return ((int)g_igCompileTraversal_metaObject);
 }
 
-igMetaObject *igCommonTraversal_GetMeta(void) {
-    return g_igCommonTraversal_metaObject;
-}
-
-int igCamera_IsTransformable(void) {
-    return 0;
-}
-
 igMetaObject *igAttrStackManager_GetMeta(void) {
     return g_igAttrStackManager_metaObject;
-}
-
-igMetaObject *igAttrSet_GetMeta(void) {
-    return g_igAttrSet_metaObject;
 }
 
 int igAnimationState_GetMeta(void) {
@@ -560,14 +456,6 @@ igMetaObject *igAnimationStatePool_GetMeta(void) {
     return g_igAnimationStatePool_metaObject;
 }
 
-igMetaObject *igAppearance_GetMeta(void) {
-    return g_igAppearance_metaObject;
-}
-
-igMetaObject *igAppearanceList_GetMeta(void) {
-    return g_igAppearanceList_metaObject;
-}
-
 igMetaObject *igAttrStack_GetMeta(void) {
     return g_igAttrStack_metaObject;
 }
@@ -578,14 +466,6 @@ igMetaObject *igAttrStackList_GetMeta(void) {
 
 igMetaObject *igNonRefCountedAttrStackManagerList_GetMeta(void) {
     return g_igNonRefCountedAttrStackManagerList_metaObject;
-}
-
-igMetaObject *igBillboard_GetMeta(void) {
-    return g_igBillboard_metaObject;
-}
-
-int igBillboard_IsTransformable(void) {
-    return 0;
 }
 
 int igBitMask_GetMeta(void) {
@@ -602,18 +482,6 @@ igMetaObject *igBlendMatrixSelect_GetMeta(void) {
 
 int igBoundingBoxesMaker_GetMeta(void) {
     return ((int)g_igBoundingBoxesMaker_metaObject);
-}
-
-igMetaObject *igCamera_GetMeta(void) {
-    return g_igCamera_metaObject;
-}
-
-void igCamera_Activate(void) {
-
-}
-
-void igCamera_Deactivate(void) {
-
 }
 
 int igCompiledTransform_GetMeta(void) {
@@ -636,22 +504,6 @@ igMetaObject *igEnvironmentMapShader2List_GetMeta(void) {
     return g_igEnvironmentMapShader2List_metaObject;
 }
 
-igMetaObject *igGeometryList_GetMeta(void) {
-    return g_igGeometryList_metaObject;
-}
-
-igMetaObject *igGraphPath_GetMeta(void) {
-    return g_igGraphPath_metaObject;
-}
-
-igMetaObject *igGraphPathList_GetMeta(void) {
-    return g_igGraphPathList_metaObject;
-}
-
-igMetaObject *igInterpretedShaderData_GetMeta(void) {
-    return g_igInterpretedShaderData_metaObject;
-}
-
 igMetaObject *igProbe_GetMeta(void) {
     return g_igProbe_metaObject;
 }
@@ -670,14 +522,6 @@ igMetaObject *igModelViewMatrixBoneSelectListSg_GetPublishedMetaObject(void) {
 
 igMetaObject *igOverrideAttrSet_GetMeta(void) {
     return g_igOverrideAttrSet_metaObject;
-}
-
-int igSegment_GetMeta(void) {
-    return ((int)g_igSegment_metaObject);
-}
-
-int igSegment_IsTransformable(void) {
-    return 0;
 }
 
 igMetaObject *igLightStateAttrPool_GetMeta(void) {
@@ -716,10 +560,6 @@ igMetaObject *igBlendMatricesAttrPool_GetMeta(void) {
     return g_igBlendMatricesAttrPool_metaObject;
 }
 
-igMetaObject *igShaderFactoryList_GetMeta(void) {
-    return g_igShaderFactoryList_metaObject;
-}
-
 igMetaObject *igRenderPackage_GetMeta(void) {
     return g_igRenderPackage_metaObject;
 }
@@ -750,10 +590,6 @@ igMetaObject *igNonRefCountedTransformList_GetMeta(void) {
 
 igMetaObject *igTransformRecorder_GetMeta(void) {
     return g_igTransformRecorder_metaObject;
-}
-
-int igTransientShaderData_GetMeta(void) {
-    return ((int)g_igTransientShaderData_metaObject);
 }
 
 igMetaObject *igRenderPackageList_GetElementMeta(void) {
@@ -814,10 +650,6 @@ igMetaObject *igAnimationCombinerList_GetElementMeta(void) {
     return g_igAnimationCombiner_metaObject;
 }
 
-igMetaObject *igAppearanceList_GetElementMeta(void) {
-    return g_igAppearance_metaObject;
-}
-
 igMetaObject *igAnimationStateList_GetElementMeta(void) {
     return g_igAnimationState_metaObject;
 }
@@ -832,10 +664,6 @@ igMetaObject *igAnimationCombinerBoneInfoList_GetElementMeta(void) {
 
 igMetaObject *igEnvironmentMapShader2List_GetElementMeta(void) {
     return g_igEnvironmentMapShader2_metaObject;
-}
-
-igMetaObject *igGraphPathList_GetElementMeta(void) {
-    return g_igGraphPath_metaObject;
 }
 
 igMetaObject *igAnimationList_GetElementMeta(void) {
@@ -863,16 +691,8 @@ int Gap__Bec__igModelViewMatrixBoneSelectList__vfunc_22(void)
     return ((int)g_igModelViewMatrixBoneSelect_metaObject);
 }
 
-igMetaObject *igShaderFactoryList_GetElementMeta(void) {
-    return g_igShaderFactory_metaObject;
-}
-
 int igCompiledTransformList_GetElementMeta(void) {
     return ((int)g_igCompiledTransform_metaObject);
-}
-
-igMetaObject *igGeometryList_GetElementMeta(void) {
-    return g_igGeometry_metaObject;
 }
 
 igMetaObject *igAttrStackList_GetElementMeta(void) {

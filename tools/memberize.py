@@ -2214,7 +2214,9 @@ def stale_keys(rows, members, macros, types, converted, scope):
     class converted after them as its flat struct (`platformLoad__Q33Gap3Gfx7igImageFP6igFile`, written while igFile
     was flat): in the Gap class's scope the parameter's class is now the Gap class
     (`…FPQ33Gap4Core6igFile`), which is the name the compiler emits. A parameter the declaration spells as the
-    flat struct (`::igFile *`) keeps it."""
+    flat struct (`::igFile *`) keeps it, and so does one that reaches the class only through a typedef
+    (`igTraversalFunction *`, a file-scope function type of `struct igTraversal *`): the typedef bound its class
+    where it was written."""
     if not converted:
         return {}
     flat = re.compile(r"(?<![\w:])(%s)\b" % "|".join(re.escape(c) for c in sorted(converted, key=len, reverse=True)))
@@ -2245,8 +2247,13 @@ def stale_keys(rows, members, macros, types, converted, scope):
                 new = compiler_name(conv, converted, scope)
             except ValueError:
                 continue
-            if new != key and _flat_form(new, converted) == _flat_form(key, converted):
-                out[key] = new
+            if new == key or _flat_form(new, converted) != _flat_form(key, converted):
+                continue
+            moved = [i for i, (old, now) in enumerate(zip(d.params, demangle(new).params)) if old != now]
+            if conv.raw_params is not None and len(conv.raw_params) == len(d.params) and \
+                    not any(flat.search(conv.raw_params[i]) for i in moved):
+                continue
+            out[key] = new
     return out
 
 

@@ -107,7 +107,7 @@ void igGuiSystem_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystem_Register);
 }
 
-static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, igGuiSystemModel_RunStaticInit, Gap::Gui::igViewList::arkRegister, igAttrSet_EnsureRegistered, igMouseCursor_RunStaticInit, igTransform_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGuiSystem_callbackList[] = { igGuiSystemRenderer_RunStaticInit, igGuiSystemModel_RunStaticInit, Gap::Gui::igViewList::arkRegister, Gap::Sg::igAttrSet::arkRegister, igMouseCursor_RunStaticInit, igTransform_EnsureRegistered, 0 };
 
 CallbackArray *igGuiSystem_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -190,7 +190,7 @@ void igGuiSystem_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Gui::igViewList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)(igAttrSet_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)(Gap::Sg::igAttrSet::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igMouseCursor_GetOrCreateMetaObject();

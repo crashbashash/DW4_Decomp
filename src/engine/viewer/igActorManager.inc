@@ -69,7 +69,7 @@ void igActorManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igActorManager_Register);
 }
 
-static igMetaObjectCallback g_igActorManager_callbackList[] = { igAppearanceList_EnsureRegistered, Gap::Sg::igNodeList::arkRegister, igActorList_EnsureRegistered, igActorManagerParams_EnsureRegistered, Gap::Core::igPointerList::arkRegister, igMetaObjectList_EnsureRegistered, Gap::Attrs::igViewportAttr::arkRegister, igViewerSceneInfoManager_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
+static igMetaObjectCallback g_igActorManager_callbackList[] = { Gap::Sg::igAppearanceList::arkRegister, Gap::Sg::igNodeList::arkRegister, igActorList_EnsureRegistered, igActorManagerParams_EnsureRegistered, Gap::Core::igPointerList::arkRegister, igMetaObjectList_EnsureRegistered, Gap::Attrs::igViewportAttr::arkRegister, igViewerSceneInfoManager_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *igActorManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -159,7 +159,7 @@ void igActorManager_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActorManager_ctorTable, 0xA);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)(igAppearanceList_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)(Gap::Sg::igAppearanceList::getClassTypeLazy());
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)(Gap::Sg::igNodeList::getClassTypeLazy());

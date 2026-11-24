@@ -1,17 +1,22 @@
-long long Gap__Sg__igCommonTraversal__vfunc_26(igCommonTraversal *t) {
-    int top; igLongStack *stack = (igLongStack *)t->_timeStack; int n = stack->_count; top = n - 1;
+namespace Gap {
+namespace Sg {
+
+long long igCommonTraversal::getTimeAsLong() {
+    int top; igLongStack *stack = _timeStack.p; int n = stack->_count; top = n - 1;
     if (n == 0) {
-        if (!t->_timeBuffered) {
-            if (t->_userTimeState) {
-                t->_timeLongBuf = t->_timeLong;
+        if (!_timeBuffered) {
+            if (_userTimeState) {
+                _timeLongBuf = _timeLong;
             } else {
-                t->_timeLongBuf = ((igTimerSourceView *)DAT_005871d8[0])->getTime();
+                _timeLongBuf = ((igTimerSourceView *)DAT_005871d8[0])->getTime();
             }
-            t->_timeBuffered = 1;
+            _timeBuffered = 1;
         }
-        return t->_timeLongBuf;
+        return _timeLongBuf;
     }
     return ((long long *)stack->_data)[top];
+}
+}
 }
 
 /* The transform source's matrix at a time (slot 21; the kit's igTransformSource::getMatrix). */
@@ -496,13 +501,13 @@ void FUN_001b4220(struct A4220 *arg0, struct B4220 *arg1) {
 
 void FUN_001b42c0(TravFlattenView *self, int root) {
     int saved[32];
-    igTDataList<igTraversalFunctionPtr> *table = g_igCommonTraversal_travProcs;
-    int meta = (int)g_igGeometry_metaObject;
+    Gap::Sg::igTraversalFunctionList *table = Gap::Sg::igCommonTraversal::_getTraversalFunctions();
+    int meta = (int)Gap::Sg::igGeometry::getClassMeta();
     int n = igMetaObject_CountTree((igMetaObject *)meta);
     int i;
     for (i = 0; i < n; i++) {
         TravObject *m = ((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i));
-        saved[i] = (int)table->_data[m->_id];
+        saved[i] = (int)table->get(m->_id);
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)table, (igMetaObject *)m, (igTraversalFunction *)FUN_001b3ad0);
     }
     DAT_005625f0 = self;
@@ -622,7 +627,7 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
     /* matching construct: declaration order (count s6, procs s5, meta s4, manager s3), from a 120-order search */
     int i;
     int count;
-    igTDataList<igTraversalFunctionPtr> *procs;
+    Gap::Sg::igTraversalFunctionList *procs;
     igMetaObject *meta;
     igAttrStackManager *manager;
     ImageView_1b4c40 *image;
@@ -646,12 +651,12 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
     self->_tcs0->set31(self->_sTexCoordIndex);
     self->_tcs1->set31(self->_oTexCoordIndex);
     manager = (igAttrStackManager *)traversal->_attrStack;
-    procs = g_igCommonTraversal_travProcs;
-    meta = g_igGeometry_metaObject;
+    procs = Gap::Sg::igCommonTraversal::_getTraversalFunctions();
+    meta = Gap::Sg::igGeometry::getClassMeta();
     count = igMetaObject_CountTree(meta);
     for (i = 0; i < count; i++) {
         igMetaObject *node = (igMetaObject *)igMetaObject_GetTreeNode(meta, i);
-        saved[i] = (int)procs->_data[node->_id];
+        saved[i] = (int)procs->get(node->_id);
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)procs, node, (igTraversalFunction *)FUN_001b4bb0);
     }
     DAT_00562638[0] = (VC_1b2fa0 *)self;
@@ -719,12 +724,15 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
     FUN_001dc610((igSorter *)traversal->_sorter);
 }
 
-void igCommonTraversal_RegisterClass(int arg0) {
-    igCommonTraversal_RegisterClassFunction(g_igCommonTraversal_travProcs, (void *)arg0);
+namespace Gap {
+namespace Sg {
+
+void igCommonTraversal::registerClass(igMetaObject *meta) {
+    _registerClass(travProcs, meta);
 }
 
-void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
-    igTraversal_RegisterClassFunction((int)(self), (int)(meta));
+void igCommonTraversal::_registerClass(igTraversalFunctionList *tpl, igMetaObject *meta) {
+    igTraversal::_registerClass(tpl, meta);
     if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
@@ -732,7 +740,7 @@ void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
         t.e[1].meta = (int)g_igProjectiveShadowShader_metaObject;
         t.e[2].meta = g_igSelfShadowShader_metaObject;
         t.e[3].meta = g_igDOFShader_metaObject[0];
-        t.e[4].meta = (int)g_igSegment_metaObject;
+        t.e[4].meta = (int)Gap::Sg::igSegment::getClassMeta();
         t.e[5].meta = (int)g_igEnvironmentMapShader2_metaObject;
         t.e[6].meta = g_igInverseKinematicsHandle_metaObject;
         t.e[7].meta = g_igInverseKinematicsSolver_metaObject;
@@ -744,19 +752,19 @@ void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
         t.e[13].meta = (int)g_unlinkedTransformClass_metaObject;
         t.e[14].meta = g_igMorphInstance_metaObject;
         t.e[15].meta = g_igMorphInstance2_metaObject;
-        t.e[16].meta = (int)g_igLod_metaObject;
-        t.e[17].meta = (int)g_igLightStateSet_metaObject;
-        t.e[18].meta = (int)g_igLightSet_metaObject;
-        t.e[19].meta = (int)g_igGeometry_metaObject;
+        t.e[16].meta = (int)Gap::Sg::igLod::getClassMeta();
+        t.e[17].meta = (int)Gap::Sg::igLightStateSet::getClassMeta();
+        t.e[18].meta = (int)Gap::Sg::igLightSet::getClassMeta();
+        t.e[19].meta = (int)Gap::Sg::igGeometry::getClassMeta();
         t.e[20].meta = (int)g_igPlanarShadowShader_metaObject;
         t.e[21].meta = g_igShader_metaObject[0];
         t.e[22].meta = g_igShader2_metaObject;
         t.e[23].meta = (int)g_igBlendMatrixSelect_metaObject;
         t.e[24].meta = (int)g_igOverrideAttrSet_metaObject;
-        t.e[25].meta = (int)g_igAttrSet_metaObject;
+        t.e[25].meta = (int)Gap::Sg::igAttrSet::getClassMeta();
         t.e[26].meta = (int)g_igTransform_metaObject;
-        t.e[27].meta = (int)g_igBillboard_metaObject;
-        t.e[28].meta = (int)g_igSwitch_metaObject;
+        t.e[27].meta = (int)Gap::Sg::igBillboard::getClassMeta();
+        t.e[28].meta = (int)Gap::Sg::igSwitch::getClassMeta();
         t.e[29].meta = (int)g_igTransformRecorder_metaObject;
         t.e[30].meta = g_igTimeTransform_metaObject[0];
         t.e[31].meta = g_igCompiledGraph_metaObject[0];
@@ -765,31 +773,24 @@ void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
         for (i = 0; i < 34; i++) {
             NodeProcEntry *e = &t.e[i];
             if (e->meta != 0 && igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)e->meta) != 0) {
-                Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)self, (igMetaObject *)meta, (igTraversalFunction *)e->proc);
+                igTraversal::_setFunction(tpl, (igMetaObject *)meta, (igTraversalFunction *)e->proc);
                 return;
             }
         }
     }
 }
 
-void igCommonTraversal_userConstruct(igCommonTraversal *self, int arg1) {
-    igObject *s0;
-    igObject *a0;
-
-    igTraversal_userConstruct((A_1e0380 *)self, arg1);
-    if (arg1 == 0) {
-        s0 = g_igCommonTraversal_travProcs;
-        igObject::ref(s0);
-        a0 = (igObject *)self->_travProcs;
-        igObject::release(a0);
-        self->_travProcs = (int)s0;
-        ((C_1b2fa0 *)self->_matrixOptimization)->vX(0);
-        *(char *)(self->_normalizeNormalsEnable + 12) = 1;
+void igCommonTraversal::userConstruct(int flag) {
+    igTraversal::userConstruct(flag);
+    if (flag == 0) {
+        cacheTravProcs();
+        _matrixOptimization->setState(false);
+        _normalizeNormalsEnable->setState(true);
     }
 }
 
-void igCommonTraversal_UserRegister(void) {
-    g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)Gap::Sg::igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587038));
+void igCommonTraversal::userRegister() {
+    travProcs = igTraversalFunctionList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     Gap::Attrs::igAttr::arkRegister();
     Gap::Attrs::igTextureBindAttr::arkRegister();
     Gap::Attrs::igModelViewMatrixAttr::arkRegister();
@@ -799,8 +800,9 @@ void igCommonTraversal_UserRegister(void) {
     igVertexBlendMatrixListAttr_EnsureRegistered();
 }
 
-void igCommonTraversal_UserUnregister(void) {
-    igTDataList<igTraversalFunctionPtr> *procs = g_igCommonTraversal_travProcs;
-    IG_OBJECT_RELEASE(procs);
+void igCommonTraversal::userUnregister() {
+    igObject::release(travProcs);
+}
+}
 }
 

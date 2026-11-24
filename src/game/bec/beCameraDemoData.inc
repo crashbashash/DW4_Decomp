@@ -34,7 +34,7 @@ void beCameraDemoData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCameraDemoData_Register);
 }
 
-static igMetaObjectCallback g_beCameraDemoData_callbackList[] = { igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCameraDemoData_callbackList[] = { Gap::Sg::igGraphPath::arkRegister, 0 };
 
 CallbackArray *beCameraDemoData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -88,7 +88,7 @@ void beCameraDemoData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraDemoData_ctorTable, 3);
     cameraPath = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)igGraphPath_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)Gap::Sg::igGraphPath::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beCameraDemoData_fieldTable, g_beCameraDemoData_fieldHandles, g_beCameraDemoData_fieldOffsets, base);
 }
 

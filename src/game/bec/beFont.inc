@@ -83,7 +83,7 @@ void beFont_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFont_Register);
 }
 
-static igMetaObjectCallback g_beFont_callbackList[] = { igAttrSet_EnsureRegistered, beFontImageList_EnsureRegistered, beFontGeomAttrPairList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFont_callbackList[] = { Gap::Sg::igAttrSet::arkRegister, beFontImageList_EnsureRegistered, beFontGeomAttrPairList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *beFont_Register(void) {
     BecLibrary_MarkRegistered();
@@ -170,7 +170,7 @@ void beFont_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beFont_ctorTable, 0xA);
     root = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
-    ((igObjectRefMetaField *)root)->_metaObject = (int)igAttrSet_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)root)->_metaObject = (int)Gap::Sg::igAttrSet::getClassTypeLazy();
     fonts = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)fonts)->_metaObject = (int)beFontImageList_GetOrCreateMetaObject();
     ((igRefMetaField *)fonts)->_construct = 1;

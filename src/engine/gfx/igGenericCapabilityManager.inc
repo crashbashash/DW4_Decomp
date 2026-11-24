@@ -30,8 +30,8 @@ CallbackArray *igGenericCapabilityManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGenericCapabilityManager_metaObject,
-        igCapabilityManager_Register,
-        igCapabilityManager_GetPublishedMetaObject,
+        Gap::Gfx::igCapabilityManager::arkRegisterInternal,
+        Gap::Gfx::igCapabilityManager::getClassMeta,
         igGenericCapabilityManager_GetMetaObjectFunction,
         "igGenericCapabilityManager",
         8, /* instance size */

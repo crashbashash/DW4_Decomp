@@ -1,53 +1,52 @@
-igMetaObject *g_igAppearanceList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAppearanceList_GetOrCreateMetaObject(void) {
-    if (g_igAppearanceList_metaObject == 0) {
-        g_igAppearanceList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAppearanceList_metaObject;
-}
+igMetaObject *igAppearanceList::_Meta;
 
-igMetaObject *igAppearanceList_GetMetaObject(void)
+igMetaObject *igAppearanceList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAppearanceList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAppearanceList_EnsureRegistered();
-    return g_igAppearanceList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAppearanceList_GetVTable(void) {
-    struct Obj_1a6080 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igAppearanceList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAppearanceList_EnsureRegistered(void)
+igMetaObject *igAppearanceList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAppearanceList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAppearanceList_callbackList[] = { igAppearance_EnsureRegistered, 0 };
+void *igAppearanceList::retrieveVTablePointer()
+{
+    igAppearanceList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAppearanceList_Register(void) {
+void igAppearanceList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAppearanceList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igAppearance::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAppearanceList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAppearanceList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAppearanceList",
-        0x14, /* instance size */
-        igAppearanceList_GetVTable,
+        sizeof(igAppearanceList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAppearanceList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAppearanceList_GetMetaObjectFunction(void) {
-    igAppearanceList_GetMetaObject();
+}
 }
 

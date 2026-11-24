@@ -43,7 +43,7 @@ void bePoint01Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(bePoint01Info_Register);
 }
 
-static igMetaObjectCallback g_bePoint01Info_callbackList[] = { igSwitch_EnsureRegistered, beGroupKeepList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_bePoint01Info_callbackList[] = { Gap::Sg::igSwitch::arkRegister, beGroupKeepList_EnsureRegistered, 0 };
 
 CallbackArray *bePoint01Info_Register(void) {
     BecLibrary_MarkRegistered();
@@ -94,7 +94,7 @@ void bePoint01Info_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_bePoint01Info_ctorTable, 2);
     switchField = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchField)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchField)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beGroupKeepList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;

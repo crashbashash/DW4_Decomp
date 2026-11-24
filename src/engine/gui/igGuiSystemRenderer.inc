@@ -44,7 +44,7 @@ void igGuiSystemRenderer_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystemRenderer_Register);
 }
 
-static igMetaObjectCallback g_igGuiSystemRenderer_callbackList[] = { Gap::Sg::igNode::arkRegister, igGuiSystemModel_RunStaticInit, igCommonTraversal_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igGuiSystemRenderer_callbackList[] = { Gap::Sg::igNode::arkRegister, igGuiSystemModel_RunStaticInit, Gap::Sg::igCommonTraversal::arkRegister, Gap::Attrs::igDisplayListAttr::arkRegister, 0 };
 
 CallbackArray *igGuiSystemRenderer_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -108,7 +108,7 @@ void igGuiSystemRenderer_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igGuiSystemModel_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_001a38e0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)Gap::Sg::igCommonTraversal::getClassTypeLazy();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
     ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)Gap::Attrs::igDisplayListAttr::getClassTypeLazy();

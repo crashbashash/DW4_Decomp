@@ -1,4 +1,26 @@
-void FUN_001c51d0(void) {
+namespace Gap {
+namespace Sg {
+
+/* The `_geoSet` field is added to the metaobject at run time (userRegister), so its place in an igGeometry is the
+ * handle's offset. The sorter reads the handle as a C datum. */
+static inline igGeometrySetAttr *geometrySetOf(igGeometry *geometry)
+{
+    return *(igGeometrySetAttr **)((char *)geometry + ((igMetaField *)DAT_00562768[0])->_offset);
+}
+
+/* The set draws through the render list the flags ask for: 2 with USE_RENDER_LIST_DELETE_ORIGINAL, 1 with USE_RENDER_LIST. */
+static inline void setRenderListState(igGeometrySetAttr *geoSet, int flags)
+{
+    if (flags & 8) {
+        geoSet->_renderListState = 2;
+    } else if (flags & 4) {
+        geoSet->_renderListState = 1;
+    } else {
+        geoSet->_renderListState = 0;
+    }
+}
+
+void igGeometry::userRegister() {
     FieldHolder field;
     char *name;
     ObjectRefFieldView *held;
@@ -18,139 +40,107 @@ void FUN_001c51d0(void) {
         field.p->_flag52 = 1;
         field.p->_flag38 = 0;
         field.p->_metaObject = (int)Gap::Attrs::igGeometrySetAttr::getClassTypeSafe();
-        igMetaObject_AddFieldAndFinalize(g_igGeometry_metaObject, field.p);
+        igMetaObject_AddFieldAndFinalize(_Meta, field.p);
         held = field.p;
         if (held != 0) {
             held->_refCount = held->_refCount - 1;
             if (((unsigned long long)((long long)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)held);
+                igObject_Destroy((::igObject *)held);
             }
         }
     }
 }
 
-void igGeometry_UserPostLoad(ParticleTimer *arg0) {
-    void *temp_a0;
-    int temp_a1;
-
-    igGroup_UserPostLoad((SgLinkNode *)arg0);
-    temp_a0 = (void *)(*(int *)((char *)arg0 + *(int *)((char *)(DAT_00562768[0]) + 8)));
-    temp_a1 = arg0->_flags;
-    if (temp_a1 & 8) {
-        *(int *)((char *)(temp_a0) + 24) = 2;
-        return;
-    }
-    if (temp_a1 & 4) {
-        *(int *)((char *)(temp_a0) + 24) = 1;
-        return;
-    }
-    *(int *)((char *)(temp_a0) + 24) = 0;
+void igGeometry::userPostLoad()
+{
+    igAttrSet::userPostLoad();
+    igGeometrySetAttr *geoSet = geometrySetOf(this);
+    int current = _flags;
+    setRenderListState(geoSet, current);
 }
 
-void igGeometry_SetFlags(ParticleTimer *arg0, int arg1) {
-    void *temp_a0;
-
-    arg0->_flags = arg1;
-    temp_a0 = (void *)(*(int *)((char *)arg0 + *(int *)((char *)(DAT_00562768[0]) + 8)));
-    if (arg1 & 8) {
-        *(int *)((char *)(temp_a0) + 24) = 2;
-        return;
-    }
-    if (arg1 & 4) {
-        *(int *)((char *)(temp_a0) + 24) = 1;
-        return;
-    }
-    *(int *)((char *)(temp_a0) + 24) = 0;
+void igGeometry::setFlags(int flags)
+{
+    _flags = flags;
+    igGeometrySetAttr *geoSet = geometrySetOf(this);
+    setRenderListState(geoSet, flags);
 }
 
-void igGeometry_EnableFlags(ParticleTimer *arg0, int arg1, int arg2) {
-    int temp_a2;
-    int *temp_a0;
-
-    if (arg2 != 0) {
-        arg0->_flags = arg0->_flags | arg1;
+void igGeometry::setFlags(int flags, const bool b)
+{
+    if (b) {
+        _flags |= flags;
     } else {
-        arg0->_flags = arg0->_flags & ~arg1;
+        _flags &= ~flags;
     }
-    temp_a0 = *(int **)((char *)arg0 + *(int *)((char *)(DAT_00562768[0]) + 8));
-    temp_a2 = arg0->_flags;
-    if (temp_a2 & 8) {
-        temp_a0[6] = 2;
-        return;
-    }
-    if (temp_a2 & 4) {
-        temp_a0[6] = 1;
-        return;
-    }
-    temp_a0[6] = 0;
+    igGeometrySetAttr *geoSet = geometrySetOf(this);
+    int current = _flags;
+    setRenderListState(geoSet, current);
 }
 
-void igGeometry_Transform(ParticleTimer *arg0, int arg1) {
-    igObjectList *temp_s3 = (igObjectList *)arg0->_attributes;
-    unsigned int temp_s2 = temp_s3->_count;
-    unsigned int var_s1;
-    for (var_s1 = 0; var_s1 < temp_s2; var_s1++) {
-        AttributeObjView *temp_s0 = (AttributeObjView *)((int *)temp_s3->_data)[var_s1];
-        if (temp_s0 != 0 && ((Gap::Core::igObject *)temp_s0)->isOfType(Gap::Attrs::igGeometryAttr::getClassMeta()) != 0) {
-            if (!((((unsigned int)(*temp_s0->f12->v100() & 0xF0)) >> 4) & 0xFF)) {
-                ((AttributeVtable *)temp_s0)->v132(arg1);
+void igGeometry::transform(const igMatrix44f &matrix)
+{
+    igAttrList *attrs = _attributes;
+    unsigned int count = attrs->getCount();
+    for (unsigned int i = 0; i < count; i++) {
+        igAttr *attr = attrs->get(i);
+        if (attr != 0 && attr->isOfType(igGeometryAttr::getClassMeta())) {
+            igGeometryAttr *geometry = (igGeometryAttr *)attr;
+            if (geometry->_vertexArray->getVertexFormat().getBlendWeightCount() == 0) {
+                geometry->transform(matrix);
             }
         }
     }
 }
 
 
-extern "C" unsigned int Gap__Bec__ParticleTimer__getTriangleCount(ParticleTimer *self);
 
-/* Triangle count of the timer's geometry attributes: triangle lists (_primType 3) add one per primitive, triangle
+/* Triangle count of the geometry attributes: triangle lists (_primType 3) add one per primitive, triangle
  * strips (4) add the vertex count less two per strip. */
-unsigned int Gap__Bec__ParticleTimer__getTriangleCount(ParticleTimer *self)
+unsigned int igGeometry::getTotalTriangles() const
 {
     /* matching construct: declaration order sets the register colours (attrs last) */
     unsigned int triangles;
     unsigned int count;
     unsigned int i;
-    igGeometryAttr *geom;
-    igObjectList *attrs;
+    igGeometryAttr *geometry;
+    igAttrList *attrs;
 
-    attrs = (igObjectList *)self->_attributes;
+    attrs = _attributes;
     triangles = 0;
-    count = attrs->_count;
+    count = attrs->getCount();
     i = 0;
-    /* matching construct: retail enters the loop through a zero-trip guard placed after the return (as igGroup_UserPostLoad) */
+    /* matching construct: retail enters the loop through a zero-trip guard placed after the return (as igGroup::userPostLoad) */
     goto guard;
-next:
-    geom = ((igGeometryAttr **)attrs->_data)[i];
-    if (geom->_primType == 3) {
-        triangles += geom->_numPrims;
-    } else if (geom->_primType == 4) {
-        triangles += ((igVertexArray *)geom->_vertexArray)->_numVerts - geom->_numPrims * 2;
+    next:
+    geometry = (igGeometryAttr *)attrs->get(i);
+    if (geometry->_primType == 3) {
+        triangles += geometry->_numPrims;
+    } else if (geometry->_primType == 4) {
+        triangles += geometry->_vertexArray->_numVerts - geometry->_numPrims * 2;
     }
     i++;
-test:
+    test:
     if (i < count) goto next;
-done:
+    done:
     return triangles;
-guard:
+    guard:
     if (i < count) goto test;
     goto done;
 }
 
-void igGeometry_Reset(ParticleAttributeObj *arg0) {
-    /* matching construct: a typed view of the receiver declared first; a cast at each use changes how the compiler hoists the field address */
-    ParticleTimer *self = (ParticleTimer *)arg0;
-    unsigned temp_s1;
-    unsigned var_s0;
-    ParticleAttributeObj *temp_a0_2;
-
-    temp_s1 = ((igObjectList *)self->_attributes)->_count;
-    for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-        ((ParticleAttributeObj **)((igObjectList *)self->_attributes)->_data)[var_s0]->vX();
+void igGeometry::reset()
+{
+    unsigned int count = _attributes->getCount();
+    for (unsigned int i = 0; i < count; i++) {
+        _attributes->get(i)->reset();
     }
-    temp_a0_2 = *(ParticleAttributeObj **)((char *)arg0 + ((FieldOffsetHolder * *)DAT_00562768)[0]->f8);
-    if (temp_a0_2 != 0) {
-        temp_a0_2->vX();
+    igGeometrySetAttr *geoSet = geometrySetOf(this);
+    if (geoSet != 0) {
+        geoSet->reset();
     }
+}
+}
 }
 
 void FUN_001c5660(Z_1c5660 *arg0, int arg1, int arg2) {
@@ -179,18 +169,22 @@ void FUN_001c5660(Z_1c5660 *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_001c5730(int *p, igObject *object)
+namespace Gap {
+namespace Sg {
+
+void igGraphPath::configure(igNode *root)
 {
-    ((Gap::Core::igObjectList *)(*(igObjectList **)((char *)p + 8)))->append((Gap::Core::igObject *)object);
+    _path->append(root);
 }
 
-void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1) {
+void igGraphPath::configure(igGraphPath *init) {
+    T_1c5740 *arg1 = (T_1c5740 *)init;
     ((DW4VC_72_0 *)(arg1->f))->vX();
-    ((Gap::Core::igObject *)arg0->f)->copy((Gap::Core::igObject *)arg1->f, 0);
+    ((Gap::Core::igObject *)((U_1c5740 *)this)->f)->copy((Gap::Core::igObject *)arg1->f, 0);
 }
 
-void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {
-    List_1c5790 *l = (List_1c5790 *)path->_path;
+void igGraphPath::configure(igNodeList *nodes) {
+    List_1c5790 *l = (List_1c5790 *)_path.p;
     int n = l->n;
     int i;
     for (i = 0; i < n; i++) {
@@ -198,7 +192,7 @@ void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {
         if (old) {
             --old->references;
             if (((unsigned long long)(long long)old->references & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)old);
+                igObject_Destroy((::igObject *)old);
         }
     }
     int n2 = l->n;
@@ -207,59 +201,51 @@ void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {
         l->arr[j] = 0;
     }
     l->n = 0;
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)path->_path))->concatenate((Gap::Core::igObjectList *)((igTDataList<igObject *> *)nodes));
+    _path->concatenate(nodes);
 }
 
-void FUN_001c5870(void *arg0, int arg1) {
-    int idx, tbl;
-    tbl = *(int *)(*(int *)((char *)((void *)igGraphPath_GetTail((igGraphPath *)arg0)) + 28) + 16);
-    idx = arg1 * 4;
-    ((Gap::Core::igObjectList *)(*(int *)((char *)(arg0) + 8)))->append((Gap::Core::igObject *)(*(int *)(tbl + idx)));
+void igGraphPath::pushNode(int child)
+{
+    _path->append(((igGroup *)getTop())->getChild(child));
 }
 
-int FUN_001c58c0(T_1c58c0 *arg0) {
-    int s2;
-    L_1c58c0 *l;
-    R_1c58c0 *o;
-    int ret;
-    if (FUN_001c59b0((void *)arg0) == 0) {
-        l = arg0->f8;
-        ret = *(int *)((char *)l->f10 + (f8_of(l) - 1) * 4);
-        s2 = l->f8 - 1;
-        o = (R_1c58c0 *)l->f10[s2];
-        if (o != 0) {
-            o->f4 = o->f4 - 1;
-            if (((unsigned long long)((long long)o->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        List_RemoveWordAt((igDataList *)l, s2);
-        l->f10[l->f8] = 0;
-        return ret;
+igNode *igGraphPath::popNode()
+{
+    if (!isTop()) {
+        igNodeList *list = _path;
+        igNode *top = list->get(list->getCount() - 1);
+        /* matching construct: retail reads the count a second time, not through the inline accessor */
+        int last = list->_count - 1;
+        igObject::release(list->get(last));
+        List_RemoveWordAt((::igDataList *)list, last);
+        ((igNode **)list->_data)[list->_count] = 0;
+        return top;
     }
     return 0;
 }
 
-igNode *igGraphPath_GetTail(igGraphPath *path) {
-    igNodeList *nodes = (igNodeList *)path->_path;
-    return *(igNode **)(nodes->_data + (nodes->_count - 1) * 4);
+igNode *igGraphPath::getTop() const
+{
+    return _path->get(_path->getCount() - 1);
 }
 
-int FUN_001c59b0(void *self) {
-    return igGraphPath_GetCount((igGraphPath *)self) == 1;
+bool igGraphPath::isTop() const
+{
+    return getDepth() == 1;
 }
 
-int igGraphPath_GetCount(igGraphPath *path) {
-    return ((igNodeList *)path->_path)->_count;
+int igGraphPath::getDepth() const
+{
+    return _path->getCount();
 }
 
-void FUN_001c59f0(OO *arg0, int arg1, int arg2, long long arg3) {
+void igGraphPath::getTransformMatrix(int arg1, igMatrix44f *arg2, long long arg3) const {
     int i;
     EE *e;
 
     igMatrix44f_SetIdentity((float *)arg2);
     for (i = 0; i < arg1; i++) {
-        e = (EE *)arg0->list->items[i];
+        e = (EE *)((OO *)this)->list->items[i];
         if (igMetaObject_IsOfType((igMetaObject *)(((DW4VC_88_0 *)(e))->vX()), g_igTransform_metaObject) != 0) {
             if (e->f96 == 0) {
                 ((DW4VC_156_2 *)(e))->vX(arg3);
@@ -269,5 +255,7 @@ void FUN_001c59f0(OO *arg0, int arg1, int arg2, long long arg3) {
             arg3 = ((DW4VC_164_1 *)(e))->vX(arg3);
         }
     }
+}
+}
 }
 

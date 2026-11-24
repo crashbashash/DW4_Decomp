@@ -139,7 +139,7 @@ static inline void createContext(ParticleArray *self) {
 int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node) {
     igCommonTraversal *common;
     ParticleTimer *timer;
-    if (traversal != 0 && ((Gap::Core::igObject *)traversal)->isOfType(g_igCommonTraversal_metaObject) != 0) {
+    if (traversal != 0 && ((Gap::Core::igObject *)traversal)->isOfType(Gap::Sg::igCommonTraversal::getClassMeta()) != 0) {
         common = (igCommonTraversal *)traversal;
     } else {
         common = 0;
@@ -153,7 +153,8 @@ int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node) {
 }
 
 void ParticleTimer_RegisterTraversalFunction(void) {
-    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, ParticleTimer_GetMetaObject(), (igTraversalFunction *)ParticleTimer_TraversalFunction);
+    igMetaObject *meta = ParticleTimer_GetMetaObject();
+    Gap::Sg::igTraversal::_setFunction(Gap::Sg::igCommonTraversal::_getTraversalFunctions(), meta, (igTraversalFunction *)ParticleTimer_TraversalFunction);
 }
 
 void ParticleTimer_resetFields(ParticleTimer *self, int flags)

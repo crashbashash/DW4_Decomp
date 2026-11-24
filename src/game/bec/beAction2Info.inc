@@ -47,7 +47,7 @@ void beAction2Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beAction2Info_Register);
 }
 
-static igMetaObjectCallback g_beAction2Info_callbackList[] = { igSwitch_EnsureRegistered, igAnimationDatabase_EnsureRegistered, beAction2DataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beAction2Info_callbackList[] = { Gap::Sg::igSwitch::arkRegister, igAnimationDatabase_EnsureRegistered, beAction2DataList_EnsureRegistered, 0 };
 
 CallbackArray *beAction2Info_Register(void) {
     BecLibrary_MarkRegistered();
@@ -103,7 +103,7 @@ void beAction2Info_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beAction2Info_ctorTable, 3);
     switchField = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchField)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchField)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     animationDatabase = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)animationDatabase)->_metaObject = (int)igAnimationDatabase_GetOrCreateMetaObject();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));

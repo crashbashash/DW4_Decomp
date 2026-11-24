@@ -8,7 +8,6 @@ struct igNode;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igGeometry_metaObject;
 void Gap__Sg__igNode__resetFields(struct igNode *node, int flags);
 struct igNode *igNode_Destroy(struct igNode *self, short deleteFlag);
 

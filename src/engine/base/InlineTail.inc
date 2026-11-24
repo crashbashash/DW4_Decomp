@@ -593,7 +593,7 @@ extern "C" int igOptimizer_CheckGraph(B_2 *log, int root) {
     FUN_0022aac0((T_4 *)it.get(), root);
     igNode *node = FUN_0022ac00((igIterateGraph *)it.get());
     for (; FUN_0022ac60(it.get()) != 0; FUN_0022ac40(it.get())) {
-        if (((Gap::Core::igObject *)node)->isOfType(igSegment_GetMetaObject()) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igSegment::getClassTypeSafe()) != 0) {
             log->put("The optimization doesn't support igSegment\n");
             return 0;
         }

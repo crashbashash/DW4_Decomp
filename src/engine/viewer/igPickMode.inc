@@ -58,7 +58,7 @@ void igPickMode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPickMode_Register);
 }
 
-static igMetaObjectCallback g_igPickMode_callbackList[] = { igViewerParameters_EnsureRegistered, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, igRay_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPickMode_callbackList[] = { igViewerParameters_EnsureRegistered, igGuiSystem_RunStaticInit, igMouseCursor_RunStaticInit, FUN_0019e440, igRay_EnsureRegistered, Gap::Sg::igGraphPath::arkRegister, 0 };
 
 CallbackArray *igPickMode_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -170,7 +170,7 @@ void igPickMode_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7)))->setDefault(0.0f);
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(Gap::Sg::igGraphPath::getClassTypeLazy());
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB));
     sp48[0] = 0;
     sp48[1] = 0;

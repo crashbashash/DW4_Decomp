@@ -62,7 +62,7 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit);
 void igPickMode_Pick(igPickMode *self);
 
 static inline igObject *asCamera(igObject *o) {
-    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igCamera_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Sg::igCamera::getClassMeta()) != 0) {
         return o;
     }
     return 0;
@@ -98,7 +98,7 @@ static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraph
     igObject::release(previous);
     pickMode->_hitPath = (int)held;
 }
-static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return igGraphPath_Create(0); }
+static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return (igGraphPath *)Gap::Sg::igGraphPath::_instantiateFromPool(0); }
 
 void igViewMode_IsCompatible(igViewMode *self, igObject *model) {
     ((Gap::Core::igObject *)model)->isOfType(g_igViewModel_metaObject);
@@ -184,7 +184,7 @@ void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
         previous = (igObject *)self->_cameraPath;
         igObject::release(previous);
         self->_cameraPath = (int)path;
-        camera = igGraphPath_GetTail((igGraphPath *)path);
+        camera = (igObject *)((Gap::Sg::igGraphPath *)path)->getTop();
         camera = asCamera(camera);
         igObject::ref(camera);
         previous = (igObject *)self->_camera;
@@ -235,7 +235,7 @@ void igCameraMode_Update(igCameraMode *self) {
     if (self->_camera != 0) {
         igMatrix44f_SetIdentity(world);
         model = (igViewModel *)self->_model;
-        igGraphPath_GetTransform((igGraphPath *)self->_cameraPath, (igMatrix44f *)world, model->_drawTime);
+        ((Gap::Sg::igGraphPath *)self->_cameraPath)->getTransformMatrixInclusive((igMatrix44f *)world, model->_drawTime);
         x = 0; y = 0; z = 0;
         igMatrix44f_GetEulerAngles(world, &x, &y, &z);
         igMatrix44f_GetTranslation(world, translation);
@@ -735,7 +735,7 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit) {
         self->_hit = 1;
         self->_impactLength = hit->distance;
         setHitPath(self, igSmartPointer<igGraphPath>(createGraphPath()));
-        igGraphPath_SetNodes((igGraphPath *)self->_hitPath, (igNodeList *)nodes);
+        ((Gap::Sg::igGraphPath *)self->_hitPath)->configure((Gap::Sg::igNodeList *)nodes);
     }
 }
 

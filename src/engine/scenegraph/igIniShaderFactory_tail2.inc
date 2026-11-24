@@ -1,30 +1,31 @@
-#define REL(p) { IniHeldObject *o = (p); if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy((igObject *)o);}}
-#define ADD(o) if(o){ ++(o)->refs; }
-bool igIniShaderFactory_ConfigureShader(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3) {
-    unsigned char ok = 1;
-    if (FUN_001c6520((O_1c6520 *)self, 1) != 0) {
-        IniHeldObject *n;
-        ADD(a2);
-        REL(self->r48);
-        self->r48 = a2;
-        n = (IniHeldObject *)((Gap::Core::igObject *)a1)->getMemoryPool();
-        ADD(n);
-        REL(self->r44);
-        self->r44 = n;
-        ok = !FUN_001cb340((ShaderProcessorView *)self, (ShaderTarget *)a1, a3);
-    }
-    if (ok) igShaderFactory_ConfigureShader(self, (VA_1d8980 *)a1, a2, a3);
-    REL(self->r48);
-    self->r48 = 0;
-    REL(self->r44);
-    self->r44 = 0;
-    return !ok;
-}
-#undef REL
-#undef ADD
+namespace Gap {
+namespace Sg {
 
-void igIniShaderFactory_ResetFileCache(int a0) {
-    igObjectStringMap_Clear((igObjectStringMap *)(*(int *)((char *)a0 + 56)));
+bool igIniShaderFactory::configureShader(igSimpleShaderDispatchView *toConfigure, igInterpretedShaderData *configuration, igCapabilityManager *platformCapabilities)
+{
+    unsigned char useDefault = 1;
+    if (FUN_001c6520((O_1c6520 *)this, 1) != 0) {
+        _data = configuration;
+        _mp = (igMemoryPool *)((Gap::Core::igObject *)toConfigure)->getMemoryPool();
+        useDefault = !FUN_001cb340((ShaderProcessorView *)this, (ShaderTarget *)toConfigure, (int)platformCapabilities);
+    }
+    if (useDefault)
+        igShaderFactory::configureShader(toConfigure, configuration, platformCapabilities);
+    _data = 0;
+    _mp = 0;
+    return !useDefault;
+}
+}
+}
+
+namespace Gap {
+namespace Sg {
+
+void igIniShaderFactory::resetFileCache()
+{
+    igObjectStringMap_Clear(_fileCache);
+}
+}
 }
 
 void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
@@ -54,45 +55,47 @@ void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
     }
 }
 
-void igIniShaderFactory_PreloadFileCache(IniShaderFactoryFields *self) {
-    if (self->f20 != 0) {
-        FUN_001c6520((O_1c6520 *)self, 0);
-        FUN_001c66c0((Node *)self, 0);
-        IniStrRef name = FUN_001c6fa0((IniSectionNode *)self);
+namespace Gap {
+namespace Sg {
+
+void igIniShaderFactory::preloadFileCache() {
+    if (_fileCachingMode != NO_CACHING) {
+        FUN_001c6520((O_1c6520 *)this, 0);
+        FUN_001c66c0((Node *)this, 0);
+        IniStrRef name = FUN_001c6fa0((IniSectionNode *)this);
         if (name.p != 0) {
             SectionRef shader(0);
-            shader = FUN_001cd9f0((IniShaderFactoryView *)self, name.p);
+            shader = FUN_001cd9f0((IniShaderFactoryView *)this, name.p);
             if (shader.get() != 0) {
                 IniNodeList *nodes = (IniNodeList *)igDriverDatabase_ParseDatabase((igDriverDatabase *)shader.get());
-                FUN_001ccd10((IniShaderFactoryView *)self, nodes);
+                FUN_001ccd10((IniShaderFactoryView *)this, nodes);
                 igDriverDatabase_DeleteConfigNodeList(shader.get(), (igTDataList<ConfigNode *> *)nodes);
             }
         }
-        for (int i = 0; i < ((Gap::Core::igRegistry *)self->f28)->getRawValueCount(); i++) {
-            IniFactoryEntry *e = (IniFactoryEntry *)((Gap::Core::igRegistry *)self->f28)->getRawValue(i);
+        for (int i = 0; i < _implementation->getRawValueCount(); i++) {
+            IniFactoryEntry *e = (IniFactoryEntry *)_implementation->getRawValue(i);
             if (e != 0 && e->f16 != 0 && e->f12 != 0 && igStringObj_HasFileExtension((igStringObj *)e->f16, ".file") != 0) {
                 char *path;
                 if (e->f12->name == 0) path = g_stringObjEmptyText; else path = e->f12->name;
-                FUN_001cdbb0((IniFactoryView *)self, path);
+                FUN_001cdbb0((IniFactoryView *)this, path);
             }
         }
     }
 }
 
-void igIniShaderFactory_UserPostLoad(igIniShaderFactory *self) {
-    igObject_UserPostLoad();
-    if (self->_fileCachingMode != 2) {
-        ((DW4VC_104_0 *)(((char *)(self) + 0)))->vX();
-    }
+void igIniShaderFactory::userPostLoad()
+{
+    igObject::userPostLoad();
+    if (_fileCachingMode != PERSISTENT_CACHE)
+        resetFileCache();
 }
 
-void igIniShaderFactory_TrimCapacity(igIniShaderFactory *self) {
-    int temp_a1;
-
-    temp_a1 = self->_fileCachingMode;
-    if (temp_a1 != 2) {
-        ((DW4VC_104_1 *)((int *)((char *)(self) + 0)))->vX((int)(temp_a1));
-    }
+void igIniShaderFactory::trimCapacity()
+{
+    if (_fileCachingMode != PERSISTENT_CACHE)
+        resetFileCache();
+}
+}
 }
 
 #define SLOT(T, x) (*(T **)&(x))
@@ -147,11 +150,11 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         if (self->mode == 3) {
             IniSourceList *source = (IniSourceList *)g_globalContext->getInfoByType((const char *)text_system, "igShaderInfo", 0);
             IniFieldEntry *entry;
-            if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(g_igShaderInfo_metaObject) == 0) {
+            if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(Gap::Sg::igShaderInfo::getClassMeta()) == 0) {
                 SET_OUT(result);
                 FINISH();
             }
-            entry = ((IniFieldEntry *)((Gap::Core::igObjectList *)source->entries)->search((Gap::Core::igStringMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
+            entry = ((IniFieldEntry *)((Gap::Core::igObjectList *)source->entries)->search((Gap::Core::igStringMetaField *)Gap::Sg::igIniShaderFactory::k_implementationName, name));
             if (entry != 0) {
                 USE_CACHE(entry->cache);
             } else {
@@ -250,10 +253,10 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
         if (self->mode == 3) {
             IniSourceList *source = (IniSourceList *)g_globalContext->getInfoByType((const char *)text_system, "igShaderInfo", 0);
             IniFieldEntry_1cdbb0 *entry;
-            if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(g_igShaderInfo_metaObject) == 0) {
+            if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(Gap::Sg::igShaderInfo::getClassMeta()) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
-            entry = ((IniFieldEntry_1cdbb0 *)((Gap::Core::igObjectList *)source->entries)->search((Gap::Core::igStringMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
+            entry = ((IniFieldEntry_1cdbb0 *)((Gap::Core::igObjectList *)source->entries)->search((Gap::Core::igStringMetaField *)Gap::Sg::igIniShaderFactory::k_implementationName, name));
             if (entry != 0) {
                 cache = entry->cache;
             } else {

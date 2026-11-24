@@ -762,13 +762,13 @@ int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) 
                 if (layer == 0) return 1;
                 igObject *child = ((igObject **)((igObjectList *)layer->_childList)->_data)[0];
                 igAttrSet *layerNode;
-                if (child != 0 && ((Gap::Core::igObject *)child)->isOfType(g_igAttrSet_metaObject) != 0) layerNode = (igAttrSet *)child;
+                if (child != 0 && ((Gap::Core::igObject *)child)->isOfType(Gap::Sg::igAttrSet::getClassMeta()) != 0) layerNode = (igAttrSet *)child;
                 else layerNode = 0;
                 if (layerNode == 0) return 1;
                 if (movie.p->_sceneInfo == 0) return 1;
                 igObject *graph = (igObject *)((igSceneInfo *)movie.p->_sceneInfo)->_sceneGraph;
                 igAttrSet *scene;
-                if (graph != 0 && ((Gap::Core::igObject *)graph)->isOfType(g_igAttrSet_metaObject) != 0) scene = (igAttrSet *)graph;
+                if (graph != 0 && ((Gap::Core::igObject *)graph)->isOfType(Gap::Sg::igAttrSet::getClassMeta()) != 0) scene = (igAttrSet *)graph;
                 else scene = 0;
                 if (scene == 0) return 1;
                 ((Gap::Sg::igGroup *)layerNode)->appendChild((Gap::Sg::igNode *)scene);

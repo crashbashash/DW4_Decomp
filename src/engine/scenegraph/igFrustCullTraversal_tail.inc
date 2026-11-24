@@ -47,7 +47,7 @@ void igFrustCullTraversal_userConstruct(O_1c4650 *arg0, int arg1) {
 }
 
 void igFrustCullTraversal_RegisterClassFunction(int arg0, int arg1) {
-    igCommonTraversal_RegisterClassFunction((void *)arg0, (void *)arg1);
+    Gap::Sg::igCommonTraversal::_registerClass((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igFrustCullTraversal_TraverseNode);
     }
@@ -57,7 +57,7 @@ void igFrustCullTraversal_RegisterClassFunction(int arg0, int arg1) {
 }
 
 void Gap__Sg__igFrustCullTraversal__vfunc_24(igCommonTraversal *self, int arg1) {
-    Gap__Sg__igCommonTraversal__vfunc_24((igCommonTraversal *)self, arg1);
+    ((Gap::Sg::igCommonTraversal *)self)->igCommonTraversal::end((Gap::Sg::igNode *)(igNode *)arg1);
 }
 
 void FUN_001c47a0(void *arg0, int arg1, int arg2) {
@@ -298,8 +298,8 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
     case 1: {
         pushCullAttr(self, (igAttr *)self->_cd);
         igObject *saved = (igObject *)self->_travProcs;
-        ((igSmartPointer<igObject> &)self->_travProcs) = (igObject *)g_igCommonTraversal_travProcs;
-        status = g_igCommonTraversal_travProcs->_data[(unsigned)node->_handle]((igTraversal *)self, node);
+        ((igSmartPointer<igObject> &)self->_travProcs) = (igObject *)Gap::Sg::igCommonTraversal::_getTraversalFunctions();
+        status = Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get((unsigned)node->_handle)((::igTraversal *)self, (::igObject *)node);
         ((igSmartPointer<igObject> &)self->_travProcs) = saved;
         popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
         if (status == 2) {
@@ -308,13 +308,13 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
         return 0;
     }
     case 3:
-        if (g_igCommonTraversal_travProcs->_data[(unsigned)node->_handle]((igTraversal *)self, node) == 2) {
+        if (Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get((unsigned)node->_handle)((::igTraversal *)self, (::igObject *)node) == 2) {
             return 2;
         }
         return 0;
     case 4:
         pushCullAttr(self, (igAttr *)self->_cd);
-        status = g_igCommonTraversal_travProcs->_data[(unsigned)node->_handle]((igTraversal *)self, node);
+        status = Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get((unsigned)node->_handle)((::igTraversal *)self, (::igObject *)node);
         popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
         if (status == 2) {
             return 2;
@@ -346,11 +346,11 @@ void igFrustCullTraversal_TraverseNode(igFrustCullTraversal *arg0, igNode *arg1)
         }
     }
     unsigned sel = arg1->_handle;
-    g_igCommonTraversal_travProcs->_data[sel]((igTraversal *)arg0, arg1);
+    Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get(sel)((::igTraversal *)arg0, (::igObject *)arg1);
 }
 
 int igFrustCullTraversal_TraversePlanarShadowShader(void *arg0, TraversalNodeView *arg1) {
-    return g_igCommonTraversal_travProcs->_data[arg1->_id]((igTraversal *)arg0, (igObject *)arg1);
+    return Gap::Sg::igCommonTraversal::_getTraversalFunctions()->get(arg1->_id)((::igTraversal *)arg0, (::igObject *)arg1);
 }
 
 int igFrustCullTraversal_SetOuterFrustCullScale(igFrustCullTraversal *self, float scale) {

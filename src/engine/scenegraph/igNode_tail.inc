@@ -1,9 +1,10 @@
-void igGraphPath_GetTransform(igGraphPath *path, igMatrix44f *matrix, long long time) {
-    FUN_001c59f0((OO *)path, igGraphPath_GetCount(path), (int)matrix, time);
-}
-
 namespace Gap {
 namespace Sg {
+
+void igGraphPath::getTransformMatrixInclusive(igMatrix44f *mat, long long time) const
+{
+    getTransformMatrix(getDepth(), mat, time);
+}
 
 /* matching construct: the two counting loops keep retail's entry test, which sits after the function's exit
  * (a guard block each: `0 < count`, then the loop's own test); no for/while spelling tried produces it */

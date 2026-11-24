@@ -31,7 +31,7 @@ void igLightSetList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLightSetList_Register);
 }
 
-static igMetaObjectCallback g_igLightSetList_callbackList[] = { igLightSet_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLightSetList_callbackList[] = { Gap::Sg::igLightSet::arkRegister, 0 };
 
 CallbackArray *igLightSetList_Register(void) {
     BecLibrary_MarkRegistered();

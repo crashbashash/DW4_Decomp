@@ -82,8 +82,8 @@ void FUN_00455f50(Z *arg0, Y *arg1) {
     if (arg1->f20 <= arg0->f24) {
         arg0->f28 = 1;
         arg0->f24 = arg1->f20;
-        setPick(arg0, igSmartPointer<Obj_455f50>((Obj_455f50 *)igGraphPath_Create((int)(((Gap::Core::igObject *)arg0)->getMemoryPool()))));
-        igGraphPath_SetNodes((igGraphPath *)arg0->f32, (igNodeList *)s1);
+        setPick(arg0, igSmartPointer<Obj_455f50>((Obj_455f50 *)Gap::Sg::igGraphPath::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool())));
+        ((Gap::Sg::igGraphPath *)arg0->f32)->configure((Gap::Sg::igNodeList *)s1);
     }
 }
 

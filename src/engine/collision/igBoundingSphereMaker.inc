@@ -204,7 +204,7 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
             var_s0 += 1;
         }
     }
-    if (((Gap::Core::igObject *)arg1)->isOfType(g_igGeometry_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(Gap::Sg::igGeometry::getClassMeta()) != 0) {
         igSmartPointer<igSphere> sphere(FUN_0023ac20((igBoundingSphereMaker *)arg0, (igGeometry *)arg1));
         FUN_0018de10((igSphere *)arg0->f8, sphere);
     } else if (((Gap::Core::igObject *)arg1)->isOfType(g_igTransform_metaObject) != 0) {

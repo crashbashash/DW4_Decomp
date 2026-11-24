@@ -29,8 +29,8 @@ CallbackArray *igBlendMatrixSelect_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendMatrixSelect_metaObject,
-        igAttrSet_Register,
-        igAttrSet_GetPublishedMetaObject,
+        Gap::Sg::igAttrSet::arkRegisterInternal,
+        Gap::Sg::igAttrSet::getClassMeta,
         igBlendMatrixSelect_GetMetaObjectFunction,
         "igBlendMatrixSelect",
         0xAC, /* instance size */

@@ -45,7 +45,7 @@ void beLayerCtl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLayerCtl_Register);
 }
 
-static igMetaObjectCallback g_beLayerCtl_callbackList[] = { igSwitch_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLayerCtl_callbackList[] = { Gap::Sg::igSwitch::arkRegister, 0 };
 
 CallbackArray *beLayerCtl_Register(void) {
     BecLibrary_MarkRegistered();
@@ -95,7 +95,7 @@ void beLayerCtl_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLayerCtl_ctorTable, 2);
     layerSwt = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)layerSwt)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)layerSwt)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beLayerCtl_fieldTable, g_beLayerCtl_fieldHandles, g_beLayerCtl_fieldOffsets, base);
 }
 

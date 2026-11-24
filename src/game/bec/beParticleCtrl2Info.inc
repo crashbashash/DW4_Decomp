@@ -36,7 +36,7 @@ void beParticleCtrl2Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beParticleCtrl2Info_Register);
 }
 
-static igMetaObjectCallback g_beParticleCtrl2Info_callbackList[] = { igSwitch_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beParticleCtrl2Info_callbackList[] = { Gap::Sg::igSwitch::arkRegister, 0 };
 
 CallbackArray *beParticleCtrl2Info_Register(void) {
     BecLibrary_MarkRegistered();
@@ -95,9 +95,9 @@ void beParticleCtrl2Info_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beParticleCtrl2Info_ctorTable, 4);
     mainSwitch = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)mainSwitch)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)mainSwitch)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     subSwitch = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)subSwitch)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)subSwitch)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beParticleCtrl2Info_fieldTable, g_beParticleCtrl2Info_fieldHandles, g_beParticleCtrl2Info_fieldOffsets, base);
 }
 

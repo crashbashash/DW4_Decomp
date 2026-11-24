@@ -31,7 +31,7 @@ void igAppearanceListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAppearanceListList_Register);
 }
 
-static igMetaObjectCallback g_igAppearanceListList_callbackList[] = { igAppearanceList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAppearanceListList_callbackList[] = { Gap::Sg::igAppearanceList::arkRegister, 0 };
 
 CallbackArray *igAppearanceListList_Register(void) {
     BecLibrary_MarkRegistered();

@@ -36,289 +36,6 @@ int igFrustCullTraversal_GetVTable(void) {
     return r;
 }
 
-struct R **igSmartPointer_igCapabilityManager_Destruct(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-struct T_19fde0 **igSmartPointer_igAttrDefaultManager_Destruct(struct T_19fde0 **arg0, short arg1) {
-    struct T_19fde0 *o;
-    if (arg0 != 0) {
-        o = *arg0;
-        if (o != 0) {
-            o->refs = o->refs - 1;
-            if ((o->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igAttrStackManager_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igTransformStack_Destruct(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igSorter_Destruct(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
-        }
-        if (flag > 0) operator delete(self);
-    }
-    return (void **)self;
-}
-
-void **igSmartPointer_igModelViewMatrixAttrPool_Destruct(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-O *igSmartPointer_igTimeAttrPool_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igVertexBlendMatrixAttrPool_Destruct(void **arg0, short arg1) {
-    S_temp_a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igTextureMatrixAttrPool_Destruct(void **arg0, short arg1) {
-    S_temp_a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *igSmartPointer_igVertexBlendMatrixListAttrPool_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-void **igSmartPointer_igMatrixObjectPool_Destruct(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-ObjectRefWord *igSmartPointer_igProjectionMatrixAttrPool_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-ObjectRefWord *igSmartPointer_igNormalizeNormalsStateAttr_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
-void **igSmartPointer_igLongStack_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igNonRefCountedMatrixObjectList_Destruct(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **igSmartPointer_igNonRefCountedTransformList_Destruct(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
-        }
-        if (flag > 0) operator delete(self);
-    }
-    return (void **)self;
-}
-
-igSmartPointer<igObject> *igSmartPointer_igStringObjList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
-O *igSmartPointer_igBlendMatricesAttrPool_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
-    }
-    return arg0;
-}
-
-ObjectRefWord *igSmartPointer_igTimeAttr_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
 Obj_19fde0 *FUN_001a0910(Obj_19fde0 *arg0, short arg1) {
     if (arg0) {
         arg0->vt = g_igCommonTraversal_vtable;
@@ -438,8 +155,8 @@ CallbackArray *igFrustCullTraversal_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFrustCullTraversal_metaObject,
-        igCommonTraversal_Register,
-        igCommonTraversal_GetPublishedMetaObject,
+        Gap::Sg::igCommonTraversal::arkRegisterInternal,
+        Gap::Sg::igCommonTraversal::getClassMeta,
         igFrustCullTraversal_GetMetaObjectFunction,
         "igFrustCullTraversal",
         0x230, /* instance size */
@@ -454,45 +171,47 @@ void igFrustCullTraversal_GetMetaObjectFunction(void) {
     igFrustCullTraversal_GetMetaObject();
 }
 
-igMetaObject *g_igCommonTraversal_metaObject;
-igMetaField *g_igCommonTraversal_attrStackMetaField;
-igMetaField *g_igCommonTraversal_transformStackMetaField;
-igMetaField *g_igCommonTraversal_vcMetaField;
-igMetaField *g_igCommonTraversal_capabilityManagerMetaField;
-igMetaField *g_igCommonTraversal_defaultManagerMetaField;
-igMetaField *g_igCommonTraversal_flushedAttrsMetaField;
-igMetaField *g_igCommonTraversal_sorterMetaField;
-igMetaField *g_igCommonTraversal_matrixPoolMetaField;
-igMetaField *g_igCommonTraversal_timePoolMetaField;
-igMetaField *g_igCommonTraversal_blendMatrixPoolMetaField;
-igMetaField *g_igCommonTraversal_texMatPoolMetaField;
-igMetaField *g_igCommonTraversal_vertexBlendMatListPoolMetaField;
-igMetaField *g_igCommonTraversal_matrixObjectPoolMetaField;
-igMetaField *g_igCommonTraversal_projectionMatrixPoolMetaField;
-igMetaField *g_igCommonTraversal_viewMatMetaField;
-igMetaField *g_igCommonTraversal_viewMatInvMetaField;
-igMetaField *g_igCommonTraversal_modeMaskMetaField;
-igMetaField *g_igCommonTraversal_matrixOptimizationMetaField;
-igMetaField *g_igCommonTraversal_normalizeNormalsEnableMetaField;
-igMetaField *g_igCommonTraversal_timeStackMetaField;
-igMetaField *g_igCommonTraversal_matrixObjectListMetaField;
-igMetaField *g_igCommonTraversal_timeLongBufMetaField;
-igMetaField *g_igCommonTraversal_timeBufferedMetaField;
-igMetaField *g_igCommonTraversal_boneMatrixPaletteListMetaField;
-igMetaField *g_igCommonTraversal_blendMatrixPaletteListMetaField;
-igMetaField *g_igCommonTraversal_blendMatrixPaletteLengthsMetaField;
-igMetaField *g_igCommonTraversal_segmentOverrideNamesMetaField;
-igMetaField *g_igCommonTraversal_segmentOverrideStacksMetaField;
-igMetaField *g_igCommonTraversal_blendMatricesAttrPoolMetaField;
-igMetaField *g_igCommonTraversal_projMatMetaField;
-igMetaField *g_igCommonTraversal_defaultTimeAttrMetaField;
-igMetaField *g_igCommonTraversal_jointChainCountMetaField;
-igMetaField *g_igCommonTraversal_jointMvmBaseMetaField;
-igMetaField *g_igCommonTraversal_jointMvmInverseBaseMetaField;
-igMetaField *g_igCommonTraversal_jointGraphRootTraversedMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igCommonTraversal_GetPublishedMetaObject(void) {
-    return g_igCommonTraversal_metaObject;
+igMetaObject *igCommonTraversal::_Meta;
+igMetaField *igCommonTraversal::k_attrStack;
+igMetaField *igCommonTraversal::k_transformStack;
+igMetaField *igCommonTraversal::k_vc;
+igMetaField *igCommonTraversal::k_capabilityManager;
+igMetaField *igCommonTraversal::k_defaultManager;
+igMetaField *igCommonTraversal::k_flushedAttrs;
+igMetaField *igCommonTraversal::k_sorter;
+igMetaField *igCommonTraversal::k_matrixPool;
+igMetaField *igCommonTraversal::k_timePool;
+igMetaField *igCommonTraversal::k_blendMatrixPool;
+igMetaField *igCommonTraversal::k_texMatPool;
+igMetaField *igCommonTraversal::k_vertexBlendMatListPool;
+igMetaField *igCommonTraversal::k_matrixObjectPool;
+igMetaField *igCommonTraversal::k_projectionMatrixPool;
+igMetaField *igCommonTraversal::k_viewMat;
+igMetaField *igCommonTraversal::k_viewMatInv;
+igMetaField *igCommonTraversal::k_modeMask;
+igMetaField *igCommonTraversal::k_matrixOptimization;
+igMetaField *igCommonTraversal::k_normalizeNormalsEnable;
+igMetaField *igCommonTraversal::k_timeStack;
+igMetaField *igCommonTraversal::k_matrixObjectList;
+igMetaField *igCommonTraversal::k_timeLongBuf;
+igMetaField *igCommonTraversal::k_timeBuffered;
+igMetaField *igCommonTraversal::k_boneMatrixPaletteList;
+igMetaField *igCommonTraversal::k_blendMatrixPaletteList;
+igMetaField *igCommonTraversal::k_blendMatrixPaletteLengths;
+igMetaField *igCommonTraversal::k_segmentOverrideNames;
+igMetaField *igCommonTraversal::k_segmentOverrideStacks;
+igMetaField *igCommonTraversal::k_blendMatricesAttrPool;
+igMetaField *igCommonTraversal::k_projMat;
+igMetaField *igCommonTraversal::k_defaultTimeAttr;
+igMetaField *igCommonTraversal::k_jointChainCount;
+igMetaField *igCommonTraversal::k_jointMvmBase;
+igMetaField *igCommonTraversal::k_jointMvmInverseBase;
+igMetaField *igCommonTraversal::k_jointGraphRootTraversed;
+igTraversalFunctionList *igCommonTraversal::travProcs;
+}
 }
 
 static FieldFactory g_igFrustCullTraversal_ctorTable[] = {

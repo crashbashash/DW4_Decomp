@@ -55,7 +55,7 @@ void beMatCtrlInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMatCtrlInfo_Register);
 }
 
-static igMetaObjectCallback g_beMatCtrlInfo_callbackList[] = { igSwitch_EnsureRegistered, beMatCtrlDataList_EnsureRegistered, beMatCtrlSearchList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMatCtrlInfo_callbackList[] = { Gap::Sg::igSwitch::arkRegister, beMatCtrlDataList_EnsureRegistered, beMatCtrlSearchList_EnsureRegistered, 0 };
 
 CallbackArray *beMatCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -111,7 +111,7 @@ void beMatCtrlInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlInfo_ctorTable, 3);
     switchgraph = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchgraph)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchgraph)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beMatCtrlDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;

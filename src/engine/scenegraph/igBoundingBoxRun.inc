@@ -66,7 +66,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
                  ok;
         }
     }
-    if (((Gap::Core::igObject *)node)->isOfType(g_igGeometry_metaObject) != 0) {
+    if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igGeometry::getClassMeta()) != 0) {
         if (!igGeometry_ExtendBound((int)box.get(), node)) {
             ok = 0;
             igGeometry_ExtendBound((int)uncachedBox.get(), node);

@@ -1,99 +1,76 @@
-igAttrSet *igAttrSet_CreateInstance(int allocator) {
-    igAttrSet_EnsureRegistered();
-    return (igAttrSet *)igMetaObject_CreateInstance((igMetaObject *)g_igAttrSet_metaObject, (igMemoryPoolView *)allocator);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAttrSet_GetOrCreateMetaObject(void) {
-    if (g_igAttrSet_metaObject == 0) {
-        g_igAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAttrSet_metaObject;
-}
-
-igMetaObject *igAttrSet_GetMetaObject(void)
+igAttrSet *igAttrSet::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igAttrSet_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAttrSet_EnsureRegistered();
-    return g_igAttrSet_metaObject;
+    arkRegister();
+    return (igAttrSet *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igAttrSet_GetVTable(void) {
-    Obj_1a5e10 o;
-    int r;
-
-    igObject_InitHeader((igObject *)&o);
-    o.w[1] = 0;
-    o.w[2] = 0;
-    o.w[3] = 0;
-    o.w[6] = 0;
-    o.vt = &g_igAttrSet_vtable[0];
-    o.s = 0;
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igAttrSet_vtable[0];
-    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&o.s, -1);
-    igGroup_Destroy((igGroup *)&o, 0);
-    return r;
-}
-
-void igAttrSet_EnsureRegistered(void)
+igMetaObject *igAttrSet::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igAttrSet_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAttrSet_callbackList[] = { Gap::Attrs::igAttrList::arkRegister, 0 };
+igMetaObject *igAttrSet::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igAttrSet_Register(void) {
+void *igAttrSet::retrieveVTablePointer()
+{
+    igAttrSet temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igAttrSet::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAttrSet::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igAttrList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAttrSet_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igGroup::arkRegisterInternal,
         Gap::Sg::igGroup::getClassMeta,
-        igAttrSet_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAttrSet",
-        0x28, /* instance size */
-        igAttrSet_GetVTable,
-        &igAttrSet_InitFields,
-        0, /* extra callback item */
-        g_igAttrSet_callbackList /* callback list */
+        sizeof(igAttrSet),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igAttrSet_GetMetaObjectFunction(void) {
-    igAttrSet_GetMetaObject();
+void igAttrSet::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igBoolMetaField_Create };
+    static const char *names[] = { "_attributes", "_trigger" };
+    static igMetaField **enumStorage[] = { &k_attributes, &k_trigger };
+    static int offsets[] = { 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
+        metaField->_construct = 1;
+        metaField->_deepCopyMethod = 0;
+        metaField->_shallowCopyMethod = 2;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igAttrSet_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igAttrSet_fieldTable[] = {
-    "_attributes",
-    "_trigger",
-};
-static igMetaField **g_igAttrSet_fieldHandles[] = {
-    &g_igAttrSet_attributesMetaField,
-    &g_igAttrSet_triggerMetaField,
-};
-static int g_igAttrSet_fieldOffsets[] = {
-    32,
-    36,
-};
-
-void igAttrSet_InitFields(void) {
-    int base;
-    void *attributesField;
-    void *meta;
-
-    meta = (void *)g_igAttrSet_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igAttrSet_ctorTable, 2);
-    attributesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)attributesField)->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
-    ((igRefMetaField *)attributesField)->_construct = 1;
-    ((igMetaField *)attributesField)->_deepCopyMethod = 0;
-    ((igMetaField *)attributesField)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igAttrSet_fieldTable, g_igAttrSet_fieldHandles, g_igAttrSet_fieldOffsets, base);
+}
 }
 

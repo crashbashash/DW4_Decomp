@@ -1,149 +1,100 @@
-igMetaObject *g_igLod_metaObject;
-igMetaField *g_igLod_rangeListMetaField;
-igMetaField *g_igLod_lastRangeMetaField;
-igMetaField *g_igLod_lastIndexMetaField;
-igMetaField *g_igLod_lastLowerMetaField;
-igMetaField *g_igLod_lastUpperMetaField;
-igMetaField *g_igLod_centerMetaField;
-igMetaField *g_igLod_hysteresisListMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igLod_GetMetaObject(void)
+igMetaObject *igLod::_Meta;
+igMetaField *igLod::k_rangeList;
+igMetaField *igLod::k_lastRange;
+igMetaField *igLod::k_lastIndex;
+igMetaField *igLod::k_lastLower;
+igMetaField *igLod::k_lastUpper;
+igMetaField *igLod::k_center;
+igMetaField *igLod::k_hysteresisList;
+
+igMetaObject *igLod::getClassTypeSafe()
 {
-    igMetaObject *g = g_igLod_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igLod_EnsureRegistered();
-    return g_igLod_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igLod_GetVTable(void) {
-    struct W_19d660 o;
-    int *p16;
-    int r;
-    int *p17;
-    igObject_InitHeader((igObject *)&o);
-    o.f[1] = 0;
-    o.f[2] = 0;
-    o.f[3] = 0;
-    o.f[6] = 0;
-    o.vt = &g_igLod_vtable[0];
-    p16 = &o.f[7];
-    *p16 = 0;
-    p17 = &o.f[8];
-    *p17 = 0;
-    o.f[15] = 0;
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igLod_vtable[0];
-    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)&o.f[15], -1);
-    igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)p17, -1);
-    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)p16, -1);
-    igGroup_Destroy((igGroup *)&o, 0);
-    return r;
-}
-
-void igLod_EnsureRegistered(void)
+void *igLod::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igLod_Register);
+    igLod temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igLod_callbackList[] = { Gap::Core::igFloatList::arkRegister, Gap::Sg::igNode::arkRegister, 0 };
+void igLod::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igLod_Register(void) {
+CallbackArray *igLod::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igFloatList::arkRegister, Gap::Sg::igNode::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igLod_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igGroup::arkRegisterInternal,
         Gap::Sg::igGroup::getClassMeta,
-        igLod_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igLod",
-        0x44, /* instance size */
-        igLod_GetVTable,
-        &igLod_InitFields,
-        0, /* extra callback item */
-        g_igLod_callbackList /* callback list */
+        sizeof(igLod),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igLod_GetMetaObjectFunction(void) {
-    igLod_GetMetaObject();
+void igLod::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, igObjectRefMetaField_Create };
+    static const char *names[] = { "_rangeList", "_lastRange", "_lastIndex", "_lastLower", "_lastUpper", "_center", "_hysteresisList" };
+    static igMetaField **enumStorage[] = { &k_rangeList, &k_lastRange, &k_lastIndex, &k_lastLower, &k_lastUpper, &k_center, &k_hysteresisList };
+    static int offsets[] = { 32, 36, 40, 44, 48, 52, 64 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
+        metaField->_construct = 1;
+        metaField->_deepCopyMethod = 0;
+        metaField->_shallowCopyMethod = 2;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(0.0f);
+        metaField->_persistent = 0;
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(0.0f);
+        metaField->_persistent = 0;
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igLod_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igLod_fieldTable[] = {
-    "_rangeList",
-    "_lastRange",
-    "_lastIndex",
-    "_lastLower",
-    "_lastUpper",
-    "_center",
-    "_hysteresisList",
-};
-static igMetaField **g_igLod_fieldHandles[] = {
-    &g_igLod_rangeListMetaField,
-    &g_igLod_lastRangeMetaField,
-    &g_igLod_lastIndexMetaField,
-    &g_igLod_lastLowerMetaField,
-    &g_igLod_lastUpperMetaField,
-    &g_igLod_centerMetaField,
-    &g_igLod_hysteresisListMetaField,
-};
-static int g_igLod_fieldOffsets[] = {
-    32,
-    36,
-    40,
-    44,
-    48,
-    52,
-    64,
-};
-
-void igLod_InitFields(void) {
-    void *rangeListField;
-    void *lastRangeField;
-    void *hysteresisListField;
-    void *meta;
-    int base;
-    int defaultCenter[3];
-    void *centerField;
-    void *lastIndexField;
-    void *lastLowerField;
-    void *lastUpperField;
-
-    meta = (void *)g_igLod_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igLod_ctorTable, 7);
-    rangeListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)rangeListField)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
-    ((igRefMetaField *)rangeListField)->_construct = 1;
-    ((igMetaField *)rangeListField)->_deepCopyMethod = 0;
-    ((igMetaField *)rangeListField)->_shallowCopyMethod = 2;
-    lastRangeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)lastRangeField)->_metaObject = (int)Gap::Sg::igNode::getClassTypeLazy();
-    ((igMetaField *)lastRangeField)->_persistent = 0;
-    lastIndexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((Gap::Core::igIntMetaField *)lastIndexField)->setDefault(-1);
-    ((igIntMetaField *)lastIndexField)->_persistent = 0;
-    lastLowerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((Gap::Core::igFloatMetaField *)lastLowerField)->setDefault(0.0f);
-    ((igFloatMetaField *)lastLowerField)->_persistent = 0;
-    lastUpperField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
-    ((Gap::Core::igFloatMetaField *)lastUpperField)->setDefault(0.0f);
-    ((igFloatMetaField *)lastUpperField)->_persistent = 0;
-    centerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
-    defaultCenter[0] = 0;
-    defaultCenter[1] = 0;
-    defaultCenter[2] = 0;
-    ((Gap::Math::igVec3fMetaField *)centerField)->setDefault(*(const igVec3f *)defaultCenter);
-    hysteresisListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
-    ((igObjectRefMetaField *)hysteresisListField)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
-    igMetaObject_NameFields((igMetaObject *)meta, g_igLod_fieldTable, g_igLod_fieldHandles, g_igLod_fieldOffsets, base);
+}
 }
 

@@ -127,7 +127,8 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
 }
 
 void beResetNode_RegisterTraversal(void) {
-    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, beResetNode_GetMetaObject(), (igTraversalFunction *)beResetNode_TraverseCallback);
+    igMetaObject *meta = (igMetaObject *)beResetNode_GetMetaObject();
+    Gap::Sg::igTraversal::_setFunction(Gap::Sg::igCommonTraversal::_getTraversalFunctions(), meta, (igTraversalFunction *)beResetNode_TraverseCallback);
 }
 
 void beSeCtl_Prepare(beSeCtl *self) {

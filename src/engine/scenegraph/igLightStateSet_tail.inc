@@ -1,11 +1,12 @@
-void igLightStateSet_Reset(igLightStateSetView *self) {
-    unsigned int n;
-    unsigned int i;
+namespace Gap {
+namespace Sg {
 
-    n = self->lights->count;
-    for (i = 0; i < n; i++) {
-        self->lights->data[i]->apply();
-    }
+void igLightStateSet::reset() {
+    unsigned int count = _lightEnables->getCount();
+    for (unsigned int i = 0; i < count; i++)
+        _lightEnables->get(i)->reset();
+}
+}
 }
 
 RangeRefObject *FUN_001d0520(RangeLookup *self, float t) {

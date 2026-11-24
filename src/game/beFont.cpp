@@ -233,7 +233,7 @@ SjisUnicodeTable g_sjisToUnicodeTable = {{
 static inline igNodeView *nodeAt(igObjectList *list, int index) { return ((igNodeView **)list->_data)[index]; }
 static inline int countOf(igObjectList *list) { if (list != 0) return list->_count; return 0; }
 static inline igNodeView *asAttrSet(igNodeView *node) {
-    if (node != 0 && ((Gap::Core::igObject *)node)->isOfType(g_igAttrSet_metaObject) != 0) return node; else return 0;
+    if (node != 0 && ((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igAttrSet::getClassMeta()) != 0) return node; else return 0;
 }
 
 /* Marks the load as failed, so the font ignores every later message. */
@@ -402,7 +402,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         if (list != 0) childCount = list->_count;
         if (childCount <= 0) { abandonLoad(ram); result = 1; goto end; }
         pair = (beFontGeomAttrPair *)nodeAt(list, 0);
-        if (g_igAttrSet_metaObject != ((igNodeView *)pair)->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
+        if (Gap::Sg::igAttrSet::getClassMeta() != ((igNodeView *)pair)->GetMeta()) { abandonLoad(ram); result = 1; goto end; }
         if (pair) pair->_refCount = pair->_refCount + 1;
         {
             igNodeView *old = (igNodeView *)self->_root;
@@ -531,10 +531,10 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     int categoryBit = data->_cbitNo;
                     int panelBit = data->_tbitNo;
                     igNodeView *rootSwitch = nodeAt(((igNodeView *)self->_root)->_childList, 0);
-                    if (visible != 0) igSwitch_EnableChild((igSwitch *)rootSwitch, categoryBit);
+                    if (visible != 0) ((Gap::Sg::igSwitch *)rootSwitch)->activateChild(categoryBit);
                     {
                         igNodeView *panelSwitch = nodeAt(nodeAt(rootSwitch->_childList, categoryBit)->_childList, 0);
-                        if (visible != 0) igSwitch_EnableChild((igSwitch *)panelSwitch, panelBit); else igSwitch_DisableChild((igSwitch *)panelSwitch, panelBit);
+                        if (visible != 0) ((Gap::Sg::igSwitch *)panelSwitch)->activateChild(panelBit); else ((Gap::Sg::igSwitch *)panelSwitch)->deactivateChild(panelBit);
                     }
                     index = beFont_FindNextLayoutEntry(self, ram);
                 } while (index != -1);
@@ -551,7 +551,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     for (bit = 0; bit < bitCount; bit++) {
                         if ((1 << (bit & 31)) & ((int *)panelMask->_data)[bit >> 5]) anyPanel = 1;
                     }
-                    if (!anyPanel) igSwitch_DisableChild((igSwitch *)layerSwitch, k);
+                    if (!anyPanel) ((Gap::Sg::igSwitch *)layerSwitch)->deactivateChild(k);
                 } else {
                     unsigned char anyPanel = 0;
                     unsigned int bit;
@@ -559,7 +559,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     for (bit = 0; bit < bitCount; bit++) {
                         if ((1 << (bit & 31)) & ((int *)panelMask->_data)[bit >> 5]) anyPanel = 1;
                     }
-                    if (anyPanel) igSwitch_EnableChild((igSwitch *)layerSwitch, k);
+                    if (anyPanel) ((Gap::Sg::igSwitch *)layerSwitch)->activateChild(k);
                 }
                 k++;
             }

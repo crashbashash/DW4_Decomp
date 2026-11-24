@@ -676,6 +676,9 @@ igObjectList	int removeAllByValue(const igObject *obj, int startIndex);
 igObjectList	int appendUnique(igObject *obj);
 igObjectList	void setCount(int newCount);
 igObjectList	void clearAll();
+igObjectList	inline void removeAll() { releaseObjects(0, _count); clearPointers(0, _count); _count = 0; }
+igObjectList	private: inline void releaseObjects(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) igObject::release(((igObject **)(void *)_data)[i]); }
+igObjectList	private: inline void clearPointers(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) ((igObject **)(void *)_data)[i] = 0; }
 igAttr	IG_ABSTRACT_OBJECT_DEFINE(igAttr)
 igAttr	private: static igMetaField *k_cachedAttrIndex;
 igAttr	protected: static igMetaField *k_cachedUnitID;
@@ -1200,6 +1203,7 @@ igLightAttr	virtual void synchronizeDefault(igVisualContext *vc);
 igLightAttr	inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
 igLightAttr	inline igVisualContext *getVisualContext() { return _vc; }
 igLightAttr	virtual void reset();
+igLightAttr	friend class Gap::Sg::igLightSet;
 igLightStateAttr	IG_OBJECT_DEFINE(igLightStateAttr)
 igLightStateAttr	private: static igMetaField *k_internal;
 igLightStateAttr	private: static igMetaField *k_light;
@@ -3621,3 +3625,250 @@ igOnOffValueObserver	virtual void notify(const igNotifyEvent &event);
 igOnOffValueObserver	void setSelected(unsigned char selected);
 igOnOffValueObserver	friend class igRadioGroup;
 igOnOffValueObserverList	IG_OBJECT_DEFINE(igOnOffValueObserverList)
+igCapabilityManager	IG_ABSTRACT_OBJECT_DEFINE(igCapabilityManager)
+igCapabilityManager	virtual int getCapability(IG_GFX_CAPABILITY which) const = 0;
+igCapabilityManager	virtual void detectDriverDatabaseProperties(igDriverDatabase *driverDB);
+igCommonTraversal	IG_OBJECT_DEFINE(igCommonTraversal)
+igCommonTraversal	enum COMMON_TRAVERSAL_FLAG { START_BIT = 0, END_BIT = 1 };
+igCommonTraversal	enum SEPARATE_OUTPUT_PASS { DEFAULT_PASS = 0, FIRST_PASS = 1, OPAQUE_PASS = 2, TRANSPARENT_PASS = 3 };
+igCommonTraversal	protected: static igMetaField *k_attrStack;
+igCommonTraversal	protected: static igMetaField *k_transformStack;
+igCommonTraversal	protected: static igMetaField *k_vc;
+igCommonTraversal	private: static igMetaField *k_capabilityManager;
+igCommonTraversal	private: static igMetaField *k_defaultManager;
+igCommonTraversal	protected: static igMetaField *k_flushedAttrs;
+igCommonTraversal	protected: static igMetaField *k_sorter;
+igCommonTraversal	protected: static igMetaField *k_matrixPool;
+igCommonTraversal	protected: static igMetaField *k_timePool;
+igCommonTraversal	protected: static igMetaField *k_blendMatrixPool;
+igCommonTraversal	protected: static igMetaField *k_texMatPool;
+igCommonTraversal	protected: static igMetaField *k_vertexBlendMatListPool;
+igCommonTraversal	protected: static igMetaField *k_matrixObjectPool;
+igCommonTraversal	protected: static igMetaField *k_projectionMatrixPool;
+igCommonTraversal	protected: static igMetaField *k_viewMat;
+igCommonTraversal	protected: static igMetaField *k_viewMatInv;
+igCommonTraversal	protected: static igMetaField *k_modeMask;
+igCommonTraversal	protected: static igMetaField *k_matrixOptimization;
+igCommonTraversal	protected: static igMetaField *k_normalizeNormalsEnable;
+igCommonTraversal	protected: static igMetaField *k_timeStack;
+igCommonTraversal	protected: static igMetaField *k_matrixObjectList;
+igCommonTraversal	private: static igMetaField *k_timeLongBuf;
+igCommonTraversal	private: static igMetaField *k_timeBuffered;
+igCommonTraversal	protected: static igMetaField *k_boneMatrixPaletteList;
+igCommonTraversal	protected: static igMetaField *k_blendMatrixPaletteList;
+igCommonTraversal	protected: static igMetaField *k_blendMatrixPaletteLengths;
+igCommonTraversal	protected: static igMetaField *k_segmentOverrideNames;
+igCommonTraversal	protected: static igMetaField *k_segmentOverrideStacks;
+igCommonTraversal	protected: static igMetaField *k_blendMatricesAttrPool;
+igCommonTraversal	protected: static igMetaField *k_projMat;
+igCommonTraversal	protected: static igMetaField *k_defaultTimeAttr;
+igCommonTraversal	protected: static igMetaField *k_jointChainCount;
+igCommonTraversal	protected: static igMetaField *k_jointMvmBase;
+igCommonTraversal	protected: static igMetaField *k_jointMvmInverseBase;
+igCommonTraversal	protected: static igMetaField *k_jointGraphRootTraversed;
+igCommonTraversal	private: static igTraversalFunctionList *travProcs;
+igCommonTraversal	static void registerClass(igMetaObject *meta);
+igCommonTraversal	protected: void cacheTravProcs() { _travProcs = travProcs; }
+igCommonTraversal	static void _registerClass(igTraversalFunctionList *tpl, igMetaObject *meta);
+igCommonTraversal	public: inline static igTraversalFunctionList *_getTraversalFunctions() { return travProcs; }
+igCommonTraversal	inline static void _setTraversalFunctions(igTraversalFunctionList *list) { travProcs = list; }
+igCommonTraversal	static void userRegister();
+igCommonTraversal	static void userUnregister();
+igCommonTraversal	virtual void userConstruct(int flag);
+igCommonTraversal	virtual void userDestruct();
+igCommonTraversal	private: static void arkRegisterUser();
+igCommonTraversal	public: inline void setCapabilityManager(igCapabilityManager *capabilityManagerParam) { _capabilityManager = capabilityManagerParam; }
+igCommonTraversal	inline igCapabilityManager *getCapabilityManager() const { return _capabilityManager; }
+igCommonTraversal	inline void setDefaultManager(igAttrDefaultManager *defaultManagerParam) { _defaultManager = defaultManagerParam; }
+igCommonTraversal	inline igAttrDefaultManager *getDefaultManager() const { return _defaultManager; }
+igCommonTraversal	virtual void setVisualContext(igVisualContext *vc);
+igCommonTraversal	inline virtual void setSorter(igSorter *so) { _sorter = so; }
+igCommonTraversal	virtual igDisplayListAttr *getOutput(SEPARATE_OUTPUT_PASS pass = DEFAULT_PASS);
+igCommonTraversal	virtual void reset();
+igCommonTraversal	virtual void pushTime(long long t);
+igCommonTraversal	virtual void popTime();
+igCommonTraversal	void setup(igAttrDefaultManager *defaultManager, igCapabilityManager *capabilityManager);
+igCommonTraversal	void setViewMatrix(const igMatrix44f *mat);
+igCommonTraversal	void setFrustum(float left, float right, float bottom, float top, float nearval, float farval);
+igCommonTraversal	void setPerspective(float hfov, float vfov, float aspect, float zNear, float zFar);
+igCommonTraversal	virtual long long getTimeAsLong();
+igCommonTraversal	private: static inline bool isTimeStackEmpty(const igLongStack *stack) { return stack->_count == 0; }
+igCommonTraversal	static inline void setTimeStackTop(igLongStack *stack, long long time) { ((long long *)stack->_data)[stack->_count - 1] = time; }
+igCommonTraversal	public: inline virtual void setTimeAsLong(long long time) { if (isTimeStackEmpty(_timeStack)) { _timeBuffered = false; _timeLong = time; } else { setTimeStackTop(_timeStack, time); } }
+igCommonTraversal	void begin(igNode *root);
+igCommonTraversal	void end(igNode *root);
+igShaderData	IG_OBJECT_DEFINE(igShaderData)
+igShaderData	protected: static igMetaField *k_attrPushLists;
+igShaderData	protected: static igMetaField *k_attrPopLists;
+igShaderData	protected: static igMetaField *k_dataPumps;
+igShaderData	protected: static igMetaField *k_childLists;
+igShaderData	public: inline void setDataPumps(igDataPumpInfo *dataPumpsParam) { _dataPumps = dataPumpsParam; }
+igShaderData	inline igDataPumpInfo *getDataPumps() const { return _dataPumps; }
+igShaderData	virtual void setPassCount(int numPasses);
+igShaderData	inline int getPassCount() const { return _attrPushLists->getCount(); }
+igShaderData	virtual void appendPass(igAttrList *pushList, igAttrList *popList, igNodeList *childList = 0);
+igShaderData	virtual void removeAll();
+igShaderData	void setPushList(int passIndex, igAttrList *pushList);
+igShaderData	inline igAttrList *getPushList(int passIndex) { return _attrPushLists->get(passIndex); }
+igShaderData	void setPopList(int passIndex, igAttrList *popList);
+igShaderData	inline igAttrList *getPopList(int passIndex) { return _attrPopLists->get(passIndex); }
+igShaderData	void setChildList(int passIndex, igNodeList *childList);
+igShaderData	virtual void userPostLoad();
+igTransientShaderData	IG_OBJECT_DEFINE(igTransientShaderData)
+igTransientShaderData	protected: static igMetaField *k_attrPushLists;
+igTransientShaderData	protected: static igMetaField *k_attrPopLists;
+igTransientShaderData	protected: static igMetaField *k_dataPumps;
+igTransientShaderData	protected: static igMetaField *k_childLists;
+igInterpretedShaderData	IG_OBJECT_DEFINE(igInterpretedShaderData)
+igInterpretedShaderData	private: static igMetaField *k_factory;
+igInterpretedShaderData	private: static igMetaField *k_objectMappings;
+igInterpretedShaderData	public: inline void setFactory(igShaderFactory *factoryParam) { _factory = factoryParam; }
+igInterpretedShaderData	inline void setObjectMappings(igObjectStringMap *objectMappingsParam) { _objectMappings = objectMappingsParam; }
+igInterpretedShaderData	inline igShaderFactory *getFactory() { return _factory; }
+igInterpretedShaderData	inline igObjectStringMap *getObjectMappings() { return _objectMappings; }
+igShaderFactory	IG_OBJECT_DEFINE(igShaderFactory)
+igShaderFactory	public: enum FILE_CACHING_MODE { NO_CACHING, NON_PERSISTENT_CACHE, PERSISTENT_CACHE, GLOBAL_CACHE };
+igShaderFactory	static igMetaEnum *getFILE_CACHING_MODEMetaEnum();
+igShaderFactory	private: static igMetaEnum *FILE_CACHING_MODE_Meta;
+igShaderFactory	private: static igMetaField *k_attrNames;
+igShaderFactory	private: static igMetaField *k_attrTypes;
+igShaderFactory	protected: static igMetaField *k_fileCachingMode;
+igShaderFactory	public: inline const igNamedObjectList *getAttrNames() const { return _attrNames; }
+igShaderFactory	inline const igNamedObjectList *getAttrTypes() const { return _attrTypes; }
+igShaderFactory	virtual bool configureShader(igSimpleShaderDispatchView *toConfigure, igInterpretedShaderData *configuration, igCapabilityManager *platformCapabilities);
+igShaderFactory	virtual igStringObjRef getInterfaceParameterString(const char *parameterName);
+igShaderFactory	virtual void setFileCachingMode(FILE_CACHING_MODE mode);
+igShaderFactory	inline FILE_CACHING_MODE getFileCachingMode() const { return _fileCachingMode; }
+igShaderFactory	virtual void resetFileCache();
+igShaderFactory	inline virtual void preloadFileCache() {}
+igShaderFactoryList	IG_OBJECT_DEFINE(igShaderFactoryList)
+igShaderInfo	IG_OBJECT_DEFINE(igShaderInfo)
+igShaderInfo	private: static igMetaField *k_factoryList;
+igShaderInfo	public: inline igShaderFactoryList *getFactoryList() const { return _factoryList; }
+igShaderInfo	virtual bool attemptResolve(igDirectory *parentDir, void *ref);
+igShaderInfo	virtual void *resolve(const char *key);
+igShaderInfo	static void userRegister();
+igShaderInfo	static void userUnregister();
+igShaderInfo	private: static void _classDestructor();
+igShaderProcessor	IG_OBJECT_DEFINE(igShaderProcessor)
+igShaderProcessor	inline virtual bool configureRequired(igSimpleShaderDispatchView *shader) { return false; }
+igShaderProcessor	virtual bool configure(igSimpleShaderDispatchView *shader, igCapabilityManager *capabilityManager);
+igShaderProcessor	virtual void update(igSimpleShaderDispatchView *shader, igCommonTraversal *ct);
+igShaderProcessor	virtual IG_TRAVERSAL_RETURN shade(igSimpleShaderDispatchView *shader, igCommonTraversal *ct);
+igAppearance	IG_OBJECT_DEFINE(igAppearance)
+igAppearance	private: static igMetaField *k_skin;
+igAppearance	private: static igMetaField *k_attachedSkins;
+igAppearance	private: static igMetaField *k_attachedGraphs;
+igAppearance	private: static igMetaField *k_segmentOverrideNameList;
+igAppearance	private: static igMetaField *k_segmentOverrideGraphList;
+igAppearance	public: void attachGraph(igNode *graph);
+igAppearance	bool detachGraph(igNode *graph);
+igAppearanceList	IG_OBJECT_DEFINE(igAppearanceList)
+igLightSet	IG_OBJECT_DEFINE(igLightSet)
+igLightSet	private: static igMetaField *k_lights;
+igLightSet	public: virtual void userConstruct(int flag);
+igLightSet	virtual unsigned int getInherantFlags();
+igLightSet	virtual void reset();
+igLightSet	virtual void transform(const igMatrix44f &matrix);
+igLightStateSet	IG_OBJECT_DEFINE(igLightStateSet)
+igLightStateSet	private: static igMetaField *k_lightEnables;
+igLightStateSet	public: virtual void userConstruct(int flag);
+igLightStateSet	virtual void reset();
+igIniShaderFactory	IG_OBJECT_DEFINE(igIniShaderFactory)
+igIniShaderFactory	public: static igMetaField *k_implementationName;
+igIniShaderFactory	private: static igMetaField *k_fileCache;
+igIniShaderFactory	private: static igMetaField *k_implementation;
+igIniShaderFactory	private: static igMetaField *k_interface;
+igIniShaderFactory	private: static igMetaField *k_interfaceFileName;
+igIniShaderFactory	private: static igMetaField *k_interfaceSection;
+igIniShaderFactory	private: static igMetaField *k_mp;
+igIniShaderFactory	private: static igMetaField *k_data;
+igIniShaderFactory	private: static igMetaField *k_cachedObjects;
+igIniShaderFactory	public: virtual bool configureShader(igSimpleShaderDispatchView *toConfigure, igInterpretedShaderData *configuration, igCapabilityManager *platformCapabilities);
+igIniShaderFactory	virtual igStringObjRef getInterfaceParameterString(const char *parameterName);
+igIniShaderFactory	virtual void resetFileCache();
+igIniShaderFactory	virtual void preloadFileCache();
+igIniShaderFactory	virtual void userPostLoad();
+igIniShaderFactory	virtual void trimCapacity();
+igAttrSet	IG_OBJECT_DEFINE(igAttrSet)
+igAttrSet	protected: static igMetaField *k_attributes;
+igAttrSet	static igMetaField *k_trigger;
+igAttrSet	public: inline igAttrList *getAttrs() { return _attributes; }
+igAttrSet	inline virtual void setAttrs(igAttrList *attributeList) { _attributes = attributeList; }
+igAttrSet	inline bool getTriggerState() const { return _trigger; }
+igAttrSet	inline virtual void setTriggerState(bool enable) { _trigger = enable; }
+igAttrSet	virtual void reset();
+igGeometry	IG_OBJECT_DEFINE(igGeometry)
+igGeometry	private: static igMetaField *k_trigger;
+igGeometry	static igMetaField *k_renderList;
+igGeometry	public: static void userRegister();
+igGeometry	virtual void userPostLoad();
+igGeometry	virtual void transform(const igMatrix44f &matrix);
+igGeometry	virtual void setFlags(int flags, const bool b);
+igGeometry	virtual void setFlags(int flags);
+igGeometry	virtual void reset();
+igGeometry	inline virtual bool isChildrenOrdered() const { return true; }
+igGeometry	virtual unsigned int getTotalTriangles() const;
+igSwitch	IG_OBJECT_DEFINE(igSwitch)
+igSwitch	private: static igMetaField *k_childMask;
+igSwitch	public: void activateChild(unsigned int index);
+igSwitch	void activateAllChildren();
+igSwitch	void deactivateChild(unsigned int index);
+igSwitch	void deactivateAllChildren();
+igSwitch	int appendChild(igNode *child);
+igSwitch	virtual bool insertChild(int index, igNode *child);
+igSwitch	igNode *removeChild(int index);
+igSwitch	inline igBitMask *getChildMask() const { return _childMask; }
+igSwitch	inline virtual bool isChildrenOrdered() const { return true; }
+igLod	IG_OBJECT_DEFINE(igLod)
+igLod	private: static igMetaField *k_rangeList;
+igLod	static igMetaField *k_lastRange;
+igLod	static igMetaField *k_lastIndex;
+igLod	static igMetaField *k_lastLower;
+igLod	static igMetaField *k_lastUpper;
+igLod	static igMetaField *k_center;
+igLod	static igMetaField *k_hysteresisList;
+igLod	public: inline virtual bool isChildrenOrdered() const { return true; }
+igLod	inline virtual int getLastSelectedLod() { if (_lastRange == 0) { return -1; } return _lastIndex; }
+igLod	virtual void transform(const igMatrix44f &matrix);
+igLod	virtual void reset();
+igLod	virtual void userPostLoad();
+igBillboard	IG_OBJECT_DEFINE(igBillboard)
+igBillboard	private: static igMetaField *k_mode;
+igBillboard	static igMetaField *k_axis;
+igBillboard	static igMetaField *k_origin;
+igBillboard	static igMetaField *k_mvm;
+igBillboard	public: void computeTransform(igMatrix44f *result, const igMatrix44f *modelMat, const igMatrix44f *viewMatInv);
+igBillboard	inline virtual bool isTransformable() const { return false; }
+igSegment	IG_OBJECT_DEFINE(igSegment)
+igSegment	inline virtual bool isTransformable() const { return false; }
+igGraphPath	IG_OBJECT_DEFINE(igGraphPath)
+igGraphPath	private: static igMetaField *k_path;
+igGraphPath	static igMetaField *k_center;
+igGraphPath	static igMetaField *k_length;
+igGraphPath	public: void configure(igNode *root);
+igGraphPath	void configure(igGraphPath *init);
+igGraphPath	void configure(igNodeList *init);
+igGraphPath	int getDepth() const;
+igGraphPath	void pushNode(int child);
+igGraphPath	igNode *popNode();
+igGraphPath	igNode *getTop() const;
+igGraphPath	bool isTop() const;
+igGraphPath	void getTransformMatrixInclusive(igMatrix44f *mat, long long time) const;
+igGraphPath	private: void getTransformMatrix(int depth, igMatrix44f *mat, long long time) const;
+igGraphPathList	IG_OBJECT_DEFINE(igGraphPathList)
+igGeometryList	IG_OBJECT_DEFINE(igGeometryList)
+igCamera	IG_OBJECT_DEFINE(igCamera)
+igCamera	enum CameraType { CameraPoint, CameraTarget };
+igCamera	static igMetaEnum *getCameraTypeMetaEnum();
+igCamera	private: static igMetaEnum *CameraType_Meta;
+igCamera	static igMetaField *k_cameraType;
+igCamera	static igMetaField *k_deadfield1;
+igCamera	static igMetaField *k_deadfield2;
+igCamera	static igMetaField *k_deadfield3;
+igCamera	protected: static igMetaField *k_horizontalFieldOfView;
+igCamera	static igMetaField *k_nearPlane;
+igCamera	static igMetaField *k_farPlane;
+igCamera	public: inline virtual bool isTransformable() const { return false; }
+igCamera	inline virtual void activate() {}
+igCamera	inline virtual void deactivate() {}

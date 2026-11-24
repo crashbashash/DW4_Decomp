@@ -4,131 +4,44 @@ static const char *g_igShaderFactory_fileCachingModeNames[] = {
 static int g_igShaderFactory_fileCachingModeValues[] = {
     0, 1, 2, 3,
 };
-igMetaEnum *g_igShaderFactory_fileCachingModeMetaEnum;
+namespace Gap {
+namespace Sg {
 
-igMetaEnum *FUN_00199110(void) {
-    if (g_igShaderFactory_fileCachingModeMetaEnum == 0) {
-        g_igShaderFactory_fileCachingModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("FILE_CACHING_MODE", g_igShaderFactory_fileCachingModeNames, g_igShaderFactory_fileCachingModeValues, 4);
-    }
-    return g_igShaderFactory_fileCachingModeMetaEnum;
-}
+igMetaEnum *igShaderFactory::FILE_CACHING_MODE_Meta;
 
-igMetaObject *g_igShaderFactory_metaObject;
-igMetaField *g_igShaderFactory_attrNamesMetaField;
-igMetaField *g_igShaderFactory_attrTypesMetaField;
-igMetaField *g_igShaderFactory_fileCachingModeMetaField;
-
-igMetaObject *igShaderFactory_GetOrCreateMetaObject(void) {
-    if (g_igShaderFactory_metaObject == 0) {
-        g_igShaderFactory_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igShaderFactory_metaObject;
-}
-
-igMetaObject *igShaderFactory_GetMetaObject(void)
+igMetaEnum *igShaderFactory::getFILE_CACHING_MODEMetaEnum()
 {
-    igMetaObject *g = g_igShaderFactory_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igShaderFactory_EnsureRegistered();
-    return g_igShaderFactory_metaObject;
+    if (FILE_CACHING_MODE_Meta == 0) {
+        FILE_CACHING_MODE_Meta = igMetaEnum::createMetaEnum("FILE_CACHING_MODE", g_igShaderFactory_fileCachingModeNames, g_igShaderFactory_fileCachingModeValues, 4);
+    }
+    return FILE_CACHING_MODE_Meta;
 }
 
-int igShaderFactory_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    char *q2;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
+igMetaObject *igShaderFactory::_Meta;
+igMetaField *igShaderFactory::k_attrNames;
+igMetaField *igShaderFactory::k_attrTypes;
+igMetaField *igShaderFactory::k_fileCachingMode;
 
-    igObject_InitHeader((igObject *)u.b);
-    q2 = &u.b[8];
-    *(int *)q2 = 0;
-    u.vt = (int)&g_igShaderFactory_vtable[0];
-    q1 = (S_ref *)&u.b[12];
-    *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[16];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igShaderFactory_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    u.vt = (int)&g_igNamedObject_vtable[0];
-    if (q2 != 0) {
-        temp_v1 = *(int **)q2;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
-            }
-        }
-    }
-    return temp_s0;
+igMetaObject *igShaderFactory::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void *FUN_00199330(struct T_199330 *arg0, long long arg1) {
-    struct Rc *o;
-    int *a1;
-    int v0;
-    if (arg0 != 0) {
-        arg0->vt = &g_igShaderFactory_vtable[0];
-        if (&arg0->f16 != 0) {
-            o = arg0->f16;
-            if (o != 0) {
-                o->rc = o->rc - 1;
-                if ((o->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy((igObject *)o);
-                }
-            }
-        }
-        if (&arg0->f12 != 0) {
-            o = arg0->f12;
-            if (o != 0) {
-                o->rc = o->rc - 1;
-                if ((o->rc & 0x7FFFFF) == 0) {
-                    igObject_Destroy((igObject *)o);
-                }
-            }
-        }
-        if (arg0 != 0) {
-            arg0->vt = &g_igNamedObject_vtable[0];
-            if (&arg0->f8 != 0) {
-                char *p = arg0->f8;
-                if (p != 0) {
-                    a1 = (int *)(p - 8);
-                    v0 = *(int *)(p - 4) - 1;
-                    *(int *)(p - 4) = v0;
-                    if (v0 == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1);
-                    }
-                }
-            }
-        }
-        if ((short)arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
+igMetaObject *igShaderFactory::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igShaderFactory::retrieveVTablePointer()
+{
+    igShaderFactory temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 igSmartPointer<igObject> *igSmartPointer_igNamedObjectList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
@@ -140,74 +53,61 @@ igSmartPointer<igObject> *igSmartPointer_igNamedObjectList_Destruct(igSmartPoint
     return self;
 }
 
-void igShaderFactory_EnsureRegistered(void)
+namespace Gap {
+namespace Sg {
+
+void igShaderFactory::arkRegister()
 {
-    igMetaObject_RunStaticInit(igShaderFactory_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-static igMetaObjectCallback g_igShaderFactory_callbackList[] = { igNamedObjectList_EnsureRegistered, 0 };
+CallbackArray *igShaderFactory::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igNamedObjectList_EnsureRegistered, 0 };
 
-CallbackArray *igShaderFactory_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igShaderFactory_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        igShaderFactory_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igShaderFactory",
-        0x18, /* instance size */
-        igShaderFactory_GetVTable,
-        &igShaderFactory_InitFields,
-        0, /* extra callback item */
-        g_igShaderFactory_callbackList /* callback list */
+        sizeof(igShaderFactory),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igShaderFactory_GetMetaObjectFunction(void) {
-    igShaderFactory_GetMetaObject();
+void igShaderFactory::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igEnumMetaField_Create };
+    static const char *names[] = { "_attrNames", "_attrTypes", "_fileCachingMode" };
+    static igMetaField **enumStorage[] = { &k_attrNames, &k_attrTypes, &k_fileCachingMode };
+    static int offsets[] = { 12, 16, 20 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(3);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Sg::igShaderFactory::getFILE_CACHING_MODEMetaEnum;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igShaderFactory_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-};
-static const char *g_igShaderFactory_fieldTable[] = {
-    "_attrNames",
-    "_attrTypes",
-    "_fileCachingMode",
-};
-static igMetaField **g_igShaderFactory_fieldHandles[] = {
-    &g_igShaderFactory_attrNamesMetaField,
-    &g_igShaderFactory_attrTypesMetaField,
-    &g_igShaderFactory_fileCachingModeMetaField,
-};
-static int g_igShaderFactory_fieldOffsets[] = {
-    12,
-    16,
-    20,
-};
-
-void igShaderFactory_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igShaderFactory_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igShaderFactory_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igNamedObjectList_GetOrCreateMetaObject();
-    *(unsigned char *)((char *)(temp_s1) + 52) = 1;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)igNamedObjectList_GetOrCreateMetaObject();
-    *(unsigned char *)((char *)(temp_s1_2) + 52) = 1;
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(3);
-    *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00199110);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igShaderFactory_fieldTable, g_igShaderFactory_fieldHandles, g_igShaderFactory_fieldOffsets, temp_s2);
+}
 }
 

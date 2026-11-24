@@ -1,175 +1,57 @@
 
-extern "C" void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count);
+
+namespace Gap {
+namespace Sg {
 
 /* Resizes the push, pop and child lists to {count}; child slots past the old count are released and cleared. */
-void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count) {
-    int i;
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_attrPushLists))->setCount(count);
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_attrPopLists))->setCount(count);
-    i = self->_childLists->count;
-    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_childLists))->setCount(count);
-    /* matching construct: check.py — the loop guard is emitted after the loop and re-enters at the test */
-    goto guard;
-next:
-    {
-        ShaderDataList *children = self->_childLists;
-        ShaderDataEntry *old = children->data[i];
-        if (old != 0) {
-            old->references = old->references - 1;
-            if (((unsigned long long)((long long)old->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)old);
-            }
-        }
-        if (children->count != 0 && i >= 0 && i < children->count) {
-            children->data[i] = 0;
-        }
-    }
-    i++;
-test:
-    if (i < count) goto next;
-done:
-    return;
-guard:
-    if (i < count) goto test;
-    goto done;
+void igShaderData::setPassCount(int numPasses)
+{
+    _attrPushLists->setCount(numPasses);
+    _attrPopLists->setCount(numPasses);
+    int oldCount = _childLists->getCount();
+    _childLists->setCount(numPasses);
+    for (int i = oldCount; i < numPasses; i++)
+        _childLists->set(i, 0);
 }
 
-void igShaderData_AppendPass(igShaderData *self, int item, int arg2, int arg3) {
-    ((Gap::Core::igObjectList *)self->_attrPushLists)->append((Gap::Core::igObject *)item);
-    ((Gap::Core::igObjectList *)self->_attrPopLists)->append((Gap::Core::igObject *)arg2);
-    ((Gap::Core::igObjectList *)self->_childLists)->append((Gap::Core::igObject *)arg3);
+void igShaderData::appendPass(igAttrList *pushList, igAttrList *popList, igNodeList *childList)
+{
+    _attrPushLists->append(pushList);
+    _attrPopLists->append(popList);
+    _childLists->append(childList);
 }
 
-void igShaderData_RemoveAll(struct ShaderDataView *arg0) {
-    ShaderDataList *l;
-    int n;
-    int i;
-    ShaderDataEntry *o;
-    l = arg0->_attrPushLists;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        o = l->data[i];
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-    }
-    {
-        int m = l->count;
-        int j;
-        for (j = 0; j < m; j++) {
-            l->data[j] = 0;
-        }
-    }
-    l->count = 0;
-    l = arg0->_attrPopLists;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        o = l->data[i];
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-    }
-    {
-        int m = l->count;
-        int j;
-        for (j = 0; j < m; j++) {
-            l->data[j] = 0;
-        }
-    }
-    l->count = 0;
-    l = arg0->_childLists;
-    n = l->count;
-    for (i = 0; i < n; i++) {
-        o = l->data[i];
-        if (o != 0) {
-            o->references = o->references - 1;
-            if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
-    }
-    {
-        int m = l->count;
-        int j;
-        for (j = 0; j < m; j++) {
-            l->data[j] = 0;
-        }
-    }
-    l->count = 0;
-    o = arg0->_dataPumps;
-    if (o != 0) {
-        o->references = o->references - 1;
-        if (((unsigned long long)((long long)o->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
-    }
-    arg0->_dataPumps = 0;
+void igShaderData::removeAll()
+{
+    _attrPushLists->removeAll();
+    _attrPopLists->removeAll();
+    _childLists->removeAll();
+    setDataPumps(0);
 }
 
-void FUN_001d86f0(struct S_1d86f0 *arg0, int arg1, igObject *arg2) {
-    igObjectList *l;
-    int off;
-    int n;
-    igObject *old;
-    l = arg0->f8;
-    igObject::ref(arg2);
-    off = arg1 * 4;
-    old = *(igObject **)(l->_data + off);
-    igObject::release(old);
-    n = l->_count;
-    if (n != 0 && arg1 >= 0 && arg1 < n) {
-        *(igObject **)(l->_data + off) = arg2;
-    }
+void igShaderData::setPushList(int passIndex, igAttrList *pushList)
+{
+    _attrPushLists->set(passIndex, pushList);
 }
 
-void FUN_001d87b0(igTransformSequence *arg0, int arg1, igObject *arg2) {
-    igObjectList *temp_s1;
-    int temp_s0;
-    int temp_v1;
-    igObject *temp_a0;
-    temp_s1 = (igObjectList *)arg0->_quatList;
-    igObject::ref(arg2);
-    temp_s0 = arg1 * 4;
-    temp_a0 = *(igObject **)(temp_s1->_data + temp_s0);
-    igObject::release(temp_a0);
-    temp_v1 = temp_s1->_count;
-    if ((temp_v1 != 0) && (arg1 >= 0) && (arg1 < temp_v1)) {
-        *(igObject **)(temp_s1->_data + temp_s0) = arg2;
-    }
+void igShaderData::setPopList(int passIndex, igAttrList *popList)
+{
+    _attrPopLists->set(passIndex, popList);
 }
 
-void FUN_001d8870(struct A_1d8870 *arg0, int arg1, igObject *arg2) {
-    igObjectList *l;
-    igObject *old;
-    int n;
-    int off;
-    l = arg0->f20;
-    igObject::ref(arg2);
-    off = arg1 * 4;
-    old = *(igObject **)(l->_data + off);
-    igObject::release(old);
-    n = l->_count;
-    if (n != 0 && arg1 >= 0 && arg1 < n) {
-        *(igObject **)(l->_data + off) = arg2;
-    }
+void igShaderData::setChildList(int passIndex, igNodeList *childList)
+{
+    _childLists->set(passIndex, childList);
 }
 
-void igShaderData_UserPostLoad(igShaderData *self) {
-    int temp_a1;
-    void *temp_a0;
-
-    igObject_UserPostLoad();
-    temp_a0 = (void *)(self->_childLists);
-    temp_a1 = *(int *)((char *)(self->_attrPushLists) + 8);
-    if (temp_a1 != *(int *)((char *)(temp_a0) + 8)) {
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)temp_a0))->setCount(temp_a1);
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_childLists))->clearAll();
+void igShaderData::userPostLoad()
+{
+    igObject::userPostLoad();
+    if (_attrPushLists->getCount() != _childLists->getCount()) {
+        _childLists->setCount(_attrPushLists->getCount());
+        _childLists->clearAll();
     }
+}
+}
 }
 

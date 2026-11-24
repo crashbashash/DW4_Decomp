@@ -1,12 +1,17 @@
-int Gap__Sg__igCommonTraversal__vfunc_30(igCommonTraversalView *self) {
-    return self->f68->slot21(self->f52);
+namespace Gap {
+namespace Sg {
+
+igDisplayListAttr *igCommonTraversal::getOutput(SEPARATE_OUTPUT_PASS pass)
+{
+    igCommonTraversalView *view = (igCommonTraversalView *)this;
+    return (igDisplayListAttr *)view->f68->slot21(view->f52);
 }
 
-void FUN_001b6cd0(int a0, float left, float right, float bottom, float top, float nearPlane, float farPlane) {
-    FUN_00191910((float *)((char *)a0 + 272), left, right, bottom, top, nearPlane, farPlane);
+void igCommonTraversal::setFrustum(float left, float right, float bottom, float top, float nearPlane, float farPlane) {
+    FUN_00191910((float *)((char *)this + 272), left, right, bottom, top, nearPlane, farPlane);
 }
 
-void igCommonTraversal_SetPerspective(void *arg0, float fparg0, float fparg1, float fparg2, float fparg3, float fparg4) {
+void igCommonTraversal::setPerspective(float fparg0, float fparg1, float fparg2, float fparg3, float fparg4) {
     float var_f23;
     float temp_f14;
     float temp_f23;
@@ -21,10 +26,11 @@ void igCommonTraversal_SetPerspective(void *arg0, float fparg0, float fparg1, fl
     }
     temp_f23 = fparg3 * -tanf(0.5f * var_f23);
     temp_f14 = fparg3 * -tanf(0.5f * var_f22);
-    FUN_001b6cd0((int)(arg0), temp_f23, -temp_f23, temp_f14, -temp_f14, fparg3, fparg4);
+    setFrustum(temp_f23, -temp_f23, temp_f14, -temp_f14, fparg3, fparg4);
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_31(A_1b6e20 *arg0) {
+void igCommonTraversal::reset() {
+    A_1b6e20 *arg0 = (A_1b6e20 *)this;
     C_1b6e20 *temp_a0;
 
     temp_a0 = arg0->f68;
@@ -46,57 +52,36 @@ void Gap__Sg__igCommonTraversal__vfunc_31(A_1b6e20 *arg0) {
     arg0->f252->f8 = 0;
 }
 
-void igCommonTraversal_SetViewMatrix(int arg0, int *arg1) {
-
-    igMatrix44f_Copy((float *)(arg0 + 0x64), (const float *)arg1);
-    igMatrix44f_Invert((float *)(arg0 + 0xA4), (const float *)arg1);
+void igCommonTraversal::setViewMatrix(const igMatrix44f *mat) {
+    igMatrix44f_Copy(_viewMat.m, mat->m);
+    igMatrix44f_Invert(_viewMatInv.m, mat->m);
 }
 
-void igCommonTraversal_Setup(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
-    R_1b6f30 *temp_a0;
-    R_1b6f30 *temp_a0_2;
-
-    if (arg2 != 0) {
-        arg2->refs = arg2->refs + 1;
-    }
-    temp_a0 = arg0->f32;
-    if (temp_a0 != 0) {
-        temp_a0->refs = temp_a0->refs - 1;
-        if (((unsigned long long)((long long)temp_a0->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->f32 = arg2;
-    if (arg1 != 0) {
-        arg1->refs = arg1->refs + 1;
-    }
-    temp_a0_2 = arg0->f36;
-    if (temp_a0_2 != 0) {
-        temp_a0_2->refs = temp_a0_2->refs - 1;
-        if (((unsigned long long)((long long)temp_a0_2->refs << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0_2);
-        }
-    }
-    arg0->f36 = arg1;
-    igAttrStackManager_Setup((igAttrStackManager *)arg0->f52, Gap::Attrs::igAttr::getClassMeta(), (igAttrDefaultManager *)arg0->f36,
-                 (igVisualContextCapabilityManager *)arg0->f32);
+void igCommonTraversal::setup(igAttrDefaultManager *defaultManager, igCapabilityManager *capabilityManager) {
+    _capabilityManager = capabilityManager;
+    _defaultManager = defaultManager;
+    igAttrStackManager_Setup((::igAttrStackManager *)_attrStack.get(), Gap::Attrs::igAttr::getClassMeta(), (::igAttrDefaultManager *)_defaultManager.get(),
+                 (igVisualContextCapabilityManager *)_capabilityManager.get());
 }
 
-void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
+void igCommonTraversal::setVisualContext(igVisualContext *vc) {
+    /* matching construct: the receiver and the context are named locals, the allocation of retail's parameters */
+    O_1b7010 *arg0 = (O_1b7010 *)this;
+    R_1b7010 *arg1 = (R_1b7010 *)vc;
     void *a;
     bool var_s1;
     R_1b7010 *t;
 
     retain_1b7010(arg1);
-    release(arg0->f60);
+    ::release(arg0->f60);
     arg0->f60 = arg1;
     var_s1 = 0;
     if (arg1 == 0) {
         a = ((void *)((Gap::Core::igObject *)arg0)->getMemoryPool());
-        release(arg0->f36);
+        ::release(arg0->f36);
         arg0->f36 = (R_1b7010 *)Gap::Attrs::igGenericAttrDefaultManager::_instantiateFromPool((igMemoryPoolView *)a);
         a = ((void *)((Gap::Core::igObject *)arg0)->getMemoryPool());
-        release(arg0->f32);
+        ::release(arg0->f32);
         arg0->f32 = (R_1b7010 *)igGenericCapabilityManager_Create((igMemoryPoolView *)a);
         var_s1 = 1;
     } else {
@@ -104,11 +89,11 @@ void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
             igSmartPointer<R_1b7010> created((R_1b7010 *)Gap::Attrs::igVisualContextAttrDefaultManager::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
             t = created.get();
             retain_1b7010(arg1);
-            release(t->f8);
+            ::release(t->f8);
             t->f8 = arg1;
             t = created.get();
             retain_1b7010(t);
-            release(arg0->f36);
+            ::release(arg0->f36);
             arg0->f36 = t;
             var_s1 = 1;
         }
@@ -116,18 +101,20 @@ void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
             igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextCapabilityManager_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
             t = created.get();
             retain_1b7010(arg1);
-            release(t->f8);
+            ::release(t->f8);
             t->f8 = arg1;
             t = created.get();
             retain_1b7010(t);
-            release(arg0->f32);
+            ::release(arg0->f32);
             arg0->f32 = t;
             var_s1 = 1;
         }
     }
     if (var_s1) {
-        igCommonTraversal_Setup((A_1b6f30 *)arg0, (R_1b6f30 *)arg0->f36, (R_1b6f30 *)arg0->f32);
+        setup((igAttrDefaultManager *)arg0->f36, (igCapabilityManager *)arg0->f32);
     }
+}
+}
 }
 
 V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
@@ -149,8 +136,13 @@ void FUN_001b73d0(struct S_1b73d0 *arg0) {
     FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
-    igClearAttr *attr;
+namespace Gap {
+namespace Sg {
+
+void igCommonTraversal::begin(igNode *root) {
+    /* matching construct: the receiver is a named local, the allocation of retail's parameter */
+    igCommonTraversalOps *t = (igCommonTraversalOps *)this;
+    ::igClearAttr *attr;
     AttrManagerView *m;
     AttrSlotList *list;
     int unit;
@@ -178,14 +170,18 @@ void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
     list = (AttrSlotList *)((AttrStackListView *)list)->_data[unit];
     list->append(attr);
     igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (igAttrStack *)list, unit);
-    Gap__Sg__igTraversal__vfunc_23((void *)t, root);
+    igTraversal::begin(root);
 }
+}
+}
+namespace Gap {
+namespace Sg {
 
-void Gap__Sg__igCommonTraversal__vfunc_32(igCommonTraversal *self, long long arg1) {
+void igCommonTraversal::pushTime(long long arg1) {
     int temp_s2;
     struct L_1b75b0 *temp_s1;
 
-    temp_s1 = (struct L_1b75b0 *)self->_timeStack;
+    temp_s1 = (struct L_1b75b0 *)_timeStack.get();
     temp_s2 = temp_s1->size;
     if (temp_s2 < temp_s1->cap) {
         temp_s1->size = size_of(temp_s1) + 1;
@@ -194,19 +190,24 @@ void Gap__Sg__igCommonTraversal__vfunc_32(igCommonTraversal *self, long long arg
     }
     temp_s1->data[temp_s2] = arg1;
 }
+}
+}
 
-void Gap__Sg__igCommonTraversal__vfunc_24(igCommonTraversal *t, int arg1) {
+namespace Gap {
+namespace Sg {
+
+void igCommonTraversal::end(igNode *arg1) {
     Mgr *m;
     int idx;
     Ent_1b7630 *e;
     int v;
     int last;
-    FUN_001b73d0((S_1b73d0 *)t);
-    if (t->_userTimeState != 0) {
-        ((TravView *)t)->f31();
+    FUN_001b73d0((S_1b73d0 *)this);
+    if (_userTimeState != 0) {
+        popTime();
     }
-    m = (Mgr *)t->_attrStack;
-    idx = ((igTimeAttr *)t->_defaultTimeAttr)->_cachedUnitID + m->idx[((igTimeAttr *)t->_defaultTimeAttr)->_cachedAttrIndex];
+    m = (Mgr *)_attrStack.get();
+    idx = _defaultTimeAttr->_cachedUnitID + m->idx[_defaultTimeAttr->_cachedAttrIndex];
     e = m->tab->ents[idx];
     last = e->count - 1; v = e->items[last];
     if (e->fn != 0) {
@@ -214,14 +215,18 @@ void Gap__Sg__igCommonTraversal__vfunc_24(igCommonTraversal *t, int arg1) {
     }
     e->count = e->count - 1;
     igAttrStackManager_MarkStackChanged((igAttrStackManager *)m, (igAttrStack *)e, idx);
-    Gap__Sg__igTraversal__vfunc_24(t, arg1);
+    igTraversal::end(arg1);
+}
+}
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_33(igCommonTraversal *self) {
-    void *temp_a0;
+namespace Gap {
+namespace Sg {
 
-    temp_a0 = (void *)(self->_timeStack);
-    *(int *)((char *)(temp_a0) + 8) = (int)((int) (*(int *)((char *)(temp_a0) + 8) - 1));
+void igCommonTraversal::popTime() {
+    _timeStack->_count = _timeStack->_count - 1;
+}
+}
 }
 
 int FUN_001b7740(void **arg0, void **arg1) {

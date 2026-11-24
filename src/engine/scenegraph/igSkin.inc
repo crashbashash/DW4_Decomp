@@ -36,15 +36,6 @@ igSmartPointer<igObject> *igSmartPointer_igAABox_Destruct(igSmartPointer<igObjec
     return self;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igNode_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
 namespace Gap {
 namespace Sg {
 

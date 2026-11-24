@@ -58,7 +58,7 @@ void igCameraMode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCameraMode_Register);
 }
 
-static igMetaObjectCallback g_igCameraMode_callbackList[] = { igGraphPath_EnsureRegistered, igCamera_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCameraMode_callbackList[] = { Gap::Sg::igGraphPath::arkRegister, Gap::Sg::igCamera::arkRegister, 0 };
 
 CallbackArray *igCameraMode_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -108,9 +108,9 @@ void igCameraMode_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCameraMode_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(Gap::Sg::igGraphPath::getClassTypeLazy());
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)(igCamera_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)(Gap::Sg::igCamera::getClassTypeLazy());
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCameraMode_fieldTable, g_igCameraMode_fieldHandles, g_igCameraMode_fieldOffsets, temp_s2);
 }
 

@@ -1,53 +1,52 @@
-igMetaObject *g_igShaderFactoryList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igShaderFactoryList_GetOrCreateMetaObject(void) {
-    if (g_igShaderFactoryList_metaObject == 0) {
-        g_igShaderFactoryList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igShaderFactoryList_metaObject;
-}
+igMetaObject *igShaderFactoryList::_Meta;
 
-igMetaObject *igShaderFactoryList_GetMetaObject(void)
+igMetaObject *igShaderFactoryList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igShaderFactoryList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igShaderFactoryList_EnsureRegistered();
-    return g_igShaderFactoryList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igShaderFactoryList_GetVTable(void) {
-    struct Obj_199040 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igShaderFactoryList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igShaderFactoryList_EnsureRegistered(void)
+igMetaObject *igShaderFactoryList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igShaderFactoryList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igShaderFactoryList_callbackList[] = { igShaderFactory_EnsureRegistered, 0 };
+void *igShaderFactoryList::retrieveVTablePointer()
+{
+    igShaderFactoryList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igShaderFactoryList_Register(void) {
+void igShaderFactoryList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igShaderFactoryList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igShaderFactory::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igShaderFactoryList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igShaderFactoryList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igShaderFactoryList",
-        0x14, /* instance size */
-        igShaderFactoryList_GetVTable,
+        sizeof(igShaderFactoryList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igShaderFactoryList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igShaderFactoryList_GetMetaObjectFunction(void) {
-    igShaderFactoryList_GetMetaObject();
+}
 }
 

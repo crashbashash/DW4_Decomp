@@ -112,10 +112,12 @@ KIT_VECTOR = {
 # igCapabilityManager has no reflected record here. igVertexArray's slots take the component lock (the kit's
 # igComponentEditInfo) by reference or pointer, igVertexStream's the kit's igComponentEditInfo2. igPsx2VisualContext's
 # PS2-only members take the pool records and the p2 light and material by pointer (dw4/gfx/igPsx2TextureRecord.h,
-# igPsx2ClutRecord.h, dw4/p2/p2lighting.h, GfxLibrary.h's StatisticsCapture).
+# igPsx2ClutRecord.h, dw4/p2/p2lighting.h, GfxLibrary.h's StatisticsCapture). The shader factories and processors
+# drive their target shader through igSimpleShaderDispatchView (dw4/scenegraph/igSimpleShader.h), a struct since the
+# kit's igSimpleShader has no registered class.
 FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
                  "igComponentEditInfo2", "igPsx2TextureRecord", "igPsx2ClutRecord", "p2Light", "p2Material",
-                 "StatisticsCapture")
+                 "StatisticsCapture", "igSimpleShaderDispatchView")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
 # `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, igVertexComponentFilter, the mask
@@ -125,11 +127,12 @@ FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock",
 # (png_structp, png_infop, png_color_8p) that igFileImagePng's reader members take, igRay.h, the kit's
 # igRay::ISET_SIDES that igGeometryAttr's intersectRay takes, igVertexArrayLock.h, the kit's vertex component
 # enum igGeometryAttr1_5's vector helper takes, and igVisualContextTypes.h, the structures igVisualContext's slots
-# take (igRenderDestinationFormat, igVideoFormat), and igNotifyEvent.h, the event igView's notify slot takes.
+# take (igRenderDestinationFormat, igVideoFormat), and igNotifyEvent.h, the event igView's notify slot takes, and
+# dw4/scenegraph/igSg.h, the scene graph library's IG_TRAVERSAL_RETURN that the shader processors' shade slot returns.
 KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h",
                     "dw4/gfx/igVertexFormat.h", "dw4/gfx/igVertexData.h", "dw4/gfx/png.h", "dw4/maths/igRay.h",
                     "dw4/gfx/igVertexArrayLock.h", "dw4/gfx/igVisualContextTypes.h",
-                    "dw4/gui/igNotifyEvent.h", "dw4/scenegraph/igTraversal.h")
+                    "dw4/gui/igNotifyEvent.h", "dw4/scenegraph/igTraversal.h", "dw4/scenegraph/igSg.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.

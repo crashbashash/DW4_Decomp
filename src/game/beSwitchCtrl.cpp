@@ -42,10 +42,10 @@ int beSwitchCtrl_OnMessageText(beSwitchCtrl *self, beBaseInfoRam *ram, int messa
 
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beSwitchCtrl_GetMessageEnum(), (const char *)message)) {
     case MSG_ALLON:
-        igSwitch_EnableAllChildren((igSwitch *)info->_switchNode);
+        ((Gap::Sg::igSwitch *)info->_switchNode)->activateAllChildren();
         return 1;
     case MSG_ALLOF:
-        igSwitch_DisableAllChildren((igSwitch *)info->_switchNode);
+        ((Gap::Sg::igSwitch *)info->_switchNode)->deactivateAllChildren();
         return 1;
     default:
         return 0;

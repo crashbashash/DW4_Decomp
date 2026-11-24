@@ -1,36 +1,37 @@
-igMetaObject *g_igCapabilityManager_metaObject;
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igCapabilityManager_GetMetaObject(void)
+igMetaObject *igCapabilityManager::_Meta;
+
+igMetaObject *igCapabilityManager::getClassTypeSafe()
 {
-    igMetaObject *g = g_igCapabilityManager_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igCapabilityManager_EnsureRegistered();
-    return g_igCapabilityManager_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igCapabilityManager_EnsureRegistered(void)
+void igCapabilityManager::arkRegister()
 {
-    igMetaObject_RunStaticInit(igCapabilityManager_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *igCapabilityManager_Register(void) {
+CallbackArray *igCapabilityManager::arkRegisterInternal()
+{
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igCapabilityManager_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igCapabilityManager_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igCapabilityManager",
-        8, /* instance size */
+        sizeof(igCapabilityManager),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igCapabilityManager_GetMetaObjectFunction(void) {
-    igCapabilityManager_GetMetaObject();
+}
 }
 

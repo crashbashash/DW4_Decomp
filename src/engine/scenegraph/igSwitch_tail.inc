@@ -1,37 +1,20 @@
-int igSwitch_InsertChild(S_1dc940 *arg0, int arg1, void *arg2) {
-    int temp_s0;
-    int var_a1;
-    P_1dc940 *temp_v0;
-    int a0v;
+namespace Gap {
+namespace Sg {
 
-    temp_s0 = igGroup_InsertChild((T_1c5d70 *)arg0, arg1, (O_1c5d70 *)arg2) & 0xFF;
-    temp_v0 = arg0->f28;
-    a0v = arg0->f32;
-    if (temp_v0 != 0) {
-        var_a1 = temp_v0->f8;
-    } else {
-        var_a1 = 0;
-    }
-    igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
-    return temp_s0;
+bool igSwitch::insertChild(int index, igNode *child)
+{
+    bool inserted = igGroup::insertChild(index, child);
+    igBitMask_SetBitCount(_childMask, getChildCount());
+    return inserted;
 }
 
-igNode *igSwitch_RemoveChildAt(igSwitch *sw, int arg1) {
-    S_1dc940 *arg0 = (S_1dc940 *)sw;
-    igNode *removed;
-    int var_a1;
-
-    removed = (::igNode *)((Gap::Sg::igGroup *)sw)->removeChild(arg1).p;
-    {
-        int a0v = arg0->f32;
-        if (arg0->f28 != 0) {
-            var_a1 = arg0->f28->f8;
-        } else {
-            var_a1 = 0;
-        }
-        igBitMask_SetBitCount((igBitMask *)a0v, var_a1);
-    }
+igNode *igSwitch::removeChild(int index)
+{
+    igNode *removed = igGroup::removeChild(index).p;
+    igBitMask_SetBitCount(_childMask, getChildCount());
     return removed;
+}
+}
 }
 
 void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {

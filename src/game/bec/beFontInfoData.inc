@@ -37,7 +37,7 @@ void beFontInfoData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFontInfoData_Register);
 }
 
-static igMetaObjectCallback g_beFontInfoData_callbackList[] = { igAttrSet_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFontInfoData_callbackList[] = { Gap::Sg::igAttrSet::arkRegister, 0 };
 
 CallbackArray *beFontInfoData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -107,7 +107,7 @@ void beFontInfoData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFontInfoData_ctorTable, 7);
     attrSet = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)attrSet)->_metaObject = (int)igAttrSet_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)attrSet)->_metaObject = (int)Gap::Sg::igAttrSet::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beFontInfoData_fieldTable, g_beFontInfoData_fieldHandles, g_beFontInfoData_fieldOffsets, base);
 }
 

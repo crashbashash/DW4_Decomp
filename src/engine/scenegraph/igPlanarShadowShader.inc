@@ -55,43 +55,6 @@ int igPlanarShadowShader_GetVTable(void) {
     return temp_s5;
 }
 
-void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
-    void *p;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->f0 = &g_igAttrSet_vtable[0];
-        if (&arg0->f20) {
-            p = arg0->f20;
-            if (p != 0) {
-                rc = *(int *)((char *)(p) + 4) - 1;
-                *(int *)((char *)(p) + 4) = rc;
-                if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (arg0 != 0) {
-            arg0->f0 = &g_igGroup_vtable[0];
-            igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x1C), -1);
-            igNode_Destroy((igNode *)arg0, 0);
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
-igSmartPointer<igObject> *igSmartPointer_igLightList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
 igSmartPointer<igObject> *igSmartPointer_igGeometryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
@@ -170,15 +133,15 @@ void igPlanarShadowShader_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPlanarShadowShader_Register);
 }
 
-static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { Gap::Attrs::igLightList::arkRegister, Gap::Attrs::igModelViewMatrixAttrList::arkRegister, igGeometryList_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, igVolume_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igStencilStateAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { Gap::Attrs::igLightList::arkRegister, Gap::Attrs::igModelViewMatrixAttrList::arkRegister, Gap::Sg::igGeometryList::arkRegister, Gap::Attrs::igAttrList::arkRegister, igVolume_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igStencilStateAttr::arkRegister, 0 };
 
 CallbackArray *igPlanarShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPlanarShadowShader_metaObject,
-        igAttrSet_Register,
-        igAttrSet_GetPublishedMetaObject,
+        Gap::Sg::igAttrSet::arkRegisterInternal,
+        Gap::Sg::igAttrSet::getClassMeta,
         igPlanarShadowShader_GetMetaObjectFunction,
         "igPlanarShadowShader",
         0x70, /* instance size */
@@ -193,12 +156,13 @@ void igPlanarShadowShader_GetMetaObjectFunction(void) {
     igPlanarShadowShader_GetMetaObject();
 }
 
-igMetaObject *g_igAttrSet_metaObject;
-igMetaField *g_igAttrSet_attributesMetaField;
-igMetaField *g_igAttrSet_triggerMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAttrSet_GetPublishedMetaObject(void) {
-    return g_igAttrSet_metaObject;
+igMetaObject *igAttrSet::_Meta;
+igMetaField *igAttrSet::k_attributes;
+igMetaField *igAttrSet::k_trigger;
+}
 }
 
 static FieldFactory g_igPlanarShadowShader_ctorTable[] = {
@@ -299,7 +263,7 @@ void igPlanarShadowShader_InitFields(void) {
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igGeometryList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Sg::igGeometryList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));

@@ -44,8 +44,8 @@ void beParticleCtrl2_Prepare(beParticleCtrl2 *self) {
         infoOffset = 0;
         do {
             info = *(beParticleCtrl2Info **)((char *)((igObjectList *)self->_infoList)->_data + infoOffset);
-            igSwitch_DisableAllChildren((igSwitch *)info->_mainSwitch);
-            igSwitch_DisableAllChildren((igSwitch *)info->_subSwitch);
+            ((Gap::Sg::igSwitch *)info->_mainSwitch)->deactivateAllChildren();
+            ((Gap::Sg::igSwitch *)info->_subSwitch)->deactivateAllChildren();
             ramCount = ((igObjectList *)info->_ramList)->_count;
             j = 0;
             if (0 < ramCount) {
@@ -99,8 +99,8 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
         }
         switch (StateOf(ram)) {
         case PARTICLE_START:
-            igSwitch_EnableChild((igSwitch *)info->_mainSwitch, 0);
-            igSwitch_EnableChild((igSwitch *)info->_subSwitch, ram->_ramNo);
+            ((Gap::Sg::igSwitch *)info->_mainSwitch)->activateChild(0);
+            ((Gap::Sg::igSwitch *)info->_subSwitch)->activateChild(ram->_ramNo);
             TimerOf(ram)->_time = -1;
             TimerOf(ram)->_timeRunning = 1;
             ((igParticleAttr **)((igAttrList *)TimerOf(ram)->_attributes)->_data)[0]->_bUseCurrentTime = 1;
@@ -113,7 +113,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             AdvanceState(ram);
         case PARTICLE_STOP: {
             TimerOf(ram)->_timeRunning = 0;
-            igSwitch_DisableChild((igSwitch *)info->_subSwitch, ram->_ramNo);
+            ((Gap::Sg::igSwitch *)info->_subSwitch)->deactivateChild(ram->_ramNo);
             ram->_isRun = 0;
             igObject::release((igObject *)ram->_work);
             ram->_work = 0;
@@ -128,7 +128,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
                 }
             }
             if (anyShown == 0) {
-                igSwitch_DisableChild((igSwitch *)info->_mainSwitch, 0);
+                ((Gap::Sg::igSwitch *)info->_mainSwitch)->deactivateChild(0);
             }
             break;
         }

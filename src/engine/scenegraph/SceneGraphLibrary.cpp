@@ -12,7 +12,7 @@ igSmartPointer<igEnbayaContextPool> g_igEnbayaContextPool_instance;
 igSmartPointer<igAlphaStateAttr> g_igAlphaStateAttr_instance(0, kRetainReference);
 igSmartPointer<igFolder> g_igFolder_instance(0, kRetainReference);
 igMatrix44fView g_projectiveShadowViewportMatrix;
-igSmartPointer<igMatrixOptStateAttr> g_envMapMatrixOptStateAttr(0, kRetainReference);
+igSmartPointer<Gap::Attrs::igMatrixOptStateAttr> g_envMapMatrixOptStateAttr(0, kRetainReference);
 igSmartPointer<igTextureMatrixStateAttr> g_envMapTextureMatrixStateAttr(0, kRetainReference);
 igSmartPointer<igTextureStateAttr> g_envMapTextureUnit1On(0, kRetainReference);
 igSmartPointer<igTextureStateAttr> g_envMapTextureUnit2On(0, kRetainReference);

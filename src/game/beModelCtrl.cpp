@@ -434,7 +434,8 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
 }
 
 void beMeterCtrlNode_RegisterTraversalFunction(void) {
-    Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)g_igCommonTraversal_travProcs, beMeterCtrlNode_ResolveMetaObject(), (igTraversalFunction *)beMeterCtrlNode_TraversalFunction);
+    igMetaObject *meta = (igMetaObject *)beMeterCtrlNode_ResolveMetaObject();
+    Gap::Sg::igTraversal::_setFunction(Gap::Sg::igCommonTraversal::_getTraversalFunctions(), meta, (igTraversalFunction *)beMeterCtrlNode_TraversalFunction);
 }
 
 void beModelCtrl_DrawDebugHitBox(beModelCtrl *self, igNode *node, igAABox *box, float *color)
@@ -2616,7 +2617,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         return 1;
     case MSG_SETLODHIGH:
         if (ram->_isRun != 0 && work != 0 && work->_svLODHighRange == -1.0f) {
-            igMetaObject *t = g_igLod_metaObject;
+            igMetaObject *t = Gap::Sg::igLod::getClassMeta();
             igLod *o = FIRST_LOD(MODEL_NODE);
             if (t == ((igLodDispatchView *)o)->GetMeta()) {
                 igNodeList *children = (igNodeList *)o->_childList;

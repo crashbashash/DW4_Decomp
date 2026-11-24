@@ -162,7 +162,6 @@ extern "C" int igGuiSystemRenderer_GetVTable(void);
 extern "C" void igGuiSystemRenderer_RunStaticInit(void);
 extern "C" CallbackArray *igGuiSystemRenderer_Register(void);
 extern "C" void thunk_igGuiSystemRenderer_GetMetaObject(void);
-extern "C" igMetaObject* FUN_001a38e0(void);
 extern "C" void igGuiSystemRenderer_InitFields(void);
 extern "C" int igActiveComponentsObserver_Create(int arg0);
 extern "C" igMetaObject *g_igActiveComponentsObserver_metaObject;

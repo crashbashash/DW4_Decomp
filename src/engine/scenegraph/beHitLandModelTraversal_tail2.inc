@@ -17,7 +17,7 @@ void igIntersectTraversal_UserUnregister(void) {
 void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
     igTraversal_RegisterClassFunction(arg0, arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
-        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGeometry_GetMetaObject()))) != 0) {
+        if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)Gap::Sg::igGeometry::getClassTypeSafe()))) != 0) {
             Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)&igIntersectTraversal_TraverseGeometry);
             return;
         }

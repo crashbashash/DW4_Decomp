@@ -55,8 +55,8 @@ CallbackArray *igVisualContextCapabilityManager_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVisualContextCapabilityManager_metaObject,
-        igCapabilityManager_Register,
-        igCapabilityManager_GetPublishedMetaObject,
+        Gap::Gfx::igCapabilityManager::arkRegisterInternal,
+        Gap::Gfx::igCapabilityManager::getClassMeta,
         igVisualContextCapabilityManager_GetMetaObjectFunction,
         "igVisualContextCapabilityManager",
         0xC, /* instance size */
@@ -69,10 +69,6 @@ CallbackArray *igVisualContextCapabilityManager_Register(void) {
 
 void igVisualContextCapabilityManager_GetMetaObjectFunction(void) {
     igVisualContextCapabilityManager_GetMetaObject();
-}
-
-igMetaObject *igCapabilityManager_GetPublishedMetaObject(void) {
-    return g_igCapabilityManager_metaObject;
 }
 
 static FieldFactory g_igVisualContextCapabilityManager_ctorTable[] = {

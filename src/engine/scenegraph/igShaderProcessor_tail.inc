@@ -1,7 +1,3 @@
-igMetaObject *igShaderProcessor_GetMeta(void) {
-    return g_igShaderProcessor_metaObject;
-}
-
 int igStringRefList_IndexOf(igStringRefList *list, char *const *key, int arg2) {
     struct L_1cafc0 *arg0 = (struct L_1cafc0 *)list;
     int n = arg0->n;
@@ -191,7 +187,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     if (info.p == 0) {
         int owner = self->allocatorKey;
         info.release();
-        info.p = (ShaderObject_1ca6c0 *)FUN_00198b60(owner);
+        info.p = (ShaderObject_1ca6c0 *)Gap::Sg::igShaderProcessor::_instantiateFromPool((igMemoryPoolView *)owner);
     }
     flag = 0;
     if (((Gap::Core::igRegistry *)self->ini)->getValue(section, "useRenderPackage", flag, 0, 0)) {
@@ -239,9 +235,9 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             third = asTexture(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)third.p, shared.p, keys.p, values.p);
         }
-        FUN_001d86f0((S_1d86f0 *)passes, i, primary.p);
-        FUN_001d87b0((igTransformSequence *)passes, i, second.p);
-        FUN_001d8870((A_1d8870 *)passes, i, third.p);
+        ((Gap::Sg::igShaderData *)passes)->setPushList(i, (Gap::Attrs::igAttrList *)primary.p);
+        ((Gap::Sg::igShaderData *)passes)->setPopList(i, (Gap::Attrs::igAttrList *)second.p);
+        ((Gap::Sg::igShaderData *)passes)->setChildList(i, (Gap::Sg::igNodeList *)third.p);
     }
     return 1;
 }

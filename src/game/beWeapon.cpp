@@ -133,7 +133,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                     ((Gap::Sg::igGroup *)boneSelect.p)->appendChild((Gap::Sg::igNode *)(((igObject **)((igObjectList *)info->_nodeList)->_data)[j]));
                     int appearanceCount = appearances->_count;
                     for (int k = 0; k < appearanceCount; k++) {
-                        igAppearance_AttachGraph((igAppearance *)(((igObject **)appearances->_data)[k]), (igNode *)boneSelect.p);
+                        ((Gap::Sg::igAppearance *)(((igObject **)appearances->_data)[k]))->attachGraph((Gap::Sg::igNode *)boneSelect.p);
                     }
                     beWeaponAttachData *attach = ((beWeaponAttachData **)((beWeaponAttachDataList *)self->_attachDataList)->_data)[ram->_ramNo];
                     ((Gap::Core::igObjectList *)attach->_boneSelectList)->append((Gap::Core::igObject *)boneSelect.p);
@@ -152,7 +152,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                 igObjectList *appearances = ((igObjectList **)((igObjectList *)attach->_appearanceListList)->_data)[i];
                 int appearanceCount = appearances->_count;
                 for (int k = 0; k < appearanceCount; k++) {
-                    igAppearance_DetachGraph((igAppearance *)(((igObject **)appearances->_data)[k]), (igNode *)boneSelect);
+                    ((Gap::Sg::igAppearance *)(((igObject **)appearances->_data)[k]))->detachGraph((Gap::Sg::igNode *)boneSelect);
                 }
             }
         }

@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igAppearanceList_metaObject;
-struct igMetaObject *igAppearanceList_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -54,7 +54,7 @@ void beCameraMode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCameraMode_Register);
 }
 
-static igMetaObjectCallback g_beCameraMode_callbackList[] = { igGraphPath_EnsureRegistered, igCamera_EnsureRegistered, igInsightCore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCameraMode_callbackList[] = { Gap::Sg::igGraphPath::arkRegister, Gap::Sg::igCamera::arkRegister, igInsightCore_EnsureRegistered, 0 };
 
 CallbackArray *beCameraMode_Register(void) {
     BecLibrary_MarkRegistered();
@@ -134,9 +134,9 @@ void beCameraMode_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraMode_ctorTable, 8);
     cameraPath = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)igGraphPath_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)cameraPath)->_metaObject = (int)Gap::Sg::igGraphPath::getClassTypeLazy();
     camera = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)camera)->_metaObject = (int)igCamera_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)camera)->_metaObject = (int)Gap::Sg::igCamera::getClassTypeLazy();
     insight = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)insight)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insight)->_refCounted = 0;

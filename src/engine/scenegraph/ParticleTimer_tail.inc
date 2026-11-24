@@ -1,18 +1,3 @@
-void Gap__Bec__ParticleTimer__vfunc_35(ParticleTimer *arg0, RefCountedHeader *arg1) {
-    RefCountedHeader *temp_a0;
-    if (arg1 != 0) {
-        arg1->references = (int)((int) (arg1->references + 1));
-    }
-    temp_a0 = (RefCountedHeader *)(arg0->_attributes);
-    if (temp_a0 != 0) {
-        temp_a0->references = (int)((int) (temp_a0->references - 1));
-        if (((unsigned long long) ((long long) temp_a0->references << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->_attributes = (int)(arg1);
-}
-
 int FUN_001d9970(int *a, int *b) {
     float diff = ((SortListView *)DAT_005629f8[0])->_data[*b]->key - ((SortListView *)DAT_005629f8[0])->_data[*a]->key;
     if (diff > 0.0f) { return 1; }

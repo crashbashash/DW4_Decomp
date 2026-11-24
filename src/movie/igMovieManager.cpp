@@ -256,7 +256,7 @@ static inline igSceneInfo *AsSceneInfo(igObject *object) {
 }
 
 static inline igAttrSet *AsAttrSet(igObject *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igAttrSet_metaObject)) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(Gap::Sg::igAttrSet::getClassMeta())) {
         return (igAttrSet *)object;
     }
     return 0;
@@ -642,7 +642,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 root.release();
-                root.p = igAttrSet_CreateInstance(allocator);
+                root.p = (igAttrSet *)Gap::Sg::igAttrSet::_instantiateFromPool((igMemoryPoolView *)allocator);
             }
             ((Gap::Core::igNamedObject *)root.p)->setName(Scene_Root);
             igSmartPointer<igBlendStateAttrDispatchView> blend((igBlendStateAttrDispatchView *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
@@ -693,9 +693,9 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                     {
                         int allocator = MovieAllocator(self);
                         tile.release();
-                        tile.p = igAttrSet_CreateInstance(allocator);
+                        tile.p = (igAttrSet *)Gap::Sg::igAttrSet::_instantiateFromPool((igMemoryPoolView *)allocator);
                     }
-                    igSmartPointer<igGeometry> geometry(igGeometry_CreateInstance(MovieAllocator(self)));
+                    igSmartPointer<igGeometry> geometry((igGeometry *)Gap::Sg::igGeometry::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
                     igSmartPointer<igGeometryAttrDispatchView> geometryAttr((igGeometryAttrDispatchView *)igGeometryAttr_Create(MovieAllocator(self)));
                     igSmartPointer<igVertexArrayDispatchView> vertices((igVertexArrayDispatchView *)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
                     vertices->configure(format, 4, 2, 0);
@@ -730,7 +730,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             igMatrix44f view;
             igMatrix44f_FromTranslation(view.m, igVec3f(0.0f, 0.0f, -1.2f));
             igMatrix44f_Invert(view.m, view.m);
-            igSmartPointer<igCamera> camera(igCamera_CreateInstance(MovieAllocator(self)));
+            igSmartPointer<igCamera> camera((igCamera *)Gap::Sg::igCamera::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
             ((Gap::Core::igNamedObject *)camera.p)->setName(Movie_camera);
             camera->_nearPlane = 0.0f;
             camera->_farPlane = 1.2f;

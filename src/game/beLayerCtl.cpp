@@ -58,7 +58,7 @@ void beLayerCtl_Prepare(beLayerCtl *self) {
     if (self->_layerSwt != 0) {
         goto test; /* matching construct: goto/label layout reproduces the retail loop shape */
     body:
-        igSwitch_RemoveChildAt(layers, 0);
+        ((Gap::Sg::igSwitch *)layers)->removeChild(0);
     test:
         layers = LAYER_SWITCH(self);
         children = CHILDREN(layers);
@@ -98,13 +98,13 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
             PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser0)
             igSwitch *old = LAYER_SWITCH(self);
             IG_OBJECT_RELEASE(old);
-            self->_layerSwt = (int)igSwitch_CreateInstance((int)allocator);
+            self->_layerSwt = (int)Gap::Sg::igSwitch::_instantiateFromPool((igMemoryPoolView *)allocator);
             ((Gap::Core::igNamedObject *)self->_layerSwt)->setName("LayerSwt");
             igGroup *lights = 0;
             int i;
             for (i = 0; i < CHILD_COUNT(CHILDREN(root)); i++) {
                 igGroup *node = NODE_AT(CHILDREN(root), i);
-                igMetaObject *lightMeta = g_igLightStateSet_metaObject;
+                igMetaObject *lightMeta = Gap::Sg::igLightStateSet::getClassMeta();
                 if (lightMeta == META_OF(node)) lights = node;
             }
             if (lights == 0) return 0;
@@ -126,13 +126,13 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
             PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser1)
             igSmartPointer<igNamedObject> layer((igNamedObject *)Gap::Sg::igGroup::_instantiateFromPool((igMemoryPoolView *)allocator));
             ((Gap::Core::igNamedObject *)layer.p)->setName(NAME_OF(NODE_AT(groups, g)));
-            igSwitch_AppendChild(LAYER_SWITCH(self), (igNode *)layer.p);
+            ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->appendChild((Gap::Sg::igNode *)layer.p);
         }
         void *noneAllocator;
         PICK_ALLOCATOR(noneAllocator, self, kIGMemoryPoolHandleUser1)
         igSmartPointer<igNamedObject> none((igNamedObject *)Gap::Sg::igGroup::_instantiateFromPool((igMemoryPoolView *)noneAllocator));
         ((Gap::Core::igNamedObject *)none.p)->setName("NONE");
-        igSwitch_AppendChild(LAYER_SWITCH(self), (igNode *)none.p);
+        ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->appendChild((Gap::Sg::igNode *)none.p);
         int index;
         igGroup *layer;
         igGroup *target;
@@ -143,7 +143,7 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         while (index < CHILD_COUNT(CHILDREN(root))) {
             node = NODE_AT(CHILDREN(root), index);
             if (NAME_OF(node) == 0) ((Gap::Core::igNamedObject *)node)->setName("NONE");
-            if (strcmp("ROOTATTR", NAME_OF(node)) == 0 || g_igLightStateSet_metaObject == META_OF(node)) {
+            if (strcmp("ROOTATTR", NAME_OF(node)) == 0 || Gap::Sg::igLightStateSet::getClassMeta() == META_OF(node)) {
                 index += 1;
             } else {
                 name = NAME_OF(node);
@@ -166,8 +166,8 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         char *control = (char *)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
         if (strcmp(layerName, "ALL") == 0) {
             switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beLayerCtl_GetSwtCtlEnum(), control)) {
-            case SWTCTL_CLR: igSwitch_DisableAllChildren(LAYER_SWITCH(self)); break;
-            case SWTCTL_SET: igSwitch_EnableAllChildren(LAYER_SWITCH(self)); break;
+            case SWTCTL_CLR: ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->deactivateAllChildren(); break;
+            case SWTCTL_SET: ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->activateAllChildren(); break;
             case SWTCTL_FLIP: break;
             }
         } else {
@@ -175,12 +175,12 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
             for (i = 0; i < CHILD_COUNT(LAYERS(self)); i++) {
                 if (strcmp(NAME_OF(NODE_AT(LAYERS(self), i)), layerName) == 0) {
                     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beLayerCtl_GetSwtCtlEnum(), control)) {
-                    case SWTCTL_CLR: igSwitch_DisableChild(LAYER_SWITCH(self), i); break;
-                    case SWTCTL_SET: igSwitch_EnableChild(LAYER_SWITCH(self), i); break;
+                    case SWTCTL_CLR: ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->deactivateChild(i); break;
+                    case SWTCTL_SET: ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->activateChild(i); break;
                     case SWTCTL_FLIP: {
                         igSwitch *layers = LAYER_SWITCH(self);
-                        if ((1 << (i & 31)) & ((unsigned *)((igBitMask *)layers->_childMask)->_data)[(unsigned)i >> 5]) igSwitch_DisableChild(layers, i);
-                        else igSwitch_EnableChild(layers, i);
+                        if ((1 << (i & 31)) & ((unsigned *)((igBitMask *)layers->_childMask)->_data)[(unsigned)i >> 5]) ((Gap::Sg::igSwitch *)layers)->deactivateChild(i);
+                        else ((Gap::Sg::igSwitch *)layers)->activateChild(i);
                         break; }
                     }
                     break;
@@ -195,7 +195,7 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         int i;
         for (i = 0; i < CHILD_COUNT(LAYERS(self)); i++) {
             if (strcmp(NAME_OF(NODE_AT(LAYERS(self), i)), layerName) == 0) {
-                igSwitch_RemoveChildAt(LAYER_SWITCH(self), i);
+                ((Gap::Sg::igSwitch *)(LAYER_SWITCH(self)))->removeChild(i);
                 break;
             }
         }

@@ -1435,7 +1435,7 @@ igMetaObject *beLayerGroupList_GetElementMeta(void)
 
 igMetaObject *igLightSetList_GetElementMeta(void)
 {
-    return g_igLightSet_metaObject;
+    return Gap::Sg::igLightSet::getClassMeta();
 }
 
 igMetaObject *beLuaDataList_GetElementMeta(void)
@@ -1550,7 +1550,7 @@ igMetaObject *beWeaponAttachDataList_GetElementMeta(void)
 
 igMetaObject *igAppearanceListList_GetElementMeta(void)
 {
-    return g_igAppearanceList_metaObject;
+    return Gap::Sg::igAppearanceList::getClassMeta();
 }
 
 igMetaObject *beBaseInfoManagerList_GetElementMeta(void)

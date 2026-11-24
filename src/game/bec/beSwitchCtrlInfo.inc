@@ -40,7 +40,7 @@ void beSwitchCtrlInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSwitchCtrlInfo_Register);
 }
 
-static igMetaObjectCallback g_beSwitchCtrlInfo_callbackList[] = { igSwitch_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSwitchCtrlInfo_callbackList[] = { Gap::Sg::igSwitch::arkRegister, 0 };
 
 CallbackArray *beSwitchCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -86,7 +86,7 @@ void beSwitchCtrlInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSwitchCtrlInfo_ctorTable, 1);
     switchNode = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)switchNode)->_metaObject = (int)igSwitch_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)switchNode)->_metaObject = (int)Gap::Sg::igSwitch::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beSwitchCtrlInfo_fieldTable, g_beSwitchCtrlInfo_fieldHandles, g_beSwitchCtrlInfo_fieldOffsets, base);
 }
 

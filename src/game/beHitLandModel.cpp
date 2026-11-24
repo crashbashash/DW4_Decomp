@@ -207,7 +207,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (CompareStringObj((const char *)work->_infoName, ((igStringObj **)names->_data)[i]) == 0) {
-                        igSwitch_EnableChild((igSwitch *)info->_checkSwitch, i);
+                        ((Gap::Sg::igSwitch *)info->_checkSwitch)->activateChild(i);
                         break;
                     }
                 }
@@ -217,7 +217,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (strcmp((const char *)work->_infoName, NamedObjectName(((igNamedObject **)names->_data)[i])) == 0) {
-                        igSwitch_EnableChild((igSwitch *)info->_checkSwitch, i);
+                        ((Gap::Sg::igSwitch *)info->_checkSwitch)->activateChild(i);
                         break;
                     }
                 }
@@ -232,7 +232,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (CompareStringObj((const char *)work->_infoName, ((igStringObj **)names->_data)[i]) == 0) {
-                        igSwitch_DisableChild((igSwitch *)info->_checkSwitch, i);
+                        ((Gap::Sg::igSwitch *)info->_checkSwitch)->deactivateChild(i);
                         break;
                     }
                 }
@@ -242,7 +242,7 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
                 int count = names->_count;
                 for (i = 0; i < count; i++) {
                     if (strcmp((const char *)work->_infoName, NamedObjectName(((igNamedObject **)names->_data)[i])) == 0) {
-                        igSwitch_DisableChild((igSwitch *)info->_checkSwitch, i);
+                        ((Gap::Sg::igSwitch *)info->_checkSwitch)->deactivateChild(i);
                         break;
                     }
                 }

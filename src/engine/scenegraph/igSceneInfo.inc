@@ -132,7 +132,7 @@ void igSceneInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igSceneInfo_Register);
 }
 
-static igMetaObjectCallback g_igSceneInfo_callbackList[] = { Gap::Sg::igNode::arkRegister, Gap::Attrs::igTextureList::arkRegister, igGraphPathList_EnsureRegistered, Gap::Sg::igNodeList::arkRegister, 0 };
+static igMetaObjectCallback g_igSceneInfo_callbackList[] = { Gap::Sg::igNode::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Sg::igGraphPathList::arkRegister, Gap::Sg::igNodeList::arkRegister, 0 };
 
 CallbackArray *igSceneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -213,7 +213,7 @@ void igSceneInfo_InitFields(void) {
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 2;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igGraphPathList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Sg::igGraphPathList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_3)->_shallowCopyMethod = 2;

@@ -654,7 +654,7 @@ igMetaObject *beCameraCtrl_GetMeta(void)
     return g_beCameraCtrl_metaObject;
 }
 
-static inline igObject *AsCamera(igObject *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igCamera_metaObject) != 0) { return o; } return 0; }
+static inline igObject *AsCamera(igObject *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Sg::igCamera::getClassMeta()) != 0) { return o; } return 0; }
 
 void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
     igObject *camera;
@@ -664,7 +664,7 @@ void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
         old = (igObject *)mode->_cameraPath;
         igObject::release(old);
         mode->_cameraPath = (int)path;
-        camera = igGraphPath_GetTail((igGraphPath *)path);
+        camera = (igObject *)((Gap::Sg::igGraphPath *)path)->getTop();
         camera = AsCamera(camera);
         igObject::ref(camera);
         old = (igObject *)mode->_camera;

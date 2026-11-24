@@ -1,123 +1,86 @@
-igCamera *igCamera_CreateInstance(int allocator) {
-    igCamera_EnsureRegistered();
-    return (igCamera *)igMetaObject_CreateInstance((igMetaObject *)g_igCamera_metaObject, (igMemoryPoolView *)allocator);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igCamera_metaObject;
-igMetaField *g_igCamera_cameraTypeMetaField;
-igMetaField *g_igCamera_horizontalFieldOfViewMetaField;
-igMetaField *g_igCamera_nearPlaneMetaField;
-igMetaField *g_igCamera_farPlaneMetaField;
-igMetaField *g_igCamera_deadfield1MetaField;
-igMetaField *g_igCamera_deadfield2MetaField;
-igMetaField *g_igCamera_deadfield3MetaField;
-
-igMetaObject *igCamera_GetOrCreateMetaObject(void) {
-    if (g_igCamera_metaObject == 0) {
-        g_igCamera_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igCamera_metaObject;
-}
-
-igMetaObject *igCamera_GetMetaObject(void)
+igCamera *igCamera::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igCamera_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igCamera_EnsureRegistered();
-    return g_igCamera_metaObject;
+    arkRegister();
+    return (igCamera *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igCamera_GetVTable(void) {
-    Obj_1a4600 o;
-    int r;
+igMetaObject *igCamera::_Meta;
+igMetaField *igCamera::k_cameraType;
+igMetaField *igCamera::k_horizontalFieldOfView;
+igMetaField *igCamera::k_nearPlane;
+igMetaField *igCamera::k_farPlane;
+igMetaField *igCamera::k_deadfield1;
+igMetaField *igCamera::k_deadfield2;
+igMetaField *igCamera::k_deadfield3;
 
-    igObject_InitHeader((igObject *)&o);
-    o.w[1] = 0;
-    o.w[2] = 0;
-    o.w[3] = 0;
-    o.vt = &g_igCamera_vtable[0];
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igCamera_vtable[0];
-    igNode_Destroy((igNode *)&o, 0);
-    return r;
-}
-
-void igCamera_EnsureRegistered(void)
+igMetaObject *igCamera::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igCamera_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igCamera_Register(void) {
+igMetaObject *igCamera::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igCamera::retrieveVTablePointer()
+{
+    igCamera temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igCamera::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igCamera::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igCamera_metaObject,
+        false,
+        &_Meta,
         Gap::Sg::igNode::arkRegisterInternal,
         Gap::Sg::igNode::getClassMeta,
-        igCamera_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igCamera",
-        0x38, /* instance size */
-        igCamera_GetVTable,
-        &igCamera_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igCamera),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igCamera_GetMetaObjectFunction(void) {
-    igCamera_GetMetaObject();
+void igCamera::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igEnumMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_cameraType", "_horizontalFieldOfView", "_nearPlane", "_farPlane", "_deadfield1", "_deadfield2", "_deadfield3" };
+    static igMetaField **enumStorage[] = { &k_cameraType, &k_horizontalFieldOfView, &k_nearPlane, &k_farPlane, &k_deadfield1, &k_deadfield2, &k_deadfield3 };
+    static int offsets[] = { 28, 44, 48, 52, 32, 36, 40 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Sg::igCamera::getCameraTypeMetaEnum;
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(45.0f);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igCamera_ctorTable[] = {
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-};
-static const char *g_igCamera_fieldTable[] = {
-    "_cameraType",
-    "_horizontalFieldOfView",
-    "_nearPlane",
-    "_farPlane",
-    "_deadfield1",
-    "_deadfield2",
-    "_deadfield3",
-};
-static igMetaField **g_igCamera_fieldHandles[] = {
-    &g_igCamera_cameraTypeMetaField,
-    &g_igCamera_horizontalFieldOfViewMetaField,
-    &g_igCamera_nearPlaneMetaField,
-    &g_igCamera_farPlaneMetaField,
-    &g_igCamera_deadfield1MetaField,
-    &g_igCamera_deadfield2MetaField,
-    &g_igCamera_deadfield3MetaField,
-};
-static int g_igCamera_fieldOffsets[] = {
-    28,
-    44,
-    48,
-    52,
-    32,
-    36,
-    40,
-};
-
-void igCamera_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igCamera_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCamera_ctorTable, 7);
-    temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);
-    *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001a47d0);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)))->setDefault(45.0f);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCamera_fieldTable, g_igCamera_fieldHandles, g_igCamera_fieldOffsets, temp_s2);
+}
 }
 
 static const char *g_igCamera_cameraTypeNames[] = {
@@ -126,12 +89,17 @@ static const char *g_igCamera_cameraTypeNames[] = {
 static int g_igCamera_cameraTypeValues[] = {
     0, 1,
 };
-igMetaEnum *g_igCamera_cameraTypeMetaEnum;
+namespace Gap {
+namespace Sg {
 
-igMetaEnum *FUN_001a47d0(void) {
-    if (g_igCamera_cameraTypeMetaEnum == 0) {
-        g_igCamera_cameraTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CameraType", g_igCamera_cameraTypeNames, g_igCamera_cameraTypeValues, 2);
+igMetaEnum *igCamera::CameraType_Meta;
+
+igMetaEnum *igCamera::getCameraTypeMetaEnum() {
+    if (CameraType_Meta == 0) {
+        CameraType_Meta = Gap::Core::igMetaEnum::createMetaEnum("CameraType", g_igCamera_cameraTypeNames, g_igCamera_cameraTypeValues, 2);
     }
-    return g_igCamera_cameraTypeMetaEnum;
+    return CameraType_Meta;
+}
+}
 }
 

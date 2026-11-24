@@ -59,7 +59,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
     max[0] = max[1] = max[2] = -3.402823466e+38f;
     igVolume_ExtendBy((void **)grid->box, (void **)bound);
     FUN_0023b430((igCollisionGrid *)self->_grid);
-    igMetaObject *geometryMeta = g_igGeometry_metaObject;
+    igMetaObject *geometryMeta = Gap::Sg::igGeometry::getClassMeta();
     igSmartPointer<igObject> iterator(igIterateGraph_Create(((Gap::Core::igObject *)self)->getMemoryPool()));
     for (FUN_0022ab90((igIterateGraph *)iterator.get(), *root, geometryMeta); FUN_0022ac00((igIterateGraph *)iterator.get()) != 0; FUN_0022ac70((igIterateGraph *)iterator.get(), geometryMeta)) {
         igNode *geometry = FUN_0022ac00((igIterateGraph *)iterator.get());

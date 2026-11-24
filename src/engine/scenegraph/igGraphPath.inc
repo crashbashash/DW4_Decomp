@@ -1,121 +1,88 @@
-igGraphPath *igGraphPath_Create(int allocator) {
-    igGraphPath_EnsureRegistered();
-    return (igGraphPath *)igMetaObject_CreateInstance((igMetaObject *)g_igGraphPath_metaObject, (igMemoryPoolView *)allocator);
-}
+namespace Gap {
+namespace Sg {
 
-igMetaObject *g_igGraphPath_metaObject;
-igMetaField *g_igGraphPath_pathMetaField;
-igMetaField *g_igGraphPath_centerMetaField;
-igMetaField *g_igGraphPath_lengthMetaField;
-
-igMetaObject *igGraphPath_GetOrCreateMetaObject(void) {
-    if (g_igGraphPath_metaObject == 0) {
-        g_igGraphPath_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igGraphPath_metaObject;
-}
-
-igMetaObject *igGraphPath_GetMetaObject(void)
+igGraphPath *igGraphPath::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igGraphPath_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igGraphPath_EnsureRegistered();
-    return g_igGraphPath_metaObject;
+    arkRegister();
+    return (igGraphPath *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igGraphPath_GetVTable(void) {
-    Obj_19f710 o;
-    int **ps;
-    int *temp_a0;
-    int temp_s0;
+igMetaObject *igGraphPath::_Meta;
+igMetaField *igGraphPath::k_path;
+igMetaField *igGraphPath::k_center;
+igMetaField *igGraphPath::k_length;
 
-    igObject_InitHeader((igObject *)&o);
-    ps = &o.ref;
-    o.vt = &g_igGraphPath_vtable[0];
-    *ps = 0;
-    temp_s0 = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o.vt = &g_igGraphPath_vtable[0];
-    if (ps != 0) {
-        temp_a0 = *ps;
-        if (temp_a0 != 0) {
-            temp_a0[1] = temp_a0[1] - 1;
-            if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igGraphPath_EnsureRegistered(void)
+igMetaObject *igGraphPath::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igGraphPath_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igGraphPath_callbackList[] = { Gap::Sg::igNodeList::arkRegister, 0 };
+igMetaObject *igGraphPath::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igGraphPath_Register(void) {
+void *igGraphPath::retrieveVTablePointer()
+{
+    igGraphPath temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igGraphPath::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igGraphPath::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igNodeList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igGraphPath_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igGraphPath_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igGraphPath",
-        0x1C, /* instance size */
-        igGraphPath_GetVTable,
-        &igGraphPath_InitFields,
-        0, /* extra callback item */
-        g_igGraphPath_callbackList /* callback list */
+        sizeof(igGraphPath),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igGraphPath_GetMetaObjectFunction(void) {
-    igGraphPath_GetMetaObject();
+void igGraphPath::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_path", "_center", "_length" };
+    static igMetaField **enumStorage[] = { &k_path, &k_center, &k_length };
+    static int offsets[] = { 8, 12, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
+        metaField->_resetMethod = 3;
+        metaField->_construct = 1;
+    }
+    {
+        igVec3fMetaField *metaField = (igVec3fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(igVec3f(0.0f, 0.0f, 0.0f));
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(1.0f);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igGraphPath_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)igFloatMetaField_Create,
-};
-static const char *g_igGraphPath_fieldTable[] = {
-    "_path",
-    "_center",
-    "_length",
-};
-static igMetaField **g_igGraphPath_fieldHandles[] = {
-    &g_igGraphPath_pathMetaField,
-    &g_igGraphPath_centerMetaField,
-    &g_igGraphPath_lengthMetaField,
-};
-static int g_igGraphPath_fieldOffsets[] = {
-    8,
-    12,
-    24,
-};
-
-void igGraphPath_InitFields(void) {
-    int base;
-    void *centerField;
-    void *pathField;
-    void *meta;
-    struct { int x; int y; int z; } defaultCenter;
-
-    meta = (void *)g_igGraphPath_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igGraphPath_ctorTable, 3);
-    pathField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)pathField)->_metaObject = (int)Gap::Sg::igNodeList::getClassTypeLazy();
-    ((igMetaField *)pathField)->_resetMethod = 3;
-    ((igRefMetaField *)pathField)->_construct = 1;
-    centerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    defaultCenter.x = 0;
-    defaultCenter.y = 0;
-    defaultCenter.z = 0;
-    ((Gap::Math::igVec3fMetaField *)centerField)->setDefault(*(const igVec3f *)&defaultCenter);
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(1.0f);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, base);
+}
 }
 

@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igCapabilityManager_EnsureRegistered(void);
-struct igMetaObject *igCapabilityManager_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -627,20 +627,26 @@ void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStac
     manager->_stackChanged = 1;
 }
 
+namespace Gap {
+namespace Sg {
+
 /* Turns the billboard to face the camera: `matrix` gets the billboard's rotation for its mode and the
  * model-view position moved by the billboard's origin. */
-void FUN_001b1aa0(igBillboard *billboard, float *matrix, const float *modelView, const float *view) {
+void igBillboard::computeTransform(igMatrix44f *result, const igMatrix44f *modelMat, const igMatrix44f *viewMatInv) {
+    float *matrix = (float *)result;
+    const float *modelView = (const float *)modelMat;
+    const float *view = (const float *)viewMatInv;
     igVec3f position;
     igVec3f up;
     igVec3f origin;
     igMatrix44f_GetTranslation(modelView, position.vec);
-    Vec3f_TransformDirection(origin.vec, billboard->_origin.vec, modelView);
+    Vec3f_TransformDirection(origin.vec, _origin.vec, modelView);
     position.add(origin);
     igVec3f viewPosition(view[12], view[13], view[14]);
     igVec3f direction = viewPosition - position;
-    switch (billboard->_mode) {
+    switch (_mode) {
     case 1:
-        Vec3f_TransformDirection(up.vec, billboard->_axis.vec, modelView);
+        Vec3f_TransformDirection(up.vec, _axis.vec, modelView);
         break;
     case 2: {
         igVec3f side;
@@ -674,6 +680,8 @@ void FUN_001b1aa0(igBillboard *billboard, float *matrix, const float *modelView,
     }
     FUN_001b1590(matrix, up.vec, direction.vec);
     igMatrix44f_SetTranslation(matrix, position.vec);
+}
+}
 }
 
 void igBitMask_SetAll(igBitMask *mask) {

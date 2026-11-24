@@ -113,7 +113,7 @@ void ParticleInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(ParticleInfo_Register);
 }
 
-static igMetaObjectCallback g_ParticleInfo_callbackList[] = { Gap::Gfx::igImage::arkRegister, igGeometry_EnsureRegistered, 0 };
+static igMetaObjectCallback g_ParticleInfo_callbackList[] = { Gap::Gfx::igImage::arkRegister, Gap::Sg::igGeometry::arkRegister, 0 };
 
 CallbackArray *ParticleInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -257,7 +257,7 @@ void ParticleInfo_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xE)))->setDefault(1);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x10)))->setDefault(0.0f);
     f = igMetaObject_GetFieldAt(meta, base + 0x11);
-    ((igObjectRefMetaField *)f)->_metaObject = (int)igGeometry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)f)->_metaObject = (int)Gap::Sg::igGeometry::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_ParticleInfo_fieldTable, g_ParticleInfo_fieldHandles, g_ParticleInfo_fieldOffsets, base);
 }
 

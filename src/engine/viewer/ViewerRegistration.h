@@ -192,7 +192,6 @@ union U_45aaf0 { int vt; int *pv; char b[96]; };
 #include "dw4/attrs/igLightingStateAttr.h"
 extern "C" ObjectRefWord* FUN_00136370(ObjectRefWord*, int);
 #include "dw4/scenegraph/igTransform.h"
-extern "C" igMetaObject* FUN_001a38e0(void);
 #include "dw4/scenegraph/igAttrSet.h"
 extern "C" igSmartPointer<igObject> *igSmartPointer_igAlphaStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 extern "C" void** FUN_001d9870(void**, short);

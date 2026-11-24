@@ -1,4 +1,7 @@
-void Gap__Gfx__igCapabilityManager__vfunc_24(V *arg0, int arg1) {
+namespace Gap {
+namespace Gfx {
+
+void igCapabilityManager::detectDriverDatabaseProperties(igDriverDatabase *arg1) {
     int capabilityIds[27] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 };
     const char *capabilityNames[27] = {
         "IG_GFX_CAPABILITY_MAX_SIZE_X",
@@ -32,8 +35,10 @@ void Gap__Gfx__igCapabilityManager__vfunc_24(V *arg0, int arg1) {
     char sp50[128];
     int i;
     for (i = 0; i < 27; i++) {
-        sprintf(sp50, "%d", arg0->vX(capabilityIds[i]));
+        sprintf(sp50, "%d", ((V *)this)->vX(capabilityIds[i]));
         igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)arg1, 8, capabilityNames[i], sp50);
     }
+}
+}
 }
 

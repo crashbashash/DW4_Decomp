@@ -75,18 +75,6 @@ int *igSmartPointer_igBlendMatrixPaletteAttrList_Construct(int *p)
     return p;
 }
 
-int *igSmartPointer_igNonRefCountedTransformList_Construct(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
-
-int *igSmartPointer_igNonRefCountedMatrixObjectList_Construct(int *p)
-{
-    *(int *)((char *)p + 0) = 0;
-    return p;
-}
-
 void igCompileTraversal_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCompileTraversal_Register);
@@ -99,8 +87,8 @@ CallbackArray *igCompileTraversal_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCompileTraversal_metaObject,
-        igCommonTraversal_Register,
-        igCommonTraversal_GetPublishedMetaObject,
+        Gap::Sg::igCommonTraversal::arkRegisterInternal,
+        Gap::Sg::igCommonTraversal::getClassMeta,
         igCompileTraversal_GetMetaObjectFunction,
         "igCompileTraversal",
         0x208, /* instance size */

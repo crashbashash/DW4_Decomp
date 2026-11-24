@@ -54,7 +54,7 @@ void igCompileTraversal_userDestruct(void **self) {
 }
 
 void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
-    igCommonTraversal_RegisterClassFunction((void *)arg0, (void *)arg1);
+    Gap::Sg::igCommonTraversal::_registerClass((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igProjectiveShadowShader_metaObject) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseProjectiveShadowShader);
         return;
@@ -87,7 +87,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)FUN_001bcde0);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igGeometry_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igGeometry::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseGeometry);
         return;
     }
@@ -115,7 +115,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseActor);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igSegment_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igSegment::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseSegment);
     }
 }
@@ -143,7 +143,7 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
     self->_currentBoneIndex = 1;
     int identity[16];
     igMatrix44f_SetIdentity((float *)identity);
-    igCommonTraversal_SetViewMatrix((int)self, (int *)identity);
+    ((Gap::Sg::igCommonTraversal *)((int)self))->setViewMatrix((const igMatrix44f *)identity);
     matrix->setMatrix((int)&self->_viewMat);
     ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)matrix.p);
     ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);

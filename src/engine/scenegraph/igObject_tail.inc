@@ -1,5 +1,10 @@
-void igCommonTraversal_userDestruct(igObject *self)
+namespace Gap {
+namespace Sg {
+
+void igCommonTraversal::userDestruct()
 {
-    Gap__Core__igObject__userDestruct(self);
+    igTraversal::userDestruct();
+}
+}
 }
 

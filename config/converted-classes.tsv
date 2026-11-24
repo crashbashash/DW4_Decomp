@@ -223,3 +223,27 @@ igRadioGroup	Gui
 igRadioGroupSelectedObserver	Gui
 igOnOffValueObserver	Gui
 igOnOffValueObserverList	Gui	igTObjectList<igOnOffValueObserver>
+igCapabilityManager	Gfx
+igCommonTraversal	Sg
+igShaderData	Sg
+igTransientShaderData	Sg
+igInterpretedShaderData	Sg
+igShaderFactory	Sg
+igShaderFactoryList	Sg	igTObjectList<igShaderFactory>
+igShaderInfo	Sg
+igShaderProcessor	Sg
+igAppearance	Sg
+igAppearanceList	Sg	igTObjectList<igAppearance>
+igLightSet	Sg
+igLightStateSet	Sg
+igIniShaderFactory	Sg
+igAttrSet	Sg
+igGeometry	Sg
+igSwitch	Sg
+igLod	Sg
+igBillboard	Sg
+igSegment	Sg
+igGraphPath	Sg
+igGraphPathList	Sg	igTObjectList<igGraphPath>
+igGeometryList	Sg	igTObjectList<igGeometry>
+igCamera	Sg

@@ -7,7 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igMetaObject *igSegment_GetMetaObject(void);
 
 #ifdef __cplusplus
 }

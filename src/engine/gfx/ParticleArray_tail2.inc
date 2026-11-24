@@ -192,6 +192,100 @@ void FUN_0015d0a0(igPointSpriteExt *arg0, int arg1, void *arg2) {
     *(float *)((char *)(arg2) + 4) = (float) *(float *)((char *)(temp_v1) + 4);
 }
 
+/* The point sprites drawn as camera-facing quads: each sprite becomes two triangles (six vertices) around its
+ * transformed centre, turned by its rotation (when the format carries one) and sized by its size source
+ * (uniform, per-sprite float, or per-sprite pair). */
+void igPointSpriteExt_Draw(PointSpriteDraw *self, int count, int first) {
+    VertexArrayLock lock;
+    bool rotate;
+    int sizeMode;  /* an int, not the byte the format returns: the byte takes another register */
+    int i;
+    igVertexArrayLock_Init((igVertexArrayLock *)&lock);
+    lock.f4 = 0;
+    lock.f0 = 0;
+    self->_vertexArray->v27(&lock, 1);
+    self->_vertexArray->v28(&lock, 2);
+    rotate = self->_vertexArray->v25()->hasSpriteRadians();
+    sizeMode = self->_vertexArray->v25()->getPointSpriteCoordCount();
+    for (i = 0; i < count; i++) {
+        igVec3f center;
+        igVec3f corner;
+        igVec2f half;
+        int vertex;
+        unsigned int index;
+        /* declaration order of the floats chooses their registers */
+        float b;
+        float a;
+        float e;
+        float angle;
+        float c;
+        float s;
+        float d;
+        float x0;
+        float y0;
+        /* the unsigned sum keeps the sprite index apart from the signed `first + i` the position calls and the
+         * vertex base recompute (a shared sum would drop two instructions) */
+        index = (unsigned int)first + (unsigned int)i;
+        if (sizeMode == 0) {
+            FUN_0015d050(self, index, &half);
+        } else if (sizeMode == 1) {
+            FUN_0015d070((igPointSpriteExt *)self, index, &half);
+        } else if (sizeMode == 2) {
+            FUN_0015d0a0((igPointSpriteExt *)self, index, &half);
+        }
+        if (self->_space == 1) {
+            igVec4f projected;
+            float w;
+            float inverse;
+            self->getPosition(first + i, &center);
+            FUN_00193c50(&projected, &center, self->_matrix);
+            w = projected.vec[3];
+            inverse = 1.0f / w;
+            center.vec[0] = inverse * projected.vec[0];
+            center.vec[1] = inverse * projected.vec[1];
+            center.vec[2] = -w;
+        } else {
+            self->getPosition(first + i, &center);
+            Vec3f_TransformProjective(center.vec, center.vec, self->_matrix);
+        }
+        vertex = (first + i) * 6;
+        if (rotate) {
+            angle = self->getRotation(index);
+        } else {
+            angle = 0.0f;
+        }
+        c = cosf(angle);
+        s = sinf(angle);
+        a = c * half.vec[0];
+        b = s * half.vec[1];
+        d = s * half.vec[0];
+        e = c * half.vec[1];
+        x0 = a + b;
+        y0 = e - d;
+        corner.vec[0] = center.vec[0] - x0;
+        corner.vec[1] = y0 + center.vec[1];
+        corner.vec[2] = center.vec[2];
+        self->_vertexArray->setPosition(vertex, &corner);
+        float a2 = a - b;
+        float d2 = d + e;
+        corner.vec[0] = center.vec[0] - a2;
+        corner.vec[1] = center.vec[1] - d2;
+        corner.vec[2] = center.vec[2];
+        self->_vertexArray->setPosition(vertex + 1, &corner);
+        self->_vertexArray->setPosition(vertex + 5, &corner);
+        corner.vec[0] = a2 + center.vec[0];
+        corner.vec[1] = d2 + center.vec[1];
+        corner.vec[2] = center.vec[2];
+        self->_vertexArray->setPosition(vertex + 2, &corner);
+        self->_vertexArray->setPosition(vertex + 4, &corner);
+        corner.vec[0] = x0 + center.vec[0];
+        corner.vec[1] = center.vec[1] - y0;
+        corner.vec[2] = center.vec[2];
+        self->_vertexArray->setPosition(vertex + 3, &corner);
+    }
+    self->_context->v71(3, count * 2, first * 6);
+}
+
 
 void FUN_0015d4d0(S4d0 *s)
 {

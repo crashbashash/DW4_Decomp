@@ -8,9 +8,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igCamera_metaObject;
-struct igCamera *igCamera_CreateInstance(int allocator);
-struct igMetaObject *igCamera_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

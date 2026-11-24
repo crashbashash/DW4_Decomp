@@ -77,7 +77,7 @@ void beCameraMode_Update(beCameraMode *self) {
         }
         igMatrix44f_SetIdentity((float *)&matrix);
         model = (igViewModel *)self->_model;
-        igGraphPath_GetTransform((igGraphPath *)self->_cameraPath, (igMatrix44f *)&matrix, self->_nowTimeL);
+        ((Gap::Sg::igGraphPath *)self->_cameraPath)->getTransformMatrixInclusive((igMatrix44f *)&matrix, self->_nowTimeL);
         a = 0; b = 0; c = 0;
         igMatrix44f_GetEulerAngles(matrix.m, &a, &b, &c);
         igMatrix44f_GetTranslation(matrix.m, translation.v);

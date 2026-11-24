@@ -1,10 +1,13 @@
-void igAttrSet_Reset(S_1af7e0 *arg0) {
-    unsigned int n;
-    unsigned int i;
+namespace Gap {
+namespace Sg {
 
-    n = arg0->l->cnt;
-    for (i = 0; i < n; i++) {
-        arg0->l->arr[i]->vX();
+void igAttrSet::reset()
+{
+    unsigned int count = _attributes->getCount();
+    for (unsigned int i = 0; i < count; i++) {
+        _attributes->get(i)->reset();
     }
+}
+}
 }
 
