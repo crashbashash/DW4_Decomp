@@ -72,8 +72,8 @@ CallbackArray *beNDMWLoadIntf2MesWin_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2MesWin_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2MesWin_GetMetaObject,
         "beNDMWLoadIntf2MesWin",
         0x40, /* instance size */

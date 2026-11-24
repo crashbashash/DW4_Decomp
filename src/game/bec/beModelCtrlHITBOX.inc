@@ -1,103 +1,71 @@
-igMetaObject *g_beModelCtrlHITBOX_metaObject;
-igMetaField *g_beModelCtrlHITBOX_kindMetaField;
-igMetaField *g_beModelCtrlHITBOX_startMetaField;
-igMetaField *g_beModelCtrlHITBOX_lengthMetaField;
-igMetaField *g_beModelCtrlHITBOX_offsetMetaField;
-igMetaField *g_beModelCtrlHITBOX_boxSizeMetaField;
+namespace Gap {
+namespace Bec {
+
+igMetaObject *beModelCtrlHITBOX::_Meta;
+igMetaField *beModelCtrlHITBOX::k_kind;
+igMetaField *beModelCtrlHITBOX::k_start;
+igMetaField *beModelCtrlHITBOX::k_length;
+igMetaField *beModelCtrlHITBOX::k_offset;
+igMetaField *beModelCtrlHITBOX::k_boxSize;
+}
+}
 
 beModelCtrlHITBOX *beModelCtrlHITBOX_Create(int allocator) {
-    beModelCtrlHITBOX_EnsureRegistered();
-    return (beModelCtrlHITBOX *)igMetaObject_CreateInstance(g_beModelCtrlHITBOX_metaObject, (igMemoryPoolView *)allocator);
+    Gap::Bec::beModelCtrlHITBOX::arkRegister();
+    return (beModelCtrlHITBOX *)igMetaObject_CreateInstance(Gap::Bec::beModelCtrlHITBOX::getClassMeta(), (igMemoryPoolView *)allocator);
 }
 
-igMetaObject *beModelCtrlHITBOX_GetMetaObject(void)
+namespace Gap {
+namespace Bec {
+
+igMetaObject *beModelCtrlHITBOX::getClassTypeSafe()
 {
-    igMetaObject *g = g_beModelCtrlHITBOX_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beModelCtrlHITBOX_EnsureRegistered();
-    return g_beModelCtrlHITBOX_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int beModelCtrlHITBOX_GetVTable(void) {
-    beModelCtrlHITBOX obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlHITBOX_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlHITBOX_EnsureRegistered(void)
+void *beModelCtrlHITBOX::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(beModelCtrlHITBOX_Register);
+    beModelCtrlHITBOX temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *beModelCtrlHITBOX_Register(void) {
+void beModelCtrlHITBOX::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlHITBOX::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlHITBOX_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlHITBOX_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlHITBOX",
-        0x30, /* instance size */
-        beModelCtrlHITBOX_GetVTable,
-        beModelCtrlHITBOX_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlHITBOX),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlHITBOX_GetMetaObjectFunction(void)
+void beModelCtrlHITBOX::arkRegisterInitialize()
 {
-    beModelCtrlHITBOX_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool };
+    static const char *names[] = { "_kind", "_start", "_length", "_offset", "_boxSize" };
+    static igMetaField **enumStorage[] = { &k_kind, &k_start, &k_length, &k_offset, &k_boxSize };
+    static int offsets[] = { 12, 16, 20, 24, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlHITBOX_ctorTable[] = {
-    igIntMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
-};
-static const char *g_beModelCtrlHITBOX_fieldTable[] = {
-    "_kind",
-    "_start",
-    "_length",
-    "_offset",
-    "_boxSize",
-};
-static igMetaField **g_beModelCtrlHITBOX_fieldHandles[] = {
-    &g_beModelCtrlHITBOX_kindMetaField,
-    &g_beModelCtrlHITBOX_startMetaField,
-    &g_beModelCtrlHITBOX_lengthMetaField,
-    &g_beModelCtrlHITBOX_offsetMetaField,
-    &g_beModelCtrlHITBOX_boxSizeMetaField,
-};
-static int g_beModelCtrlHITBOX_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    36,
-};
-
-void beModelCtrlHITBOX_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlHITBOX_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlHITBOX_ctorTable, 5);
-    igMetaObject_NameFields(meta, g_beModelCtrlHITBOX_fieldTable, g_beModelCtrlHITBOX_fieldHandles, g_beModelCtrlHITBOX_fieldOffsets, base);
+}
 }
 

@@ -1,88 +1,60 @@
-igMetaObject *g_beGeneraterItemDataOne_metaObject;
-igMetaField *g_beGeneraterItemDataOne_idMetaField;
-igMetaField *g_beGeneraterItemDataOne_rankMetaField;
-igMetaField *g_beGeneraterItemDataOne_rateMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beGeneraterItemDataOne_GetMetaObject(void) {
-    igMetaObject *g = g_beGeneraterItemDataOne_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beGeneraterItemDataOne_EnsureRegistered();
-    }
-    return g_beGeneraterItemDataOne_metaObject;
-}
+igMetaObject *beGeneraterItemDataOne::_Meta;
+igMetaField *beGeneraterItemDataOne::k_id;
+igMetaField *beGeneraterItemDataOne::k_rank;
+igMetaField *beGeneraterItemDataOne::k_rate;
 
-int beGeneraterItemDataOne_GetVTable(void) {
-    beGeneraterItemDataOne obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beGeneraterItemDataOne_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beGeneraterItemDataOne_EnsureRegistered(void)
+igMetaObject *beGeneraterItemDataOne::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beGeneraterItemDataOne_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beGeneraterItemDataOne_Register(void) {
+void *beGeneraterItemDataOne::retrieveVTablePointer()
+{
+    beGeneraterItemDataOne temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beGeneraterItemDataOne::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beGeneraterItemDataOne::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beGeneraterItemDataOne_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beGeneraterItemDataOne_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beGeneraterItemDataOne",
-        0x18, /* instance size */
-        beGeneraterItemDataOne_GetVTable,
-        beGeneraterItemDataOne_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beGeneraterItemDataOne),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beGeneraterItemDataOne_GetMetaObjectFunction(void)
+void beGeneraterItemDataOne::arkRegisterInitialize()
 {
-    beGeneraterItemDataOne_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_id", "_rank", "_rate" };
+    static igMetaField **enumStorage[] = { &k_id, &k_rank, &k_rate };
+    static int offsets[] = { 12, 16, 20 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beGeneraterItemDataOne_ctorTable[] = {
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-    igIntMetaField_Create,
-};
-static const char *g_beGeneraterItemDataOne_fieldTable[] = {
-    "_id",
-    "_rank",
-    "_rate",
-};
-static igMetaField **g_beGeneraterItemDataOne_fieldHandles[] = {
-    &g_beGeneraterItemDataOne_idMetaField,
-    &g_beGeneraterItemDataOne_rankMetaField,
-    &g_beGeneraterItemDataOne_rateMetaField,
-};
-static int g_beGeneraterItemDataOne_fieldOffsets[] = {
-    12,
-    16,
-    20,
-};
-
-void beGeneraterItemDataOne_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beGeneraterItemDataOne_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beGeneraterItemDataOne_ctorTable, 3);
-    igMetaObject_NameFields(meta, g_beGeneraterItemDataOne_fieldTable, g_beGeneraterItemDataOne_fieldHandles, g_beGeneraterItemDataOne_fieldOffsets, base);
+}
 }
 
 igMetaEnum *g_beGeneraterItemDataOne_msgActionMetaEnum;

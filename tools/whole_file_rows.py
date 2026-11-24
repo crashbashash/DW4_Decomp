@@ -421,16 +421,26 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
       a call out of the file is an external, read from the retail `jal`; a call only a duplicate
       makes (`operator delete` in an inline destructor) has no member's `jal` to be read from
     A twin is read for its calls and the functions it reaches only: its data are the twin object's,
-    compared under that profile. A function an exception table names and nothing in the file
+    compared under that profile. So is a vtable whose own class's virtual (its `getMeta`) is a twin: the
+    retail linker kept both from the twin's unit (verify.vtable_twins), so the RTTI record an RTTI-on
+    file's copy names is not in it. A function an exception table names and nothing in the file
     defines is table_externals'. A data-only file has no member: its walk starts at its kept data
     `sections`, [(retail address, section index)]."""
     tables = exception_tables(syms, headers, obj, functions)
     data, duplicates, externals, seen, work = {}, {}, {}, set(), []
 
-    def walk_section(base, index):
-        work.append((base, verify.object_section(obj, headers[index][0], index),
-                     verify.object_relocs(obj, target_section=index),
-                     "table" if headers[index][0] == ".exception" else "data", index))
+    def twin_vtable(name, base, raw, relocs):
+        return twins is not None and any(
+            target in functions and target not in function_at
+            and twins(target, (retail.word(base + offset) - struct.unpack_from("<I", raw, offset)[0]) & 0xffffffff)
+            for offset, target in verify.own_virtuals(name, relocs))
+
+    def walk_section(base, index, name=None):
+        raw = verify.object_section(obj, headers[index][0], index)
+        relocs = verify.object_relocs(obj, target_section=index)
+        mode = ("table" if headers[index][0] == ".exception"
+                else "twin" if name and twin_vtable(name, base, raw, relocs) else "data")
+        work.append((base, raw, relocs, mode, index))
 
     def walk_body(name, address, copy):
         own = copy is functions[name]
@@ -498,7 +508,7 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
                 reads_twice(obj, syms, functions, name, data[name], address)
             data[name] = address
             if isinstance(home, int):
-                walk_section(address - syms[name][1], home)
+                walk_section(address - syms[name][1], home, name)
     return data, duplicates, externals
 
 

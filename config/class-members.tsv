@@ -5505,3 +5505,68 @@ igGuiSystem	void move(IG_DIRECTION direction);
 igGuiSystem	void pressFocusedComponent();
 igGuiSystem	igGuiComponent *getNextComponent(igGuiComponent *component, IG_DIRECTION direction);
 igBoxComponent	IG_OBJECT_DEFINE(igBoxComponent)
+beSeData	IG_OBJECT_DEFINE(beSeData)
+beSeData	private: static igMetaField *k_sound;
+beSeData	static igMetaField *k_delay;
+beSeDataList	IG_OBJECT_DEFINE(beSeDataList)
+beWeaponSeqData	IG_OBJECT_DEFINE(beWeaponSeqData)
+beWeaponSeqData	private: static igMetaField *k_label;
+beWeaponSeqDataList	IG_OBJECT_DEFINE(beWeaponSeqDataList)
+beBaseInfoData	IG_ABSTRACT_OBJECT_DEFINE(beBaseInfoData)
+beBaseInfoData	private: static igMetaField *k_version;
+beBaseInfoDataList	IG_OBJECT_DEFINE(beBaseInfoDataList)
+beSeInfoData	IG_OBJECT_DEFINE(beSeInfoData)
+beSeInfoData	private: static igMetaField *k_actionList;
+beActionStarterData	IG_OBJECT_DEFINE(beActionStarterData)
+beActionStarterData	private: static igMetaField *k_message;
+beActionStarterData	static igMetaField *k_delay;
+beActionStarterData	static igMetaField *k_offset;
+beActionStarterData	static igMetaField *k_isSeqDead;
+beActionStarterData	static igMetaField *k_isPositionLock;
+beActionStarterDataList	IG_OBJECT_DEFINE(beActionStarterDataList)
+beLayerGroup	IG_OBJECT_DEFINE(beLayerGroup)
+beLayerGroupList	IG_OBJECT_DEFINE(beLayerGroupList)
+beGeneraterItemDataOne	IG_OBJECT_DEFINE(beGeneraterItemDataOne)
+beGeneraterItemDataOne	private: static igMetaField *k_id;
+beGeneraterItemDataOne	static igMetaField *k_rank;
+beGeneraterItemDataOne	static igMetaField *k_rate;
+beGeneraterItemDataOneList	IG_OBJECT_DEFINE(beGeneraterItemDataOneList)
+beModelCtrlAIData	IG_OBJECT_DEFINE(beModelCtrlAIData)
+beModelCtrlAIData	private: static igMetaField *k_dirRadian;
+beModelCtrlAIData	static igMetaField *k_time;
+beModelCtrlAIData	static igMetaField *k_limit;
+beModelCtrlAIDataList	IG_OBJECT_DEFINE(beModelCtrlAIDataList)
+beModelCtrlACTION	IG_OBJECT_DEFINE(beModelCtrlACTION)
+beModelCtrlCTRL	IG_OBJECT_DEFINE(beModelCtrlCTRL)
+beModelCtrlHITBOX	IG_OBJECT_DEFINE(beModelCtrlHITBOX)
+beModelCtrlHITBOX	private: static igMetaField *k_kind;
+beModelCtrlHITBOX	static igMetaField *k_start;
+beModelCtrlHITBOX	static igMetaField *k_length;
+beModelCtrlHITBOX	static igMetaField *k_offset;
+beModelCtrlHITBOX	static igMetaField *k_boxSize;
+beModelCtrlJUMP	IG_OBJECT_DEFINE(beModelCtrlJUMP)
+beModelCtrlLABEL	IG_OBJECT_DEFINE(beModelCtrlLABEL)
+beModelCtrlLABELCTRL	IG_OBJECT_DEFINE(beModelCtrlLABELCTRL)
+beModelCtrlLABELCTRL	private: static igMetaField *k_seqName;
+beModelCtrlLUACALL	IG_OBJECT_DEFINE(beModelCtrlLUACALL)
+beModelCtrlLUACALL	private: static igMetaField *k_modeName;
+beModelCtrlMOVE	IG_OBJECT_DEFINE(beModelCtrlMOVE)
+beModelCtrlMOVE	private: static igMetaField *k_value;
+beModelCtrlMOVE	static igMetaField *k_frame;
+beModelCtrlMOVEEX	IG_OBJECT_DEFINE(beModelCtrlMOVEEX)
+beModelCtrlMOVEEX	private: static igMetaField *k_value;
+beModelCtrlMOVEEX	static igMetaField *k_frame;
+beModelCtrlMOVEEX	static igMetaField *k_playTime;
+beModelCtrlMOVEEX	static igMetaField *k_isSeqStop;
+beModelCtrlMOVEEX	static igMetaField *k_stopValue;
+beModelCtrlMOVEEX	static igMetaField *k_stopFrame;
+beModelCtrlMOVERL	IG_OBJECT_DEFINE(beModelCtrlMOVERL)
+beModelCtrlMOVERL	private: static igMetaField *k_modelName;
+beModelCtrlMOVERL	static igMetaField *k_boneName;
+beModelCtrlMSGBOX	IG_OBJECT_DEFINE(beModelCtrlMSGBOX)
+beModelCtrlMUTEKI	IG_OBJECT_DEFINE(beModelCtrlMUTEKI)
+beModelCtrlMUTEKI	private: static igMetaField *k_frame;
+beModelCtrlPDMOVE	IG_OBJECT_DEFINE(beModelCtrlPDMOVE)
+beModelCtrlPDMOVE	private: static igMetaField *k_value;
+beModelCtrlPDMOVE	static igMetaField *k_frame;
+beModelCtrlWCHECK	IG_OBJECT_DEFINE(beModelCtrlWCHECK)

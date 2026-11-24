@@ -439,3 +439,32 @@ igPickMode	Viewer
 igGuiComponent	Gui
 igGuiSystem	Gui
 igBoxComponent	Gui
+beSeData	Bec
+beSeDataList	Bec	igTObjectList<beSeData>
+beWeaponSeqData	Bec
+beWeaponSeqDataList	Bec	igTObjectList<beWeaponSeqData>
+beBaseInfoData	Bec
+beBaseInfoDataList	Bec	igTObjectList<beBaseInfoData>
+beSeInfoData	Bec
+beActionStarterData	Bec
+beActionStarterDataList	Bec	igTObjectList<beActionStarterData>
+beLayerGroup	Bec
+beLayerGroupList	Bec	igTObjectList<beLayerGroup>
+beGeneraterItemDataOne	Bec
+beGeneraterItemDataOneList	Bec	igTObjectList<beGeneraterItemDataOne>
+beModelCtrlAIData	Bec
+beModelCtrlAIDataList	Bec	igTObjectList<beModelCtrlAIData>
+beModelCtrlACTION	Bec
+beModelCtrlCTRL	Bec
+beModelCtrlHITBOX	Bec
+beModelCtrlJUMP	Bec
+beModelCtrlLABEL	Bec
+beModelCtrlLABELCTRL	Bec
+beModelCtrlLUACALL	Bec
+beModelCtrlMOVE	Bec
+beModelCtrlMOVEEX	Bec
+beModelCtrlMOVERL	Bec
+beModelCtrlMSGBOX	Bec
+beModelCtrlMUTEKI	Bec
+beModelCtrlPDMOVE	Bec
+beModelCtrlWCHECK	Bec

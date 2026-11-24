@@ -1,82 +1,58 @@
-igMetaObject *g_beModelCtrlPDMOVE_metaObject;
-igMetaField *g_beModelCtrlPDMOVE_valueMetaField;
-igMetaField *g_beModelCtrlPDMOVE_frameMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlPDMOVE_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlPDMOVE_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlPDMOVE_EnsureRegistered();
-    }
-    return g_beModelCtrlPDMOVE_metaObject;
-}
+igMetaObject *beModelCtrlPDMOVE::_Meta;
+igMetaField *beModelCtrlPDMOVE::k_value;
+igMetaField *beModelCtrlPDMOVE::k_frame;
 
-int beModelCtrlPDMOVE_GetVTable(void) {
-    beModelCtrlPDMOVE obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlPDMOVE_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlPDMOVE_EnsureRegistered(void)
+igMetaObject *beModelCtrlPDMOVE::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlPDMOVE_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlPDMOVE_Register(void) {
+void *beModelCtrlPDMOVE::retrieveVTablePointer()
+{
+    beModelCtrlPDMOVE temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlPDMOVE::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlPDMOVE::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlPDMOVE_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlPDMOVE_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlPDMOVE",
-        0x14, /* instance size */
-        beModelCtrlPDMOVE_GetVTable,
-        beModelCtrlPDMOVE_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlPDMOVE),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlPDMOVE_GetMetaObjectFunction(void)
+void beModelCtrlPDMOVE::arkRegisterInitialize()
 {
-    beModelCtrlPDMOVE_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_value", "_frame" };
+    static igMetaField **enumStorage[] = { &k_value, &k_frame };
+    static int offsets[] = { 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlPDMOVE_ctorTable[] = {
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beModelCtrlPDMOVE_fieldTable[] = {
-    "_value",
-    "_frame",
-};
-static igMetaField **g_beModelCtrlPDMOVE_fieldHandles[] = {
-    &g_beModelCtrlPDMOVE_valueMetaField,
-    &g_beModelCtrlPDMOVE_frameMetaField,
-};
-static int g_beModelCtrlPDMOVE_fieldOffsets[] = {
-    12,
-    16,
-};
-
-void beModelCtrlPDMOVE_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlPDMOVE_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlPDMOVE_ctorTable, 2);
-    igMetaObject_NameFields(meta, g_beModelCtrlPDMOVE_fieldTable, g_beModelCtrlPDMOVE_fieldHandles, g_beModelCtrlPDMOVE_fieldOffsets, base);
+}
 }
 

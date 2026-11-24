@@ -69,7 +69,14 @@ unowned section.
   are the twin compile's too: the owner object keeps no datum only a twin reaches (a base
   class's vtable its inline destructor stores), so the inline virtuals that vtable names
   may be `stripped`, and the twin compile's reference to its own copy of such a datum reads
-  the address `config/SLUS-20836/compiler-names.tsv` binds.
+  the address `config/SLUS-20836/compiler-names.tsv` binds. A vtable the owner object emits for a class
+  without a key function goes with its inline virtuals: the retail linker kept the first unit's copies
+  of both, so a `data` vtable whose own class's virtual (its `getMeta`) is a twin duplicate is the
+  twin's (`verify.vtable_twins`). It is compared as the twin compile emits it, at the row's address,
+  and not placed; the owner's copy reaches no datum (the RTTI-on Bec unit's copy of igNamedObject's
+  vtable names an RTTI record that attrs' `-RTTI off` copy at 0x524950 has a zero word for). Linking
+  extracts the owner's bodies without that copy, as it does a dead datum: the bodies reference the
+  row's address, and retail's datum there stays the twin's unit's.
 * **Switch tables.** The owner's `.rodata` sections are matched to the owner's
   entries in `config/SLUS-20836/jumptables.txt` (count and byte size), relocated against the
   member symbols and compared with the retail tables. Linking places them with the

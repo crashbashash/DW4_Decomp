@@ -1,54 +1,52 @@
-igMetaObject *g_beLayerGroupList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beLayerGroupList_GetOrCreateMetaObject(void) {
-    if (g_beLayerGroupList_metaObject == 0) {
-        g_beLayerGroupList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beLayerGroupList_metaObject;
-}
+igMetaObject *beLayerGroupList::_Meta;
 
-void *beLayerGroupList_GetMetaObject(void) {
-    igMetaObject *g = g_beLayerGroupList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beLayerGroupList_EnsureRegistered();
-    }
-    return g_beLayerGroupList_metaObject;
-}
-
-int beLayerGroupList_GetVTable(void) {
-    beLayerGroupList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beLayerGroupList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beLayerGroupList_EnsureRegistered(void)
+igMetaObject *beLayerGroupList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beLayerGroupList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beLayerGroupList_callbackList[] = { beLayerGroup_EnsureRegistered, 0 };
+igMetaObject *beLayerGroupList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beLayerGroupList_Register(void) {
+void *beLayerGroupList::retrieveVTablePointer()
+{
+    beLayerGroupList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beLayerGroupList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beLayerGroupList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beLayerGroup::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beLayerGroupList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beLayerGroupList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beLayerGroupList",
-        0x14, /* instance size */
-        beLayerGroupList_GetVTable,
+        sizeof(beLayerGroupList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beLayerGroupList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beLayerGroupList_GetMetaObjectFunction(void)
-{
-    beLayerGroupList_GetMetaObject();
+}
 }
 

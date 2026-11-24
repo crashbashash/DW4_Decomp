@@ -1,54 +1,52 @@
-igMetaObject *g_beModelCtrlAIDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beModelCtrlAIDataList_GetOrCreateMetaObject(void) {
-    if (g_beModelCtrlAIDataList_metaObject == 0) {
-        g_beModelCtrlAIDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beModelCtrlAIDataList_metaObject;
-}
+igMetaObject *beModelCtrlAIDataList::_Meta;
 
-void *beModelCtrlAIDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlAIDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlAIDataList_EnsureRegistered();
-    }
-    return g_beModelCtrlAIDataList_metaObject;
-}
-
-int beModelCtrlAIDataList_GetVTable(void) {
-    beModelCtrlAIDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beModelCtrlAIDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beModelCtrlAIDataList_EnsureRegistered(void)
+igMetaObject *beModelCtrlAIDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beModelCtrlAIDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beModelCtrlAIDataList_callbackList[] = { beModelCtrlAIData_EnsureRegistered, 0 };
+igMetaObject *beModelCtrlAIDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beModelCtrlAIDataList_Register(void) {
+void *beModelCtrlAIDataList::retrieveVTablePointer()
+{
+    beModelCtrlAIDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlAIDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlAIDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beModelCtrlAIData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlAIDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beModelCtrlAIDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlAIDataList",
-        0x14, /* instance size */
-        beModelCtrlAIDataList_GetVTable,
+        sizeof(beModelCtrlAIDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beModelCtrlAIDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beModelCtrlAIDataList_GetMetaObjectFunction(void)
-{
-    beModelCtrlAIDataList_GetMetaObject();
+}
 }
 

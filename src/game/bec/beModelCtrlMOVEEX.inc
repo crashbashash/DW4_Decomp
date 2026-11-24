@@ -1,105 +1,62 @@
-igMetaObject *g_beModelCtrlMOVEEX_metaObject;
-igMetaField *g_beModelCtrlMOVEEX_valueMetaField;
-igMetaField *g_beModelCtrlMOVEEX_frameMetaField;
-igMetaField *g_beModelCtrlMOVEEX_playTimeMetaField;
-igMetaField *g_beModelCtrlMOVEEX_isSeqStopMetaField;
-igMetaField *g_beModelCtrlMOVEEX_stopValueMetaField;
-igMetaField *g_beModelCtrlMOVEEX_stopFrameMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlMOVEEX_GetMetaObject(void) {
-    bool ok;
-    if (g_beModelCtrlMOVEEX_metaObject == 0) goto make;
-    ok = !!(g_beModelCtrlMOVEEX_metaObject->_validity & 4);
-    if (ok != false) goto done;
-make:
-    beModelCtrlMOVEEX_EnsureRegistered();
-done:;
-    return g_beModelCtrlMOVEEX_metaObject;
-}
+igMetaObject *beModelCtrlMOVEEX::_Meta;
+igMetaField *beModelCtrlMOVEEX::k_value;
+igMetaField *beModelCtrlMOVEEX::k_frame;
+igMetaField *beModelCtrlMOVEEX::k_playTime;
+igMetaField *beModelCtrlMOVEEX::k_isSeqStop;
+igMetaField *beModelCtrlMOVEEX::k_stopValue;
+igMetaField *beModelCtrlMOVEEX::k_stopFrame;
 
-int beModelCtrlMOVEEX_GetVTable(void) {
-    beModelCtrlMOVEEX obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlMOVEEX_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlMOVEEX_EnsureRegistered(void)
+igMetaObject *beModelCtrlMOVEEX::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlMOVEEX_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlMOVEEX_Register(void) {
+void *beModelCtrlMOVEEX::retrieveVTablePointer()
+{
+    beModelCtrlMOVEEX temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlMOVEEX::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlMOVEEX::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlMOVEEX_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMOVEEX_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlMOVEEX",
-        0x24, /* instance size */
-        beModelCtrlMOVEEX_GetVTable,
-        beModelCtrlMOVEEX_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlMOVEEX),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlMOVEEX_GetMetaObjectFunction(void)
+void beModelCtrlMOVEEX::arkRegisterInitialize()
 {
-    beModelCtrlMOVEEX_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, igBoolMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_value", "_frame", "_playTime", "_isSeqStop", "_stopValue", "_stopFrame" };
+    static igMetaField **enumStorage[] = { &k_value, &k_frame, &k_playTime, &k_isSeqStop, &k_stopValue, &k_stopFrame };
+    static int offsets[] = { 12, 16, 20, 24, 28, 32 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 6);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlMOVEEX_ctorTable[] = {
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-    igBoolMetaField_Create,
-    igFloatMetaField_Create,
-    igFloatMetaField_Create,
-};
-static const char *g_beModelCtrlMOVEEX_fieldTable[] = {
-    "_value",
-    "_frame",
-    "_playTime",
-    "_isSeqStop",
-    "_stopValue",
-    "_stopFrame",
-};
-static igMetaField **g_beModelCtrlMOVEEX_fieldHandles[] = {
-    &g_beModelCtrlMOVEEX_valueMetaField,
-    &g_beModelCtrlMOVEEX_frameMetaField,
-    &g_beModelCtrlMOVEEX_playTimeMetaField,
-    &g_beModelCtrlMOVEEX_isSeqStopMetaField,
-    &g_beModelCtrlMOVEEX_stopValueMetaField,
-    &g_beModelCtrlMOVEEX_stopFrameMetaField,
-};
-static int g_beModelCtrlMOVEEX_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-};
-
-void beModelCtrlMOVEEX_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlMOVEEX_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlMOVEEX_ctorTable, 6);
-    igMetaObject_NameFields(meta, g_beModelCtrlMOVEEX_fieldTable, g_beModelCtrlMOVEEX_fieldHandles, g_beModelCtrlMOVEEX_fieldOffsets, base);
+}
 }
 

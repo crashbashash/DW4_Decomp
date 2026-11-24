@@ -50,8 +50,8 @@ CallbackArray *beNDMWLoadIntf2MakeChr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2MakeChr_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2MakeChr_GetMetaObject,
         "beNDMWLoadIntf2MakeChr",
         0x3c, /* instance size */

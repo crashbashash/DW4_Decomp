@@ -54,8 +54,8 @@ CallbackArray *beSelectCtrlInfoRamData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSelectCtrlInfoRamData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beSelectCtrlInfoRamData_GetMetaObjectFunction,
         "beSelectCtrlInfoRamData",
         0x20, /* instance size */

@@ -1,54 +1,52 @@
-igMetaObject *g_beWeaponSeqDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beWeaponSeqDataList_GetOrCreateMetaObject(void) {
-    if (g_beWeaponSeqDataList_metaObject == 0) {
-        g_beWeaponSeqDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beWeaponSeqDataList_metaObject;
-}
+igMetaObject *beWeaponSeqDataList::_Meta;
 
-void *beWeaponSeqDataList_GetMetaObject(void) {
-    igMetaObject *g = g_beWeaponSeqDataList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beWeaponSeqDataList_EnsureRegistered();
-    }
-    return g_beWeaponSeqDataList_metaObject;
-}
-
-int beWeaponSeqDataList_GetVTable(void) {
-    beWeaponSeqDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beWeaponSeqDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beWeaponSeqDataList_EnsureRegistered(void)
+igMetaObject *beWeaponSeqDataList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(beWeaponSeqDataList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beWeaponSeqDataList_callbackList[] = { beWeaponSeqData_EnsureRegistered, 0 };
+igMetaObject *beWeaponSeqDataList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *beWeaponSeqDataList_Register(void) {
+void *beWeaponSeqDataList::retrieveVTablePointer()
+{
+    beWeaponSeqDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beWeaponSeqDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beWeaponSeqDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beWeaponSeqData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beWeaponSeqDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beWeaponSeqDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beWeaponSeqDataList",
-        0x14, /* instance size */
-        beWeaponSeqDataList_GetVTable,
+        sizeof(beWeaponSeqDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beWeaponSeqDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beWeaponSeqDataList_GetMetaObjectFunction(void)
-{
-    beWeaponSeqDataList_GetMetaObject();
+}
 }
 

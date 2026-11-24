@@ -55,8 +55,8 @@ CallbackArray *beSoundData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSoundData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beSoundData_GetMetaObjectFunction,
         "beSoundData",
         0x20, /* instance size */

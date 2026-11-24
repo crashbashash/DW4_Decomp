@@ -717,3 +717,11 @@ igGuiSystem	_root	igSmartPointer<igAttrSet>
 igGuiSystem	_mouseCursor	igSmartPointer<igMouseCursor>
 igGuiSystem	_mouseCursorTransform	igSmartPointer<igTransform>
 igGuiSystem	_mouseCursorVisible	bool
+beSeData	_sound	igStringRef
+beWeaponSeqData	_label	igStringRef
+beSeInfoData	_actionList	igSmartPointer<beSeDataList>
+beActionStarterData	_message	igStringRef
+beModelCtrlLABELCTRL	_seqName	igStringRef
+beModelCtrlLUACALL	_modeName	igStringRef
+beModelCtrlMOVERL	_modelName	igStringRef
+beModelCtrlMOVERL	_boneName	igStringRef

@@ -450,11 +450,7 @@ typedef struct beActionStarterData {
     int _name;                                     /* +8    igStringMetaField */
     int _message;                                  /* +12   igStringMetaField */
     int _delay;                                    /* +16   igIntMetaField */
-#ifdef __cplusplus
-    igVec3f _offset;                               /* +20   igVec3fMetaField */
-#else
     float _offset[3];                              /* +20   igVec3fMetaField */
-#endif
     unsigned char _isSeqDead;                      /* +32   igBoolMetaField */
     unsigned char _isPositionLock;                 /* +33   igBoolMetaField */
     char _pad34[2];
@@ -2925,16 +2921,8 @@ typedef struct beModelCtrlHITBOX {
     int _kind;                                     /* +12   igIntMetaField */
     float _start;                                  /* +16   igFloatMetaField */
     float _length;                                 /* +20   igFloatMetaField */
-#ifdef __cplusplus
-    igVec3f _offset;                               /* +24   igVec3fMetaField */
-#else
     float _offset[3];                              /* +24   igVec3fMetaField */
-#endif
-#ifdef __cplusplus
-    igVec3f _boxSize;                              /* +36   igVec3fMetaField */
-#else
     float _boxSize[3];                             /* +36   igVec3fMetaField */
-#endif
 } beModelCtrlHITBOX;
 
 #ifdef __cplusplus
@@ -20836,7 +20824,7 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igStringRef.h"
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCopyRenderDestinationAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryAttr; class igGeometryAttr1_5; class igGeometryAttrList; class igGeometryMaskAttr; class igGeometrySetAttr; class igImageMipMapList; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderDestinationAttr; class igRenderListAttr; class igSetRenderDestinationAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureAttr; class igTextureBindAttr; class igTextureCoordSourceAttr; class igTextureCubeAttr; class igTextureFunctionAttr; class igTextureList; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
-namespace Bec { class beAction2InfoWork; class beCameraBoxData; class beCameraDemoData; class beCountry; class beCriFxXbData; class beCriSndf; class beCriVolume; class beDataBase; class beDataBaseList; class beDemoKeepMes; class beDemoKeepMesList; class beDemoManagerWork; class beDemoManagerWorkList; class beFile; class beFileChkObj; class beFontGeomAttrPair; class beFontGeomAttrPairList; class beGeneraterInfoWork; class beGeneraterPlayerData; class beGeneraterPlayerDataList; class beHitLandResultData; class beHitLandResultDataList; class beLuaDataObject; class beMatCtrlInfoWork; class beMatCtrlSearch; class beMatCtrlSearchList; class beMessengerArgData; class beMessengerArgDataList; class beMessengerDelay; class beMessengerDelayList; class beMessengerWork; class beMessengerWorkList; class beModelCtrlInfoAI; class beModelCtrlInfoHitBody; class beModelCtrlMoveObject; class beModelCtrlMoveObjectList; class beModelCtrlSubCom; class beModelCtrlSubComBase; class beNumVerData; class beNumVerDataList; class beNumVerInsideData; class beNumVerInsideDataList; class beNumberCtrlInfoWork; class bePadData; class bePadDataList; class beParticleCtrl2InfoWork; class bePlaySE; class bePlaySEList; class beSaveDataDeliver; class beSelectCtrlInfoWork; class beSvDeliver; class beSvPlatBaseData; class beSvPlatDataGC; class beSvPlatDataPC; class beSvPlatDataPS2; class beSvPs2McImage128k; class beSvSlotData; class beSvSlotDataList; class beSvSlotGC; class beSvSlotPS2; class beSvSlotXbox; class beTimerData; class beTimerDataList; class beUnicode; class beWaterMove; class beWaterMoveData; class beWaterMoveDataList; class beXboxImage24k; class igAppearanceListList; class igLightSetList; }
+namespace Bec { class beAction2InfoWork; class beActionStarterData; class beActionStarterDataList; class beBaseInfoData; class beBaseInfoDataList; class beCameraBoxData; class beCameraDemoData; class beCountry; class beCriFxXbData; class beCriSndf; class beCriVolume; class beDataBase; class beDataBaseList; class beDemoKeepMes; class beDemoKeepMesList; class beDemoManagerWork; class beDemoManagerWorkList; class beFile; class beFileChkObj; class beFontGeomAttrPair; class beFontGeomAttrPairList; class beGeneraterInfoWork; class beGeneraterItemDataOne; class beGeneraterItemDataOneList; class beGeneraterPlayerData; class beGeneraterPlayerDataList; class beHitLandResultData; class beHitLandResultDataList; class beLayerGroup; class beLayerGroupList; class beLuaDataObject; class beMatCtrlInfoWork; class beMatCtrlSearch; class beMatCtrlSearchList; class beMessengerArgData; class beMessengerArgDataList; class beMessengerDelay; class beMessengerDelayList; class beMessengerWork; class beMessengerWorkList; class beModelCtrlACTION; class beModelCtrlAIData; class beModelCtrlAIDataList; class beModelCtrlCTRL; class beModelCtrlHITBOX; class beModelCtrlInfoAI; class beModelCtrlInfoHitBody; class beModelCtrlJUMP; class beModelCtrlLABEL; class beModelCtrlLABELCTRL; class beModelCtrlLUACALL; class beModelCtrlMOVE; class beModelCtrlMOVEEX; class beModelCtrlMOVERL; class beModelCtrlMSGBOX; class beModelCtrlMUTEKI; class beModelCtrlMoveObject; class beModelCtrlMoveObjectList; class beModelCtrlPDMOVE; class beModelCtrlSubCom; class beModelCtrlSubComBase; class beModelCtrlWCHECK; class beNumVerData; class beNumVerDataList; class beNumVerInsideData; class beNumVerInsideDataList; class beNumberCtrlInfoWork; class bePadData; class bePadDataList; class beParticleCtrl2InfoWork; class bePlaySE; class bePlaySEList; class beSaveDataDeliver; class beSeData; class beSeDataList; class beSeInfoData; class beSelectCtrlInfoWork; class beSvDeliver; class beSvPlatBaseData; class beSvPlatDataGC; class beSvPlatDataPC; class beSvPlatDataPS2; class beSvPs2McImage128k; class beSvSlotData; class beSvSlotDataList; class beSvSlotGC; class beSvSlotPS2; class beSvSlotXbox; class beTimerData; class beTimerDataList; class beUnicode; class beWaterMove; class beWaterMoveData; class beWaterMoveDataList; class beWeaponSeqData; class beWeaponSeqDataList; class beXboxImage24k; class igAppearanceListList; class igLightSetList; }
 namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBitMask; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDependencyOrderedList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFile; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igFolder; class igIGBFile; class igInfo; class igInfoList; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMediaFile; class igMediaList; class igMemoryDirEntry; class igMemoryFile; class igMemoryFileEntry; class igMemoryFileEntryList; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igNonRefCountedObjectStack; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igPsx2File; class igPsx2Folder; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igRegistry; class igRegistryValue; class igRegistryValueList; class igResource; class igSemaphore; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gfx { class igCapabilityManager; class igClut; class igExternalImageEntry; class igFileImage; class igFileImagePng; class igImage; class igImageConvert; class igImageLoader; class igImageUtils; class igIndexArray; class igMemoryImage; class igPrimLengthArray; class igPrimLengthArray1_1; class igPsx2Clut; class igPsx2Image; class igPsx2ImageConvert; class igPsx2IndexArray; class igPsx2VertexArray1_1; class igPsx2VertexArray2; class igPsx2VertexStream; class igPsx2VisualContext; class igTgaLoader; class igVertexArray; class igVertexArray1_1; class igVertexArray2; class igVertexArray2Helper; class igVertexStream; class igVisualContext; }
 namespace Gui { class igAction; class igBoxComponent; class igClearRenderer; class igEventReceiver; class igEventReceiverOrderedList; class igFieldChangeView; class igFieldChangeViewList; class igFieldSynchronizer; class igGeometryElement; class igGuiComponent; class igGuiComponentModel; class igGuiSystem; class igGuiSystemModel; class igHotKeyBinding; class igHotKeyBindingList; class igHotKeyEventReceiver; class igModel; class igMouseCursor; class igNonRefCountedViewList; class igOnOffModel; class igOnOffValueObserver; class igOnOffValueObserverList; class igRadioGroup; class igRadioGroupModel; class igRadioGroupSelectedObserver; class igRenderer; class igRendererOrderedList; class igView; class igViewList; }
@@ -20847,6 +20835,10 @@ namespace Viewer { class igActorManagerParams; class igBoundingBoxRenderer; clas
 using Core::__internalNonRefCountedObjectList;
 using Core::__internalObjectList;
 using Bec::beAction2InfoWork;
+using Bec::beActionStarterData;
+using Bec::beActionStarterDataList;
+using Bec::beBaseInfoData;
+using Bec::beBaseInfoDataList;
 using Bec::beCameraBoxData;
 using Bec::beCameraDemoData;
 using Bec::beCountry;
@@ -20864,10 +20856,14 @@ using Bec::beFileChkObj;
 using Bec::beFontGeomAttrPair;
 using Bec::beFontGeomAttrPairList;
 using Bec::beGeneraterInfoWork;
+using Bec::beGeneraterItemDataOne;
+using Bec::beGeneraterItemDataOneList;
 using Bec::beGeneraterPlayerData;
 using Bec::beGeneraterPlayerDataList;
 using Bec::beHitLandResultData;
 using Bec::beHitLandResultDataList;
+using Bec::beLayerGroup;
+using Bec::beLayerGroupList;
 using Bec::beLuaDataObject;
 using Bec::beMatCtrlInfoWork;
 using Bec::beMatCtrlSearch;
@@ -20878,12 +20874,28 @@ using Bec::beMessengerDelay;
 using Bec::beMessengerDelayList;
 using Bec::beMessengerWork;
 using Bec::beMessengerWorkList;
+using Bec::beModelCtrlACTION;
+using Bec::beModelCtrlAIData;
+using Bec::beModelCtrlAIDataList;
+using Bec::beModelCtrlCTRL;
+using Bec::beModelCtrlHITBOX;
 using Bec::beModelCtrlInfoAI;
 using Bec::beModelCtrlInfoHitBody;
+using Bec::beModelCtrlJUMP;
+using Bec::beModelCtrlLABEL;
+using Bec::beModelCtrlLABELCTRL;
+using Bec::beModelCtrlLUACALL;
+using Bec::beModelCtrlMOVE;
+using Bec::beModelCtrlMOVEEX;
+using Bec::beModelCtrlMOVERL;
+using Bec::beModelCtrlMSGBOX;
+using Bec::beModelCtrlMUTEKI;
 using Bec::beModelCtrlMoveObject;
 using Bec::beModelCtrlMoveObjectList;
+using Bec::beModelCtrlPDMOVE;
 using Bec::beModelCtrlSubCom;
 using Bec::beModelCtrlSubComBase;
+using Bec::beModelCtrlWCHECK;
 using Bec::beNumVerData;
 using Bec::beNumVerDataList;
 using Bec::beNumVerInsideData;
@@ -20895,6 +20907,9 @@ using Bec::beParticleCtrl2InfoWork;
 using Bec::bePlaySE;
 using Bec::bePlaySEList;
 using Bec::beSaveDataDeliver;
+using Bec::beSeData;
+using Bec::beSeDataList;
+using Bec::beSeInfoData;
 using Bec::beSelectCtrlInfoWork;
 using Bec::beSvDeliver;
 using Bec::beSvPlatBaseData;
@@ -20913,6 +20928,8 @@ using Bec::beUnicode;
 using Bec::beWaterMove;
 using Bec::beWaterMoveData;
 using Bec::beWaterMoveDataList;
+using Bec::beWeaponSeqData;
+using Bec::beWeaponSeqDataList;
 using Bec::beXboxImage24k;
 using Gui::igAction;
 using Viewer::igActorManagerParams;
@@ -21629,6 +21646,29 @@ public:
 }
 
 namespace Gap {
+namespace Bec {
+/* handle 0x589e60, 8 field(s), sizeof 36 (registered instance size) */
+class beActionStarterData : public Gap::Core::igNamedObject {
+public:
+    igStringRef _message;                          /* +12   igStringMetaField */
+    int _delay;                                    /* +16   igIntMetaField */
+    igVec3f _offset;                               /* +20   igVec3fMetaField */
+    unsigned char _isSeqDead;                      /* +32   igBoolMetaField */
+    unsigned char _isPositionLock;                 /* +33   igBoolMetaField */
+    char _pad34[2];
+    IG_OBJECT_DEFINE(beActionStarterData)
+private:
+    static igMetaField *k_message;
+public:
+    static igMetaField *k_delay;
+    static igMetaField *k_offset;
+    static igMetaField *k_isSeqDead;
+    static igMetaField *k_isPositionLock;
+};
+}
+}
+
+namespace Gap {
 namespace Core {
 /* handle 0x586788, 5 field(s), sizeof 20 (registered instance size) */
 class igDataList : public Gap::Core::igObject {
@@ -21662,6 +21702,78 @@ protected:
 }
 
 #include "dw4/core/igTDataList.h"
+
+namespace Gap {
+namespace Core {
+/* handle 0x585b60, 5 field(s), sizeof 20 (registered instance size) */
+class igObjectList : public Gap::Core::igTDataList<igObject *> {
+public:
+    IG_OBJECT_DEFINE(igObjectList)
+private:
+    static igMetaField *k_data;
+    typedef igTDataList<igObject *> Parent;
+public:
+    inline virtual void userPreWrite() { trimCapacity(); }
+    inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
+    void append(igObject *object);
+    inline void insert(int index, igObject *object) { igObject::ref(object); Parent::insert(index, object); }
+    void concatenate(const igObjectList *list);
+    inline void set(int index, igObject *object) { igObject::ref(object); igObject::release(get(index)); Parent::set(index, object); }
+    void setAll(igObject *object);
+    igObject *search(igStringMetaField *field, const char *name) const;
+    igObject *search(igObjectRefMetaField *field, const igObject *obj) const;
+    void bubbleSort(igRefMetaField *field);
+    igObject *sortedSearch(const igRefMetaField *field, const void *val) const;
+    int fastBinaryFind(const igRefMetaField *field, const void *val) const;
+    inline int find(const igObject *obj, int startIndex) const { return Parent::find((igObject *const &)obj, startIndex); }
+    igResult removeByValue(const igObject *obj, int startIndex);
+    int removeAllByValue(const igObject *obj, int startIndex);
+    int appendUnique(igObject *obj);
+    void setCount(int newCount);
+    void clearAll();
+    inline void remove(int index) { igObject::release(get(index)); Parent::remove(index); ((igObject **)(void *)_data)[_count] = 0; }
+    inline void removeAll() { releaseObjects(0, _count); clearPointers(0, _count); _count = 0; }
+private:
+    inline void releaseObjects(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) igObject::release(((igObject **)(void *)_data)[i]); }
+    inline void clearPointers(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) ((igObject **)(void *)_data)[i] = 0; }
+};
+}
+}
+
+#include "dw4/core/igTObjectList.h"
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589e58, 5 field(s), sizeof 20 (registered instance size) */
+class beActionStarterDataList : public Gap::Core::igTObjectList<beActionStarterData> {
+public:
+    IG_OBJECT_DEFINE(beActionStarterDataList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589e08, 4 field(s), sizeof 16 (registered instance size) */
+class beBaseInfoData : public Gap::Core::igNamedObject {
+public:
+    int _version;                                  /* +12   igIntMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(beBaseInfoData)
+private:
+    static igMetaField *k_version;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589e00, 5 field(s), sizeof 20 (registered instance size) */
+class beBaseInfoDataList : public Gap::Core::igTObjectList<beBaseInfoData> {
+public:
+    IG_OBJECT_DEFINE(beBaseInfoDataList)
+};
+}
+}
 
 namespace Gap {
 namespace Core {
@@ -21735,45 +21847,6 @@ public:
 };
 }
 }
-
-namespace Gap {
-namespace Core {
-/* handle 0x585b60, 5 field(s), sizeof 20 (registered instance size) */
-class igObjectList : public Gap::Core::igTDataList<igObject *> {
-public:
-    IG_OBJECT_DEFINE(igObjectList)
-private:
-    static igMetaField *k_data;
-    typedef igTDataList<igObject *> Parent;
-public:
-    inline virtual void userPreWrite() { trimCapacity(); }
-    inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
-    void append(igObject *object);
-    inline void insert(int index, igObject *object) { igObject::ref(object); Parent::insert(index, object); }
-    void concatenate(const igObjectList *list);
-    inline void set(int index, igObject *object) { igObject::ref(object); igObject::release(get(index)); Parent::set(index, object); }
-    void setAll(igObject *object);
-    igObject *search(igStringMetaField *field, const char *name) const;
-    igObject *search(igObjectRefMetaField *field, const igObject *obj) const;
-    void bubbleSort(igRefMetaField *field);
-    igObject *sortedSearch(const igRefMetaField *field, const void *val) const;
-    int fastBinaryFind(const igRefMetaField *field, const void *val) const;
-    inline int find(const igObject *obj, int startIndex) const { return Parent::find((igObject *const &)obj, startIndex); }
-    igResult removeByValue(const igObject *obj, int startIndex);
-    int removeAllByValue(const igObject *obj, int startIndex);
-    int appendUnique(igObject *obj);
-    void setCount(int newCount);
-    void clearAll();
-    inline void remove(int index) { igObject::release(get(index)); Parent::remove(index); ((igObject **)(void *)_data)[_count] = 0; }
-    inline void removeAll() { releaseObjects(0, _count); clearPointers(0, _count); _count = 0; }
-private:
-    inline void releaseObjects(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) igObject::release(((igObject **)(void *)_data)[i]); }
-    inline void clearPointers(int start, int num) { const int end = start + num; for (int i = start; i < end; i++) ((igObject **)(void *)_data)[i] = 0; }
-};
-}
-}
-
-#include "dw4/core/igTObjectList.h"
 
 namespace Gap {
 namespace Sg {
@@ -23135,6 +23208,34 @@ public:
 
 namespace Gap {
 namespace Bec {
+/* handle 0x5895a8, 6 field(s), sizeof 24 (registered instance size) */
+class beGeneraterItemDataOne : public Gap::Core::igNamedObject {
+public:
+    int _id;                                       /* +12   igIntMetaField */
+    int _rank;                                     /* +16   igIntMetaField */
+    int _rate;                                     /* +20   igIntMetaField */
+    IG_OBJECT_DEFINE(beGeneraterItemDataOne)
+private:
+    static igMetaField *k_id;
+public:
+    static igMetaField *k_rank;
+    static igMetaField *k_rate;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x5895a0, 5 field(s), sizeof 20 (registered instance size) */
+class beGeneraterItemDataOneList : public Gap::Core::igTObjectList<beGeneraterItemDataOne> {
+public:
+    IG_OBJECT_DEFINE(beGeneraterItemDataOneList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
 /* handle 0x589560, 6 field(s), sizeof 24 (registered instance size) */
 class beGeneraterPlayerData : public Gap::Core::igObject {
 public:
@@ -23186,6 +23287,26 @@ namespace Bec {
 class beHitLandResultDataList : public Gap::Core::igTObjectList<beHitLandResultData> {
 public:
     IG_OBJECT_DEFINE(beHitLandResultDataList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589280, 3 field(s), sizeof 12 (registered instance size) */
+class beLayerGroup : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beLayerGroup)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589278, 5 field(s), sizeof 20 (registered instance size) */
+class beLayerGroupList : public Gap::Core::igTObjectList<beLayerGroup> {
+public:
+    IG_OBJECT_DEFINE(beLayerGroupList)
 };
 }
 }
@@ -23384,6 +23505,76 @@ public:
 
 namespace Gap {
 namespace Bec {
+/* handle 0x588e08, 3 field(s), sizeof 12 (registered instance size) */
+class beModelCtrlACTION : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlACTION)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588d00, 6 field(s), sizeof 24 (registered instance size) */
+class beModelCtrlAIData : public Gap::Core::igNamedObject {
+public:
+    float _dirRadian;                              /* +12   igFloatMetaField */
+    float _time;                                   /* +16   igFloatMetaField */
+    int _limit;                                    /* +20   igIntMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlAIData)
+private:
+    static igMetaField *k_dirRadian;
+public:
+    static igMetaField *k_time;
+    static igMetaField *k_limit;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588cf8, 5 field(s), sizeof 20 (registered instance size) */
+class beModelCtrlAIDataList : public Gap::Core::igTObjectList<beModelCtrlAIData> {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlAIDataList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588df8, 3 field(s), sizeof 12 (registered instance size) */
+class beModelCtrlCTRL : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlCTRL)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588d20, 8 field(s), sizeof 48 (registered instance size) */
+class beModelCtrlHITBOX : public Gap::Core::igNamedObject {
+public:
+    int _kind;                                     /* +12   igIntMetaField */
+    float _start;                                  /* +16   igFloatMetaField */
+    float _length;                                 /* +20   igFloatMetaField */
+    igVec3f _offset;                               /* +24   igVec3fMetaField */
+    igVec3f _boxSize;                              /* +36   igVec3fMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlHITBOX)
+private:
+    static igMetaField *k_kind;
+public:
+    static igMetaField *k_start;
+    static igMetaField *k_length;
+    static igMetaField *k_offset;
+    static igMetaField *k_boxSize;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
 /* handle 0x588ad0, 7 field(s), sizeof 36 (registered instance size) */
 class beModelCtrlInfoAI : public Gap::Core::igObject {
 public:
@@ -23434,6 +23625,132 @@ public:
 
 namespace Gap {
 namespace Bec {
+/* handle 0x588e00, 3 field(s), sizeof 12 (registered instance size) */
+class beModelCtrlJUMP : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlJUMP)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588e20, 3 field(s), sizeof 12 (registered instance size) */
+class beModelCtrlLABEL : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlLABEL)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588e10, 4 field(s), sizeof 16 (registered instance size) */
+class beModelCtrlLABELCTRL : public Gap::Core::igNamedObject {
+public:
+    igStringRef _seqName;                          /* +12   igStringMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlLABELCTRL)
+private:
+    static igMetaField *k_seqName;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588e28, 4 field(s), sizeof 16 (registered instance size) */
+class beModelCtrlLUACALL : public Gap::Core::igNamedObject {
+public:
+    igStringRef _modeName;                         /* +12   igStringMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlLUACALL)
+private:
+    static igMetaField *k_modeName;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588dd8, 5 field(s), sizeof 20 (registered instance size) */
+class beModelCtrlMOVE : public Gap::Core::igNamedObject {
+public:
+    float _value;                                  /* +12   igFloatMetaField */
+    float _frame;                                  /* +16   igFloatMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlMOVE)
+private:
+    static igMetaField *k_value;
+public:
+    static igMetaField *k_frame;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588da0, 9 field(s), sizeof 36 (registered instance size) */
+class beModelCtrlMOVEEX : public Gap::Core::igNamedObject {
+public:
+    float _value;                                  /* +12   igFloatMetaField */
+    float _frame;                                  /* +16   igFloatMetaField */
+    float _playTime;                               /* +20   igFloatMetaField */
+    unsigned char _isSeqStop;                      /* +24   igBoolMetaField */
+    char _pad25[3];
+    float _stopValue;                              /* +28   igFloatMetaField */
+    float _stopFrame;                              /* +32   igFloatMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlMOVEEX)
+private:
+    static igMetaField *k_value;
+public:
+    static igMetaField *k_frame;
+    static igMetaField *k_playTime;
+    static igMetaField *k_isSeqStop;
+    static igMetaField *k_stopValue;
+    static igMetaField *k_stopFrame;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588d88, 5 field(s), sizeof 20 (registered instance size) */
+class beModelCtrlMOVERL : public Gap::Core::igNamedObject {
+public:
+    igStringRef _modelName;                        /* +12   igStringMetaField */
+    igStringRef _boneName;                         /* +16   igStringMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlMOVERL)
+private:
+    static igMetaField *k_modelName;
+public:
+    static igMetaField *k_boneName;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588df0, 3 field(s), sizeof 12 (registered instance size) */
+class beModelCtrlMSGBOX : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlMSGBOX)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588d50, 4 field(s), sizeof 16 (registered instance size) */
+class beModelCtrlMUTEKI : public Gap::Core::igNamedObject {
+public:
+    float _frame;                                  /* +12   igFloatMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlMUTEKI)
+private:
+    static igMetaField *k_frame;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
 /* handle 0x588b48, 11 field(s), sizeof 44 (registered instance size) */
 class beModelCtrlMoveObject : public Gap::Core::igObject {
 public:
@@ -23476,6 +23793,22 @@ public:
 
 namespace Gap {
 namespace Bec {
+/* handle 0x588d70, 5 field(s), sizeof 20 (registered instance size) */
+class beModelCtrlPDMOVE : public Gap::Core::igNamedObject {
+public:
+    float _value;                                  /* +12   igFloatMetaField */
+    float _frame;                                  /* +16   igFloatMetaField */
+    IG_OBJECT_DEFINE(beModelCtrlPDMOVE)
+private:
+    static igMetaField *k_value;
+public:
+    static igMetaField *k_frame;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
 /* handle 0x5887a0, 3 field(s), sizeof 12 (registered instance size) */
 class beModelCtrlSubCom : public Gap::Core::igObject {
 public:
@@ -23502,6 +23835,16 @@ private:
 public:
     static igMetaField *k_runFrame;
     static igMetaField *k_startFrame;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x588d68, 3 field(s), sizeof 12 (registered instance size) */
+class beModelCtrlWCHECK : public Gap::Core::igNamedObject {
+public:
+    IG_OBJECT_DEFINE(beModelCtrlWCHECK)
 };
 }
 }
@@ -23704,6 +24047,46 @@ public:
     static igMetaField *k_data;
     virtual void userConstruct(int flag);
     virtual void userDestruct();
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x587fd0, 5 field(s), sizeof 20 (registered instance size) */
+class beSeData : public Gap::Core::igNamedObject {
+public:
+    igStringRef _sound;                            /* +12   igStringMetaField */
+    short _delay;                                  /* +16   igShortMetaField */
+    char _pad18[2];
+    IG_OBJECT_DEFINE(beSeData)
+private:
+    static igMetaField *k_sound;
+public:
+    static igMetaField *k_delay;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x587fc8, 5 field(s), sizeof 20 (registered instance size) */
+class beSeDataList : public Gap::Core::igTObjectList<beSeData> {
+public:
+    IG_OBJECT_DEFINE(beSeDataList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x587fb8, 5 field(s), sizeof 20 (registered instance size) */
+class beSeInfoData : public Gap::Bec::beBaseInfoData {
+public:
+    igSmartPointer<beSeDataList> _actionList;      /* +16   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(beSeInfoData)
+private:
+    static igMetaField *k_actionList;
 };
 }
 }
@@ -24087,6 +24470,29 @@ public:
     static igMetaField *k_maxTime;
     static igMetaField *k_targetData;
     static igMetaField *k_dataList;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x587a50, 4 field(s), sizeof 16 (registered instance size) */
+class beWeaponSeqData : public Gap::Core::igNamedObject {
+public:
+    igStringRef _label;                            /* +12   igStringMetaField */
+    IG_OBJECT_DEFINE(beWeaponSeqData)
+private:
+    static igMetaField *k_label;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x587a48, 5 field(s), sizeof 20 (registered instance size) */
+class beWeaponSeqDataList : public Gap::Core::igTObjectList<beWeaponSeqData> {
+public:
+    IG_OBJECT_DEFINE(beWeaponSeqDataList)
 };
 }
 }

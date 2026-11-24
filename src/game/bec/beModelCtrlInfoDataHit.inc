@@ -45,8 +45,8 @@ CallbackArray *beModelCtrlInfoDataHit_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlInfoDataHit_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beModelCtrlInfoDataHit_GetMetaObjectFunction,
         "beModelCtrlInfoDataHit",
         0x1c, /* instance size */

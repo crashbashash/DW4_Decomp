@@ -42,8 +42,8 @@ CallbackArray *beMovieInfoData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beMovieInfoData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beMovieInfoData_GetMetaObjectFunction,
         "beMovieInfoData",
         0x1c, /* instance size */

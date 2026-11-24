@@ -1,54 +1,44 @@
-igMetaObject *g_beLayerGroup_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beLayerGroup_GetMetaObject(void) {
-    igMetaObject *g = g_beLayerGroup_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beLayerGroup_EnsureRegistered();
-    }
-    return g_beLayerGroup_metaObject;
-}
+igMetaObject *beLayerGroup::_Meta;
 
-int beLayerGroup_GetVTable(void) {
-    beLayerGroup obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_beLayerGroup_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beLayerGroup_EnsureRegistered(void)
+igMetaObject *beLayerGroup::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beLayerGroup_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beLayerGroup_Register(void) {
+void *beLayerGroup::retrieveVTablePointer()
+{
+    beLayerGroup temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beLayerGroup::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beLayerGroup::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beLayerGroup_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beLayerGroup_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beLayerGroup",
-        0xc, /* instance size */
-        beLayerGroup_GetVTable,
+        sizeof(beLayerGroup),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beLayerGroup_GetMetaObjectFunction(void)
-{
-    beLayerGroup_GetMetaObject();
+}
 }
 
 igMetaEnum *g_beLayerGroup_swtCtlMetaEnum;

@@ -1,56 +1,43 @@
-igMetaObject *g_beModelCtrlMSGBOX_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlMSGBOX_GetMetaObject(void) {
-    unsigned char b;
-    if (g_beModelCtrlMSGBOX_metaObject != 0) {
-        b = (g_beModelCtrlMSGBOX_metaObject->_validity & 4) != 0;
-        if (b != 0) goto done;
-    }
-    beModelCtrlMSGBOX_EnsureRegistered();
-done:
-    return g_beModelCtrlMSGBOX_metaObject;
-}
+igMetaObject *beModelCtrlMSGBOX::_Meta;
 
-int beModelCtrlMSGBOX_GetVTable(void) {
-    beModelCtrlMSGBOX obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlMSGBOX_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlMSGBOX_EnsureRegistered(void)
+igMetaObject *beModelCtrlMSGBOX::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlMSGBOX_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlMSGBOX_Register(void) {
+void *beModelCtrlMSGBOX::retrieveVTablePointer()
+{
+    beModelCtrlMSGBOX temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlMSGBOX::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlMSGBOX::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlMSGBOX_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMSGBOX_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlMSGBOX",
-        0xc, /* instance size */
-        beModelCtrlMSGBOX_GetVTable,
+        sizeof(beModelCtrlMSGBOX),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beModelCtrlMSGBOX_GetMetaObjectFunction(void)
-{
-    beModelCtrlMSGBOX_GetMetaObject();
+}
 }
 

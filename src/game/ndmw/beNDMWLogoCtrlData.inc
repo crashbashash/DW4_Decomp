@@ -50,8 +50,8 @@ CallbackArray *beNDMWLogoCtrlData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLogoCtrlData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLogoCtrlData_GetMetaObject,
         "beNDMWLogoCtrlData",
         0x20, /* instance size */

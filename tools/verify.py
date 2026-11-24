@@ -43,6 +43,7 @@ import sys
 
 import cc
 import compiler_names
+import demangle
 import forkpool
 import exceptions as exception_records
 import units
@@ -1298,6 +1299,43 @@ def stripped_bodies(obj, headers, syms, group, sections, image, by_va, by_name=N
     return out
 
 
+def own_virtuals(vtable, relocs):
+    """[(offset, function)] of the relocations in `vtable`'s section that name its own class's `getMeta`, the
+    inline virtual the object macros define in every class and MWCC emits with the vtable, or [] when `vtable`
+    is no vtable (`__vt__`). An out-of-line virtual the class defines (igFolder's `getSubFolders`) may be another
+    unit's copy while the vtable is the unit's own, so it tells nothing."""
+    found = demangle.demangle(vtable)
+    if not found or found.special != "vt":
+        return []
+    return [(offset, target) for _section, offset, _kind, target, _addend in relocs
+            for named in [demangle.demangle(target)]
+            if named and not named.data and named.name == "getMeta" and named.class_name == found.class_name
+            and named.namespaces == found.namespaces]
+
+
+def vtable_twins(obj, group, profiles):
+    """{vtable: Profile} of the row's `data` vtables whose retail copy a unit of another profile built.
+
+    MWCC emits the vtable of a class without a key function, and the inline virtuals it names, in every
+    unit that uses the class; the retail linker kept the first unit's copies of both. So the vtable is the
+    unit's whose copy of a virtual of the class itself (its `getMeta`) the row places as a duplicate deferred
+    to that profile (`profiles`, duplicate_profiles): the Bec unit's RTTI-on copy of igNamedObject's vtable
+    is not the -RTTI off attrs copy retail keeps at 0x524950, beside attrs' getMeta at 0x142b60. Such a
+    vtable is compared as that profile builds it (verify_emitted_unit), like the duplicate."""
+    deferred = {name: profile for profile, names in profiles.items() for name in names}
+    syms, _ = object_syms(obj)
+    out = {}
+    for name, _address in group.data:
+        section = syms.get(name, (None,))[0]
+        if not isinstance(section, int):
+            continue
+        twin = next((deferred[target] for _offset, target in
+                     own_virtuals(name, object_relocs(obj, target_section=section)) if target in deferred), None)
+        if twin is not None:
+            out[name] = twin
+    return out
+
+
 def dead_data(obj, headers, syms, bodies, declared, opaque=()):
     """Data sections of a whole-file unit that no placed body or declared datum reaches.
 
@@ -1649,7 +1687,7 @@ def differing_bodies(obj, headers, syms, group, members, image, by_va, deferred=
 
 
 def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=False,
-                          requested=None, jumptables=None, deferred=(), requested_lines=None):
+                          requested=None, jumptables=None, deferred=(), requested_lines=None, deferred_data=()):
     """Verify every explicitly owned body before any per-function extraction.
 
     Code sections must be exactly the owner, its placed emitted members and its
@@ -1668,7 +1706,10 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     different compiler profile; their bytes cannot equal this object's, so only
     their presence as a complete section is required here. `verify_emitted_unit`
     then compiles the same source with that unit's own profile and compares them
-    there; nothing is skipped without such a second, exact comparison.
+    there; nothing is skipped without such a second, exact comparison. ``deferred_data``
+    names the ``data`` vtables retail kept from such a unit (vtable_twins): their
+    references bind the row's address, and their sections, like a deferred body's,
+    keep no datum of this object; they are compared there too and not placed.
 
     ``requested_lines``, a list, gets an entry when the report shows a body's words, the one
     part of the report `requested` changes.
@@ -1734,11 +1775,15 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         data_addresses = dict(group.data)
         data_sections = {}      # section -> retail address of its first byte
         data_labels = {}        # section -> the row naming its first byte, for report lines
+        twin_data = set()       # the sections of the vtables deferred to another profile
         for name, address in group.data:
             section, value, _ = syms.get(name, (None, None, None))
             if isinstance(section, int) and headers[section][0] in LITERAL_SECTIONS:
                 raise ValueError(f"data row {name} is a compiler literal: each reference reads the pool "
                                  "entry its retail instruction names, so a literal has no row")
+            if name in deferred_data:
+                twin_data.add(section)
+                continue
             if isinstance(section, int) and data_sections.setdefault(section, address - value) != address - value:
                 raise ValueError(f"data symbol {name} disagrees with its section's retail address")
             if isinstance(section, int) and value == 0:
@@ -1752,12 +1797,12 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         dropped = set(stripped.values()) | {i for name in stripped for i in exc_all.get(name, ())
                                             if i is not None}
         # a placed member's exception record and table point at it, not the other way round; a duplicate
-        # deferred to another profile keeps no datum of this object (its data are the twin's, as in
+        # or vtable deferred to another profile keeps no datum of this object (its data are the twin's, as in
         # whole_file_rows.reach)
         exc_live = {i for pair in exc_sections.values() for i in pair if i is not None}
         twin_bodies = {section for name, (_address, section, _size) in records.items() if name in deferred}
-        dead = (dead_data(obj, headers, syms, sections, set(data_sections) | exc_live | initializer_sections,
-                          twin_bodies)
+        dead = (dead_data(obj, headers, syms, sections,
+                          set(data_sections) | exc_live | initializer_sections | twin_data, twin_bodies | twin_data)
                 if group.whole_file else set())
         dropped |= dead
         if group.whole_file:
@@ -1798,7 +1843,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
         named_text = {i for i, (name, h) in enumerate(headers)
                       if name in (".text", ".init") and h[5] and i not in dropped}
         auxiliary = (table_sections | set(data_sections) | set(literal_sections) | set(anon_failed.values())
-                     | {i for pair in exc_sections.values() for i in pair if i is not None} | initializer_sections)
+                     | {i for pair in exc_sections.values() for i in pair if i is not None} | initializer_sections
+                     | twin_data)
         unbound = sorted(name for name, (section, _value, _size) in syms.items()
                          if unitobjects.is_anonymous(name) and section in allocated - auxiliary - sections)
         if unbound:
@@ -2002,7 +2048,8 @@ def verify_emitted_object(obj, group, elf, symbols, gp_override=None, verbose=Fa
     result = Records(records)
     result.exception_placements = placements
     result.ctor_placements = ctor_placements
-    result.data_sections = set(data_sections) | dead
+    # a vtable deferred to a twin (twin_data) is the twin's unit's to place, like a dropped datum
+    result.data_sections = set(data_sections) | dead | twin_data
     result.data = {**dict(group.data), **anon_bound}
     result.data_placements = data_placements
     return kind == "match", report + "\n".join(reports), result if success else None
@@ -2037,16 +2084,19 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
     ``recompile(compiler, flags, out)`` builds the same translation unit with
     another profile's compiler and command flags and returns whether `out` exists.
     Every deferred duplicate must then be a complete, correctly sized `.text` body
-    equal to its retail unit after relocation. Any failure rejects the whole unit.
+    equal to its retail unit after relocation, and every vtable retail kept with one
+    (vtable_twins) a complete datum equal to retail at the row's address. Any failure
+    rejects the whole unit.
     """
     try:
         profiles = duplicate_profiles(group, profile, unit_flags, unit_compilers, units, symbols)
     except ValueError as error:
         return False, f"emitted object rejected: {error}", None
     deferred = {name for names in profiles.values() for name in names}
+    vtables = vtable_twins(obj, group, profiles) if group.data else {}
     good, report, records = verify_emitted_object(obj, group, elf, symbols, gp_override, verbose,
                                                   requested, jumptables, deferred=deferred,
-                                                  requested_lines=requested_lines)
+                                                  requested_lines=requested_lines, deferred_data=set(vtables))
     if not records and not good and not report.startswith("DIFFER"):
         return good, report, records
     by_name, by_va = load_symbols(symbols)
@@ -2067,14 +2117,16 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                 return False, report + f"\nDIFFER duplicate profile '{twin_flags}' does not compile", None
             headers, (syms, _) = elf_section_headers(twin), object_syms(twin)
             addresses = dict(group.duplicates)
-            for name in names:
-                address = addresses[name]
+            for name in names + sorted(v for v, p in vtables.items() if p == twin_profile):
+                vtable = name in vtables
+                address = data_addresses[name] if vtable else addresses[name]
                 section, value, size = syms.get(name, (None, None, None))
-                expected = by_va[address][1]
-                if (not isinstance(section, int) or headers[section][0] != ".text" or value != 0
-                        or size != expected or headers[section][1][5] != expected
-                        or not headers[section][1][2] & 4):
-                    lines.append(f"DIFFER duplicate 0x{address:x} {name}: extent {size} "
+                expected = size if vtable else by_va[address][1]
+                code = isinstance(section, int) and headers[section][0] == ".text" and headers[section][1][2] & 4
+                if (not isinstance(section, int) or value != 0 or size != expected
+                        or headers[section][1][5] != expected or bool(code) == vtable):
+                    lines.append(f"DIFFER vtable 0x{address:x} {name}: not a whole section under '{twin_flags}'"
+                                 if vtable else f"DIFFER duplicate 0x{address:x} {name}: extent {size} "
                                  f"under '{twin_flags}', retail {expected}")
                     success = twins_ok = False
                     continue
@@ -2104,13 +2156,13 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                         return spelled_address(symbol, symbols)
 
                 patched, _, unresolved = apply_relocs(
-                    object_section(twin, ".text", section),
+                    object_section(twin, headers[section][0], section),
                     object_relocs(twin, target_section=section), resolve, gp)
                 retail = va_bytes(image, address, expected)
                 ok = patched == retail and not unresolved
                 success, twins_ok = success and ok, twins_ok and ok
-                lines.append(f"{'MATCH' if ok else 'DIFFER'} duplicate 0x{address:x} {name} "
-                             f"{expected}B under '{twin_flags}'")
+                lines.append(f"{'MATCH' if ok else 'DIFFER'} {'vtable' if vtable else 'duplicate'} 0x{address:x} "
+                             f"{name} {expected}B under '{twin_flags}'")
                 for offset, symbol in unresolved:
                     lines.append(f"  unresolved relocation {symbol!r} at +0x{offset:x}")
                 if patched is not None and not ok:

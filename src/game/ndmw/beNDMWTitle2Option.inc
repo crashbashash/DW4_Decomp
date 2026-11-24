@@ -57,8 +57,8 @@ CallbackArray *beNDMWTitle2Option_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWTitle2Option_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWTitle2Option_GetMetaObjectFunction,
         "beNDMWTitle2Option",
         0x38, /* instance size */

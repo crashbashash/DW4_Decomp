@@ -37,7 +37,7 @@ void beGeneraterItemData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beGeneraterItemData_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterItemData_callbackList[] = { beGeneraterItemDataOneList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beGeneraterItemData_callbackList[] = { Gap::Bec::beGeneraterItemDataOneList::arkRegister, 0 };
 
 CallbackArray *beGeneraterItemData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -83,7 +83,7 @@ void beGeneraterItemData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beGeneraterItemData_ctorTable, 1);
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)dataList)->_metaObject = (int)beGeneraterItemDataOneList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dataList)->_metaObject = (int)Gap::Bec::beGeneraterItemDataOneList::getClassTypeLazy();
     ((igRefMetaField *)dataList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beGeneraterItemData_fieldTable, g_beGeneraterItemData_fieldHandles, g_beGeneraterItemData_fieldOffsets, base);
 }

@@ -1412,7 +1412,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
         object.p = (igObject *)Gap::Bec::beModelCtrlMoveObject::_instantiateFromPool((igMemoryPoolView *)allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
     }
-    meta = g_beModelCtrlMOVE_metaObject;
+    meta = Gap::Bec::beModelCtrlMOVE::getClassMeta();
     if (meta == ((igObjectDispatchView *)command)->GetMeta()) {
         char *name;
         float value, frame;
@@ -1434,7 +1434,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
             beModelCtrlMoveObject_Start(MoveObjects(work)[1], 1, value, frame, 0.0f);
         }
     } else {
-        meta = g_beModelCtrlMOVEEX_metaObject;
+        meta = Gap::Bec::beModelCtrlMOVEEX::getClassMeta();
         if (meta == ((igObjectDispatchView *)command)->GetMeta()) {
             char *name;
             int idx, mode, base;
@@ -1959,53 +1959,53 @@ void beModelCtrl_RunCommands(beModelCtrl *self, beModelCtrlInfo *info, beBaseInf
         do {
             next = 1;
             command = ((igObjectDispatchView **)((igObjectList *)commands->_comList)->_data)[index];
-            if (g_beModelCtrlCTRL_metaObject == command->GetMeta()) {
+            if (Gap::Bec::beModelCtrlCTRL::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunCtrl(self, work, (beModelCtrlCTRL *)command);
                 index += 1;
-            } else if (g_beModelCtrlACTION_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlACTION::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunAction(self, info, ram, (beModelCtrlACTION *)command);
                 index += 1;
-            } else if (g_beModelCtrlMOVE_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlMOVE::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunMove(self, ram, work, (igObject *)command);
                 index += 1;
-            } else if (g_beModelCtrlMOVEEX_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlMOVEEX::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunMove(self, ram, work, (igObject *)command);
                 index += 1;
-            } else if (g_beModelCtrlMOVERL_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlMOVERL::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunMove(self, ram, work, (igObject *)command);
                 index += 1;
-            } else if (g_beModelCtrlPDMOVE_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlPDMOVE::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunPdMove(self, ram, work, (beModelCtrlPDMOVE *)command);
                 index += 1;
-            } else if (g_beModelCtrlWCHECK_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlWCHECK::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_StartWaitCheck(self, work, (beModelCtrlWCHECK *)command);
                 index += 1;
-            } else if (g_beModelCtrlHITBOX_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlHITBOX::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunHitBox(self, ram, work, (beModelCtrlHITBOX *)command);
                 index += 1;
-            } else if (g_beModelCtrlMUTEKI_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlMUTEKI::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunMuteki(self, ram, work, (beModelCtrlMUTEKI *)command);
                 index += 1;
-            } else if (g_beModelCtrlLABELCTRL_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlLABELCTRL::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunLabelCtrl(self, ram, work, (beModelCtrlLABELCTRL *)command);
                 index += 1;
-            } else if (g_beModelCtrlLUACALL_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlLUACALL::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunLuaCall(self, (beBaseInfo *)info, ram, work, (beModelCtrlLUACALL *)command);
                 index += 1;
             } else if (g_beModelCtrlAIMAP_metaObject == command->GetMeta()) {
                 next = beModelCtrl_RunAiMap(self, info, ram, work, (beModelCtrlAIMAP *)command);
                 index += 1;
-            } else if (g_beModelCtrlMSGBOX_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlMSGBOX::getClassMeta() == command->GetMeta()) {
                 next = beModelCtrl_RunMsgBox(self, info, work, (beModelCtrlMSGBOX *)command);
                 index += 1;
-            } else if (g_beModelCtrlLABEL_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlLABEL::getClassMeta() == command->GetMeta()) {
                 if (work->_comLabelCount != 0) {
                     next = 0;
                 } else {
                     work->_comLabelCount = 1;
                     index += 1;
                 }
-            } else if (g_beModelCtrlJUMP_metaObject == command->GetMeta()) {
+            } else if (Gap::Bec::beModelCtrlJUMP::getClassMeta() == command->GetMeta()) {
                 jumped = beModelCtrl_RunJump(self, ram, (beModelCtrlJUMP *)command);
             }
         } while (jumped == 0 && next != 0 && index != ((igObjectList *)commands->_comList)->_count);
@@ -2245,7 +2245,7 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
                 count = ((igObjectList *)commands->_comList)->_count;
                 for (i = 0; i < count; i++) {
                     beModelCtrlLABEL *label = (beModelCtrlLABEL *)((int *)((igObjectList *)commands->_comList)->_data)[i];
-                    if (g_beModelCtrlLABEL_metaObject == ((igObjectDispatchView *)label)->GetMeta()) {
+                    if (Gap::Bec::beModelCtrlLABEL::getClassMeta() == ((igObjectDispatchView *)label)->GetMeta()) {
                         if (strcmp(label->_name != 0 ? (const char *)label->_name : emptyString, (const char *)labelName) == 0) {
                             igIntList *offsets = (igIntList *)work->_labelOffsetList;
                             index = i;

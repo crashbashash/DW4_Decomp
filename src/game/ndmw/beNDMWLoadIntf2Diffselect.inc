@@ -59,8 +59,8 @@ CallbackArray *beNDMWLoadIntf2Diffselect_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2Diffselect_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2Diffselect_GetMetaObject,
         "beNDMWLoadIntf2Diffselect",
         0x4c, /* instance size */

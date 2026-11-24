@@ -70,8 +70,8 @@ CallbackArray *beNDMWLoadIntf2SelSlot_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2SelSlot_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2SelSlot_GetMetaObject,
         "beNDMWLoadIntf2SelSlot",
         0x5c, /* instance size */

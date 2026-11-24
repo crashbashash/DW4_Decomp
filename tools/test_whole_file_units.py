@@ -1,4 +1,5 @@
 """Whole-file units: a stock source compiled whole, its data compared with retail."""
+import collections
 import contextlib
 import dataclasses
 import io
@@ -284,6 +285,26 @@ class Objects(unittest.TestCase):
         verify.isolate_emitted_body(str(isolated), self.OWNER, records, group, str(self.symbols))
         syms, _ = verify.object_syms(str(isolated))
         self.assertEqual(syms[f"DAT_{self.DATA:08x}"][0], "UND")
+        allocated = [name for name, h in verify.elf_section_headers(str(isolated)) if h[2] & 2 and h[5]]
+        self.assertEqual(allocated, [".text"])
+
+    def test_isolated_body_leaves_a_twin_vtable_to_the_twin(self):
+        # a `data` row deferred to another profile's twin (verify.vtable_twins, the Bec unit's igNamedObject
+        # vtable copy) is neither compared nor placed: extraction drops it, as it drops a dead datum
+        obj = self.compile(SOURCE + "int fixture_table[3] = { 1, 2, 3 };\n", "twin")
+        self.registry.write_text(json.dumps({hex(self.OWNER): {
+            "whole_file": True, "emitted": {"fixture_second": hex(self.MEMBER)},
+            "stripped": ["fixture_drop"], "data": {"fixture_table": hex(self.DROPPED_DATA)},
+            "anon": [hex(self.DATA)]}}))
+        unitobjects.load.cache_clear()
+        group = unitobjects.group_for(self.OWNER, self.registry)
+        ok, report, records = verify.verify_emitted_object(str(obj), group, str(self.image), str(self.symbols),
+                                                           jumptables={}, deferred_data={"fixture_table"})
+        self.assertTrue(ok, report)
+        self.assertNotIn(self.DROPPED_DATA, [address for address, *_rest in records.data_placements.values()])
+        isolated = self.root / "isolated.o"
+        shutil.copyfile(obj, isolated)
+        verify.isolate_emitted_body(str(isolated), self.OWNER, records, group, str(self.symbols))
         allocated = [name for name, h in verify.elf_section_headers(str(isolated)) if h[2] & 2 and h[5]]
         self.assertEqual(allocated, [".text"])
 
@@ -982,6 +1003,72 @@ class TwinKeepsNoDatum(unittest.TestCase):
     def test_the_twin_keeps_the_vtable_only_when_it_is_the_units_own(self):
         self.assertEqual(self.dead(()), set())
         self.assertEqual(self.dead({2}), {3})
+
+
+class VtableTwin(unittest.TestCase):
+    """The Bec unit (RTTI on) converts igNamedObject subclasses, so it emits igNamedObject's vtable and getMeta,
+    which have no key function. Retail kept attrs' copies (-RTTI off): getMeta at 0x142b60, a profile twin, and the
+    vtable at 0x524950, whose RTTI word is 0 where the unit's copy names its RTTI record. The vtable is the twin's
+    too: the rows walk it as the twin's datum, and verify compares it under the twin's profile."""
+    VT, META, RTTI = "__vt__Q33Gap4Core13igNamedObject", "getMeta__Q33Gap4Core13igNamedObjectCFv", \
+        "__RTTI__Q33Gap4Core13igNamedObject"
+    OWN_VT, OWN_META = "__vt__Q33Gap3Bec8beSeData", "getMeta__Q33Gap3Bec8beSeDataCFv"
+    BASE_INLINE = "userPreWrite__Q33Gap4Core12igObjectListFv"
+    MEMBER, VTABLE, COPY = 0x346300, 0x524950, 0x142b60
+    SYMS = {"member": (1, 0, 4), VT: (2, 0, 12), RTTI: (3, 0, 8), META: (4, 0, 8), OWN_VT: (5, 0, 12)}
+    HEADERS = [("", (0, 0, 0, 0, 0, 0))] + [(label, (1, 0, flags, 0, 0, size)) for label, flags, size in
+                                            ((".text", 6, 4), (".vtables", 2, 12), (".rodata", 2, 8),
+                                             (".text", 6, 8), (".vtables", 2, 12))]
+    RELOCS = {1: [(1, 0, 2, VT, 0)], 2: [(2, 0, 2, RTTI, 0), (2, 8, 2, META, 0)], 3: [], 4: [],
+              5: [(5, 0, 2, "__RTTI__Q33Gap3Bec8beSeData", 0), (5, 4, 2, BASE_INLINE, 0), (5, 8, 2, OWN_META, 0)]}
+
+    class Copy:
+        def __init__(self, section, size, relocs=()):
+            self.section, self.raw, self.relocs = section, bytes(size), list(relocs)
+
+        def fits(self, _retail, _va):
+            return True
+
+    class Retail:
+        gp = 0
+
+        def __init__(self, words):
+            self.words = words
+
+        def word(self, va):
+            return self.words[va]
+
+    def reach(self, rtti_word, twin):
+        functions = {"member": self.Copy(1, 4, self.RELOCS[1]), self.META: self.Copy(4, 8)}
+        retail = self.Retail({self.MEMBER: self.VTABLE, self.VTABLE: rtti_word, self.VTABLE + 8: self.COPY,
+                              rtti_word: 0, rtti_word + 4: 0})
+        copy = self.Copy(4, 8)
+        twins = lambda name, address: copy if twin and (name, address) == (self.META, self.COPY) else None
+        with mock.patch.object(verify, "object_relocs", lambda _obj, target_section: self.RELOCS[target_section]), \
+                mock.patch.object(verify, "object_section", lambda _obj, _label, index: bytes(self.HEADERS[index][1][5])), \
+                mock.patch.object(whole_file_rows, "exception_tables", lambda *_args: {}):
+            return whole_file_rows.reach({"member": self.MEMBER}, retail, self.SYMS, self.HEADERS, "unit.o",
+                                         functions, {}, {}, 0x370780, twins)[:2]
+
+    def test_the_rows_leave_the_twin_vtables_rtti_record_to_the_twin(self):
+        self.assertEqual(self.reach(0, True), ({self.VT: self.VTABLE}, {self.META: self.COPY}))
+
+    def test_a_vtable_of_the_files_own_profile_keeps_its_rtti_record(self):
+        self.assertEqual(self.reach(0x534000, False),
+                         ({self.VT: self.VTABLE, self.RTTI: 0x534000}, {self.META: self.COPY}))
+
+    def test_verify_defers_only_a_vtable_whose_own_getmeta_is_a_twin(self):
+        folder, sub = "__vt__Q33Gap4Core8igFolder", "getSubFolders__Q33Gap4Core8igFolderCFv"
+        group = collections.namedtuple("Group", "data")(((self.VT, self.VTABLE), (self.OWN_VT, 0x534000),
+                                                         (folder, 0x52fee0), ("member_datum", 0x540000)))
+        syms, relocs = {**self.SYMS, folder: (6, 0, 12)}, {**self.RELOCS, 6: [(6, 8, 2, sub, 0)]}
+        attrs = unitprofiles.Profile("mwcc", "-O4,s -RTTI off", "off")
+        with mock.patch.object(verify, "object_relocs", lambda _obj, target_section: relocs[target_section]), \
+                mock.patch.object(verify, "object_syms", lambda _obj: (syms, {})):
+            twins = verify.vtable_twins("unit.o", group, {attrs: [self.META, self.BASE_INLINE, sub]})
+        # beSeData's vtable names a base's twin (igObjectList::userPreWrite), but its own getMeta is the unit's;
+        # core's igFolder vtable names another unit's copy of an out-of-line virtual, and stays core's own
+        self.assertEqual(twins, {self.VT: attrs})
 
 
 class TableExternals(unittest.TestCase):

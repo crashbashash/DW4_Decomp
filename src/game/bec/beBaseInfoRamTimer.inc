@@ -45,8 +45,8 @@ CallbackArray *beBaseInfoRamTimer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beBaseInfoRamTimer_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beBaseInfoRamTimer_GetMetaObjectFunction,
         "beBaseInfoRamTimer",
         0x40, /* instance size */

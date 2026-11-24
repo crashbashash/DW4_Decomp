@@ -1,77 +1,57 @@
-igMetaObject *g_beModelCtrlMUTEKI_metaObject;
-igMetaField *g_beModelCtrlMUTEKI_frameMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beModelCtrlMUTEKI_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlMUTEKI_metaObject;
-    int t;
-    if (!g || !(t = (g->_validity & 4) != 0))
-        beModelCtrlMUTEKI_EnsureRegistered();
-    return g_beModelCtrlMUTEKI_metaObject;
-}
+igMetaObject *beModelCtrlMUTEKI::_Meta;
+igMetaField *beModelCtrlMUTEKI::k_frame;
 
-int beModelCtrlMUTEKI_GetVTable(void) {
-    beModelCtrlMUTEKI obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlMUTEKI_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlMUTEKI_EnsureRegistered(void)
+igMetaObject *beModelCtrlMUTEKI::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlMUTEKI_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlMUTEKI_Register(void) {
+void *beModelCtrlMUTEKI::retrieveVTablePointer()
+{
+    beModelCtrlMUTEKI temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlMUTEKI::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlMUTEKI::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlMUTEKI_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMUTEKI_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlMUTEKI",
-        0x10, /* instance size */
-        beModelCtrlMUTEKI_GetVTable,
-        beModelCtrlMUTEKI_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlMUTEKI),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlMUTEKI_GetMetaObjectFunction(void)
+void beModelCtrlMUTEKI::arkRegisterInitialize()
 {
-    beModelCtrlMUTEKI_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_frame" };
+    static igMetaField **enumStorage[] = { &k_frame };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlMUTEKI_ctorTable[] = {
-    igFloatMetaField_Create,
-};
-static const char *g_beModelCtrlMUTEKI_fieldTable[] = {
-    "_frame",
-};
-static igMetaField **g_beModelCtrlMUTEKI_fieldHandles[] = {
-    &g_beModelCtrlMUTEKI_frameMetaField,
-};
-static int g_beModelCtrlMUTEKI_fieldOffsets[] = {
-    12,
-};
-
-void beModelCtrlMUTEKI_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlMUTEKI_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlMUTEKI_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_beModelCtrlMUTEKI_fieldTable, g_beModelCtrlMUTEKI_fieldHandles, g_beModelCtrlMUTEKI_fieldOffsets, base);
+}
 }
 

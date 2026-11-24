@@ -62,8 +62,8 @@ CallbackArray *beNDMWLoadIntf2CtrlData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2CtrlData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2CtrlData_GetMetaObject,
         "beNDMWLoadIntf2CtrlData",
         0x34, /* instance size */

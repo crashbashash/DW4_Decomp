@@ -20,8 +20,8 @@ CallbackArray *beBinDataObject_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_beBinDataObject_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beBinDataObject_GetMetaObjectFunction,
         "beBinDataObject",
         0x18, /* instance size */
@@ -35,10 +35,6 @@ CallbackArray *beBinDataObject_Register(void) {
 void beBinDataObject_GetMetaObjectFunction(void)
 {
     beBinDataObject_GetMetaObject();
-}
-
-igMetaObject *beBaseInfoData_GetPublishedMetaObject(void) {
-    return g_beBaseInfoData_metaObject;
 }
 
 static FieldFactory g_beBinDataObject_ctorTable[] = {

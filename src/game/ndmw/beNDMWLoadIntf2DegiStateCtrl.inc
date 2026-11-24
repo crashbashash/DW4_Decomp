@@ -61,8 +61,8 @@ CallbackArray *beNDMWLoadIntf2DegiStateCtrl_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2DegiStateCtrl_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2DegiStateCtrl_GetMetaObject,
         "beNDMWLoadIntf2DegiStateCtrl",
         0x14, /* instance size */

@@ -1,61 +1,51 @@
-igMetaObject *g_beBaseInfoData_metaObject;
-igMetaField *g_beBaseInfoData_versionMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beBaseInfoData_GetMetaObject(void) {
-    igMetaObject *g = g_beBaseInfoData_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beBaseInfoData_EnsureRegistered();
-    }
-    return g_beBaseInfoData_metaObject;
-}
+igMetaObject *beBaseInfoData::_Meta;
+igMetaField *beBaseInfoData::k_version;
 
-void beBaseInfoData_EnsureRegistered(void)
+igMetaObject *beBaseInfoData::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beBaseInfoData_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beBaseInfoData_Register(void) {
+void beBaseInfoData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beBaseInfoData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_beBaseInfoData_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beBaseInfoData_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beBaseInfoData",
-        0x10, /* instance size */
+        sizeof(beBaseInfoData),
         0,
-        beBaseInfoData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beBaseInfoData_GetMetaObjectFunction(void)
+void beBaseInfoData::arkRegisterInitialize()
 {
-    beBaseInfoData_GetMetaObject();
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool };
+    static const char *names[] = { "_version" };
+    static igMetaField **enumStorage[] = { &k_version };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beBaseInfoData_ctorTable[] = {
-    igIntMetaField_Create,
-};
-static const char *g_beBaseInfoData_fieldTable[] = {
-    "_version",
-};
-static igMetaField **g_beBaseInfoData_fieldHandles[] = {
-    &g_beBaseInfoData_versionMetaField,
-};
-static int g_beBaseInfoData_fieldOffsets[] = {
-    12,
-};
-
-void beBaseInfoData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beBaseInfoData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beBaseInfoData_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_beBaseInfoData_fieldTable, g_beBaseInfoData_fieldHandles, g_beBaseInfoData_fieldOffsets, base);
+}
 }
 

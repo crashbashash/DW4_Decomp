@@ -10,7 +10,6 @@ extern "C" {
 
 struct beModelCtrlHITBOX *beModelCtrlHITBOX_Create(int allocator);
 
-extern struct igMetaObject *g_beModelCtrlHITBOX_metaObject;
 
 #ifdef __cplusplus
 }

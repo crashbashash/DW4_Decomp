@@ -53,8 +53,8 @@ CallbackArray *beNDMWLoadIntf2TextOrder_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2TextOrder_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2TextOrder_GetMetaObject,
         "beNDMWLoadIntf2TextOrder",
         0x18, /* instance size */

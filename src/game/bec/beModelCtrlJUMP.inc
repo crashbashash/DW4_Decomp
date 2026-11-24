@@ -1,53 +1,43 @@
-igMetaObject *g_beModelCtrlJUMP_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlJUMP_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlJUMP_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlJUMP_EnsureRegistered();
-    }
-    return g_beModelCtrlJUMP_metaObject;
-}
+igMetaObject *beModelCtrlJUMP::_Meta;
 
-int beModelCtrlJUMP_GetVTable(void) {
-    beModelCtrlJUMP obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlJUMP_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlJUMP_EnsureRegistered(void)
+igMetaObject *beModelCtrlJUMP::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlJUMP_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlJUMP_Register(void) {
+void *beModelCtrlJUMP::retrieveVTablePointer()
+{
+    beModelCtrlJUMP temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlJUMP::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlJUMP::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlJUMP_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlJUMP_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlJUMP",
-        0xc, /* instance size */
-        beModelCtrlJUMP_GetVTable,
+        sizeof(beModelCtrlJUMP),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beModelCtrlJUMP_GetMetaObjectFunction(void)
-{
-    beModelCtrlJUMP_GetMetaObject();
+}
 }
 

@@ -1,90 +1,58 @@
-igMetaObject *g_beModelCtrlMOVERL_metaObject;
-igMetaField *g_beModelCtrlMOVERL_modelNameMetaField;
-igMetaField *g_beModelCtrlMOVERL_boneNameMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlMOVERL_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlMOVERL_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlMOVERL_EnsureRegistered();
-    }
-    return g_beModelCtrlMOVERL_metaObject;
-}
+igMetaObject *beModelCtrlMOVERL::_Meta;
+igMetaField *beModelCtrlMOVERL::k_modelName;
+igMetaField *beModelCtrlMOVERL::k_boneName;
 
-int beModelCtrlMOVERL_GetVTable(void) {
-    beModelCtrlMOVERL obj;
-    int vtable;
-    char **boneNameSlot;
-    char **modelNameSlot;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_beModelCtrlMOVERL_vtable[0];
-    modelNameSlot = (char **)&obj._modelName;
-    *modelNameSlot = 0;
-    boneNameSlot = (char **)&obj._boneName;
-    *boneNameSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beModelCtrlMOVERL_vtable[0];
-    igStringRef_Release(boneNameSlot);
-    igStringRef_Release(modelNameSlot);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlMOVERL_EnsureRegistered(void)
+igMetaObject *beModelCtrlMOVERL::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlMOVERL_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlMOVERL_Register(void) {
+void *beModelCtrlMOVERL::retrieveVTablePointer()
+{
+    beModelCtrlMOVERL temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlMOVERL::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlMOVERL::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlMOVERL_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlMOVERL_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlMOVERL",
-        0x14, /* instance size */
-        beModelCtrlMOVERL_GetVTable,
-        beModelCtrlMOVERL_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlMOVERL),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlMOVERL_GetMetaObjectFunction(void)
+void beModelCtrlMOVERL::arkRegisterInitialize()
 {
-    beModelCtrlMOVERL_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_modelName", "_boneName" };
+    static igMetaField **enumStorage[] = { &k_modelName, &k_boneName };
+    static int offsets[] = { 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlMOVERL_ctorTable[] = {
-    igStringMetaField_Create,
-    igStringMetaField_Create,
-};
-static const char *g_beModelCtrlMOVERL_fieldTable[] = {
-    "_modelName",
-    "_boneName",
-};
-static igMetaField **g_beModelCtrlMOVERL_fieldHandles[] = {
-    &g_beModelCtrlMOVERL_modelNameMetaField,
-    &g_beModelCtrlMOVERL_boneNameMetaField,
-};
-static int g_beModelCtrlMOVERL_fieldOffsets[] = {
-    12,
-    16,
-};
-
-void beModelCtrlMOVERL_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlMOVERL_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlMOVERL_ctorTable, 2);
-    igMetaObject_NameFields(meta, g_beModelCtrlMOVERL_fieldTable, g_beModelCtrlMOVERL_fieldHandles, g_beModelCtrlMOVERL_fieldOffsets, base);
+}
 }
 

@@ -57,7 +57,7 @@ void beModelCtrlAIMap_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlAIMap_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlAIMap_callbackList[] = { beModelCtrlAIDataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlAIMap_callbackList[] = { Gap::Bec::beModelCtrlAIDataList::arkRegister, 0 };
 
 CallbackArray *beModelCtrlAIMap_Register(void) {
     BecLibrary_MarkRegistered();
@@ -142,16 +142,16 @@ void beModelCtrlAIMap_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlAIMap_ctorTable, 0xA);
     zoneA = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
-    ((igObjectRefMetaField *)zoneA)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)zoneA)->_metaObject = (int)Gap::Bec::beModelCtrlAIDataList::getClassTypeLazy();
     ((igRefMetaField *)zoneA)->_construct = 1;
     zoneB = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
-    ((igObjectRefMetaField *)zoneB)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)zoneB)->_metaObject = (int)Gap::Bec::beModelCtrlAIDataList::getClassTypeLazy();
     ((igRefMetaField *)zoneB)->_construct = 1;
     zoneC = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
-    ((igObjectRefMetaField *)zoneC)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)zoneC)->_metaObject = (int)Gap::Bec::beModelCtrlAIDataList::getClassTypeLazy();
     ((igRefMetaField *)zoneC)->_construct = 1;
     zoneD = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
-    ((igObjectRefMetaField *)zoneD)->_metaObject = (int)beModelCtrlAIDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)zoneD)->_metaObject = (int)Gap::Bec::beModelCtrlAIDataList::getClassTypeLazy();
     ((igRefMetaField *)zoneD)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlAIMap_fieldTable, g_beModelCtrlAIMap_fieldHandles, g_beModelCtrlAIMap_fieldOffsets, base);
 }

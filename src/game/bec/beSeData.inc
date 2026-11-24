@@ -1,82 +1,58 @@
-igMetaObject *g_beSeData_metaObject;
-igMetaField *g_beSeData_soundMetaField;
-igMetaField *g_beSeData_delayMetaField;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beSeData_GetMetaObject(void) {
-    igMetaObject *g = g_beSeData_metaObject;
-    int t;
-    if (!g || !(t = (g->_validity & 4) != 0))
-        beSeData_EnsureRegistered();
-    return g_beSeData_metaObject;
-}
+igMetaObject *beSeData::_Meta;
+igMetaField *beSeData::k_sound;
+igMetaField *beSeData::k_delay;
 
-int beSeData_GetVTable(void) {
-    SeDataLocal obj;
-    int vtable;
-
-    igObject_InitHeader(&obj);
-    obj._name = 0;
-    obj._vtable = (int)&g_beSeData_vtable[0];
-    obj._sound = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beSeData_vtable[0];
-    obj.relSound();
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj.relName();
-    return vtable;
-}
-
-void beSeData_EnsureRegistered(void)
+igMetaObject *beSeData::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beSeData_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beSeData_Register(void) {
+void *beSeData::retrieveVTablePointer()
+{
+    beSeData temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beSeData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSeData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSeData_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beSeData_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSeData",
-        0x14, /* instance size */
-        beSeData_GetVTable,
-        beSeData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beSeData),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beSeData_GetMetaObjectFunction(void)
+void beSeData::arkRegisterInitialize()
 {
-    beSeData_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igShortMetaField_Create };
+    static const char *names[] = { "_sound", "_delay" };
+    static igMetaField **enumStorage[] = { &k_sound, &k_delay };
+    static int offsets[] = { 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beSeData_ctorTable[] = {
-    igStringMetaField_Create,
-    igShortMetaField_Create,
-};
-static const char *g_beSeData_fieldTable[] = {
-    "_sound",
-    "_delay",
-};
-static igMetaField **g_beSeData_fieldHandles[] = {
-    &g_beSeData_soundMetaField,
-    &g_beSeData_delayMetaField,
-};
-static int g_beSeData_fieldOffsets[] = {
-    12,
-    16,
-};
-
-void beSeData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beSeData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beSeData_ctorTable, 2);
-    igMetaObject_NameFields(meta, g_beSeData_fieldTable, g_beSeData_fieldHandles, g_beSeData_fieldOffsets, base);
+}
 }
 

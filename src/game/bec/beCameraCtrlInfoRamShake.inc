@@ -55,8 +55,8 @@ CallbackArray *beCameraCtrlInfoRamShake_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCameraCtrlInfoRamShake_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beCameraCtrlInfoRamShake_GetMetaObjectFunction,
         "beCameraCtrlInfoRamShake",
         0x40, /* instance size */

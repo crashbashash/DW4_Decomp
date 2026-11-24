@@ -44,8 +44,8 @@ CallbackArray *beFontInfoData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beFontInfoData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beFontInfoData_GetMetaObjectFunction,
         "beFontInfoData",
         0x2c, /* instance size */

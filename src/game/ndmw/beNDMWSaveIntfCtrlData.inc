@@ -61,8 +61,8 @@ CallbackArray *beNDMWSaveIntfCtrlData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWSaveIntfCtrlData_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWSaveIntfCtrlData_GetMetaObjectFunction,
         "beNDMWSaveIntfCtrlData",
         0x34, /* instance size */

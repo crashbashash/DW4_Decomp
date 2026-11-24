@@ -99,8 +99,8 @@ CallbackArray *beNDMWLoadCtrl2CommonIntf_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadCtrl2CommonIntf_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadCtrl2CommonIntf_GetMetaObject,
         "beNDMWLoadCtrl2CommonIntf",
         0x48, /* instance size */

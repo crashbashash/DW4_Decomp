@@ -40,8 +40,8 @@ CallbackArray *beActionStarterData2_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beActionStarterData2_metaObject,
-        beActionStarterData_Register,
-        beActionStarterData_GetPublishedMetaObject,
+        Gap::Bec::beActionStarterData::arkRegisterInternal,
+        Gap::Bec::beActionStarterData::getClassMeta,
         beActionStarterData2_GetMetaObjectFunction,
         "beActionStarterData2",
         0x30, /* instance size */
@@ -55,10 +55,6 @@ CallbackArray *beActionStarterData2_Register(void) {
 void beActionStarterData2_GetMetaObjectFunction(void)
 {
     beActionStarterData2_GetMetaObject();
-}
-
-igMetaObject *beActionStarterData_GetPublishedMetaObject(void) {
-    return g_beActionStarterData_metaObject;
 }
 
 static FieldFactory g_beActionStarterData2_ctorTable[] = {

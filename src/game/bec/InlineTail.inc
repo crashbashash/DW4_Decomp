@@ -63,19 +63,9 @@ igMetaObject *beAction2InfoRam_GetMeta(void)
     return g_beAction2InfoRam_metaObject;
 }
 
-igMetaObject *beActionStarterDataList_GetMeta(void)
-{
-    return g_beActionStarterDataList_metaObject;
-}
-
 igMetaObject *beActionStarterData2_GetMeta(void)
 {
     return g_beActionStarterData2_metaObject;
-}
-
-igMetaObject *beActionStarterData_GetMeta(void)
-{
-    return g_beActionStarterData_metaObject;
 }
 
 igMetaObject *beAsTargetModelData_GetMeta(void)
@@ -96,11 +86,6 @@ igMetaObject *beActionStarterInfo_GetMeta(void)
 igMetaObject *beActionStarterInfoRam_GetMeta(void)
 {
     return g_beActionStarterInfoRam_metaObject;
-}
-
-igMetaObject *beBaseInfoDataList_GetMeta(void)
-{
-    return g_beBaseInfoDataList_metaObject;
 }
 
 igMetaObject *beBaseInfoList_GetMeta(void)
@@ -286,16 +271,6 @@ igMetaObject *beFontInfo_GetMeta(void)
     return g_beFontInfo_metaObject;
 }
 
-igMetaObject *beGeneraterItemDataOne_GetMeta(void)
-{
-    return g_beGeneraterItemDataOne_metaObject;
-}
-
-igMetaObject *beGeneraterItemDataOneList_GetMeta(void)
-{
-    return g_beGeneraterItemDataOneList_metaObject;
-}
-
 igMetaObject *beGeneraterItemData_GetMeta(void)
 {
     return g_beGeneraterItemData_metaObject;
@@ -364,16 +339,6 @@ igMetaObject *beHitLandModelInfoRam_GetMeta(void)
 igMetaObject *beLOA_GetMeta(void)
 {
     return g_beLOA_metaObject;
-}
-
-igMetaObject *beLayerGroup_GetMeta(void)
-{
-    return g_beLayerGroup_metaObject;
-}
-
-igMetaObject *beLayerGroupList_GetMeta(void)
-{
-    return g_beLayerGroupList_metaObject;
 }
 
 igMetaObject *beLayerInfo_GetMeta(void)
@@ -487,89 +452,9 @@ igMetaObject *beModelCtrlDataList_GetMeta(void)
     return g_beModelCtrlDataList_metaObject;
 }
 
-igMetaObject *beModelCtrlLUACALL_GetMeta(void)
-{
-    return g_beModelCtrlLUACALL_metaObject;
-}
-
-igMetaObject *beModelCtrlLABEL_GetMeta(void)
-{
-    return g_beModelCtrlLABEL_metaObject;
-}
-
-igMetaObject *beModelCtrlLABELCTRL_GetMeta(void)
-{
-    return g_beModelCtrlLABELCTRL_metaObject;
-}
-
-igMetaObject *beModelCtrlACTION_GetMeta(void)
-{
-    return g_beModelCtrlACTION_metaObject;
-}
-
-igMetaObject *beModelCtrlJUMP_GetMeta(void)
-{
-    return g_beModelCtrlJUMP_metaObject;
-}
-
-igMetaObject *beModelCtrlCTRL_GetMeta(void)
-{
-    return g_beModelCtrlCTRL_metaObject;
-}
-
-igMetaObject *beModelCtrlMSGBOX_GetMeta(void)
-{
-    return g_beModelCtrlMSGBOX_metaObject;
-}
-
-igMetaObject *beModelCtrlMOVE_GetMeta(void)
-{
-    return g_beModelCtrlMOVE_metaObject;
-}
-
-igMetaObject *beModelCtrlMOVEEX_GetMeta(void)
-{
-    return g_beModelCtrlMOVEEX_metaObject;
-}
-
-igMetaObject *beModelCtrlMOVERL_GetMeta(void)
-{
-    return g_beModelCtrlMOVERL_metaObject;
-}
-
-igMetaObject *beModelCtrlPDMOVE_GetMeta(void)
-{
-    return g_beModelCtrlPDMOVE_metaObject;
-}
-
-igMetaObject *beModelCtrlWCHECK_GetMeta(void)
-{
-    return g_beModelCtrlWCHECK_metaObject;
-}
-
 igMetaObject *beModelCtrlAIMAP_GetMeta(void)
 {
     return g_beModelCtrlAIMAP_metaObject;
-}
-
-igMetaObject *beModelCtrlMUTEKI_GetMeta(void)
-{
-    return g_beModelCtrlMUTEKI_metaObject;
-}
-
-igMetaObject *beModelCtrlHITBOX_GetMeta(void)
-{
-    return g_beModelCtrlHITBOX_metaObject;
-}
-
-igMetaObject *beModelCtrlAIData_GetMeta(void)
-{
-    return g_beModelCtrlAIData_metaObject;
-}
-
-igMetaObject *beModelCtrlAIDataList_GetMeta(void)
-{
-    return g_beModelCtrlAIDataList_metaObject;
 }
 
 igMetaObject *beModelCtrlAIMap_GetMeta(void)
@@ -843,21 +728,6 @@ igMetaObject *beSaveUtilInfoRam_GetMeta(void)
     return g_beSaveUtilInfoRam_metaObject;
 }
 
-igMetaObject *beSeData_GetMeta(void)
-{
-    return g_beSeData_metaObject;
-}
-
-igMetaObject *beSeDataList_GetMeta(void)
-{
-    return g_beSeDataList_metaObject;
-}
-
-igMetaObject *beSeInfoData_GetMeta(void)
-{
-    return g_beSeInfoData_metaObject;
-}
-
 igMetaObject *beSeInfo_GetMeta(void)
 {
     return g_beSeInfo_metaObject;
@@ -886,11 +756,6 @@ igMetaObject *beShadow01InfoList_GetMeta(void)
 igMetaObject *beSoundData_GetMeta(void)
 {
     return g_beSoundData_metaObject;
-}
-
-igMetaObject *beBaseInfoData_GetMeta(void)
-{
-    return g_beBaseInfoData_metaObject;
 }
 
 igMetaObject *beSoundInfo_GetMeta(void)
@@ -982,16 +847,6 @@ igMetaObject *beWeaponAttachDataList_GetMeta(void)
     return g_beWeaponAttachDataList_metaObject;
 }
 
-igMetaObject *beWeaponSeqData_GetMeta(void)
-{
-    return g_beWeaponSeqData_metaObject;
-}
-
-igMetaObject *beWeaponSeqDataList_GetMeta(void)
-{
-    return g_beWeaponSeqDataList_metaObject;
-}
-
 igMetaObject *beWeaponInfo_GetMeta(void)
 {
     return g_beWeaponInfo_metaObject;
@@ -1027,11 +882,6 @@ igMetaObject *beAsTargetModelDataList_GetElementMeta(void)
     return g_beAsTargetModelData_metaObject;
 }
 
-igMetaObject *beActionStarterDataList_GetElementMeta(void)
-{
-    return g_beActionStarterData_metaObject;
-}
-
 igMetaObject *beCriHandleList_GetElementMeta(void)
 {
     return g_beCriHandle_metaObject;
@@ -1062,19 +912,9 @@ igMetaObject *beGeneraterItemDataList_GetElementMeta(void)
     return g_beGeneraterItemData_metaObject;
 }
 
-igMetaObject *beGeneraterItemDataOneList_GetElementMeta(void)
-{
-    return g_beGeneraterItemDataOne_metaObject;
-}
-
 igMetaObject *beGroupKeepList_GetElementMeta(void)
 {
     return g_beGroupKeep_metaObject;
-}
-
-igMetaObject *beLayerGroupList_GetElementMeta(void)
-{
-    return g_beLayerGroup_metaObject;
 }
 
 igMetaObject *beLuaDataList_GetElementMeta(void)
@@ -1107,11 +947,6 @@ igMetaObject *beModelCtrlAIMapList_GetElementMeta(void)
     return g_beModelCtrlAIMap_metaObject;
 }
 
-igMetaObject *beModelCtrlAIDataList_GetElementMeta(void)
-{
-    return g_beModelCtrlAIData_metaObject;
-}
-
 igMetaObject *beModelCtrlDataList_GetElementMeta(void)
 {
     return g_beModelCtrlData_metaObject;
@@ -1120,11 +955,6 @@ igMetaObject *beModelCtrlDataList_GetElementMeta(void)
 igMetaObject *beNumberCtrlInfoList_GetElementMeta(void)
 {
     return g_beNumberCtrlInfo_metaObject;
-}
-
-igMetaObject *beSeDataList_GetElementMeta(void)
-{
-    return g_beSeData_metaObject;
 }
 
 igMetaObject *beShadow01InfoList_GetElementMeta(void)
@@ -1152,11 +982,6 @@ igMetaObject *beMessengerGroupList_GetElementMeta(void)
     return g_beMessengerGroup_metaObject;
 }
 
-igMetaObject *beWeaponSeqDataList_GetElementMeta(void)
-{
-    return g_beWeaponSeqData_metaObject;
-}
-
 igMetaObject *beBaseInfoRamList_GetElementMeta(void)
 {
     return g_beBaseInfoRam_metaObject;
@@ -1166,9 +991,3 @@ igMetaObject *beBaseInfoList_GetElementMeta(void)
 {
     return g_beBaseInfo_metaObject;
 }
-
-igMetaObject *beBaseInfoDataList_GetElementMeta(void)
-{
-    return g_beBaseInfoData_metaObject;
-}
-

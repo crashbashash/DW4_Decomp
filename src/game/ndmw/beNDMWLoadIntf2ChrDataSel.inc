@@ -59,8 +59,8 @@ CallbackArray *beNDMWLoadIntf2ChrDataSel_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2ChrDataSel_metaObject,
-        beBaseInfoData_Register,
-        beBaseInfoData_GetPublishedMetaObject,
+        Gap::Bec::beBaseInfoData::arkRegisterInternal,
+        Gap::Bec::beBaseInfoData::getClassMeta,
         beNDMWLoadIntf2ChrDataSel_GetMetaObject,
         "beNDMWLoadIntf2ChrDataSel",
         0x4c, /* instance size */

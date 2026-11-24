@@ -42,7 +42,7 @@ void beLayerInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLayerInfo_Register);
 }
 
-static igMetaObjectCallback g_beLayerInfo_callbackList[] = { beLayerGroupList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLayerInfo_callbackList[] = { Gap::Bec::beLayerGroupList::arkRegister, 0 };
 
 CallbackArray *beLayerInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -88,7 +88,7 @@ void beLayerInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beLayerInfo_ctorTable, 1);
     groups = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)groups)->_metaObject = (int)beLayerGroupList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)groups)->_metaObject = (int)Gap::Bec::beLayerGroupList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beLayerInfo_fieldTable, g_beLayerInfo_fieldHandles, g_beLayerInfo_fieldOffsets, base);
 }
 

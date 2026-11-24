@@ -1,53 +1,43 @@
-igMetaObject *g_beModelCtrlCTRL_metaObject;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlCTRL_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlCTRL_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlCTRL_EnsureRegistered();
-    }
-    return g_beModelCtrlCTRL_metaObject;
-}
+igMetaObject *beModelCtrlCTRL::_Meta;
 
-int beModelCtrlCTRL_GetVTable(void) {
-    beModelCtrlCTRL obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beModelCtrlCTRL_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlCTRL_EnsureRegistered(void)
+igMetaObject *beModelCtrlCTRL::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlCTRL_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlCTRL_Register(void) {
+void *beModelCtrlCTRL::retrieveVTablePointer()
+{
+    beModelCtrlCTRL temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlCTRL::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlCTRL::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlCTRL_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlCTRL_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlCTRL",
-        0xc, /* instance size */
-        beModelCtrlCTRL_GetVTable,
+        sizeof(beModelCtrlCTRL),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void beModelCtrlCTRL_GetMetaObjectFunction(void)
-{
-    beModelCtrlCTRL_GetMetaObject();
+}
 }
 

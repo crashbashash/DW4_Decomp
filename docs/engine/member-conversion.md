@@ -884,9 +884,11 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    - **Callers.** `<Class>_Create(int)` becomes `Gap::Bec::<Class>::_instantiateFromPool((igMemoryPoolView *)alloc)`,
      returning the Gap class: a flat `igSmartPointer<beX>` takes it through a `(beX *)` cast, or the pointer is
      `igSmartPointer<Gap::Bec::beX>` (bePlaySE; its destructor name then spells the Gap class).
-   - **Open: `igNamedObject` bases.** Converting `beSeData` and `beWeaponSeqData` (parent `igNamedObject`) stopped
-     `whole_file_rows.py` for the Bec unit (`struct.error`: the object emits `__vt__igNamedObject` and its RTTI record
-     where retail's unit does not), so the `igNamedObject`-derived rows wait for that; the igObject-derived ones are done.
+   - **`igNamedObject` bases.** A class over `igNamedObject` (`beSeData`) makes the RTTI-on Bec unit emit
+     igNamedObject's vtable and its inline `getMeta`, which have no key function; retail kept attrs' `-RTTI off`
+     copies (0x524950, 0x142b60). `getMeta` is a profile-twin duplicate, and the vtable goes with it: the rows walk
+     it as the twin's datum and verify compares it under attrs' profile ([profile
+     twins](emitted-functions.md#duplicates-switch-tables-and-exception-data), `verify.vtable_twins`).
    - **Second pass (thirty more: `beCriSndf`, `beNumberCtrlInfoWork`, `beCriFxXbData`, `beModelCtrlMoveObject`,
      `beModelCtrlInfoAI`, `beDemoManagerWork`, `beWaterMove`, `beMessengerWork`, `beMatCtrlSearch`,
      `beGeneraterPlayerData`, `beMatCtrlInfoWork`, `beGeneraterInfoWork`, `beCameraDemoData`, `beFontGeomAttrPair`,

@@ -1,55 +1,52 @@
-igMetaObject *g_beSeDataList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beSeDataList_GetOrCreateMetaObject(void) {
-    if (g_beSeDataList_metaObject == 0) {
-        g_beSeDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beSeDataList_metaObject;
-}
+igMetaObject *beSeDataList::_Meta;
 
-igMetaObject *beSeDataList_GetMetaObject(void)
+igMetaObject *beSeDataList::getClassTypeLazy()
 {
-    igMetaObject *g = g_beSeDataList_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beSeDataList_EnsureRegistered();
-    return g_beSeDataList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int beSeDataList_GetVTable(void) {
-    beSeDataList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beSeDataList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beSeDataList_EnsureRegistered(void)
+igMetaObject *beSeDataList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beSeDataList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beSeDataList_callbackList[] = { beSeData_EnsureRegistered, 0 };
+void *beSeDataList::retrieveVTablePointer()
+{
+    beSeDataList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beSeDataList_Register(void) {
+void beSeDataList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beSeDataList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beSeData::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beSeDataList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beSeDataList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beSeDataList",
-        0x14, /* instance size */
-        beSeDataList_GetVTable,
+        sizeof(beSeDataList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beSeDataList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beSeDataList_GetMetaObjectFunction(void)
-{
-    beSeDataList_GetMetaObject();
+}
 }
 

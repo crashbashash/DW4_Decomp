@@ -1,81 +1,57 @@
-igMetaObject *g_beModelCtrlLABELCTRL_metaObject;
-igMetaField *g_beModelCtrlLABELCTRL_seqNameMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beModelCtrlLABELCTRL_GetMetaObject(void) {
-    igMetaObject *g = g_beModelCtrlLABELCTRL_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beModelCtrlLABELCTRL_EnsureRegistered();
-    }
-    return g_beModelCtrlLABELCTRL_metaObject;
-}
+igMetaObject *beModelCtrlLABELCTRL::_Meta;
+igMetaField *beModelCtrlLABELCTRL::k_seqName;
 
-int beModelCtrlLABELCTRL_GetVTable(void) {
-    beModelCtrlLABELCTRL obj;
-    int vtable;
-    char **seqNameSlot;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_beModelCtrlLABELCTRL_vtable[0];
-    seqNameSlot = (char **)&obj._seqName;
-    *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beModelCtrlLABELCTRL_vtable[0];
-    igStringRef_Release(seqNameSlot);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beModelCtrlLABELCTRL_EnsureRegistered(void)
+igMetaObject *beModelCtrlLABELCTRL::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beModelCtrlLABELCTRL_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beModelCtrlLABELCTRL_Register(void) {
+void *beModelCtrlLABELCTRL::retrieveVTablePointer()
+{
+    beModelCtrlLABELCTRL temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beModelCtrlLABELCTRL::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beModelCtrlLABELCTRL::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beModelCtrlLABELCTRL_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beModelCtrlLABELCTRL_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beModelCtrlLABELCTRL",
-        0x10, /* instance size */
-        beModelCtrlLABELCTRL_GetVTable,
-        beModelCtrlLABELCTRL_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beModelCtrlLABELCTRL),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beModelCtrlLABELCTRL_GetMetaObjectFunction(void)
+void beModelCtrlLABELCTRL::arkRegisterInitialize()
 {
-    beModelCtrlLABELCTRL_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create };
+    static const char *names[] = { "_seqName" };
+    static igMetaField **enumStorage[] = { &k_seqName };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beModelCtrlLABELCTRL_ctorTable[] = {
-    igStringMetaField_Create,
-};
-static const char *g_beModelCtrlLABELCTRL_fieldTable[] = {
-    "_seqName",
-};
-static igMetaField **g_beModelCtrlLABELCTRL_fieldHandles[] = {
-    &g_beModelCtrlLABELCTRL_seqNameMetaField,
-};
-static int g_beModelCtrlLABELCTRL_fieldOffsets[] = {
-    12,
-};
-
-void beModelCtrlLABELCTRL_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beModelCtrlLABELCTRL_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beModelCtrlLABELCTRL_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_beModelCtrlLABELCTRL_fieldTable, g_beModelCtrlLABELCTRL_fieldHandles, g_beModelCtrlLABELCTRL_fieldOffsets, base);
+}
 }
 

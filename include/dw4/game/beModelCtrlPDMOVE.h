@@ -7,7 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_beModelCtrlPDMOVE_metaObject;
 
 #ifdef __cplusplus
 }

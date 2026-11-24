@@ -1,82 +1,58 @@
-igMetaObject *g_beWeaponSeqData_metaObject;
-igMetaField *g_beWeaponSeqData_labelMetaField;
+namespace Gap {
+namespace Bec {
 
-void *beWeaponSeqData_GetMetaObject(void) {
-    igMetaObject *g = g_beWeaponSeqData_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beWeaponSeqData_EnsureRegistered();
-    }
-    return g_beWeaponSeqData_metaObject;
-}
+igMetaObject *beWeaponSeqData::_Meta;
+igMetaField *beWeaponSeqData::k_label;
 
-int beWeaponSeqData_GetVTable(void) {
-    beWeaponSeqData obj;
-    int vtable;
-    char **nameSlot;
-    char **labelSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
-    labelSlot = (char **)&obj._label;
-    *labelSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
-    igStringRef_Release(labelSlot);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beWeaponSeqData_EnsureRegistered(void)
+igMetaObject *beWeaponSeqData::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beWeaponSeqData_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *beWeaponSeqData_Register(void) {
+void *beWeaponSeqData::retrieveVTablePointer()
+{
+    beWeaponSeqData temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beWeaponSeqData::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beWeaponSeqData::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beWeaponSeqData_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beWeaponSeqData_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beWeaponSeqData",
-        0x10, /* instance size */
-        beWeaponSeqData_GetVTable,
-        beWeaponSeqData_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beWeaponSeqData),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beWeaponSeqData_GetMetaObjectFunction(void)
+void beWeaponSeqData::arkRegisterInitialize()
 {
-    beWeaponSeqData_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create };
+    static const char *names[] = { "_label" };
+    static igMetaField **enumStorage[] = { &k_label };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beWeaponSeqData_ctorTable[] = {
-    igStringMetaField_Create,
-};
-static const char *g_beWeaponSeqData_fieldTable[] = {
-    "_label",
-};
-static igMetaField **g_beWeaponSeqData_fieldHandles[] = {
-    &g_beWeaponSeqData_labelMetaField,
-};
-static int g_beWeaponSeqData_fieldOffsets[] = {
-    12,
-};
-
-void beWeaponSeqData_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beWeaponSeqData_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beWeaponSeqData_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_beWeaponSeqData_fieldTable, g_beWeaponSeqData_fieldHandles, g_beWeaponSeqData_fieldOffsets, base);
+}
 }
 
 igMetaEnum *g_beWeaponSeqData_msgActionMetaEnum;

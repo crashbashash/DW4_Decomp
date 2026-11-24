@@ -10,8 +10,6 @@ extern "C" {
 #endif
 
 struct beBaseInfoData *beBaseInfoData_Destroy(struct beBaseInfoData *self, short delete_storage);
-struct igMetaObject *beBaseInfoData_GetPublishedMetaObject(void);
-struct CallbackArray *beBaseInfoData_Register(void);
 
 #ifdef __cplusplus
 }
