@@ -115,8 +115,6 @@ void beFont_LockVertexArray(beFont *self, igVertexArrayView *vertices, igVertexA
 int beFont_FindFirstLayoutEntry(beFont *self, beBaseInfoRam *ram, int dataName, int setName);
 int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram);
 igMetaObject *beFont_GetMeta(void);
-void beUnicodeObj_userDestruct(beUnicodeObj *self);
-igMetaObject *beUnicodeObj_GetMeta(void);
 
 
 SjisUnicodeTable g_sjisToUnicodeTable = {{
@@ -471,7 +469,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             } else if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) > 0) {
                 igNodeView *object = (igNodeView *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 object->GetMeta();
-                if (g_beUnicodeObj_metaObject == object->GetMeta()) {
+                if (Gap::Bec::beUnicodeObj::getClassMeta() == object->GetMeta()) {
                     text = (igObject *)object;
                 } else {
                     igStringObj_Set(scratch.p, "\202\251\202\347\202\301\202\333");
@@ -726,7 +724,7 @@ igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *t
     }
     allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     allocator = g_useOwnerAllocator ? allocator : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
-    igSmartPointer<beUnicodeObj> result(beUnicodeObj_Create(allocator));
+    igSmartPointer<beUnicodeObj> result((beUnicodeObj *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)allocator));
     beUnicodeObj_AllocateBuffer(result.p, length);
     unsigned short *out = (unsigned short *)result.p->_buffer;
     int written = 0;
@@ -1128,11 +1126,16 @@ int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram) {
     return found;
 }
 
-void beUnicodeObj_userDestruct(beUnicodeObj *self) {
-    if (self->_buffer != 0) {
-        Memory_FreeBufferWithAllocator((void *)self->_buffer, ((Gap::Core::igObject *)self)->getMemoryPool());
+namespace Gap {
+namespace Bec {
+
+void beUnicodeObj::userDestruct() {
+    if (_buffer != 0) {
+        Memory_FreeBufferWithAllocator((void *)_buffer, ((Gap::Core::igObject *)this)->getMemoryPool());
     }
-    Gap__Core__igObject__userDestruct((igObject *)self);
+    Gap__Core__igObject__userDestruct((::igObject *)this);
+}
+}
 }
 
 /* Makes the buffer hold `length` UTF-16 characters and a terminator, and clears it. */
@@ -1148,11 +1151,6 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length) {
         self->_buffer = (int)Memory_AllocateAlignedWithAllocator((length + 1) * 2, 0x10, ((Gap::Core::igObject *)self)->getMemoryPool());
     }
     memset((void *)self->_buffer, 0, Memory_GetBufferSize((void *)self->_buffer));
-}
-
-igMetaObject *beUnicodeObj_GetMeta(void)
-{
-    return g_beUnicodeObj_metaObject;
 }
 
 igMetaObject *beFont_GetMeta(void)

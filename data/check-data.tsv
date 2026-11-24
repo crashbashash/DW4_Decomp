@@ -10392,6 +10392,15 @@
 00507b48	8	.rodata	0033bf50	match
 00507b50	44	.rodata	0033bf50	match
 00507b80	8	.rodata	0033bf50	match
+00507b90	23	.data	0033bf50	match
+00507bb0	20	.rodata	0033bf50	match
+00507bc8	8	.rodata	0033bf50	match
+00507c10	24	.data	0033bf50	match
+00507c30	20	.rodata	0033bf50	match
+00507c48	8	.rodata	0033bf50	match
+00507c90	26	.data	0033bf50	match
+00507cb0	20	.rodata	0033bf50	match
+00507cc8	8	.rodata	0033bf50	match
 00507f30	24	.data	0033bf50	match
 00507f48	12	.rodata	0033bf50	match
 00507f58	8	.rodata	0033bf50	match
@@ -10425,6 +10434,12 @@
 005082c8	8	.rodata	0033bf50	match
 005082d0	44	.rodata	0033bf50	match
 00508300	8	.rodata	0033bf50	match
+005084b0	27	.data	0033bf50	match
+005084d0	49	.data	0033bf50	match
+00508510	36	.rodata	0033bf50	match
+00508538	8	.rodata	0033bf50	match
+00508540	44	.rodata	0033bf50	match
+00508570	8	.rodata	0033bf50	match
 00508620	33	.data	0033bf50	match
 00508650	20	.rodata	0033bf50	match
 00508668	8	.rodata	0033bf50	match
@@ -13706,6 +13721,7 @@
 00529110	92	.vtables	00194380	match
 00529170	108	.vtables	00194380	match
 005291e0	116	.vtables	00194380	match
+00529260	196	.vtables	00194380	match
 00529330	136	.vtables	00194380	match
 005293c0	136	.vtables	00194380	match
 00529450	96	.vtables	00194380	match
@@ -13713,6 +13729,9 @@
 00529550	108	.vtables	00194380	match
 005295c0	100	.vtables	00194380	match
 00529630	92	.vtables	00194380	match
+005296b0	152	.vtables	00194380	match
+00529750	100	.vtables	00194380	match
+005297c0	100	.vtables	00194380	match
 00529830	92	.vtables	00194380	match
 00529890	100	.vtables	00194380	match
 00529900	92	.vtables	00194380	match
@@ -13905,6 +13924,9 @@
 00535090	92	.vtables	0033bf50	match
 00535160	92	.vtables	0033bf50	match
 005351c0	100	.vtables	0033bf50	match
+00535230	92	.vtables	0033bf50	match
+005352f0	92	.vtables	0033bf50	match
+005353b0	92	.vtables	0033bf50	match
 00535610	92	.vtables	0033bf50	match
 00535670	100	.vtables	0033bf50	match
 005356e0	92	.vtables	0033bf50	match
@@ -13913,6 +13935,7 @@
 00535810	92	.vtables	0033bf50	match
 005358e0	92	.vtables	0033bf50	match
 00535940	100	.vtables	0033bf50	match
+00535b00	100	.vtables	0033bf50	match
 00535c40	92	.vtables	0033bf50	match
 00535ca0	100	.vtables	0033bf50	match
 00535de0	92	.vtables	0033bf50	match
@@ -14019,6 +14042,8 @@
 00541fe0	92	.vtables	00458680	match
 00542040	92	.vtables	00458680	match
 005420a0	92	.vtables	00458680	match
+00542100	92	.vtables	00458680	match
+00542160	92	.vtables	00458680	match
 005421c0	100	.vtables	00458680	match
 00554990	1	.sdata	002590c0	match
 00554994	1	.sdata	002b5d50	match

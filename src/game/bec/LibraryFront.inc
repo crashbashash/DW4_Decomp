@@ -215,8 +215,8 @@ void BecLibrary_RegisterClasses(void) {
     beGenerater_EnsureRegistered();
     beFontImage_EnsureRegistered();
     beFontImageList_EnsureRegistered();
-    beUnicodeObj_EnsureRegistered();
-    beUnicodeObjList_EnsureRegistered();
+    Gap::Bec::beUnicodeObj::arkRegister();
+    Gap::Bec::beUnicodeObjList::arkRegister();
     beFontInfoData_EnsureRegistered();
     beFontInfo_EnsureRegistered();
     Gap::Bec::beFontGeomAttrPair::arkRegister();
@@ -231,11 +231,11 @@ void BecLibrary_RegisterClasses(void) {
     Gap::Bec::beDemoManagerWork::arkRegister();
     Gap::Bec::beDemoManagerWorkList::arkRegister();
     beDemoManager_EnsureRegistered();
-    beDataObjInt_EnsureRegistered();
+    Gap::Bec::beDataObjInt::arkRegister();
     beDataObjIntList_EnsureRegistered();
-    beDataObjBool_EnsureRegistered();
+    Gap::Bec::beDataObjBool::arkRegister();
     beDataObjBoolList_EnsureRegistered();
-    beDataObjString_EnsureRegistered();
+    Gap::Bec::beDataObjString::arkRegister();
     beDataObjStringList_EnsureRegistered();
     beDataObjObjectList_EnsureRegistered();
     beDataObjFloatList_EnsureRegistered();

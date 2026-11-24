@@ -1,14 +1,19 @@
 #include "dw4/maths/igVec3f.h"
-extern "C" igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index);
 
-igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index) {
+namespace Gap {
+namespace Sg {
+
+const igVec3f *igCompressedAnimationSequenceQS::getTranslation(int index) const
+{
     static igVec3f translation;
-    unsigned short *p = o->_compressedTranslationList->_data + index * 3;
+    const unsigned short *p = _compressedTranslationList->getArray() + index * 3;
     float *out = translation.vec;
-    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
-    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
-    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
+    *out++ = _translationBase + (float)(unsigned int)*p++ * _translationRangeOverMaxUShort;
+    *out++ = _translationBase + (float)(unsigned int)*p++ * _translationRangeOverMaxUShort;
+    *out++ = _translationBase + (float)(unsigned int)*p++ * _translationRangeOverMaxUShort;
     return &translation;
+}
+}
 }
 
 void FUN_001bf560(QSView *o, int index, float *out) {
@@ -19,21 +24,29 @@ void FUN_001bf560(QSView *o, int index, float *out) {
     *out++ = o->_quaternionBase + (float)(unsigned int)*p++ * o->_quaternionRangeOverMaxUShort;
 }
 
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_46(QSView *o, int index, float *out) {
-    unsigned short *p = o->_compressedTranslationList->_data + index * 3;
-    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
-    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
-    *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
+namespace Gap {
+namespace Sg {
+
+void igCompressedAnimationSequenceQS::getTranslation(int index, igVec3f &vec) const
+{
+    float *out = vec.vec;
+    const unsigned short *p = _compressedTranslationList->getArray() + index * 3;
+    *out++ = _translationBase + (float)(unsigned int)*p++ * _translationRangeOverMaxUShort;
+    *out++ = _translationBase + (float)(unsigned int)*p++ * _translationRangeOverMaxUShort;
+    *out++ = _translationBase + (float)(unsigned int)*p++ * _translationRangeOverMaxUShort;
 }
 
 /* Decodes a 16-bit sign-magnitude sample (bit 15 = sign, 15-bit magnitude) into a 64-bit fixed-
  * point value (magnitude << 23). One 64-bit variable is widened, masked, shifted and negated in
  * place. */
-long long Gap__Sg__igCompressedAnimationSequenceQS__vfunc_42(igCompressedAnimationSequenceQS *self, int arg1) {
-    unsigned short *d = *(unsigned short **)(self->_compressedTimeList + 16);
-    long long v = d[arg1];
+long long igCompressedAnimationSequenceQS::getTimeAsLong(int index) const
+{
+    const unsigned short *d = _compressedTimeList->getArray();
+    long long v = d[index];
     if (v & 0x8000) { v &= 0x7FFF; v <<= 0x17; v = -v; } else v <<= 0x17;
     return v;
+}
+}
 }
 
 void FUN_001bf7d0(QSSequenceView *o, unsigned char *before, unsigned char *after, int *key0, int *key1, float *t0, float *t1, long long time) {
@@ -74,21 +87,25 @@ void FUN_001bf7d0(QSSequenceView *o, unsigned char *before, unsigned char *after
     FUN_001bfc70((O_1bfc70 *)o, time, key0, key1, t0, t1);
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O_1bfa60 *a0, int a1, long long a2) {
+namespace Gap {
+namespace Sg {
+
+bool igCompressedAnimationSequenceQS::getMatrix(igMatrix44f &matrix, long long time)
+{
     unsigned char s6f; unsigned char s6e; int s68; int s64; float s60; float s5c; int s50[3]; int s40[4];
     float f;
-    FUN_001bf7d0((QSSequenceView *)a0, &s6f, &s6e, &s68, &s64, &s60, &s5c, a2);
-    igMatrix44f_SetIdentity((float *)a1);
+    FUN_001bf7d0((QSSequenceView *)this, &s6f, &s6e, &s68, &s64, &s60, &s5c, time);
+    igMatrix44f_SetIdentity((float *)&matrix);
     if (s6f) {
-        if (a0->flags & 2) { FUN_001bf560((QSView *)a0, 0, (float *)s40); FUN_00192810((const float *)s40, (float *)a1); }
-        if (a0->flags & 1) { a0->v44(0, s50); igMatrix44f_SetTranslation((float *)a1, (float *)s50); }
+        if (_channels & 2) { FUN_001bf560((QSView *)this, 0, (float *)s40); FUN_00192810((const float *)s40, (float *)&matrix); }
+        if (_channels & 1) { getTranslation(0, *(igVec3f *)s50); igMatrix44f_SetTranslation((float *)&matrix, (float *)s50); }
     } else if (s6e) {
-        if (a0->flags & 2) { FUN_001bf560((QSView *)a0, a0->m->count - 1, (float *)s40); FUN_00192810((const float *)s40, (float *)a1); }
-        if (a0->flags & 1) { a0->v44(a0->v33() - 1, s50); igMatrix44f_SetTranslation((float *)a1, (float *)s50); }
+        if (_channels & 2) { FUN_001bf560((QSView *)this, ((QSSequenceView *)this)->_compressedTimeList->_count - 1, (float *)s40); FUN_00192810((const float *)s40, (float *)&matrix); }
+        if (_channels & 1) { getTranslation(getTimeCount() - 1, *(igVec3f *)s50); igMatrix44f_SetTranslation((float *)&matrix, (float *)s50); }
     } else {
         if (s5c < 9.99999997e-07f) f = 0.0f; else f = s60 / s5c;
-        if (a0->flags & 2) { a0->v46(s40, s68, s64, f); FUN_00192810((const float *)s40, (float *)a1); }
-        if (a0->flags & 1) { a0->v45(s50, s68, s64, f); igMatrix44f_SetTranslation((float *)a1, (float *)s50); }
+        if (_channels & 2) { constructInterpolatedQuaternion(*(igVec4f *)s40, s68, s64, f); FUN_00192810((const float *)s40, (float *)&matrix); }
+        if (_channels & 1) { constructInterpolatedTranslation(*(igVec3f *)s50, s68, s64, f); igMatrix44f_SetTranslation((float *)&matrix, (float *)s50); }
     }
     return 1;
 }
@@ -97,8 +114,11 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O_1bfa60 *a0, int a1, lon
  * `_compressedTimeList` (reflected object ref, +16): the word at +8 of an igDataList-style list is
  * `_count`. The list is read through the generic igDataList layout. */
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_35(igCompressedAnimationSequenceQS *self) {
-    return ((igDataList *)self->_compressedTimeList)->_count;
+int igCompressedAnimationSequenceQS::getTimeCount() const
+{
+    return ((QSSequenceView *)this)->_compressedTimeList->_count;
+}
+}
 }
 
 void FUN_001bfc70(O_1bfc70 *o, long long t, int *a2, int *a3, float *a4, float *a5) {
@@ -119,39 +139,45 @@ void FUN_001bfc70(O_1bfc70 *o, long long t, int *a2, int *a3, float *a4, float *
     *a5 = (float)(unsigned int)(int)((o->v40(*a3) - s) >> 18);
 }
 
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_48(struct S_1bfe90 *arg0, int *arg1, void *arg2, int *arg3, float fparg0) {
+namespace Gap {
+namespace Sg {
+
+void igCompressedAnimationSequenceQS::constructInterpolatedQuaternion(igVec4f &interpolatedQuaternion, int lowerBound, int upperBound, float ratio) const
+{
     int slerpFrom[4]; int slerpTo[4]; int lerpFrom[4]; int lerpTo[4];
     unsigned char t;
-    t = arg0->f58;
+    t = _interpolationMethod[1];
     if (t == 0) {
-        FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)arg1);
+        FUN_001bf560((QSView *)this, lowerBound, (float *)&interpolatedQuaternion);
         return;
     }
     if (t == 3) {
-        FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)slerpFrom);
-        FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)slerpTo);
-        FUN_00192ab0((float *)arg1, fparg0, (void *)slerpFrom, (void *)slerpTo);
+        FUN_001bf560((QSView *)this, lowerBound, (float *)slerpFrom);
+        FUN_001bf560((QSView *)this, upperBound, (float *)slerpTo);
+        FUN_00192ab0((float *)&interpolatedQuaternion, ratio, (void *)slerpFrom, (void *)slerpTo);
         return;
     }
-    FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)lerpFrom);
-    FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)lerpTo);
-    Quaternion_Lerp((float *)arg1, fparg0, (const float *)lerpFrom, (const float *)lerpTo);
+    FUN_001bf560((QSView *)this, lowerBound, (float *)lerpFrom);
+    FUN_001bf560((QSView *)this, upperBound, (float *)lerpTo);
+    Quaternion_Lerp((float *)&interpolatedQuaternion, ratio, (const float *)lerpFrom, (const float *)lerpTo);
 }
 
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(igCompressedAnimationSequenceQS *self, int *arg1, int arg2, int arg3, float fparg0) {
+void igCompressedAnimationSequenceQS::constructInterpolatedTranslation(igVec3f &translation, int lowerBound, int upperBound, float ratio) const
+{
     int vecFrom[4];
     int vecTo[4];
 
-    if (self->_interpolationMethod[0] == 0) {
-        ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, arg1);
+    if (_interpolationMethod[0] == 0) {
+        getTranslation(lowerBound, translation);
         return;
     }
-    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, &vecFrom[0]);
-    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg3, &vecTo[0]);
-    Vec3_Lerp((float *)arg1, fparg0, (const float *)((void *)&vecFrom[0]), (const float *)((void *)&vecTo[0]));
+    getTranslation(lowerBound, *(igVec3f *)&vecFrom[0]);
+    getTranslation(upperBound, *(igVec3f *)&vecTo[0]);
+    Vec3_Lerp(translation.vec, ratio, (const float *)((void *)&vecFrom[0]), (const float *)((void *)&vecTo[0]));
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_25(S_1c0010 *arg0, int arg1, long long arg2) {
+bool igCompressedAnimationSequenceQS::evaluateRotation(float *quaternion, long long time)
+{
     unsigned char beforeStart;
     unsigned char afterEnd;
     int key0;
@@ -159,36 +185,39 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_25(S_1c0010 *arg0, int arg1,
     float elapsed;
     float duration;
 
-    FUN_001bf7d0((QSSequenceView *)arg0, &beforeStart, &afterEnd, &key0, &key1, &elapsed, &duration, arg2);
+    FUN_001bf7d0((QSSequenceView *)this, &beforeStart, &afterEnd, &key0, &key1, &elapsed, &duration, time);
     if (beforeStart != 0) {
-        FUN_001bf560((QSView *)arg0, 0, (float *)arg1);
+        FUN_001bf560((QSView *)this, 0, quaternion);
     } else if (afterEnd != 0) {
-        FUN_001bf560((QSView *)arg0, arg0->f16->cnt - 1, (float *)arg1);
+        FUN_001bf560((QSView *)this, ((QSSequenceView *)this)->_compressedTimeList->_count - 1, quaternion);
     } else {
-        ((V192 *)arg0)->vX(arg1, key0, key1, elapsed / duration);
+        constructInterpolatedQuaternion(*(igVec4f *)quaternion, key0, key1, elapsed / duration);
     }
     return 1;
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_27(O_1c00e0 *arg0, int arg1, int arg2, long long arg3) {
+bool igCompressedAnimationSequenceQS::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time)
+{
     unsigned char beforeStart; unsigned char afterEnd; int key0; int key1; float elapsed; float duration; float f20;
-    FUN_001bf7d0((QSSequenceView *)arg0, &beforeStart, &afterEnd, &key0, &key1, &elapsed, &duration, arg3);
+    FUN_001bf7d0((QSSequenceView *)this, &beforeStart, &afterEnd, &key0, &key1, &elapsed, &duration, time);
     if (beforeStart != 0) {
-        FUN_001bf560((QSView *)arg0, 0, (float *)arg1);
-        arg0->v184(0, arg2);
+        FUN_001bf560((QSView *)this, 0, quaternion);
+        getTranslation(0, *(igVec3f *)translation);
     } else if (afterEnd != 0) {
-        FUN_001bf560((QSView *)arg0, arg0->f16->n - 1, (float *)arg1);
-        arg0->v184(arg0->v140() - 1, arg2);
+        FUN_001bf560((QSView *)this, ((QSSequenceView *)this)->_compressedTimeList->_count - 1, quaternion);
+        getTranslation(getTimeCount() - 1, *(igVec3f *)translation);
     } else {
         if (duration < 9.99999997e-07f) {
             f20 = 0.0f;
         } else {
             f20 = elapsed / duration;
         }
-        arg0->v192(arg1, key0, key1, f20);
-        arg0->v188(arg2, key0, key1, f20);
+        constructInterpolatedQuaternion(*(igVec4f *)quaternion, key0, key1, f20);
+        constructInterpolatedTranslation(*(igVec3f *)translation, key0, key1, f20);
     }
     return 1;
+}
+}
 }
 
 /* Getter: the scale keyframe list (`_scaleList`). */

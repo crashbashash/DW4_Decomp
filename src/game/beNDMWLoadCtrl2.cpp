@@ -1846,7 +1846,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
     else
         a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     {
-    ChunkRef nameText((RefCounted *)beUnicodeObj_Create(a));
+    ChunkRef nameText((RefCounted *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)a));
     beUnicodeObj_AllocateBuffer((beUnicodeObj *)nameText.p, 8);
     unsigned short *dst = (unsigned short *)((beUnicodeObj *)nameText.p)->_buffer;
     unsigned short *q = record->playerName;

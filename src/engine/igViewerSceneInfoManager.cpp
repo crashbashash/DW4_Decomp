@@ -340,7 +340,7 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
             g_sharedViewerOptions = 0;
         }
     }
-    igViewManager_SynchronizeParameters((igViewManager *)self->_viewManager, (igViewerParameters *)self->_parameters);
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->synchronizeParameters((Gap::Viewer::igViewerParameters *)self->_parameters);
     {
         igObject *s2 = (igObject *)self->_parameters;
         RendererLink *s1 = (RendererLink *)self->_viewerRenderer;
@@ -541,7 +541,7 @@ void igViewerSceneInfoManager_Update(igViewerSceneInfoManager *self) {
     if (self->_clippingCheckFrame == insight->_frames) {
         igViewerSceneInfoManager_CheckClipping(self);
     }
-    igViewManager_SetFrameTime((igViewManager *)self->_viewManager, frameTime);
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->setFrameTime(frameTime);
 }
 
 void igViewerSceneInfoManager_RemoveAllInfo(igViewerSceneInfoManager *self) {
@@ -705,8 +705,8 @@ void igViewerSceneInfoManager_HomeView(igViewerSceneInfoManager *self) {
     ((igViewerParameters *)self->_parameters)->_operationMode = 1;
     igNotifyEvent modeChanged((Gap::Core::igMetaField *)Gap::Viewer::igViewerParameters::k_operationMode);
     ((Gap::Gui::igModel *)self->_parameters)->notifyAllViews(modeChanged);
-    igViewManager_SetSceneUpVector((igViewManager *)self->_viewManager, (const float *)&((igViewerParameters *)self->_parameters)->_upVector[0]);
-    igViewManager_FrameObject((igViewManager *)self->_viewManager, (igNode *)(((igViewerParameters *)self->_parameters)->_scene));
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->setSceneUpVector((const float *)&((igViewerParameters *)self->_parameters)->_upVector[0]);
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->frameObject((Gap::Sg::igNode *)(((igViewerParameters *)self->_parameters)->_scene));
 }
 
 void igViewerSceneInfoManager_ResetView(igViewerSceneInfoManager *self) {
@@ -719,7 +719,7 @@ void igViewerSceneInfoManager_ResetView(igViewerSceneInfoManager *self) {
     int *h;
     int rc;
     igViewerSceneInfoManager_HomeView(self);
-    igViewManager_ApplyOptions((igViewManager *)self->_viewManager, (igObject *)(((igViewerParameters *)self->_parameters)->_scene));
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->applyOptions((Gap::Core::igObject *)(((igViewerParameters *)self->_parameters)->_scene));
     igViewerSceneInfoManager_OnButton1(self);
     igViewerRenderer_ApplyOptions((igViewerRenderer *)self->_viewerRenderer);
     parameters = (igViewerParameters *)self->_parameters;
@@ -837,15 +837,15 @@ void igViewerSceneInfoManager_OnGuiShown(igViewerSceneInfoManager *self)
 }
 
 void igViewerSceneInfoManager_CenterSelection(igViewerSceneInfoManager *self) {
-    igViewManager_CenterSelection((igViewManager *)self->_viewManager, (bool)0);
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->centerSelection((bool)0);
 }
 
 void igViewerSceneInfoManager_FitSelection(igViewerSceneInfoManager *self) {
-    igViewManager_FitSelection((igViewManager *)self->_viewManager);
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->fitSelection();
 }
 
 void igViewerSceneInfoManager_PrintViewMatrix(igViewerSceneInfoManager *self) {
-    igViewManager_PrintViewMatrix((igViewManager *)self->_viewManager);
+    ((Gap::Viewer::igViewManager *)self->_viewManager)->printViewMatrix();
 }
 
 void igViewerSceneInfoManager_CycleGuiVisibility(igViewerSceneInfoManager *self) {
@@ -890,24 +890,24 @@ void igViewerSceneInfoManager_ApplyOperationMode(igViewerSceneInfoManager *self)
         setCursor(pick, igViewerGuiFactory_CreateEmpty((igViewerGuiFactory *)self->_guiFactory, 1));
         setParameters(pick, (igObject *)self->_parameters);
         setGuiSystem(pick, (igObject *)self->_gui);
-        igViewManager_SetViewMode((igViewManager *)self->_viewManager, (igViewMode *)pick.p);
+        ((Gap::Viewer::igViewManager *)self->_viewManager)->setViewMode((Gap::Viewer::igViewMode *)pick.p);
         break;
     }
     case 2: {
         igSmartPointer<igFlyMode> fly(createFlyMode());
         setWindow(fly, (igObject *)((igInsightCore *)self->_insight)->_window);
-        igViewManager_SetViewMode((igViewManager *)self->_viewManager, (igViewMode *)fly.p);
+        ((Gap::Viewer::igViewManager *)self->_viewManager)->setViewMode((Gap::Viewer::igViewMode *)fly.p);
         break;
     }
     case 1: {
         igSmartPointer<igRotateMode> rotate(createRotateMode());
-        igViewManager_SetViewMode((igViewManager *)self->_viewManager, (igViewMode *)rotate.p);
+        ((Gap::Viewer::igViewManager *)self->_viewManager)->setViewMode((Gap::Viewer::igViewMode *)rotate.p);
         break;
     }
     case 3: {
         igSmartPointer<igRotateMode> rotate(createRotateMode());
         rotate.p->_maya = 1;
-        igViewManager_SetViewMode((igViewManager *)self->_viewManager, (igViewMode *)rotate.p);
+        ((Gap::Viewer::igViewManager *)self->_viewManager)->setViewMode((Gap::Viewer::igViewMode *)rotate.p);
         break;
     }
     default: {
@@ -916,7 +916,7 @@ void igViewerSceneInfoManager_ApplyOperationMode(igViewerSceneInfoManager *self)
                 first = mode - first;
             igSmartPointer<igCameraMode> camera(createCameraMode());
             ((Gap::Viewer::igCameraMode *)camera.p)->setCameraPath((Gap::Core::igObject *)(((int *)((igObjectList *)((igViewerParameters *)self->_parameters)->_cameras)->_data)[first]));
-            igViewManager_SetViewMode((igViewManager *)self->_viewManager, (igViewMode *)camera.p);
+            ((Gap::Viewer::igViewManager *)self->_viewManager)->setViewMode((Gap::Viewer::igViewMode *)camera.p);
             self->_clippingCheckFrame = ((igInsightCore *)self->_insight)->_frames + 1;
         }
         break;

@@ -103,7 +103,7 @@ void igCompileTraversal::_registerClass(igTraversalFunctionList *arg0, igMetaObj
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseBlendMatrixSelect);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, g_igActor_metaObject) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, Gap::Sg::igActor::getClassMeta()) != 0) {
         Gap::Sg::igTraversal::_setFunction((Gap::Sg::igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (igTraversalFunction *)igCompileTraversal_TraverseActor);
         return;
     }

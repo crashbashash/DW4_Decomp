@@ -1,34 +1,35 @@
-igMetaObject *igAnimationSequence_GetMetaObject(void)
+namespace Gap {
+namespace Sg {
+
+igMetaObject *igAnimationSequence::getClassTypeSafe()
 {
-    igMetaObject *g = g_igAnimationSequence_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAnimationSequence_EnsureRegistered();
-    return g_igAnimationSequence_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igAnimationSequence_EnsureRegistered(void)
+void igAnimationSequence::arkRegister()
 {
-    igMetaObject_RunStaticInit(igAnimationSequence_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-CallbackArray *igAnimationSequence_Register(void) {
+CallbackArray *igAnimationSequence::arkRegisterInternal()
+{
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igAnimationSequence_metaObject,
+        true,
+        &_Meta,
         Gap::Sg::igTransformSource::arkRegisterInternal,
         Gap::Sg::igTransformSource::getClassMeta,
-        igAnimationSequence_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAnimationSequence",
-        8, /* instance size */
+        sizeof(igAnimationSequence),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igAnimationSequence_GetMetaObjectFunction(void) {
-    igAnimationSequence_GetMetaObject();
+}
 }
 

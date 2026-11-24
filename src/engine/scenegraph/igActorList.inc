@@ -1,53 +1,52 @@
-igMetaObject *g_igActorList_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igActorList_GetOrCreateMetaObject(void) {
-    if (g_igActorList_metaObject == 0) {
-        g_igActorList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igActorList_metaObject;
-}
+igMetaObject *igActorList::_Meta;
 
-igMetaObject *igActorList_GetMetaObject(void)
+igMetaObject *igActorList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igActorList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igActorList_EnsureRegistered();
-    return g_igActorList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igActorList_GetVTable(void) {
-    struct Obj_1aa660 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igActorList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igActorList_EnsureRegistered(void)
+igMetaObject *igActorList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igActorList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igActorList_callbackList[] = { igActor_EnsureRegistered, 0 };
+void *igActorList::retrieveVTablePointer()
+{
+    igActorList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igActorList_Register(void) {
+void igActorList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igActorList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Sg::igActor::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igActorList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igActorList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igActorList",
-        0x14, /* instance size */
-        igActorList_GetVTable,
+        sizeof(igActorList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igActorList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igActorList_GetMetaObjectFunction(void) {
-    igActorList_GetMetaObject();
+}
 }
 

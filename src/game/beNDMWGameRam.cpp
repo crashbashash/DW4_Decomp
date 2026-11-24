@@ -515,7 +515,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         switch (entry->type) {
         case DATA_INT: {
             ALLOC(self, alloc)
-            igSmartPointer<beDataObjInt> s0((beDataObjInt *)beDataObjInt_Create((int)alloc));
+            igSmartPointer<beDataObjInt> s0((beDataObjInt *)Gap::Bec::beDataObjInt::_instantiateFromPool((igMemoryPoolView *)alloc));
             ((Gap::Core::igNamedObject *)s0.p)->setName((const char *)entry->name);
             ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s0.p);
             break;
@@ -537,7 +537,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         }
         case DATA_BOOL: {
             ALLOC(self, alloc)
-            igSmartPointer<beDataObjBool> s2((beDataObjBool *)beDataObjBool_Create((int)alloc));
+            igSmartPointer<beDataObjBool> s2((beDataObjBool *)Gap::Bec::beDataObjBool::_instantiateFromPool((igMemoryPoolView *)alloc));
             ((Gap::Core::igNamedObject *)s2.p)->setName((const char *)entry->name);
             ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s2.p);
             break;
@@ -559,7 +559,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         }
         case DATA_STRING: {
             ALLOC(self, alloc)
-            igSmartPointer<beDataObjString> s4((beDataObjString *)beDataObjString_Create((int)alloc));
+            igSmartPointer<beDataObjString> s4((beDataObjString *)Gap::Bec::beDataObjString::_instantiateFromPool((igMemoryPoolView *)alloc));
             ((Gap::Core::igNamedObject *)s4.p)->setName((const char *)entry->name);
             ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s4.p);
             break;
@@ -1257,7 +1257,7 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
     player = ((int *)(((igObjectList *)self->_playerDataListList)->_data))[index];
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-    igSmartPointer<beUnicodeObj> unicodeName(beUnicodeObj_Create(allocator));
+    igSmartPointer<beUnicodeObj> unicodeName((beUnicodeObj *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)allocator));
     beUnicodeObj_AllocateBuffer(unicodeName.p, 8);
     {
         const char *text = (const char *)name.p;

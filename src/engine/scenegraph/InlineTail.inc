@@ -188,62 +188,60 @@ void igPlanarShadowShader::reset()
 /* Getter for the reflected `_channels` member (igUnsignedCharMetaField at +56). */
 
 
-unsigned char Gap__Sg__igCompressedAnimationSequenceQS__vfunc_34(igCompressedAnimationSequenceQS *self) {
-    return self->_channels;
+namespace Gap {
+namespace Sg {
+
+unsigned char igCompressedAnimationSequenceQS::getComponentChannels() const
+{
+    return _channels;
 }
 
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_37(struct S_1e3300 *arg0) {
-    struct R *temp_a0;
-
-    arg0->f56 = arg0->f56 & 0xFE;
-    temp_a0 = arg0->p8;
-    if (temp_a0 != 0) {
-        temp_a0->rc = temp_a0->rc - 1;
-        if ((temp_a0->rc & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->p8 = 0;
+void igCompressedAnimationSequenceQS::removeTranslationChannel()
+{
+    _channels &= (unsigned char)~1;
+    _compressedTranslationList = 0;
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_38(void) {
+int igCompressedAnimationSequenceQS::getScaleCount() const
+{
     return 0;
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_39(void) {
+const igVec3f *igCompressedAnimationSequenceQS::getScale(int i) const
+{
     return 0;
 }
 
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_40(void) {
-
+void igCompressedAnimationSequenceQS::removeScaleChannel()
+{
 }
 
-int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_41(void) {
+long long igCompressedAnimationSequenceQS::getKeyframeTimeOffset()
+{
     return 0;
 }
 
 /* Accessor: the sequence's reflected _animationDuration field (igUnsignedLongMetaField, +40). */
-long long Gap__Sg__igCompressedAnimationSequenceQS__vfunc_43(igCompressedAnimationSequenceQS *self) {
-    return self->_animationDuration;
+unsigned long long igCompressedAnimationSequenceQS::getDuration()
+{
+    return _animationDuration;
 }
 
 /* Setter: stores the sequence length (`_animationDuration`, an igUnsignedLongMetaField of the
  * reflected igCompressedAnimationSequenceQS). */
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_45(igCompressedAnimationSequenceQS *self, long long animationDuration) {
-    self->_animationDuration = animationDuration;
+void igCompressedAnimationSequenceQS::setDuration(unsigned long long duration)
+{
+    _animationDuration = duration;
 }
 
-int igCompressedAnimationSequenceQS_evaluateRotation(void **arg0, int arg1) {
-    int sp30[16];
-    int temp_s0;
-
-    temp_s0 = ((DW4VC_96_1 *)(arg0))->vX((int)(sp30)) & 0xFF;
-    igMatrix44f_GetQuaternion((float *)arg1, (float *)sp30);
-    return temp_s0;
+bool igCompressedAnimationSequenceQS::evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags)
+{
+    float matrix[16];
+    bool result = getMatrix(*(igMatrix44f *)matrix, time, cachedLastTimeFrame, flags);
+    igMatrix44f_GetQuaternion(quaternion, matrix);
+    return result;
 }
-
-igMetaObject *igCompressedAnimationSequenceQS_GetMeta(void) {
-    return g_igCompressedAnimationSequenceQS_metaObject;
+}
 }
 
 unsigned char igAnimationCombiner_GetHierarchyUpdated(igAnimationCombiner *self) {
@@ -264,22 +262,6 @@ int igAnimationCombiner_GetBlendMatrixArray(igAnimationCombiner *self) {
 
 int igAnimationCombiner_GetBlendMatrix(igAnimationCombiner *self, int arg1) {
     return self->_blendMatrixArray + (arg1 << 6);
-}
-
-int igActor_GetMeta(void) {
-    return ((int)g_igActor_metaObject);
-}
-
-int igActor_IsTransformable(void) {
-    return 0;
-}
-
-int igActorList_GetMeta(void) {
-    return ((int)g_igActorList_metaObject);
-}
-
-igMetaObject *igActorInfo_GetMeta(void) {
-    return g_igActorInfo_metaObject;
 }
 
 int FUN_001e35f0(igAnimationBindingList *self) {
@@ -332,11 +314,6 @@ int FUN_001e3ab0(igIntList *list, int *value) {
         return 0;
     }
     return ((int *)list->_data)[lo] < *value ? 1 + lo : lo;
-}
-
-/* Returns the metaobject slot of the element class igActor, not of the list. */
-int igActorList_GetElementMeta(void) {
-    return ((int)g_igActor_metaObject);
 }
 
 int igCompiledTransformList_GetElementMeta(void) {

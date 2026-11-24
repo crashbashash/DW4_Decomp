@@ -42,9 +42,6 @@ void igTrackedElementMetaField_EnsureRegistered(void);
 void igParticleAttr_EnsureRegistered(void);
 
 /* SceneGraph */
-void igActorList_EnsureRegistered(void);
-void igActor_EnsureRegistered(void);
-void igCompressedAnimationSequenceQS_EnsureRegistered(void);
 
 /* Libraries */
 void AdxMovieLibrary_RegisterClasses(void);

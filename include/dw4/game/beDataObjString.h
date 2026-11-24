@@ -7,7 +7,6 @@ struct beDataObjString;
 extern "C" {
 #endif
 
-struct beDataObjString *beDataObjString_Create(int allocator);
 
 #ifdef __cplusplus
 }

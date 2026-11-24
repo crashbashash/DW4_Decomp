@@ -4151,7 +4151,7 @@ igTransformSource	inline virtual bool getMatrix(igMatrix44f &matrix, long long t
 igTransformSource	virtual bool evaluateRotation(float *quaternion, long long time) = 0;
 igTransformSource	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags) = 0;
 igTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time) = 0;
-igTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) = 0;
+igTransformSource	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
 igTransformSource	inline virtual bool isTransformable() const { return false; }
 igTransformSource	inline virtual void transform(const igMatrix44f &matrix) { }
 igTransformSource	inline virtual long long getFirstFrameTime() { return 0; }
@@ -4172,7 +4172,6 @@ igTransformSequence	static igMetaField *k_centerOfRotation;
 igTransformSequence	public: virtual void setMatrix(int i, const igMatrix44f *matrix);
 igTransformSequence	virtual void getMatrix(int i, igMatrix44f *matrix) const;
 igTransformSequence	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
-igTransformSequence	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
 igTransformSequence	virtual void removeKeyFrame(int n) = 0;
 igTransformSequence	virtual void insertKeyFrame(int index) = 0;
 igTransformSequence	virtual void setKeyFrameCount(int n) = 0;
@@ -5570,3 +5569,132 @@ beModelCtrlPDMOVE	IG_OBJECT_DEFINE(beModelCtrlPDMOVE)
 beModelCtrlPDMOVE	private: static igMetaField *k_value;
 beModelCtrlPDMOVE	static igMetaField *k_frame;
 beModelCtrlWCHECK	IG_OBJECT_DEFINE(beModelCtrlWCHECK)
+igAnimationSequence	IG_ABSTRACT_OBJECT_DEFINE(igAnimationSequence)
+igCompressedAnimationSequenceQS	IG_OBJECT_DEFINE(igCompressedAnimationSequenceQS)
+igCompressedAnimationSequenceQS	protected: static igMetaField *k_compressedTranslationList;
+igCompressedAnimationSequenceQS	static igMetaField *k_compressedQuaternionList;
+igCompressedAnimationSequenceQS	static igMetaField *k_compressedTimeList;
+igCompressedAnimationSequenceQS	static igMetaField *k_translationBase;
+igCompressedAnimationSequenceQS	static igMetaField *k_translationRangeOverMaxUShort;
+igCompressedAnimationSequenceQS	static igMetaField *k_quaternionBase;
+igCompressedAnimationSequenceQS	static igMetaField *k_quaternionRangeOverMaxUShort;
+igCompressedAnimationSequenceQS	static igMetaField *k_animationDuration;
+igCompressedAnimationSequenceQS	static igMetaField *k_playMode;
+igCompressedAnimationSequenceQS	static igMetaField *k_lastTime;
+igCompressedAnimationSequenceQS	static igMetaField *k_channels;
+igCompressedAnimationSequenceQS	static igMetaField *k_interpolationMethod;
+igCompressedAnimationSequenceQS	public: inline void setCompressedTranslationList(igUnsignedShortList *compressedTranslationListParam) { _compressedTranslationList = compressedTranslationListParam; }
+igCompressedAnimationSequenceQS	inline const igUnsignedShortList *getCompressedTranslationList() const { return _compressedTranslationList; }
+igCompressedAnimationSequenceQS	inline void setCompressedQuaternionList(igUnsignedShortList *compressedQuaternionListParam) { _compressedQuaternionList = compressedQuaternionListParam; }
+igCompressedAnimationSequenceQS	inline const igUnsignedShortList *getCompressedQuaternionList() const { return _compressedQuaternionList; }
+igCompressedAnimationSequenceQS	inline void setCompressedTimeList(igUnsignedShortList *compressedTimeListParam) { _compressedTimeList = compressedTimeListParam; }
+igCompressedAnimationSequenceQS	inline const igUnsignedShortList *getCompressedTimeList() const { return _compressedTimeList; }
+igCompressedAnimationSequenceQS	inline void setPlayMode(int playModeParam) { _playMode = playModeParam; }
+igCompressedAnimationSequenceQS	inline int getPlayMode() const { return _playMode; }
+igCompressedAnimationSequenceQS	inline void setChannels(unsigned char channelsParam) { _channels = channelsParam; }
+igCompressedAnimationSequenceQS	inline unsigned char getChannels() const { return _channels; }
+igCompressedAnimationSequenceQS	virtual bool getMatrix(igMatrix44f &matrix, long long time);
+igCompressedAnimationSequenceQS	virtual bool getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags);
+igCompressedAnimationSequenceQS	virtual bool evaluateRotation(float *quaternion, long long time);
+igCompressedAnimationSequenceQS	virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
+igCompressedAnimationSequenceQS	virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time);
+igCompressedAnimationSequenceQS	virtual unsigned char getComponentChannels() const;
+igCompressedAnimationSequenceQS	virtual int getTimeCount() const;
+igCompressedAnimationSequenceQS	virtual const igVec3f *getTranslation(int i) const;
+igCompressedAnimationSequenceQS	virtual void removeTranslationChannel();
+igCompressedAnimationSequenceQS	virtual int getScaleCount() const;
+igCompressedAnimationSequenceQS	virtual const igVec3f *getScale(int i) const;
+igCompressedAnimationSequenceQS	virtual void removeScaleChannel();
+igCompressedAnimationSequenceQS	virtual long long getKeyframeTimeOffset();
+igCompressedAnimationSequenceQS	virtual long long getTimeAsLong(int index) const;
+igCompressedAnimationSequenceQS	virtual unsigned long long getDuration();
+igCompressedAnimationSequenceQS	virtual void configure(igTransformSequence1_5 *transSeq);
+igCompressedAnimationSequenceQS	virtual void setDuration(unsigned long long duration);
+igCompressedAnimationSequenceQS	virtual void getTranslation(int i, igVec3f &vec) const;
+igCompressedAnimationSequenceQS	virtual void constructInterpolatedTranslation(igVec3f &translation, int lowerBound, int upperBound, float ratio) const;
+igCompressedAnimationSequenceQS	virtual void constructInterpolatedQuaternion(igVec4f &interpolatedQuaternion, int lowerBound, int upperBound, float ratio) const;
+igActorInfo	IG_OBJECT_DEFINE(igActorInfo)
+igActorInfo	private: static igMetaField *k_actor;
+igActorInfo	static igMetaField *k_actorList;
+igActorInfo	static igMetaField *k_animationDatabase;
+igActorInfo	static igMetaField *k_combinerList;
+igActorInfo	static igMetaField *k_appearanceList;
+igActorInfo	public: inline void setActor(igActor *actorParam) { _actor = actorParam; }
+igActorInfo	inline const igActor *getActor() const { return _actor; }
+igActorInfo	inline void setActorList(igActorList *actorListParam) { _actorList = actorListParam; }
+igActorInfo	inline igActorList *getActorList() const { return _actorList; }
+igActorInfo	inline void setAnimationDatabase(igAnimationDatabase *animationDatabaseParam) { _animationDatabase = animationDatabaseParam; }
+igActorInfo	inline igAnimationDatabase *getAnimationDatabase() const { return _animationDatabase; }
+igActorInfo	inline void setCombinerList(igAnimationCombinerList *combinerListParam) { _combinerList = combinerListParam; }
+igActorInfo	inline igAnimationCombinerList *getCombinerList() const { return _combinerList; }
+igActorInfo	inline void setAppearanceList(igAppearanceList *appearanceListParam) { _appearanceList = appearanceListParam; }
+igActorInfo	inline igAppearanceList *getAppearanceList() const { return _appearanceList; }
+igActor	IG_OBJECT_DEFINE(igActor)
+igActor	protected: static igMetaField *k_animationSystem;
+igActor	static igMetaField *k_boneMatrixCacheArray;
+igActor	static igMetaField *k_blendMatrixCacheArray;
+igActor	static igMetaField *k_appearance;
+igActor	static igMetaField *k_animationDatabase;
+igActor	static igMetaField *k_modifierList;
+igActor	static igMetaField *k_transform;
+igActor	static igMetaField *k_forceActorCacheUse;
+igActor	static igMetaField *k_actorCacheUsed;
+igActor	static igMetaField *k_mvmWhenTraversed;
+igActor	static igMetaField *k_inverseViewWhenTraversed;
+igActor	static igMetaField *k_update;
+igActor	static igMetaField *k_render;
+igActor	public: inline void setAppearance(igAppearance *appearanceParam) { _appearance = appearanceParam; }
+igActor	inline void setAnimationDatabase(igAnimationDatabase *animationDatabaseParam) { _animationDatabase = animationDatabaseParam; }
+igActor	inline void setModifierList(igAnimationModifierList *modifierListParam) { _modifierList = modifierListParam; }
+igActor	inline igAnimationModifierList *getModifierList() const { return _modifierList; }
+igActor	inline void setForceActorCacheUse(bool forceActorCacheUseParam) { _forceActorCacheUse = forceActorCacheUseParam; }
+igActor	inline bool getForceActorCacheUse() const { return _forceActorCacheUse; }
+igActor	inline void setActorCacheUsed(bool actorCacheUsedParam) { _actorCacheUsed = actorCacheUsedParam; }
+igActor	inline bool getActorCacheUsed() const { return _actorCacheUsed; }
+igActor	inline void setUpdate(bool updateParam) { _update = updateParam; }
+igActor	inline bool getUpdate() const { return _update; }
+igActor	inline void setRender(bool renderParam) { _render = renderParam; }
+igActor	inline bool getRender() const { return _render; }
+igActor	inline igAppearance *getAppearance() { return _appearance; }
+igActor	inline bool configured() { return (_animationSystem != 0); }
+igActor	inline igAnimationSystem *getAnimationSystem() { return _animationSystem; }
+igActor	virtual int traverse(igCommonTraversal *trav);
+igActor	inline virtual bool isTransformable() const { return false; }
+igActorList	IG_OBJECT_DEFINE(igActorList)
+igViewManager	IG_OBJECT_DEFINE(igViewManager)
+igViewManager	public: static igMetaField *k_viewMode;
+igViewManager	static igMetaField *k_viewModel;
+igViewManager	static igMetaField *k_synchronizers;
+igViewManager	static igMetaField *k_homeMatrix;
+igViewManager	public: virtual void resetFields(int persistent);
+igViewManager	virtual bool keyEvent(Display::igKey::KEY_VALUES key, bool status);
+igViewManager	virtual bool mouseMotionEvent(float x, float y);
+igViewManager	virtual bool mouseButtonEvent(Display::igMouse::MOUSE_BUTTON button, bool status);
+igViewManager	virtual bool controllerMotionEvent(int controllerNum, unsigned short joystick, float x, float y);
+igViewManager	virtual bool controllerButtonEvent(int controllerNum, Display::igController::BUTTONS button, bool status);
+igViewManager	virtual bool windowResizeEvent(int width, int height);
+igViewManager	void setFrameTime(long long frameTime);
+igViewManager	void setSceneUpVector(const float *upVector);
+igViewManager	void applyOptions(igObject *scene);
+igViewManager	void printViewMatrix();
+igViewManager	void setViewMode(igViewMode *mode);
+igViewManager	void centerSelection(bool resetEye);
+igViewManager	void fitSelection();
+igViewManager	void frameObject(igNode *object);
+igViewManager	void synchronizeParameters(igViewerParameters *parameters);
+igViewerLoadingFileMessage	IG_OBJECT_DEFINE(igViewerLoadingFileMessage)
+igViewerLoadingFileMessage	public: static igMetaField *k_current;
+igViewerLoadingFileMessage	static igMetaField *k_filename;
+igViewerModeChangeMessage	IG_OBJECT_DEFINE(igViewerModeChangeMessage)
+igViewerModeChangeMessage	public: static igMetaField *k_state;
+igViewerModeChangeMessage	static igMetaField *k_mode;
+beDataObjBool	IG_OBJECT_DEFINE(beDataObjBool)
+beDataObjBool	private: static igMetaField *k_data;
+beDataObjInt	IG_OBJECT_DEFINE(beDataObjInt)
+beDataObjInt	private: static igMetaField *k_data;
+beDataObjString	IG_OBJECT_DEFINE(beDataObjString)
+beDataObjString	private: static igMetaField *k_data;
+beUnicodeObj	IG_OBJECT_DEFINE(beUnicodeObj)
+beUnicodeObj	virtual void userDestruct();
+beUnicodeObj	private: static igMetaField *k_buffer;
+beUnicodeObjList	IG_OBJECT_DEFINE(beUnicodeObjList)

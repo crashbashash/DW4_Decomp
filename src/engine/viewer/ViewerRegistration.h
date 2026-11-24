@@ -43,9 +43,7 @@ class igMemoryPoolView;
 #include "dw4/attrs/igGeometryAttrList.h"
 #include "dw4/gfx/igVisualContext.h"
 #include "dw4/maths/igRay.h"
-extern "C" void igViewerModeChangeMessage_EnsureRegistered(void);
 extern "C" void igViewerRenderer_EnsureRegistered(void);
-extern "C" void igViewManager_EnsureRegistered(void);
 #include "dw4/gui/igBasicColorChanger.h"
 #include "dw4/gui/igBitmapFont.h"
 #include "dw4/gui/igDefaultAspect.h"
@@ -115,23 +113,9 @@ extern "C" void igViewerSceneInfoManager_GetMetaObjectFunction(void);
 extern "C" void FUN_00459ee0(void);
 typedef struct { int *vt; int w[2]; char *s; } Obj_45a450;
 #include "dw4/core/StringPool.h"
-extern "C" int g_igViewerModeChangeMessage_vtable[4];
 #include "dw4/insight/igMessage.h"
-extern "C" igMetaObject *igViewerModeChangeMessage_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igViewerModeChangeMessage_GetMetaObject(void);
-extern "C" int igViewerModeChangeMessage_GetVTable(void);
-extern "C" CallbackArray *igViewerModeChangeMessage_Register(void);
-extern "C" void igViewerModeChangeMessage_GetMetaObjectFunction(void);
-extern "C" void igViewerModeChangeMessage_InitFields(void);
 struct Obj_45a680 { int *vt; char pad[8]; char *m; };
-extern "C" int g_igViewerLoadingFileMessage_vtable[4];
 extern "C" int DAT_0051eef0[4];
-extern "C" igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void);
-extern "C" int igViewerLoadingFileMessage_GetVTable(void);
-extern "C" void igViewerLoadingFileMessage_EnsureRegistered(void);
-extern "C" CallbackArray *igViewerLoadingFileMessage_Register(void);
-extern "C" void igViewerLoadingFileMessage_GetMetaObjectFunction(void);
-extern "C" void igViewerLoadingFileMessage_InitFields(void);
 struct Obj_45a8c0 { int *vt; char pad[28]; };
 union U_45aaf0 { int vt; int *pv; char b[96]; };
 #include "dw4/attrs/igLightingStateAttr.h"
@@ -196,15 +180,8 @@ struct V3 { int x; int y; int z; };
 union U_45ccd0 { int vt; int w[21]; char b[84]; };
 #include "dw4/scenegraph/igCamera.h"
 struct W { int *vt; int f[19]; };
-extern "C" igMetaObject *igViewManager_GetOrCreateMetaObject(void);
-extern "C" void *igViewManager_GetMetaObject(void);
-extern "C" int g_igViewManager_vtable[4];
 extern "C" int DAT_00542680[8];
 union U_45d1a0 { int vt; int w[21]; char b[84]; };
-extern "C" int igViewManager_GetVTable(void);
-extern "C" CallbackArray *igViewManager_Register(void);
-extern "C" void igViewManager_GetMetaObjectFunction(void);
-extern "C" void igViewManager_InitFields(void);
 struct Obj_45d8d0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" void** FUN_00136e10(void**, int);
 #include "dw4/attrs/igColorAttr.h"
@@ -246,7 +223,5 @@ extern "C" void igActorManager_GetMetaObjectFunction(void);
 #include "dw4/windowinput/igWindow.h"
 #include "dw4/viewer/ViewerInlineCopies.h"
 extern "C" void igActorManager_InitFields(void);
-extern "C" igMetaObject *igViewerLoadingFileMessage_GetMeta(void);
-extern "C" igMetaObject *igViewerModeChangeMessage_GetMeta(void);
 
 #endif

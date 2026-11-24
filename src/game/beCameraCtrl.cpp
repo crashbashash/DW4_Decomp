@@ -297,7 +297,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     mode->_isEnd = 0;
                     mode->_nowTimeL = 0;
                     mode->_svWorldTimeL = 0;
-                    igViewManager_SetViewMode((igViewManager *)((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager, (igViewMode *)mode);
+                    ((Gap::Viewer::igViewManager *)(((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager))->setViewMode((Gap::Viewer::igViewMode *)mode);
                 }
             }
         }
@@ -420,7 +420,7 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         mode->_isEnd = 0;
         mode->_nowTimeL = 0;
         mode->_svWorldTimeL = 0;
-        igViewManager_SetViewMode((igViewManager *)((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager, (igViewMode *)mode);
+        ((Gap::Viewer::igViewManager *)(((igViewerSceneInfoManager *)self->_viewerMang)->_viewManager))->setViewMode((Gap::Viewer::igViewMode *)mode);
         ram->_st0 = ram->_st0 + 1;
         ram->_st3 = 0;
         ram->_st2 = 0;

@@ -166,8 +166,8 @@ void igActor_SetAnimationSystem(igActor *self, igAnimationCombiner *combiner) {
         Memory_FreeBuffer((void *)self->_blendMatrixCacheArray);
         self->_blendMatrixCacheArray = 0;
     }
-    igMetaField_AllocateArray(&boneStatus, (igMemoryRefMetaField *)g_igActor_boneMatrixCacheArrayMetaField, self, boneCount, ((Gap::Core::igObject *)self)->getMemoryPool());
-    igMetaField_AllocateArray(&blendStatus, (igMemoryRefMetaField *)g_igActor_blendMatrixCacheArrayMetaField, self, blendCount, ((Gap::Core::igObject *)self)->getMemoryPool());
+    igMetaField_AllocateArray(&boneStatus, (igMemoryRefMetaField *)Gap::Sg::igActor::k_boneMatrixCacheArray, self, boneCount, ((Gap::Core::igObject *)self)->getMemoryPool());
+    igMetaField_AllocateArray(&blendStatus, (igMemoryRefMetaField *)Gap::Sg::igActor::k_blendMatrixCacheArray, self, blendCount, ((Gap::Core::igObject *)self)->getMemoryPool());
     boneMatrix = self->_boneMatrixCacheArray;
     i = 0;
     while (i < boneCount) {

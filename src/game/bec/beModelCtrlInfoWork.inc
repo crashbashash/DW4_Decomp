@@ -250,7 +250,7 @@ void beModelCtrlInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { beDataObjInt_EnsureRegistered, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, Gap::Bec::beModelCtrlInfoAI::arkRegister, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, Gap::Bec::beModelCtrlMoveObjectList::arkRegister, beModelCtrlInfoRideOn_EnsureRegistered, Gap::Sg::igGroup::arkRegister, Gap::Bec::beModelCtrlInfoHitBody::arkRegister, Gap::Bec::beModelCtrlSubCom::arkRegister, igAABox_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { Gap::Bec::beDataObjInt::arkRegister, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, Gap::Bec::beModelCtrlInfoAI::arkRegister, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, Gap::Bec::beModelCtrlMoveObjectList::arkRegister, beModelCtrlInfoRideOn_EnsureRegistered, Gap::Sg::igGroup::arkRegister, Gap::Bec::beModelCtrlInfoHitBody::arkRegister, Gap::Bec::beModelCtrlSubCom::arkRegister, igAABox_EnsureRegistered, 0 };
 
 CallbackArray *beModelCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -507,10 +507,10 @@ void beModelCtrlInfoWork_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoWork_ctorTable, 0x32);
     mHp = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)mHp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)mHp)->_metaObject = (int)Gap::Bec::beDataObjInt::getClassTypeLazy();
     ((igRefMetaField *)mHp)->_construct = 1;
     hp = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)hp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hp)->_metaObject = (int)Gap::Bec::beDataObjInt::getClassTypeLazy();
     ((igRefMetaField *)hp)->_construct = 1;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
     comData = (void *)(igMetaObject_GetFieldAt(meta, base + 4));

@@ -173,9 +173,11 @@ void igAnimationCombiner_SetHierarchyUpdated(igAnimationCombiner *self, char arg
 namespace Gap {
 namespace Sg {
 
-bool igTransformSequence::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) {
+/* One retail copy (0x1ad310) fills slot 28 of both igTransformSequence's and igCompressedAnimationSequenceQS's
+ * vtables: the base's own definition, which neither overrides. */
+bool igTransformSource::evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) {
     float matrix[16];
-    bool result = ((igTransformSource *)this)->getMatrix(*(igMatrix44f *)matrix, time, cachedLastTimeFrame, flags);
+    bool result = getMatrix(*(igMatrix44f *)matrix, time, cachedLastTimeFrame, flags);
     igMatrix44f_GetQuaternion(quaternion, matrix);
     igMatrix44f_GetTranslation(matrix, translation);
     return result;

@@ -1,4 +1,8 @@
-int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
+namespace Gap {
+namespace Sg {
+
+int igActor::traverse(igCommonTraversal *trav) {
+    ActorTraversal *t0 = (ActorTraversal *)trav;
     ActorAnimationHolder *holder;
     int r;
     ActorCountedList *nodes;
@@ -8,7 +12,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
     ActorTraversal *t;
     int status;
     char *rootBone;
-    o = (ActorView *)(int)o0;
+    o = (ActorView *)(int)(ActorView *)this;
     t = (ActorTraversal *)(int)t0;
     if (o->_animate) {
         ActorAttrState *st = t->_state;
@@ -21,7 +25,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
         }
         {
             world = o->_world;
-            rootBone = (char *)o + g_igActor_transformMetaField->_offset;
+            rootBone = (char *)o + k_transform->_offset;
             igMatrix44f_Multiply(bonesOf(o), (const float *)rootBone, (const float *)world);
         }
         status = o->_animationState->update(t, o);
@@ -46,10 +50,12 @@ skip:
         } else {
             r = 0;
         }
-        FUN_001b89b0((void *)o, (igCommonTraversal *)t);
+        FUN_001b89b0((void *)o, (::igCommonTraversal *)t);
         return r;
     }
     return 0;
+}
+}
 }
 
 void FUN_001b89b0(void *arg0, igCommonTraversal *arg1) {

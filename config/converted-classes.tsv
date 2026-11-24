@@ -468,3 +468,16 @@ beModelCtrlMSGBOX	Bec
 beModelCtrlMUTEKI	Bec
 beModelCtrlPDMOVE	Bec
 beModelCtrlWCHECK	Bec
+igAnimationSequence	Sg
+igCompressedAnimationSequenceQS	Sg
+igActorInfo	Sg
+igActor	Sg
+igActorList	Sg	igTObjectList<igActor>
+igViewManager	Viewer
+igViewerLoadingFileMessage	Viewer
+igViewerModeChangeMessage	Viewer
+beDataObjBool	Bec
+beDataObjInt	Bec
+beDataObjString	Bec
+beUnicodeObj	Bec
+beUnicodeObjList	Bec	igTObjectList<beUnicodeObj>

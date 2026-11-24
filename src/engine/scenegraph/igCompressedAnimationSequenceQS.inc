@@ -1,189 +1,103 @@
-igMetaObject *g_igCompressedAnimationSequenceQS_metaObject;
-igMetaField *g_igCompressedAnimationSequenceQS_compressedTranslationListMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_compressedQuaternionListMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_compressedTimeListMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_translationBaseMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_translationRangeOverMaxUShortMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_quaternionBaseMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_quaternionRangeOverMaxUShortMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_animationDurationMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_playModeMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_lastTimeMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_channelsMetaField;
-igMetaField *g_igCompressedAnimationSequenceQS_interpolationMethodMetaField;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igCompressedAnimationSequenceQS_GetMetaObject(void)
+igMetaObject *igCompressedAnimationSequenceQS::_Meta;
+igMetaField *igCompressedAnimationSequenceQS::k_compressedTranslationList;
+igMetaField *igCompressedAnimationSequenceQS::k_compressedQuaternionList;
+igMetaField *igCompressedAnimationSequenceQS::k_compressedTimeList;
+igMetaField *igCompressedAnimationSequenceQS::k_translationBase;
+igMetaField *igCompressedAnimationSequenceQS::k_translationRangeOverMaxUShort;
+igMetaField *igCompressedAnimationSequenceQS::k_quaternionBase;
+igMetaField *igCompressedAnimationSequenceQS::k_quaternionRangeOverMaxUShort;
+igMetaField *igCompressedAnimationSequenceQS::k_animationDuration;
+igMetaField *igCompressedAnimationSequenceQS::k_playMode;
+igMetaField *igCompressedAnimationSequenceQS::k_lastTime;
+igMetaField *igCompressedAnimationSequenceQS::k_channels;
+igMetaField *igCompressedAnimationSequenceQS::k_interpolationMethod;
+
+igMetaObject *igCompressedAnimationSequenceQS::getClassTypeSafe()
 {
-    unsigned char ready;
-    if (g_igCompressedAnimationSequenceQS_metaObject != 0) {
-        ready = (g_igCompressedAnimationSequenceQS_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igCompressedAnimationSequenceQS_EnsureRegistered();
-done:
-    return g_igCompressedAnimationSequenceQS_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igCompressedAnimationSequenceQS_GetVTable(void) {
-    union U_1a2810 u;
-    int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-    S_ref *q2;
-
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igCompressedAnimationSequenceQS_vtable[0];
-    q2 = (S_ref *)&u.b[8];
-    *(int *)q2 = 0;
-    q1 = (S_ref *)&u.b[12];
-    *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[16];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igCompressedAnimationSequenceQS_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    if (q2 != 0) {
-        q2 = *(S_ref **)q2;
-        if (q2 != 0) {
-            q2->f4 = (int)((int) (q2->f4 - 1));
-            if (((unsigned long long) ((long long) q2->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q2);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igCompressedAnimationSequenceQS_EnsureRegistered(void)
+void *igCompressedAnimationSequenceQS::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igCompressedAnimationSequenceQS_Register);
+    igCompressedAnimationSequenceQS temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igCompressedAnimationSequenceQS_callbackList[] = { Gap::Core::igUnsignedShortList::arkRegister, 0 };
+void igCompressedAnimationSequenceQS::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igCompressedAnimationSequenceQS_Register(void) {
+CallbackArray *igCompressedAnimationSequenceQS::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igUnsignedShortList::arkRegister, 0 };
+
     SceneGraphLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igCompressedAnimationSequenceQS_metaObject,
-        igAnimationSequence_Register,
-        igAnimationSequence_GetPublishedMetaObject,
-        igCompressedAnimationSequenceQS_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Sg::igAnimationSequence::arkRegisterInternal,
+        Gap::Sg::igAnimationSequence::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igCompressedAnimationSequenceQS",
-        0x40, /* instance size */
-        igCompressedAnimationSequenceQS_GetVTable,
-        &igCompressedAnimationSequenceQS_InitFields,
-        0, /* extra callback item */
-        g_igCompressedAnimationSequenceQS_callbackList /* callback list */
+        sizeof(igCompressedAnimationSequenceQS),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igCompressedAnimationSequenceQS_GetMetaObjectFunction(void) {
-    igCompressedAnimationSequenceQS_GetMetaObject();
+void igCompressedAnimationSequenceQS::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igUnsignedLongMetaField::_instantiateFromPool, igEnumMetaField_Create, (FieldFactory)Gap::Core::igIntMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igUnsignedCharMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igUnsignedCharArrayMetaField::_instantiateFromPool };
+    static const char *names[] = { "_compressedTranslationList", "_compressedQuaternionList", "_compressedTimeList", "_translationBase", "_translationRangeOverMaxUShort", "_quaternionBase", "_quaternionRangeOverMaxUShort", "_animationDuration", "_playMode", "_lastTime", "_channels", "_interpolationMethod" };
+    static igMetaField **enumStorage[] = { &k_compressedTranslationList, &k_compressedQuaternionList, &k_compressedTimeList, &k_translationBase, &k_translationRangeOverMaxUShort, &k_quaternionBase, &k_quaternionRangeOverMaxUShort, &k_animationDuration, &k_playMode, &k_lastTime, &k_channels, &k_interpolationMethod };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 57 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 12);
+    {
+    igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+    metaField->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
+    }
+    {
+    igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+    metaField->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
+    }
+    {
+    igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+    metaField->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
+    }
+    {
+    igUnsignedLongMetaField *metaField = (igUnsignedLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+    metaField->setDefault(0xFFFFFFFFFFFFFFFFULL);
+    }
+    {
+    igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
+    metaField->setDefault(0);
+    *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    }
+    {
+    igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+    metaField->setDefault(1);
+    metaField->_persistent = 0;
+    }
+    {
+    igUnsignedCharMetaField *metaField = (igUnsignedCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);
+    metaField->setDefault(0);
+    }
+    {
+    igUnsignedCharArrayMetaField *metaField = (igUnsignedCharArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
+    metaField->_num = 3;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igCompressedAnimationSequenceQS_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igUnsignedLongMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igUnsignedCharMetaField_Create,
-    (FieldFactory)igUnsignedCharArrayMetaField_Create,
-};
-static const char *g_igCompressedAnimationSequenceQS_fieldTable[] = {
-    "_compressedTranslationList",
-    "_compressedQuaternionList",
-    "_compressedTimeList",
-    "_translationBase",
-    "_translationRangeOverMaxUShort",
-    "_quaternionBase",
-    "_quaternionRangeOverMaxUShort",
-    "_animationDuration",
-    "_playMode",
-    "_lastTime",
-    "_channels",
-    "_interpolationMethod",
-};
-static igMetaField **g_igCompressedAnimationSequenceQS_fieldHandles[] = {
-    &g_igCompressedAnimationSequenceQS_compressedTranslationListMetaField,
-    &g_igCompressedAnimationSequenceQS_compressedQuaternionListMetaField,
-    &g_igCompressedAnimationSequenceQS_compressedTimeListMetaField,
-    &g_igCompressedAnimationSequenceQS_translationBaseMetaField,
-    &g_igCompressedAnimationSequenceQS_translationRangeOverMaxUShortMetaField,
-    &g_igCompressedAnimationSequenceQS_quaternionBaseMetaField,
-    &g_igCompressedAnimationSequenceQS_quaternionRangeOverMaxUShortMetaField,
-    &g_igCompressedAnimationSequenceQS_animationDurationMetaField,
-    &g_igCompressedAnimationSequenceQS_playModeMetaField,
-    &g_igCompressedAnimationSequenceQS_lastTimeMetaField,
-    &g_igCompressedAnimationSequenceQS_channelsMetaField,
-    &g_igCompressedAnimationSequenceQS_interpolationMethodMetaField,
-};
-static int g_igCompressedAnimationSequenceQS_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    40,
-    48,
-    52,
-    56,
-    57,
-};
-
-void igCompressedAnimationSequenceQS_InitFields(void) {
-    int temp_s0;
-    igMetaObject *temp_s1;
-    struct Fld_1a29e0 *temp_s2;
-    struct Fld_1a29e0 *temp_s2_2;
-    struct Fld_1a29e0 *temp_s2_3;
-    struct Fld_1a29e0 *temp_s2_4;
-    struct Fld_1a29e0 *temp_v0;
-    struct Fld_1a29e0 *temp_v0_2;
-
-    temp_s1 = g_igCompressedAnimationSequenceQS_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igCompressedAnimationSequenceQS_ctorTable, 0xC);
-    temp_s2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    temp_s2->f56 = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
-    temp_s2_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    temp_s2_2->f56 = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
-    temp_s2_3 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    temp_s2_3->f56 = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
-    ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)))->setDefault(0xFFFFFFFFFFFFFFFFULL);
-    temp_v0 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);
-    temp_v0->f52 = (int)&igMetaEnum_GetEmpty;
-    temp_v0_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    ((Gap::Core::igIntMetaField *)temp_v0_2)->setDefault(1);
-    temp_v0_2->f38 = 0;
-    ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA)))->setDefault(0);
-    temp_s2_4 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
-    temp_s2_4->f52 = 3;
-    igMetaObject_NameFields(temp_s1, g_igCompressedAnimationSequenceQS_fieldTable, g_igCompressedAnimationSequenceQS_fieldHandles, g_igCompressedAnimationSequenceQS_fieldOffsets, temp_s0);
+}
 }

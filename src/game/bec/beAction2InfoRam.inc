@@ -47,7 +47,7 @@ void beAction2InfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beAction2InfoRam_Register);
 }
 
-static igMetaObjectCallback g_beAction2InfoRam_callbackList[] = { beModelCtrlNode2_EnsureRegistered, Gap::Sg::igAppearanceList::arkRegister, igActorList_EnsureRegistered, Gap::Bec::beAction2InfoWork::arkRegister, 0 };
+static igMetaObjectCallback g_beAction2InfoRam_callbackList[] = { beModelCtrlNode2_EnsureRegistered, Gap::Sg::igAppearanceList::arkRegister, Gap::Sg::igActorList::arkRegister, Gap::Bec::beAction2InfoWork::arkRegister, 0 };
 
 CallbackArray *beAction2InfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -113,7 +113,7 @@ void beAction2InfoRam_InitFields(void) {
     ((igObjectRefMetaField *)appearanceList)->_metaObject = (int)Gap::Sg::igAppearanceList::getClassTypeLazy();
     ((igRefMetaField *)appearanceList)->_construct = 1;
     actorList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
-    ((igObjectRefMetaField *)actorList)->_metaObject = (int)igActorList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)actorList)->_metaObject = (int)Gap::Sg::igActorList::getClassTypeLazy();
     ((igRefMetaField *)actorList)->_construct = 1;
     work = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)work)->_metaObject = (int)Gap::Bec::beAction2InfoWork::getClassTypeLazy();

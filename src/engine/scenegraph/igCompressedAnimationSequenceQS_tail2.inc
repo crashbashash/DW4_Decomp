@@ -1,4 +1,10 @@
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QSSourceSequence *arg1) {
+namespace Gap {
+namespace Sg {
+
+void igCompressedAnimationSequenceQS::configure(igTransformSequence1_5 *transSeq)
+{
+    QSSequenceView *arg0 = (QSSequenceView *)this;
+    QSSourceSequence *arg1 = (QSSourceSequence *)transSeq;
     float sp7C;
     float sp78;
     int n = arg1->v156();
@@ -24,7 +30,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
             old = arg0->_compressedTranslationList;
             if (old != 0) {
                 old->_refCount = old->_refCount - 1;
-                if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)old);
+                if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((::igObject *)old);
             }
             arg0->_compressedTranslationList = (QSDataList *)igUnsignedShortList_Create(al);
         }
@@ -47,7 +53,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
             old = arg0->_compressedQuaternionList;
             if (old != 0) {
                 old->_refCount = old->_refCount - 1;
-                if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)old);
+                if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((::igObject *)old);
             }
             arg0->_compressedQuaternionList = (QSDataList *)igUnsignedShortList_Create(al);
         }
@@ -69,7 +75,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
         old = arg0->_compressedTimeList;
         if (old != 0) {
             old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)old);
+            if (((unsigned long long)((long long)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((::igObject *)old);
         }
         arg0->_compressedTimeList = (QSDataList *)igUnsignedShortList_Create(al);
     }
@@ -82,5 +88,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
     int c = l->_count;
     if (c < l->_capacity) { ((Gap::Core::igDataList *)l)->setCapacity(c, 2); }
     for (s0 = 0; s0 < n; s0++) FUN_001bf400((int)arg0, s0, arg1->v224(s0));
+}
+}
 }
 

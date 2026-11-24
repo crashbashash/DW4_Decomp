@@ -55,7 +55,7 @@ void beMeterCtrlOneData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMeterCtrlOneData_Register);
 }
 
-static igMetaObjectCallback g_beMeterCtrlOneData_callbackList[] = { beMeterCtrlNode_EnsureRegistered, beDataObjInt_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMeterCtrlOneData_callbackList[] = { beMeterCtrlNode_EnsureRegistered, Gap::Bec::beDataObjInt::arkRegister, 0 };
 
 CallbackArray *beMeterCtrlOneData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -159,9 +159,9 @@ void beMeterCtrlOneData_InitFields(void) {
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0.0f);
     hp = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igObjectRefMetaField *)hp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hp)->_metaObject = (int)Gap::Bec::beDataObjInt::getClassTypeLazy();
     mHp = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
-    ((igObjectRefMetaField *)mHp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)mHp)->_metaObject = (int)Gap::Bec::beDataObjInt::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beMeterCtrlOneData_fieldTable, g_beMeterCtrlOneData_fieldHandles, g_beMeterCtrlOneData_fieldOffsets, base);
 }
 

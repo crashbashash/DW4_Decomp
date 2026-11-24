@@ -1,55 +1,52 @@
-igMetaObject *g_beUnicodeObjList_metaObject;
+namespace Gap {
+namespace Bec {
 
-igMetaObject *beUnicodeObjList_GetOrCreateMetaObject(void) {
-    if (g_beUnicodeObjList_metaObject == 0) {
-        g_beUnicodeObjList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_beUnicodeObjList_metaObject;
-}
+igMetaObject *beUnicodeObjList::_Meta;
 
-igMetaObject *beUnicodeObjList_GetMetaObject(void)
+igMetaObject *beUnicodeObjList::getClassTypeLazy()
 {
-    igMetaObject *g = g_beUnicodeObjList_metaObject;
-    bool t;
-    if (!g || (t = g->_validity & 4) == 0)
-        beUnicodeObjList_EnsureRegistered();
-    return g_beUnicodeObjList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int beUnicodeObjList_GetVTable(void) {
-    beUnicodeObjList obj;
-
-    igObject_InitHeader(&obj);
-    obj._vtable = (int)&g_beUnicodeObjList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void beUnicodeObjList_EnsureRegistered(void)
+igMetaObject *beUnicodeObjList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(beUnicodeObjList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_beUnicodeObjList_callbackList[] = { beUnicodeObj_EnsureRegistered, 0 };
+void *beUnicodeObjList::retrieveVTablePointer()
+{
+    beUnicodeObjList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *beUnicodeObjList_Register(void) {
+void beUnicodeObjList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beUnicodeObjList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Bec::beUnicodeObj::arkRegister, 0 };
+
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beUnicodeObjList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        beUnicodeObjList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beUnicodeObjList",
-        0x14, /* instance size */
-        beUnicodeObjList_GetVTable,
+        sizeof(beUnicodeObjList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_beUnicodeObjList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void beUnicodeObjList_GetMetaObjectFunction(void)
-{
-    beUnicodeObjList_GetMetaObject();
+}
 }
 

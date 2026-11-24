@@ -76,9 +76,10 @@ igMetaObject *igTransform_GetPublishedMetaObject(void) {
     return Gap::Sg::igTransform::getClassMeta();
 }
 
-igMetaObject *g_igAnimationSequence_metaObject;
+namespace Gap {
+namespace Sg {
 
-igMetaObject *igAnimationSequence_GetPublishedMetaObject(void) {
-    return g_igAnimationSequence_metaObject;
+igMetaObject *igAnimationSequence::_Meta;
+}
 }
 

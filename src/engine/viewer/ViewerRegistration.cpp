@@ -26,5 +26,4 @@
 #include "src/engine/viewer/igBoundingBoxRenderer.inc"
 #include "src/engine/viewer/igActorManager.inc"
 #include "src/engine/viewer/igActorManagerParams.inc"
-#include "src/engine/viewer/InlineTail.inc"
 #pragma pop

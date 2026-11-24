@@ -300,7 +300,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igModelViewMatrixBoneSelectList::arkRegister();
     Gap::Sg::igAnimationBinding::arkRegister();
     Gap::Sg::igAnimationTrack::arkRegister();
-    igActor_EnsureRegistered();
+    Gap::Sg::igActor::arkRegister();
     Gap::Sg::igAppearance::arkRegister();
     Gap::Sg::igAnimationDatabase::arkRegister();
     Gap::Sg::igAnimationList::arkRegister();
@@ -315,7 +315,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igEnbayaAnimationSource::arkRegister();
     Gap::Sg::igEnbayaAnimationState::arkRegister();
     Gap::Sg::igBlendMatrixSelect::arkRegister();
-    igActorList_EnsureRegistered();
+    Gap::Sg::igActorList::arkRegister();
     Gap::Attrs::igProjectionMatrixAttr::arkRegister();
     Gap::Attrs::igModelViewMatrixAttr::arkRegister();
     Gap::Attrs::igFogStateAttr::arkRegister();
@@ -352,7 +352,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Sg::igGeometryList::arkRegister();
     Gap::Sg::igCamera::arkRegister();
     Gap::Core::igUnsignedShortList::arkRegister();
-    igCompressedAnimationSequenceQS_EnsureRegistered();
+    Gap::Sg::igCompressedAnimationSequenceQS::arkRegister();
     Gap::Sg::igModelViewMatrixBoneSelect::arkRegister();
     igFloatListList_EnsureRegistered();
     Gap::Sg::igTransformRecorder::arkRegister();
@@ -564,7 +564,7 @@ static inline void setFolderName(igFolder *folder, const char *name) {
 Blk::Blk()
     : viewer(igInsightCore_CreateWindow(0)), reservedA(0, kRetainReference), reservedB(0, kRetainReference), repeatCounts(0, kRetainReference),
       modelNames(0, kRetainReference), isFinished(false), fileNames(0, kRetainReference), folder((igFolder *)Gap::Core::igFolder::_instantiateFromPool(0), AdoptReference()),
-      loadingMessage(igViewerLoadingFileMessage_Create(0), AdoptReference()) {
+      loadingMessage((igViewerLoadingFileMessage *)Gap::Viewer::igViewerLoadingFileMessage::_instantiateFromPool(0), AdoptReference()) {
     setFolderName(folder, "cdrom0:");
     GameMain_ListIgbFiles(this);
 }

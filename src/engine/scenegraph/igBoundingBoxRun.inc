@@ -102,12 +102,12 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
             (igSmartPointer<igAABox> &)node->_bound = shadowBox;
         }
         ok = 0;
-    } else if (((Gap::Core::igObject *)node)->isOfType(g_igActor_metaObject) != 0) {
+    } else if (((Gap::Core::igObject *)node)->isOfType(Gap::Sg::igActor::getClassMeta()) != 0) {
         igActor *actor = (igActor *)node;
         igSkin *skin = (igSkin *)((igAppearance *)actor->_appearance)->_skin;
         igNode_ComputeBound(box.get(), uncachedBound, skin->_skinnedGraph, nodeHandle, applySequences, 0, time);
         if (box->_min[0] <= box->_max[0]) {
-            float *transformMatrix = (float *)((char *)actor + g_igActor_transformMetaField->_offset);
+            float *transformMatrix = (float *)((char *)actor + Gap::Sg::igActor::k_transform->_offset);
             float w = transformMatrix[15];
             bool unitW = w >= 0.9999995f && w <= 1.0000005f;
             if (unitW) {

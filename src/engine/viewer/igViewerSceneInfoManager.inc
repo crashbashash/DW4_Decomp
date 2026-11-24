@@ -421,7 +421,7 @@ void igViewerSceneInfoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerSceneInfoManager_Register);
 }
 
-static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { Gap::Viewer::igViewerSceneInfoManagerController::arkRegister, Gap::Viewer::igViewerParameters::arkRegister, igViewerRenderer_EnsureRegistered, Gap::Viewer::igBoundingBoxRenderer::arkRegister, Gap::Viewer::igNormalsRenderer::arkRegister, Gap::Insight::igFlushRenderer::arkRegister, Gap::Gui::igGuiSystem::arkRegister, Gap::Viewer::igViewerGuiFactory::arkRegister, Gap::Gui::igBoxComponent::arkRegister, Gap::Gui::igGuiComponent::arkRegister, Gap::Viewer::igStatisticsItem::arkRegister, Gap::Gui::igHotKeyEventReceiver::arkRegister, igViewManager_EnsureRegistered, Gap::Viewer::igViewerStatisticsManager::arkRegister, igGuiComponentList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, Gap::Gui::igRadioGroup::arkRegister, Gap::Attrs::igTextureList::arkRegister, igViewerModeChangeMessage_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { Gap::Viewer::igViewerSceneInfoManagerController::arkRegister, Gap::Viewer::igViewerParameters::arkRegister, igViewerRenderer_EnsureRegistered, Gap::Viewer::igBoundingBoxRenderer::arkRegister, Gap::Viewer::igNormalsRenderer::arkRegister, Gap::Insight::igFlushRenderer::arkRegister, Gap::Gui::igGuiSystem::arkRegister, Gap::Viewer::igViewerGuiFactory::arkRegister, Gap::Gui::igBoxComponent::arkRegister, Gap::Gui::igGuiComponent::arkRegister, Gap::Viewer::igStatisticsItem::arkRegister, Gap::Gui::igHotKeyEventReceiver::arkRegister, Gap::Viewer::igViewManager::arkRegister, Gap::Viewer::igViewerStatisticsManager::arkRegister, igGuiComponentList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, Gap::Gui::igRadioGroup::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Viewer::igViewerModeChangeMessage::arkRegister, 0 };
 
 CallbackArray *igViewerSceneInfoManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
@@ -753,7 +753,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_29) + 56) = (int)Gap::Gui::igHotKeyEventReceiver::getClassTypeLazy();
     *(char *)((char *)(temp_s0_29) + 52) = 1;
     temp_s0_30 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1E));
-    *(int *)((char *)(temp_s0_30) + 56) = (int)igViewManager_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_30) + 56) = (int)Gap::Viewer::igViewManager::getClassTypeLazy();
     *(char *)((char *)(temp_s0_30) + 52) = 1;
     temp_s0_31 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1F));
     *(int *)((char *)(temp_s0_31) + 56) = (int)Gap::Viewer::igViewerStatisticsManager::getClassTypeLazy();
@@ -777,7 +777,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_36) + 56) = (int)Gap::Attrs::igTextureList::getClassTypeLazy();
     *(char *)((char *)(temp_s0_36) + 52) = 1;
     temp_s0_37 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x28));
-    *(int *)((char *)(temp_s0_37) + 56) = (int)igViewerModeChangeMessage_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_37) + 56) = (int)Gap::Viewer::igViewerModeChangeMessage::getClassTypeLazy();
     *(char *)((char *)(temp_s0_37) + 52) = 1;
     temp_s0_38 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x2A));
     *(int *)((char *)(temp_s0_38) + 56) = (int)Gap::Gui::igGuiComponent::getClassTypeLazy();

@@ -736,7 +736,7 @@ void igCommonTraversal::_registerClass(igTraversalFunctionList *tpl, igMetaObjec
     if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)(((int)Gap::Sg::igNode::getClassTypeSafe()))) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
-        t.e[0].meta = (int)g_igActor_metaObject;
+        t.e[0].meta = (int)Gap::Sg::igActor::getClassMeta();
         t.e[1].meta = (int)Gap::Sg::igProjectiveShadowShader::getClassMeta();
         t.e[2].meta = g_igSelfShadowShader_metaObject;
         t.e[3].meta = g_igDOFShader_metaObject[0];

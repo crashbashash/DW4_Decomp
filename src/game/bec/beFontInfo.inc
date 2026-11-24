@@ -42,7 +42,7 @@ void beFontInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFontInfo_Register);
 }
 
-static igMetaObjectCallback g_beFontInfo_callbackList[] = { beUnicodeObjList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFontInfo_callbackList[] = { Gap::Bec::beUnicodeObjList::arkRegister, 0 };
 
 CallbackArray *beFontInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -88,7 +88,7 @@ void beFontInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFontInfo_ctorTable, 1);
     unicodeList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)unicodeList)->_metaObject = (int)beUnicodeObjList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)unicodeList)->_metaObject = (int)Gap::Bec::beUnicodeObjList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beFontInfo_fieldTable, g_beFontInfo_fieldHandles, g_beFontInfo_fieldOffsets, base);
 }
 

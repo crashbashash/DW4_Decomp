@@ -7,7 +7,6 @@ struct igViewerLoadingFileMessage;
 extern "C" {
 #endif
 
-struct igViewerLoadingFileMessage *igViewerLoadingFileMessage_Create(int allocator);
 
 #ifdef __cplusplus
 }

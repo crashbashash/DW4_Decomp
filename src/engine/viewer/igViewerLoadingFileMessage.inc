@@ -1,96 +1,68 @@
-igMetaObject *g_igViewerLoadingFileMessage_metaObject;
-igMetaField *g_igViewerLoadingFileMessage_currentMetaField;
-igMetaField *g_igViewerLoadingFileMessage_filenameMetaField;
+namespace Gap {
+namespace Viewer {
 
-igViewerLoadingFileMessage *igViewerLoadingFileMessage_Create(int allocator) {
-    igViewerLoadingFileMessage_EnsureRegistered();
-    return (igViewerLoadingFileMessage *)igMetaObject_CreateInstance(g_igViewerLoadingFileMessage_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igViewerLoadingFileMessage::_Meta;
+igMetaField *igViewerLoadingFileMessage::k_current;
+igMetaField *igViewerLoadingFileMessage::k_filename;
 
-igMetaObject *igViewerLoadingFileMessage_GetMetaObject(void) {
-    igMetaObject *g = g_igViewerLoadingFileMessage_metaObject;
-    int t;
-    if (!g || !(t = (g->_validity & 4) != 0))
-        igViewerLoadingFileMessage_EnsureRegistered();
-    return g_igViewerLoadingFileMessage_metaObject;
-}
-
-int igViewerLoadingFileMessage_GetVTable(void) {
-    struct Obj_45a680 obj;
-    char *o;
-    int *a1;
-    int v0;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igViewerLoadingFileMessage_vtable[0];
-    obj.m = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igViewerLoadingFileMessage_vtable[0];
-    if (&obj.m != 0) {
-        o = obj.m;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-            }
-        }
-    }
-    return t;
-}
-
-void igViewerLoadingFileMessage_EnsureRegistered(void)
+igViewerLoadingFileMessage *igViewerLoadingFileMessage::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(igViewerLoadingFileMessage_Register);
+    arkRegister();
+    return (igViewerLoadingFileMessage *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *igViewerLoadingFileMessage_Register(void) {
+igMetaObject *igViewerLoadingFileMessage::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igViewerLoadingFileMessage::retrieveVTablePointer()
+{
+    igViewerLoadingFileMessage temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igViewerLoadingFileMessage::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewerLoadingFileMessage::arkRegisterInternal()
+{
     ViewerLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewerLoadingFileMessage_metaObject,
+        false,
+        &_Meta,
         Gap::Insight::igMessage::arkRegisterInternal,
         Gap::Insight::igMessage::getClassMeta,
-        igViewerLoadingFileMessage_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewerLoadingFileMessage",
-        0x10, /* instance size */
-        igViewerLoadingFileMessage_GetVTable,
-        &igViewerLoadingFileMessage_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igViewerLoadingFileMessage),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igViewerLoadingFileMessage_GetMetaObjectFunction(void) {
-    igViewerLoadingFileMessage_GetMetaObject();
+void igViewerLoadingFileMessage::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_current", "_filename" };
+    static igMetaField **enumStorage[] = { &k_current, &k_filename };
+    static int offsets[] = { 8, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault("");
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewerLoadingFileMessage_ctorTable[] = {
-    igBoolMetaField_Create,
-    igStringMetaField_Create,
-};
-static const char *g_igViewerLoadingFileMessage_fieldTable[] = {
-    "_current",
-    "_filename",
-};
-static igMetaField **g_igViewerLoadingFileMessage_fieldHandles[] = {
-    &g_igViewerLoadingFileMessage_currentMetaField,
-    &g_igViewerLoadingFileMessage_filenameMetaField,
-};
-static int g_igViewerLoadingFileMessage_fieldOffsets[] = {
-    8,
-    12,
-};
-
-void igViewerLoadingFileMessage_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
-
-    temp_s0 = g_igViewerLoadingFileMessage_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerLoadingFileMessage_ctorTable, 2);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)))->setDefault("");
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerLoadingFileMessage_fieldTable, g_igViewerLoadingFileMessage_fieldHandles, g_igViewerLoadingFileMessage_fieldOffsets, temp_s1);
+}
 }
 

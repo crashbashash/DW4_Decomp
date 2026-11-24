@@ -1,87 +1,67 @@
-igMetaObject *g_beDataObjString_metaObject;
-igMetaField *g_beDataObjString_dataMetaField;
+namespace Gap {
+namespace Bec {
 
-beDataObjString *beDataObjString_Create(int allocator) {
-    beDataObjString_EnsureRegistered();
-    return (beDataObjString *)igMetaObject_CreateInstance(g_beDataObjString_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beDataObjString::_Meta;
+igMetaField *beDataObjString::k_data;
 
-void *beDataObjString_GetMetaObject(void) {
-    igMetaObject *g = g_beDataObjString_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false) {
-        beDataObjString_EnsureRegistered();
-    }
-    return g_beDataObjString_metaObject;
-}
-
-int beDataObjString_GetVTable(void) {
-    beDataObjString obj;
-    int vtable;
-    char **dataSlot;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)(&g_beDataObjString_vtable[0]);
-    dataSlot = (char **)&obj._data;
-    *dataSlot = 0;
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)(&g_beDataObjString_vtable[0]);
-    igStringRef_Release(dataSlot);
-    obj._vtable = (int)(&g_igNamedObject_vtable[0]);
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beDataObjString_EnsureRegistered(void)
+beDataObjString *beDataObjString::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beDataObjString_Register);
+    arkRegister();
+    return (beDataObjString *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beDataObjString_Register(void) {
+igMetaObject *beDataObjString::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beDataObjString::retrieveVTablePointer()
+{
+    beDataObjString temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beDataObjString::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beDataObjString::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beDataObjString_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beDataObjString_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beDataObjString",
-        0x10, /* instance size */
-        beDataObjString_GetVTable,
-        beDataObjString_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beDataObjString),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beDataObjString_GetMetaObjectFunction(void)
+void beDataObjString::arkRegisterInitialize()
 {
-    beDataObjString_GetMetaObject();
+    static FieldFactory instFuncs[] = { igStringMetaField_Create };
+    static const char *names[] = { "_data" };
+    static igMetaField **enumStorage[] = { &k_data };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beDataObjString_ctorTable[] = {
-    igStringMetaField_Create,
-};
-static const char *g_beDataObjString_fieldTable[] = {
-    "_data",
-};
-static igMetaField **g_beDataObjString_fieldHandles[] = {
-    &g_beDataObjString_dataMetaField,
-};
-static int g_beDataObjString_fieldOffsets[] = {
-    12,
-};
-
-void beDataObjString_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_beDataObjString_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beDataObjString_ctorTable, 1);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0);
-    igMetaObject_NameFields(meta, g_beDataObjString_fieldTable, g_beDataObjString_fieldHandles, g_beDataObjString_fieldOffsets, base);
+}
 }
 

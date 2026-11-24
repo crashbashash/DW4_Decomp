@@ -2,19 +2,18 @@
 #define DW4_IGVIEWMODEDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 
-/* igViewMode's virtual functions as igViewManager forwards its events to the current view mode:
- * slots 23 to 27 take the key, mouse, stick and controller-button events, slot 28 advances the
- * mode by a frame's time in seconds.
+/* igViewMode's flag-taking virtual functions as igViewManager forwards its receiver events: retail hands the
+ * receiver's bool flag to slots 23, 25 and 27 as it came in, where igViewMode's own declarations take it as an
+ * int (igPickMode's tests of it do not mask), and the int form masks the flag first.
  * ABI view only: never instantiated. */
 class igViewModeDispatchView : public igObjectDispatchView {
 public:
     virtual void d21(); virtual void d22();
-    virtual int OnKeyEvent();                                               /* slot 23 */
-    virtual int OnMouseMove();                                              /* slot 24 */
-    virtual int OnMouseButton();                                            /* slot 25 */
-    virtual void OnStickEvent(int controller, int stick, float x, float y); /* slot 26 */
-    virtual int OnButtonEvent();                                            /* slot 27 */
-    virtual void Update(float seconds);                                     /* slot 28 */
+    virtual void OnKeyEvent(int key, bool down);                            /* slot 23 */
+    virtual void d24();
+    virtual void OnMouseButton(int button, bool pressed);                   /* slot 25 */
+    virtual void d26();
+    virtual void OnButtonEvent(void *controller, int key, bool down);       /* slot 27 */
 };
 
 #endif

@@ -7,7 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igMetaObject *igActorInfo_GetMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -1,85 +1,67 @@
-igMetaObject *g_beUnicodeObj_metaObject;
-igMetaField *g_beUnicodeObj_bufferMetaField;
+namespace Gap {
+namespace Bec {
 
-beUnicodeObj *beUnicodeObj_Create(int allocator) {
-    beUnicodeObj_EnsureRegistered();
-    return (beUnicodeObj *)igMetaObject_CreateInstance(g_beUnicodeObj_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *beUnicodeObj::_Meta;
+igMetaField *beUnicodeObj::k_buffer;
 
-igMetaObject *beUnicodeObj_GetMetaObject(void) {
-    igMetaObject *g = g_beUnicodeObj_metaObject;
-    int t;
-    if (!g || !(t = (g->_validity & 4) != 0))
-        beUnicodeObj_EnsureRegistered();
-    return g_beUnicodeObj_metaObject;
-}
-
-int beUnicodeObj_GetVTable(void) {
-    beUnicodeObj obj;
-    int vtable;
-    char **nameSlot;
-
-    igObject_InitHeader(&obj);
-    nameSlot = (char **)&obj._name;
-    *nameSlot = 0;
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    obj._vtable = (int)&g_beUnicodeObj_vtable[0];
-    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igNamedObject_vtable[0];
-    igStringRef_Release(nameSlot);
-    return vtable;
-}
-
-void beUnicodeObj_EnsureRegistered(void)
+beUnicodeObj *beUnicodeObj::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject_RunStaticInit(beUnicodeObj_Register);
+    arkRegister();
+    return (beUnicodeObj *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-CallbackArray *beUnicodeObj_Register(void) {
+igMetaObject *beUnicodeObj::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *beUnicodeObj::retrieveVTablePointer()
+{
+    beUnicodeObj temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void beUnicodeObj::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *beUnicodeObj::arkRegisterInternal()
+{
     BecLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_beUnicodeObj_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        igNamedObject_GetPublishedMetaObject,
-        beUnicodeObj_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "beUnicodeObj",
-        0x10, /* instance size */
-        beUnicodeObj_GetVTable,
-        beUnicodeObj_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(beUnicodeObj),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void beUnicodeObj_GetMetaObjectFunction(void)
+void beUnicodeObj::arkRegisterInitialize()
 {
-    beUnicodeObj_GetMetaObject();
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create };
+    static const char *names[] = { "_buffer" };
+    static igMetaField **enumStorage[] = { &k_buffer };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Core::igUnsignedShortMetaField::getMetaField();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_beUnicodeObj_ctorTable[] = {
-    igMemoryRefMetaField_Create,
-};
-static const char *g_beUnicodeObj_fieldTable[] = {
-    "_buffer",
-};
-static igMetaField **g_beUnicodeObj_fieldHandles[] = {
-    &g_beUnicodeObj_bufferMetaField,
-};
-static int g_beUnicodeObj_fieldOffsets[] = {
-    12,
-};
-
-void beUnicodeObj_InitFields(void) {
-    int base;
-    void *buffer;
-    igMetaObject *meta;
-
-    meta = g_beUnicodeObj_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_beUnicodeObj_ctorTable, 1);
-    buffer = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)buffer)->_memType = (int)Gap::Core::igUnsignedShortMetaField::getMetaField();
-    igMetaObject_NameFields(meta, g_beUnicodeObj_fieldTable, g_beUnicodeObj_fieldHandles, g_beUnicodeObj_fieldOffsets, base);
+}
 }
 

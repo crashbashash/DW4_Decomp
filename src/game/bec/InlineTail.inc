@@ -186,29 +186,14 @@ igMetaObject *beDBManagerInfo_GetMeta(void)
     return g_beDBManagerInfo_metaObject;
 }
 
-igMetaObject *beDataObjInt_GetMeta(void)
-{
-    return g_beDataObjInt_metaObject;
-}
-
 igMetaObject *beDataObjIntList_GetMeta(void)
 {
     return g_beDataObjIntList_metaObject;
 }
 
-igMetaObject *beDataObjBool_GetMeta(void)
-{
-    return g_beDataObjBool_metaObject;
-}
-
 igMetaObject *beDataObjBoolList_GetMeta(void)
 {
     return g_beDataObjBoolList_metaObject;
-}
-
-igMetaObject *beDataObjString_GetMeta(void)
-{
-    return g_beDataObjString_metaObject;
 }
 
 igMetaObject *beDataObjStringList_GetMeta(void)
@@ -254,11 +239,6 @@ igMetaObject *igFont_GetMeta(void)
 igMetaObject *beFontImageList_GetMeta(void)
 {
     return g_beFontImageList_metaObject;
-}
-
-igMetaObject *beUnicodeObjList_GetMeta(void)
-{
-    return g_beUnicodeObjList_metaObject;
 }
 
 igMetaObject *beFontInfoData_GetMeta(void)
@@ -890,11 +870,6 @@ igMetaObject *beCriHandleList_GetElementMeta(void)
 igMetaObject *beDataObjListList_GetElementMeta(void)
 {
     return g_beDataObjList_metaObject;
-}
-
-igMetaObject *beUnicodeObjList_GetElementMeta(void)
-{
-    return g_beUnicodeObj_metaObject;
 }
 
 igMetaObject *beFontImageList_GetElementMeta(void)

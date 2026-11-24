@@ -20824,14 +20824,14 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igStringRef.h"
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCopyRenderDestinationAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryAttr; class igGeometryAttr1_5; class igGeometryAttrList; class igGeometryMaskAttr; class igGeometrySetAttr; class igImageMipMapList; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderDestinationAttr; class igRenderListAttr; class igSetRenderDestinationAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureAttr; class igTextureBindAttr; class igTextureCoordSourceAttr; class igTextureCubeAttr; class igTextureFunctionAttr; class igTextureList; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
-namespace Bec { class beAction2InfoWork; class beActionStarterData; class beActionStarterDataList; class beBaseInfoData; class beBaseInfoDataList; class beCameraBoxData; class beCameraDemoData; class beCountry; class beCriFxXbData; class beCriSndf; class beCriVolume; class beDataBase; class beDataBaseList; class beDemoKeepMes; class beDemoKeepMesList; class beDemoManagerWork; class beDemoManagerWorkList; class beFile; class beFileChkObj; class beFontGeomAttrPair; class beFontGeomAttrPairList; class beGeneraterInfoWork; class beGeneraterItemDataOne; class beGeneraterItemDataOneList; class beGeneraterPlayerData; class beGeneraterPlayerDataList; class beHitLandResultData; class beHitLandResultDataList; class beLayerGroup; class beLayerGroupList; class beLuaDataObject; class beMatCtrlInfoWork; class beMatCtrlSearch; class beMatCtrlSearchList; class beMessengerArgData; class beMessengerArgDataList; class beMessengerDelay; class beMessengerDelayList; class beMessengerWork; class beMessengerWorkList; class beModelCtrlACTION; class beModelCtrlAIData; class beModelCtrlAIDataList; class beModelCtrlCTRL; class beModelCtrlHITBOX; class beModelCtrlInfoAI; class beModelCtrlInfoHitBody; class beModelCtrlJUMP; class beModelCtrlLABEL; class beModelCtrlLABELCTRL; class beModelCtrlLUACALL; class beModelCtrlMOVE; class beModelCtrlMOVEEX; class beModelCtrlMOVERL; class beModelCtrlMSGBOX; class beModelCtrlMUTEKI; class beModelCtrlMoveObject; class beModelCtrlMoveObjectList; class beModelCtrlPDMOVE; class beModelCtrlSubCom; class beModelCtrlSubComBase; class beModelCtrlWCHECK; class beNumVerData; class beNumVerDataList; class beNumVerInsideData; class beNumVerInsideDataList; class beNumberCtrlInfoWork; class bePadData; class bePadDataList; class beParticleCtrl2InfoWork; class bePlaySE; class bePlaySEList; class beSaveDataDeliver; class beSeData; class beSeDataList; class beSeInfoData; class beSelectCtrlInfoWork; class beSvDeliver; class beSvPlatBaseData; class beSvPlatDataGC; class beSvPlatDataPC; class beSvPlatDataPS2; class beSvPs2McImage128k; class beSvSlotData; class beSvSlotDataList; class beSvSlotGC; class beSvSlotPS2; class beSvSlotXbox; class beTimerData; class beTimerDataList; class beUnicode; class beWaterMove; class beWaterMoveData; class beWaterMoveDataList; class beWeaponSeqData; class beWeaponSeqDataList; class beXboxImage24k; class igAppearanceListList; class igLightSetList; }
+namespace Bec { class beAction2InfoWork; class beActionStarterData; class beActionStarterDataList; class beBaseInfoData; class beBaseInfoDataList; class beCameraBoxData; class beCameraDemoData; class beCountry; class beCriFxXbData; class beCriSndf; class beCriVolume; class beDataBase; class beDataBaseList; class beDataObjBool; class beDataObjInt; class beDataObjString; class beDemoKeepMes; class beDemoKeepMesList; class beDemoManagerWork; class beDemoManagerWorkList; class beFile; class beFileChkObj; class beFontGeomAttrPair; class beFontGeomAttrPairList; class beGeneraterInfoWork; class beGeneraterItemDataOne; class beGeneraterItemDataOneList; class beGeneraterPlayerData; class beGeneraterPlayerDataList; class beHitLandResultData; class beHitLandResultDataList; class beLayerGroup; class beLayerGroupList; class beLuaDataObject; class beMatCtrlInfoWork; class beMatCtrlSearch; class beMatCtrlSearchList; class beMessengerArgData; class beMessengerArgDataList; class beMessengerDelay; class beMessengerDelayList; class beMessengerWork; class beMessengerWorkList; class beModelCtrlACTION; class beModelCtrlAIData; class beModelCtrlAIDataList; class beModelCtrlCTRL; class beModelCtrlHITBOX; class beModelCtrlInfoAI; class beModelCtrlInfoHitBody; class beModelCtrlJUMP; class beModelCtrlLABEL; class beModelCtrlLABELCTRL; class beModelCtrlLUACALL; class beModelCtrlMOVE; class beModelCtrlMOVEEX; class beModelCtrlMOVERL; class beModelCtrlMSGBOX; class beModelCtrlMUTEKI; class beModelCtrlMoveObject; class beModelCtrlMoveObjectList; class beModelCtrlPDMOVE; class beModelCtrlSubCom; class beModelCtrlSubComBase; class beModelCtrlWCHECK; class beNumVerData; class beNumVerDataList; class beNumVerInsideData; class beNumVerInsideDataList; class beNumberCtrlInfoWork; class bePadData; class bePadDataList; class beParticleCtrl2InfoWork; class bePlaySE; class bePlaySEList; class beSaveDataDeliver; class beSeData; class beSeDataList; class beSeInfoData; class beSelectCtrlInfoWork; class beSvDeliver; class beSvPlatBaseData; class beSvPlatDataGC; class beSvPlatDataPC; class beSvPlatDataPS2; class beSvPs2McImage128k; class beSvSlotData; class beSvSlotDataList; class beSvSlotGC; class beSvSlotPS2; class beSvSlotXbox; class beTimerData; class beTimerDataList; class beUnicode; class beUnicodeObj; class beUnicodeObjList; class beWaterMove; class beWaterMoveData; class beWaterMoveDataList; class beWeaponSeqData; class beWeaponSeqDataList; class beXboxImage24k; class igAppearanceListList; class igLightSetList; }
 namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBitMask; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDependencyOrderedList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFile; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igFolder; class igIGBFile; class igInfo; class igInfoList; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMediaFile; class igMediaList; class igMemoryDirEntry; class igMemoryFile; class igMemoryFileEntry; class igMemoryFileEntryList; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igNonRefCountedObjectStack; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igPsx2File; class igPsx2Folder; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igRegistry; class igRegistryValue; class igRegistryValueList; class igResource; class igSemaphore; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gfx { class igCapabilityManager; class igClut; class igExternalImageEntry; class igFileImage; class igFileImagePng; class igImage; class igImageConvert; class igImageLoader; class igImageUtils; class igIndexArray; class igMemoryImage; class igPrimLengthArray; class igPrimLengthArray1_1; class igPsx2Clut; class igPsx2Image; class igPsx2ImageConvert; class igPsx2IndexArray; class igPsx2VertexArray1_1; class igPsx2VertexArray2; class igPsx2VertexStream; class igPsx2VisualContext; class igTgaLoader; class igVertexArray; class igVertexArray1_1; class igVertexArray2; class igVertexArray2Helper; class igVertexStream; class igVisualContext; }
 namespace Gui { class igAction; class igBoxComponent; class igClearRenderer; class igEventReceiver; class igEventReceiverOrderedList; class igFieldChangeView; class igFieldChangeViewList; class igFieldSynchronizer; class igGeometryElement; class igGuiComponent; class igGuiComponentModel; class igGuiSystem; class igGuiSystemModel; class igHotKeyBinding; class igHotKeyBindingList; class igHotKeyEventReceiver; class igModel; class igMouseCursor; class igNonRefCountedViewList; class igOnOffModel; class igOnOffValueObserver; class igOnOffValueObserverList; class igRadioGroup; class igRadioGroupModel; class igRadioGroupSelectedObserver; class igRenderer; class igRendererOrderedList; class igView; class igViewList; }
 namespace Insight { class igFilterMessageDispatcher; class igFlushRenderer; class igInfoManager; class igInfoManagerList; class igInfoManagerOrderedList; class igInsightPlugin; class igInsightPluginList; class igInsightScheduler; class igMessage; class igMessageDefaultReceiver; class igMessageDispatcher; class igMessageFilter; class igMessageFilterList; class igMessageReceiver; class igMessageReceiverList; class igMessenger; class igSerialScheduler; class igViewportResizedMessage; }
 namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec3fMetaField; class igVec4fArrayMetaField; class igVec4fMetaField; class igVec4ucMetaField; }
-namespace Sg { class igAnimation; class igAnimationBinding; class igAnimationBindingList; class igAnimationCombiner; class igAnimationCombinerBoneInfo; class igAnimationCombinerBoneInfoList; class igAnimationCombinerBoneInfoListList; class igAnimationCombinerBoneInfoPool; class igAnimationCombinerList; class igAnimationDatabase; class igAnimationHierarchy; class igAnimationList; class igAnimationModifier; class igAnimationModifierList; class igAnimationState; class igAnimationStateList; class igAnimationStatePool; class igAnimationSystem; class igAnimationTrack; class igAnimationTrackList; class igAnimationTransitionDefinition; class igAnimationTransitionDefinitionList; class igAnimationTransitionParams; class igAnimationTransitionPoint; class igAnimationTransitionPointList; class igAppearance; class igAppearanceList; class igAttrSet; class igAttrStack; class igAttrStackList; class igAttrStackManager; class igBillboard; class igBlendListRecord; class igBlendMatricesAttrPool; class igBlendMatrixSelect; class igBoundingBoxesMaker; class igCamera; class igCommonTraversal; class igCompileTraversal; class igCompressedTransformSequence1_5Data; class igEnbayaAnimationSource; class igEnbayaAnimationState; class igEnbayaContextPool; class igEnbayaTransformSource; class igEnvironmentMapShader2; class igEnvironmentMapShader2List; class igFrustCullTraversal; class igGeometry; class igGeometryList; class igGraphPath; class igGraphPathList; class igGroup; class igIniShaderFactory; class igInterpretedShaderData; class igIntersectTraversal; class igLightSet; class igLightStateAttrPool; class igLightStateSet; class igLod; class igMatrixObjectPool; class igModelViewMatrixAttrPool; class igModelViewMatrixBoneSelect; class igModelViewMatrixBoneSelectList; class igNode; class igNodeList; class igNodeListList; class igNonRefCountedAttrStackManagerList; class igNonRefCountedNodeList; class igNonRefCountedTransformList; class igObjectPool; class igOverrideAttrSet; class igPlanarShadowShader; class igProbe; class igProjectionMatrixAttrPool; class igProjectiveShadowShader; class igPsx2EnvironmentMapShader; class igRenderPackage; class igRenderPackageList; class igRenderPackagePool; class igSceneInfo; class igSegment; class igShaderData; class igShaderFactory; class igShaderFactoryList; class igShaderInfo; class igShaderProcessor; class igSkeleton; class igSkeletonBoneInfo; class igSkeletonBoneInfoList; class igSkeletonList; class igSkin; class igSkinList; class igSorter; class igSwitch; class igTextureMatrixAttrPool; class igTimeAttrPool; class igTransform; class igTransformList; class igTransformRecorder; class igTransformSequence; class igTransformSequence1_5; class igTransformSource; class igTransformStack; class igTransientShaderData; class igTraversal; class igTraversalFunctionList; class igVertexBlendMatrixAttrPool; class igVertexBlendMatrixListAttrPool; }
-namespace Viewer { class igActorManagerParams; class igBoundingBoxRenderer; class igCameraMode; class igFlyMode; class igLogoRenderer; class igNormalsRenderer; class igPickMode; class igRotateMode; class igStatisticsItem; class igStatisticsItemList; class igViewMode; class igViewModel; class igViewerAction; class igViewerGuiFactory; class igViewerParameters; class igViewerSceneInfoManagerController; class igViewerStatisticsManager; }
+namespace Sg { class igActor; class igActorInfo; class igActorList; class igAnimation; class igAnimationBinding; class igAnimationBindingList; class igAnimationCombiner; class igAnimationCombinerBoneInfo; class igAnimationCombinerBoneInfoList; class igAnimationCombinerBoneInfoListList; class igAnimationCombinerBoneInfoPool; class igAnimationCombinerList; class igAnimationDatabase; class igAnimationHierarchy; class igAnimationList; class igAnimationModifier; class igAnimationModifierList; class igAnimationSequence; class igAnimationState; class igAnimationStateList; class igAnimationStatePool; class igAnimationSystem; class igAnimationTrack; class igAnimationTrackList; class igAnimationTransitionDefinition; class igAnimationTransitionDefinitionList; class igAnimationTransitionParams; class igAnimationTransitionPoint; class igAnimationTransitionPointList; class igAppearance; class igAppearanceList; class igAttrSet; class igAttrStack; class igAttrStackList; class igAttrStackManager; class igBillboard; class igBlendListRecord; class igBlendMatricesAttrPool; class igBlendMatrixSelect; class igBoundingBoxesMaker; class igCamera; class igCommonTraversal; class igCompileTraversal; class igCompressedAnimationSequenceQS; class igCompressedTransformSequence1_5Data; class igEnbayaAnimationSource; class igEnbayaAnimationState; class igEnbayaContextPool; class igEnbayaTransformSource; class igEnvironmentMapShader2; class igEnvironmentMapShader2List; class igFrustCullTraversal; class igGeometry; class igGeometryList; class igGraphPath; class igGraphPathList; class igGroup; class igIniShaderFactory; class igInterpretedShaderData; class igIntersectTraversal; class igLightSet; class igLightStateAttrPool; class igLightStateSet; class igLod; class igMatrixObjectPool; class igModelViewMatrixAttrPool; class igModelViewMatrixBoneSelect; class igModelViewMatrixBoneSelectList; class igNode; class igNodeList; class igNodeListList; class igNonRefCountedAttrStackManagerList; class igNonRefCountedNodeList; class igNonRefCountedTransformList; class igObjectPool; class igOverrideAttrSet; class igPlanarShadowShader; class igProbe; class igProjectionMatrixAttrPool; class igProjectiveShadowShader; class igPsx2EnvironmentMapShader; class igRenderPackage; class igRenderPackageList; class igRenderPackagePool; class igSceneInfo; class igSegment; class igShaderData; class igShaderFactory; class igShaderFactoryList; class igShaderInfo; class igShaderProcessor; class igSkeleton; class igSkeletonBoneInfo; class igSkeletonBoneInfoList; class igSkeletonList; class igSkin; class igSkinList; class igSorter; class igSwitch; class igTextureMatrixAttrPool; class igTimeAttrPool; class igTransform; class igTransformList; class igTransformRecorder; class igTransformSequence; class igTransformSequence1_5; class igTransformSource; class igTransformStack; class igTransientShaderData; class igTraversal; class igTraversalFunctionList; class igVertexBlendMatrixAttrPool; class igVertexBlendMatrixListAttrPool; }
+namespace Viewer { class igActorManagerParams; class igBoundingBoxRenderer; class igCameraMode; class igFlyMode; class igLogoRenderer; class igNormalsRenderer; class igPickMode; class igRotateMode; class igStatisticsItem; class igStatisticsItemList; class igViewManager; class igViewMode; class igViewModel; class igViewerAction; class igViewerGuiFactory; class igViewerLoadingFileMessage; class igViewerModeChangeMessage; class igViewerParameters; class igViewerSceneInfoManagerController; class igViewerStatisticsManager; }
 using Core::__internalNonRefCountedObjectList;
 using Core::__internalObjectList;
 using Bec::beAction2InfoWork;
@@ -20847,6 +20847,9 @@ using Bec::beCriSndf;
 using Bec::beCriVolume;
 using Bec::beDataBase;
 using Bec::beDataBaseList;
+using Bec::beDataObjBool;
+using Bec::beDataObjInt;
+using Bec::beDataObjString;
 using Bec::beDemoKeepMes;
 using Bec::beDemoKeepMesList;
 using Bec::beDemoManagerWork;
@@ -20925,6 +20928,8 @@ using Bec::beSvSlotXbox;
 using Bec::beTimerData;
 using Bec::beTimerDataList;
 using Bec::beUnicode;
+using Bec::beUnicodeObj;
+using Bec::beUnicodeObjList;
 using Bec::beWaterMove;
 using Bec::beWaterMoveData;
 using Bec::beWaterMoveDataList;
@@ -20932,6 +20937,9 @@ using Bec::beWeaponSeqData;
 using Bec::beWeaponSeqDataList;
 using Bec::beXboxImage24k;
 using Gui::igAction;
+using Sg::igActor;
+using Sg::igActorInfo;
+using Sg::igActorList;
 using Viewer::igActorManagerParams;
 using Attrs::igAlphaFunctionAttr;
 using Attrs::igAlphaStateAttr;
@@ -20949,6 +20957,7 @@ using Sg::igAnimationHierarchy;
 using Sg::igAnimationList;
 using Sg::igAnimationModifier;
 using Sg::igAnimationModifierList;
+using Sg::igAnimationSequence;
 using Sg::igAnimationState;
 using Sg::igAnimationStateList;
 using Sg::igAnimationStatePool;
@@ -21004,6 +21013,7 @@ using Attrs::igColorMaskAttr;
 using Sg::igCommonTraversal;
 using Sg::igCompileTraversal;
 using Core::igCompoundMetaField;
+using Sg::igCompressedAnimationSequenceQS;
 using Sg::igCompressedTransformSequence1_5Data;
 using Core::igContext;
 using Attrs::igCopyRenderDestinationAttr;
@@ -21283,10 +21293,13 @@ using Attrs::igVertexBlendStateAttr;
 using Gfx::igVertexStream;
 using Gui::igView;
 using Gui::igViewList;
+using Viewer::igViewManager;
 using Viewer::igViewMode;
 using Viewer::igViewModel;
 using Viewer::igViewerAction;
 using Viewer::igViewerGuiFactory;
+using Viewer::igViewerLoadingFileMessage;
+using Viewer::igViewerModeChangeMessage;
 using Viewer::igViewerParameters;
 using Viewer::igViewerSceneInfoManagerController;
 using Viewer::igViewerStatisticsManager;
@@ -22515,7 +22528,7 @@ public:
     virtual bool evaluateRotation(float *quaternion, long long time) = 0;
     virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags) = 0;
     virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time) = 0;
-    virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags) = 0;
+    virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
     inline virtual bool isTransformable() const { return false; }
     inline virtual void transform(const igMatrix44f &matrix) { }
     inline virtual long long getFirstFrameTime() { return 0; }
@@ -22834,6 +22847,46 @@ namespace Bec {
 class beDataBaseList : public Gap::Core::igTObjectList<beDataBase> {
 public:
     IG_OBJECT_DEFINE(beDataBaseList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589898, 4 field(s), sizeof 16 (registered instance size) */
+class beDataObjBool : public Gap::Core::igNamedObject {
+public:
+    unsigned char _data;                           /* +12   igBoolMetaField */
+    char _pad13[3];
+    IG_OBJECT_DEFINE(beDataObjBool)
+private:
+    static igMetaField *k_data;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x5898b8, 4 field(s), sizeof 16 (registered instance size) */
+class beDataObjInt : public Gap::Core::igNamedObject {
+public:
+    int _data;                                     /* +12   igIntMetaField */
+    IG_OBJECT_DEFINE(beDataObjInt)
+private:
+    static igMetaField *k_data;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589878, 4 field(s), sizeof 16 (registered instance size) */
+class beDataObjString : public Gap::Core::igNamedObject {
+public:
+    igStringRef _data;                             /* +12   igStringMetaField */
+    IG_OBJECT_DEFINE(beDataObjString)
+private:
+    static igMetaField *k_data;
 };
 }
 }
@@ -24426,6 +24479,30 @@ public:
 
 namespace Gap {
 namespace Bec {
+/* handle 0x589640, 4 field(s), sizeof 16 (registered instance size) */
+class beUnicodeObj : public Gap::Core::igNamedObject {
+public:
+    int _buffer;                                   /* +12   igMemoryRefMetaField */
+    IG_OBJECT_DEFINE(beUnicodeObj)
+    virtual void userDestruct();
+private:
+    static igMetaField *k_buffer;
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
+/* handle 0x589638, 5 field(s), sizeof 20 (registered instance size) */
+class beUnicodeObjList : public Gap::Core::igTObjectList<beUnicodeObj> {
+public:
+    IG_OBJECT_DEFINE(beUnicodeObjList)
+};
+}
+}
+
+namespace Gap {
+namespace Bec {
 /* handle 0x587bc0, 5 field(s), sizeof 24 (registered instance size) */
 class beWaterMoveData : public Gap::Core::igObject {
 public:
@@ -24527,115 +24604,6 @@ public:
 }
 
 namespace Gap {
-namespace Gui {
-/* handle 0x58c1c0, 3 field(s), sizeof 12 (registered instance size) */
-class igView : public Gap::Core::igObject {
-public:
-    igModel *_model;                               /* +8    igObjectRefMetaField */
-    IG_ABSTRACT_OBJECT_DEFINE(igView)
-protected:
-    static igMetaField *k_model;
-public:
-    inline igModel *getModel() const { return _model; }
-    void setModel(igModel *model);
-    virtual int isCompatible(igModel *model) = 0;
-protected:
-    virtual void notify(const igNotifyEvent &event) = 0;
-public:
-    virtual void userDestruct();
-    friend class igModel;
-};
-}
-}
-
-namespace Gap {
-namespace Gui {
-/* handle 0x58c1b0, 5 field(s), sizeof 20 (registered instance size) */
-class igNonRefCountedViewList : public Gap::Core::igTNonRefCountedObjectList<igView> {
-public:
-    IG_OBJECT_DEFINE(igNonRefCountedViewList)
-};
-}
-}
-
-namespace Gap {
-namespace Gui {
-/* handle 0x58c298, 3 field(s), sizeof 12 (registered instance size) */
-class igModel : public Gap::Core::igObject {
-public:
-    igSmartPointer<igNonRefCountedViewList> _views; /* +8    igObjectRefMetaField */
-    IG_OBJECT_DEFINE(igModel)
-private:
-    static igMetaField *k_views;
-public:
-    void appendView(igView *view);
-    void removeView(igView *view);
-protected:
-    virtual void userDestruct();
-public:
-    void notifyAllViews(const igNotifyEvent &event);
-    friend class igView;
-};
-}
-}
-
-namespace Gap {
-namespace Viewer {
-/* handle 0x58ceb8, 5 field(s), sizeof 16 (registered instance size) */
-class igActorManagerParams : public Gap::Gui::igModel {
-public:
-    unsigned char _skelOnly;                       /* +12   igBoolMetaField */
-    unsigned char _skelAndSkin;                    /* +13   igBoolMetaField */
-    char _pad14[2];
-    IG_OBJECT_DEFINE(igActorManagerParams)
-    static igMetaField *k_skelOnly;
-    static igMetaField *k_skelAndSkin;
-};
-}
-}
-
-namespace Gap {
-namespace Attrs {
-/* handle 0x55f490, 6 field(s), sizeof 20 (registered instance size) */
-class igAlphaFunctionAttr : public Gap::Attrs::igVisualAttribute {
-public:
-    int _func;                                     /* +12   igEnumMetaField */
-    float _refValue;                               /* +16   igFloatMetaField */
-    IG_OBJECT_DEFINE(igAlphaFunctionAttr)
-private:
-    static igMetaField *k_func;
-    static igMetaField *k_refValue;
-public:
-    virtual void apply(igVisualContext *vc);
-    virtual void setAlphaFunc(IG_GFX_ALPHA_FUNCTION afunc);
-    inline IG_GFX_ALPHA_FUNCTION getAlphaFunc() const { return (IG_GFX_ALPHA_FUNCTION)_func; }
-    virtual void setRefValue(float val);
-    inline float getRefValue() const { return _refValue; }
-    virtual void synchronizeDefault(igVisualContext *vc);
-};
-}
-}
-
-namespace Gap {
-namespace Attrs {
-/* handle 0x55f480, 5 field(s), sizeof 16 (registered instance size) */
-class igAlphaStateAttr : public Gap::Attrs::igVisualAttribute {
-public:
-    bool _enabled;                                 /* +12   igBoolMetaField */
-    char _pad13[3];
-    IG_OBJECT_DEFINE(igAlphaStateAttr)
-private:
-    static igMetaField *k_enabled;
-public:
-    virtual void apply(igVisualContext *vc);
-    virtual void setState(bool enabled);
-    inline bool getState() const { return _enabled; }
-    virtual void synchronizeDefault(igVisualContext *vc);
-};
-}
-}
-
-namespace Gap {
 namespace Sg {
 /* handle 0x5621e0, 4 field(s), sizeof 16 (registered instance size) */
 class igAnimationHierarchy : public Gap::Core::igNamedObject {
@@ -24654,6 +24622,192 @@ public:
     virtual int getChild(int parentIndex, int &startIndex) const = 0;
     virtual int getChildCount(int boneIndex) const = 0;
     virtual int getSpecifiedChild(int boneIndex, int number) const = 0;
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5620c8, 4 field(s), sizeof 16 (registered instance size) */
+class igAnimationSystem : public Gap::Core::igNamedObject {
+public:
+    igSmartPointer<igAnimationHierarchy> _animHierarchy; /* +12   igObjectRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igAnimationSystem)
+protected:
+    static igMetaField *k_animHierarchy;
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x561490, 5 field(s), sizeof 20 (registered instance size) */
+class igSkin : public Gap::Core::igNamedObject {
+public:
+    igSmartPointer<igNode> _skinnedGraph;          /* +12   igObjectRefMetaField */
+    igSmartPointer<igAABox> _bound;                /* +16   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igSkin)
+protected:
+    static igMetaField *k_skinnedGraph;
+public:
+    static igMetaField *k_bound;
+    inline void setSkinnedGraph(igNode *skinnedGraphParam) { _skinnedGraph = skinnedGraphParam; }
+    inline void setBound(igAABox *boundParam) { _bound = boundParam; }
+    inline igAABox *getBound() const { return _bound; }
+    int traverse(igTraversal *traversal);
+    inline igNode *getSkinnedGraph() { return _skinnedGraph; }
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x561488, 5 field(s), sizeof 20 (registered instance size) */
+class igSkinList : public Gap::Core::igTObjectList<igSkin> {
+public:
+    IG_OBJECT_DEFINE(igSkinList)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x561888, 9 field(s), sizeof 36 (registered instance size) */
+class igModelViewMatrixBoneSelect : public Gap::Sg::igGroup {
+public:
+    int _matrixIndex;                              /* +32   igIntMetaField */
+    IG_OBJECT_DEFINE(igModelViewMatrixBoneSelect)
+private:
+    static igMetaField *k_matrixIndex;
+public:
+    inline void setMatrixIndex(int index) { _matrixIndex = index; }
+    inline int getMatrixIndex() const { return _matrixIndex; }
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x561880, 5 field(s), sizeof 20 (from the fields; no registrar found) */
+class igModelViewMatrixBoneSelectList : public Gap::Core::igTObjectList<igModelViewMatrixBoneSelect> {
+public:
+    IG_OBJECT_DEFINE(igModelViewMatrixBoneSelectList)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x562098, 8 field(s), sizeof 32 (registered instance size) */
+class igAppearance : public Gap::Core::igNamedObject {
+public:
+    igSmartPointer<igSkin> _skin;                  /* +12   igObjectRefMetaField */
+    igSmartPointer<igSkinList> _attachedSkins;     /* +16   igObjectRefMetaField */
+    igSmartPointer<igModelViewMatrixBoneSelectList> _attachedGraphs; /* +20   igObjectRefMetaField */
+    igSmartPointer<igStringObjList> _segmentOverrideNameList; /* +24   igObjectRefMetaField */
+    igSmartPointer<igNodeList> _segmentOverrideGraphList; /* +28   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igAppearance)
+private:
+    static igMetaField *k_skin;
+    static igMetaField *k_attachedSkins;
+    static igMetaField *k_attachedGraphs;
+    static igMetaField *k_segmentOverrideNameList;
+    static igMetaField *k_segmentOverrideGraphList;
+public:
+    void attachGraph(igNode *graph);
+    bool detachGraph(igNode *graph);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586128, 5 field(s), sizeof 20 (registered instance size) */
+class igInfo : public Gap::Core::igNamedObject {
+public:
+    igDirectory *_directory;                       /* +12   igObjectRefMetaField */
+    bool _resolveState;                            /* +16   igBoolMetaField */
+    char _pad17[3];
+    IG_OBJECT_DEFINE(igInfo)
+private:
+    static igMetaField *k_directory;
+public:
+    static igMetaField *k_resolveState;
+    inline void setDirectory(igDirectory *directoryParam) { _directory = directoryParam; }
+    inline const igDirectory *getDirectory() const { return _directory; }
+    inline void setResolveState(bool resolveStateParam) { _resolveState = resolveStateParam; }
+    inline bool getResolveState() const { return _resolveState; }
+    virtual bool attemptResolve(igDirectory *parentDir, void *ref);
+    virtual void *resolve(const char *key);
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5614d8, 6 field(s), sizeof 24 (registered instance size) */
+class igSkeletonBoneInfo : public Gap::Core::igNamedObject {
+public:
+    int _parentIdx;                                /* +12   igIntMetaField */
+    int _bmIdx;                                    /* +16   igIntMetaField */
+    int _flags;                                    /* +20   igIntMetaField */
+    IG_OBJECT_DEFINE(igSkeletonBoneInfo)
+    static igMetaField *k_parentIdx;
+    static igMetaField *k_bmIdx;
+    static igMetaField *k_flags;
+    inline int getBmIdx() const { return _bmIdx; }
+    inline int getFlags() const { return _flags; }
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5614d0, 5 field(s), sizeof 20 (registered instance size) */
+class igSkeletonBoneInfoList : public Gap::Core::igTObjectList<igSkeletonBoneInfo> {
+public:
+    IG_OBJECT_DEFINE(igSkeletonBoneInfoList)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5614b0, 7 field(s), sizeof 28 (registered instance size) */
+class igSkeleton : public Gap::Sg::igAnimationHierarchy {
+public:
+    igSmartPointer<igSkeletonBoneInfoList> _boneInfoList; /* +16   igObjectRefMetaField */
+    igMatrix44f *_invJointArray;                   /* +20   igMemoryRefMetaField */
+    int _jointCount;                               /* +24   igIntMetaField */
+    IG_OBJECT_DEFINE(igSkeleton)
+protected:
+    static igMetaField *k_boneInfoList;
+public:
+    static igMetaField *k_invJointArray;
+    static igMetaField *k_jointCount;
+    inline void setBoneInfoList(igSkeletonBoneInfoList *boneInfoListParam) { _boneInfoList = boneInfoListParam; }
+    inline igSkeletonBoneInfoList *getBoneInfoList() const { return _boneInfoList; }
+    inline igMatrix44f *getInvJointArray() const { return _invJointArray; }
+    inline void setJointCount(int jointCountParam) { _jointCount = jointCountParam; }
+    virtual void update(igCommonTraversal *traversal, igActor *actor, const igMatrix44f *animResultArray, igMatrix44f *boneMatrixResultArray, igMatrix44f *blendMatrixResultArray, igAnimationModifierList *modifierList);
+    virtual int getBoneCount() const;
+    inline virtual int getJointCount() const { return _jointCount; }
+    inline virtual const char *getBoneName(int index) const { return _boneInfoList->get(index)->getName(); }
+    virtual int findBoneIndex(const char *boneName) const;
+    inline virtual int getParent(int childIndex) const { return _boneInfoList->get(childIndex)->_parentIdx; }
+    virtual int getChild(int parentIndex, int &startIndex) const;
+    virtual int getChildCount(int boneIndex) const;
+    virtual int getSpecifiedChild(int boneIndex, int number) const;
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5614a8, 5 field(s), sizeof 20 (registered instance size) */
+class igSkeletonList : public Gap::Core::igTObjectList<igSkeleton> {
+public:
+    IG_OBJECT_DEFINE(igSkeletonList)
 };
 }
 }
@@ -24865,13 +25019,20 @@ public:
 
 namespace Gap {
 namespace Sg {
-/* handle 0x5620c8, 4 field(s), sizeof 16 (registered instance size) */
-class igAnimationSystem : public Gap::Core::igNamedObject {
+/* handle 0x562368, 5 field(s), sizeof 20 (registered instance size) */
+class igAnimationList : public Gap::Core::igTObjectList<igAnimation> {
 public:
-    igSmartPointer<igAnimationHierarchy> _animHierarchy; /* +12   igObjectRefMetaField */
-    IG_ABSTRACT_OBJECT_DEFINE(igAnimationSystem)
-protected:
-    static igMetaField *k_animHierarchy;
+    IG_OBJECT_DEFINE(igAnimationList)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x562090, 5 field(s), sizeof 20 (registered instance size) */
+class igAppearanceList : public Gap::Core::igTObjectList<igAppearance> {
+public:
+    IG_OBJECT_DEFINE(igAppearanceList)
 };
 }
 }
@@ -25087,230 +25248,10 @@ public:
 
 namespace Gap {
 namespace Sg {
-/* handle 0x5612e8, 8 field(s), sizeof 32 (registered instance size) */
-class igObjectPool : public Gap::Core::igObjectList {
-public:
-    int _freeIndex;                                /* +20   igIntMetaField */
-    int _capabilityIncrease;                       /* +24   igIntMetaField */
-    unsigned char _resetMode;                      /* +28   igBoolMetaField */
-    char _pad29[3];
-    IG_OBJECT_DEFINE(igObjectPool)
-    static igMetaField *k_freeIndex;
-    static igMetaField *k_capabilityIncrease;
-    static igMetaField *k_resetMode;
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x562250, 8 field(s), sizeof 32 (registered instance size) */
-class igAnimationCombinerBoneInfoPool : public Gap::Sg::igObjectPool {
-public:
-    IG_OBJECT_DEFINE(igAnimationCombinerBoneInfoPool)
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
 /* handle 0x5622b0, 5 field(s), sizeof 20 (registered instance size) */
 class igAnimationCombinerList : public Gap::Core::igTObjectList<igAnimationCombiner> {
 public:
     IG_OBJECT_DEFINE(igAnimationCombinerList)
-};
-}
-}
-
-namespace Gap {
-namespace Core {
-/* handle 0x586128, 5 field(s), sizeof 20 (registered instance size) */
-class igInfo : public Gap::Core::igNamedObject {
-public:
-    igDirectory *_directory;                       /* +12   igObjectRefMetaField */
-    bool _resolveState;                            /* +16   igBoolMetaField */
-    char _pad17[3];
-    IG_OBJECT_DEFINE(igInfo)
-private:
-    static igMetaField *k_directory;
-public:
-    static igMetaField *k_resolveState;
-    inline void setDirectory(igDirectory *directoryParam) { _directory = directoryParam; }
-    inline const igDirectory *getDirectory() const { return _directory; }
-    inline void setResolveState(bool resolveStateParam) { _resolveState = resolveStateParam; }
-    inline bool getResolveState() const { return _resolveState; }
-    virtual bool attemptResolve(igDirectory *parentDir, void *ref);
-    virtual void *resolve(const char *key);
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x5614d8, 6 field(s), sizeof 24 (registered instance size) */
-class igSkeletonBoneInfo : public Gap::Core::igNamedObject {
-public:
-    int _parentIdx;                                /* +12   igIntMetaField */
-    int _bmIdx;                                    /* +16   igIntMetaField */
-    int _flags;                                    /* +20   igIntMetaField */
-    IG_OBJECT_DEFINE(igSkeletonBoneInfo)
-    static igMetaField *k_parentIdx;
-    static igMetaField *k_bmIdx;
-    static igMetaField *k_flags;
-    inline int getBmIdx() const { return _bmIdx; }
-    inline int getFlags() const { return _flags; }
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x5614d0, 5 field(s), sizeof 20 (registered instance size) */
-class igSkeletonBoneInfoList : public Gap::Core::igTObjectList<igSkeletonBoneInfo> {
-public:
-    IG_OBJECT_DEFINE(igSkeletonBoneInfoList)
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x5614b0, 7 field(s), sizeof 28 (registered instance size) */
-class igSkeleton : public Gap::Sg::igAnimationHierarchy {
-public:
-    igSmartPointer<igSkeletonBoneInfoList> _boneInfoList; /* +16   igObjectRefMetaField */
-    igMatrix44f *_invJointArray;                   /* +20   igMemoryRefMetaField */
-    int _jointCount;                               /* +24   igIntMetaField */
-    IG_OBJECT_DEFINE(igSkeleton)
-protected:
-    static igMetaField *k_boneInfoList;
-public:
-    static igMetaField *k_invJointArray;
-    static igMetaField *k_jointCount;
-    inline void setBoneInfoList(igSkeletonBoneInfoList *boneInfoListParam) { _boneInfoList = boneInfoListParam; }
-    inline igSkeletonBoneInfoList *getBoneInfoList() const { return _boneInfoList; }
-    inline igMatrix44f *getInvJointArray() const { return _invJointArray; }
-    inline void setJointCount(int jointCountParam) { _jointCount = jointCountParam; }
-    virtual void update(igCommonTraversal *traversal, igActor *actor, const igMatrix44f *animResultArray, igMatrix44f *boneMatrixResultArray, igMatrix44f *blendMatrixResultArray, igAnimationModifierList *modifierList);
-    virtual int getBoneCount() const;
-    inline virtual int getJointCount() const { return _jointCount; }
-    inline virtual const char *getBoneName(int index) const { return _boneInfoList->get(index)->getName(); }
-    virtual int findBoneIndex(const char *boneName) const;
-    inline virtual int getParent(int childIndex) const { return _boneInfoList->get(childIndex)->_parentIdx; }
-    virtual int getChild(int parentIndex, int &startIndex) const;
-    virtual int getChildCount(int boneIndex) const;
-    virtual int getSpecifiedChild(int boneIndex, int number) const;
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x5614a8, 5 field(s), sizeof 20 (registered instance size) */
-class igSkeletonList : public Gap::Core::igTObjectList<igSkeleton> {
-public:
-    IG_OBJECT_DEFINE(igSkeletonList)
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x562368, 5 field(s), sizeof 20 (registered instance size) */
-class igAnimationList : public Gap::Core::igTObjectList<igAnimation> {
-public:
-    IG_OBJECT_DEFINE(igAnimationList)
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x561490, 5 field(s), sizeof 20 (registered instance size) */
-class igSkin : public Gap::Core::igNamedObject {
-public:
-    igSmartPointer<igNode> _skinnedGraph;          /* +12   igObjectRefMetaField */
-    igSmartPointer<igAABox> _bound;                /* +16   igObjectRefMetaField */
-    IG_OBJECT_DEFINE(igSkin)
-protected:
-    static igMetaField *k_skinnedGraph;
-public:
-    static igMetaField *k_bound;
-    inline void setSkinnedGraph(igNode *skinnedGraphParam) { _skinnedGraph = skinnedGraphParam; }
-    inline void setBound(igAABox *boundParam) { _bound = boundParam; }
-    inline igAABox *getBound() const { return _bound; }
-    int traverse(igTraversal *traversal);
-    inline igNode *getSkinnedGraph() { return _skinnedGraph; }
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x561488, 5 field(s), sizeof 20 (registered instance size) */
-class igSkinList : public Gap::Core::igTObjectList<igSkin> {
-public:
-    IG_OBJECT_DEFINE(igSkinList)
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x561888, 9 field(s), sizeof 36 (registered instance size) */
-class igModelViewMatrixBoneSelect : public Gap::Sg::igGroup {
-public:
-    int _matrixIndex;                              /* +32   igIntMetaField */
-    IG_OBJECT_DEFINE(igModelViewMatrixBoneSelect)
-private:
-    static igMetaField *k_matrixIndex;
-public:
-    inline void setMatrixIndex(int index) { _matrixIndex = index; }
-    inline int getMatrixIndex() const { return _matrixIndex; }
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x561880, 5 field(s), sizeof 20 (from the fields; no registrar found) */
-class igModelViewMatrixBoneSelectList : public Gap::Core::igTObjectList<igModelViewMatrixBoneSelect> {
-public:
-    IG_OBJECT_DEFINE(igModelViewMatrixBoneSelectList)
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x562098, 8 field(s), sizeof 32 (registered instance size) */
-class igAppearance : public Gap::Core::igNamedObject {
-public:
-    igSmartPointer<igSkin> _skin;                  /* +12   igObjectRefMetaField */
-    igSmartPointer<igSkinList> _attachedSkins;     /* +16   igObjectRefMetaField */
-    igSmartPointer<igModelViewMatrixBoneSelectList> _attachedGraphs; /* +20   igObjectRefMetaField */
-    igSmartPointer<igStringObjList> _segmentOverrideNameList; /* +24   igObjectRefMetaField */
-    igSmartPointer<igNodeList> _segmentOverrideGraphList; /* +28   igObjectRefMetaField */
-    IG_OBJECT_DEFINE(igAppearance)
-private:
-    static igMetaField *k_skin;
-    static igMetaField *k_attachedSkins;
-    static igMetaField *k_attachedGraphs;
-    static igMetaField *k_segmentOverrideNameList;
-    static igMetaField *k_segmentOverrideGraphList;
-public:
-    void attachGraph(igNode *graph);
-    bool detachGraph(igNode *graph);
-};
-}
-}
-
-namespace Gap {
-namespace Sg {
-/* handle 0x562090, 5 field(s), sizeof 20 (registered instance size) */
-class igAppearanceList : public Gap::Core::igTObjectList<igAppearance> {
-public:
-    IG_OBJECT_DEFINE(igAppearanceList)
 };
 }
 }
@@ -25383,6 +25324,251 @@ namespace Sg {
 class igAnimationModifierList : public Gap::Core::igTObjectList<igAnimationModifier> {
 public:
     IG_OBJECT_DEFINE(igAnimationModifierList)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x562488, 21 field(s), sizeof 256 (registered instance size) */
+class igActor : public Gap::Sg::igGroup {
+public:
+    igSmartPointer<igAnimationSystem> _animationSystem; /* +32   igObjectRefMetaField */
+    int _boneMatrixCacheArray;                     /* +36   igMemoryRefMetaField */
+    int _blendMatrixCacheArray;                    /* +40   igMemoryRefMetaField */
+    igSmartPointer<igAppearance> _appearance;      /* +44   igObjectRefMetaField */
+    igSmartPointer<igAnimationDatabase> _animationDatabase; /* +48   igObjectRefMetaField */
+    igSmartPointer<igAnimationModifierList> _modifierList; /* +52   igObjectRefMetaField */
+    igMatrix44f _transform;                        /* +56   igMatrix44fMetaField */
+    unsigned char _forceActorCacheUse;             /* +120  igBoolMetaField */
+    unsigned char _actorCacheUsed;                 /* +121  igBoolMetaField */
+    char _pad122[2];
+    igMatrix44f _mvmWhenTraversed;                 /* +124  igMatrix44fMetaField */
+    igMatrix44f _inverseViewWhenTraversed;         /* +188  igMatrix44fMetaField */
+    unsigned char _update;                         /* +252  igBoolMetaField */
+    unsigned char _render;                         /* +253  igBoolMetaField */
+    char _pad254[2];
+    IG_OBJECT_DEFINE(igActor)
+protected:
+    static igMetaField *k_animationSystem;
+public:
+    static igMetaField *k_boneMatrixCacheArray;
+    static igMetaField *k_blendMatrixCacheArray;
+    static igMetaField *k_appearance;
+    static igMetaField *k_animationDatabase;
+    static igMetaField *k_modifierList;
+    static igMetaField *k_transform;
+    static igMetaField *k_forceActorCacheUse;
+    static igMetaField *k_actorCacheUsed;
+    static igMetaField *k_mvmWhenTraversed;
+    static igMetaField *k_inverseViewWhenTraversed;
+    static igMetaField *k_update;
+    static igMetaField *k_render;
+    inline void setAppearance(igAppearance *appearanceParam) { _appearance = appearanceParam; }
+    inline void setAnimationDatabase(igAnimationDatabase *animationDatabaseParam) { _animationDatabase = animationDatabaseParam; }
+    inline void setModifierList(igAnimationModifierList *modifierListParam) { _modifierList = modifierListParam; }
+    inline igAnimationModifierList *getModifierList() const { return _modifierList; }
+    inline void setForceActorCacheUse(bool forceActorCacheUseParam) { _forceActorCacheUse = forceActorCacheUseParam; }
+    inline bool getForceActorCacheUse() const { return _forceActorCacheUse; }
+    inline void setActorCacheUsed(bool actorCacheUsedParam) { _actorCacheUsed = actorCacheUsedParam; }
+    inline bool getActorCacheUsed() const { return _actorCacheUsed; }
+    inline void setUpdate(bool updateParam) { _update = updateParam; }
+    inline bool getUpdate() const { return _update; }
+    inline void setRender(bool renderParam) { _render = renderParam; }
+    inline bool getRender() const { return _render; }
+    inline igAppearance *getAppearance() { return _appearance; }
+    inline bool configured() { return (_animationSystem != 0); }
+    inline igAnimationSystem *getAnimationSystem() { return _animationSystem; }
+    virtual int traverse(igCommonTraversal *trav);
+    inline virtual bool isTransformable() const { return false; }
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x562480, 5 field(s), sizeof 20 (registered instance size) */
+class igActorList : public Gap::Core::igTObjectList<igActor> {
+public:
+    IG_OBJECT_DEFINE(igActorList)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x562450, 10 field(s), sizeof 40 (registered instance size) */
+class igActorInfo : public Gap::Core::igInfo {
+public:
+    igSmartPointer<igActor> _actor;                /* +20   igObjectRefMetaField */
+    igSmartPointer<igActorList> _actorList;        /* +24   igObjectRefMetaField */
+    igSmartPointer<igAnimationDatabase> _animationDatabase; /* +28   igObjectRefMetaField */
+    igSmartPointer<igAnimationCombinerList> _combinerList; /* +32   igObjectRefMetaField */
+    igSmartPointer<igAppearanceList> _appearanceList; /* +36   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igActorInfo)
+private:
+    static igMetaField *k_actor;
+public:
+    static igMetaField *k_actorList;
+    static igMetaField *k_animationDatabase;
+    static igMetaField *k_combinerList;
+    static igMetaField *k_appearanceList;
+    inline void setActor(igActor *actorParam) { _actor = actorParam; }
+    inline const igActor *getActor() const { return _actor; }
+    inline void setActorList(igActorList *actorListParam) { _actorList = actorListParam; }
+    inline igActorList *getActorList() const { return _actorList; }
+    inline void setAnimationDatabase(igAnimationDatabase *animationDatabaseParam) { _animationDatabase = animationDatabaseParam; }
+    inline igAnimationDatabase *getAnimationDatabase() const { return _animationDatabase; }
+    inline void setCombinerList(igAnimationCombinerList *combinerListParam) { _combinerList = combinerListParam; }
+    inline igAnimationCombinerList *getCombinerList() const { return _combinerList; }
+    inline void setAppearanceList(igAppearanceList *appearanceListParam) { _appearanceList = appearanceListParam; }
+    inline igAppearanceList *getAppearanceList() const { return _appearanceList; }
+};
+}
+}
+
+namespace Gap {
+namespace Gui {
+/* handle 0x58c1c0, 3 field(s), sizeof 12 (registered instance size) */
+class igView : public Gap::Core::igObject {
+public:
+    igModel *_model;                               /* +8    igObjectRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igView)
+protected:
+    static igMetaField *k_model;
+public:
+    inline igModel *getModel() const { return _model; }
+    void setModel(igModel *model);
+    virtual int isCompatible(igModel *model) = 0;
+protected:
+    virtual void notify(const igNotifyEvent &event) = 0;
+public:
+    virtual void userDestruct();
+    friend class igModel;
+};
+}
+}
+
+namespace Gap {
+namespace Gui {
+/* handle 0x58c1b0, 5 field(s), sizeof 20 (registered instance size) */
+class igNonRefCountedViewList : public Gap::Core::igTNonRefCountedObjectList<igView> {
+public:
+    IG_OBJECT_DEFINE(igNonRefCountedViewList)
+};
+}
+}
+
+namespace Gap {
+namespace Gui {
+/* handle 0x58c298, 3 field(s), sizeof 12 (registered instance size) */
+class igModel : public Gap::Core::igObject {
+public:
+    igSmartPointer<igNonRefCountedViewList> _views; /* +8    igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igModel)
+private:
+    static igMetaField *k_views;
+public:
+    void appendView(igView *view);
+    void removeView(igView *view);
+protected:
+    virtual void userDestruct();
+public:
+    void notifyAllViews(const igNotifyEvent &event);
+    friend class igView;
+};
+}
+}
+
+namespace Gap {
+namespace Viewer {
+/* handle 0x58ceb8, 5 field(s), sizeof 16 (registered instance size) */
+class igActorManagerParams : public Gap::Gui::igModel {
+public:
+    unsigned char _skelOnly;                       /* +12   igBoolMetaField */
+    unsigned char _skelAndSkin;                    /* +13   igBoolMetaField */
+    char _pad14[2];
+    IG_OBJECT_DEFINE(igActorManagerParams)
+    static igMetaField *k_skelOnly;
+    static igMetaField *k_skelAndSkin;
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f490, 6 field(s), sizeof 20 (registered instance size) */
+class igAlphaFunctionAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _func;                                     /* +12   igEnumMetaField */
+    float _refValue;                               /* +16   igFloatMetaField */
+    IG_OBJECT_DEFINE(igAlphaFunctionAttr)
+private:
+    static igMetaField *k_func;
+    static igMetaField *k_refValue;
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setAlphaFunc(IG_GFX_ALPHA_FUNCTION afunc);
+    inline IG_GFX_ALPHA_FUNCTION getAlphaFunc() const { return (IG_GFX_ALPHA_FUNCTION)_func; }
+    virtual void setRefValue(float val);
+    inline float getRefValue() const { return _refValue; }
+    virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f480, 5 field(s), sizeof 16 (registered instance size) */
+class igAlphaStateAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    bool _enabled;                                 /* +12   igBoolMetaField */
+    char _pad13[3];
+    IG_OBJECT_DEFINE(igAlphaStateAttr)
+private:
+    static igMetaField *k_enabled;
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setState(bool enabled);
+    inline bool getState() const { return _enabled; }
+    virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5612e8, 8 field(s), sizeof 32 (registered instance size) */
+class igObjectPool : public Gap::Core::igObjectList {
+public:
+    int _freeIndex;                                /* +20   igIntMetaField */
+    int _capabilityIncrease;                       /* +24   igIntMetaField */
+    unsigned char _resetMode;                      /* +28   igBoolMetaField */
+    char _pad29[3];
+    IG_OBJECT_DEFINE(igObjectPool)
+    static igMetaField *k_freeIndex;
+    static igMetaField *k_capabilityIncrease;
+    static igMetaField *k_resetMode;
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x562250, 8 field(s), sizeof 32 (registered instance size) */
+class igAnimationCombinerBoneInfoPool : public Gap::Sg::igObjectPool {
+public:
+    IG_OBJECT_DEFINE(igAnimationCombinerBoneInfoPool)
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x5621d8, 2 field(s), sizeof 8 (registered instance size) */
+class igAnimationSequence : public Gap::Sg::igTransformSource {
+public:
+    IG_ABSTRACT_OBJECT_DEFINE(igAnimationSequence)
 };
 }
 }
@@ -27266,6 +27452,73 @@ public:
     IG_OBJECT_DEFINE(igUnsignedShortList)
 private:
     static igMetaField *k_data;
+};
+}
+}
+
+namespace Gap {
+namespace Sg {
+/* handle 0x561c38, 14 field(s), sizeof 64 (registered instance size) */
+class igCompressedAnimationSequenceQS : public Gap::Sg::igAnimationSequence {
+public:
+    igSmartPointer<igUnsignedShortList> _compressedTranslationList; /* +8    igObjectRefMetaField */
+    igSmartPointer<igUnsignedShortList> _compressedQuaternionList; /* +12   igObjectRefMetaField */
+    igSmartPointer<igUnsignedShortList> _compressedTimeList; /* +16   igObjectRefMetaField */
+    float _translationBase;                        /* +20   igFloatMetaField */
+    float _translationRangeOverMaxUShort;          /* +24   igFloatMetaField */
+    float _quaternionBase;                         /* +28   igFloatMetaField */
+    float _quaternionRangeOverMaxUShort;           /* +32   igFloatMetaField */
+    char _pad36[4];
+    unsigned long long _animationDuration;         /* +40   igUnsignedLongMetaField */
+    int _playMode;                                 /* +48   igEnumMetaField */
+    int _lastTime;                                 /* +52   igIntMetaField */
+    unsigned char _channels;                       /* +56   igUnsignedCharMetaField */
+    unsigned char _interpolationMethod[7];         /* +57   igUnsignedCharArrayMetaField */
+    IG_OBJECT_DEFINE(igCompressedAnimationSequenceQS)
+protected:
+    static igMetaField *k_compressedTranslationList;
+public:
+    static igMetaField *k_compressedQuaternionList;
+    static igMetaField *k_compressedTimeList;
+    static igMetaField *k_translationBase;
+    static igMetaField *k_translationRangeOverMaxUShort;
+    static igMetaField *k_quaternionBase;
+    static igMetaField *k_quaternionRangeOverMaxUShort;
+    static igMetaField *k_animationDuration;
+    static igMetaField *k_playMode;
+    static igMetaField *k_lastTime;
+    static igMetaField *k_channels;
+    static igMetaField *k_interpolationMethod;
+    inline void setCompressedTranslationList(igUnsignedShortList *compressedTranslationListParam) { _compressedTranslationList = compressedTranslationListParam; }
+    inline const igUnsignedShortList *getCompressedTranslationList() const { return _compressedTranslationList; }
+    inline void setCompressedQuaternionList(igUnsignedShortList *compressedQuaternionListParam) { _compressedQuaternionList = compressedQuaternionListParam; }
+    inline const igUnsignedShortList *getCompressedQuaternionList() const { return _compressedQuaternionList; }
+    inline void setCompressedTimeList(igUnsignedShortList *compressedTimeListParam) { _compressedTimeList = compressedTimeListParam; }
+    inline const igUnsignedShortList *getCompressedTimeList() const { return _compressedTimeList; }
+    inline void setPlayMode(int playModeParam) { _playMode = playModeParam; }
+    inline int getPlayMode() const { return _playMode; }
+    inline void setChannels(unsigned char channelsParam) { _channels = channelsParam; }
+    inline unsigned char getChannels() const { return _channels; }
+    virtual bool getMatrix(igMatrix44f &matrix, long long time);
+    virtual bool getMatrix(igMatrix44f &matrix, long long time, int *cachedLastTimeFrame, int flags);
+    virtual bool evaluateRotation(float *quaternion, long long time);
+    virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
+    virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time);
+    virtual unsigned char getComponentChannels() const;
+    virtual int getTimeCount() const;
+    virtual const igVec3f *getTranslation(int i) const;
+    virtual void removeTranslationChannel();
+    virtual int getScaleCount() const;
+    virtual const igVec3f *getScale(int i) const;
+    virtual void removeScaleChannel();
+    virtual long long getKeyframeTimeOffset();
+    virtual long long getTimeAsLong(int index) const;
+    virtual unsigned long long getDuration();
+    virtual void configure(igTransformSequence1_5 *transSeq);
+    virtual void setDuration(unsigned long long duration);
+    virtual void getTranslation(int i, igVec3f &vec) const;
+    virtual void constructInterpolatedTranslation(igVec3f &translation, int lowerBound, int upperBound, float ratio) const;
+    virtual void constructInterpolatedQuaternion(igVec4f &interpolatedQuaternion, int lowerBound, int upperBound, float ratio) const;
 };
 }
 }
@@ -32975,7 +33228,6 @@ public:
     virtual void setMatrix(int i, const igMatrix44f *matrix);
     virtual void getMatrix(int i, igMatrix44f *matrix) const;
     virtual bool evaluateRotation(float *quaternion, long long time, int *cachedLastTimeFrame, int flags);
-    virtual bool evaluateRotationAndTranslation(float *quaternion, float *translation, long long time, int *cachedLastTimeFrame, int flags);
     virtual void removeKeyFrame(int n) = 0;
     virtual void insertKeyFrame(int index) = 0;
     virtual void setKeyFrameCount(int n) = 0;
@@ -33446,6 +33698,40 @@ public:
 
 namespace Gap {
 namespace Viewer {
+/* handle 0x58cd08, 6 field(s), sizeof 84 (registered instance size) */
+class igViewManager : public Gap::Gui::igEventReceiver {
+public:
+    igSmartPointer<igViewMode> _viewMode;          /* +8    igObjectRefMetaField */
+    igSmartPointer<igViewModel> _viewModel;        /* +12   igObjectRefMetaField */
+    igSmartPointer<igObjectList> _synchronizers;   /* +16   igObjectRefMetaField */
+    igMatrix44f _homeMatrix;                       /* +20   igMatrix44fMetaField */
+    IG_OBJECT_DEFINE(igViewManager)
+    static igMetaField *k_viewMode;
+    static igMetaField *k_viewModel;
+    static igMetaField *k_synchronizers;
+    static igMetaField *k_homeMatrix;
+    virtual void resetFields(int persistent);
+    virtual bool keyEvent(Display::igKey::KEY_VALUES key, bool status);
+    virtual bool mouseMotionEvent(float x, float y);
+    virtual bool mouseButtonEvent(Display::igMouse::MOUSE_BUTTON button, bool status);
+    virtual bool controllerMotionEvent(int controllerNum, unsigned short joystick, float x, float y);
+    virtual bool controllerButtonEvent(int controllerNum, Display::igController::BUTTONS button, bool status);
+    virtual bool windowResizeEvent(int width, int height);
+    void setFrameTime(long long frameTime);
+    void setSceneUpVector(const float *upVector);
+    void applyOptions(igObject *scene);
+    void printViewMatrix();
+    void setViewMode(igViewMode *mode);
+    void centerSelection(bool resetEye);
+    void fitSelection();
+    void frameObject(igNode *object);
+    void synchronizeParameters(igViewerParameters *parameters);
+};
+}
+}
+
+namespace Gap {
+namespace Viewer {
 /* handle 0x58c770, 4 field(s), sizeof 24 (registered instance size) */
 class igViewerAction : public Gap::Gui::igAction {
 public:
@@ -33483,6 +33769,36 @@ public:
     static igMetaField *k_smallIconOnOffColor;
     static igMetaField *k_font;
     virtual void resetFields(int flag);
+};
+}
+}
+
+namespace Gap {
+namespace Viewer {
+/* handle 0x58c910, 4 field(s), sizeof 16 (registered instance size) */
+class igViewerLoadingFileMessage : public Gap::Insight::igMessage {
+public:
+    bool _current;                                 /* +8    igBoolMetaField */
+    char _pad9[3];
+    igStringRef _filename;                         /* +12   igStringMetaField */
+    IG_OBJECT_DEFINE(igViewerLoadingFileMessage)
+    static igMetaField *k_current;
+    static igMetaField *k_filename;
+};
+}
+}
+
+namespace Gap {
+namespace Viewer {
+/* handle 0x58c8f8, 4 field(s), sizeof 16 (registered instance size) */
+class igViewerModeChangeMessage : public Gap::Insight::igMessage {
+public:
+    bool _state;                                   /* +8    igBoolMetaField */
+    char _pad9[3];
+    igStringRef _mode;                             /* +12   igStringMetaField */
+    IG_OBJECT_DEFINE(igViewerModeChangeMessage)
+    static igMetaField *k_state;
+    static igMetaField *k_mode;
 };
 }
 }

@@ -151,7 +151,7 @@
  },
  "data_bytes": {
   "identified": 1294869,
-  "kind_mismatch": 4375,
+  "kind_mismatch": 4524,
   "kinds": {
    "?": 4911,
    "code": 3472700,
@@ -160,17 +160,17 @@
    "jtbl": 352,
    "literal": 244,
    "named": 112559,
-   "pad": 210974,
+   "pad": 210954,
    "ptr": 3032,
    "ref": 69348,
    "region": 109384,
-   "source": 558844,
+   "source": 560132,
    "str": 68640,
-   "table": 18396,
-   "vtable": 69964
+   "table": 18236,
+   "vtable": 68856
   },
-  "matched": 558844,
-  "matched_pct": 43.0,
+  "matched": 560132,
+  "matched_pct": 43.09,
   "pct": 99.62,
   "start_only": 184939,
   "start_only_pct": 14.23,
@@ -188,7 +188,7 @@
    },
    "boilerplate.functions": {
     "reason": null,
-    "value": 4149
+    "value": 4056
    },
    "code_only.bytes": {
     "reason": null,
@@ -272,11 +272,11 @@
    },
    "free_methods.bytes": {
     "reason": null,
-    "value": 1350168
+    "value": 1337992
    },
    "free_methods.functions": {
     "reason": null,
-    "value": 7046
+    "value": 6932
    },
    "fun_dat_refs": {
     "reason": null,
@@ -312,7 +312,7 @@
    },
    "members.offset_named": {
     "reason": null,
-    "value": 1435
+    "value": 1434
    },
    "mismatch.bytes": {
     "reason": null,
@@ -352,7 +352,7 @@
    },
    "reflected.untyped_refs": {
     "reason": null,
-    "value": 3513
+    "value": 3498
    },
    "strings.externs": {
     "reason": null,
@@ -392,11 +392,11 @@
    },
    "views.local": {
     "reason": null,
-    "value": 231
+    "value": 228
    },
    "virtual_views.slots": {
     "reason": null,
-    "value": 15035
+    "value": 15037
    },
    "virtual_views.types": {
     "reason": null,
@@ -406,7 +406,7 @@
   "counters": {
    "asm_body.bytes": 0,
    "asm_body.functions": 0,
-   "boilerplate.functions": 4149,
+   "boilerplate.functions": 4056,
    "code_only.bytes": 0,
    "code_only.differ.bytes": 0,
    "code_only.differ.functions": 0,
@@ -427,8 +427,8 @@
    "decl.varargs": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "free_methods.bytes": 1350168,
-   "free_methods.functions": 7046,
+   "free_methods.bytes": 1337992,
+   "free_methods.functions": 6932,
    "fun_dat_refs": 6,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
@@ -437,7 +437,7 @@
    "layout.tail_fragments": 393,
    "m2c_idiom.units": 0,
    "matching_constructs": 572,
-   "members.offset_named": 1435,
+   "members.offset_named": 1434,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -447,7 +447,7 @@
    "profile_split.bytes": 0,
    "profile_split.units": 0,
    "raw_casts.reflected": 0,
-   "reflected.untyped_refs": 3513,
+   "reflected.untyped_refs": 3498,
    "strings.externs": 48,
    "struct.a": 0,
    "struct.b": 0,
@@ -457,8 +457,8 @@
    "unmatched.bytes": 146768,
    "unmatched.functions": 98,
    "vfunc_slots.functions": 403,
-   "views.local": 231,
-   "virtual_views.slots": 15035,
+   "views.local": 228,
+   "virtual_views.slots": 15037,
    "virtual_views.types": 171
   }
  },
@@ -530,14 +530,14 @@
  ],
  "link": {
   "asm_bytes": 146768,
-  "data_bytes": 453318,
+  "data_bytes": 454755,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 8288,
   "from_assembly_units": 165,
-  "from_c_bytes": 3770962,
-  "from_c_pct": 83.04,
+  "from_c_bytes": 3772399,
+  "from_c_pct": 83.07,
   "from_c_units": 20313,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
@@ -562,23 +562,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2830092,
+  "bytes": 2831852,
   "failing": {
    "addresses": {
-    "bytes": 400108,
-    "functions": 1732
+    "bytes": 398616,
+    "functions": 1728
    },
    "declarations": {
     "bytes": 0,
     "functions": 0
    },
    "fields": {
-    "bytes": 136556,
-    "functions": 601
+    "bytes": 134200,
+    "functions": 592
    },
    "idioms": {
-    "bytes": 160736,
-    "functions": 854
+    "bytes": 157776,
+    "functions": 840
    },
    "name": {
     "bytes": 317652,
@@ -589,19 +589,19 @@
     "functions": 0
    },
    "references": {
-    "bytes": 235924,
-    "functions": 731
+    "bytes": 235708,
+    "functions": 734
    },
    "types": {
-    "bytes": 187100,
-    "functions": 785
+    "bytes": 186072,
+    "functions": 782
    },
    "virtuals": {
-    "bytes": 91868,
-    "functions": 353
+    "bytes": 90560,
+    "functions": 349
    }
   },
-  "functions": 17884,
+  "functions": 17890,
   "matched_functions": 20478
  },
  "regions": [
@@ -736,11 +736,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 2396,
-  "pct": 48.81,
-  "recovered": 34745,
-  "synthetic": 3864,
-  "total": 71177,
+  "offset_casts": 2387,
+  "pct": 48.86,
+  "recovered": 34756,
+  "synthetic": 3839,
+  "total": 71130,
   "typeable": 0,
   "typeable_pct": 0.0
  }

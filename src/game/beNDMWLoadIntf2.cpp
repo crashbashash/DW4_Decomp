@@ -201,7 +201,7 @@ static inline void NoteUseData(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *d
  * characters) into status text slot nameSlot. */
 static inline void DrawName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int nameSlot) {
     int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
-    igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)));
+    igSmartPointer<beUnicodeObj> text((beUnicodeObj *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)(g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
     beUnicodeObj_AllocateBuffer(text.p, 8);
     unsigned short *dst = (unsigned short *)text.p->_buffer;
     const unsigned short *name = data->_dmNameUni;
@@ -1329,7 +1329,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
               if (control->_isNewMake == 1) {
                 RequestGameRam(self, host, "GAMEDATAINIT");
                 int allocator = SelectAllocator(&kIGMemoryPoolHandleUser0, (int)((Gap::Core::igObject *)self)->getMemoryPool());
-                beUnicodeObj *nameObject = beUnicodeObj_Create(allocator);
+                beUnicodeObj *nameObject = (beUnicodeObj *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)allocator);
                 {
                   igSmartPointer<beUnicodeObj> nameRef(nameObject);
                   beUnicodeObj_AllocateBuffer(nameRef.p, 8);
@@ -2287,7 +2287,7 @@ static inline void RequestPrompt(beNDMWLoadIntf2DataSelIntf *self, int mesWin, i
  * extra node here stops the save-area callers from inlining this and ShowSaveAreaName's other callees. */
 static inline beUnicodeObj *CreateUnicodeText(beNDMWLoadIntf2DataSelIntf *self) {
     int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
-    return beUnicodeObj_Create(g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1.value));
+    return (beUnicodeObj *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)(g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1.value)));
 }
 
 /* Fills `text` with the Digimon name of an area: the characters of _dmNameUni after its first, at
@@ -3170,7 +3170,7 @@ void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char
 static inline beUnicodeObj *NameSelNewLetterText(beNDMWLoadIntf2NameSel *nameSel) {
     int allocator = (int)((Gap::Core::igObject *)nameSel)->getMemoryPool();
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-    return beUnicodeObj_Create(allocator);
+    return (beUnicodeObj *)Gap::Bec::beUnicodeObj::_instantiateFromPool((igMemoryPoolView *)allocator);
 }
 
 /* Shows one letter in text slot `slot` of the font line `font` of the player's text order; color 1
